@@ -30,4 +30,7 @@ No additional instructions required.
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
 Lucas Tai | 92368426 | e0406424@u.nus.edu | Mac
+
 Lim Ethan | 94319256 | e0406537@u.nus.edu | Mac M1
+
+Tin Hong Wen | 92307489 | e0325606@u.nus.edu | Mac M1
