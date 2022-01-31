@@ -6,15 +6,13 @@
 #define SPA_QUERY_H
 
 #include "PKB.h"
-#include "PatternClause.h"
+#include "Clause.h"
 
 class Query {
 protected:
-//declarations
-//...
-//clauses: such-that-cl, pattern-cl
-//...
-PatternClause patternClause;
+// MAP<String, string> declarations
+    Clause patternClause;
+    Clause suchThatClause;
 public:
     virtual std::string generateResult(PKB* pkb);
 };

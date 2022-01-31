@@ -2,13 +2,13 @@
 // Created by リム・イーサン on 31/1/22.
 //
 
-#ifndef SPA_PATTERNCLAUSE_H
-#define SPA_PATTERNCLAUSE_H
+#ifndef SPA_SUCHTHATCLAUSE_H
+#define SPA_SUCHTHATCLAUSE_H
 
 
 #include "Clause.h"
 
-class PatternClause : public Clause {
+class SuchThatClause : public Clause {
 public:
     Result evaluateClause() override {
         return {};
@@ -16,4 +16,4 @@ public:
 };
 
 
-#endif //SPA_PATTERNCLAUSE_H
+#endif //SPA_SUCHTHATCLAUSE_H
