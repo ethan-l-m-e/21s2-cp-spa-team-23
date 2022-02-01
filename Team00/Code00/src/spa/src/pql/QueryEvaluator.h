@@ -13,6 +13,7 @@ class QueryEvaluator {
 private:
     PKB* pkb;
 public:
+    QueryEvaluator(PKB* pkb) : pkb(pkb) { }
     std::string evaluate(Query* query);
 };
 

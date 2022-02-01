@@ -5,12 +5,26 @@
 #ifndef SPA_QUERY_H
 #define SPA_QUERY_H
 
+#include <unordered_map>
 #include "PKB.h"
 #include "Clause.h"
 
+enum class DesignEntity{
+    PROCEDURE,
+    STMT,
+    READ,
+    PRINT,
+    ASSIGN,
+    CALL,
+    WHILE,
+    IF,
+    VARIABLE,
+    CONSTANT
+};
+
 class Query {
 protected:
-// MAP<String, string> declarations
+    unordered_map<string, DesignEntity> declarations;
     Clause patternClause;
     Clause suchThatClause;
 public:

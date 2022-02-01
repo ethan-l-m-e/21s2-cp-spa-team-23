@@ -6,10 +6,14 @@
 #define SPA_SUCHTHATCLAUSE_H
 
 
+#include <vector>
 #include "Clause.h"
 
 class SuchThatClause : public Clause {
+private:
+    RelRef relRef;
 public:
+    SuchThatClause(RelRef relRef, std::vector<Argument> args) : relRef{relRef}, Clause(args) {}
     Result evaluateClause() override {
         return {};
     }
