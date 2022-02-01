@@ -1,3 +1,8 @@
 #pragma once
 using namespace std;
-int Parse();
+
+class Parser {
+public:
+    static int Parse(string);
+};
+
