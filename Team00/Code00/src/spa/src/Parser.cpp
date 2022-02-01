@@ -42,18 +42,15 @@ int Parser::Parse (string filename) {
 
     // proceed to convert sourceCode into AST using recursive descend
     convertToTNode(sourceCode);
-
+\
     //extract relationship entities from AST
+    //TODO: create a relationshipExtractor class to pull methods
     return 0;
 }
 
 
 
 void convertToTNode(string sourceCode) {
-    //define node
-    // node contains:
-    //    value | constant | operator
-    //    list of pointers to other nodes (i hate pointers)
     TNode firstNode = TNode("program");
     // TODO (FUTURE): add a line number at the back of each statement (except 'then', 'else' & procedure_regex or blank)? for statement no. possibly Under StringFormatter
     recursiveTreeConstruction(sourceCode, firstNode);
