@@ -28,8 +28,10 @@ protected:
     Clause patternClause;
     Clause suchThatClause;
 public:
-    virtual std::string generateResult(PKB* pkb);
     optional<DesignEntity> findEntityType(std::string synonym);
+    virtual std::string generateResult(
+            PKB* pkb,
+            unordered_map<string, DesignEntity> declarations);
 };
 
 
