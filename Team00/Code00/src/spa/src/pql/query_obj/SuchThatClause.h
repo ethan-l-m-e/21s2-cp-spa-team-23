@@ -14,9 +14,16 @@ private:
     RelRef relRef;
 public:
     SuchThatClause(RelRef relRef, std::vector<Argument> args) : relRef{relRef}, Clause(args) {}
-    Result evaluateClause() override {
-        return {};
-    }
+    Result evaluateClause() override;
+    Result evaluateFollows();
+    Result evaluateFollowsT();
+    Result evaluateParent();
+    Result evaluateParentT();
+    Result evaluateModifiesS();
+    Result evaluateModifiesP();
+    Result evaluateUsesS();
+    Result evaluateUsesP();
+
 };
 
 

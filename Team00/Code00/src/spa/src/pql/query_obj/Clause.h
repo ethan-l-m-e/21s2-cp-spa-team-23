@@ -22,7 +22,7 @@ enum class RelRef{
 };
 
 class Clause {
-private:
+protected:
     std::vector<Argument> argList;
 public:
     Clause(std::vector<Argument> args) : argList(args) {}

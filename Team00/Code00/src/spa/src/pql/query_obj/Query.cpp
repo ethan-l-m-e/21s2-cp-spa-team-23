@@ -12,3 +12,11 @@ std::string Query::generateResult(PKB *pkb) {
     std::string result; // remove later
     return result;
 }
+
+optional<DesignEntity> Query::findEntityType(std::string synonym) {
+    auto got = declarations.find (synonym);
+    if ( got == declarations.end() )
+    return std::nullopt;
+    else
+    return got->second;
+}
