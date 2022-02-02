@@ -9,24 +9,18 @@
 #include <vector>
 #include "Result.h"
 #include "Argument.h"
+#include "PKB.h"
+#include "Query.h"
 
-enum class RelRef{
-    FOLLOWS,
-    FOLLOWS_T,
-    PARENT,
-    PARENT_T,
-    USES_S,
-    USES_P,
-    MODIFIES_S,
-    MODIFIES_P
-};
 
 class Clause {
-private:
+protected:
     std::vector<Argument> argList;
 public:
     Clause(std::vector<Argument> args) : argList(args) {}
-    virtual Result evaluateClause();
+    virtual Result evaluateClause(
+            PKB* pkb,
+            unordered_map<string, DesignEntity> declarations);
 };
 
 

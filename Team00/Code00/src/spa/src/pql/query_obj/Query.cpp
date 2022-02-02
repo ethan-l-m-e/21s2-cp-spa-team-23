@@ -4,9 +4,11 @@
 
 #include "Query.h"
 
-std::string Query::generateResult(PKB *pkb) {
-    Result suchThatResults = suchThatClause.evaluateClause();
-    Result patternResults = patternClause.evaluateClause();
+std::string Query::generateResult(
+        PKB *pkb,
+        unordered_map<string, DesignEntity> declarations) {
+    Result suchThatResults = suchThatClause.evaluateClause(pkb, declarations);
+    Result patternResults = patternClause.evaluateClause(pkb, declarations);
 
     // Combine results and return
     std::string result; // remove later
