@@ -28,6 +28,7 @@ protected:
     Clause patternClause;
     Clause suchThatClause;
 public:
+    optional<DesignEntity> findEntityType(std::string synonym);
     virtual std::string generateResult(PKB* pkb);
 };
 

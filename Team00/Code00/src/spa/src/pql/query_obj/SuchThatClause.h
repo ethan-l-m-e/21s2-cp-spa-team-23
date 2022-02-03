@@ -27,9 +27,16 @@ public:
     SuchThatClause(RelRef relRef, std::vector<Argument> args) : relRef{relRef}, Clause(args) {}
     Result evaluateClause(
             PKB* pkb,
-            unordered_map<string, DesignEntity> declarations) override {
-        return {};
-    }
+                          unordered_map<string, DesignEntity> declarations) override;
+    Result evaluateFollows();
+    Result evaluateFollowsT();
+    Result evaluateParent();
+    Result evaluateParentT();
+    Result evaluateModifiesS();
+    Result evaluateModifiesP();
+    Result evaluateUsesS();
+    Result evaluateUsesP();
+
 };
 
 
