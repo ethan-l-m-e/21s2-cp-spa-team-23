@@ -9,9 +9,11 @@
 
 class Extractor {
     static std::string* information;
-    Extractor(){
-    }
+
+
+public:
     Extractor* extractAssign(std::string sourceCode );
+
     Extractor* extractProcedure(std::string sourceCode );
 
     std::string getAssignVar();
@@ -23,6 +25,9 @@ class Extractor {
     std::string getProcName();
 
     Extractor *extractExpression(std::string sourceCode);
+
+    Extractor(){
+    }
 };
 
 
