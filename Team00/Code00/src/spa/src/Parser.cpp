@@ -45,11 +45,8 @@ int Parser::Parse (string filename) {
     // proceed to convert sourceCode into AST using recursive descend
     convertToTNode(sourceCode);
 
-    //extract relationship entities from AST
+    //extract relationship entities from AST and transmit data to PKB
     //TODO: create a relationshipExtractor class to pull methods
-
-    // transmit data to PKB
-
     return 0;
 }
 
@@ -72,9 +69,9 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
                 // build Nodes and pointers. add ref to current Node
                 const string name = "Example"; // Hard coded stuff TODO: create an Extractor class that obtains important values like name & operators: Lucas.
                 TNode newNode = TNode(name + ":procedure");
-                currentNode.addNode(newNode);
+                currentNode.addNode(&newNode);
                 TNode childNode =  TNode("stmtList");
-                newNode.addNode(childNode);
+                newNode.addNode(&childNode);
 
                 // TODO: create a StringFormatter component that handles string trimming/partitioning. Lucas (later)
                 // perform recursion on additional nodes
@@ -84,7 +81,7 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
             }
             case ASSIGN: {
                 // add stmtNo as stmtNo to node
-                cout << "assign found";
+                cout << "assign1 found";
                 stmtNo++;
                 break;
             }

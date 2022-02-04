@@ -18,16 +18,18 @@ using namespace std;
 
 class TNode {
     string value; // can be value, constant or integer constant and integer have to be converted back into int first for proper use
-    vector<TNode> childrenRef;
+    vector<TNode*> childrenRef;
     int stmtNo;
 public:
     TNode(string);
     TNode(string, int);
-    void addNode(TNode &);
+    void addNode(TNode*);
     void removeNode(int);
-    TNode getNode(int);
+    TNode* getNode(int);
+    int getNumberOfChildNodes();
     string getValue();
     void changeValue(string value);
+
     bool hasStmtNo();
     int getStmtNo();
     void setStmtNo(int);

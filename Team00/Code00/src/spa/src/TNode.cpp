@@ -16,7 +16,7 @@ TNode::TNode(string name, int stmtNo) {
     this -> stmtNo = stmtNo;
 }
 
-void TNode::addNode(TNode &nodeRef) {
+void TNode::addNode(TNode *nodeRef) {
     // add node ref into the childrenRef
     childrenRef.push_back(nodeRef);
 }
@@ -25,8 +25,12 @@ void TNode::removeNode(int index) {
     childrenRef.erase(childrenRef.begin() + (index - 1));
 }
 
-TNode TNode::getNode(int index) {
+TNode *TNode::getNode(int index) {
     return childrenRef[index];
+}
+
+int TNode::getNumberOfChildNodes() {
+    return childrenRef.size();
 }
 
 string TNode::getValue() {
