@@ -11,7 +11,7 @@ using namespace std;
 
 class Identifier {
     public:
-        int identifyFirstObject(string);
+        static int identifyFirstObject(string);
 };
 
 

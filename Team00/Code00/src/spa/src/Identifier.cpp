@@ -13,12 +13,23 @@
 #include "Constants/Constants.h"
 #include "Validator.h"
 
+string ltrim(const string &s) {
+    return std::regex_replace(s, std::regex("^\\s+"), std::string(""));
+}
+string rtrim(const string &s) {
+    return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
+}
+string trim(const string &s) {
+    return ltrim(rtrim(s));
+}
+
 string extractFrontStringByRegex(string, string);
 int switchCaseOrError(int, bool);
 
 int Identifier::identifyFirstObject(string sourceCode) {
-    // TODO: IDENTIFIER (+ validator) CLASS to determine object/node type. if identified, check if the basic syntax holds?
+    // TODO: IDENTIFIER (+ validator) CLASS to determine object/node type. if identified, check if the basic syntax holds
     string firstLine = extractFrontStringByRegex(sourceCode, "\n");
+    firstLine = trim(firstLine);
     if(regex_match(firstLine, std::regex(PROCEDURE_IDENTIFIER))) {
         bool isCorrect = Validator::checkParenthesesCorrectness(sourceCode, "{}");
         return switchCaseOrError(PROCEDURE, isCorrect); //ignores stmtLst

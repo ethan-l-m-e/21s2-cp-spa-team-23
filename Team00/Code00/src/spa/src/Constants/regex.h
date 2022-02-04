@@ -26,13 +26,13 @@ string const FACTOR_REGEX;
 
 //string const READ_REGEX = "(read )([A-Za-z][A-Za-z|0-9]*)(;)";
 //string const PRINT_REGEX = "(print )(" + VAR_NAME + ")(;)";
-char READ_REGEX[100];   int a = sprintf(READ_REGEX, "[ ]*(read )(%s)(;)", VAR_NAME.c_str());
-char PRINT_REGEX[100];  int b = sprintf(PRINT_REGEX, "[ ]*(print )(%s)(;)", VAR_NAME.c_str());
+char READ_REGEX[100];   int a = sprintf(READ_REGEX, "[ ]*(read)[ ]*(%s)[ ]*(;)", VAR_NAME.c_str());
+char PRINT_REGEX[100];  int b = sprintf(PRINT_REGEX, "[ ]*(print)[ ]*(%s)[ ]*(;)", VAR_NAME.c_str());
 char WHILE_REGEX[100];
 char IF_ELSE_REGEX[100];
 
 
-string const PROCEDURE_IDENTIFIER = "(procedure )(" + PROC_NAME + ")(\\{)[.]*" ;
-string const ASSIGN_IDENTIFIER = "[ ]*" + VAR_NAME + "(=)(.*)(;)";
+string const PROCEDURE_IDENTIFIER = "(procedure )[ ]*(" + PROC_NAME + ")[ ]*(\\{)[.]*" ;
+string const ASSIGN_IDENTIFIER = VAR_NAME + "[ ]*(=)[ ]*" + EXPR_TERM_IDENTIFIER + "(;)";
 
 char STMT_REGEX[200];    int s = sprintf(STMT_REGEX, "%s|%s|%s|%s|%s", READ_REGEX, PRINT_REGEX, ASSIGN_IDENTIFIER.c_str(), WHILE_REGEX, IF_ELSE_REGEX);   //not done
