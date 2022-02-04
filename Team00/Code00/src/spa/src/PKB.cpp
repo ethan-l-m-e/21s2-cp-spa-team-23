@@ -15,3 +15,14 @@ int PKB::setProcToAST(PROC p, TNode* r) {
 TNode* PKB::getRootAST (PROC p){
 	return nullptr;
 }
+
+
+//// Setter Functions
+//void PKB::setFollows(STMT_NO s1, STMT_NO s2) {
+//
+//}
+//
+//// Getter Functions
+//bool PKB::isFollows(STMT_NO s1, STMT_NO s2) {
+//
+//}
