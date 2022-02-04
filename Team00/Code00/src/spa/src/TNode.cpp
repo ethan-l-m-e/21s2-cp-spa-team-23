@@ -4,8 +4,16 @@
 
 #include "TNode.h"
 
+int const INVALID = -1;
+
 TNode::TNode(string name) {
     this -> value = name;
+    this -> stmtNo = INVALID;
+}
+
+TNode::TNode(string name, int stmtNo) {
+    this -> value = name;
+    this -> stmtNo = stmtNo;
 }
 
 void TNode::addNode(TNode &nodeRef) {
@@ -27,4 +35,19 @@ string TNode::getValue() {
 
 void TNode::changeValue(string value) {
     this -> value = value;
+}
+
+bool TNode::hasStmtNo() {
+    if (this -> stmtNo == INVALID)
+        return false;
+    else
+        return true;
+}
+
+int TNode::getStmtNo() {
+    return stmtNo;
+}
+
+void TNode::setStmtNo(int no) {
+    this -> stmtNo = no;
 }
