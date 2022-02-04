@@ -12,8 +12,6 @@ using namespace std;
 class Identifier {
     public:
         int identifyFirstObject(string);
-        void splitStringByLine(string, vector<string>&);
-        vector<bool> checkSourceCodeStmt(string);
 };
 
 
