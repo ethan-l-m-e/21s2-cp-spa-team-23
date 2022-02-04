@@ -47,10 +47,11 @@ int Parser::Parse (string filename) {
 
     //extract relationship entities from AST
     //TODO: create a relationshipExtractor class to pull methods
+
+    // transmit data to PKB
+
     return 0;
 }
-
-
 
 void convertToTNode(string sourceCode) {
     TNode firstNode = TNode("program");
@@ -117,3 +118,5 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
     //}
     return &currentNode;
 }
+
+

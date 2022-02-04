@@ -23,7 +23,6 @@ void splitString(string s, vector<string> &v){
     v.push_back(temp);
 }
 
-
 bool Validator::checkParenthesesCorrectness(string code, string brackets) {
     int count = 0;
     bool startedCount = false;

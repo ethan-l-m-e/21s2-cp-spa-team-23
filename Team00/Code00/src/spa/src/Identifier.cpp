@@ -39,8 +39,6 @@ int Identifier::identifyFirstObject(string sourceCode) {
     }
 }
 
-
-
 int switchCaseOrError(int switchCase, bool cond) {
     if (cond)  return switchCase;
     else return ERROR;
