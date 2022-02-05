@@ -10,7 +10,7 @@ using namespace std;
 
 class Validator {
     public:
-        static bool checkParenthesesCorrectness(string, string);
+        static bool checkParenthesesCorrectness(string code, string brackets);
 
 };
 

@@ -12,6 +12,7 @@ using namespace std;
 #include "TNode.cpp"
 #include "Constants/Constants.h"
 #include "Identifier.h"
+#include "RelationshipExtractor.h"
 
 /*
 int const BASE_CASE = 0;
@@ -47,6 +48,9 @@ int Parser::Parse (string filename) {
 
     //extract relationship entities from AST and transmit data to PKB
     //TODO: create a relationshipExtractor class to pull methods
+
+    //RelationshipExtractor::extractRelationships();
+
     return 0;
 }
 
