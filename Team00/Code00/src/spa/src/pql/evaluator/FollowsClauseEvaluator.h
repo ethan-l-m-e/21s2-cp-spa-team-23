@@ -12,7 +12,7 @@
 class FollowsClauseEvaluator : public ClauseEvaluator {
     public:
         FollowsClauseEvaluator (std::vector<Argument> args, PKB* pkb, Query* query) : ClauseEvaluator(std::move(args), pkb, query) {}
-        Result evaluateClause() override;
+        Result* evaluateClause() override;
 };
 
 

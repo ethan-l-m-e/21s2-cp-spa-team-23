@@ -4,6 +4,35 @@
 
 #include "ClauseEvaluator.h"
 
-Result ClauseEvaluator::evaluateClause() {
-    return Result();
+Result* ClauseEvaluator::evaluateClause() {
+    return new Result();
+}
+
+bool ClauseEvaluator::hasTwoSynonyms() {
+    Argument argLeft = argList[0];
+    Argument argRight = argList[1];
+    return argLeft.argumentType == ArgumentType::SYNONYM && argRight.argumentType == ArgumentType::SYNONYM;
+}
+
+
+bool ClauseEvaluator::hasNoSynonyms() {
+    Argument argLeft = argList[0];
+    Argument argRight = argList[1];
+    return argLeft.argumentType != ArgumentType::SYNONYM && argRight.argumentType != ArgumentType::SYNONYM;
+}
+
+bool ClauseEvaluator::leftIsSynonym() {
+    Argument argLeft = argList[0];
+    Argument argRight = argList[1];
+    return argLeft.argumentType == ArgumentType::SYNONYM;
+}
+
+bool ClauseEvaluator::rightIsSynonym() {
+    Argument argLeft = argList[0];
+    Argument argRight = argList[1];
+    return argRight.argumentType == ArgumentType::SYNONYM;
+}
+
+Result* ClauseEvaluator::buildResult(ResultType type, ResultHeader header, Vector<ResultItem> items) {
+    return new Result{type, header, items};
 }
