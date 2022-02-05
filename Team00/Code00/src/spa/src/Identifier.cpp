@@ -31,7 +31,7 @@ int Identifier::identifyFirstObject(string sourceCode) {
     string firstLine = extractFrontStringByRegex(sourceCode, "\n");
     firstLine = trim(firstLine);
     if(regex_match(firstLine, std::regex(PROCEDURE_IDENTIFIER))) {
-        bool isCorrect = Validator::checkParenthesesCorrectness(sourceCode, "{}");
+        bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "{}");
         return switchCaseOrError(PROCEDURE, isCorrect); //ignores stmtLst
     } else if (regex_match(firstLine, std::regex(ASSIGN_IDENTIFIER))) {
         return ASSIGN; // ignores EXPR_TERM
@@ -40,7 +40,7 @@ int Identifier::identifyFirstObject(string sourceCode) {
     } else if (regex_match(firstLine, std::regex(PRINT_REGEX))) {
         return PRINT; // done
     } else if (regex_match(firstLine, std::regex(EXPR_TERM_IDENTIFIER))) {
-        bool isCorrect = Validator::checkParenthesesCorrectness(sourceCode, "()");
+        bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "()");
         return switchCaseOrError(EXPR_TERM, isCorrect); //ignores stmtLst
     } else if (regex_match(firstLine, std::regex(BASE_CASE_REGEX))) {
         return BASE_CASE;

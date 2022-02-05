@@ -22,7 +22,7 @@ using namespace std;
  * after trimming the correct portion of the code, left with '} procedure b {}'.
  * The stray '}' will throw an error during identification
  */
-bool Validator::checkParenthesesCorrectness(string code, string brackets) {
+bool Validator::checkParenthesesClosure(string code, string brackets) {
     int count = 0;
     bool startedCount = false;
     char bracketLeft = brackets[0];
