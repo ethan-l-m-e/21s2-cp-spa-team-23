@@ -8,9 +8,9 @@
 enum type {
     ASSIGN, PROCEDURE, EXPRESSION
 };
-static class StringFormatter {
+class StringFormatter {
     public:
-        std::string Trim(std::string sourceCode,type t);
+        std::string Trim(std::string sourceCode,type t,std::string* initCode);
 };
 
 

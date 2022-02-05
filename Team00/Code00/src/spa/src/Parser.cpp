@@ -11,6 +11,7 @@ using namespace std;
 #include "TNode.cpp"
 #include "Constants.h"
 #include "Extractor.h"
+#include "StringFormatter.h"
 
 /*
 int const BASE_CASE = 0;
@@ -64,6 +65,7 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
     //TODO: identifier + validation class to identify object type from SourceCode: Hong Wen
     //while(!sourceCode.empty()) {
         TNode newNode = TNode(""); //Create empty new node to be filled in during switch and returned at the end
+        StringFormatter stringFormatter;
         Extractor extractor;
         switch(identifyFirstObject(sourceCode)) { // identify object
             case PROCEDURE: {
@@ -85,7 +87,8 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
             }
             case ASSIGN: {
                 cout << "assign found";
-                extractor.extractAssign(sourceCode);
+                string trimmedCode = stringFormatter.Trim(sourceCode, (type) ASSIGN,&sourceCode);
+                extractor.extractAssign(trimmedCode);
                 newNode.changeValue("Assign");
                 TNode childNodeLeft = TNode(extractor.getAssignVar());
                 TNode* childNodeRight = recursiveTreeConstruction(extractor.getAssignExpr(),newNode);
