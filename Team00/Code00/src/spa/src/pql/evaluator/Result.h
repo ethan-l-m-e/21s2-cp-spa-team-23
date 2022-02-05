@@ -7,6 +7,7 @@
 
 #include <string>
 #include <variant>
+#include <vector>
 
 enum class ResultType {
     BOOLEAN,
@@ -24,8 +25,8 @@ using ResultItem = std::variant<
 
 typedef struct Result {
     ResultType resultType = ResultType::EMPTY;
-    ResultHeader resultHeader = new ResultHeader;
-    std::vector<ResultItem> resultItemList = new vector<ResultItem>;
-};
+    ResultHeader resultHeader;
+    std::vector<ResultItem> resultItemList;
+} Result;
 
 #endif //SPA_RESULT_H

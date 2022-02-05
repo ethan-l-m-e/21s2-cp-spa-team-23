@@ -6,9 +6,6 @@
 
 std::string Query::generateResult(
         PKB *pkb) {
-
-
-
     // Combine results and return
     std::string result; // remove later
     return result;

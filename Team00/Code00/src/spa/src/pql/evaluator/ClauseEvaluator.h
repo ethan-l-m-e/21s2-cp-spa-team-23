@@ -8,9 +8,9 @@
 
 #include <vector>
 #include "Result.h"
-#include "Argument.h"
+#include "pql/query_obj/Argument.h"
 #include "PKB.h"
-#include "Query.h"
+#include "pql/query_obj/Query.h"
 
 
 class ClauseEvaluator {

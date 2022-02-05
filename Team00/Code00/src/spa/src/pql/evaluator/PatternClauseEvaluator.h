@@ -7,7 +7,7 @@
 
 #include <vector>
 #include "ClauseEvaluator.h"
-#include "Argument.h"
+#include "pql/query_obj/Argument.h"
 
 class PatternClauseEvaluator : public ClauseEvaluator {
 private:

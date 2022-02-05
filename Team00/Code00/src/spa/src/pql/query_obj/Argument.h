@@ -2,13 +2,10 @@
 // Created by Tianyi Wang on 2/2/22.
 //
 
-#include <string>
-
 #ifndef SPA_ARGUMENT_H
 #define SPA_ARGUMENT_H
 
-#endif //SPA_ARGUMENT_H
-
+#include <string>
 
 enum class ArgumentType {
     SYNONYM,
@@ -22,3 +19,5 @@ typedef struct Argument {
     ArgumentType argumentType;
     std::string argumentValue;
 } Argument;
+
+#endif //SPA_ARGUMENT_H

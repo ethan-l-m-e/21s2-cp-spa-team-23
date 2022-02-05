@@ -1,9 +1,11 @@
 //
 // Created by リム・イーサン on 31/1/22.
 //
+// Created by Tianyi Wang on 5/2/22.
+//
 
-#ifndef SPA_RESULT_H
-#define SPA_RESULT_H
+#ifndef SPA_CLAUSE_H
+#define SPA_CLAUSE_H
 
 #include <string>
 #include <variant>
@@ -37,4 +39,4 @@ typedef struct PatternClause : Clause {
 
 
 
-#endif //SPA_RESULT_H
+#endif //SPA_CLAUSE_H

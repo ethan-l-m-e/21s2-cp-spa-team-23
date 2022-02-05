@@ -8,6 +8,7 @@
 
 #include "PKB.h"
 #include "pql/query_obj/Query.h"
+#include "pql/evaluator/Result.h"
 
 class QueryEvaluator {
 private:
