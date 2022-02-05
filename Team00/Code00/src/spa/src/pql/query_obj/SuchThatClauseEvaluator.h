@@ -2,12 +2,12 @@
 // Created by リム・イーサン on 31/1/22.
 //
 
-#ifndef SPA_SUCHTHATCLAUSE_H
-#define SPA_SUCHTHATCLAUSE_H
+#ifndef SPA_SUCHTHATCLAUSEEVALUATOR_H
+#define SPA_SUCHTHATCLAUSEEVALUATOR_H
 
 
 #include <vector>
-#include "Clause.h"
+#include "ClauseEvaluator.h"
 
 enum class RelRef{
     FOLLOWS,
@@ -20,13 +20,12 @@ enum class RelRef{
     MODIFIES_P
 };
 
-class SuchThatClause : public Clause {
+class SuchThatClauseEvaluator : public ClauseEvaluator {
 private:
     RelRef relRef;
 public:
-    SuchThatClause(RelRef relRef, std::vector<Argument> args) : relRef{relRef}, Clause(args) {}
-    Result evaluateClause(
-            PKB* pkb,
+    SuchThatClauseEvaluator(RelRef relRef, std::vector<Argument> args) : relRef(relRef), ClauseEvaluator(args) {}
+    Result evaluateClause(PKB* pkb,
                           unordered_map<string, DesignEntity> declarations) override;
     Result evaluateFollows();
     Result evaluateFollowsT();
@@ -36,8 +35,9 @@ public:
     Result evaluateModifiesP();
     Result evaluateUsesS();
     Result evaluateUsesP();
+    optional<DesignEntity> findEntityType(std::string synonym);
 
 };
 
 
-#endif //SPA_SUCHTHATCLAUSE_H
+#endif //SPA_SUCHTHATCLAUSEEVALUATOR_H

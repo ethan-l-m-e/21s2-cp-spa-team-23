@@ -23,9 +23,9 @@ using ResultItem = std::variant<
         std::tuple<std::string, std::string>>;
 
 typedef struct Result {
-    ResultType resultType;
-    ResultHeader resultHeader;
-    std::vector<ResultItem> resultItemList;
+    ResultType resultType = ResultType::EMPTY;
+    ResultHeader resultHeader = new ResultHeader;
+    std::vector<ResultItem> resultItemList = new vector<ResultItem>;
 };
 
 #endif //SPA_RESULT_H

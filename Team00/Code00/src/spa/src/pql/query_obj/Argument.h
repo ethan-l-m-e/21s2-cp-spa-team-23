@@ -21,4 +21,4 @@ enum class ArgumentType {
 typedef struct Argument {
     ArgumentType argumentType;
     std::string argumentValue;
-};
+} Argument;

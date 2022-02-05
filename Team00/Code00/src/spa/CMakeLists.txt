@@ -1,6 +1,6 @@
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
-add_library(spa ${srcs} ${headers} src/pql/QueryPreprocessor.cpp src/pql/QueryPreprocessor.h src/pql/query_obj/Query.cpp src/pql/query_obj/Query.h src/pql/QueryEvaluator.cpp src/pql/QueryEvaluator.h src/pql/query_obj/Result.cpp src/pql/query_obj/Result.h src/pql/query_obj/Clause.cpp src/pql/query_obj/Clause.h src/pql/query_obj/PatternClause.h src/pql/query_obj/SuchThatClause.h src/pql/query_obj/Argument.h src/pql/query_obj/SuchThatClause.cpp src/pql/query_obj/Utility.cpp src/pql/query_obj/Utility.h)
+add_library(spa ${srcs} ${headers} src/pql/QueryPreprocessor.cpp src/pql/QueryPreprocessor.h src/pql/query_obj/Query.cpp src/pql/query_obj/Query.h src/pql/QueryEvaluator.cpp src/pql/QueryEvaluator.h src/pql/query_obj/Result.cpp src/pql/query_obj/Result.h src/pql/query_obj/ClauseEvaluator.cpp src/pql/query_obj/ClauseEvaluator.h src/pql/query_obj/PatternClauseEvaluator.h src/pql/query_obj/SuchThatClauseEvaluator.h src/pql/query_obj/Argument.h src/pql/query_obj/SuchThatClauseEvaluator.cpp src/pql/query_obj/Utility.cpp src/pql/query_obj/Utility.h)
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

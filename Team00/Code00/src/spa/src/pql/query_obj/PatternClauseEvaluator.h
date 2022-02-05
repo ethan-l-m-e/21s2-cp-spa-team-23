@@ -2,20 +2,18 @@
 // Created by リム・イーサン on 31/1/22.
 //
 
-#ifndef SPA_PATTERNCLAUSE_H
-#define SPA_PATTERNCLAUSE_H
+#ifndef SPA_PATTERNCLAUSEEVALUATOR_H
+#define SPA_PATTERNCLAUSEEVALUATOR_H
 
 #include <vector>
-#include "Clause.h"
+#include "ClauseEvaluator.h"
 #include "Argument.h"
 
-enum class SynonymType { ASSIGN };
-
-class PatternClause : public Clause {
+class PatternClauseEvaluator : public ClauseEvaluator {
 private:
     SynonymType synonymType;
 public:
-    PatternClause (SynonymType synonymType, std::vector<Argument> args) : synonymType{synonymType}, Clause(args) {}
+    PatternClauseEvaluator (SynonymType synonymType, std::vector<Argument> args) : synonymType{synonymType}, ClauseEvaluator(args) {}
 
     Result evaluateClause(
             PKB* pkb,
@@ -40,4 +38,4 @@ public:
 };
 
 
-#endif //SPA_PATTERNCLAUSE_H
+#endif //SPA_PATTERNCLAUSEEVALUATOR_H
