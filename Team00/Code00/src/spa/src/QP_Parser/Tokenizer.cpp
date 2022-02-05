@@ -2,7 +2,6 @@
 #include <string>
 #include <regex>
 #include <utility>
-#include <string>
 #include <vector>
 #include <sstream>
 
@@ -21,14 +20,7 @@ std::vector<QueryToken> Tokenizer::getQueryTokens(std::vector<std::string> queri
     for (std::string query : queries) {
         QueryToken queryToken = QueryToken();
         getDeclarationTokens(query, queryToken);
-        // find select synonym
-        std::regex re("Select [A-Za-z][A-Za-z|0-9]*");
-        std::smatch match;
-        std::regex_search(query, match, re);
-        std::string selectString = match.str(0);
-        selectString = selectString.substr(7);
-        queryToken.selectClauseToken = &selectString;
-
+        getSelectClause(query, queryToken);
         resultTokens.push_back(queryToken);
     }
 
@@ -40,14 +32,29 @@ void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
     std::stringstream ds(pql);
 
     queryToken.declarationTokens = new std::vector<std::string>();
+    int count = 0;
 
     // Split declarations
     while (ds.good()) {
         std::string substring;
         getline(ds, substring, ';');
+        if (count != 0) {
+            substring = substring.substr(1);
+        }
         queryToken.declarationTokens->push_back(substring);
+        count += 1;
     }
 
     // Remove the line that comes after declarations
     queryToken.declarationTokens->pop_back();
+}
+
+void Tokenizer::getSelectClause(std::string& pql, QueryToken& queryToken) {
+    // find select synonym
+    std::regex re("Select [A-Za-z][A-Za-z|0-9]*");
+    std::smatch match;
+    std::regex_search(pql.cbegin(), pql.cend(), match, re);
+    std::string selectString = match[0];
+    selectString = selectString.substr(7);
+    queryToken.selectClauseToken = &selectString;
 }

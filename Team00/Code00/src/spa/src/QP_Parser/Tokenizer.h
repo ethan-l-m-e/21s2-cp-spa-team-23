@@ -18,5 +18,6 @@ namespace qp {
     public:
         std::vector<QueryToken> getQueryTokens(std::vector<std::string>);
         void getDeclarationTokens(std::string, QueryToken&);
+        void getSelectClause(std::string&, QueryToken&);
     };
 }
