@@ -27,3 +27,30 @@ vector<PatternClause> Query::getPatternClauses(){
     return patternClauses;
 }
 
+std::string Query::getSelectedSynonym() {
+    return selectedSynonym;
+}
+
+DesignEntity Query::getSelectedSynonymType() {
+    return declarations.find(selectedSynonym)->second;
+}
+
+DesignEntity Query::findEntityType(std::string synonym) {
+    auto got = declarations.find (synonym);
+    if ( got == declarations.end() )
+        return DesignEntity::EMPTY;
+    else
+        return got->second;
+}
+
+
+/*
+optional<DesignEntity> findEntityType(std::string synonym) {
+    auto got = declarations.find (synonym);
+    if ( got == declarations.end() )
+        return std::nullopt;
+    else
+        return got->second;
+}
+ */
+

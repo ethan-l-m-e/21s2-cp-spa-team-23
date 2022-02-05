@@ -28,7 +28,10 @@ std::string QueryEvaluator::evaluate(Query* query) {
     }
 
     if (result.resultType == ResultType::EMPTY) {
+        DesignEntity entityType = query->getSelectedSynonymType();
         //TODO: Evaluate clause without suchThat and pattern
+        //pkb->getAllType(entityType);
+        // merge result
     }
 
     return convertResultToString(result);
