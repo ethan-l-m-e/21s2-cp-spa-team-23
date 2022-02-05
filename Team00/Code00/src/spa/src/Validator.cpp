@@ -8,7 +8,6 @@
 #include "Validator.h"
 using namespace std;
 
-
 /**
  * IMPORTANT NOTE this algorithm DOES NOT CHECK:
  *
