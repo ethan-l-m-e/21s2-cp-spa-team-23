@@ -42,7 +42,7 @@ int Identifier::identifyFirstObject(string sourceCode) {
     } else if (regex_match(firstLine, std::regex(EXPR_TERM_IDENTIFIER))) {
         bool isCorrect = Validator::checkParenthesesCorrectness(sourceCode, "()");
         return switchCaseOrError(EXPR_TERM, isCorrect); //ignores stmtLst
-    } else if (regex_match(firstLine, std::regex(VAR_NAME)) | regex_match(sourceCode, std::regex(CONST_VALUE))) {
+    } else if (regex_match(firstLine, std::regex(BASE_CASE_REGEX))) {
         return BASE_CASE;
     } else {
         cout << "parser cannot identify '" + firstLine + "' in the source code";

@@ -54,11 +54,10 @@ TEST_CASE("ASSIGN") {
     CHECK(switchCase == ASSIGN);
     switchCase = Identifier::identifyFirstObject(assign2);  //non-standard spacing
     CHECK(switchCase == ASSIGN);
-    switchCase = Identifier::identifyFirstObject("x = ;");
-    CHECK(switchCase == ASSIGN);
+    switchCase = Identifier::identifyFirstObject("x = ;");  // missing RHS expr
+    CHECK(switchCase == ERROR);
     switchCase = Identifier::identifyFirstObject("x = 1 + 1");  //missing ;
     CHECK(switchCase == ERROR);
-
 }
 
 TEST_CASE("BASE CASE") {
@@ -92,7 +91,7 @@ TEST_CASE("PROCEDURE") {
     procedureLine = "procedure Example { " + assign1 +"}";              //no new line
     switchCase = Identifier::identifyFirstObject(procedureLine);
     CHECK(switchCase == PROCEDURE);
-    procedureLine = "procedure        Example{\n" + assign1 +"}\n";     //non-standard spacing
+    procedureLine = "procedure   Example{\n" + assign1 +"}\n";     //non-standard spacing
     switchCase = Identifier::identifyFirstObject(procedureLine);
     CHECK(switchCase == PROCEDURE);
     procedureLine = "procedure Example {\n{" + assign1 +"\n}";          //incorrect bracket count
