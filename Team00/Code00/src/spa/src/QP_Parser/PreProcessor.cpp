@@ -9,9 +9,16 @@ using namespace qp;
 
 void PreProcessor::getQuery(std::string filename) {
     // Load File
+    std::vector<std::string> queries;
+    readFile(filename, queries);
+
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<QueryToken> queryTokens = tokenizer.getQueryTokens(queries);
+};
+
+void PreProcessor::readFile(std::string filename, std::vector<std::string>& queries) {
     std::fstream file;
     file.open(filename,std::ios::in);
-    std::vector<std::string> queries;
 
     if (file.is_open()) {
         std::string text;
@@ -29,7 +36,4 @@ void PreProcessor::getQuery(std::string filename) {
         }
     }
     file.close();
-
-    Tokenizer tokenizer = Tokenizer();
-    std::vector<QueryToken> queryTokens = tokenizer.getQueryTokens(queries);
-};
+}
