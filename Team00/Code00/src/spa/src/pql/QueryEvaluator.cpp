@@ -6,23 +6,32 @@
 
 
 std::string QueryEvaluator::evaluate(Query* query) {
-    return query->generateResult(pkb);
+    // Initialise an empty result
     Result result;
+
+    // Create evaluator and evaluate each of the pattern clause
     if(query->hasPatternClause()) {
         for(PatternClause clause : query->getPatternClauses()) {
             ClauseEvaluator* patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
-            Result patternResults = patternClauseEvaluator->evaluateClause();
+            Result patternResult = patternClauseEvaluator->evaluateClause();
+            result = mergeResults(result, patternResult);
         }
     }
 
+    // Create evaluator and evaluate each of the suchThat clause
     if(query->hasSuchThatClause()) {
         for(SuchThatClause clause : query->getSuchThatClauses()) {
             ClauseEvaluator* suchThatClauseEvaluator = generateEvaluator(clause, query);
-            Result suchThatResults = suchThatClauseEvaluator->evaluateClause();
+            Result suchThatResult = suchThatClauseEvaluator->evaluateClause();
+            result = mergeResults(result, suchThatResult);
         }
     }
 
-    return;
+    if (result.resultType == ResultType::EMPTY) {
+        //TODO: Evaluate clause without suchThat and pattern
+    }
+
+    return convertResultToString(result);
 }
 
 ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
@@ -31,26 +40,34 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
             return new FollowsClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::FOLLOWS_T:
-            // return followsTClauseEvaluator();
+            // return followsTClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::PARENT:
-            // return parentClauseEvaluator();
+            // return parentClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::PARENT_T:
-            // return parentTTClauseEvaluator();
+            // return parentTTClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::USES_S:
-            // return usesSClauseEvaluator();
+            // return usesSClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::USES_P:
-            // return usesPClauseEvaluator();
+            // return usesPClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::MODIFIES_S:
-            // return modifiesSClauseEvaluator();
+            // return modifiesSClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::MODIFIES_P:
-            // return modifiesPClauseEvaluator();
+            // return modifiesPClauseEvaluator(clause.argList, pkb, query);
             break;
     }
+}
+
+Result QueryEvaluator::mergeResults(Result r1, Result r2) {
+    return r1;
+}
+
+std::string QueryEvaluator::convertResultToString(Result result) {
+    return "resultString"
 }
 

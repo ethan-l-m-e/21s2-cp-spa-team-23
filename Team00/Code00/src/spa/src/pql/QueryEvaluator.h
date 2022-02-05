@@ -18,8 +18,14 @@ private:
     PKB* pkb;
 public:
     QueryEvaluator(PKB* pkb) : pkb(pkb) { }
+
     std::string evaluate(Query* query);
+
     ClauseEvaluator * generateEvaluator(SuchThatClause clause, Query* query);
+
+    static Result mergeResults(Result r1, Result r2);
+
+    static string convertResultToString(Result result);
 };
 
 
