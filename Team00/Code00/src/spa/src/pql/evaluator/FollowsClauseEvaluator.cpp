@@ -11,7 +11,7 @@ Result FollowsClauseEvaluator::evaluateClause(){
     ResultHeader resultHeader;
     vector<ResultItem> resultItem;
     if (hasNoSynonyms()) {
-        //bool resultBoolean = pkb->isFollows(argLeft.value, argRight.value);
+        bool resultBoolean = pkb->isFollows(argLeft.argumentValue, argRight.argumentValue);
         resultType = ResultType::BOOLEAN;
     }
     else if (hasTwoSynonyms()) {
