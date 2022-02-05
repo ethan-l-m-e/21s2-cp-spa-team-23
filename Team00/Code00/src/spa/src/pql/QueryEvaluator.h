@@ -21,7 +21,7 @@ public:
 
     std::string evaluate(Query* query);
 
-    ClauseEvaluator * generateEvaluator(SuchThatClause clause, Query* query);
+    ClauseEvaluator generateEvaluator(SuchThatClause clause, Query* query);
 
     static Result mergeResults(Result r1, Result r2);
 

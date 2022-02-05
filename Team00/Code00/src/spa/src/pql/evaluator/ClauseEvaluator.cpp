@@ -4,8 +4,8 @@
 
 #include "ClauseEvaluator.h"
 
-Result* ClauseEvaluator::evaluateClause() {
-    return new Result();
+Result ClauseEvaluator::evaluateClause() {
+    return Result();
 }
 
 bool ClauseEvaluator::hasTwoSynonyms() {
@@ -33,6 +33,6 @@ bool ClauseEvaluator::rightIsSynonym() {
     return argRight.argumentType == ArgumentType::SYNONYM;
 }
 
-Result* ClauseEvaluator::buildResult(ResultType type, ResultHeader header, Vector<ResultItem> items) {
-    return new Result{type, header, items};
+Result ClauseEvaluator::buildResult(ResultType type, ResultHeader header, vector<ResultItem> items) {
+    return {type, header, items};
 }

@@ -4,7 +4,7 @@
 
 #include "FollowsClauseEvaluator.h"
 
-Result* FollowsClauseEvaluator::evaluateClause(){
+Result FollowsClauseEvaluator::evaluateClause(){
     Argument argLeft = argList[0];
     Argument argRight = argList[1];
     ResultType resultType;
