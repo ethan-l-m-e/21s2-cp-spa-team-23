@@ -30,7 +30,6 @@ bool Validator::checkParenthesesCorrectness(string code, string brackets) {
     char bracketRight = brackets[1];
     for (int i = 0; i < code.size(); i++) {
         if (startedCount == true && count == 0) {
-            cout << "bracket syntax correct\n";
             return true;
         } else if (code[i]== bracketLeft) {
             startedCount = true;
@@ -52,7 +51,6 @@ bool Validator::checkParenthesesCorrectness(string code, string brackets) {
         cout << "excessive " << bracketRight << "\n";
         return false;
     } else {
-        cout << "bracket syntax correct\n";
         return true;
     }
 }
