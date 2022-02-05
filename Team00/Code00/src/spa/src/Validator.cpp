@@ -49,7 +49,7 @@ bool Validator::checkParenthesesCorrectness(string code, string brackets) {
     if (count > 0) {
         cout << "excessive " << bracketLeft << "\n";
         return false;
-    } else if (count == 0 && startedCount == false) {
+    } else if (count == 0) {
         return true;
     }
 }
