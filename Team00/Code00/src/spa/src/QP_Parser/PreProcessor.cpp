@@ -5,10 +5,12 @@
 #include <vector>
 #include "Tokenizer.h"
 
+using namespace qp;
+
 void PreProcessor::getQuery(std::string filename) {
     // Load File
     std::fstream file;
-    file.open(filename,ios::in);
+    file.open(filename,std::ios::in);
     std::vector<std::string> queries;
 
     if (file.is_open()) {
@@ -17,10 +19,10 @@ void PreProcessor::getQuery(std::string filename) {
         std::string query;
         // Read data from file and put it into string.
         while(getline(file, text)){
-            if (lineNo % 2 == 0) {
+            if (lineNo % 2 == 0 && lineNo % 4 != 0) { // TODO: need to edit
                 query = text;
             } else if (lineNo % 3 == 0) {
-                query = query + "\n" + text;
+                query += "\n" + text;
                 queries.push_back(query);
             }
             lineNo += 1;

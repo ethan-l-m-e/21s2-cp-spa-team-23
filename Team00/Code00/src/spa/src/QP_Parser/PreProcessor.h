@@ -1,7 +1,9 @@
 #include <string>
 
-class PreProcessor {
-public:
-    void getQuery(std::string);
-};
+namespace qp {
+    class PreProcessor {
+    public:
+        void getQuery(std::string);
+    };
+}
 

@@ -1,5 +1,5 @@
 #pragma once
-using namespace std;
+using namespace QP;
 
 // Regex for Lexical Tokens
 string const LETTER = "[A-Za-z]";
