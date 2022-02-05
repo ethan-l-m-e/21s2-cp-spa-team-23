@@ -3,3 +3,7 @@
 //
 
 #include "ClauseEvaluator.h"
+
+Result ClauseEvaluator::evaluateClause() {
+    return Result();
+}

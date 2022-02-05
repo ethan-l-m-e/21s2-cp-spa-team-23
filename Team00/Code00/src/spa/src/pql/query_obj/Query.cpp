@@ -19,11 +19,11 @@ bool Query::hasPatternClause(){
     return !patternClauses.empty();
 }
 
-vector<Clause> Query::getSuchThatClauses(){
+vector<SuchThatClause> Query::getSuchThatClauses(){
     return suchThatClauses;
 }
 
-vector<Clause> Query::getPatternClauses(){
+vector<PatternClause> Query::getPatternClauses(){
     return patternClauses;
 }
 

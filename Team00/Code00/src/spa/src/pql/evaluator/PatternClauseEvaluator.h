@@ -13,8 +13,7 @@ class PatternClauseEvaluator : public ClauseEvaluator {
 private:
     SynonymType synonymType;
 public:
-    PatternClauseEvaluator (SynonymType synonymType, std::vector<Argument> args) : synonymType{synonymType}, ClauseEvaluator(args) {}
-
+    PatternClauseEvaluator (SynonymType synonymType, std::vector<Argument> args, PKB* pkb, Query* query) : synonymType{synonymType}, ClauseEvaluator(args, pkb, query) {}
     Result evaluateClause(
             PKB* pkb,
             unordered_map<string, DesignEntity> declarations) override {

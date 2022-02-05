@@ -5,25 +5,7 @@
 #include "SuchThatClauseEvaluator.h"
 Result SuchThatClauseEvaluator::evaluateClause(PKB* pkb,
 unordered_map<string, DesignEntity> declarations){
-    switch (relRef) {
-        case RelRef::FOLLOWS:
-            evaluateFollows(pkb, declarations);
-            break;
-        case RelRef::FOLLOWS_T:
-            break;
-        case RelRef::PARENT:
-            break;
-        case RelRef::PARENT_T:
-            break;
-        case RelRef::USES_S:
-            break;
-        case RelRef::USES_P:
-            break;
-        case RelRef::MODIFIES_S:
-            break;
-        case RelRef::MODIFIES_P:
-            break;
-    }
+
 };
 
 Result SuchThatClauseEvaluator::evaluateFollows(PKB* pkb,

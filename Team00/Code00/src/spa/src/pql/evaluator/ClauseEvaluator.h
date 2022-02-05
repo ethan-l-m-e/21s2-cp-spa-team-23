@@ -6,6 +6,7 @@
 #define SPA_CLAUSEEVALUATOR_H
 
 
+#include <utility>
 #include <vector>
 #include "Result.h"
 #include "pql/query_obj/Argument.h"
@@ -16,11 +17,11 @@
 class ClauseEvaluator {
 protected:
     std::vector<Argument> argList;
+    PKB* pkb;
+    Query* query;
 public:
-    ClauseEvaluator(std::vector<Argument> args) : argList(args) {}
-    virtual Result evaluateClause(
-            PKB* pkb,
-            unordered_map<string, DesignEntity> declarations);
+    ClauseEvaluator(std::vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
+    virtual Result evaluateClause();
 };
 
 

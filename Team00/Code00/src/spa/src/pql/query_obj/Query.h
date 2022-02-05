@@ -25,15 +25,15 @@ enum class DesignEntity{
 class Query {
 protected:
     unordered_map<string, DesignEntity> declarations;
-    vector<Clause> patternClauses;
-    vector<Clause> suchThatClauses;
+    vector<SuchThatClause> patternClauses;
+    vector<PatternClause> suchThatClauses;
     std::string selectedSynonym;
 public:
     virtual std::string generateResult(PKB* pkb);
     bool hasSuchThatClause();
     bool hasPatternClause();
-    vector<Clause> getSuchThatClauses();
-    vector<Clause> getPatternClauses();
+    vector<SuchThatClause> getSuchThatClauses();
+    vector<PatternClause> getPatternClauses();
 };
 
 #endif //SPA_QUERY_H
