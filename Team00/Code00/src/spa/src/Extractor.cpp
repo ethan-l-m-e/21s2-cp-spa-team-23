@@ -4,12 +4,13 @@
 
 #include "Extractor.h"
 
+std::string* information;
 
 Extractor* Extractor::extractAssign(std::string sourceCode) {
 
     std::string assignInfo[2];
 
-    sourceCode.erase(std::remove_if(sourceCode.begin(),sourceCode.end(), ::isspace),sourceCode.end());
+    sourceCode.erase(std::remove_if(sourceCode.begin(),sourceCode.end(), isspace),sourceCode.end());
     int pos = sourceCode.find('=');
     std::string varName;
     for (int i = 0; i<pos;i++) {
@@ -35,9 +36,10 @@ std::string Extractor::getAssignExpr(){
 
 Extractor* Extractor::extractProcedure(std::string sourceCode) {
     std::string procInfo[2];
-    sourceCode.erase(std::remove_if(sourceCode.begin(),sourceCode.end(), ::isspace),sourceCode.end());
-    sourceCode.erase(std::remove_if(sourceCode.begin(),sourceCode.begin()+9, "procedure"),sourceCode.end());
-    int pos = sourceCode.find("{");
+    sourceCode.erase(std::remove_if(sourceCode.begin(),sourceCode.end(), isspace),sourceCode.end());
+    int procedurePos = sourceCode.find("procedure");
+    sourceCode = sourceCode.substr(procedurePos+9,sourceCode.size());
+    int pos = sourceCode.find('{');
     std::string procName;
     for (int i = 0; i<pos;i++) {
         procName.push_back(sourceCode[i]);
@@ -61,28 +63,28 @@ std::string Extractor::getProcStmtLst(){
 }
 
 Extractor* Extractor::extractExpression(std::string sourceCode) {
-    std::string exprInfo[3];
-    std::string init = sourceCode;
-    int bracketFlag = 0;
-    for (int i = sourceCode.length();i>=0;i--){
-        switch(sourceCode[i]) {
-            case ')':
-                bracketFlag = 1;
-                break;
-            case '+':
-                break;
-            case '-':
-                break;
-            case '*':
-                break;
-            case '/':
-                break;
-            case '(':
-                break;
-        }
-
-
-    }
+//    std::string exprInfo[3];
+//    std::string init = sourceCode;
+//    int bracketFlag = 0;
+//    for (int i = sourceCode.length();i>=0;i--){
+//        switch(sourceCode[i]) {
+//            case ')':
+//                bracketFlag = 1;
+//                break;
+//            case '+':
+//                break;
+//            case '-':
+//                break;
+//            case '*':
+//                break;
+//            case '/':
+//                break;
+//            case '(':
+//                break;
+//        }
+//
+//
+//    }
 
     return this;
 }

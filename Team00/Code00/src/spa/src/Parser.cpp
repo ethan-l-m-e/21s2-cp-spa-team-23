@@ -87,7 +87,7 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
             }
             case ASSIGN: {
                 cout << "assign found";
-                string trimmedCode = stringFormatter.Trim(sourceCode, (type) ASSIGN,&sourceCode);
+                string trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN,&sourceCode);
                 extractor.extractAssign(trimmedCode);
                 newNode.changeValue("Assign");
                 TNode childNodeLeft = TNode(extractor.getAssignVar());

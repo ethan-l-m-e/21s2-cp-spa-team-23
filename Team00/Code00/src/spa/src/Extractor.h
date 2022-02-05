@@ -8,7 +8,7 @@
 
 
 class Extractor {
-    static std::string* information;
+//    static std::string* information;
 
 
 public:
@@ -16,9 +16,9 @@ public:
 
     Extractor* extractProcedure(std::string sourceCode );
 
-    std::string getAssignVar();
+    static std::string getAssignVar();
 
-    std::string getAssignExpr();
+    static std::string getAssignExpr();
 
     std::string getProcStmtLst();
 

@@ -3,10 +3,10 @@
 //
 
 #include "StringFormatter.h"
-
-std::string StringFormatter::Trim(std::string sourceCode, type t, std::string* initCode) {
+#include "Constants.h"
+std::string StringFormatter::Trim(std::string sourceCode, int type, std::string* initCode) {
     std::string trimmedCode;
-    switch(t) {
+    switch(type) {
         case ASSIGN:{
             int pos = sourceCode.find('\n');
             trimmedCode = sourceCode.substr(0, pos);
@@ -18,7 +18,7 @@ std::string StringFormatter::Trim(std::string sourceCode, type t, std::string* i
             trimmedCode = "";
             break;
         }
-        case EXPRESSION: {
+        case BASE_CASE: {
             trimmedCode = "";
             break;
         }
