@@ -5,9 +5,10 @@
 #ifndef SPA_STRINGFORMATTER_H
 #define SPA_STRINGFORMATTER_H
 #include <string>
+#include <Partition.h>
 class StringFormatter {
     public:
-        std::string Trim(std::string sourceCode,int type,std::string* initCode);
+        Partition Trim(std::string sourceCode,int type);
 };
 
 

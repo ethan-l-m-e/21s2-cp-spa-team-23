@@ -15,6 +15,7 @@ using namespace std;
 #include "RelationshipExtractor.h"
 #include "Extractor.h"
 #include "StringFormatter.h"
+#include "Partition.cpp"
 
 /*
 int const BASE_CASE = 0;
@@ -92,10 +93,11 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
                 break;
             }
             case ASSIGN: {
-                string trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN,&sourceCode);
-                cout <<"trimmed code: "<<trimmedCode <<"\n";
-                cout <<"init code: "<<sourceCode <<"\n";
-                extractor.extractAssign(trimmedCode);
+                cout << "assign found";
+                Partition trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN);
+                string codeToExtract = trimmedCode.GetFirstString();
+                string codeToRecurse = trimmedCode.GetSecondString();
+                extractor.extractAssign(codeToExtract);
                 newNode.changeValue("Assign");
                 newNode.setStmtNo(stmtNo);
                 TNode childNodeLeft = TNode(extractor.getAssignVar());
@@ -116,6 +118,7 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
                 break;
             }
         }
+//    sourceCode = codeToRecurse;
     //}
     TNode * ptr;
     ptr = &newNode;
