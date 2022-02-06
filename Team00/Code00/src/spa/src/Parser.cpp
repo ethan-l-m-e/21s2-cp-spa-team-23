@@ -10,6 +10,8 @@ using namespace std;
 #include "PKB.h"
 #include "TNode.cpp"
 #include "Constants.h"
+#include "Extractor.h"
+#include "StringFormatter.h"
 
 /*
 int const BASE_CASE = 0;
@@ -62,16 +64,20 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
     // insert recursion here
     //TODO: identifier + validation class to identify object type from SourceCode: Hong Wen
     //while(!sourceCode.empty()) {
+        TNode newNode = TNode(""); //Create empty new node to be filled in during switch and returned at the end
+        StringFormatter stringFormatter;
+        Extractor extractor;
         switch(identifyFirstObject(sourceCode)) { // identify object
             case PROCEDURE: {
                 cout << "procedure_regex found\n";
                 /*insert validation method here*/
                 // build Nodes and pointers. add ref to current Node
                 const string name = "Example"; // Hard coded stuff TODO: create an Extractor class that obtains important values like name & operators: Lucas.
-                TNode newNode = TNode(name + ":procedure");
+                newNode.changeValue(name + ":procedure");
                 currentNode.addNode(newNode);
                 TNode childNode =  TNode("stmtList");
                 newNode.addNode(childNode);
+                extractor.extractProcedure(sourceCode);
 
                 // TODO: create a StringFormatter component that handles string trimming/partitioning. Lucas (later)
                 // perform recursion on additional nodes
@@ -81,6 +87,13 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
             }
             case ASSIGN: {
                 cout << "assign found";
+                string trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN,&sourceCode);
+                extractor.extractAssign(trimmedCode);
+                newNode.changeValue("Assign");
+                TNode childNodeLeft = TNode(extractor.getAssignVar());
+                TNode* childNodeRight = recursiveTreeConstruction(extractor.getAssignExpr(),newNode);
+                newNode.addNode(childNodeLeft);
+                newNode.addNode((TNode &)(childNodeRight));
                 break;
             }
             case BASE_CASE: {
@@ -98,7 +111,7 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
 
 
     //}
-    return &currentNode;
+    return &newNode;
 }
 
 
