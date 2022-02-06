@@ -10,7 +10,6 @@
 #include "Clause.h"
 
 enum class DesignEntity{
-    EMPTY,
     PROCEDURE,
     STMT,
     READ,
@@ -26,18 +25,12 @@ enum class DesignEntity{
 class Query {
 protected:
     unordered_map<string, DesignEntity> declarations;
-    vector<SuchThatClause> suchThatClauses;
-    vector<PatternClause> patternClauses;
-    std::string selectedSynonym;
+    Clause patternClause;
+    Clause suchThatClause;
 public:
+    optional<DesignEntity> findEntityType(std::string synonym);
     virtual std::string generateResult(PKB* pkb);
-    bool hasSuchThatClause();
-    bool hasPatternClause();
-    vector<PatternClause> getPatternClauses();
-    vector<SuchThatClause> getSuchThatClauses();
-    std::string getSelectedSynonym();
-    DesignEntity getSelectedSynonymType();
-    DesignEntity findEntityType(std::string synonym);
 };
+
 
 #endif //SPA_QUERY_H

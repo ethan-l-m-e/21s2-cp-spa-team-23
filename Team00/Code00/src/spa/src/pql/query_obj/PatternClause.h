@@ -2,19 +2,24 @@
 // Created by リム・イーサン on 31/1/22.
 //
 
-#ifndef SPA_PATTERNCLAUSEEVALUATOR_H
-#define SPA_PATTERNCLAUSEEVALUATOR_H
+#ifndef SPA_PATTERNCLAUSE_H
+#define SPA_PATTERNCLAUSE_H
 
 #include <vector>
-#include "ClauseEvaluator.h"
-#include "pql/query_obj/Argument.h"
+#include "Clause.h"
+#include "Argument.h"
 
-class PatternClauseEvaluator : public ClauseEvaluator {
+enum class SynonymType { ASSIGN };
+
+class PatternClause : public Clause {
 private:
     SynonymType synonymType;
 public:
-    PatternClauseEvaluator (SynonymType synonymType, std::vector<Argument> args, PKB* pkb, Query* query) : synonymType{synonymType}, ClauseEvaluator(args, pkb, query) {}
-    Result evaluateClause() override {
+    PatternClause (SynonymType synonymType, std::vector<Argument> args) : synonymType{synonymType}, Clause(args) {}
+
+    Result evaluateClause(
+            PKB* pkb,
+            unordered_map<string, DesignEntity> declarations) override {
         std::string synonym = argList[0].argumentValue;
         std::string entRef = argList[1].argumentValue;
         std::string expressionSpec = argList[2].argumentValue;
@@ -35,4 +40,4 @@ public:
 };
 
 
-#endif //SPA_PATTERNCLAUSEEVALUATOR_H
+#endif //SPA_PATTERNCLAUSE_H
