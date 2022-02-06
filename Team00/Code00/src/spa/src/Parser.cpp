@@ -160,6 +160,7 @@ void recursiveTreeConstruction(string sourceCode, TNode * currentNode, int * stm
                 // perform recursion on additional nodes
                 //childNode.addNode( * recursiveTreeConstruction(sourceCode, childNode)); // not trimmed yet
                 // remove stmts & syntax that are a part of this procedure_regex. while statement will loop again
+                sourcePtr = &emptyStr; // to immediately end the loop since this part not completed
                 break;
             }
             case ASSIGN: {
@@ -181,7 +182,7 @@ void recursiveTreeConstruction(string sourceCode, TNode * currentNode, int * stm
             }
             case BASE_CASE: {
                 newNode.changeValue(*sourcePtr);
-                sourcePtr = &emptyStr;
+                sourcePtr = &emptyStr; // to immediately end the loop since this part not completed
                 break;
             }
             case OPERATOR: {
