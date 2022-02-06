@@ -29,11 +29,11 @@ int const OPERATOR = 7;
 int const PRINT = 8;
 int const CALL = 9;
 */
-
+string emptyStr = EMPTY;
 Identifier identifier;
 string extractFrontStringByRegex(string sourceCode, string regex);
-void recursiveTreeConstruction(string, TNode, int);
-void convertToTNode(string);
+void recursiveTreeConstruction(string, TNode*, int*);
+TNode* convertToTNode(string);
 
 int Parser::Parse (string filename) {
     // load file
@@ -47,7 +47,7 @@ int Parser::Parse (string filename) {
     file.close();
 
     // proceed to convert sourceCode into AST using recursive descend
-    convertToTNode(sourceCode);
+    TNode * rootNode = convertToTNode(sourceCode);
 
     //extract relationship entities from AST and transmit data to PKB
     //TODO: create a relationshipExtractor class to pull methods
@@ -57,13 +57,18 @@ int Parser::Parse (string filename) {
     return 0;
 }
 
-void convertToTNode(string sourceCode) {
-    TNode firstNode = TNode("program");
-    int static count = 1;
+TNode * convertToTNode(string sourceCode) {
+    TNode * firstNode;
+    TNode node("program");
+    firstNode = &node;
+
+    int * count;
+    int init = 1;
+    count = &init;
+
     // TODO (FUTURE): add a line number at the back of each statement (except 'then', 'else' & procedure_regex or blank)? for statement no. possibly Under StringFormatter
     recursiveTreeConstruction(sourceCode, firstNode, count);
-
-
+    return firstNode;
 }
 
 
@@ -130,21 +135,23 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
 }
 */
 
-void recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmtNo) {
+void recursiveTreeConstruction(string sourceCode, TNode * currentNode, int * stmtNo) {
     // insert recursion here
+    string * sourcePtr;
+    sourcePtr = &sourceCode;
+
     //TODO: identifier + validation class to identify object type from SourceCode: Hong Wen
-    //while(!sourceCode.empty()) {
+
+    while(sourcePtr -> length() != 0) {
         TNode newNode = TNode(""); //Create empty new node to be filled in during switch and returned at the end
         StringFormatter stringFormatter;
         Extractor extractor;
-        switch(Identifier::identifyFirstObject(sourceCode)) { // identify object
+        switch(Identifier::identifyFirstObject(*sourcePtr)) { // identify object
             case PROCEDURE: {
-                /*insert validation method here*/
                 // build Nodes and pointers. add ref to current Node
                 const string name = "Example"; // Hard coded stuff TODO: create an Extractor class that obtains important values like name & operators: Lucas.
-
                 newNode.changeValue(name + ":procedure");
-                currentNode.addNode(&newNode);
+                currentNode -> addNode(&newNode);
                 TNode childNode =  TNode("stmtList");
                 newNode.addNode(&childNode);
                 extractor.extractProcedure(sourceCode);
@@ -156,38 +163,40 @@ void recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmtNo)
                 break;
             }
             case ASSIGN: {
-                cout << "assign found";
-                Partition trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN);
-                string codeToExtract = trimmedCode.GetFirstString();
-                string codeToRecurse = trimmedCode.GetSecondString();
-                // attach newNode to current node
-                currentNode.addNode(&newNode);
-                extractor.extractAssign(codeToExtract);
+                Partition trimmedCode = stringFormatter.Trim(*sourcePtr, ASSIGN);
                 newNode.changeValue("Assign");
-                newNode.setStmtNo(stmtNo);
+                newNode.setStmtNo(*stmtNo);
 
-                TNode childNodeLeft = TNode(extractor.getAssignVar());
-                newNode.addNode(&childNodeLeft);
-                cout << "codeToExtract"<< extractor.getAssignExpr();
-                recursiveTreeConstruction(extractor.getAssignExpr(), newNode, ++stmtNo);
-                sourceCode = codeToRecurse;
+                // Node pointing
+                currentNode -> addNode(&newNode);
+                //extractor.extractAssign(codeToExtract)
+                //TNode childNodeLeft = TNode(extractor.getAssignVar());
+                //newNode.addNode(&childNodeLeft);
+                //recursiveTreeConstruction(extractor.getAssignExpr(), newNode, ++stmtNo);
+
+                (*stmtNo)++;
+                string codeToRecurse = trimmedCode.GetSecondString();
+                sourcePtr = &codeToRecurse;
                 break;
             }
-
             case BASE_CASE: {
-                cout << "base case found: " << sourceCode << "\n";
+                newNode.changeValue(*sourcePtr);
+                sourcePtr = &emptyStr;
                 break;
             }
             case OPERATOR: {
-                cout << "operator found";
+                sourcePtr = &emptyStr;
                 break;
             }
             case ERROR: {
+                sourcePtr = &emptyStr;
                 break;
             }
+            default:
+                sourcePtr = &emptyStr;
+                break;
         }
-
-    //}
+    }
 }
 
 
