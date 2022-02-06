@@ -33,6 +33,15 @@ bool ClauseEvaluator::rightIsSynonym() {
     return argRight.argumentType == ArgumentType::SYNONYM;
 }
 
+unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity) {
+    if (designEntity == DesignEntity::VARIABLE) {
+        return pkb->getAllVariables();
+
+    } else {
+        return unordered_set<std::string>();
+    }
+};
+
 Result ClauseEvaluator::buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items) {
     return {type, isTrue, header, items};
 }

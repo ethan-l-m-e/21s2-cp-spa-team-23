@@ -30,10 +30,8 @@ std::string QueryEvaluator::evaluate(Query* query) {
     }
 
     if (result.resultType == ResultType::EMPTY) {
-        DesignEntity entityType = query->getSelectedSynonymType();
-        //TODO: Evaluate clause without suchThat and pattern
-        //pkb->getAllType(entityType);
-        // merge result
+        ClauseEvaluator selectClauseEvaluator = SelectClauseEvaluator(result, pkb, query);
+        return convertResultToString(result, query->getSelectedSynonym());
     }
 
     return convertResultToString(result, query->getSelectedSynonym());
@@ -76,6 +74,15 @@ Result QueryEvaluator::mergeResults(Result r1, Result r2) {
 std::string QueryEvaluator::convertResultToString(Result result, string selectedSynonym) {
 
     //TODO: convert result object to output result string
+
+    auto str  = std::get_if<std::string>(&result.resultHeader);
+
+    if (!str->compare(selectedSynonym)) {
+        vector<ResultItem> vec = result.resultItemList;
+        string str(vec.begin(), vec.end());
+        cout<<(str);
+        return str;
+    }
     return "resultString";
 }
 

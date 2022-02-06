@@ -12,6 +12,7 @@
 #include "pql/evaluator/ClauseEvaluator.h"
 #include "pql/evaluator/FollowsClauseEvaluator.h"
 #include "pql/evaluator/PatternClauseEvaluator.h"
+#include "pql/evaluator/SelectClauseEvaluator.h"
 
 class QueryEvaluator {
 private:

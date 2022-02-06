@@ -21,11 +21,13 @@ protected:
     Query* query;
 public:
     ClauseEvaluator(std::vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
+    ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
     virtual Result evaluateClause();
     bool hasTwoSynonyms();
     bool hasNoSynonyms();
     bool leftIsSynonym();
     bool rightIsSynonym();
+    unordered_set<std::string> getAllType(DesignEntity designEntity);
     Result buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items);
 };
 

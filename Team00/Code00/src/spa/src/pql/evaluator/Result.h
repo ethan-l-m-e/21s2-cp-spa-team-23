@@ -12,20 +12,20 @@
 enum class ResultType {
     BOOLEAN,
     LIST,
-    TUPLES,
+    VECTOR,
     EMPTY
 };
 using ResultHeader = std::variant<
         std::string,
-        std::tuple<std::string, std::string>>;
+        std::vector<std::string>>;
 using ResultItem = std::variant<
         std::string,
-        std::tuple<std::string, std::string>>;
+        std::vector<std::string>>;
 
 typedef struct Result {
     ResultType resultType = ResultType::EMPTY;
     bool resultBoolean;
-    ResultHeader resultHeader;
+    ResultHeader resultHeader = std::vector<std::string>();
     std::vector<ResultItem> resultItemList;
 } Result;
 
