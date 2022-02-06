@@ -99,10 +99,39 @@ TEST_CASE("PROCEDURE") {
     CHECK(switchCase == ERROR);
 }
 
-TEST_CASE("GENERAL") {
+TEST_CASE("STMTLST") {
+    string stmtlst = read1 + "\n" + assign1 + "\n" + print1;
+    switchCase = Identifier::identifyFirstObject(stmtlst);
+    CHECK(switchCase == READ);
+    stmtlst = assign1 + "\n" + print1;
+    CHECK(switchCase == ASSIGN);
+}
+
+TEST_CASE("COND_EXPR") {
+    string cond1 = "x < present";
+    switchCase = Identifier::identifyFirstObject(cond1);
+    CHECK(switchCase == COND_EXPR);
+    cond1 = "!( x < present)";
+    switchCase = Identifier::identifyFirstObject(cond1);
+    CHECK(switchCase == COND_EXPR);
+    cond1 = "(x > 1) && (y < 2)";
+    switchCase = Identifier::identifyFirstObject(cond1);
+    CHECK(switchCase == COND_EXPR);
+    cond1 = "(x > 1) || (y < 2)";
+    switchCase = Identifier::identifyFirstObject(cond1);
+    CHECK(switchCase == COND_EXPR);
+    cond1 = "!((x > 1)";
+    switchCase = Identifier::identifyFirstObject(cond1);
+    CHECK(switchCase == ERROR);
+}
+
+TEST_CASE("WHILE") {
 
 }
 
+TEST_CASE("IF") {
+
+}
 
 
 
