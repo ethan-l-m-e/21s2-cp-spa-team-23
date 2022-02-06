@@ -12,6 +12,7 @@ using namespace std;
 #include "Constants.h"
 #include "Extractor.h"
 #include "StringFormatter.h"
+#include "Partition.cpp"
 
 /*
 int const BASE_CASE = 0;
@@ -87,8 +88,10 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
             }
             case ASSIGN: {
                 cout << "assign found";
-                string trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN,&sourceCode);
-                extractor.extractAssign(trimmedCode);
+                Partition trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN);
+                string codeToExtract = trimmedCode.GetFirstString();
+                string codeToRecurse = trimmedCode.GetSecondString();
+                extractor.extractAssign(codeToExtract);
                 newNode.changeValue("Assign");
                 TNode childNodeLeft = TNode(extractor.getAssignVar());
                 TNode* childNodeRight = recursiveTreeConstruction(extractor.getAssignExpr(),newNode);
@@ -109,7 +112,7 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode) {
             }
         }
 
-
+//    sourceCode = codeToRecurse;
     //}
     return &newNode;
 }
