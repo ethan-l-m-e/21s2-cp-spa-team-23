@@ -25,7 +25,7 @@ TEST_CASE ("SELECT CLAUSE") {
     queries.push_back(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = QueryToken();
-    tokenizer.getSelectClause(firstQuery, queryToken);
+    tokenizer.getSelectClauseTokens(firstQuery, queryToken);
     std::string str = *(queryToken.selectClauseToken);
     std::cout << str;
     CHECK(str == "v");

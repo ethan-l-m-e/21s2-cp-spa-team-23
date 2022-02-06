@@ -7,24 +7,18 @@
 
 using namespace qp;
 
-std::vector<QueryToken> Tokenizer::getQueryTokens(std::vector<std::string> queries) {
+QueryToken Tokenizer::getQueryToken(std::string query) {
 
-    std::vector<QueryToken> resultTokens;
+    QueryToken queryToken = QueryToken();
 
     // check if length of queries is non-zero
-    if (queries.size() == 0) {
-        return resultTokens;
+    if (query.length() == 0) {
+        return queryToken;
     }
 
-    // loop thru each query string to get declarations, synonym, rs, pattern
-    for (std::string query : queries) {
-        QueryToken queryToken = QueryToken();
-        getDeclarationTokens(query, queryToken);
-        getSelectClause(query, queryToken);
-        resultTokens.push_back(queryToken);
-    }
-
-     return resultTokens;
+    getDeclarationTokens(query, queryToken);
+    getSelectClauseTokens(query, queryToken);
+     return queryToken;
 }
 
 void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
@@ -49,7 +43,7 @@ void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
     queryToken.declarationTokens->pop_back();
 }
 
-void Tokenizer::getSelectClause(std::string& pql, QueryToken& queryToken) {
+void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
     // find select synonym
     std::regex re("Select [A-Za-z][A-Za-z|0-9]*");
     std::smatch match;

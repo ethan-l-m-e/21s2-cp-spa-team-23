@@ -1,39 +1,43 @@
 #include "PreProcessor.h"
-#include <iostream>
-#include <fstream>
 #include <string>
 #include <vector>
+#include <regex>
 #include "Tokenizer.h"
 
 using namespace qp;
 
-void PreProcessor::getQuery(std::string filename) {
-    // Load File
-    std::vector<std::string> queries;
-    readFile(filename, queries);
-
+void PreProcessor::getQuery(std::string pql) {
     Tokenizer tokenizer = Tokenizer();
-    std::vector<QueryToken> queryTokens = tokenizer.getQueryTokens(queries);
+    QueryToken queryToken = tokenizer.getQueryToken(pql);
+
 };
 
-void PreProcessor::readFile(std::string filename, std::vector<std::string>& queries) {
-    std::fstream file;
-    file.open(filename,std::ios::in);
+void PreProcessor::getDeclarations(QueryToken queryToken) {
+    std::vector<std::string> declarations = *(queryToken.declarationTokens);
+    std::string designEntity;
 
-    if (file.is_open()) {
-        std::string text;
-        int lineNo = 0;
-        std::string query;
-        // Read data from file and put it into string.
-        while(getline(file, text)){
-            if (lineNo % 2 == 0 && lineNo % 4 != 0) { // TODO: need to edit
-                query = text;
-            } else if (lineNo % 3 == 0) {
-                query += "\n" + text;
-                queries.push_back(query);
-            }
-            lineNo += 1;
+    for (std::string declaration : declarations) {
+        designEntity = declaration.substr(0, declaration.find(' '));
+        if (designEntity == "stmt") {
+            
+        } else if (designEntity == "read") {
+
+        } else if (designEntity == "print") {
+
+        } else if (designEntity == "call") {
+
+        } else if (designEntity == "while") {
+
+        } else if (designEntity == "if") {
+
+        } else if (designEntity == "assign") {
+
+        } else if (designEntity == "variable") {
+
+        } else if (designEntity == "constant") {
+
+        } else if (designEntity == "procedure") {
+
         }
     }
-    file.close();
 }

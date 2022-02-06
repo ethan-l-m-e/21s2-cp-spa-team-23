@@ -1,6 +1,9 @@
 #include <vector>
 #include <string>
 
+#ifndef SPA_TOKENIZER_H
+#define SPA_TOKENIZER_H
+
 namespace qp {
     class QueryToken {
     public:
@@ -16,8 +19,10 @@ namespace qp {
 
     class Tokenizer {
     public:
-        std::vector<QueryToken> getQueryTokens(std::vector<std::string>);
+        QueryToken getQueryToken(std::string);
         void getDeclarationTokens(std::string, QueryToken&);
-        void getSelectClause(std::string&, QueryToken&);
+        void getSelectClauseTokens(std::string&, QueryToken&);
     };
 }
+
+#endif //SPA_TOKENIZER_H
