@@ -13,6 +13,8 @@ using namespace std;
 #include "Constants/Constants.h"
 #include "Identifier.h"
 #include "RelationshipExtractor.h"
+#include "Extractor.h"
+#include "StringFormatter.h"
 
 /*
 int const BASE_CASE = 0;
@@ -67,15 +69,21 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
     // insert recursion here
     //TODO: identifier + validation class to identify object type from SourceCode: Hong Wen
     //while(!sourceCode.empty()) {
-        switch(identifier.identifyFirstObject(sourceCode)) { // identify object
+
+        TNode newNode = TNode(""); //Create empty new node to be filled in during switch and returned at the end
+        StringFormatter stringFormatter;
+        Extractor extractor;
+        switch(Identifier::identifyFirstObject(sourceCode)) { // identify object
             case PROCEDURE: {
                 /*insert validation method here*/
                 // build Nodes and pointers. add ref to current Node
                 const string name = "Example"; // Hard coded stuff TODO: create an Extractor class that obtains important values like name & operators: Lucas.
-                TNode newNode = TNode(name + ":procedure");
+
+                newNode.changeValue(name + ":procedure");
                 currentNode.addNode(&newNode);
                 TNode childNode =  TNode("stmtList");
                 newNode.addNode(&childNode);
+                extractor.extractProcedure(sourceCode);
 
                 // TODO: create a StringFormatter component that handles string trimming/partitioning. Lucas (later)
                 // perform recursion on additional nodes
@@ -84,23 +92,15 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
                 break;
             }
             case ASSIGN: {
-                // add stmtNo as stmtNo to node
-                cout << "assign1 found";
-                stmtNo++;
-                break;
-            }
-
-            case READ: {
-                //add stmtNo as stmtNo to node
-                cout << "read found";
-                stmtNo++;
-                break;
-            }
-
-            case PRINT: {
-                //add stmtNo as stmtNo to node
-                cout << "print found";
-                stmtNo++;
+                string trimmedCode = stringFormatter.Trim(sourceCode, ASSIGN,&sourceCode);
+                cout <<"trimmed code: "<<trimmedCode <<"\n";
+                cout <<"init code: "<<sourceCode <<"\n";
+                extractor.extractAssign(trimmedCode);
+                newNode.changeValue("Assign");
+                newNode.setStmtNo(stmtNo);
+                TNode childNodeLeft = TNode(extractor.getAssignVar());
+                //TNode* childNodeRight = recursiveTreeConstruction(extractor.getAssignExpr(), newNode, stmtNo++);
+                //newNode.addNode(&childNodeLeft).addNode(childNodeRight);
                 break;
             }
 
@@ -117,7 +117,9 @@ TNode * recursiveTreeConstruction(string sourceCode, TNode currentNode, int stmt
             }
         }
     //}
-    return &currentNode;
+    TNode * ptr;
+    ptr = &newNode;
+    return ptr;
 }
 
 

@@ -23,8 +23,7 @@ TEST_CASE("Children Test") {
     TNode cNode1(value2);
     TNode cNode2(value3);
     TNode ccNode1(value4);
-    pNode.addNode(&cNode1);
-    pNode.addNode(&cNode2);
+    pNode.addNode(&cNode1).addNode(&cNode2);
     cNode1.addNode(&ccNode1);
     CHECK(2 == pNode.getNumberOfChildNodes());
     CHECK(value2 == pNode.getNode(0) -> getValue());
