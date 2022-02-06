@@ -73,6 +73,6 @@ Result QueryEvaluator::mergeResults(Result r1, Result r2) {
 
 std::string QueryEvaluator::convertResultToString(Result result) {
     //TODO: convert result object to output result string
-    return "resultString"
+    return "resultString";
 }
 
