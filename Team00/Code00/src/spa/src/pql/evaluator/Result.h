@@ -19,7 +19,6 @@ using ResultHeader = std::variant<
         std::string,
         std::tuple<std::string, std::string>>;
 using ResultItem = std::variant<
-        bool,
         std::string,
         std::tuple<std::string, std::string>>;
 
