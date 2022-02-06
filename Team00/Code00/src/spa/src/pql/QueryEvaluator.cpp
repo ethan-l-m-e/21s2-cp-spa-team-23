@@ -14,6 +14,7 @@ std::string QueryEvaluator::evaluate(Query* query) {
         for(PatternClause clause : query->getPatternClauses()) {
             ClauseEvaluator patternClauseEvaluator = PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
             Result patternResult = patternClauseEvaluator.evaluateClause();
+            if (!patternResult.resultBoolean) return convertResultToString(result, query->getSelectedSynonym());
             result = mergeResults(result, patternResult);
         }
     }
@@ -23,6 +24,7 @@ std::string QueryEvaluator::evaluate(Query* query) {
         for(SuchThatClause clause : query->getSuchThatClauses()) {
             ClauseEvaluator suchThatClauseEvaluator = generateEvaluator(clause, query);
             Result suchThatResult = suchThatClauseEvaluator.evaluateClause();
+            if (!suchThatResult.resultBoolean) return convertResultToString(result, query->getSelectedSynonym());
             result = mergeResults(result, suchThatResult);
         }
     }
@@ -34,7 +36,7 @@ std::string QueryEvaluator::evaluate(Query* query) {
         // merge result
     }
 
-    return convertResultToString(result);
+    return convertResultToString(result, query->getSelectedSynonym());
 }
 
 ClauseEvaluator QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
@@ -71,7 +73,8 @@ Result QueryEvaluator::mergeResults(Result r1, Result r2) {
     return r1;
 }
 
-std::string QueryEvaluator::convertResultToString(Result result) {
+std::string QueryEvaluator::convertResultToString(Result result, string selectedSynonym) {
+
     //TODO: convert result object to output result string
     return "resultString";
 }

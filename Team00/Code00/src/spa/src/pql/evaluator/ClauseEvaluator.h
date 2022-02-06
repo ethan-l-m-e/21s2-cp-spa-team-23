@@ -26,7 +26,7 @@ public:
     bool hasNoSynonyms();
     bool leftIsSynonym();
     bool rightIsSynonym();
-    Result buildResult(ResultType type, ResultHeader header, vector<ResultItem> items);
+    Result buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items);
 };
 
 

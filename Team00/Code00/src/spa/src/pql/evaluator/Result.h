@@ -25,6 +25,7 @@ using ResultItem = std::variant<
 
 typedef struct Result {
     ResultType resultType = ResultType::EMPTY;
+    bool resultBoolean;
     ResultHeader resultHeader;
     std::vector<ResultItem> resultItemList;
 } Result;

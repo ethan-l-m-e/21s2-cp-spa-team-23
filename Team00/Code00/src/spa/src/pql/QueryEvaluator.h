@@ -25,7 +25,7 @@ public:
 
     static Result mergeResults(Result r1, Result r2);
 
-    static string convertResultToString(Result result);
+    static string convertResultToString(Result result, string selectedSynonym);
 };
 
 

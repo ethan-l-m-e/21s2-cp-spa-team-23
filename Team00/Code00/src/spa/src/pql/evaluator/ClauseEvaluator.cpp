@@ -33,6 +33,6 @@ bool ClauseEvaluator::rightIsSynonym() {
     return argRight.argumentType == ArgumentType::SYNONYM;
 }
 
-Result ClauseEvaluator::buildResult(ResultType type, ResultHeader header, vector<ResultItem> items) {
-    return {type, header, items};
+Result ClauseEvaluator::buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items) {
+    return {type, isTrue, header, items};
 }
