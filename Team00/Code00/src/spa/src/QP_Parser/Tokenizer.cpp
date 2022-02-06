@@ -18,7 +18,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
-     return queryToken;
+    return queryToken;
 }
 
 void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
@@ -50,5 +50,5 @@ void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) 
     std::regex_search(pql.cbegin(), pql.cend(), match, re);
     std::string selectString = match[0];
     selectString = selectString.substr(7);
-    queryToken.selectClauseToken = &selectString;
+    queryToken.selectClauseToken = selectString;
 }

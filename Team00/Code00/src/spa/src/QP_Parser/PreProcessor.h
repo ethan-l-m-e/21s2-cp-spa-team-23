@@ -1,11 +1,13 @@
 #include <string>
 #include "Tokenizer.h"
+#include "pql/query_obj/Query.h"
 
 namespace qp {
     class PreProcessor {
     public:
-        void getQuery(std::string);
-        void getDeclarations(QueryToken);
+        Query getQuery(std::string);
+        void getDeclarations(QueryToken&, Query&);
+        void getSynonym(QueryToken&, Query&);
     };
 }
 

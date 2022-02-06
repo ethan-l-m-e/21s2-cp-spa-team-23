@@ -6,11 +6,8 @@
 
 using namespace qp;
 
-std::vector<std::string> queries;
-std::string firstQuery = "variable v; assign a;\nSelect v";
-
 TEST_CASE ("DECLARATIONS") {
-    queries.push_back(firstQuery);
+    std::string firstQuery = "variable v; assign a;\nSelect v";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = QueryToken();
     tokenizer.getDeclarationTokens(firstQuery, queryToken);
@@ -22,11 +19,10 @@ TEST_CASE ("DECLARATIONS") {
 }
 
 TEST_CASE ("SELECT CLAUSE") {
-    queries.push_back(firstQuery);
+    std::string firstQuery = "variable v; assign a;\nSelect v";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = QueryToken();
     tokenizer.getSelectClauseTokens(firstQuery, queryToken);
-    std::string str = *(queryToken.selectClauseToken);
-    std::cout << str;
-    CHECK(str == "v");
+    std::cout << queryToken.selectClauseToken;
+    CHECK(queryToken.selectClauseToken == "v");
 }
