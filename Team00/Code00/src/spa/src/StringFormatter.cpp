@@ -3,7 +3,7 @@
 //
 
 #include "StringFormatter.h"
-#include "Constants.h"
+#include "Constants/Constants.h"
 Partition StringFormatter::Trim(std::string sourceCode, int type) {
     std::string trimmedCode;
     Partition finalStrings = Partition();
@@ -11,7 +11,7 @@ Partition StringFormatter::Trim(std::string sourceCode, int type) {
         case ASSIGN:{
             int pos = sourceCode.find('\n');
             trimmedCode = sourceCode.substr(0, pos);
-            std::string codeToRecurse = sourceCode.substr(pos,sourceCode.size());
+            std::string codeToRecurse = sourceCode.substr(pos + 1,sourceCode.size()); // +1 to get rid of the \n space
             finalStrings = Partition(trimmedCode,codeToRecurse);
             break;
         }
