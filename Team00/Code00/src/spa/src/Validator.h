@@ -9,9 +9,8 @@
 using namespace std;
 
 class Validator {
-    public:
-        static bool checkParenthesesClosure(string code, string brackets);
-
+public:
+    static bool checkParenthesesClosure(string code, string brackets);
 };
 
 
