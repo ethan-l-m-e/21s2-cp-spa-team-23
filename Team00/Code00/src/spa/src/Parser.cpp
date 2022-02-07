@@ -219,11 +219,11 @@ TNode* recursiveTreeConstruction(string sourceCode, TNode * &currentNode, int st
 }
 
 
-
 VariableNode* Parser::parseVar(string variable) {
     // convert into a variable node
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
+        //PKB::addVariable(variable);
         return new VariableNode(variable);
     } else {
         throw "Invalid varname format: '" + variable + "'\n";
