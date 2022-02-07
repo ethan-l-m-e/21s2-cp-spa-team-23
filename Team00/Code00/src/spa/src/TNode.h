@@ -19,7 +19,8 @@ using namespace std;
 class TNode {
     string value; // can be value, constant or integer constant and integer have to be converted back into int first for proper use
     vector<TNode*> childrenRef;
-    int stmtNo;
+    int stmtNo = -1;
+
 public:
     TNode(string);
     TNode(string, int);

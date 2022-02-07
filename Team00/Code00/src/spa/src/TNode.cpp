@@ -1,14 +1,13 @@
 //
 // Created by Tin Hong Wen on 28/1/22.
 //
-
+#include <iostream>
 #include "TNode.h"
 
-int const INVALID = -1;
+using namespace std;
 
 TNode::TNode(string name) {
     this -> value = name;
-    this -> stmtNo = INVALID;
 }
 
 TNode::TNode(string name, int stmtNo) {
@@ -42,16 +41,16 @@ void TNode::changeValue(string value) {
 }
 
 bool TNode::hasStmtNo() {
-    if (this -> stmtNo == INVALID)
-        return false;
-    else
+    if (this -> stmtNo > 0)
         return true;
+    else
+        return false;
 }
 
 int TNode::getStmtNo() {
     return stmtNo;
 }
 
-void TNode::setStmtNo(int no) {
-    this -> stmtNo = no;
+void TNode::setStmtNo(int stmtNo) {
+    this -> stmtNo = stmtNo;
 }
