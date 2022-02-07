@@ -33,7 +33,7 @@ public:
     static PKB* getInstance();
 
     // Setter Functions
-    static static void addVariable(string variable);
+    void addVariable(string variable);
     void addProcedures(string procedure);
 
     // Getter Functions
