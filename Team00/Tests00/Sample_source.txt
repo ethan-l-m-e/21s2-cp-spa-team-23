@@ -1,4 +1,4 @@
-procedure Example {
-    x = 1;
-
-}
+x = y;
+a = b;
+c = a;
+d = e;
