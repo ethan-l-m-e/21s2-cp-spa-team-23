@@ -72,9 +72,15 @@ TNode convertToTNode(string sourceCode) {
     // TODO (FUTURE): add a line number at the back of each statement (except 'then', 'else' & procedure_regex or blank)? for statement no. possibly Under StringFormatter
     firstNode = recursiveTreeConstruction(sourceCode, firstNode, init);
 
+    /*
     cout << "Value outside fn: "<< firstNode -> getNode(1) -> getValue() << "\n";
-    cout << "Stmt No outside fn: " << firstNode -> getNode(1) -> hasStmtNo() << "\n";   // statement number not working
-    //firstNode -> getNode(0) ->setStmtNo(123);
+    cout << "Stmt No outside fn: " << firstNode -> getNode(1) -> getStmtNo() << "\n";   // statement number not working
+
+    TNode * childNode = firstNode ->getNode(1);
+    cout << "Value outside fn: "<< childNode -> getValue() << "\n";
+    cout << "Stmt No outside fn: " << childNode-> getStmtNo() << "\n";
+    */
+    //firstNode -> getNode(1) ->setStmtNo(123);
     //cout << "Stmt No outside fn: " << firstNode -> getNode(1) -> getStmtNo() << "\n";
 
     //printTNodeValue(firstNode);
@@ -165,8 +171,10 @@ TNode* recursiveTreeConstruction(string sourceCode, TNode * &currentNode, int st
                 Partition trimmedCode = stringFormatter.Trim(*sourcePtr, ASSIGN);
                 newNode.changeValue("Assign ");
 
-                newNodePtr -> setStmtNo(stmtNo);
+                //currentNode -> getNode(currentNode -> getNumberOfChildNodes() - 1) -> setStmtNo(stmtNo);
+                newNodePtr ->setStmtNo(stmtNo);
                 stmtNo++;
+
                 // connecting current node to new node
                 currentNode -> addNode(newNodePtr);
 
@@ -223,14 +231,12 @@ TNode* recursiveTreeConstruction(string sourceCode, TNode * &currentNode, int st
 
     }
 
-    if(currentNode -> getNumberOfChildNodes() > 0) {
-        cout << "getValue: " << currentNode ->getNode(currentNode -> getNumberOfChildNodes() - 1) ->getValue() << "\n";
-        cout << "getStmtNo: " << currentNode ->getNode(currentNode -> getNumberOfChildNodes() - 1) ->getStmtNo() << "\n";
-    }
-
     return currentNode;
 }
 
-
+/*
+ * recursionTreeConstruction()
+ *
+ */
 
 
