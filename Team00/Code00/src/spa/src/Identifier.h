@@ -8,11 +8,8 @@
 
 using namespace std;
 
-
 class Identifier {
     public:
         static int identifyFirstObject(string);
 };
-
-
 #endif //SPA_IDENTIFIER_H
