@@ -28,7 +28,7 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" Parentstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">3</id><querystr><![CDATA[assign a; Select a such that Parent*(4, a)]]></querystr>
+<id ReturnTuple="1" Parentstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">3</id><querystr><![CDATA[assign1 a; Select a such that Parent*(4, a)]]></querystr>
 <stuans></stuans>
 <correct>5,7,8,9,11</correct>
 <time_taken>19.000000</time_taken>
@@ -156,7 +156,7 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" Affects="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">11</id><querystr><![CDATA[assign a; Select a such that Affects(a, 9)]]></querystr>
+<id ReturnTuple="1" Affects="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">11</id><querystr><![CDATA[assign1 a; Select a such that Affects(a, 9)]]></querystr>
 <stuans></stuans>
 <correct>2,3,5,7,11</correct>
 <time_taken>25.000000</time_taken>
@@ -172,7 +172,7 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" Affectsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">12</id><querystr><![CDATA[assign a; Select a such that Affects*(11, a)]]></querystr>
+<id ReturnTuple="1" Affectsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">12</id><querystr><![CDATA[assign1 a; Select a such that Affects*(11, a)]]></querystr>
 <stuans></stuans>
 <correct>9,11</correct>
 <time_taken>19.000000</time_taken>
@@ -188,14 +188,14 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="comment">13</id><querystr><![CDATA[assign a; Select a pattern a("z", _"x+i")]]></querystr>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="comment">13</id><querystr><![CDATA[assign1 a; Select a pattern a("z", _"x+i")]]></querystr>
 <stuans></stuans>
 <correct></correct>
 <time_taken>28.000000</time_taken>
 <passed/>
 </query>
 <query>
-<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="comment">14</id><querystr><![CDATA[assign a; Select a pattern a(_, _"x + 1"_)]]></querystr>
+<id ReturnTuple="1" UnnamedVar="3" Pattern="1" CondNum="5" RelNum="0" comment="comment">14</id><querystr><![CDATA[assign1 a; Select a pattern a(_, _"x + 1"_)]]></querystr>
 <stuans></stuans>
 <correct>7,18,23</correct>
 <time_taken>23.000000</time_taken>
@@ -211,7 +211,7 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="comment">15</id><querystr><![CDATA[assign a; Select a pattern a(_, " 3  +  2 ")]]></querystr>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="comment">15</id><querystr><![CDATA[assign1 a; Select a pattern a(_, " 3  +  2 ")]]></querystr>
 <stuans></stuans>
 <correct></correct>
 <time_taken>25.000000</time_taken>
@@ -266,7 +266,7 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" Followsstar="2" Modifies="1" Uses="1" SuchThat="1" With="1" CondNum="7" RelNum="4" comment="comment">19</id><querystr><![CDATA[if ifs; assign a1, a2; variable v1, v2; Select ifs such that Follows*(a1, ifs) and Follows*(ifs, a2) and Modifies(ifs, v1) and Uses(ifs, v2) with v1.varName = v2.varName]]></querystr>
+<id ReturnTuple="1" Followsstar="2" Modifies="1" Uses="1" SuchThat="1" With="1" CondNum="7" RelNum="4" comment="comment">19</id><querystr><![CDATA[if ifs; assign1 a1, a2; variable v1, v2; Select ifs such that Follows*(a1, ifs) and Follows*(ifs, a2) and Modifies(ifs, v1) and Uses(ifs, v2) with v1.varName = v2.varName]]></querystr>
 <stuans></stuans>
 <correct>6</correct>
 <time_taken>21.000000</time_taken>
@@ -298,7 +298,7 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" Affectsstar="1" Nextstar="1" UnnamedVar="1" SuchThat="1" CondNum="5" RelNum="2" comment="comment">21</id><querystr><![CDATA[prog_line n; assign a; Select a such that Affects*(a, n) and Next*(13, n)]]></querystr>
+<id ReturnTuple="1" Affectsstar="1" Nextstar="1" UnnamedVar="1" SuchThat="1" CondNum="5" RelNum="2" comment="comment">21</id><querystr><![CDATA[prog_line n; assign1 a; Select a such that Affects*(a, n) and Next*(13, n)]]></querystr>
 <stuans></stuans>
 <correct>17,18,19,20</correct>
 <time_taken>21.000000</time_taken>
@@ -330,7 +330,7 @@
 </failed>
 </query>
 <query>
-<id Affects="1" ReturnBoolean="1" Followsstar="1" UnnamedVar="2" Uses="1" SuchThat="1" CondNum="7" RelNum="3" comment="comment">23</id><querystr><![CDATA[call c; assign a1, a2; Select BOOLEAN such that Follows*(_, c) and Affects(a1, a2) and Uses(a2, _)]]></querystr>
+<id Affects="1" ReturnBoolean="1" Followsstar="1" UnnamedVar="2" Uses="1" SuchThat="1" CondNum="7" RelNum="3" comment="comment">23</id><querystr><![CDATA[call c; assign1 a1, a2; Select BOOLEAN such that Follows*(_, c) and Affects(a1, a2) and Uses(a2, _)]]></querystr>
 <stuans></stuans>
 <correct>true</correct>
 <time_taken>21.000000</time_taken>
@@ -346,7 +346,7 @@
 </failed>
 </query>
 <query>
-<id ReturnTuple="1" Affectsstar="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="2" comment="comment">24</id><querystr><![CDATA[assign a1, a2; variable v; Select v pattern a1(v, _) such that Affects*(a1, a2) and Uses(a2, v)]]></querystr>
+<id ReturnTuple="1" Affectsstar="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="2" comment="comment">24</id><querystr><![CDATA[assign1 a1, a2; variable v; Select v pattern a1(v, _) such that Affects*(a1, a2) and Uses(a2, v)]]></querystr>
 <stuans></stuans>
 <correct>i,x,z</correct>
 <time_taken>22.000000</time_taken>

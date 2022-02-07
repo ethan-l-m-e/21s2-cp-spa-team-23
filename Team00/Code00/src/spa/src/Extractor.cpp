@@ -1,8 +1,11 @@
 //
 // Created by Lucas Tai on 3/2/22.
 //
+#include <iostream>
 
 #include "Extractor.h"
+
+// using namespace std;
 
 std::string* information;
 
@@ -10,7 +13,7 @@ Extractor* Extractor::extractAssign(std::string sourceCode) {
 
     std::string assignInfo[2];
 
-    sourceCode.erase(std::remove_if(sourceCode.begin(),sourceCode.end(), isspace),sourceCode.end());
+    sourceCode.erase(remove_if(sourceCode.begin(),sourceCode.end(), isspace),sourceCode.end());
     int pos = sourceCode.find('=');
     std::string varName;
     for (int i = 0; i<pos;i++) {
@@ -18,11 +21,16 @@ Extractor* Extractor::extractAssign(std::string sourceCode) {
     }
     assignInfo[0] = varName;
     std::string expr;
-    for (int i = pos; i<sourceCode.length();i++) {
-        expr.push_back(sourceCode[i]);
+    for (int i = pos + 1; i<sourceCode.length();i++) {
+        if(sourceCode[i] != ';')                // take note of ;
+            expr.push_back(sourceCode[i]);
+        else
+            break;
     }
     assignInfo[1] = expr;
     information = assignInfo;
+    std::cout<<"information0: " << information[0] << "\n";
+    std::cout<<"information1: " << information[1] << "\n";
     return this;
 }
 
