@@ -223,7 +223,7 @@ VariableNode* Parser::parseVar(string variable) {
     // convert into a variable node
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
-        //PKB::addVariable(variable);
+        PKB::getInstance() ->addVariable(variable);
         return new VariableNode(variable);
     } else {
         throw "Invalid varname format: '" + variable + "'\n";
