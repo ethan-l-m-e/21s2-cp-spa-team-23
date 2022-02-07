@@ -38,6 +38,8 @@ public:
     std::string getSelectedSynonym();
     DesignEntity getSelectedSynonymType();
     DesignEntity findEntityType(std::string synonym);
+    void setDeclarations(unordered_map<string, DesignEntity>);
+    void setSynonym(std::string);
 };
 
 #endif //SPA_QUERY_H

@@ -43,6 +43,14 @@ DesignEntity Query::findEntityType(std::string synonym) {
         return got->second;
 }
 
+void Query::setDeclarations(unordered_map<string, DesignEntity> declarationsMap) {
+    declarations = declarationsMap;
+}
+
+void Query::setSynonym(std::string synonym) {
+    selectedSynonym = synonym;
+}
+
 
 /*
 optional<DesignEntity> findEntityType(std::string synonym) {
