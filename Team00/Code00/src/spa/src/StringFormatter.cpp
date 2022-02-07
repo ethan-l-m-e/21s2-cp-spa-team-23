@@ -57,6 +57,24 @@ string rtrim(const string s) {
 }
 
 
+vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
+    std::regex r(regex);
+    string spaced = std::regex_replace(s, r, " ");
+
+    char * sourceAsChar = new char[spaced.size()];
+    char * regexChar = "[ ]*";
+    strcpy(sourceAsChar, spaced.c_str());
+    char *token = strtok(sourceAsChar,regexChar);
+    vector<string> v;
+    while (token) {
+        cout << token << "\n";
+        v.push_back(token);
+        token = strtok(NULL, regexChar);
+    }
+    return v;
+}
+
+
 
 string StringFormatter::extractFrontStringByRegex(string sourceCode, string regex) {
     char * sourceAsChar = new char[100];
@@ -67,3 +85,5 @@ string StringFormatter::extractFrontStringByRegex(string sourceCode, string rege
     string s(token);
     return s;
 }
+
+
