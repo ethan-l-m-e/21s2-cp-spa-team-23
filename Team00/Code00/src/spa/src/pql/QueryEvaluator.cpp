@@ -5,7 +5,7 @@
 #include "QueryEvaluator.h"
 
 
-std::string QueryEvaluator::evaluate(Query* query) {
+std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     // Initialise an empty result
     Result result = {ResultType::EMPTY};
 /*
@@ -31,12 +31,12 @@ std::string QueryEvaluator::evaluate(Query* query) {
         */
 
     if (result.resultType == ResultType::EMPTY) {
-        SelectClauseEvaluator* selectClauseEvaluator = new SelectClauseEvaluator(&result, pkb, query);
+        auto* selectClauseEvaluator = new SelectClauseEvaluator(&result, pkb, query);
         Result result1 = selectClauseEvaluator->evaluateClause();
-        return convertResultToString(result1, query->getSelectedSynonym());
+        return convertResultToStringList(result1, query->getSelectedSynonym());
     }
 
-    return convertResultToString(result, query->getSelectedSynonym());
+    return convertResultToStringList(result, query->getSelectedSynonym());
 }
 
 ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
@@ -77,22 +77,22 @@ Result QueryEvaluator::mergeResults(Result r1, Result r2) {
     return r1;
 }
 
-std::string QueryEvaluator::convertResultToString(Result result, string selectedSynonym) {
+std::list<std::string> QueryEvaluator::convertResultToStringList(Result result, string selectedSynonym) {
 
     //TODO: convert result object to output result string
+    std::list<std::string> stringList;
     string* str  = std::get_if<std::string>(&result.resultHeader);
     if ((*str) == selectedSynonym) {
         vector<ResultItem> vec = result.resultItemList;
-        std::stringstream ss;
+        std::string s;
         for(size_t i = 0; i < vec.size(); ++i)
         {
-            if(i != 0)
-                ss << " ";
-            ss << std::get<std::string>(vec[i]);
+            s = std::get<std::string>(vec[i]);
+            stringList.emplace_back(s);
         }
-        return ss.str();
+        return stringList;
     } else {
-        return "result";
+        return stringList;
     }
 }
 

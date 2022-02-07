@@ -15,6 +15,7 @@
 #include "pql/evaluator/SelectClauseEvaluator.h"
 #include <sstream>
 #include <iostream>
+#include <list>
 
 class QueryEvaluator {
 private:
@@ -22,13 +23,13 @@ private:
 public:
     explicit QueryEvaluator(PKB* pkb) : pkb(pkb) { }
 
-    std::string evaluate(Query* query);
+    std::list<std::string> evaluate(Query* query);
 
     ClauseEvaluator* generateEvaluator(SuchThatClause clause, Query* query);
 
     static Result mergeResults(Result r1, Result r2);
 
-    static string convertResultToString(Result result, string selectedSynonym);
+    static std::list<std::string> convertResultToStringList(Result result, string selectedSynonym);
 };
 
 

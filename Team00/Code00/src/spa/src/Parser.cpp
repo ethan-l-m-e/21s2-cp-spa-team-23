@@ -14,7 +14,7 @@ using namespace std;
 #include "Constants/Constants.h"
 #include "Constants/regex.h"
 #include "Identifier.h"
-#include "RelationshipExtractor.h"
+//#include "RelationshipExtractor.h"
 #include "Extractor.h"
 #include "StringFormatter.h"
 #include "Partition.cpp"
