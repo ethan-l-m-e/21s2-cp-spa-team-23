@@ -74,7 +74,6 @@ Result QueryEvaluator::mergeResults(Result r1, Result r2) {
 std::string QueryEvaluator::convertResultToString(Result result, string selectedSynonym) {
 
     //TODO: convert result object to output result string
-
     auto str  = std::get_if<std::string>(&result.resultHeader);
 
     if (!str->compare(selectedSynonym)) {
