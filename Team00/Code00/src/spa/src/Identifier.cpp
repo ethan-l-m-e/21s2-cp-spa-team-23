@@ -33,8 +33,10 @@ int Identifier::identifyFirstObject(string sourceCode) {
     } else if (regex_match(firstLine, std::regex(COND_EXPR_IDENTIFIER))) {
         bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "()");
         return switchCaseOrError(COND_EXPR, isCorrect);
-    } else if (regex_match(firstLine, std::regex(BASE_CASE_REGEX))) {
-        return BASE_CASE;
+    } else if (regex_match(firstLine, std::regex(VAR_NAME))) {
+        return VARIABLE_NAME; // same as proc name
+    }  else if (regex_match(firstLine, std::regex(CONST_VALUE))) {
+        return CONSTANT_VALUE;
     } else {
         cout << "parser cannot identify '" + firstLine + "' in the source code\n";
         return ERROR;

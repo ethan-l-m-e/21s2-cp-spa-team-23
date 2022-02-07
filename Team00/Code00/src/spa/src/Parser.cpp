@@ -22,7 +22,7 @@ using namespace std;
 
 
 string emptyStr = "";
-
+int statementNumber = 0;
 Identifier identifier;
 string extractFrontStringByRegex(string sourceCode, string regex);
 TNode* recursiveTreeConstruction(string, TNode*&, int);
@@ -46,18 +46,14 @@ int Parser::Parse (string filename) {
 
     //extract relationship entities from AST and transmit data to PKB
     //TODO: create a relationshipExtractor class to pull methods
-    //cout << "root node: " << "\n";
-
-
-
-    //cout << rootNode.getNode(0)-> getValue() << "\n";
-    //cout << rootNode.getNode(1)-> getValue() << "\n";
-    //cout << rootNode.getNode(2)-> getValue() << "\n";
-
+    AssignNode* node = Parser::parseAssign(sourceCode);
+    cout << node ->getRightNode() ->getVariableName() << "\n";
+    cout << node ->getLeftNode() ->getVariableName() << "\n";
     //RelationshipExtractor::extractFollows(&rootNode);
 
     return 0;
 }
+
 
 
 TNode convertToTNode(string sourceCode) {
@@ -70,22 +66,7 @@ TNode convertToTNode(string sourceCode) {
     count = &init;
 
     // TODO (FUTURE): add a line number at the back of each statement (except 'then', 'else' & procedure_regex or blank)? for statement no. possibly Under StringFormatter
-    firstNode = recursiveTreeConstruction(sourceCode, firstNode, init);
-
-    /*
-    cout << "Value outside fn: "<< firstNode -> getNode(1) -> getValue() << "\n";
-    cout << "Stmt No outside fn: " << firstNode -> getNode(1) -> getStmtNo() << "\n";   // statement number not working
-
-    TNode * childNode = firstNode ->getNode(1);
-    cout << "Value outside fn: "<< childNode -> getValue() << "\n";
-    cout << "Stmt No outside fn: " << childNode-> getStmtNo() << "\n";
-    */
-    //firstNode -> getNode(1) ->setStmtNo(123);
-    //cout << "Stmt No outside fn: " << firstNode -> getNode(1) -> getStmtNo() << "\n";
-
-    //printTNodeValue(firstNode);
-    //TNode * node1 = firstNode ->getNode(0);
-
+    //firstNode = recursiveTreeConstruction(sourceCode, firstNode, init);
     return node;
 }
 
@@ -164,6 +145,7 @@ TNode* recursiveTreeConstruction(string sourceCode, TNode * &currentNode, int st
         //Extractor extractor;
         TNode newNode = TNode(""); //Create empty new node to be filled in during switch and returned at the end
         switch(Identifier::identifyFirstObject(*sourcePtr)) { // identify object
+            /*
             case ASSIGN: {
                 //cout << "assign found\n";
                 TNode * newNodePtr;
@@ -205,6 +187,7 @@ TNode* recursiveTreeConstruction(string sourceCode, TNode * &currentNode, int st
                 sourcePtr = &codeToRecurse;
                 break;
             }
+            */
             case BASE_CASE: {
                 TNode newNode = TNode(StringFormatter::removeTrailingSpace(*sourcePtr));
                 currentNode -> addNode(&newNode);
@@ -231,12 +214,59 @@ TNode* recursiveTreeConstruction(string sourceCode, TNode * &currentNode, int st
 
     }
 
+    cout << "has stmtNo" << currentNode ->getNode(1) -> hasStmtNo() << "\n";
     return currentNode;
 }
 
-/*
- * recursionTreeConstruction()
- *
- */
 
+VariableNode* Parser::parseVar(string variable) {
+    // convert into a variable node
+    int check = Identifier::identifyFirstObject(variable);
+    if(check == VARIABLE_NAME) {
+        //PKB::addVariable(variable);
+        return new VariableNode(variable);
+    } else {
+        throw "Invalid varname format: '" + variable + "'\n";
+    }
+}
 
+int getStatementNumber() {
+    statementNumber = statementNumber + 1;
+    return statementNumber;
+}
+
+AssignNode* Parser::parseAssign(string assignLine) {
+    vector<string> tokens;
+    SourceTokenizer::extractAssign(assignLine, tokens);
+    return new AssignNode(getStatementNumber(), parseVar(tokens[0]), parseVar(tokens[1]));
+}
+
+// difficult to modify. edit at own risk
+StatementList Parser::parseStatementList(string statementListString) {
+    StatementList stmtLst;
+    string * stmtLstPtr;
+    stmtLstPtr = &statementListString;
+    while(stmtLstPtr -> length() > 0) {
+        StmtNode* newStmtNode = parseStatementNode(&*stmtLstPtr);
+        stmtLst.push_back(newStmtNode);
+    }
+    return stmtLst;
+}
+StmtNode* Parser::parseStatementNode(string * stmt) {
+    StmtNode * newNode;
+    int switchCase = Identifier::identifyFirstObject(*stmt);
+    switch(switchCase){
+        case(ASSIGN): {
+            vector<string> v = StringFormatter::Trim(*stmt, ASSIGN);
+            newNode = Parser::parseAssign(v[0]);
+            *stmt = v[1];
+            break;
+        }
+            // ADD MORE CASES FOR STATEMENT
+        default:{
+            throw "cannot recognise '" + *stmt + "' as a statement";
+            break;
+        }
+    }
+    return newNode;
+}

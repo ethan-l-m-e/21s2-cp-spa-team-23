@@ -35,6 +35,6 @@ string const IF_IDENTIFIER  = "(if)[ ]*(\\()(" + COND_EXPR_IDENTIFIER + ")(\\))[
 
 
 string const PROCEDURE_IDENTIFIER = "(procedure )[ ]*(" + PROC_NAME + ")[ ]*(\\{)(.*)" ;
-string const ASSIGN_IDENTIFIER = VAR_NAME + "[ ]*(=)[ ]*(" + EXPR_TERM_IDENTIFIER + "|" +  BASE_CASE_REGEX + ")(;)[\\}]*";
+string const ASSIGN_IDENTIFIER = VAR_NAME + "[ ]*(=)[ ]*(" + EXPR_TERM_IDENTIFIER + "|" +  BASE_CASE_REGEX + ")(;)";
 
 //char STMT_REGEX[200];    int s = sprintf(STMT_REGEX, "%s|%s|%s|%s|%s", READ_REGEX, PRINT_REGEX, ASSIGN_IDENTIFIER.c_str(), WHILE_REGEX, IF_ELSE_REGEX);   //not done
