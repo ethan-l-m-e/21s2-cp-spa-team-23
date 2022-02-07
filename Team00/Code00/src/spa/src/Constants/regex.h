@@ -2,7 +2,7 @@
 using namespace std;
 
 // regex
-string const LETTER = "[A-Za-z]";
+const string LETTER = "[A-Za-z]";
 string const DIGIT = "[0-9]";
 string const NAME = "[A-Za-z][A-Za-z|0-9]*";
 string const INTEGER = "[0-9]+";
@@ -26,10 +26,9 @@ string const FACTOR_REGEX;
 
 //string const READ_REGEX = "(read )([A-Za-z][A-Za-z|0-9]*)(;)";
 //string const PRINT_REGEX = "(print )(" + VAR_NAME + ")(;)";
-char READ_REGEX[100];   int a = sprintf(READ_REGEX, "[ ]*(read )[ ]*(%s)[ ]*(;)[\\}]*", VAR_NAME.c_str());
-char PRINT_REGEX[100];  int b = sprintf(PRINT_REGEX, "[ ]*(print )[ ]*(%s)[ ]*(;)[\\}]*", VAR_NAME.c_str());
-char WHILE_REGEX[100];
-char IF_ELSE_REGEX[100];
+string const READ_REGEX = "[ ]*(read )[ ]*(" + VAR_NAME +")[ ]*(;)[\\}]*";
+string const PRINT_REGEX = "[ ]*(print )[ ]*(" + VAR_NAME + ")[ ]*(;)[\\}]*";
+
 
 string const WHILE_IDENTIFIER = "(while)[ ]*(\\()(" + COND_EXPR_IDENTIFIER + ")(\\))[ ]*(//{)(.*)";
 string const IF_IDENTIFIER  = "(if)[ ]*(\\()(" + COND_EXPR_IDENTIFIER + ")(\\))[ ]* (then)[ ]*(//{)(.*)";
@@ -38,4 +37,4 @@ string const IF_IDENTIFIER  = "(if)[ ]*(\\()(" + COND_EXPR_IDENTIFIER + ")(\\))[
 string const PROCEDURE_IDENTIFIER = "(procedure )[ ]*(" + PROC_NAME + ")[ ]*(\\{)(.*)" ;
 string const ASSIGN_IDENTIFIER = VAR_NAME + "[ ]*(=)[ ]*(" + EXPR_TERM_IDENTIFIER + "|" +  BASE_CASE_REGEX + ")(;)[\\}]*";
 
-char STMT_REGEX[200];    int s = sprintf(STMT_REGEX, "%s|%s|%s|%s|%s", READ_REGEX, PRINT_REGEX, ASSIGN_IDENTIFIER.c_str(), WHILE_REGEX, IF_ELSE_REGEX);   //not done
+//char STMT_REGEX[200];    int s = sprintf(STMT_REGEX, "%s|%s|%s|%s|%s", READ_REGEX, PRINT_REGEX, ASSIGN_IDENTIFIER.c_str(), WHILE_REGEX, IF_ELSE_REGEX);   //not done
