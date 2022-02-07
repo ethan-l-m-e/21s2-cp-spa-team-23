@@ -19,14 +19,14 @@ Result FollowsClauseEvaluator::evaluateClause(){
         DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
         DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
         //resultItem = pkb->getAllFollows();
-        resultBoolean = resultItem.empty();
+        resultBoolean = !resultItem.empty();
         resultType = ResultType::TUPLES;
         resultHeader = vector<string> { argLeft.argumentValue, argRight.argumentValue};
     }
     else if (leftIsSynonym()) {
         DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
         //resultItem = pkb->getStmtFollowedBy(argRight.argumentValue);
-        resultBoolean = resultItem.empty();
+        resultBoolean = !resultItem.empty();
         resultType = ResultType::LIST;
         resultHeader = argLeft.argumentValue;
     }
@@ -34,7 +34,7 @@ Result FollowsClauseEvaluator::evaluateClause(){
     {
         DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
         //resultItem = pkb->getStmtFollows(argLeft.argumentValue);
-        resultBoolean = resultItem.empty();
+        resultBoolean = !resultItem.empty();
         resultType = ResultType::LIST;
         resultHeader = argRight.argumentValue;
     }
