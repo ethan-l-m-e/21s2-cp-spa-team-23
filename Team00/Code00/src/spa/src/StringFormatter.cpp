@@ -10,17 +10,23 @@ using namespace std;
 
 string ltrim(string);
 string rtrim(string);
-Partition StringFormatter::Trim(std::string sourceCode, int type) {
+vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
     string trimmedCode;
-    Partition finalStrings = Partition();
+    vector<string> v;
+    //Partition finalStrings = Partition();
     switch(type) {
         case ASSIGN:{
             int pos = sourceCode.find('\n');
             trimmedCode = sourceCode.substr(0, pos);
             string codeToRecurse;
-            if (pos == -1)      codeToRecurse = "";     //empty string for latter half
-            else       codeToRecurse = sourceCode.substr(pos + 1,sourceCode.size()); // +1 to get rid of the \n space
-            finalStrings = Partition(trimmedCode,codeToRecurse);
+            if (pos == -1)
+                codeToRecurse = "";     //empty string for latter half
+            else
+                codeToRecurse = sourceCode.substr(pos + 1,sourceCode.size()); // +1 to get rid of the \n space
+
+            v.push_back(trimmedCode);
+            v.push_back(codeToRecurse);
+            //finalStrings = Partition(trimmedCode,codeToRecurse);
             break;
         }
         case PROCEDURE: {
@@ -31,8 +37,11 @@ Partition StringFormatter::Trim(std::string sourceCode, int type) {
             trimmedCode = "";
             break;
         }
+        default: {
+            throw "dk what to trim";
+        }
     }
-    return finalStrings;
+    return v;
 }
 
 
@@ -46,6 +55,8 @@ string ltrim(const string s) {
 string rtrim(const string s) {
     return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
 }
+
+
 
 string StringFormatter::extractFrontStringByRegex(string sourceCode, string regex) {
     char * sourceAsChar = new char[100];

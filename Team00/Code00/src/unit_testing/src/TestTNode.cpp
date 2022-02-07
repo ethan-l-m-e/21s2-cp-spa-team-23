@@ -1,3 +1,4 @@
+#include <iostream>
 
 #include "TNode.h"
 
@@ -44,8 +45,38 @@ TEST_CASE("stmtNoTest") {
     CHECK(stmtNo == node.getStmtNo());
 }
 
+TEST_CASE("Node Test") {
+    Node parent;
+    Node node;
+    node.setParentNode(&parent);
+    CHECK(&parent == node.getParentNode());
+}
+
+TEST_CASE("stmt Node Test") {
+    int num = 4;
+    StmtNode node(num);
+    StmtNode *ptr;
+    ptr = &node;
+    CHECK(num == ptr -> getStmtNumber());
+}
+
+TEST_CASE("varNameNode Test") {
+    string var = "x";
+    VariableNode * varNode = new VariableNode(var);
+    CHECK(var == varNode ->getVariableName());
+}
 
 
+TEST_CASE("Assign node test") {
+    string left = "x";
+    string right = "y";
+    int stmtNo = 4;
+    auto varLeftNode = new VariableNode(left);
+    auto varRightNode = new VariableNode(right);
 
-
+    AssignNode * testNode = new AssignNode(4, varLeftNode, varRightNode);
+    CHECK(left == testNode -> getLeftNode() ->getVariableName());
+    CHECK(right == testNode ->getRightNode() ->getVariableName());
+    CHECK(stmtNo == testNode ->getStmtNumber());
+}
 

@@ -11,7 +11,7 @@ using namespace std;
 
 class StringFormatter {
     public:
-        Partition Trim(std::string sourceCode,int type);
+        static vector<string> Trim(std::string sourceCode, int type);
         static string removeTrailingSpace(string);
         static string extractFrontStringByRegex(string, string);
 };
