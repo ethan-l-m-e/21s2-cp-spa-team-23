@@ -20,10 +20,6 @@ void TNode::addNode(TNode *nodeRef) {
     childrenRef.push_back(nodeRef);
 }
 
-void TNode::removeNode(int index) {
-    childrenRef.erase(childrenRef.begin() + (index - 1));
-}
-
 TNode *TNode::getNode(int index) {
     return childrenRef[index];
 }
@@ -53,4 +49,37 @@ int TNode::getStmtNo() {
 
 void TNode::setStmtNo(int stmtNo) {
     this -> stmtNo = stmtNo;
+}
+
+
+
+Node::Node() { this->parent = nullptr; }
+
+void Node::setParentNode(Node *parent) {this -> parent = parent;}
+Node *Node::getParentNode() const {return this -> parent;}
+
+
+StmtNode::StmtNode(int num) { this ->statementNumber = num;}
+int StmtNode::getStmtNumber() const { return this ->statementNumber; }
+
+VariableNode::VariableNode(VarName name) { this ->varName = name; }
+VarName &VariableNode::getVariableName(){ return this ->varName; }
+
+ConstValueNode::ConstValueNode(const string num) { this -> constValue = num; }
+string ConstValueNode::getConstValue() {return this ->constValue; }
+
+
+AssignNode::AssignNode(int num, VariableNode *leftNode, VariableNode *rightNode) : StmtNode(num) {
+    this ->leftNode = leftNode;
+    this ->rightNode = rightNode;
+    this ->leftNode ->setParentNode(this);
+    this ->rightNode ->setParentNode(this);
+}
+
+VariableNode* AssignNode::getLeftNode() const {
+    return this ->leftNode;
+}
+
+VariableNode* AssignNode::getRightNode() const {
+    return this ->rightNode;
 }
