@@ -27,7 +27,7 @@ public:
                 // response = pkb->getPattern(synonym, entRef, expressionSpec);
                 resultItems.reserve(response.size());
                 for(auto & i : response) { resultItems.emplace_back(i); }
-                return {resultType, synonym, resultItems};
+                return {resultType, !resultItems.empty() ,synonym, resultItems};
             default:
                 return {ResultType::EMPTY, {}};
         }
