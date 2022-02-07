@@ -12,20 +12,23 @@
 #include "pql/evaluator/ClauseEvaluator.h"
 #include "pql/evaluator/FollowsClauseEvaluator.h"
 #include "pql/evaluator/PatternClauseEvaluator.h"
+#include "pql/evaluator/SelectClauseEvaluator.h"
+#include <sstream>
+#include <iostream>
 
 class QueryEvaluator {
 private:
     PKB* pkb;
 public:
-    QueryEvaluator(PKB* pkb) : pkb(pkb) { }
+    explicit QueryEvaluator(PKB* pkb) : pkb(pkb) { }
 
     std::string evaluate(Query* query);
 
-    ClauseEvaluator generateEvaluator(SuchThatClause clause, Query* query);
+    ClauseEvaluator* generateEvaluator(SuchThatClause clause, Query* query);
 
     static Result mergeResults(Result r1, Result r2);
 
-    static string convertResultToString(Result result);
+    static string convertResultToString(Result result, string selectedSynonym);
 };
 
 

@@ -17,15 +17,15 @@ enum class ResultType {
 };
 using ResultHeader = std::variant<
         std::string,
-        std::tuple<std::string, std::string>>;
+        std::vector<std::string>>;
 using ResultItem = std::variant<
-        bool,
         std::string,
-        std::tuple<std::string, std::string>>;
+        std::vector<std::string>>;
 
 typedef struct Result {
     ResultType resultType = ResultType::EMPTY;
-    ResultHeader resultHeader;
+    bool resultBoolean;
+    ResultHeader resultHeader = std::vector<std::string>();
     std::vector<ResultItem> resultItemList;
 } Result;
 
