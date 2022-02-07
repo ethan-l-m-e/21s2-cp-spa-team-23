@@ -12,7 +12,7 @@
 enum class ResultType {
     BOOLEAN,
     LIST,
-    VECTOR,
+    TUPLES,
     EMPTY
 };
 using ResultHeader = std::variant<

@@ -10,10 +10,10 @@
 
 class SelectClauseEvaluator : public ClauseEvaluator {
 public:
-    SelectClauseEvaluator (Result result, PKB* pkb, Query* query) : resultReference(result), ClauseEvaluator(pkb, query) {}
+    SelectClauseEvaluator (Result* result, PKB* pkb, Query* query) : resultReference(result), ClauseEvaluator(pkb, query) {};
     Result evaluateClause() override;
 private:
-    Result resultReference;
+    Result* resultReference;
 };
 
 

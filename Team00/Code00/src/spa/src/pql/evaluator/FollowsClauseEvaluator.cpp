@@ -21,7 +21,7 @@ Result FollowsClauseEvaluator::evaluateClause(){
         //resultItem = pkb->getAllFollows();
         resultBoolean = resultItem.empty();
         resultType = ResultType::TUPLES;
-        resultHeader = tuple<string, string> { argLeft.argumentValue, argRight.argumentValue};
+        resultHeader = vector<string> { argLeft.argumentValue, argRight.argumentValue};
     }
     else if (leftIsSynonym()) {
         DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);

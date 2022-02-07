@@ -22,7 +22,7 @@ protected:
 public:
     ClauseEvaluator(std::vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
     ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
-    virtual Result evaluateClause();
+    virtual Result evaluateClause() = 0;
     bool hasTwoSynonyms();
     bool hasNoSynonyms();
     bool leftIsSynonym();
