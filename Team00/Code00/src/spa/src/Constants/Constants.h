@@ -14,6 +14,9 @@ int const PRINT = 8;
 int const CALL = 9;
 int const COND_EXPR = 10;
 int const EXPR_TERM = 11;
-
+int const VARIABLE_NAME = 12;
+int const PROCEDURE_NAME = VARIABLE_NAME;
+int const CONSTANT_VALUE = 14;
+int const STMT_LIST = ASSIGN;
 
 string const EMPTY = "";
