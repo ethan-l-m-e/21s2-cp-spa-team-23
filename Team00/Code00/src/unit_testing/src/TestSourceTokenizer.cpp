@@ -48,3 +48,11 @@ TEST_CASE("while token - basic") {
     REQUIRE(v[0] == "x==0");
     REQUIRE(v[1] == "y = 1;");
 }
+
+TEST_CASE("while token - nested while loop") {
+    string p = "while(x==0) {y = 1; while(y==0){z = 2;}}";
+    vector<string> v;
+    SourceTokenizer::extractWhile(p, v);
+    REQUIRE(v[0] == "x==0");
+    REQUIRE(v[1] == "y = 1; while(y==0){z = 2;}");
+}
