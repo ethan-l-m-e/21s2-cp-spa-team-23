@@ -2,7 +2,7 @@
 // Created by Tin Hong Wen on 5/2/22.
 //
 
-#include "RelationshipExtractor.h"
+//#include "RelationshipExtractor.h"
 #include "TNode.h"
 #include "catch.hpp"
 
@@ -27,5 +27,5 @@ TEST_CASE("test follows") {
     bNode.addNode(&fNode);
     */
 
-    RelationshipExtractor::extractFollows(&pNode);
+//    RelationshipExtractor::extractFollows(&pNode);
 }

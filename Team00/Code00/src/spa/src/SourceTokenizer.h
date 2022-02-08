@@ -12,7 +12,13 @@ using namespace std;
 class SourceTokenizer {
 public:
     static void extractAssign(string, vector<string>&);
+    static void extractIfElseThen(string, vector<string>&);
+    static void extractWhile(string, vector<string>&);
     static string extractUntilParenthesesClosure(string, string);
+
+    static void extractProcedure(string sourceCode, vector<string> &v);
+
+    void extractExpression(string sourceCode, vector<string> &v);
 };
 
 

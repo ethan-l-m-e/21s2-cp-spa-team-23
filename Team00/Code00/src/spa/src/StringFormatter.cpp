@@ -56,6 +56,10 @@ string rtrim(const string s) {
     return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
 }
 
+string StringFormatter::removeFrontBackBrackets(const string s){
+    string toReturn = removeTrailingSpace(s);
+    return toReturn.substr(1,toReturn.length()-2);
+}
 
 vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
     std::regex r(regex);
