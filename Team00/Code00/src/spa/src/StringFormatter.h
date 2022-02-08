@@ -16,6 +16,8 @@ class StringFormatter {
         static string extractFrontStringByRegex(string, string);
 
     static vector<string> tokenizeByRegex(string code, string regex);
+
+    static string removeFrontBackBrackets(const string s);
 };
 
 
