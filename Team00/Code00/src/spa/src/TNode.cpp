@@ -5,6 +5,9 @@
 #include "TNode.h"
 
 using namespace std;
+/**
+ * TNode is obsolete, remove TNode methods (safely of course) and use Node instead!
+ **/
 
 TNode::TNode(string name) {
     this -> value = name;
