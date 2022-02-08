@@ -4,6 +4,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <variant>
 
 #include "regex.h"
 using namespace std;
@@ -104,6 +105,77 @@ public:
     VariableNode* getVarName() const;
 };
 */
+class BinaryOperatorNode;
+
+// factor: var_name | const_value | '(' expr ')'
+// Expression is replaced by BinaryOperatorNode***
+// ***Explanation: expr is also a BinaryOperatorNode, VariableNode, or ConstValueNode
+using Factor = variant<VariableNode, ConstValueNode, BinaryOperatorNode>;
+
+// term: term '*' factor | term '/' factor | term '%' factor | factor
+using Term = variant<BinaryOperatorNode, VariableNode, ConstValueNode>;
+
+// expr: expr '+' term | expr '-' term | term
+using Expression = variant<BinaryOperatorNode, Term>;
+
+// rel_factor: var_name | const_value | expr
+using RelFactor = variant<VariableNode, ConstValueNode, Expression>;
+
+class BinaryOperatorNode : public Node {
+    Expression *leftExpr;
+    Expression *rightExpr;
+    string binaryOperator;
+public:
+    BinaryOperatorNode(Expression *leftExpr, Expression *rightExpr, string binaryOperator);
+    [[nodiscard]] Expression* getLeftExpr() const;
+    [[nodiscard]] Expression* getRightExpr() const;
+};
+
+// Definition:
+// rel_expr: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
+//          rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
+//          rel_factor '==' rel_factor | rel_factor '!=' rel_factor
+class RelExprNode : public Node {
+    RelFactor *leftNode;
+    RelFactor *rightNode;
+    string relativeOperator;
+public:
+    RelExprNode(RelFactor *leftNode, RelFactor *rightNode, string relativeOperator);
+    [[nodiscard]] RelFactor* getLeftFactor() const;
+    [[nodiscard]] RelFactor* getRightFactor() const;
+};
+
+// Definition:
+// cond_expr: rel_expr | '!' '(' cond_expr ')' |
+//           '(' cond_expr ')' '&&' '(' cond_expr ')' |
+//           '(' cond_expr ')' '||' '(' cond_expr ')'
+class CondExprNode : public Node {
+    RelExprNode *relExpr = nullptr;
+    string condOperator = "";
+    CondExprNode *leftNode = nullptr;
+    CondExprNode *rightNode = nullptr;
+public:
+    // Case: rel_expr
+    explicit CondExprNode(RelExprNode *relExpr);
+    // Case: '!' '(' cond_expr ')'
+    explicit CondExprNode(CondExprNode *singleCondExpr);
+    // Case: '(' cond_expr ')' '&&' '(' cond_expr ')' |'(' cond_expr ')' '||' '(' cond_expr ')'
+    CondExprNode(string condOperator, CondExprNode *leftNode, CondExprNode *rightNode);
+
+    [[nodiscard]] CondExprNode *getLeftNode() const;
+    [[nodiscard]] CondExprNode *getRightNode() const;
+};
+
+// Definition:
+// while: 'while' '(' cond_expr ')' '{' stmtLst '}'
+class WhileNode: public Node {
+    CondExprNode *condExpr;
+    StatementList stmtLst;
+public:
+    WhileNode(CondExprNode *condExpr, StatementList stmtLst);
+    CondExprNode *getCondExpr();
+    StatementList getStmtLst();
+};
 
 class ProcedureNode: public Node {
     ProcNameNode *procName;
