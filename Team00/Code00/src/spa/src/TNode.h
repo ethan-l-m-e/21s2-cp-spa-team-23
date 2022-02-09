@@ -84,25 +84,26 @@ class BinaryOperatorNode;
 // factor: var_name | const_value | '(' expr ')'
 // Expression is replaced by BinaryOperatorNode***
 // ***Explanation: expr is also a BinaryOperatorNode, VariableNode, or ConstValueNode
-using Factor = variant<VariableNode, ConstValueNode, BinaryOperatorNode>;
+using Factor = variant<shared_ptr<VariableNode>, shared_ptr<ConstValueNode>, shared_ptr<BinaryOperatorNode>>;
 
 // term: term '*' factor | term '/' factor | term '%' factor | factor
-using Term = variant<BinaryOperatorNode, VariableNode, ConstValueNode>;
+using Term = variant<shared_ptr<BinaryOperatorNode>, shared_ptr<Factor>>;
 
 // expr: expr '+' term | expr '-' term | term
-using Expression = variant<BinaryOperatorNode, Term>;
+using Expression = variant<shared_ptr<VariableNode>, shared_ptr<ConstValueNode>, shared_ptr<BinaryOperatorNode>>;
 
 // rel_factor: var_name | const_value | expr
-using RelFactor = variant<VariableNode, ConstValueNode, Expression>;
+using RelFactor = variant<shared_ptr<VariableNode>, shared_ptr<ConstValueNode>, shared_ptr<BinaryOperatorNode>>;
 
 class BinaryOperatorNode : public Node {
-    Expression *leftExpr;
-    Expression *rightExpr;
+    Expression leftExpr;
+    Expression rightExpr;
     string binaryOperator;
 public:
-    BinaryOperatorNode(Expression *leftExpr, Expression *rightExpr, string binaryOperator);
-    [[nodiscard]] Expression* getLeftExpr() const;
-    [[nodiscard]] Expression* getRightExpr() const;
+    BinaryOperatorNode(Expression leftExpr, Expression rightExpr, string binaryOperator);
+    [[nodiscard]] Expression getLeftExpr() const;
+    [[nodiscard]] Expression getRightExpr() const;
+    [[nodiscard]] string getBinaryOperator() const;
 };
 
 // Definition:
@@ -110,13 +111,14 @@ public:
 //          rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
 //          rel_factor '==' rel_factor | rel_factor '!=' rel_factor
 class RelExprNode : public Node {
-    RelFactor *leftNode;
-    RelFactor *rightNode;
+    RelFactor leftNode;
+    RelFactor rightNode;
     string relativeOperator;
 public:
-    RelExprNode(RelFactor *leftNode, RelFactor *rightNode, string relativeOperator);
-    [[nodiscard]] RelFactor* getLeftFactor() const;
-    [[nodiscard]] RelFactor* getRightFactor() const;
+    RelExprNode(RelFactor leftNode, RelFactor rightNode, string relativeOperator);
+    [[nodiscard]] RelFactor getLeftFactor() const;
+    [[nodiscard]] RelFactor getRightFactor() const;
+    [[nodiscard]] string getRelativeOperator() const;
 };
 
 // Definition:
@@ -138,6 +140,7 @@ public:
 
     [[nodiscard]] CondExprNode *getLeftNode() const;
     [[nodiscard]] CondExprNode *getRightNode() const;
+    [[nodiscard]] string getCondOperator() const;
 };
 
 // Definition:

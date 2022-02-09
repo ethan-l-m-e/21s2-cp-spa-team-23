@@ -68,6 +68,11 @@ TEST_CASE("varNameNode Test") {
     CHECK(var == varNode ->getVariableName());
 }
 
+TEST_CASE("constValueNode Test") {
+    string value = "1";
+    ConstValueNode * constValueNode = new ConstValueNode(value);
+    CHECK(value == constValueNode->getConstValue());
+}
 
 TEST_CASE("Assign node test") {
     string left = "x";
@@ -82,8 +87,13 @@ TEST_CASE("Assign node test") {
     CHECK(stmtNo == testNode ->getStmtNumber());
 }
 
-TEST_CASE("") {
-
+TEST_CASE("Binary operator node test") {
+    shared_ptr<ConstValueNode> left = shared_ptr<ConstValueNode>(new ConstValueNode("1"));
+    shared_ptr<ConstValueNode> right = shared_ptr<ConstValueNode>(new ConstValueNode("2"));
+    string plusOperator = "+";
+    auto testNode = BinaryOperatorNode(left, right, plusOperator);
+    CHECK(get<shared_ptr<ConstValueNode>>(testNode.getLeftExpr()).get()->getConstValue() == "1");
+    CHECK(get<shared_ptr<ConstValueNode>>(testNode.getRightExpr()).get()->getConstValue() == "2");
 }
 
 TEST_CASE("") {

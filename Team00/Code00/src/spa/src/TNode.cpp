@@ -38,32 +38,40 @@ VariableNode* AssignNode::getRightNode() const {
     return this ->rightNode;
 }
 
-BinaryOperatorNode::BinaryOperatorNode(Expression *leftExpr, Expression *rightExpr, string binaryOperator) {
+BinaryOperatorNode::BinaryOperatorNode(Expression leftExpr, Expression rightExpr, string binaryOperator) {
     this->leftExpr = leftExpr;
     this->rightExpr = rightExpr;
     this->binaryOperator = std::move(binaryOperator);
 }
 
-Expression *BinaryOperatorNode::getLeftExpr() const {
+Expression BinaryOperatorNode::getLeftExpr() const {
     return this->leftExpr;
 }
 
-Expression *BinaryOperatorNode::getRightExpr() const {
+Expression BinaryOperatorNode::getRightExpr() const {
     return this->rightExpr;
 }
 
-RelExprNode::RelExprNode(RelFactor *leftNode, RelFactor *rightNode, string relativeOperator) {
+string BinaryOperatorNode::getBinaryOperator() const {
+    return this->binaryOperator;
+}
+
+RelExprNode::RelExprNode(RelFactor leftNode, RelFactor rightNode, string relativeOperator) {
     this->leftNode = leftNode;
     this->rightNode = rightNode;
     this->relativeOperator = std::move(relativeOperator);
 }
 
-RelFactor *RelExprNode::getLeftFactor() const {
+RelFactor RelExprNode::getLeftFactor() const {
     return this->leftNode;
 }
 
-RelFactor *RelExprNode::getRightFactor() const {
+RelFactor RelExprNode::getRightFactor() const {
     return this->rightNode;
+}
+
+string RelExprNode::getRelativeOperator() const {
+    return this->relativeOperator;
 }
 
 CondExprNode::CondExprNode(RelExprNode *relExpr){
@@ -87,6 +95,10 @@ CondExprNode *CondExprNode::getLeftNode() const {
 
 CondExprNode *CondExprNode::getRightNode() const {
     return this->rightNode;
+}
+
+string CondExprNode::getCondOperator() const {
+    return this->condOperator;
 }
 
 WhileNode::WhileNode(CondExprNode *condExpr, StatementList stmtLst) {
