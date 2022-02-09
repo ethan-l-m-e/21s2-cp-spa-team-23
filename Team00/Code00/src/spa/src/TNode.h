@@ -4,6 +4,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <variant>
 
 #include "regex.h"
 using namespace std;
@@ -16,32 +17,6 @@ using namespace std;
 //    value | constant | operator
 //    stmtNo
 //    list of pointers to other nodes (i hate pointers)
-
-
-
-class TNode {
-    string value; // can be value, constant or integer constant and integer have to be converted back into int first for proper use
-    vector<TNode*> childrenRef;
-    int stmtNo = -1;
-
-public:
-    TNode(string);
-    TNode(string, int);
-    void addNode(TNode*);
-    TNode* getNode(int);
-    int getNumberOfChildNodes();
-    string getValue();
-    void changeValue(string value);
-
-    bool hasStmtNo();
-    int getStmtNo();
-    void setStmtNo(int);
-
-};
-
-
-
-
 
 typedef std::string VarName, ProcName;
 
@@ -104,6 +79,85 @@ public:
     VariableNode* getVarName() const;
 };
 */
+class BinaryOperatorNode;
+
+// Expression is replaced by BinaryOperatorNode***
+// ***Explanation: expr is also a BinaryOperatorNode, VariableNode, or ConstValueNode
+// factor: var_name | const_value | '(' expr ')'
+using Factor = variant<VariableNode*, ConstValueNode*, BinaryOperatorNode*>;
+
+// Term, Expression and RelFactor are all equated to Factor
+// ***Explanation:
+// term, expr are both either BinaryOperatorNodes, or they can become VariableNodes or ConstValueNodes
+// rel_factor is already either VariableNode or ConstValueNode, but can also be an expr.
+// Therefore, all three are actually the same as factor.
+
+// term: term '*' factor | term '/' factor | term '%' factor | factor
+using Term = Factor;
+// expr: expr '+' term | expr '-' term | term
+using Expression = Term;
+// rel_factor: var_name | const_value | expr
+using RelFactor = Expression;
+
+class BinaryOperatorNode : public Node {
+    Expression leftExpr;
+    Expression rightExpr;
+    string binaryOperator;
+public:
+    BinaryOperatorNode(Expression leftExpr, Expression rightExpr, string binaryOperator);
+    [[nodiscard]] Expression getLeftExpr() const;
+    [[nodiscard]] Expression getRightExpr() const;
+    [[nodiscard]] string getBinaryOperator() const;
+};
+
+// Definition:
+// rel_expr: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
+//          rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
+//          rel_factor '==' rel_factor | rel_factor '!=' rel_factor
+class RelExprNode : public Node {
+    RelFactor leftNode;
+    RelFactor rightNode;
+    string relativeOperator;
+public:
+    RelExprNode(RelFactor leftNode, RelFactor rightNode, string relativeOperator);
+    [[nodiscard]] RelFactor getLeftFactor() const;
+    [[nodiscard]] RelFactor getRightFactor() const;
+    [[nodiscard]] string getRelativeOperator() const;
+};
+
+// Definition:
+// cond_expr: rel_expr | '!' '(' cond_expr ')' |
+//           '(' cond_expr ')' '&&' '(' cond_expr ')' |
+//           '(' cond_expr ')' '||' '(' cond_expr ')'
+class CondExprNode : public Node {
+    RelExprNode *relExpr = nullptr;
+    string condOperator = "";
+    CondExprNode *leftNode = nullptr;
+    CondExprNode *rightNode = nullptr;
+public:
+    // Case: rel_expr
+    explicit CondExprNode(RelExprNode *relExpr);
+    // Case: '!' '(' cond_expr ')'
+    explicit CondExprNode(CondExprNode *singleCondExpr);
+    // Case: '(' cond_expr ')' '&&' '(' cond_expr ')' |'(' cond_expr ')' '||' '(' cond_expr ')'
+    CondExprNode(string condOperator, CondExprNode *leftNode, CondExprNode *rightNode);
+
+    [[nodiscard]] RelExprNode *getRelExpr() const;
+    [[nodiscard]] CondExprNode *getLeftNode() const;
+    [[nodiscard]] CondExprNode *getRightNode() const;
+    [[nodiscard]] string getCondOperator() const;
+};
+
+// Definition:
+// while: 'while' '(' cond_expr ')' '{' stmtLst '}'
+class WhileNode: public Node {
+    CondExprNode *condExpr;
+    StatementList stmtLst;
+public:
+    WhileNode(CondExprNode *condExpr, StatementList stmtLst);
+    CondExprNode *getCondExpr();
+    StatementList getStmtLst();
+};
 
 class ProcedureNode: public Node {
     ProcNameNode *procName;

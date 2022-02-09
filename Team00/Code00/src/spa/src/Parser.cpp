@@ -25,8 +25,6 @@ string emptyStr = "";
 int statementNumber = 0;
 Identifier identifier;
 string extractFrontStringByRegex(string sourceCode, string regex);
-TNode* recursiveTreeConstruction(string, TNode*&, int);
-TNode convertToTNode(string);
 
 int Parser::Parse (string filename) {
     // load file
@@ -39,10 +37,7 @@ int Parser::Parse (string filename) {
     string sourceCode = codeStream.str();
     file.close();
 
-    // proceed to convert sourceCode into AST using recursive descend
-    TNode * rootNodePtr;
-    TNode rootNode = convertToTNode(sourceCode);
-    rootNodePtr = &rootNode;
+
 
     //extract relationship entities from AST and transmit data to PKB
     //TODO: create a relationshipExtractor class to pull methods
@@ -51,22 +46,6 @@ int Parser::Parse (string filename) {
     //RelationshipExtractor::extractFollows(&rootNode);
 
     return 0;
-}
-
-
-
-TNode convertToTNode(string sourceCode) {
-    TNode * firstNode;
-    TNode node("program");
-    firstNode = &node;
-
-    int * count;
-    int init = 1;
-    count = &init;
-
-    // TODO (FUTURE): add a line number at the back of each statement (except 'then', 'else' & procedure_regex or blank)? for statement no. possibly Under StringFormatter
-
-    return node;
 }
 
 VariableNode* Parser::parseVar(string variable) {
