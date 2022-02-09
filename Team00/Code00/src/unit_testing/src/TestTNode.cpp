@@ -9,6 +9,7 @@ void require(bool b) {
     REQUIRE(b);
 }
 
+/*
 TEST_CASE("Value Test") {
     string nodeValue = "my Value";
     TNode node(nodeValue);
@@ -44,6 +45,7 @@ TEST_CASE("stmtNoTest") {
     CHECK(node.hasStmtNo());
     CHECK(stmtNo == node.getStmtNo());
 }
+*/
 
 TEST_CASE("Node Test") {
     Node parent;
@@ -78,5 +80,13 @@ TEST_CASE("Assign node test") {
     CHECK(left == testNode -> getLeftNode() ->getVariableName());
     CHECK(right == testNode ->getRightNode() ->getVariableName());
     CHECK(stmtNo == testNode ->getStmtNumber());
+}
+
+TEST_CASE("") {
+
+}
+
+TEST_CASE("") {
+
 }
 
