@@ -9,44 +9,6 @@ void require(bool b) {
     REQUIRE(b);
 }
 
-/*
-TEST_CASE("Value Test") {
-    string nodeValue = "my Value";
-    TNode node(nodeValue);
-    CHECK(nodeValue == node.getValue());
-}
-
-TEST_CASE("Children Test") {
-    string value1 = "pValue";
-    string value2 = "cValue1";
-    string value3 = "cValue2";
-    string value4 = "ccValue1";
-    TNode pNode(value1);
-    TNode cNode1(value2);
-    TNode cNode2(value3);
-    TNode ccNode1(value4);
-    pNode.addNode(&cNode1);
-    pNode.addNode(&cNode2);
-    cNode1.addNode(&ccNode1);
-    CHECK(2 == pNode.getNumberOfChildNodes());
-    CHECK(value2 == pNode.getNode(0) -> getValue());
-    CHECK(value3 == pNode.getNode(1) -> getValue());
-    CHECK(value4 == pNode.getNode(0) -> getNode(0) -> getValue());
-
-}
-
-TEST_CASE("stmtNoTest") {
-    int stmtNo = 1;
-    TNode node("value");
-    CHECK(!node.hasStmtNo());
-    node.setStmtNo(stmtNo);
-    CHECK(node.hasStmtNo());
-    TNode node2("value", stmtNo);
-    CHECK(node.hasStmtNo());
-    CHECK(stmtNo == node.getStmtNo());
-}
-*/
-
 TEST_CASE("Node Test") {
     Node parent;
     Node node;
@@ -88,15 +50,56 @@ TEST_CASE("Assign node test") {
 }
 
 TEST_CASE("Binary operator node test") {
-    shared_ptr<ConstValueNode> left = shared_ptr<ConstValueNode>(new ConstValueNode("1"));
-    shared_ptr<ConstValueNode> right = shared_ptr<ConstValueNode>(new ConstValueNode("2"));
+    ConstValueNode left("1");
+    ConstValueNode right("2");
     string plusOperator = "+";
-    auto testNode = BinaryOperatorNode(left, right, plusOperator);
-    CHECK(get<shared_ptr<ConstValueNode>>(testNode.getLeftExpr()).get()->getConstValue() == "1");
-    CHECK(get<shared_ptr<ConstValueNode>>(testNode.getRightExpr()).get()->getConstValue() == "2");
+    auto testNode = BinaryOperatorNode(&left, &right, plusOperator);
+    CHECK(get<ConstValueNode*>(testNode.getLeftExpr())->getConstValue() == "1");
+    CHECK(get<ConstValueNode*>(testNode.getRightExpr())->getConstValue() == "2");
+    CHECK(testNode.getBinaryOperator() == plusOperator);
 }
 
-TEST_CASE("") {
-
+TEST_CASE("Relative expression node test") {
+    ConstValueNode constValueNode("1");
+    string andOperator = "&&";
+    auto testNode = RelExprNode(&constValueNode, &constValueNode, andOperator);
+    CHECK(get<ConstValueNode*>(testNode.getLeftFactor())->getConstValue() == constValueNode.getConstValue());
+    CHECK(get<ConstValueNode*>(testNode.getRightFactor())->getConstValue() == constValueNode.getConstValue());
+    CHECK(testNode.getRelativeOperator() == andOperator);
 }
+
+TEST_CASE("Condition expression node test") {
+    ConstValueNode constValueNode("1");
+    string andOperator = "&&";
+    RelExprNode relExprNode(&constValueNode, &constValueNode, andOperator);
+    // Case: rel_expr
+    auto testNode1 = CondExprNode(&relExprNode);
+    CHECK(testNode1.getCondOperator().empty());
+    CHECK(testNode1.getLeftNode() == nullptr);
+    CHECK(testNode1.getRightNode() == nullptr);
+    // Case: '!' '(' cond_expr ')'
+    string notOperator = "!";
+    CondExprNode condExprNode(&relExprNode);
+    auto testNode2 = CondExprNode(&condExprNode);
+    //CHECK(testNode2.getRelExpr() ); TODO: WRITE EQUALITY CHECK FOR NODE
+    CHECK(testNode2.getLeftNode() == nullptr);
+    // CHECK(testNode2.getRightNode() == condExprNode); TODO: WRITE EQUALITY CHECK FOR NODE
+    CHECK(testNode2.getCondOperator() == notOperator);
+    // Case: '(' cond_expr ')' '&&' '(' cond_expr ')' |'(' cond_expr ')' '||' '(' cond_expr ')'
+    auto testNode3 = CondExprNode(andOperator, &condExprNode, &condExprNode);
+    CHECK(testNode3.getCondOperator() == andOperator);
+    // TODO: WRITE EQUALITY CHECK FOR NODE
+}
+
+TEST_CASE("While node test") {
+    ConstValueNode constValueNode("1");
+    string andOperator = "&&";
+    RelExprNode relExprNode(&constValueNode, &constValueNode, andOperator);
+    CondExprNode condExprNode(&relExprNode);
+    StatementList stmtLst = {};
+    auto testNode = WhileNode(&condExprNode, stmtLst);
+    CHECK(testNode.getStmtLst().size() == 0);
+    // TODO: WRITE EQUALITY CHECK FOR NODE
+}
+
 

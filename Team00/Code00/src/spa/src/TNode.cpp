@@ -89,6 +89,10 @@ CondExprNode::CondExprNode(string condOperator, CondExprNode *leftNode, CondExpr
     this->rightNode = rightNode;
 }
 
+RelExprNode *CondExprNode::getRelExpr() const {
+    return this->relExpr;
+}
+
 CondExprNode *CondExprNode::getLeftNode() const {
     return this->leftNode;
 }

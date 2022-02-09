@@ -81,19 +81,23 @@ public:
 */
 class BinaryOperatorNode;
 
-// factor: var_name | const_value | '(' expr ')'
 // Expression is replaced by BinaryOperatorNode***
 // ***Explanation: expr is also a BinaryOperatorNode, VariableNode, or ConstValueNode
-using Factor = variant<shared_ptr<VariableNode>, shared_ptr<ConstValueNode>, shared_ptr<BinaryOperatorNode>>;
+// factor: var_name | const_value | '(' expr ')'
+using Factor = variant<VariableNode*, ConstValueNode*, BinaryOperatorNode*>;
+
+// Term, Expression and RelFactor are all equated to Factor
+// ***Explanation:
+// term, expr are both either BinaryOperatorNodes, or they can become VariableNodes or ConstValueNodes
+// rel_factor is already either VariableNode or ConstValueNode, but can also be an expr.
+// Therefore, all three are actually the same as factor.
 
 // term: term '*' factor | term '/' factor | term '%' factor | factor
-using Term = variant<shared_ptr<BinaryOperatorNode>, shared_ptr<Factor>>;
-
+using Term = Factor;
 // expr: expr '+' term | expr '-' term | term
-using Expression = variant<shared_ptr<VariableNode>, shared_ptr<ConstValueNode>, shared_ptr<BinaryOperatorNode>>;
-
+using Expression = Term;
 // rel_factor: var_name | const_value | expr
-using RelFactor = variant<shared_ptr<VariableNode>, shared_ptr<ConstValueNode>, shared_ptr<BinaryOperatorNode>>;
+using RelFactor = Expression;
 
 class BinaryOperatorNode : public Node {
     Expression leftExpr;
@@ -138,6 +142,7 @@ public:
     // Case: '(' cond_expr ')' '&&' '(' cond_expr ')' |'(' cond_expr ')' '||' '(' cond_expr ')'
     CondExprNode(string condOperator, CondExprNode *leftNode, CondExprNode *rightNode);
 
+    [[nodiscard]] RelExprNode *getRelExpr() const;
     [[nodiscard]] CondExprNode *getLeftNode() const;
     [[nodiscard]] CondExprNode *getRightNode() const;
     [[nodiscard]] string getCondOperator() const;
