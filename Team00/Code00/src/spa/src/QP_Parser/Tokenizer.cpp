@@ -1,4 +1,7 @@
 #include "Tokenizer.h"
+#include "StringFormatter.h"
+
+#include<iostream>
 #include <string>
 #include <regex>
 #include <utility>
@@ -44,11 +47,32 @@ void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
 }
 
 void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
-    // find select synonym
-    std::regex re("Select [A-Za-z][A-Za-z|0-9]*");
-    std::smatch match;
-    std::regex_search(pql.cbegin(), pql.cend(), match, re);
-    std::string selectString = match[0];
-    selectString = selectString.substr(7);
-    queryToken.selectClauseToken = selectString;
+    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    vector<string> tokens = StringFormatter::tokenizeByRegex(selectLine, "(Select[ ]*|[ ]+)");
+    for(int i = 0 ; i < tokens.size(); i++) {
+        cout << tokens[i] << "\n";
+    }
+    queryToken.selectClauseToken = tokens[0];
+}
+
+void Tokenizer::getSuchThatClause(std::string& pql, QueryToken& queryToken) {
+    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "Select (.*) such that[ ]*");
+    if(regex_match(backClauses[0], std::regex("(Modifies[\\*]*|Uses[\\*]*|Follows[\\*]*|Parents[\\*]*)(.*)"))) {
+        vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
+        cout << "such that: " << suchThatClauses[0] << "\n";
+        cout << "leftArg: " << suchThatClauses[1] << "\n";
+        cout << "rightArg:" << suchThatClauses[2] << "\n";
+
+    } else {
+        cout << "there is no such that clause in this query." << "\n";
+    }
+}
+
+void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {
+    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "pattern[ ]*");
+        vector<string> pattternClause = StringFormatter::tokenizeByRegex(backClauses[1], "(a\\()|(\\))|(,)");
+        cout << "LHS: " << pattternClause[0] << "\n";
+        cout << "RHS: " << pattternClause[1] << "\n";
 }
