@@ -7,7 +7,7 @@
 
 std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     // Initialise an empty result
-    Result result = {ResultType::EMPTY};
+    auto* synonymRelations = new SynonymRelations();
 /*
     // Create evaluator and evaluate each of the pattern clause
     if(query->hasPatternClause()) {
@@ -30,13 +30,13 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     }
         */
 
-    if (result.resultType == ResultType::EMPTY) {
-        auto* selectClauseEvaluator = new SelectClauseEvaluator(&result, pkb, query);
+    if (synonymRelations->isEmpty()) {
+        auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
         Result result1 = selectClauseEvaluator->evaluateClause();
         return convertResultToStringList(result1, query->getSelectedSynonym());
     }
 
-    return convertResultToStringList(result, query->getSelectedSynonym());
+    return list<string>{"hello"};
 }
 
 ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {

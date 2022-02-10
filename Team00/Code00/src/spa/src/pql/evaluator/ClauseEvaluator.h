@@ -8,9 +8,10 @@
 
 #include <utility>
 #include <vector>
-#include "Result.h"
-#include "pql/query_obj/Argument.h"
 #include "PKB.h"
+#include "Result.h"
+#include "SynonymRelations.h"
+#include "pql/query_obj/Argument.h"
 #include "pql/query_obj/Query.h"
 
 
@@ -27,6 +28,7 @@ public:
     bool hasNoSynonyms();
     bool leftIsSynonym();
     bool rightIsSynonym();
+    bool generateTuples(RelRef relRef, unordered_set<std::string> leftSet, unordered_set<std::string> rightSet);
     unordered_set<std::string> getAllType(DesignEntity designEntity);
     Result buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items);
 };

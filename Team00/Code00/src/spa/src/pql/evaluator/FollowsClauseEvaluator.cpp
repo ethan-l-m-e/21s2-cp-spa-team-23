@@ -18,10 +18,12 @@ Result FollowsClauseEvaluator::evaluateClause(){
     else if (hasTwoSynonyms()) {
         DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
         DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
-        //resultItem = pkb->getAllFollows();
+        unordered_set<std::string> leftSet = getAllType(entityLeft);
+        unordered_set<std::string> rightSet = getAllType(entityLeft);
+        generateTuples(getRelRef(), leftSet, rightSet);
         resultBoolean = !resultItem.empty();
         resultType = ResultType::TUPLES;
-        resultHeader = vector<string> { argLeft.argumentValue, argRight.argumentValue};
+        resultHeader = tuple<string, string> { argLeft.argumentValue, argRight.argumentValue};
     }
     else if (leftIsSynonym()) {
         DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
@@ -30,7 +32,7 @@ Result FollowsClauseEvaluator::evaluateClause(){
         resultType = ResultType::LIST;
         resultHeader = argLeft.argumentValue;
     }
-    else //if (rightIsSynonym())
+    else if (rightIsSynonym())
     {
         DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
         //resultItem = pkb->getStmtFollows(argLeft.argumentValue);

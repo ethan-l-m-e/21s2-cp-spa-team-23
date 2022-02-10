@@ -45,3 +45,7 @@ unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity
 Result ClauseEvaluator::buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items) {
     return {type, isTrue, header, items};
 }
+
+bool ClauseEvaluator::generateTuples(RelRef relRef, unordered_set<std::string> leftSet, unordered_set<std::string> rightSet) {
+
+};

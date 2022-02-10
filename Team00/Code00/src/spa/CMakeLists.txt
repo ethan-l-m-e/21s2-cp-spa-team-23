@@ -8,6 +8,8 @@ set(srcs ${srcs}
         src/pql/evaluator/ClauseEvaluator.cpp
         src/pql/evaluator/SelectClauseEvaluator.cpp
         src/pql/evaluator/FollowsClauseEvaluator.cpp
+        src/pql/evaluator/SynonymRelations.cpp
+        src/pql/evaluator/SuchThatClauseEvaluator.cpp
         )
 set(headers ${headers}
         src/QP_Parser/PreProcessor.h
@@ -17,8 +19,9 @@ set(headers ${headers}
         src/pql/evaluator/ClauseEvaluator.h
         src/pql/evaluator/SelectClauseEvaluator.h
         src/pql/evaluator/FollowsClauseEvaluator.h
-
-        )
+        src/pql/evaluator/Result.h
+        src/pql/evaluator/SynonymRelations.h
+        src/pql/evaluator/SuchThatClauseEvaluator.h)
 add_library(spa ${srcs} ${headers} src/Parser.cpp src/Parser.h
         src/Identifier.cpp src/Identifier.h
         src/Validator.cpp src/Validator.h
