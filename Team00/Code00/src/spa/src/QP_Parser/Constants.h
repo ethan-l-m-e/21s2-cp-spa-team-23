@@ -35,3 +35,6 @@ std::string const Modifies_S = "Modifies\\(" + STMT_REF + "," + ENT_REF + "\\)";
 std::string const Modifies_P = "Modifies\\(" + ENT_REF + "," + ENT_REF + "\\)";
 
 // TODO: pattern regex
+std::string const FACTOR;
+std::string const EXPRESSION_SPEC = "";
+std::string const pattern = "pattern a\\(" + ENT_REF + "," + EXPRESSION_SPEC + "\\)";
