@@ -24,6 +24,7 @@ public:
     ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
     virtual Result evaluateClause() = 0;
     bool hasTwoSynonyms();
+    bool hasOneSynonym();
     bool hasNoSynonyms();
     bool leftIsSynonym();
     bool rightIsSynonym();
