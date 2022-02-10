@@ -27,6 +27,12 @@ int Identifier::identifyFirstObject(string sourceCode) {
         return READ; // done
     } else if (regex_match(firstLine, std::regex(PRINT_REGEX))) {
         return PRINT; // done
+    } else if (regex_match(firstLine, std::regex(WHILE_IDENTIFIER))) {
+        bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "()") && Validator::checkParenthesesClosure(sourceCode, "{}");
+        return switchCaseOrError(WHILE, isCorrect); //ignores stmtLst
+    } else if (regex_match(firstLine, std::regex(IF_IDENTIFIER))) {
+        bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "()") && Validator::checkParenthesesClosure(sourceCode, "{}");
+        return switchCaseOrError(WHILE, isCorrect); //ignores stmtLst
     } else if (regex_match(firstLine, std::regex(EXPR_TERM_IDENTIFIER))) {
         bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "()");
         return switchCaseOrError(EXPR_TERM, isCorrect); //ignores stmtLst
