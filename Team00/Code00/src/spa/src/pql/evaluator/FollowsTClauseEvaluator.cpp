@@ -1,10 +1,10 @@
 //
-// Created by Tianyi Wang on 5/2/22.
+// Created by Tianyi Wang on 10/2/22.
 //
 
-#include "FollowsClauseEvaluator.h"
+#include "FollowsTClauseEvaluator.h"
 
-Result FollowsClauseEvaluator::evaluateClause(){
+Result FollowsTClauseEvaluator::evaluateClause(){
     Argument argLeft = argList[0];
     Argument argRight = argList[1];
     ResultType resultType;
@@ -12,7 +12,7 @@ Result FollowsClauseEvaluator::evaluateClause(){
     vector<ResultItem> resultItem;
     bool resultBoolean;
     if (hasNoSynonym()) {
-        //resultBoolean = pkb->isFollows(argLeft.argumentValue, argRight.argumentValue);
+        //resultBoolean = pkb->isFollowsT(argLeft.argumentValue, argRight.argumentValue);
         resultType = ResultType::BOOLEAN;
     }
     else if (hasTwoSynonyms()) {
@@ -27,14 +27,15 @@ Result FollowsClauseEvaluator::evaluateClause(){
     }
     else if (hasLeftSynonym()) {
         DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
-        //resultItem = pkb->getStmtFollowedBy(argRight.argumentValue);
+        //resultItem = pkb->getStmtFollowedTBy(argRight.argumentValue);
         resultBoolean = !resultItem.empty();
         resultType = ResultType::LIST;
         resultHeader = argLeft.argumentValue;
     }
-    else if (hasRightSynonym()) {
+    else if (hasRightSynonym())
+    {
         DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
-        //resultItem = pkb->getStmtFollows(argLeft.argumentValue);
+        //resultItem = pkb->getStmtFollowsT(argLeft.argumentValue);
         resultBoolean = !resultItem.empty();
         resultType = ResultType::LIST;
         resultHeader = argRight.argumentValue;
@@ -43,11 +44,11 @@ Result FollowsClauseEvaluator::evaluateClause(){
     return buildResult(resultType, resultBoolean, resultHeader, resultItem);
 };
 
-std::vector<ResultItem> FollowsClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
+std::vector<ResultItem> FollowsTClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
     std::vector<ResultItem> tuples = std::vector<ResultItem>{};
     for (auto left = leftSet.begin(); left != leftSet.end(); ++left) {
         /* ... process *itr ...
-        unordered_set<std::string> follows = pkb->getStmtFollows(left);
+        unordered_set<std::string> follows = pkb->getStmtFollowsT(left);
         for (const auto & follow : follows) {
             if (rightSet.find(follow) != rightSet.end()) {
                 tuples.emplace_back(std::tuple<string, string>(*left, follow));

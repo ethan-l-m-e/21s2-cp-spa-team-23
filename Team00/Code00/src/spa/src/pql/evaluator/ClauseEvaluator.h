@@ -24,11 +24,6 @@ public:
     ClauseEvaluator(std::vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
     ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
     virtual Result evaluateClause() = 0;
-    bool hasTwoSynonyms();
-    bool hasNoSynonyms();
-    bool leftIsSynonym();
-    bool rightIsSynonym();
-    bool generateTuples(RelRef relRef, unordered_set<std::string> leftSet, unordered_set<std::string> rightSet);
     unordered_set<std::string> getAllType(DesignEntity designEntity);
     Result buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items);
 };

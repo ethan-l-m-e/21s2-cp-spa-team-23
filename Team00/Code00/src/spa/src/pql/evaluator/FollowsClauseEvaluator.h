@@ -5,15 +5,16 @@
 #ifndef SPA_FOLLOWSCLAUSEEVALUATOR_H
 #define SPA_FOLLOWSCLAUSEEVALUATOR_H
 
-#include "ClauseEvaluator.h"
+#include "SuchThatClauseEvaluator.h"
 
 #include <utility>
 
-class FollowsClauseEvaluator : public ClauseEvaluator {
+class FollowsClauseEvaluator : public SuchThatClauseEvaluator {
     public:
-        FollowsClauseEvaluator (std::vector<Argument> args, PKB* pkb, Query* query) : ClauseEvaluator(std::move(args), pkb, query) {}
+        FollowsClauseEvaluator (std::vector<Argument> args, PKB* pkb, Query* query) : SuchThatClauseEvaluator(std::move(args), pkb, query) {}
         Result evaluateClause() override;
-        RelRef getRelRef() {return RelRef::FOLLOWS;};
+        RelRef getRelRef() override {return RelRef::FOLLOWS;};
+        vector<ResultItem> generateTuples (unordered_set<std::string> &leftSet, unordered_set<std::string> &rightSet) override;
 };
 
 
