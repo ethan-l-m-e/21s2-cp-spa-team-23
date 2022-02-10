@@ -55,20 +55,16 @@ void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) 
 void Tokenizer::getSuchThatClause(std::string& pql, QueryToken& queryToken) {
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
     vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
-    if(regex_match(backClauses[0], std::regex("(Modifies[\\*]*|Uses[\\*]*|Follows[\\*]*|Parents[\\*]*)(.*)"))) {
-        vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
-        cout << "such that: " << suchThatClauses[0] << "\n";
-        cout << "leftArg: " << suchThatClauses[1] << "\n";
-        cout << "rightArg:" << suchThatClauses[2] << "\n";
-    } else {
-        cout << "there is no such that clause in this query." << "\n";
-    }
+    vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
+    cout << "such that: " << suchThatClauses[0] << "\n";
+    cout << "leftArg: " << suchThatClauses[1] << "\n";
+    cout << "rightArg:" << suchThatClauses[2] << "\n";
 }
 
 void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
     vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)pattern[ ]*");
-    vector<string> pattternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(a\\()|(\\))|(,)");
-    cout << "LHS: " << pattternClause[0] << "\n";
-    cout << "RHS: " << pattternClause[1] << "\n";
+    vector<string> pattternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|(,)");
+    cout << "LHS: " << pattternClause[1] << "\n";
+    cout << "RHS: " << pattternClause[2] << "\n";
 }
