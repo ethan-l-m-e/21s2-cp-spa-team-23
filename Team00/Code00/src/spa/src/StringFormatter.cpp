@@ -62,16 +62,16 @@ string StringFormatter::removeFrontBackBrackets(const string s){
 }
 
 vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
+
     std::regex r(regex);
-    string spaced = std::regex_replace(s, r, " ");
+    string spaced = std::regex_replace(s, r, "//");
 
     char * sourceAsChar = new char[spaced.size()];
-    char * regexChar = "[ ]*";
+    char * regexChar = "//*";
     strcpy(sourceAsChar, spaced.c_str());
     char *token = strtok(sourceAsChar,regexChar);
     vector<string> v;
     while (token) {
-        cout << token << "\n";
         v.push_back(token);
         token = strtok(NULL, regexChar);
     }
@@ -90,4 +90,13 @@ string StringFormatter::extractFrontStringByRegex(string sourceCode, string rege
     return s;
 }
 
-
+string StringFormatter::extractSecondStringByRegex(string sourceCode, string regex) {
+    char * sourceAsChar = new char[100];
+    char * regexChar = new char[100];
+    strcpy(sourceAsChar, sourceCode.c_str());
+    strcpy(regexChar, regex.c_str());
+    char *token = strtok(sourceAsChar,regexChar);
+    token = strtok(NULL, regexChar);
+    string s(token);
+    return s;
+}
