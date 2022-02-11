@@ -1,29 +1,23 @@
-file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
+file(GLOB srcs
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/query_obj/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/evaluator/*.cpp"
+        )
+file(GLOB headers
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/query_obj/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/evaluator/*.h"
+        )
 set(srcs ${srcs}
         src/QP_Parser/PreProcessor.cpp
         src/QP_Parser/Tokenizer.cpp
-        src/pql/query_obj/Query.cpp
-        src/pql/QueryEvaluator.cpp
-        src/pql/evaluator/ClauseEvaluator.cpp
-        src/pql/evaluator/SelectClauseEvaluator.cpp
-        src/pql/evaluator/FollowsClauseEvaluator.cpp
-        src/pql/evaluator/SynonymRelations.cpp
-        src/pql/evaluator/SuchThatClauseEvaluator.cpp
-        src/pql/evaluator/FollowsTClauseEvaluator.cpp
         )
 set(headers ${headers}
         src/QP_Parser/PreProcessor.h
         src/QP_Parser/Tokenizer.h
-        src/pql/query_obj/Query.h
         src/pql/QueryEvaluator.h
-        src/pql/evaluator/ClauseEvaluator.h
-        src/pql/evaluator/SelectClauseEvaluator.h
-        src/pql/evaluator/FollowsClauseEvaluator.h
-        src/pql/evaluator/Result.h
-        src/pql/evaluator/SynonymRelations.h
-        src/pql/evaluator/SuchThatClauseEvaluator.h
-        src/pql/evaluator/FollowsTClauseEvaluator.h
         )
 add_library(spa ${srcs} ${headers} src/Parser.cpp src/Parser.h
         src/Identifier.cpp src/Identifier.h

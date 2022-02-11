@@ -10,11 +10,13 @@
 #include <utility>
 
 class FollowsClauseEvaluator : public SuchThatClauseEvaluator {
-    public:
+public:
         FollowsClauseEvaluator (std::vector<Argument> args, PKB* pkb, Query* query) : SuchThatClauseEvaluator(std::move(args), pkb, query) {}
-        Result evaluateClause() override;
         RelRef getRelRef() override {return RelRef::FOLLOWS;};
-        vector<ResultItem> generateTuples (unordered_set<std::string> &leftSet, unordered_set<std::string> &rightSet) override;
+protected:
+    bool isRelation(string left, string right) override;
+    unordered_set<std::string> getLeftSynonymValue(std::string right) override;
+    unordered_set<std::string> getRightSynonymValue(std::string left) override;
 };
 
 
