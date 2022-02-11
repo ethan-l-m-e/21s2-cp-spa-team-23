@@ -105,6 +105,31 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
                     break;
             }
         }
+        for (int i = sourceCode.length()-1; i >= 0; i--) {
+            switch (sourceCode[i]) {
+                case ('*'):
+                    if (bracketCheck == 0) {
+                        exprPos = i;
+                        goto exit_loop;
+                    }
+                    break;
+                case ('/'):
+                    if (bracketCheck == 0) {
+                        exprPos = i;
+                        goto exit_loop;
+                    }
+                    break;
+                case (')'):
+                    bracketCheck++;
+                    break;
+                case ('('):
+                    bracketCheck--;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         sourceCode = StringFormatter::removeFrontBackBrackets(sourceCode);
     }
         exit_loop:;

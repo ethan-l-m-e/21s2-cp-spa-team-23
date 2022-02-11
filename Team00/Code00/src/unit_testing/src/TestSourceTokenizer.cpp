@@ -75,6 +75,15 @@ TEST_CASE("expression token - only '+'") {
     REQUIRE(v[2] == "+");
 }
 
+TEST_CASE("expression token - only '*'") {
+    string p = " x * y *z * a * b * c";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "x * y *z * a * b");
+    REQUIRE(v[1] == "c");
+    REQUIRE(v[2] == "*");
+}
+
 TEST_CASE("expression token - '+' and '-'") {
     string p = " x + y +z - a + b - c";
     vector<string> v;
@@ -120,11 +129,11 @@ TEST_CASE("expression token - nested brackets") {
     REQUIRE(v[2] == "+");
 }
 
-//TEST_CASE("fail test") {
-//    string p = "x+y";
-//    vector<string> v;
-//    SourceTokenizer::extractExpression(p, v);
-//    REQUIRE(v[0] == "x");
-//    REQUIRE(v[1] == "y");
-//    REQUIRE(v[2] == "*");
-//}
+TEST_CASE("fail test") {
+    string p = "x+y";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "x");
+    REQUIRE(v[1] == "y");
+    REQUIRE(v[2] == "*");
+}
