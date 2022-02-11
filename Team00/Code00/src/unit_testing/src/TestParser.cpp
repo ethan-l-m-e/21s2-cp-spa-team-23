@@ -57,6 +57,6 @@ TEST_CASE("Assign parsing") {
     string input = left + " = " + right + ";";
     AssignNode * testNode = Parser::parseAssign(input);
     CHECK(left ==  testNode ->getLeftNode() ->getVariableName());
-    CHECK(right == testNode ->getRightNode() ->getVariableName());
+    CHECK(right == get<VariableNode*>(testNode ->getRightNode())->getVariableName());
 }
 
