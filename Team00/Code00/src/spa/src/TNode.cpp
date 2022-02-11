@@ -5,55 +5,6 @@
 #include "TNode.h"
 
 using namespace std;
-/**
- * TNode is obsolete, remove TNode methods (safely of course) and use Node instead!
- **/
-
-TNode::TNode(string name) {
-    this -> value = name;
-}
-
-TNode::TNode(string name, int stmtNo) {
-    this -> value = name;
-    this -> stmtNo = stmtNo;
-}
-
-void TNode::addNode(TNode *nodeRef) {
-    // add node ref into the childrenRef
-    childrenRef.push_back(nodeRef);
-}
-
-TNode *TNode::getNode(int index) {
-    return childrenRef[index];
-}
-
-int TNode::getNumberOfChildNodes() {
-    return childrenRef.size();
-}
-
-string TNode::getValue() {
-    return value;
-}
-
-void TNode::changeValue(string value) {
-    this -> value = value;
-}
-
-bool TNode::hasStmtNo() {
-    if (this -> stmtNo > 0)
-        return true;
-    else
-        return false;
-}
-
-int TNode::getStmtNo() {
-    return stmtNo;
-}
-
-void TNode::setStmtNo(int stmtNo) {
-    this -> stmtNo = stmtNo;
-}
-
 
 
 Node::Node() { this->parent = nullptr; }
@@ -85,4 +36,84 @@ VariableNode* AssignNode::getLeftNode() const {
 
 VariableNode* AssignNode::getRightNode() const {
     return this ->rightNode;
+}
+
+BinaryOperatorNode::BinaryOperatorNode(Expression leftExpr, Expression rightExpr, string binaryOperator) {
+    this->leftExpr = leftExpr;
+    this->rightExpr = rightExpr;
+    this->binaryOperator = std::move(binaryOperator);
+}
+
+Expression BinaryOperatorNode::getLeftExpr() const {
+    return this->leftExpr;
+}
+
+Expression BinaryOperatorNode::getRightExpr() const {
+    return this->rightExpr;
+}
+
+string BinaryOperatorNode::getBinaryOperator() const {
+    return this->binaryOperator;
+}
+
+RelExprNode::RelExprNode(RelFactor leftNode, RelFactor rightNode, string relativeOperator) {
+    this->leftNode = leftNode;
+    this->rightNode = rightNode;
+    this->relativeOperator = std::move(relativeOperator);
+}
+
+RelFactor RelExprNode::getLeftFactor() const {
+    return this->leftNode;
+}
+
+RelFactor RelExprNode::getRightFactor() const {
+    return this->rightNode;
+}
+
+string RelExprNode::getRelativeOperator() const {
+    return this->relativeOperator;
+}
+
+CondExprNode::CondExprNode(RelExprNode *relExpr){
+    this->relExpr = relExpr;
+}
+
+CondExprNode::CondExprNode(CondExprNode *singleCondExpr) {
+    this->condOperator = "!";
+    this->rightNode = singleCondExpr;
+}
+
+CondExprNode::CondExprNode(string condOperator, CondExprNode *leftNode, CondExprNode *rightNode) {
+    this->condOperator = std::move(condOperator);
+    this->leftNode = leftNode;
+    this->rightNode = rightNode;
+}
+
+RelExprNode *CondExprNode::getRelExpr() const {
+    return this->relExpr;
+}
+
+CondExprNode *CondExprNode::getLeftNode() const {
+    return this->leftNode;
+}
+
+CondExprNode *CondExprNode::getRightNode() const {
+    return this->rightNode;
+}
+
+string CondExprNode::getCondOperator() const {
+    return this->condOperator;
+}
+
+WhileNode::WhileNode(CondExprNode *condExpr, StatementList stmtLst) {
+    this->condExpr = condExpr;
+    this->stmtLst = std::move(stmtLst);
+}
+
+CondExprNode *WhileNode::getCondExpr() {
+    return this->condExpr;
+}
+
+StatementList WhileNode::getStmtLst() {
+    return this->stmtLst;
 }

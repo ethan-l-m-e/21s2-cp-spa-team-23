@@ -19,10 +19,27 @@ TEST_CASE ("DECLARATIONS") {
 }
 
 TEST_CASE ("SELECT CLAUSE") {
-    std::string firstQuery = "variable v; assign a;\nSelect v";
+    std::string first = "variable v; assign a;\nSelect v";
+    std::string second = "variable v; assign a;\nSelect a such that Uses(a,v)";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = QueryToken();
-    tokenizer.getSelectClauseTokens(firstQuery, queryToken);
-    std::cout << queryToken.selectClauseToken;
+    tokenizer.getSelectClauseTokens(first, queryToken);
     CHECK(queryToken.selectClauseToken == "v");
+    tokenizer.getSelectClauseTokens(second, queryToken);
+    CHECK(queryToken.selectClauseToken == "a");
+
+}
+
+TEST_CASE("SUCH THAT CLAUSE") {
+    std::string second = "variable v; assign a;\nSelect a such that Uses(a,v) pattern a(_,_)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = QueryToken();
+    tokenizer.getSuchThatClause(second, queryToken);
+}
+
+TEST_CASE("PATTERN CLAUSE") {
+    std::string second = "variable v; assign a;\nSelect a such that pattern a(v,\"x\")";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = QueryToken();
+    tokenizer.getPatternClause(second, queryToken);
 }

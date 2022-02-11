@@ -14,7 +14,7 @@ class StringFormatter {
         static vector<string> Trim(std::string sourceCode, int type);
         static string removeTrailingSpace(string);
         static string extractFrontStringByRegex(string, string);
-
+        static string extractSecondStringByRegex(string, string);
     static vector<string> tokenizeByRegex(string code, string regex);
 
     static string removeFrontBackBrackets(const string s);

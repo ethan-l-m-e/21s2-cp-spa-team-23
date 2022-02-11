@@ -78,29 +78,43 @@ void SourceTokenizer::extractProcedure(string sourceCode, vector<string> &v) {
 }
 
 void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
-    stack<char> parenthesesStack;
-    for (int i = sourceCode.length(); i>0;i--){
-        switch(sourceCode[i-1]){
-            case '+':
-                if(parenthesesStack.empty()){
-
-                }
-                break;
-            case '-':
-                if(parenthesesStack.empty()){
-
-                }
-
-                break;
-
+    int bracketCheck = 0;
+    int exprPos = -1;
+    while(true) {
+        for (int i = sourceCode.length()-1; i >= 0; i--) {
+            switch (sourceCode[i]) {
+                case ('+'):
+                    if (bracketCheck == 0) {
+                        exprPos = i;
+                        goto exit_loop;
+                    }
+                    break;
+                case ('-'):
+                    if (bracketCheck == 0) {
+                        exprPos = i;
+                        goto exit_loop;
+                    }
+                    break;
+                case (')'):
+                    bracketCheck++;
+                    break;
+                case ('('):
+                    bracketCheck--;
+                    break;
+                default:
+                    break;
+            }
         }
+        sourceCode = StringFormatter::removeFrontBackBrackets(sourceCode);
     }
-    int equal = sourceCode.rfind('=');
-    int end = sourceCode.find(';');
-    string varname = sourceCode.substr(0, equal);
-    string expr = sourceCode.substr(equal + 1, end - equal - 1);
-    varname = StringFormatter::removeTrailingSpace(varname);
-    expr = StringFormatter::removeTrailingSpace(expr);
-    v.push_back(varname);
-    v.push_back(expr);
+        exit_loop:;
+
+    string left = sourceCode.substr(0, exprPos);
+    string right = sourceCode.substr(exprPos+1, sourceCode.length()-exprPos-1);
+    string sign = sourceCode.substr(exprPos, 1);
+    left = StringFormatter::removeTrailingSpace(left);
+    right = StringFormatter::removeTrailingSpace(right);
+    v.push_back(left);
+    v.push_back(right);
+    v.push_back(sign);
 }

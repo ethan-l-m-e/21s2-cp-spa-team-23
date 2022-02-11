@@ -56,3 +56,75 @@ TEST_CASE("while token - nested while loop") {
     REQUIRE(v[0] == "x==0");
     REQUIRE(v[1] == "y = 1; while(y==0){z = 2;}");
 }
+
+TEST_CASE("expression token - basic") {
+    string p = " x + y ";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "x");
+    REQUIRE(v[1] == "y");
+    REQUIRE(v[2] == "+");
+}
+
+TEST_CASE("expression token - only '+'") {
+    string p = " x + y +z + a + b + c";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "x + y +z + a + b");
+    REQUIRE(v[1] == "c");
+    REQUIRE(v[2] == "+");
+}
+
+TEST_CASE("expression token - '+' and '-'") {
+    string p = " x + y +z - a + b - c";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "x + y +z - a + b");
+    REQUIRE(v[1] == "c");
+    REQUIRE(v[2] == "-");
+}
+
+TEST_CASE("expression token - '+' and '-' and '*' and '/' ") {
+    string p = " x + y * z - a - b / c";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "x + y * z - a");
+    REQUIRE(v[1] == "b / c");
+    REQUIRE(v[2] == "-");
+}
+
+TEST_CASE("expression token - '+' and '*' and brackets") {
+    string p = " (x + y) * z + (a +c)";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "(x + y) * z");
+    REQUIRE(v[1] == "(a +c)");
+    REQUIRE(v[2] == "+");
+}
+
+TEST_CASE("expression token - brackets on the whole expression") {
+    string p = "(x + y + z)";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "x + y");
+    REQUIRE(v[1] == "z");
+    REQUIRE(v[2] == "+");
+}
+
+TEST_CASE("expression token - nested brackets") {
+    string p = "(x + y) + (a + b) + ((m*n) + (p*q))";
+    vector<string> v;
+    SourceTokenizer::extractExpression(p, v);
+    REQUIRE(v[0] == "(x + y) + (a + b)");
+    REQUIRE(v[1] == "((m*n) + (p*q))");
+    REQUIRE(v[2] == "+");
+}
+
+//TEST_CASE("fail test") {
+//    string p = "x+y";
+//    vector<string> v;
+//    SourceTokenizer::extractExpression(p, v);
+//    REQUIRE(v[0] == "x");
+//    REQUIRE(v[1] == "y");
+//    REQUIRE(v[2] == "*");
+//}

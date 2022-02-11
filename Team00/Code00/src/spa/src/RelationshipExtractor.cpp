@@ -8,7 +8,7 @@
 #include "TNode.h"
 
 
-void RelationshipExtractor::extractFollows(TNode * node) {
+void RelationshipExtractor::extractFollows(Node * node) {
     /**
      * NOTE: Syntax of Tnode changed, so try to fix Tnode to work with the new Node(or nodes).
      */
@@ -30,11 +30,11 @@ void RelationshipExtractor::extractFollows(TNode * node) {
      */
 }
 
-void RelationshipExtractor::extractParents(TNode * node) {
+void RelationshipExtractor::extractParents(Node * node) {
 
 }
 
-vector<string> RelationshipExtractor::extractUses (TNode * node) {
+vector<string> RelationshipExtractor::extractUses (Node * node) {
     // if node is assign/print statement
     //      search list of variables that is on the right side of node
     //      perform createUses(stmtNo, list of v)
@@ -50,7 +50,7 @@ vector<string> RelationshipExtractor::extractUses (TNode * node) {
     return v;
 }
 
-vector<string> RelationshipExtractor::extractModifies (TNode * node) {
+vector<string> RelationshipExtractor::extractModifies (Node * node) {
     // if node is assign/print statement
     //      search list of variables that is on the right side of node
     //      perform createUses(stmtNo, list of v)
@@ -66,7 +66,7 @@ vector<string> RelationshipExtractor::extractModifies (TNode * node) {
     return v;
 }
 
-void RelationshipExtractor::extractRelationships(TNode * node){
+void RelationshipExtractor::extractRelationships(Node * node){
     extractFollows(node);
     extractParents(node);
     extractUses(node);

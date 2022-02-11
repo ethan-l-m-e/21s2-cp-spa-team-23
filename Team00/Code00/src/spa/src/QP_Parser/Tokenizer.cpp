@@ -1,4 +1,7 @@
 #include "Tokenizer.h"
+#include "StringFormatter.h"
+
+#include<iostream>
 #include <string>
 #include <regex>
 #include <utility>
@@ -44,11 +47,24 @@ void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
 }
 
 void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
-    // find select synonym
-    std::regex re("Select [A-Za-z][A-Za-z|0-9]*");
-    std::smatch match;
-    std::regex_search(pql.cbegin(), pql.cend(), match, re);
-    std::string selectString = match[0];
-    selectString = selectString.substr(7);
-    queryToken.selectClauseToken = selectString;
+    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    vector<string> tokens = StringFormatter::tokenizeByRegex(selectLine, "(Select[ ]*|[ ]+)");
+    queryToken.selectClauseToken = tokens[0];
+}
+
+void Tokenizer::getSuchThatClause(std::string& pql, QueryToken& queryToken) {
+    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
+    vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
+    cout << "such that: " << suchThatClauses[0] << "\n";
+    cout << "leftArg: " << suchThatClauses[1] << "\n";
+    cout << "rightArg:" << suchThatClauses[2] << "\n";
+}
+
+void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {
+    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)pattern[ ]*");
+    vector<string> pattternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|(,)");
+    cout << "LHS: " << pattternClause[1] << "\n";
+    cout << "RHS: " << pattternClause[2] << "\n";
 }
