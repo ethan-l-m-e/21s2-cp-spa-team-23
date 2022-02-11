@@ -8,11 +8,11 @@
 
 #include "PKB.h"
 #include "pql/query_obj/Query.h"
-#include "pql/evaluator/Result.h"
-#include "pql/evaluator/ClauseEvaluator.h"
-#include "pql/evaluator/FollowsClauseEvaluator.h"
-#include "pql/evaluator/PatternClauseEvaluator.h"
-#include "pql/evaluator/SelectClauseEvaluator.h"
+#include "pql/ClauseEvaluators/Result.h"
+#include "pql/ClauseEvaluators/ClauseEvaluator.h"
+#include "pql/ClauseEvaluators/FollowsClauseEvaluator.h"
+#include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
+#include "pql/ClauseEvaluators/SelectClauseEvaluator.h"
 #include <sstream>
 #include <iostream>
 #include <list>

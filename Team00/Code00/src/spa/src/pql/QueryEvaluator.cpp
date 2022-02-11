@@ -9,7 +9,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     // Initialise an empty result
     auto* synonymRelations = new SynonymRelations();
 /*
-    // Create evaluator and evaluate each of the pattern clause
+    // Create ClauseEvaluators and evaluate each of the pattern clause
     if(query->hasPatternClause()) {
         for(PatternClause clause : query->getPatternClauses()) {
             PatternClauseEvaluator patternClauseEvaluator = PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
@@ -19,7 +19,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
-    // Create evaluator and evaluate each of the suchThat clause
+    // Create ClauseEvaluators and evaluate each of the suchThat clause
     if(query->hasSuchThatClause()) {
         for(SuchThatClause clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
