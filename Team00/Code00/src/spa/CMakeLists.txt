@@ -18,7 +18,7 @@ set(headers ${headers}
         src/pql/evaluator/SelectClauseEvaluator.h
         src/pql/evaluator/FollowsClauseEvaluator.h
 
-        )
+        src/pql/evaluator/PatternClauseEvaluator.cpp)
 add_library(spa ${srcs} ${headers} src/Parser.cpp src/Parser.h
         src/Identifier.cpp src/Identifier.h
         src/Validator.cpp src/Validator.h
