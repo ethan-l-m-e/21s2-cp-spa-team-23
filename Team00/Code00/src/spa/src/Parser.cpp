@@ -86,7 +86,7 @@ Expression parseExpression(string expression) {
         if (isNumber(expression)) {
             return new ConstValueNode(expression);
         }
-        return new VariableNode(expression);
+        return Parser::parseVar(expression);
     }
     vector<string> tokens;
     SourceTokenizer::extractExpression(expression, tokens);
