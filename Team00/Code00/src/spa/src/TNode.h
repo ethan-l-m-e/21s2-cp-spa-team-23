@@ -163,9 +163,11 @@ class ProcedureNode: public Node {
     ProcNameNode *procName;
     StatementList stmtLst;
 public:
-    ProcedureNode(ProcName *procName, StatementList stmtLst);
+    ProcedureNode(ProcNameNode *procName, StatementList stmtLst);
     ProcName getProcName();
     StatementList getStmtLst();
 };
+
+typedef std::vector<ProcedureNode*> Program;
 
 #endif //SPA_NODE_H

@@ -100,3 +100,42 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
     }
     return newNode;
 }
+
+ProcNameNode *Parser::parseProcName(string procedureName) {
+    //int check = Identifier::identifyFirstObject(procedureName);
+    //if(check == PROCEDURE_NAME) {
+        cout << "sending " << procedureName << " to PKB\n";
+        PKB::getInstance() ->addProcedures(procedureName);
+        return new ProcNameNode(procedureName);
+    //} else {
+        throw "Invalid varname format: '" + procedureName + "'\n";
+    //}
+}
+
+ProcedureNode *Parser::parseProcedure(string * procedure) {
+    //vector<string> v = StringFormatter::Trim(*procedure, PROCEDURE);
+    // REPLACE WITH ABOVE ONCE IMPLEMENTED
+    vector<string> v;
+    v.push_back(*procedure);
+    v.push_back("");
+    // ---------------------------------- //
+
+    vector<string> tokens;
+    SourceTokenizer::extractProcedure(v[0], tokens);
+    *procedure = v[1];
+    ProcNameNode* newProcNameNode = Parser::parseProcName(tokens[0]);
+    StatementList stmtLst = parseStatementList(tokens[1]);
+    return new ProcedureNode(newProcNameNode, stmtLst);
+}
+
+Program Parser::parseProgram(string sourceCode) {
+    vector<string> tokens;
+    Program program;
+    string * procedurePtr;
+    procedurePtr = &sourceCode;
+    //while(procedurePtr -> length() > 0) {
+        ProcedureNode *newProcedureNode = Parser::parseProcedure(&sourceCode);
+        program.push_back(newProcedureNode);
+    //}
+    return program;
+}

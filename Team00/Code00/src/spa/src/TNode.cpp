@@ -117,3 +117,24 @@ CondExprNode *WhileNode::getCondExpr() {
 StatementList WhileNode::getStmtLst() {
     return this->stmtLst;
 }
+
+ProcNameNode::ProcNameNode(ProcName name) {
+    this->procedureName = std::move(name);
+}
+
+ProcName ProcNameNode::getProcedureName() {
+    return this->procedureName;
+}
+
+ProcedureNode::ProcedureNode(ProcNameNode *procName, StatementList stmtLst) {
+    this->procName = procName;
+    this->stmtLst = std::move(stmtLst);
+}
+
+ProcName ProcedureNode::getProcName() {
+    return this->procName->getProcedureName();
+}
+
+StatementList ProcedureNode::getStmtLst() {
+    return this->stmtLst;
+}
