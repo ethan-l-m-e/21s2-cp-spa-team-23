@@ -26,6 +26,9 @@ private:
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
 
+    unordered_map<int, unordered_set<int>> parentToChildrenMap;
+    unordered_map<int, int> childToParentMap;
+
 public:
 //	static VarTable* varTable;
 //	static int setProcToAST(PROC p, TNode* r);
@@ -52,6 +55,16 @@ public:
     bool isFollows(int followee, int follower);
     int getFollower(int followee);
     int getFollowee(int follower);
+
+    // Setter Functions (Parent Relationship)
+
+    void setParent(int parent, int child);
+
+    // Getter Functions (Parent Relationship)
+
+    bool isParent(int parent, int child);
+    unordered_set<int> getChildren(int parent);
+    int getParent(int child);
 
 
 };
