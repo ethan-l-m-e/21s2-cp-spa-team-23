@@ -46,10 +46,10 @@ void PKB::addConstant(string constant) {
 }
 
 
-void addReadStatement(int statement) {
+void PKB::addReadStatement(int statement) {
     readStatementsSet.insert(statement);
 }
-void addPrintStatement(int statement) {
+void PKB::addPrintStatement(int statement) {
     printStatementsSet.insert(statement);
 }
 
@@ -67,7 +67,7 @@ unordered_set<string> PKB::getAllConstants() {
 
 // Setter Functions (Follows Relationship)
 
-bool PKB::setFollows(int followee, int follower) {
+void PKB::setFollows(int followee, int follower) {
     followeeToFollowerMap.emplace(followee, follower);
     followerToFolloweeMap.emplace(follower, followee);
 }
@@ -93,14 +93,14 @@ int PKB::getFollowee(int follower) {
 
 // Setter Functions (FollowsT Relationship)
 
-bool PKB::setFollows(int followee, int follower) {
+void PKB::setFollowsT(int followee, int follower) {
     tFolloweeToFollowerMap.emplace(followee, follower);
     tFollowerToFolloweeMap.emplace(follower, followee);
 }
 
 // Getter Functions (FollowsT Relationship)
 
-bool PKB::isFollows(int followee, int follower) {
+bool PKB::isFollowsT(int followee, int follower) {
     if (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) {
         return tFolloweeToFollowerMap[followee] == follower;
     } else {
@@ -112,21 +112,21 @@ int PKB::getFollowerT(int followee) {
     return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? tFolloweeToFollowerMap[followee] : -1;
 }
 
-int PKB::getFollowee(int follower) {
+int PKB::getFolloweeT(int follower) {
     return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? tFollowerToFolloweeMap[follower] : -1;
 }
 
 
 // Setter Functions (Parent Relationship)
 
-bool PKB::setParent(int parent, int child) {
+void PKB::setParent(int parent, int child) {
 
     childToParentMap.emplace(child, parent);
 
     if (parentToChildrenMap.find(parent) == parentToChildrenMap.end()) {
         parentToChildrenMap.emplace(parent, unordered_set<int>{child});
     } else {
-        parentToChildrenMap[parent].insert(child)
+        parentToChildrenMap[parent].insert(child);
     }
 
 }
@@ -141,8 +141,11 @@ bool PKB::isParent(int parent, int child) {
     }
 }
 
-int PKB::getChildren(int parent) {
-    return (parentToChildrenMap.find(parent) != parentToChildrenMap.end()) ? parentToChildrenMap[parent] : unordered_set<int>;
+unordered_set<int> PKB::getChildren(int parent) {
+
+    unordered_set<int> emptySet;
+
+    return (parentToChildrenMap.find(parent) != parentToChildrenMap.end()) ? parentToChildrenMap[parent] : emptySet;
 }
 
 int PKB::getParent(int child) {
