@@ -9,11 +9,11 @@ namespace qp {
     public:
         std::vector<std::string>* declarationTokens;
         std::string selectClauseToken;
-        std::string* relationshipToken;
-        std::string* patternToken;
+        std::vector<std::string>* suchThatClauseToken;
+        std::string patternToken;
 
-        QueryToken() : declarationTokens(nullptr), selectClauseToken(""), relationshipToken(nullptr), patternToken(
-                nullptr) {};
+        QueryToken() : declarationTokens(nullptr), selectClauseToken(""), suchThatClauseToken(nullptr), patternToken(
+                "") {};
 
     };
 

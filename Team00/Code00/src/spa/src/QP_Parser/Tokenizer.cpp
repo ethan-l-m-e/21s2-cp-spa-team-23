@@ -1,7 +1,7 @@
 #include "Tokenizer.h"
 #include "StringFormatter.h"
 
-#include<iostream>
+#include <iostream>
 #include <string>
 #include <regex>
 #include <utility>
@@ -14,7 +14,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 
     QueryToken queryToken = QueryToken();
 
-    // check if length of queries is non-zero
+    // check if length of query is non-zero
     if (query.length() == 0) {
         return queryToken;
     }
@@ -25,25 +25,13 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 }
 
 void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
-    // TODO: Replace with regex
-    std::stringstream ds(pql);
-
-    queryToken.declarationTokens = new std::vector<std::string>();
-    int count = 0;
-
-    // Split declarations
-    while (ds.good()) {
-        std::string substring;
-        getline(ds, substring, ';');
-        if (count != 0) {
-            substring = substring.substr(1);
-        }
-        queryToken.declarationTokens->push_back(substring);
-        count += 1;
+    std::string selectLine = StringFormatter::extractFrontStringByRegex(pql, "\n");
+    std::vector<std::string> declarations = StringFormatter::tokenizeByRegex(selectLine, "[]*;");
+    std::vector<std::string>* declarationPtr = new std::vector<std::string>();
+    for (std::string declaration : declarations) {
+        declarationPtr->push_back(StringFormatter::removeTrailingSpace(declaration));
     }
-
-    // Remove the line that comes after declarations
-    queryToken.declarationTokens->pop_back();
+    queryToken.declarationTokens = declarationPtr;
 }
 
 void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
@@ -53,12 +41,13 @@ void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) 
 }
 
 void Tokenizer::getSuchThatClause(std::string& pql, QueryToken& queryToken) {
-    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
-    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
-    vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
+    std::string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
+    std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
     cout << "such that: " << suchThatClauses[0] << "\n";
     cout << "leftArg: " << suchThatClauses[1] << "\n";
     cout << "rightArg:" << suchThatClauses[2] << "\n";
+    queryToken.suchThatClauseToken = &suchThatClauses;
 }
 
 void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {

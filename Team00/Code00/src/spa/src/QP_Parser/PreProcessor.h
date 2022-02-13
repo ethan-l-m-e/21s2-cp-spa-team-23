@@ -8,6 +8,8 @@ namespace qp {
         Query getQuery(std::string);
         void getDeclarations(QueryToken&, Query&);
         void getSynonym(QueryToken&, Query&);
+        void getRelationship(QueryToken&, Query&);
+        Argument getArgument(std::string, std::string);
     };
 }
 
