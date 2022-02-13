@@ -41,6 +41,8 @@ void PKB::addProcedures(string procedure) {
     proceduresSet.insert(procedure);
 }
 
+
+
 // Getter Functions (Variables, Procedures etc.)
 unordered_set <string> PKB::getAllVariables() {
     return variablesSet;
@@ -60,7 +62,7 @@ bool PKB::setFollows(int followee, int follower) {
 
 bool PKB::isFollows(int followee, int follower) {
     if (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) {
-        return followsMap[followee] == follower;
+        return followeeToFollowerMap[followee] == follower;
     } else {
         return false;
     }
@@ -74,6 +76,31 @@ int PKB::getFollowee(int follower) {
     return (followerToFolloweeMap.find(follower) != followerToFolloweeMap.end()) ? followerToFolloweeMap[follower] : -1;
 }
 
+
+// Setter Functions (FollowsT Relationship)
+
+bool PKB::setFollows(int followee, int follower) {
+    tFolloweeToFollowerMap.emplace(followee, follower);
+    tFollowerToFolloweeMap.emplace(follower, followee);
+}
+
+// Getter Functions (FollowsT Relationship)
+
+bool PKB::isFollows(int followee, int follower) {
+    if (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) {
+        return tFolloweeToFollowerMap[followee] == follower;
+    } else {
+        return false;
+    }
+}
+
+int PKB::getFollowerT(int followee) {
+    return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? tFolloweeToFollowerMap[followee] : -1;
+}
+
+int PKB::getFollowee(int follower) {
+    return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? tFollowerToFolloweeMap[follower] : -1;
+}
 
 
 // Setter Functions (Parent Relationship)

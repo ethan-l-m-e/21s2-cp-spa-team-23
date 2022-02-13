@@ -24,9 +24,13 @@ private:
 
     unordered_set<string> variablesSet;
     unordered_set<string> proceduresSet;
+    
 
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
+
+    unordered_map<int, int> tFolloweeToFollowerMap;
+    unordered_map<int, int> tFollowerToFolloweeMap;
 
     unordered_map<int, unordered_set<int>> parentToChildrenMap;
     unordered_map<int, int> childToParentMap;
@@ -57,6 +61,17 @@ public:
     bool isFollows(int followee, int follower);
     int getFollower(int followee);
     int getFollowee(int follower);
+
+    // Setter Functions (FollowsT Relationship)
+
+    void setFollowsT(int followee, int follower);
+
+    // Getter Functions (FollowsT Relationship)
+
+    bool isFollowsT(int followee, int follower);
+    int getFollowerT(int followee);
+    int getFolloweeT(int follower);
+
 
     // Setter Functions (Parent Relationship)
 
