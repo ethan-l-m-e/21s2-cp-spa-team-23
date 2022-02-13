@@ -24,7 +24,7 @@ private:
 
     unordered_set<string> variablesSet;
     unordered_set<string> proceduresSet;
-    
+    unordered_set<string> constantsSet;
 
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
@@ -46,6 +46,7 @@ public:
     // Setter Functions (Variables, Procedures etc.)
     void addVariable(string variable);
     void addProcedures(string procedure);
+    void addConstant(string constant);
 
     // Getter Functions (Variables, Procedures etc.)
 

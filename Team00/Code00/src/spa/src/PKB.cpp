@@ -41,7 +41,9 @@ void PKB::addProcedures(string procedure) {
     proceduresSet.insert(procedure);
 }
 
-
+void PKB::addConstant(string constant) {
+    constantsSet.insert(constant);
+}
 
 // Getter Functions (Variables, Procedures etc.)
 unordered_set <string> PKB::getAllVariables() {
