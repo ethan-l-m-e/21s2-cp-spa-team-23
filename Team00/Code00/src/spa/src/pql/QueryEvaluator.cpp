@@ -21,22 +21,24 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
 
     // Create ClauseEvaluators and evaluate each of the suchThat clause
     if(query->hasSuchThatClause()) {
-        for(SuchThatClause clause : query->getSuchThatClauses()) {
+        cout << "has such that clause!!!";
+        for(const SuchThatClause& clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
-            Result suchThatResult = suchThatClauseEvaluator.evaluateClause();
-            if (!suchThatResult.resultBoolean) return convertResultToString(result, query->getSelectedSynonym());
-            result = mergeResults(result, suchThatResult);
+            Result suchThatResult = suchThatClauseEvaluator->evaluateClause();
+            //if (!suchThatResult.resultBoolean) return generateResultString(*suchThatResult, query->getSelectedSynonym());
+            mergeResultToSynonymsRelations(synonymRelations, suchThatResult);
         }
     }
-        */
+
+    */
 
     if (synonymRelations->isEmpty()) {
         auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
-        Result result1 = selectClauseEvaluator->evaluateClause();
-        return convertResultToStringList(result1, query->getSelectedSynonym());
+        Result selectResult = selectClauseEvaluator->evaluateClause();
+        mergeResultToSynonymsRelations(synonymRelations, selectResult);
     }
 
-    return list<string>{"hello"};
+    return generateResultString(synonymRelations, query->getSelectedSynonym());
 }
 
 ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
@@ -72,27 +74,32 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
     }
 }
 
-Result QueryEvaluator::mergeResults(Result r1, Result r2) {
+void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations* sr, Result result) {
     //TODO: method for merging two results
-    return r1;
 }
 
-std::list<std::string> QueryEvaluator::convertResultToStringList(Result result, string selectedSynonym) {
+std::list<std::string> QueryEvaluator::generateResultString(SynonymRelations* sr, string selectedSynonym) {
 
-    //TODO: convert result object to output result string
+    /*
     std::list<std::string> stringList;
-    string* str  = std::get_if<std::string>(&result.resultHeader);
-    if ((*str) == selectedSynonym) {
-        vector<ResultItem> vec = result.resultItemList;
-        std::string s;
-        for(size_t i = 0; i < vec.size(); ++i)
-        {
-            s = std::get<std::string>(vec[i]);
-            stringList.emplace_back(s);
+    std::vector<std::string>* header  = sr.getHeader();
+    for(size_t j = 0; j < header->size(); ++j) {
+        std::string str = (*header)[j];
+        if (str == selectedSynonym) {
+            std::vector<std::vector<std::string>>* vec = sr.getList();
+            std::string s;
+            for(auto & i : *vec)
+            {
+                s = i[j];
+                stringList.emplace_back(s);
+            }
+            return stringList;
         }
-        return stringList;
-    } else {
-        return stringList;
     }
+     */
+
+    std::list<std::string> stringList;
+    stringList.emplace_back("1");
+    return stringList;
 }
 

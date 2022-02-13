@@ -11,6 +11,10 @@ bool FollowsClauseEvaluator::isRelation(std::string left, std::string right) {
 
 unordered_set<std::string> FollowsClauseEvaluator::getLeftSynonymValue(std::string right) {
     //return pkb->getStmtFollowedBy(right);
+    unordered_set<std::string> result {};
+    result.emplace("1");
+    result.emplace("2");
+    result.emplace("3");
     return unordered_set<std::string>{};
 }
 
