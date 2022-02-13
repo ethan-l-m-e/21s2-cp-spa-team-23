@@ -45,6 +45,14 @@ void PKB::addConstant(string constant) {
     constantsSet.insert(constant);
 }
 
+
+void addReadStatement(int statement) {
+    readStatementsSet.insert(statement);
+}
+void addPrintStatement(int statement) {
+    printStatementsSet.insert(statement);
+}
+
 // Getter Functions (Variables, Procedures etc.)
 unordered_set <string> PKB::getAllVariables() {
     return variablesSet;

@@ -26,6 +26,9 @@ private:
     unordered_set<string> proceduresSet;
     unordered_set<string> constantsSet;
 
+    unordered_set<int> readStatementsSet;
+    unordered_set<int> printStatementsSet;
+
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
 
@@ -48,7 +51,9 @@ public:
     void addProcedures(string procedure);
     void addConstant(string constant);
 
-    
+    void addReadStatement(int statement);
+    void addPrintStatement(int statement);
+
 
     // Getter Functions (Variables, Procedures etc.)
 
