@@ -22,9 +22,16 @@ private:
 
     unordered_set<string> variablesSet;
     unordered_set<string> proceduresSet;
+    unordered_set<string> constantsSet;
+
+    unordered_set<int> readStatementsSet;
+    unordered_set<int> printStatementsSet;
 
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
+
+    unordered_map<int, int> tFolloweeToFollowerMap;
+    unordered_map<int, int> tFollowerToFolloweeMap;
 
     unordered_map<int, unordered_set<int>> parentToChildrenMap;
     unordered_map<int, int> childToParentMap;
@@ -40,11 +47,17 @@ public:
     // Setter Functions (Variables, Procedures etc.)
     void addVariable(string variable);
     void addProcedures(string procedure);
+    void addConstant(string constant);
+
+    void addReadStatement(int statement);
+    void addPrintStatement(int statement);
+
 
     // Getter Functions (Variables, Procedures etc.)
 
     unordered_set<string> getAllVariables();
     unordered_set<string> getAllProcedures();
+    unordered_set<string> getAllConstants();
 
     // Setter Functions (Follows Relationship)
 
@@ -55,6 +68,17 @@ public:
     bool isFollows(int followee, int follower);
     int getFollower(int followee);
     int getFollowee(int follower);
+
+    // Setter Functions (FollowsT Relationship)
+
+    void setFollowsT(int followee, int follower);
+
+    // Getter Functions (FollowsT Relationship)
+
+    bool isFollowsT(int followee, int follower);
+    int getFollowerT(int followee);
+    int getFolloweeT(int follower);
+
 
     // Setter Functions (Parent Relationship)
 
