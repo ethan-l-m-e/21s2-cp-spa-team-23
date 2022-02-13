@@ -53,6 +53,10 @@ unordered_set<string> PKB::getAllProcedures() {
     return proceduresSet;
 }
 
+unordered_set<string> PKB::getAllConstants() {
+    return constantsSet;
+}
+
 // Setter Functions (Follows Relationship)
 
 bool PKB::setFollows(int followee, int follower) {

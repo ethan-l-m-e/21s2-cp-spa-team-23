@@ -48,10 +48,13 @@ public:
     void addProcedures(string procedure);
     void addConstant(string constant);
 
+    
+
     // Getter Functions (Variables, Procedures etc.)
 
     unordered_set<string> getAllVariables();
     unordered_set<string> getAllProcedures();
+    unordered_set<string> getAllConstants();
 
     // Setter Functions (Follows Relationship)
 
