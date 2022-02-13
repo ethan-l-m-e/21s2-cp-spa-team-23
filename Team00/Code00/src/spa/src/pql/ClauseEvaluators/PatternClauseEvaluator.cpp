@@ -34,7 +34,7 @@ Result PatternClauseEvaluator::evaluateClause() {
         //  "concrete value"    filtered stmtNo                 filtered stmtNo
         //      _               filtered stmtNo                 all stmtNo
 
-        if(leftIsSynonym()) {
+        if(argLeft.argumentType == ArgumentType::SYNONYM) {
             //result Type set to var
 
             //if right is expressionSpec,

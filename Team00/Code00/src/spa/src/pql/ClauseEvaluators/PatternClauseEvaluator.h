@@ -20,12 +20,8 @@ public:
         std::string synonym = argList[0].argumentValue;
         std::string entRef = argList[1].argumentValue;
         std::string expressionSpec = argList[2].argumentValue;
-
         ResultType resultType = ResultType::LIST;
         vector<ResultItem> resultItems;
-
-
-        /*
         ResultType resultType = ResultType::LIST;
         vector<ResultItem> resultItems;
         vector<std::string> response;
