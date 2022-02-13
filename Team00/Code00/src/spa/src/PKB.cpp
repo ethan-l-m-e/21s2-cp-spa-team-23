@@ -52,15 +52,11 @@ unordered_set<string> PKB::getAllProcedures() {
 // Setter Functions (Follows Relationship)
 
 bool PKB::setFollows(int followee, int follower) {
-
-}
-
-// Getter Functions (Follows Relationship)
-
-bool PKB::setFollows(int followee, int follower) {
     followeeToFollowerMap.emplace(followee, follower);
     followerToFolloweeMap.emplace(follower, followee);
 }
+
+// Getter Functions (Follows Relationship)
 
 bool PKB::isFollows(int followee, int follower) {
     if (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) {
@@ -76,4 +72,38 @@ int PKB::getFollower(int followee) {
 
 int PKB::getFollowee(int follower) {
     return (followerToFolloweeMap.find(follower) != followerToFolloweeMap.end()) ? followerToFolloweeMap[follower] : -1;
+}
+
+
+
+// Setter Functions (Parent Relationship)
+
+bool PKB::setParent(int parent, int child) {
+
+    childToParentMap.emplace(child, parent);
+
+    if (parentToChildrenMap.find(parent) == parentToChildrenMap.end()) {
+        parentToChildrenMap.emplace(parent, unordered_set<int>{child});
+    } else {
+        parentToChildrenMap[parent].insert(child)
+    }
+
+}
+
+// Getter Functions (Parent Relationship)
+
+bool PKB::isParent(int parent, int child) {
+    if (childToParentMap.find(child) != childToParentMap.end()) {
+        return childToParentMap[child] == parent;
+    } else {
+        return false;
+    }
+}
+
+int PKB::getChildren(int parent) {
+    return (parentToChildrenMap.find(parent) != parentToChildrenMap.end()) ? parentToChildrenMap[parent] : unordered_set<int>;
+}
+
+int PKB::getParent(int child) {
+    return (childToParentMap.find(child) != childToParentMap.end()) ? childToParentMap[child] : -1;
 }
