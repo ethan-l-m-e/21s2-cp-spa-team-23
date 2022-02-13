@@ -24,12 +24,16 @@ public:
     ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
     virtual Result evaluateClause() = 0;
     bool hasTwoSynonyms();
-    bool hasOneSynonym();
     bool hasNoSynonyms();
     bool leftIsSynonym();
     bool rightIsSynonym();
     unordered_set<std::string> getAllType(DesignEntity designEntity);
     Result buildResult(ResultType type, bool isTrue, ResultHeader header, vector<ResultItem> items);
+
+    bool leftIsConcrete();
+    bool leftIsWildCard();
+    bool rightIsPartWildCard();
+    bool rightIsWildCard();
 };
 
 
