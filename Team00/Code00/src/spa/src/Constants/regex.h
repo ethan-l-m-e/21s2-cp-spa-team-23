@@ -15,7 +15,7 @@ string const CONST_VALUE = INTEGER;
 string const BASE_CASE_REGEX = VAR_NAME + "|" + PROC_NAME + "|" + CONST_VALUE;
 
 string const COND_EXPR_REGEX;
-string const COND_EXPR_IDENTIFIER;
+string const COND_EXPR_IDENTIFIER = "(.*)";
 string const EXPR_REGEX;
 string const EXPR_TERM_IDENTIFIER = "([^=;\\[\\]\\{\\}]*)[+-/*]{1}([^=;\\[\\]\\{\\}]*)";
 string const TERM_REGEX;
@@ -30,8 +30,8 @@ string const READ_REGEX = "[ ]*(read )[ ]*(" + VAR_NAME +")[ ]*(;)[\\}]*";
 string const PRINT_REGEX = "[ ]*(print )[ ]*(" + VAR_NAME + ")[ ]*(;)[\\}]*";
 
 
-string const WHILE_IDENTIFIER = "(while)[ ]*(\\()(" + COND_EXPR_IDENTIFIER + ")(\\))[ ]*(//{)(.*)";
-string const IF_IDENTIFIER  = "(if)[ ]*(\\()(" + COND_EXPR_IDENTIFIER + ")(\\))[ ]* (then)[ ]*(//{)(.*)";
+string const WHILE_IDENTIFIER = "(while)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]*(\\{)(.*)";
+string const IF_IDENTIFIER  = "(if)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]* (then)[ ]*(\\{)(.*)";
 
 
 string const PROCEDURE_IDENTIFIER = "(procedure )[ ]*(" + PROC_NAME + ")[ ]*(\\{)(.*)" ;

@@ -62,9 +62,9 @@ TEST_CASE("ASSIGN") {
 
 TEST_CASE("BASE CASE") {
     switchCase = Identifier::identifyFirstObject(varName);
-    CHECK(switchCase == BASE_CASE);
+    CHECK(switchCase == VARIABLE_NAME);
     switchCase = Identifier::identifyFirstObject(integer);
-    CHECK(switchCase == BASE_CASE);
+    CHECK(switchCase == CONSTANT_VALUE);
     switchCase = Identifier::identifyFirstObject(varNameWrong);
     CHECK(switchCase == ERROR);
     switchCase = Identifier::identifyFirstObject(strayBracket);
@@ -126,12 +126,29 @@ TEST_CASE("COND_EXPR") {
 }
 
 TEST_CASE("WHILE") {
+    string whileString = "while (x < present) {\n x = y + 1\n }";
+    switchCase = Identifier::identifyFirstObject(whileString);
+    CHECK(switchCase == WHILE);
+    whileString = "while (x < present {\n x = y + 1\n}";
+    switchCase = Identifier::identifyFirstObject(whileString);
+    CHECK(switchCase == ERROR);
+    whileString = "while (x < present) {\n x = y + 1\n";
+    switchCase = Identifier::identifyFirstObject(whileString);
+    CHECK(switchCase == ERROR);
 
 }
 
 TEST_CASE("IF") {
-
+    string ifString = "if (x < present) then {\n x = y + 1;\n } else {\n y = 1;\n}";
+    switchCase = Identifier::identifyFirstObject(ifString);
+    CHECK(switchCase == IF_ELSE);
 }
 
+
+TEST_CASE("GENERAL") {
+    string test = "x = b;\nb = c;\nb= y;";
+    switchCase = Identifier::identifyFirstObject(test);
+    CHECK(switchCase == ASSIGN);
+}
 
 
