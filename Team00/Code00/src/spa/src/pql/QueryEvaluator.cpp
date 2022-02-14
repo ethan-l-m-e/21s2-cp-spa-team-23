@@ -22,7 +22,6 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
 
     // Create ClauseEvaluators and evaluate each of the suchThat clause
     if(query->hasSuchThatClause()) {
-        cout << "has such that clause!!!";
         for(const SuchThatClause& clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
             Result suchThatResult = suchThatClauseEvaluator->evaluateClause();

@@ -5,10 +5,14 @@
 #include "ClauseEvaluator.h"
 
 unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity) {
-    if (designEntity == DesignEntity::VARIABLE) {
-        return pkb->getAllVariables();
 
-    } else {
-        return unordered_set<std::string>();
+    switch (designEntity) {
+        case DesignEntity::VARIABLE:
+            return pkb->getAllVariables();
+        case DesignEntity::STMT:
+            //return pkb->getAllStatement();
+            return {"1","2","3","4","5","6"};
+        default:
+            return {};
     }
 };

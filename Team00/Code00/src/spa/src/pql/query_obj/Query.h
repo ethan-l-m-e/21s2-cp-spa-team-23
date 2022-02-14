@@ -40,6 +40,8 @@ public:
     DesignEntity findEntityType(std::string synonym);
     void setDeclarations(unordered_map<string, DesignEntity>);
     void setSynonym(std::string);
+
+    void addSuchThatClause(SuchThatClause suchThatClause);
 };
 
 #endif //SPA_QUERY_H

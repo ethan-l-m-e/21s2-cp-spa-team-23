@@ -54,19 +54,37 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
 }
 void SuchThatClauseEvaluator::evaluateLeftSynonym() {
     DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
-    unordered_set<std::string> intersect = findIntersection(getLeftSynonymValue(argRight.argumentValue), getAllType(entityLeft));
-    result.resultType = ResultType::LIST;
-    result.resultBoolean = !result.resultItemList.empty();
-    result.resultHeader = argLeft.argumentValue;
-    result.resultItemList = convertSetToVector(intersect);
+    unordered_set<std::string> rightSet;
+    if(argRight.argumentType == ArgumentType::UNDERSCORE) {
+        rightSet = getAllType(std::get<1>(getWildcardType()));
+    } else {
+        rightSet = getLeftSynonymValue(argRight.argumentValue);
+    }
+    unordered_set<std::string> resultSet = generateLeftSet(rightSet);
+    filterByType(resultSet, entityLeft);
+    bool isEmpty = resultSet.empty();
+    result = {.resultType = ResultType::LIST,
+            .resultBoolean = !isEmpty,
+            .resultHeader = argLeft.argumentValue,
+            .resultItemList = convertSetToVector(resultSet)};
 }
+
 void SuchThatClauseEvaluator::evaluateRightSynonym() {
     DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
-    unordered_set<std::string> intersect = findIntersection(getRightSynonymValue(argLeft.argumentValue), getAllType(entityRight));
-    result.resultType = ResultType::LIST;
-    result.resultBoolean = !result.resultItemList.empty();
-    result.resultHeader = argRight.argumentValue;
-    result.resultItemList = convertSetToVector(intersect);
+    unordered_set<std::string> leftSet;
+    if(argLeft.argumentType == ArgumentType::UNDERSCORE) {
+        leftSet = getAllType(std::get<0>(getWildcardType()));
+    } else {
+        leftSet = {argLeft.argumentValue};
+    }
+
+    unordered_set<std::string> resultSet = generateRightSet(leftSet);
+    filterByType(resultSet, entityRight);
+    bool isEmpty = resultSet.empty();
+    result = {.resultType = ResultType::LIST,
+              .resultBoolean = !isEmpty,
+              .resultHeader = argRight.argumentValue,
+              .resultItemList = convertSetToVector(resultSet)};
 }
 
 std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
@@ -91,12 +109,72 @@ std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_s
     return vector;
 };
 
-unordered_set<std::string> SuchThatClauseEvaluator::findIntersection (unordered_set<std::string> set1, unordered_set<std::string> set2) {
+unordered_set<std::string> SuchThatClauseEvaluator::generateLeftSet (unordered_set<std::string>& rightSet) {
+
+    /*
     unordered_set<std::string> intersect;
-    set_intersection(set1.begin(), set1.end(), set2.begin(), set2.end(),
-                     std::inserter(intersect, intersect.begin()));
+    for( const std::string& str1 : set1 ) {
+        for( const std::string& str2 : set2 ) {
+            if (str1 == str2) {
+                intersect.emplace(str1);
+            }
+        }
+    };
+    std::cout << '\n' ;
+    cout << intersect.size();
     return intersect;
+     */
+    unordered_set<std::string> leftSet;
+    for (const std::string& str : rightSet) {
+        unordered_set<std::string> resultSet = getLeftSynonymValue(str);
+        leftSet.insert(resultSet.begin(), resultSet.end());
+    }
+
+    return leftSet;
 };
+
+unordered_set<std::string> SuchThatClauseEvaluator::generateRightSet (unordered_set<std::string>& leftSet) {
+    unordered_set<std::string> rightSet;
+    for (const std::string& str : leftSet) {
+        unordered_set<std::string> resultSet = getRightSynonymValue(str);
+        rightSet.insert(resultSet.begin(), resultSet.end());
+    }
+    return rightSet;
+}
+
+void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, DesignEntity entityType) {
+    for (const std::string& str : set) {
+        if(!isEntityType(str, entityType)) {
+            set.erase(str);
+        }
+    }
+}
+
+
+bool SuchThatClauseEvaluator::isEntityType (std::string ident, DesignEntity entityType) {
+    switch (entityType) {
+        /*
+        case DesignEntity::STMT:
+            return pkb->isStatement(ident);
+        case DesignEntity::VARIABLE:
+            return pkb->isVariable(ident);
+        case DesignEntity::ASSIGN:
+            return pkb->isAssign(ident);
+        case DesignEntity::PRINT:
+            return pkb->isPrint(ident);
+        case DesignEntity::READ:
+            return pkb->isRead(ident);
+        case DesignEntity::WHILE:
+            return pkb->isWhile(ident);
+        case DesignEntity::IF:
+            return pkb->isIf(ident);
+            */
+        default:
+            return true;
+    }
+}
+
+
 
 
 
