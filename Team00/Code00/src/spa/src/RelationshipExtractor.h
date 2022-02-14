@@ -10,11 +10,11 @@
 
 class RelationshipExtractor {
 public:
-    static void extractFollows(TNode*);
-    static void extractParents(TNode*);
-    static vector<string> extractModifies(TNode*);
-    static vector<string> extractUses(TNode*);
-    static void extractRelationships(TNode*);
+    static void extractFollows(Node*);
+    static void extractParents(Node*);
+    static vector<string> extractModifies(Node*);
+    static vector<string> extractUses(Node*);
+    static void extractRelationships(Node*);
 };
 
 

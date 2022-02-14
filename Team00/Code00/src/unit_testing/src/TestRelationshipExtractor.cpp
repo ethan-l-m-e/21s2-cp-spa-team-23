@@ -9,6 +9,7 @@
 using namespace std;
 
 TEST_CASE("test follows") {
+    /*
     TNode pNode("procedure");
     TNode aNode("assign", 2);
     TNode bNode("while", 3);
@@ -16,6 +17,7 @@ TEST_CASE("test follows") {
     TNode dNode("cond");
     TNode eNode("assign", 4);
     TNode fNode("print:x", 5);
+     */
 
     /*
     pNode.addNode(&aNode);
