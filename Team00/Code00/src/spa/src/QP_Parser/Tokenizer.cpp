@@ -65,6 +65,7 @@ void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
     vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)pattern[ ]*");
     vector<string> pattternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|(,)");
+    cout << "assign-Synonym: " << pattternClause[0] << "\n";
     cout << "LHS: " << pattternClause[1] << "\n";
     cout << "RHS: " << pattternClause[2] << "\n";
 }
