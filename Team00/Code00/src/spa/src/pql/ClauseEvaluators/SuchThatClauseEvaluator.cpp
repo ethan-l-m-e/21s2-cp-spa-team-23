@@ -39,8 +39,10 @@ ClauseSynonymType SuchThatClauseEvaluator::getClauseSynonymType() {
 }
 
 void SuchThatClauseEvaluator::evaluateNoSynonym() {
-    result.resultType = ResultType::BOOLEAN;
-    result.resultBoolean = isRelation(argLeft.argumentValue, argRight.argumentValue);
+
+    result = {
+            .resultType = ResultType::BOOLEAN,
+            .resultBoolean = isRelation(argLeft.argumentValue, argRight.argumentValue)};
 }
 void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
     DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
@@ -58,12 +60,12 @@ void SuchThatClauseEvaluator::evaluateLeftSynonym() {
     if(argRight.argumentType == ArgumentType::UNDERSCORE) {
         rightSet = getAllType(std::get<1>(getWildcardType()));
     } else {
-        rightSet = getLeftSynonymValue(argRight.argumentValue);
+        rightSet = {argRight.argumentValue};
     }
     unordered_set<std::string> resultSet = generateLeftSet(rightSet);
     filterByType(resultSet, entityLeft);
     bool isEmpty = resultSet.empty();
-    result = {.resultType = ResultType::LIST,
+    result = {.resultType = ResultType::STRING,
             .resultBoolean = !isEmpty,
             .resultHeader = argLeft.argumentValue,
             .resultItemList = convertSetToVector(resultSet)};
@@ -81,7 +83,7 @@ void SuchThatClauseEvaluator::evaluateRightSynonym() {
     unordered_set<std::string> resultSet = generateRightSet(leftSet);
     filterByType(resultSet, entityRight);
     bool isEmpty = resultSet.empty();
-    result = {.resultType = ResultType::LIST,
+    result = {.resultType = ResultType::STRING,
               .resultBoolean = !isEmpty,
               .resultHeader = argRight.argumentValue,
               .resultItemList = convertSetToVector(resultSet)};

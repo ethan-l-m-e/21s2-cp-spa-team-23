@@ -41,12 +41,12 @@ void generateSamplePKB() {
 
 TEST_CASE("Query0") {
     generateSamplePKB();
-    Query query0;
+    Query query;
     unordered_map<string, DesignEntity> declarationsMap = {{"v", DesignEntity::VARIABLE}};
-    query0.setDeclarations(declarationsMap);
-    query0.setSynonym("v");
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("v");
     auto qe = QueryEvaluator(testPKB);
-    list<string> result = qe.evaluate(&query0);
+    list<string> result = qe.evaluate(&query);
     list<string> expected = {"x", "y", "xylophone", "yeast", "z"};
     REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
@@ -54,17 +54,17 @@ TEST_CASE("Query0") {
 
 TEST_CASE("Query1") {
     generateSamplePKB();
-    Query query1;
+    Query query;
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT}};
-    query1.setDeclarations(declarationsMap);
-    query1.setSynonym("s");
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s");
     Argument a1 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "1"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
     SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
     follows.argList = {a1, a2};
-    query1.addSuchThatClause(follows);
+    query.addSuchThatClause(follows);
     auto qe = QueryEvaluator(testPKB);
-    list<string> result = qe.evaluate(&query1);
+    list<string> result = qe.evaluate(&query);
     list<string> expected = {"2"};
     REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
@@ -72,17 +72,17 @@ TEST_CASE("Query1") {
 
 TEST_CASE("Query2") {
     generateSamplePKB();
-    Query query2;
+    Query query;
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT}};
-    query2.setDeclarations(declarationsMap);
-    query2.setSynonym("s");
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s");
     Argument a1 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
     SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
     follows.argList = {a1, a2};
-    query2.addSuchThatClause(follows);
+    query.addSuchThatClause(follows);
     auto qe = QueryEvaluator(testPKB);
-    list<string> result = qe.evaluate(&query2);
+    list<string> result = qe.evaluate(&query);
     list<string> expected = {"2", "3", "4", "5"};
 
     REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
@@ -91,17 +91,17 @@ TEST_CASE("Query2") {
 
 TEST_CASE("Query3") {
     generateSamplePKB();
-    Query query3;
+    Query query;
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT}};
-    query3.setDeclarations(declarationsMap);
-    query3.setSynonym("s");
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s");
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
     Argument a2 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
     SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
     follows.argList = {a1, a2};
-    query3.addSuchThatClause(follows);
+    query.addSuchThatClause(follows);
     auto qe = QueryEvaluator(testPKB);
-    list<string> result = qe.evaluate(&query3);
+    list<string> result = qe.evaluate(&query);
     list<string> expected = {"1", "2", "3", "4"};
     REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
@@ -109,18 +109,72 @@ TEST_CASE("Query3") {
 
 TEST_CASE("Query4") {
     generateSamplePKB();
-    Query query4;
+    Query query;
     unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT}, {"s2", DesignEntity::STMT}};
-    query4.setDeclarations(declarationsMap);
-    query4.setSynonym("s1");
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s1");
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
     SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
     follows.argList = {a1, a2};
-    query4.addSuchThatClause(follows);
+    query.addSuchThatClause(follows);
     auto qe = QueryEvaluator(testPKB);
-    list<string> result = qe.evaluate(&query4);
+    list<string> result = qe.evaluate(&query);
     list<string> expected = {"1", "2", "3", "4"};
+    REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
+            == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+}
+
+TEST_CASE("Query5") {
+    generateSamplePKB();
+    Query query;
+    unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT}, {"s2", DesignEntity::STMT}};
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s2");
+    Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
+    Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
+    SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
+    follows.argList = {a1, a2};
+    query.addSuchThatClause(follows);
+    auto qe = QueryEvaluator(testPKB);
+    list<string> result = qe.evaluate(&query);
+    list<string> expected = {"2", "3", "4", "5"};
+    REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
+            == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+}
+
+TEST_CASE("Query6") {
+    generateSamplePKB();
+    Query query;
+    unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT}};
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s");
+    Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
+    Argument a2 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "6"};
+    SuchThatClause follows = {.relRef = RelRef::PARENT};
+    follows.argList = {a1, a2};
+    query.addSuchThatClause(follows);
+    auto qe = QueryEvaluator(testPKB);
+    list<string> result = qe.evaluate(&query);
+    list<string> expected = {"5"};
+    REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
+            == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+}
+
+TEST_CASE("Query7") {
+    generateSamplePKB();
+    Query query;
+    unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT}, };
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s2");
+    Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
+    Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
+    SuchThatClause follows = {.relRef = RelRef::PARENT};
+    follows.argList = {a1, a2};
+    query.addSuchThatClause(follows);
+    auto qe = QueryEvaluator(testPKB);
+    list<string> result = qe.evaluate(&query);
+    list<string> expected = {"6"};
     REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
 }

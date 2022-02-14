@@ -25,7 +25,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         for(const SuchThatClause& clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
             Result suchThatResult = suchThatClauseEvaluator->evaluateClause();
-            //if (!suchThatResult.resultBoolean) return generateResultString(*suchThatResult, query->getSelectedSynonym());
+            if (!suchThatResult.resultBoolean) return generateResultString({}, query->getSelectedSynonym());
             mergeResultToSynonymsRelations(synonymRelations, suchThatResult);
         }
     }
@@ -45,7 +45,8 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
             return new FollowsClauseEvaluator(clause.argList, pkb, query);
-            break;
+        case RelRef::PARENT:
+            return new ParentClauseEvaluator(clause.argList, pkb, query);
         /*
         case RelRef::FOLLOWS_T:
             // return FollowsTClauseEvaluator(clause.argList, pkb, query);
@@ -75,17 +76,20 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
 }
 
 void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations* sr, Result result) {
-    //TODO: method for merging two results
+    //if result is boolean type, do nothing;
+    if (result.resultType == ResultType::BOOLEAN) return;
+
+    // if result is
     std::vector<std::string>* header  = sr->getHeader();
     std::vector<std::vector<std::string>>* values = sr->getList();
     auto headerType = result.resultHeader.index();
-    if (headerType == 0) {
+    if (result.resultType == ResultType::STRING) {
         auto it = std::find(header->begin(), header->end(), std::get<string>(result.resultHeader));
-        if(it != header->end()) {
-            long index = std::distance( header->begin(), it );
-            for (auto value = values->begin(); value != values->end(); ++value)
-            {
-                if (!std::count(result.resultItemList.begin(), result.resultItemList.end(), (ResultItem)(*value)[index])) {
+        if (it != header->end()) {
+            long index = std::distance(header->begin(), it);
+            for (auto value = values->begin(); value != values->end(); ++value) {
+                if (!std::count(result.resultItemList.begin(), result.resultItemList.end(),
+                                (ResultItem) (*value)[index])) {
                     values->erase(value);
                 }
             }
@@ -95,7 +99,7 @@ void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations* sr, Result
             //assign new list
             sr->assignList(appendNewSynonym(values, result.resultItemList));
         }
-    } else {
+    } else if (result.resultType == ResultType::TUPLES) {
         // more logic
         auto headerTuple = std::get<tuple<string, string>>(result.resultHeader);
         auto it1 = std::find(header->begin(), header->end(), std::get<0>(headerTuple));

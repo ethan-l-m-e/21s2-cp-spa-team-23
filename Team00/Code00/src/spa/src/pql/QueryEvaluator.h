@@ -11,6 +11,7 @@
 #include "pql/ClauseEvaluators/Result.h"
 #include "pql/ClauseEvaluators/ClauseEvaluator.h"
 #include "pql/ClauseEvaluators/FollowsClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ParentClauseEvaluator.h"
 #include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
 #include "pql/ClauseEvaluators/SelectClauseEvaluator.h"
 #include <sstream>

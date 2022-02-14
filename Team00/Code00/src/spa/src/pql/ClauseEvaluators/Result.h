@@ -11,7 +11,7 @@
 
 enum class ResultType {
     BOOLEAN,
-    LIST,
+    STRING,
     TUPLES,
     EMPTY
 };

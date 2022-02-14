@@ -14,7 +14,7 @@ Result PatternClauseEvaluator::evaluateClause() {
 
     vector<AssignNode*> listOfAssignNodes;
     //PKB::getInstance() -> getAllAssignPointers();
-    resultType = ResultType::LIST;
+    resultType = ResultType::STRING;
 
 
 
