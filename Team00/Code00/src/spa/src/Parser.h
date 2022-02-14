@@ -15,6 +15,7 @@ public:
 
     static AssignNode* parseAssign(string assignLine);
     static StatementList parseStatementList(string stmtList);
-    ProcedureNode* parseProcedure(string procedure);
+    static ProcedureNode* parseProcedure(string * procedure);
+    static Program parseProgram(string sourceCode);
 };
 

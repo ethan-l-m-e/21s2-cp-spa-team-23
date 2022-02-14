@@ -57,6 +57,11 @@ TEST_CASE("Assign parsing") {
     string input = left + " = " + right + ";";
     AssignNode * testNode = Parser::parseAssign(input);
     CHECK(left ==  testNode ->getLeftNode() ->getVariableName());
-    CHECK(right == testNode ->getRightNode() ->getVariableName());
+    CHECK(right == get<VariableNode*>(testNode ->getRightNode())->getVariableName());
 }
 
+TEST_CASE("Program parsing") {
+    string code = "program { X = a }";
+    Program program = Parser::parseProgram(code);
+    CHECK(program[0]->getProcName() == "program");
+}

@@ -23,18 +23,18 @@ ConstValueNode::ConstValueNode(const string num) { this -> constValue = num; }
 string ConstValueNode::getConstValue() {return this ->constValue; }
 
 
-AssignNode::AssignNode(int num, VariableNode *leftNode, VariableNode *rightNode) : StmtNode(num) {
+AssignNode::AssignNode(int num, VariableNode *leftNode, Expression rightNode) : StmtNode(num) {
     this ->leftNode = leftNode;
     this ->rightNode = rightNode;
     this ->leftNode ->setParentNode(this);
-    this ->rightNode ->setParentNode(this);
+    visit([this](auto& n){n->setParentNode(this);},this->rightNode);
 }
 
 VariableNode* AssignNode::getLeftNode() const {
     return this ->leftNode;
 }
 
-VariableNode* AssignNode::getRightNode() const {
+Expression AssignNode::getRightNode() const {
     return this ->rightNode;
 }
 
@@ -115,5 +115,26 @@ CondExprNode *WhileNode::getCondExpr() {
 }
 
 StatementList WhileNode::getStmtLst() {
+    return this->stmtLst;
+}
+
+ProcNameNode::ProcNameNode(ProcName name) {
+    this->procedureName = std::move(name);
+}
+
+ProcName ProcNameNode::getProcedureName() {
+    return this->procedureName;
+}
+
+ProcedureNode::ProcedureNode(ProcNameNode *procName, StatementList stmtLst) {
+    this->procName = procName;
+    this->stmtLst = std::move(stmtLst);
+}
+
+ProcName ProcedureNode::getProcName() {
+    return this->procName->getProcedureName();
+}
+
+StatementList ProcedureNode::getStmtLst() {
     return this->stmtLst;
 }
