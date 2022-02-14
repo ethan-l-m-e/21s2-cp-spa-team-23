@@ -38,7 +38,7 @@ TEST_CASE("SUCH THAT CLAUSE") {
 }
 
 TEST_CASE("PATTERN CLAUSE") {
-    std::string second = "variable v; assign a1;\nSelect a pattern a1(v,\"x\") such that Uses(a,v)";
+    std::string second = "variable v; assign a1;\nSelect a pattern a1(v,_\"x\"_) such that Uses(a,v)";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = QueryToken();
     tokenizer.getPatternClause(second, queryToken);
