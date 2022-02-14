@@ -6,14 +6,20 @@
 #include "TNode.h"
 #include "StringFormatter.h"
 
-
+bool searchForMatchInExpression(Expression expressionNode, string rightArg);
 void addToStmtList(AssignNode* assignNode, vector<ResultItem> stmtNumberList);
 void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> statementAndVarList);
 string retrieveLHSVar(AssignNode* assignNode);
 bool matchLHSValue(AssignNode* assignNode, Argument arg);
 int retrieveStmtNo(AssignNode* assignNode);
 bool matchRHSValue(AssignNode* assignNode, Argument arg);
-
+/**
+ * Uses (stmtRef, entRef)
+ *
+ * stmtRef: synonym, _ or integer
+ * entRef: synonym, _ or "fixed"
+ *
+ */
 
 Result PatternClauseEvaluator::evaluateClause() {
     vector<AssignNode*> listOfAssignNodes;
@@ -97,16 +103,41 @@ bool matchRHSValue(AssignNode* assignNode, Argument arg) {    // for partial wil
     // convert into an AST (future issue, for now stick to single variable/const value)
     // TODO: extract assignNode right side, then call searchForMatchInExpression method
     // extract right side of Assign node
-    // searchForMatchInExpression(right side of AssignNode, rightArg)
+    Expression RHSExpression = assignNode ->getRightNode();
+    searchForMatchInExpression(RHSExpression, rightArg);
     return true;
 }
 
-bool searchForMatchInExpression(BinaryOperatorNode* expressionNode, string rightArg) {
+bool searchForMatchInExpression(Expression expressionNode, string rightArg) {
     // TODO: complete pattern matching algorithm. search expressionNode to see if can find RHS argument
     // if is variable/const node
     //      compare value with rightArg. if match return true else false
     // else
     //      return searchRHSExpression(leftside) || searchForMatchInExpression(rightSide)
+    if (auto value = std::get_if<BinaryOperatorNode*>(&expressionNode)) {
+        BinaryOperatorNode* operatorNode = *value;
+        bool leftResult = searchForMatchInExpression(operatorNode->getLeftExpr(), rightArg);
+        bool rightResult = searchForMatchInExpression(operatorNode->getRightExpr(), rightArg);
+        return leftResult || rightResult;
+    } else if (auto value = std::get_if<VariableNode*>(&expressionNode)) {
+        VariableNode* varNode = *value;
+        if (varNode->getVariableName() == rightArg) {
+            return true;
+        } else {
+            cout << varNode->getVariableName() << " != " << rightArg;
+            return false;
+        }
+    } else if(auto value = std::get_if<ConstValueNode*>(&expressionNode)) {
+        ConstValueNode* constNode = *value;
+        if (constNode->getConstValue() == rightArg) {
+            return true;
+        } else {
+            cout << constNode->getConstValue() << " != " << rightArg;
+            return false;
+        }
+    } else {
+        throw "cannot understand expression";
+    };
 }
 
 bool PatternClauseEvaluator::leftIsSynonym() {
