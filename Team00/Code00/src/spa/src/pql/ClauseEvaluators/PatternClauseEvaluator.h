@@ -9,15 +9,6 @@
 #include "ClauseEvaluator.h"
 #include "pql/query_obj/Argument.h"
 
-enum class PatternType {
-    LEFT_SYNONYM,
-    LEFT_FIXED,
-    LEFT_WILDCARD,
-    RIGHT_WILDCARD_PARTIAL,
-    RIGHT_WILDCARD
-};
-
-
 class PatternClauseEvaluator : public ClauseEvaluator {
 protected:
     PatternClauseEvaluator (SynonymType synonymType, std::vector<Argument> args, PKB* pkb, Query* query): ClauseEvaluator(std::move(args), pkb, query) {}

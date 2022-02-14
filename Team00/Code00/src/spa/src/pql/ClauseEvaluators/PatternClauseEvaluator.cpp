@@ -4,6 +4,7 @@
 #include "PKB.h"
 #include "PatternClauseEvaluator.h"
 #include "TNode.h"
+#include "StringFormatter.h"
 
 
 void addToStmtList(AssignNode* assignNode, vector<ResultItem> stmtNumberList);
@@ -21,47 +22,48 @@ Result PatternClauseEvaluator::evaluateClause() {
     vector<ResultItem> assignVarPairList;
     vector<ResultItem> stmtNumberList;
 
+    /**
+     * Chart for pattern clause:
+     * LHS/RHS      _something_              _
+     * synonym      filtered assign & var   all assign & var
+     * fixed        filtered assign         filtered assign
+     * _            filtered assign         all assign
+     */
     for (int i = 0; i < listOfAssignNodes.size(); i++) {
         AssignNode * currentNode = listOfAssignNodes[i];
-        if (leftIsSynonym() && rightIsPartWildCard()) {
-            if(matchRHSValue(currentNode, argRight)) {
-                addToStmtAndVariableList(currentNode, assignVarPairList);
-            }
-        } else if (leftIsSynonym() && rightIsWildCard()) {
+        if (leftIsSynonym() && rightIsWildCard()) {
             addToStmtAndVariableList(currentNode, assignVarPairList);
+        } else if (leftIsSynonym() && rightIsPartWildCard()) {
+            if(matchRHSValue(currentNode, argRight))
+                addToStmtAndVariableList(currentNode, assignVarPairList);
         } else if (leftIsFixed() && rightIsWildCard()) {
-            if(matchLHSValue(currentNode, argLeft)) {
+            if(matchLHSValue(currentNode, argLeft))
                 addToStmtList(currentNode, stmtNumberList);
-            }
         } else if (leftIsFixed() && rightIsPartWildCard()) {
-            if(matchLHSValue(currentNode, argLeft) && matchRHSValue(currentNode, argRight)) {
+            if(matchLHSValue(currentNode, argLeft) && matchRHSValue(currentNode, argRight))
                 addToStmtList(currentNode, stmtNumberList);
-            }
         } else if (leftIsWildCard() && rightIsPartWildCard()) {
-            if(matchRHSValue(currentNode, argRight)) {
+            if(matchRHSValue(currentNode, argRight))
                 addToStmtList(currentNode, stmtNumberList);
-            }
         } else if (leftIsWildCard() && rightIsWildCard()) {
             addToStmtList(currentNode, stmtNumberList);
         }
     }
 
-
     // result construction
     if (leftIsSynonym()) {
-        // configure resultType, to have both variable names and statement numbers
+        // configure resultType, to have both variable names and assign
         result.resultType = ResultType::TUPLES;
         result.resultBoolean = !result.resultItemList.empty();
         result.resultHeader = tuple<string, string>(assignSynonym.argumentValue, argLeft.argumentValue);
         result.resultItemList = assignVarPairList;
     } else {
-        // configure resultType to have only a list of statement number
+        // configure resultType to have only a list of assign
         result.resultType = ResultType::LIST;
         result.resultBoolean = !result.resultItemList.empty();
         result.resultHeader = assignSynonym.argumentValue;
         result.resultItemList = stmtNumberList;
     }
-
 }
 
 void addToStmtList(AssignNode* assignNode, vector<ResultItem> stmtNumberList) {
@@ -77,7 +79,7 @@ string retrieveLHSVar(AssignNode* assignNode) {
     return assignNode->getLeftNode()->getVariableName();
 }
 
-bool matchLHSValue(AssignNode* assignNode, Argument arg) {
+bool matchLHSValue(AssignNode* assignNode, Argument arg) {      //  not tested yet
     if (retrieveLHSVar(assignNode) == arg.argumentValue) {
         return true;
     } else {
@@ -89,11 +91,23 @@ int retrieveStmtNo(AssignNode* assignNode) {
     return assignNode->getStmtNumber();
 }
 
-bool matchRHSValue(AssignNode* assignNode, Argument arg) {    // Arg: Expression node, Objective node
-    // perform Search algorithm
+bool matchRHSValue(AssignNode* assignNode, Argument arg) {    // for partial wildcards
+    // convert arg to variable (or expression in the future)
+    string rightArg = StringFormatter::tokenizeByRegex(arg.argumentValue, "(_\")|(\"_)")[0];
+    // convert into an AST (future issue, for now stick to single variable/const value)
+    // TODO: extract assignNode right side, then call searchForMatchInExpression method
+    // extract right side of Assign node
+    // searchForMatchInExpression(right side of AssignNode, rightArg)
     return true;
 }
 
+bool searchForMatchInExpression(BinaryOperatorNode* expressionNode, string rightArg) {
+    // TODO: complete pattern matching algorithm. search expressionNode to see if can find RHS argument
+    // if is variable/const node
+    //      compare value with rightArg. if match return true else false
+    // else
+    //      return searchRHSExpression(leftside) || searchForMatchInExpression(rightSide)
+}
 
 bool PatternClauseEvaluator::leftIsSynonym() {
     return argLeft.argumentType == ArgumentType::SYNONYM;
