@@ -35,7 +35,7 @@ vector<DeclarationToken>* Tokenizer::splitDeclarations(vector<string> &declarati
     auto declarationPtr = new vector<DeclarationToken>();
     string designEntity, synonymsString, declarationString;
 
-    for (std::string &declaration : declarations) {
+    for (string &declaration : declarations) {
         designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
         synonymsString = declaration.substr(designEntity.length() + 1);
         vector<string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, "[]*, ");
@@ -49,21 +49,22 @@ vector<DeclarationToken>* Tokenizer::splitDeclarations(vector<string> &declarati
     return declarationPtr;
 }
 
-void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
+void Tokenizer::getSelectClauseTokens(string& pql, QueryToken& queryToken) {
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
     vector<string> tokens = StringFormatter::tokenizeByRegex(selectLine, "(Select[ ]*|[ ]+)");
     queryToken.selectClauseToken = tokens[0];
 }
 
 void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
-    std::string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
-    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
-    std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
-    auto suchThatClausesPtr = new std::vector<std::string>(suchThatClauses);
+    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
+    vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
+    auto suchThatClausesPtr = new vector<string>(suchThatClauses);
     queryToken.suchThatClauseToken = suchThatClausesPtr;
 }
 
 void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {
+    // TODO: Modify to extract synonym from pattern
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
     vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)pattern[ ]*");
     vector<string> pattternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|(,)");
