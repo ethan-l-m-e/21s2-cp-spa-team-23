@@ -6,7 +6,6 @@
 #include <regex>
 #include <utility>
 #include <vector>
-#include <sstream>
 
 using namespace qp;
 
@@ -21,17 +20,33 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
+    getSuchThatClauseTokens(query, queryToken);
     return queryToken;
 }
 
 void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
-    std::string selectLine = StringFormatter::extractFrontStringByRegex(pql, "\n");
-    std::vector<std::string> declarations = StringFormatter::tokenizeByRegex(selectLine, "[]*;");
-    std::vector<std::string>* declarationPtr = new std::vector<std::string>();
-    for (std::string declaration : declarations) {
-        declarationPtr->push_back(StringFormatter::removeTrailingSpace(declaration));
-    }
+    string selectLine = StringFormatter::extractFrontStringByRegex(pql, "\n");
+    vector<string> declarations = StringFormatter::tokenizeByRegex(selectLine, "[]*;");
+    auto declarationPtr = splitDeclarations(declarations);
     queryToken.declarationTokens = declarationPtr;
+}
+
+vector<DeclarationToken>* Tokenizer::splitDeclarations(vector<string> &declarations) {
+    auto declarationPtr = new vector<DeclarationToken>();
+    string designEntity, synonymsString, declarationString;
+
+    for (std::string &declaration : declarations) {
+        designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
+        synonymsString = declaration.substr(designEntity.length() + 1);
+        vector<string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, "[]*, ");
+
+        // Create Declaration token
+        DeclarationToken declarationToken = DeclarationToken();
+        declarationToken.designEntity = designEntity;
+        declarationToken.synonyms = new vector<string>(synonyms);
+        declarationPtr->push_back(declarationToken);
+    }
+    return declarationPtr;
 }
 
 void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
@@ -40,14 +55,12 @@ void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) 
     queryToken.selectClauseToken = tokens[0];
 }
 
-void Tokenizer::getSuchThatClause(std::string& pql, QueryToken& queryToken) {
+void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
     std::string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
     std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
     std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
-    cout << "such that: " << suchThatClauses[0] << "\n";
-    cout << "leftArg: " << suchThatClauses[1] << "\n";
-    cout << "rightArg:" << suchThatClauses[2] << "\n";
-    queryToken.suchThatClauseToken = &suchThatClauses;
+    auto suchThatClausesPtr = new std::vector<std::string>(suchThatClauses);
+    queryToken.suchThatClauseToken = suchThatClausesPtr;
 }
 
 void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {
