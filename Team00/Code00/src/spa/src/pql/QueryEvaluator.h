@@ -30,6 +30,12 @@ public:
     static void mergeResultToSynonymsRelations(SynonymRelations* sr, Result result);
 
     static std::list<std::string> generateResultString(SynonymRelations* sr, string selectedSynonym);
+
+    static vector<std::vector<std::string>> *
+    appendNewSynonym(vector<vector<std::string>> *currentTuples, vector<ResultItem> synonymValues);
+
+    static vector<std::vector<std::string>> *
+    appendNewSynonymTuples(vector<vector<string>> *currentTuples, vector<ResultItem> synonymValues);
 };
 
 

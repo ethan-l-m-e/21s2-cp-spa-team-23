@@ -18,6 +18,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             result = mergeResults(result, patternResult);
         }
     }
+*/
 
     // Create ClauseEvaluators and evaluate each of the suchThat clause
     if(query->hasSuchThatClause()) {
@@ -30,13 +31,11 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
-    */
+
 
     if (synonymRelations->isEmpty()) {
         auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
         Result selectResult = selectClauseEvaluator->evaluateClause();
-        //string test = std::get<std::string>(selectResult.resultItemList[0]);
-        //cout << test;
         mergeResultToSynonymsRelations(synonymRelations, selectResult);
     }
 
@@ -93,32 +92,28 @@ void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations* sr, Result
             }
         } else {
             //append new synonym to header
-
             header->emplace_back(std::get<string>(result.resultHeader));
-
             //assign new list
-            auto* updatedValues = new std::vector<std::vector<std::string>>{};
-            if(values->empty()){
-                for(auto resultItem : result.resultItemList) {
-                    std::string curr = std::get<string>(resultItem);
-                    updatedValues->emplace_back(std::vector<std::string>{curr});
-                }
-            } else {
-                for (auto resultItem: result.resultItemList) {
-                    std::string curr = std::get<string>(resultItem);
-                    //append to existing values
-                    for (const auto &value: *values) {
-                        //deep copy values
-                        std::vector<std::string> currentValues = value;
-                        currentValues.emplace_back(curr);
-                        updatedValues->emplace_back(currentValues);
-                    }
-                }
-            }
-            sr->assignList(updatedValues);
+            sr->assignList(appendNewSynonym(values, result.resultItemList));
         }
     } else {
         // more logic
+        auto headerTuple = std::get<tuple<string, string>>(result.resultHeader);
+        auto it1 = std::find(header->begin(), header->end(), std::get<0>(headerTuple));
+        auto it2 = std::find(header->begin(), header->end(), std::get<1>(headerTuple));
+        if (it1 == header->end() && it2 == header->end()) {
+            //append new synonym tuple to header
+            header->emplace_back(std::get<0>(headerTuple));
+            header->emplace_back(std::get<1>(headerTuple));
+            //assign new list
+            sr->assignList(appendNewSynonymTuples(values, result.resultItemList));
+        } else if (it1 != header->end() && it1 != header->end()) {
+            cout << "join 2 unimplemented";
+        } else if (it1 != header->end()) {
+            cout << "join 3 unimplemented";
+        } else{
+            cout << "join 4 unimplemented";
+        }
     }
 
 }
@@ -142,3 +137,46 @@ std::list<std::string> QueryEvaluator::generateResultString(SynonymRelations* sr
     }
     return stringList;
 }
+
+std::vector<std::vector<std::string>>* QueryEvaluator::appendNewSynonym(vector<vector<std::string>>* currentTuples, vector<ResultItem> synonymValues) {
+    auto* updatedTuples = new std::vector<std::vector<std::string>>{};
+
+    for(auto resultItem : synonymValues) {
+        auto curr = std::get<string>(resultItem);
+        if(currentTuples->empty()) {
+            updatedTuples->emplace_back(std::vector<std::string>{curr});
+        } else {
+            for (const auto &value: *currentTuples) {
+                //deep copy values
+                std::vector<std::string> currentValues = value;
+                currentValues.emplace_back(curr);
+                updatedTuples->emplace_back(currentValues);
+            }
+        }
+    }
+
+    return updatedTuples;
+};
+
+std::vector<std::vector<std::string>>* QueryEvaluator::appendNewSynonymTuples(vector<vector<string>>* currentTuples, std::vector<ResultItem> synonymValues) {
+    auto* updatedTuples = new std::vector<std::vector<std::string>>{};
+
+    for(auto resultItem : synonymValues) {
+        auto curr = std::get<tuple<string,string>>(resultItem);
+        if(currentTuples->empty()) {
+            auto vector = std::vector<std::string> {std::get<0>(curr), std::get<1>(curr)};
+            updatedTuples->emplace_back(vector);
+        } else {
+            for (const auto &value: *currentTuples) {
+                //deep copy values
+                std::vector<std::string> currentValues = value;
+                currentValues.emplace_back(std::get<0>(curr));
+                currentValues.emplace_back(std::get<1>(curr));
+                updatedTuples->emplace_back(currentValues);
+            }
+        }
+    }
+
+    return updatedTuples;
+};
+
