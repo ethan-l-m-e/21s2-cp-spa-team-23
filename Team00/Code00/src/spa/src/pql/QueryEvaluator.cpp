@@ -25,7 +25,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         for(const SuchThatClause& clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
             Result suchThatResult = suchThatClauseEvaluator->evaluateClause();
-            if (!suchThatResult.resultBoolean) return generateResultString({}, query->getSelectedSynonym());
+            if (!suchThatResult.resultBoolean) return {};
             mergeResultToSynonymsRelations(synonymRelations, suchThatResult);
         }
     }
@@ -104,16 +104,29 @@ void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations* sr, Result
         auto headerTuple = std::get<tuple<string, string>>(result.resultHeader);
         auto it1 = std::find(header->begin(), header->end(), std::get<0>(headerTuple));
         auto it2 = std::find(header->begin(), header->end(), std::get<1>(headerTuple));
+
         if (it1 == header->end() && it2 == header->end()) {
             //append new synonym tuple to header
             header->emplace_back(std::get<0>(headerTuple));
             header->emplace_back(std::get<1>(headerTuple));
             //assign new list
             sr->assignList(appendNewSynonymTuples(values, result.resultItemList));
-        } else if (it1 != header->end() && it1 != header->end()) {
+        } else if (it1 != header->end() && it2 != header->end()) {
             cout << "join 2 unimplemented";
+            long index1 = std::distance(header->begin(), it1);
+            long index2 = std::distance(header->begin(), it2);
+            /*
+            for (auto value :*values) {
+                value[index1]
+                if (!std::count(result.resultItemList.begin(), result.resultItemList.end(),
+                                (ResultItem) (*value)[index])) {
+                    values->erase(value);
+                }
+            }
+             */
         } else if (it1 != header->end()) {
             cout << "join 3 unimplemented";
+            long index = std::distance(header->begin(), it1);
         } else{
             cout << "join 4 unimplemented";
         }

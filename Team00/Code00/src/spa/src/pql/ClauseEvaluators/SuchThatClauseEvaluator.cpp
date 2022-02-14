@@ -49,10 +49,14 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
     DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
     unordered_set<std::string> leftSet = getAllType(entityLeft);
     unordered_set<std::string> rightSet = getAllType(entityRight);
-    result.resultType = ResultType::TUPLES;
-    result.resultBoolean = !result.resultItemList.empty();
-    result.resultHeader = tuple<string, string> { argLeft.argumentValue, argRight.argumentValue};
-    result.resultItemList = generateTuples(leftSet, rightSet);
+    vector<ResultItem> resultItemList = generateTuples(leftSet, rightSet);
+
+    result = {
+            .resultType = ResultType::TUPLES,
+            .resultBoolean = !resultItemList.empty(),
+            .resultHeader = tuple<string, string> { argLeft.argumentValue, argRight.argumentValue},
+            .resultItemList = resultItemList
+    };
 }
 void SuchThatClauseEvaluator::evaluateLeftSynonym() {
     DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);

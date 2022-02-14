@@ -60,9 +60,9 @@ TEST_CASE("Query1") {
     query.setSynonym("s");
     Argument a1 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "1"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
-    SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
-    follows.argList = {a1, a2};
-    query.addSuchThatClause(follows);
+    SuchThatClause clause = {.relRef = RelRef::FOLLOWS};
+    clause.argList = {a1, a2};
+    query.addSuchThatClause(clause);
     auto qe = QueryEvaluator(testPKB);
     list<string> result = qe.evaluate(&query);
     list<string> expected = {"2"};
@@ -78,9 +78,9 @@ TEST_CASE("Query2") {
     query.setSynonym("s");
     Argument a1 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
-    SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
-    follows.argList = {a1, a2};
-    query.addSuchThatClause(follows);
+    SuchThatClause clause = {.relRef = RelRef::FOLLOWS};
+    clause.argList = {a1, a2};
+    query.addSuchThatClause(clause);
     auto qe = QueryEvaluator(testPKB);
     list<string> result = qe.evaluate(&query);
     list<string> expected = {"2", "3", "4", "5"};
@@ -97,9 +97,9 @@ TEST_CASE("Query3") {
     query.setSynonym("s");
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
     Argument a2 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
-    SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
-    follows.argList = {a1, a2};
-    query.addSuchThatClause(follows);
+    SuchThatClause clause = {.relRef = RelRef::FOLLOWS};
+    clause.argList = {a1, a2};
+    query.addSuchThatClause(clause);
     auto qe = QueryEvaluator(testPKB);
     list<string> result = qe.evaluate(&query);
     list<string> expected = {"1", "2", "3", "4"};
@@ -115,9 +115,9 @@ TEST_CASE("Query4") {
     query.setSynonym("s1");
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
-    SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
-    follows.argList = {a1, a2};
-    query.addSuchThatClause(follows);
+    SuchThatClause clause = {.relRef = RelRef::FOLLOWS};
+    clause.argList = {a1, a2};
+    query.addSuchThatClause(clause);
     auto qe = QueryEvaluator(testPKB);
     list<string> result = qe.evaluate(&query);
     list<string> expected = {"1", "2", "3", "4"};
@@ -133,9 +133,9 @@ TEST_CASE("Query5") {
     query.setSynonym("s2");
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
-    SuchThatClause follows = {.relRef = RelRef::FOLLOWS};
-    follows.argList = {a1, a2};
-    query.addSuchThatClause(follows);
+    SuchThatClause clause = {.relRef = RelRef::FOLLOWS};
+    clause.argList = {a1, a2};
+    query.addSuchThatClause(clause);
     auto qe = QueryEvaluator(testPKB);
     list<string> result = qe.evaluate(&query);
     list<string> expected = {"2", "3", "4", "5"};
@@ -151,9 +151,9 @@ TEST_CASE("Query6") {
     query.setSynonym("s");
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
     Argument a2 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "6"};
-    SuchThatClause follows = {.relRef = RelRef::PARENT};
-    follows.argList = {a1, a2};
-    query.addSuchThatClause(follows);
+    SuchThatClause clause = {.relRef = RelRef::PARENT};
+    clause.argList = {a1, a2};
+    query.addSuchThatClause(clause);
     auto qe = QueryEvaluator(testPKB);
     list<string> result = qe.evaluate(&query);
     list<string> expected = {"5"};
@@ -164,14 +164,14 @@ TEST_CASE("Query6") {
 TEST_CASE("Query7") {
     generateSamplePKB();
     Query query;
-    unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT}, };
+    unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT}, {"s2", DesignEntity::STMT}};
     query.setDeclarations(declarationsMap);
     query.setSynonym("s2");
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
-    SuchThatClause follows = {.relRef = RelRef::PARENT};
-    follows.argList = {a1, a2};
-    query.addSuchThatClause(follows);
+    SuchThatClause clause = {.relRef = RelRef::PARENT};
+    clause.argList = {a1, a2};
+    query.addSuchThatClause(clause);
     auto qe = QueryEvaluator(testPKB);
     list<string> result = qe.evaluate(&query);
     list<string> expected = {"6"};
@@ -179,3 +179,34 @@ TEST_CASE("Query7") {
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
 }
 
+/*
+TEST_CASE("Query8") {
+    generateSamplePKB();
+    Query query;
+    unordered_map<string, DesignEntity> declarationsMap = {
+            {"s1", DesignEntity::STMT},
+            {"s2", DesignEntity::STMT},
+            {"s3", DesignEntity::STMT},
+    };
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s2");
+
+    Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
+    Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
+    SuchThatClause clause1 = {.relRef = RelRef::FOLLOWS};
+    clause1.argList = {a1, a2};
+    query.addSuchThatClause(clause1);
+
+    Argument a3 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
+    Argument a4 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s3"};
+    SuchThatClause clause2 = {.relRef = RelRef::FOLLOWS};
+    clause2.argList = {a3, a4};
+    query.addSuchThatClause(clause2);
+
+    auto qe = QueryEvaluator(testPKB);
+    list<string> result = qe.evaluate(&query);
+    list<string> expected = {"2,3,4"};
+    REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
+            == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+}
+*/

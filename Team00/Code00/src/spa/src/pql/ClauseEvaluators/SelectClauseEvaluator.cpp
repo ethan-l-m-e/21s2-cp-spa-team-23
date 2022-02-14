@@ -19,11 +19,13 @@ Result SelectClauseEvaluator::evaluateClause() {
         resultItemList = std::vector<ResultItem>(resultSet.begin(), resultSet.end());
     }
 
-    result = {
+     result = {
             .resultType = ResultType::STRING,
             .resultBoolean =resultItemList.empty(),
             .resultHeader = query->getSelectedSynonym(),
             .resultItemList = resultItemList
     };
+
+    return result;
 }
 
