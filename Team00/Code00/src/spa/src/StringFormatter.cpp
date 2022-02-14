@@ -23,10 +23,8 @@ vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
                 codeToRecurse = "";     //empty string for latter half
             else
                 codeToRecurse = sourceCode.substr(pos + 1,sourceCode.size()); // +1 to get rid of the \n space
-
             v.push_back(trimmedCode);
             v.push_back(codeToRecurse);
-            //finalStrings = Partition(trimmedCode,codeToRecurse);
             break;
         }
         case PROCEDURE: {
