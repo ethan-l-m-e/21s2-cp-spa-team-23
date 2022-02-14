@@ -65,10 +65,42 @@ int getStatementNumber() {
     return statementNumber;
 }
 
+bool isLeaf(const string& expression) {
+    if (expression.find('+') != string::npos
+        || expression.find('-') != string::npos
+        || expression.find('*') != string::npos
+        || expression.find('/') != string::npos
+        || expression.find('%') != string::npos) {
+        return false;
+    }
+    return true;
+}
+bool isNumber(string s) {
+    for(char const &c: s) {
+        if (isdigit(c) == 0) return false;
+    }
+    return true;
+}
+Expression parseExpression(string expression) {
+    if (isLeaf(expression)) {
+        if (isNumber(expression)) {
+            return new ConstValueNode(expression);
+        }
+        return Parser::parseVar(expression);
+    }
+    vector<string> tokens;
+    SourceTokenizer::extractExpression(expression, tokens);
+    Expression left = parseExpression(tokens[0]);
+    Expression right = parseExpression(tokens[1]);
+    return new BinaryOperatorNode(left, right, tokens[2]);
+}
+
 AssignNode* Parser::parseAssign(string assignLine) {
     vector<string> tokens;
     SourceTokenizer::extractAssign(assignLine, tokens);
-    return new AssignNode(getStatementNumber(), parseVar(tokens[0]), parseVar(tokens[1]));
+    VariableNode* newVarNode = parseVar(tokens[0]);
+    Expression newExpression = parseExpression(tokens[1]);
+    return new AssignNode(getStatementNumber(), newVarNode, newExpression);
 }
 
 // difficult to modify. edit at own risk

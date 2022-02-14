@@ -62,14 +62,7 @@ private:
 };
 
 
-class AssignNode: public StmtNode {
-    VariableNode *leftNode;
-    VariableNode *rightNode;
-public:
-    explicit AssignNode(int num, VariableNode *leftNode, VariableNode *rightNode);
-    VariableNode* getLeftNode() const;
-    VariableNode* getRightNode() const;
-};
+
 
 /*
 class ReadNode: public StmtNode {
@@ -98,6 +91,15 @@ using Term = Factor;
 using Expression = Term;
 // rel_factor: var_name | const_value | expr
 using RelFactor = Expression;
+
+class AssignNode: public StmtNode {
+    VariableNode *leftNode;
+    Expression rightNode;
+public:
+    explicit AssignNode(int num, VariableNode *leftNode, Expression rightNode);
+    VariableNode* getLeftNode() const;
+    Expression getRightNode() const;
+};
 
 class BinaryOperatorNode : public Node {
     Expression leftExpr;

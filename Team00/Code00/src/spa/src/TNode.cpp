@@ -23,18 +23,18 @@ ConstValueNode::ConstValueNode(const string num) { this -> constValue = num; }
 string ConstValueNode::getConstValue() {return this ->constValue; }
 
 
-AssignNode::AssignNode(int num, VariableNode *leftNode, VariableNode *rightNode) : StmtNode(num) {
+AssignNode::AssignNode(int num, VariableNode *leftNode, Expression rightNode) : StmtNode(num) {
     this ->leftNode = leftNode;
     this ->rightNode = rightNode;
     this ->leftNode ->setParentNode(this);
-    this ->rightNode ->setParentNode(this);
+    visit([this](auto& n){n->setParentNode(this);},this->rightNode);
 }
 
 VariableNode* AssignNode::getLeftNode() const {
     return this ->leftNode;
 }
 
-VariableNode* AssignNode::getRightNode() const {
+Expression AssignNode::getRightNode() const {
     return this ->rightNode;
 }
 
