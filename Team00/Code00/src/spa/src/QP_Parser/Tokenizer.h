@@ -13,12 +13,20 @@ namespace qp {
         DeclarationToken() : designEntity(""), synonyms(nullptr) {};
     };
 
+    class PatternToken {
+    public:
+        std::string synonym;
+        std::pair<std::string, std::string>* arguments;
+
+        PatternToken() : synonym(""), arguments(nullptr) {};
+    };
+
     class QueryToken {
     public:
         std::vector<DeclarationToken>* declarationTokens;
         std::string selectClauseToken;
         std::vector<std::string>* suchThatClauseToken;
-        std::string patternToken;
+        PatternToken* patternToken;
 
         QueryToken() : declarationTokens(nullptr), selectClauseToken(""), suchThatClauseToken(nullptr), patternToken(
                 "") {};

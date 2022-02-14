@@ -64,10 +64,13 @@ void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken
 }
 
 void Tokenizer::getPatternClause(std::string& pql, QueryToken& queryToken) {
-    // TODO: Modify to extract synonym from pattern
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
     vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)pattern[ ]*");
-    vector<string> pattternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|(,)");
-    cout << "LHS: " << pattternClause[1] << "\n";
-    cout << "RHS: " << pattternClause[2] << "\n";
+    vector<string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|(,)");
+
+    string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
+    PatternToken* patternToken = new PatternToken();
+    patternToken->synonym = synonym;
+    patternToken->arguments = new pair<string, string>(patternClause[1], patternClause[2]);
+    queryToken.patternToken = patternToken;
 }

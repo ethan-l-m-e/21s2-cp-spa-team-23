@@ -34,10 +34,11 @@ namespace qp {
         void getDeclarations(QueryToken&, Query&);
         void getSynonym(QueryToken&, Query&);
         void getSuchThatClauses(QueryToken&, Query&);
+        void getPattern(QueryToken&, Query&);
         Argument getArgument(std::string, std::string);
         ArgumentType getArgumentType(std::string, std::string);
         DesignEntity getDesignEntity(std::string);
-        vector<Argument> getArgumentList(vector<string>, string);
+        vector<Argument> getArgumentList(pair<string, string>, string);
         RelRef getRelRefFromString(string, Argument);
         string determineRelationshipBasedOnArg(Argument);
     };

@@ -41,6 +41,7 @@ public:
     void setDeclarations(unordered_map<string, DesignEntity>);
     void setSynonym(std::string);
     void setSuchThatClauses(vector<SuchThatClause>);
+    void setPatternClauses(vector<PatternClause>);
 };
 
 #endif //SPA_QUERY_H
