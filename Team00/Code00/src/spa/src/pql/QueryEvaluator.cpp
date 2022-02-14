@@ -35,6 +35,8 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     if (synonymRelations->isEmpty()) {
         auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
         Result selectResult = selectClauseEvaluator->evaluateClause();
+        //string test = std::get<std::string>(selectResult.resultItemList[0]);
+        //cout << test;
         mergeResultToSynonymsRelations(synonymRelations, selectResult);
     }
 
@@ -76,17 +78,59 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
 
 void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations* sr, Result result) {
     //TODO: method for merging two results
+    std::vector<std::string>* header  = sr->getHeader();
+    std::vector<std::vector<std::string>>* values = sr->getList();
+    auto headerType = result.resultHeader.index();
+    if (headerType == 0) {
+        auto it = std::find(header->begin(), header->end(), std::get<string>(result.resultHeader));
+        if(it != header->end()) {
+            long index = std::distance( header->begin(), it );
+            for (auto value = values->begin(); value != values->end(); ++value)
+            {
+                if (!std::count(result.resultItemList.begin(), result.resultItemList.end(), (ResultItem)(*value)[index])) {
+                    values->erase(value);
+                }
+            }
+        } else {
+            //append new synonym to header
+
+            header->emplace_back(std::get<string>(result.resultHeader));
+
+            //assign new list
+            auto* updatedValues = new std::vector<std::vector<std::string>>{};
+            if(values->empty()){
+                for(auto resultItem : result.resultItemList) {
+                    std::string curr = std::get<string>(resultItem);
+                    updatedValues->emplace_back(std::vector<std::string>{curr});
+                }
+            } else {
+                for (auto resultItem: result.resultItemList) {
+                    std::string curr = std::get<string>(resultItem);
+                    //append to existing values
+                    for (const auto &value: *values) {
+                        //deep copy values
+                        std::vector<std::string> currentValues = value;
+                        currentValues.emplace_back(curr);
+                        updatedValues->emplace_back(currentValues);
+                    }
+                }
+            }
+            sr->assignList(updatedValues);
+        }
+    } else {
+        // more logic
+    }
+
 }
 
 std::list<std::string> QueryEvaluator::generateResultString(SynonymRelations* sr, string selectedSynonym) {
 
-    /*
     std::list<std::string> stringList;
-    std::vector<std::string>* header  = sr.getHeader();
+    std::vector<std::string>* header  = sr->getHeader();
     for(size_t j = 0; j < header->size(); ++j) {
         std::string str = (*header)[j];
         if (str == selectedSynonym) {
-            std::vector<std::vector<std::string>>* vec = sr.getList();
+            std::vector<std::vector<std::string>>* vec = sr->getList();
             std::string s;
             for(auto & i : *vec)
             {
@@ -96,10 +140,5 @@ std::list<std::string> QueryEvaluator::generateResultString(SynonymRelations* sr
             return stringList;
         }
     }
-     */
-
-    std::list<std::string> stringList;
-    stringList.emplace_back("1");
     return stringList;
 }
-

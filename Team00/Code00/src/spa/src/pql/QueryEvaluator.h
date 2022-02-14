@@ -27,7 +27,7 @@ public:
 
     ClauseEvaluator* generateEvaluator(SuchThatClause clause, Query* query);
 
-    void mergeResultToSynonymsRelations(SynonymRelations* sr, Result result);
+    static void mergeResultToSynonymsRelations(SynonymRelations* sr, Result result);
 
     static std::list<std::string> generateResultString(SynonymRelations* sr, string selectedSynonym);
 };
