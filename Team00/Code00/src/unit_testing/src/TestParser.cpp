@@ -60,3 +60,8 @@ TEST_CASE("Assign parsing") {
     CHECK(right == get<VariableNode*>(testNode ->getRightNode())->getVariableName());
 }
 
+TEST_CASE("Program parsing") {
+    string code = "program { X = a }";
+    Program program = Parser::parseProgram(code);
+    CHECK(program[0]->getProcName() == "program");
+}
