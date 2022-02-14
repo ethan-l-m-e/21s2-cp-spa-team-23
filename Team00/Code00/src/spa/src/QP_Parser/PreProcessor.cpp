@@ -5,9 +5,6 @@
 #include <utility>
 #include <regex>
 #include "Tokenizer.h"
-#include <iostream>
-#include "./pql/query_obj/Query.h"
-#include "./pql/query_obj/Clause.h"
 
 using namespace qp;
 
@@ -39,7 +36,7 @@ void PreProcessor::getDeclarations(QueryToken& queryToken, Query& query) {
 
 DesignEntity PreProcessor::getDesignEntity(string designEntityString) {
     DesignEntity designEntity = stringToDesignEntityMap.at(designEntityString);
-    // TODO: throw exception if DesignEntity cannot be found
+    // TODO: catch exception if DesignEntity cannot be found
     return designEntity;
 }
 
@@ -47,35 +44,66 @@ void PreProcessor::getSynonym(QueryToken& queryToken, Query& query) {
     query.setSynonym(queryToken.selectClauseToken);
 }
 
-void PreProcessor::getRelationship(QueryToken& queryToken, Query& query) {
-    std::vector<std::string> suchThatClausesString = *(queryToken.suchThatClauseToken);
-    std::string relationship = suchThatClausesString[0];
-    std::string firstArgumentString = suchThatClausesString[1];
-    std::string secondArgumentString = suchThatClausesString[2];
-    SuchThatClause suchThatClause = SuchThatClause();
-    if (relationship == "Follows") {
-        suchThatClause.relRef = RelRef::FOLLOWS;
-    } else if (relationship == "Follows*") {
-        suchThatClause.relRef = RelRef::FOLLOWS_T;
-    } else if (relationship == "Parent") {
-        suchThatClause.relRef = RelRef::PARENT;
-    } else if (relationship == "Parent*") {
-        suchThatClause.relRef = RelRef::PARENT_T;
-    }
+void PreProcessor::getSuchThatClauses(QueryToken& queryToken, Query& query) {
+    vector<string> suchThatClausesString = *(queryToken.suchThatClauseToken);
+    string relationship = suchThatClausesString[0];
+    string synonym = queryToken.selectClauseToken;
 
-    Argument firstArgument = getArgument(firstArgumentString, queryToken.selectClauseToken);
-    Argument secondArgument = getArgument(secondArgumentString, queryToken.selectClauseToken);
-    std::vector<Argument> argList = std::vector<Argument>();
-    argList.push_back(firstArgument);
-    argList.push_back(secondArgument);
+    vector<SuchThatClause> suchThatClauses = vector<SuchThatClause>();
+    vector<Argument> argList = getArgumentList(suchThatClausesString, synonym);
+    RelRef relRef = getRelRefFromString(relationship, argList[0]);
+
+    SuchThatClause suchThatClause = SuchThatClause();
+
     suchThatClause.argList = argList;
-    std::vector<SuchThatClause> suchThatClauses = std::vector<SuchThatClause>();
+    suchThatClause.relRef = relRef;
     suchThatClauses.push_back(suchThatClause);
     query.setSuchThatClauses(suchThatClauses);
 }
 
-Argument PreProcessor::getArgument(std::string argumentString, std::string synonym) {
+RelRef PreProcessor::getRelRefFromString(string relationship, Argument firstArgument) {
+    string additionalString = determineRelationshipBasedOnArg(firstArgument);
+    relationship += additionalString;
+    RelRef relRef = stringToRelRefMap.at(relationship);
+    // TODO: Handle any exception thrown
+    return relRef;
+}
+
+string PreProcessor::determineRelationshipBasedOnArg(Argument firstArgument) {
+    if (firstArgument.argumentType == ArgumentType::STMT_NO) {
+        return "_S";
+    } else if (firstArgument.argumentType == ArgumentType::IDENT) {
+        return "_P";
+    }
+    return "";
+};
+
+vector<Argument> PreProcessor::getArgumentList(vector<string> clauseToken, string synonym) {
+    // Get Argument Strings from clauseToken
+    string firstArgumentString = clauseToken[1];
+    string secondArgumentString = clauseToken[2];
+
+    // Convert strings to arguments
+    Argument firstArgument = getArgument(firstArgumentString, synonym);
+    Argument secondArgument = getArgument(secondArgumentString, synonym);
+
+    // Create Argument List
+    vector<Argument> argList = vector<Argument>();
+    argList.push_back(firstArgument);
+    argList.push_back(secondArgument);
+    return argList;
+}
+
+Argument PreProcessor::getArgument(string argumentString, string synonym) {
     Argument argument = Argument();
+    ArgumentType argumentType = getArgumentType(argumentString, synonym);
+    argument.argumentType = argumentType;
+    argument.argumentValue = argumentString;
+    return argument;
+}
+
+ArgumentType PreProcessor::getArgumentType(string argumentString, string synonym) {
+    // TODO: transfer regex to constants file
     ArgumentType argumentType;
     std::regex stmtNo("[0-9]+");
     std::regex ident("([a-z]|[A-Z])+([a-z]|[A-Z]|[0-9])*");
@@ -88,7 +116,7 @@ Argument PreProcessor::getArgument(std::string argumentString, std::string synon
     } else if (std::regex_match(argumentString.c_str(), ident)) {
         argumentType = ArgumentType::IDENT;
     } else {
-        // Throw Exception
+        // TODO: Throw Exception
     }
-
+    return argumentType;
 }

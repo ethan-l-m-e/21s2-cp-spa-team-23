@@ -17,7 +17,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
     if (query.length() == 0) {
         return queryToken;
     }
-
+    // TODO: transfer regex to constants file
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
     getSuchThatClauseTokens(query, queryToken);

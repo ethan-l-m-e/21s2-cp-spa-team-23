@@ -4,7 +4,7 @@
 #include "pql/query_obj/Query.h"
 
 namespace qp {
-    std::map<std::string, DesignEntity> stringToDesignEntityMap({
+    const std::map<std::string, DesignEntity> stringToDesignEntityMap({
                                                                         {"stmt", DesignEntity::STMT},
                                                                         {"read", DesignEntity::READ},
                                                                         {"print", DesignEntity::PRINT},
@@ -16,14 +16,30 @@ namespace qp {
                                                                         {"constant", DesignEntity::CONSTANT},
                                                                         {"procedure", DesignEntity::PROCEDURE},
                                                         });
+
+    const std::map<std::string, RelRef> stringToRelRefMap({
+                                                                        {"Follows", RelRef::FOLLOWS},
+                                                                        {"Follows*", RelRef::FOLLOWS_T},
+                                                                        {"Parent", RelRef::PARENT},
+                                                                        {"Parent*", RelRef::PARENT_T},
+                                                                        {"Uses_S", RelRef::USES_S},
+                                                                        {"Uses_P", RelRef::USES_P},
+                                                                        {"Modifies_S", RelRef::MODIFIES_S},
+                                                                        {"Modifies_P", RelRef::MODIFIES_P},
+                                                                });
+
     class PreProcessor {
     public:
         Query getQuery(std::string);
         void getDeclarations(QueryToken&, Query&);
         void getSynonym(QueryToken&, Query&);
-        void getRelationship(QueryToken&, Query&);
+        void getSuchThatClauses(QueryToken&, Query&);
         Argument getArgument(std::string, std::string);
+        ArgumentType getArgumentType(std::string, std::string);
         DesignEntity getDesignEntity(std::string);
+        vector<Argument> getArgumentList(vector<string>, string);
+        RelRef getRelRefFromString(string, Argument);
+        string determineRelationshipBasedOnArg(Argument);
     };
 }
 
