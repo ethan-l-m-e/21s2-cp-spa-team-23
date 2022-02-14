@@ -45,8 +45,9 @@ TEST_CASE("Assign node test") {
 
     AssignNode * testNode = new AssignNode(4, varLeftNode, varRightNode);
     CHECK(left == testNode -> getLeftNode() ->getVariableName());
-    CHECK(right == testNode ->getRightNode() ->getVariableName());
+    CHECK(right == get<VariableNode*>(testNode ->getRightNode())->getVariableName());
     CHECK(stmtNo == testNode ->getStmtNumber());
+    CHECK(testNode == get<VariableNode*>(testNode ->getRightNode())->getParentNode());
 }
 
 TEST_CASE("Binary operator node test") {

@@ -65,10 +65,42 @@ int getStatementNumber() {
     return statementNumber;
 }
 
+bool isLeaf(const string& expression) {
+    if (expression.find('+') != string::npos
+        || expression.find('-') != string::npos
+        || expression.find('*') != string::npos
+        || expression.find('/') != string::npos
+        || expression.find('%') != string::npos) {
+        return false;
+    }
+    return true;
+}
+bool isNumber(string s) {
+    for(char const &c: s) {
+        if (isdigit(c) == 0) return false;
+    }
+    return true;
+}
+Expression parseExpression(string expression) {
+    if (isLeaf(expression)) {
+        if (isNumber(expression)) {
+            return new ConstValueNode(expression);
+        }
+        return Parser::parseVar(expression);
+    }
+    vector<string> tokens;
+    SourceTokenizer::extractExpression(expression, tokens);
+    Expression left = parseExpression(tokens[0]);
+    Expression right = parseExpression(tokens[1]);
+    return new BinaryOperatorNode(left, right, tokens[2]);
+}
+
 AssignNode* Parser::parseAssign(string assignLine) {
     vector<string> tokens;
     SourceTokenizer::extractAssign(assignLine, tokens);
-    return new AssignNode(getStatementNumber(), parseVar(tokens[0]), parseVar(tokens[1]));
+    VariableNode* newVarNode = parseVar(tokens[0]);
+    Expression newExpression = parseExpression(tokens[1]);
+    return new AssignNode(getStatementNumber(), newVarNode, newExpression);
 }
 
 // difficult to modify. edit at own risk
@@ -99,4 +131,43 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
         }
     }
     return newNode;
+}
+
+ProcNameNode *Parser::parseProcName(string procedureName) {
+    //int check = Identifier::identifyFirstObject(procedureName);
+    //if(check == PROCEDURE_NAME) {
+        cout << "sending " << procedureName << " to PKB\n";
+        PKB::getInstance() ->addProcedures(procedureName);
+        return new ProcNameNode(procedureName);
+    //} else {
+        throw "Invalid varname format: '" + procedureName + "'\n";
+    //}
+}
+
+ProcedureNode *Parser::parseProcedure(string * procedure) {
+    //vector<string> v = StringFormatter::Trim(*procedure, PROCEDURE);
+    // REPLACE WITH ABOVE ONCE IMPLEMENTED
+    vector<string> v;
+    v.push_back(*procedure);
+    v.push_back("");
+    // ---------------------------------- //
+
+    vector<string> tokens;
+    SourceTokenizer::extractProcedure(v[0], tokens);
+    *procedure = v[1];
+    ProcNameNode* newProcNameNode = Parser::parseProcName(tokens[0]);
+    StatementList stmtLst = parseStatementList(tokens[1]);
+    return new ProcedureNode(newProcNameNode, stmtLst);
+}
+
+Program Parser::parseProgram(string sourceCode) {
+    vector<string> tokens;
+    Program program;
+    string * procedurePtr;
+    procedurePtr = &sourceCode;
+    //while(procedurePtr -> length() > 0) {
+        ProcedureNode *newProcedureNode = Parser::parseProcedure(&sourceCode);
+        program.push_back(newProcedureNode);
+    //}
+    return program;
 }
