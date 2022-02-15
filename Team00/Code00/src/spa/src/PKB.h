@@ -24,8 +24,11 @@ private:
     unordered_set<string> proceduresSet;
     unordered_set<string> constantsSet;
 
+    unordered_set<int> assignStatementsSet;
     unordered_set<int> readStatementsSet;
     unordered_set<int> printStatementsSet;
+    unordered_set<int> ifStatementsSet;
+    unordered_set<int> whileStatementsSet;
 
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
@@ -46,18 +49,42 @@ public:
 
     // Setter Functions (Variables, Procedures etc.)
     void addVariable(string variable);
-    void addProcedures(string procedure);
+    void addProcedure(string procedure);
     void addConstant(string constant);
 
-    void addReadStatement(int statement);
-    void addPrintStatement(int statement);
-
-
     // Getter Functions (Variables, Procedures etc.)
+
+    bool isVariable(string variable);
+    bool isProcedure(string procedure);
+    bool isConstant(string constant);
 
     unordered_set<string> getAllVariables();
     unordered_set<string> getAllProcedures();
     unordered_set<string> getAllConstants();
+
+    // Setter Functions (Statement Types)
+
+    void addAssignStatement(int statement);
+
+    void addReadStatement(int statement);
+    void addPrintStatement(int statement);
+
+    void addIfStatement(int statement);
+    void addWhileStatement(int statement);
+
+    // Getter Functions (Statement Types)
+
+    bool isAssignStatement(int statement);
+    bool isReadStatement(int statement);
+    bool isPrintStatement(int statement);
+    bool isIfStatement(int statement);
+    bool isWhileStatement(int statement);
+
+    unordered_set<int> getAllAssignStatements();
+    unordered_set<int> getAllReadStatements();
+    unordered_set<int> getAllPrintStatements();
+    unordered_set<int> getAllIfStatements();
+    unordered_set<int> getAllWhileStatements();
 
     // Setter Functions (Follows Relationship)
 
