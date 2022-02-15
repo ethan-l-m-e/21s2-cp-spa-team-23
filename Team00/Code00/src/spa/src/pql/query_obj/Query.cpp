@@ -51,6 +51,14 @@ void Query::setSynonym(std::string synonym) {
     selectedSynonym = synonym;
 }
 
+void Query::setSuchThatClauses(vector<SuchThatClause> suchThatClauses) {
+    suchThatClauses = suchThatClauses;
+}
+
+void Query::setPatternClauses(vector<PatternClause> patternClauses) {
+    patternClauses = patternClauses;
+}
+
 
 /*
 optional<DesignEntity> findEntityType(std::string synonym) {
