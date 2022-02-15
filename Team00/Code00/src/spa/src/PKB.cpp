@@ -48,7 +48,15 @@ void PKB::addConstant(string constant) {
 
 // Getter Functions (Variables, Procedures etc.)
 
-
+bool PKB::isVariable(string variable) {
+    return variablesSet.find(variable) != variablesSet.end();
+}
+bool PKB::isProcedure(string procedure) {
+    return proceduresSet.find(procedure) != proceduresSet.end();
+}
+bool PKB::isConstant(string constant) {
+    return proceduresSet.find(constant) != proceduresSet.end();
+}
 
 unordered_set <string> PKB::getAllVariables() {
     return variablesSet;
@@ -63,6 +71,10 @@ unordered_set<string> PKB::getAllConstants() {
 
 
 // Setter Functions (Statement Types)
+
+void PKB::addAssignStatement(int statement) {
+    assignStatementsSet.insert(statement);
+}
 
 void PKB::addReadStatement(int statement) {
     readStatementsSet.insert(statement);
@@ -80,9 +92,14 @@ void PKB::addWhileStatement(int statement) {
 
 // Getter Functions (Statement Types)
 
+bool PKB::isAssignStatement(int statement) {
+    return assignStatementsSet.find(statement) != readStatementsSet.end();
+}
+
 bool PKB::isReadStatement(int statement) {
     return readStatementsSet.find(statement) != readStatementsSet.end();
 }
+
 bool PKB::isPrintStatement(int statement) {
     return printStatementsSet.find(statement) != printStatementsSet.end();
 }
@@ -92,6 +109,23 @@ bool PKB::isIfStatement(int statement) {
 bool PKB::isWhileStatement(int statement) {
     return whileStatementsSet.find(statement) != whileStatementsSet.end();
 }
+
+unordered_set<int> PKB::getAllAssignStatements() {
+    return assignStatementsSet;
+}
+unordered_set<int> PKB::getAllReadStatements() {
+    return readStatementsSet;
+}
+unordered_set<int> PKB::getAllPrintStatements() {
+    return printStatementsSet;
+}
+unordered_set<int> PKB::getAllIfStatements() {
+    return ifStatementsSet;
+}
+unordered_set<int> PKB::getAllWhileStatements() {
+    return whileStatementsSet;
+}
+
 
 // Setter Functions (Follows Relationship)
 
