@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -109,7 +110,7 @@ Expression parseExpression(string expression) {
 
 AssignNode* Parser::parseAssign(string assignLine) {
     vector<string> tokens;
-    SourceTokenizer::extractAssign(assignLine, tokens);
+    SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
     int stmtNo = getStatementNumber();
