@@ -8,7 +8,7 @@
 
 using namespace qp;
 
-Query PreProcessor::getQuery(std::string pql) {
+Query PreProcessor::getQuery(string pql) {
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(pql);
     Query query = Query();
@@ -28,7 +28,7 @@ void PreProcessor::getDeclarations(QueryToken& queryToken, Query& query) {
         DesignEntity designEntity = getDesignEntity(designEntityString);
 
         for (string synonym : synonyms) {
-            declarationsMap.insert(std::make_pair(synonym, designEntity));
+            declarationsMap.insert(make_pair(synonym, designEntity));
         }
     }
     query.setDeclarations(declarationsMap);
@@ -106,15 +106,15 @@ Argument PreProcessor::getArgument(string argumentString, string synonym) {
 ArgumentType PreProcessor::getArgumentType(string argumentString, string synonym) {
     // TODO: transfer regex to constants file
     ArgumentType argumentType;
-    std::regex stmtNo("[0-9]+");
-    std::regex ident("([a-z]|[A-Z])+([a-z]|[A-Z]|[0-9])*");
+    regex stmtNo("[0-9]+");
+    regex ident("([a-z]|[A-Z])+([a-z]|[A-Z]|[0-9])*");
     if (argumentString == synonym) {
         argumentType = ArgumentType::SYNONYM;
-    } else if (std::regex_match(argumentString.c_str(), stmtNo)) {
+    } else if (regex_match(argumentString.c_str(), stmtNo)) {
         argumentType = ArgumentType::STMT_NO;
     } else if (argumentString == "_") {
         argumentType = ArgumentType::UNDERSCORE;
-    } else if (std::regex_match(argumentString.c_str(), ident)) {
+    } else if (regex_match(argumentString.c_str(), ident)) {
         argumentType = ArgumentType::IDENT;
     } else {
         // TODO: Throw Exception
