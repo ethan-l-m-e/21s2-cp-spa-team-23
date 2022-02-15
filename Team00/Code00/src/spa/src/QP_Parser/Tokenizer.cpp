@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-
+#include <iostream>
 using namespace qp;
 // TODO: transfer regex to constants file
 QueryToken Tokenizer::getQueryToken(string query) {
@@ -58,16 +58,18 @@ void Tokenizer::getSelectClauseTokens(string& pql, QueryToken& queryToken) {
 
 void Tokenizer::getSuchThatClauseTokens(string& pql, QueryToken& queryToken) {
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
-    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such that ");
-    vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|([ ]*,[ ]*)");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such [ ]*that[ ]+");
+    vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
+
     auto suchThatClausesPtr = new vector<string>(suchThatClauses);
     queryToken.suchThatClauseToken = suchThatClausesPtr;
 }
 
 void Tokenizer::getPatternClause(string& pql, QueryToken& queryToken) {
     string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
-    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)pattern[ ]*");
-    vector<string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "(\\()|(\\))|(,)");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)[ ]+pattern[ ]+");
+    vector<string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
+
     string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
     PatternToken* patternToken = new PatternToken();
     patternToken->synonym = synonym;
