@@ -5,15 +5,31 @@
 #define SPA_TOKENIZER_H
 
 namespace qp {
+    class DeclarationToken {
+    public:
+        std::string designEntity;
+        std::vector<std::string>* synonyms;
+
+        DeclarationToken() : designEntity(""), synonyms(nullptr) {};
+    };
+
+    class PatternToken {
+    public:
+        std::string synonym;
+        std::pair<std::string, std::string>* arguments;
+
+        PatternToken() : synonym(""), arguments(nullptr) {};
+    };
+
     class QueryToken {
     public:
-        std::vector<std::string>* declarationTokens;
+        std::vector<DeclarationToken>* declarationTokens;
         std::string selectClauseToken;
-        std::string* relationshipToken;
-        std::string* patternToken;
+        std::vector<std::string>* suchThatClauseToken;
+        PatternToken* patternToken;
 
-        QueryToken() : declarationTokens(nullptr), selectClauseToken(""), relationshipToken(nullptr), patternToken(
-                nullptr) {};
+        QueryToken() : declarationTokens(nullptr), selectClauseToken(""), suchThatClauseToken(nullptr), patternToken(
+                "") {};
 
     };
 
@@ -22,9 +38,9 @@ namespace qp {
         QueryToken getQueryToken(std::string);
         void getDeclarationTokens(std::string, QueryToken&);
         void getSelectClauseTokens(std::string&, QueryToken&);
-        void getSuchThatClause(std::string&, QueryToken&);
+        void getSuchThatClauseTokens(std::string&, QueryToken&);
         void getPatternClause(std::string&, QueryToken&);
-
+        std::vector<DeclarationToken>* splitDeclarations(std::vector<std::string>&);
 
     };
 }

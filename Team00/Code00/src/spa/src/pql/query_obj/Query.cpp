@@ -51,8 +51,12 @@ void Query::setSynonym(std::string synonym) {
     selectedSynonym = synonym;
 }
 
-void Query::addSuchThatClause(SuchThatClause suchThatClause) {
-    suchThatClauses.emplace_back(suchThatClause);
+void Query::setSuchThatClauses(vector<SuchThatClause> suchThatClauses) {
+    suchThatClauses = suchThatClauses;
+}
+
+void Query::setPatternClauses(vector<PatternClause> patternClauses) {
+    patternClauses = patternClauses;
 }
 
 
