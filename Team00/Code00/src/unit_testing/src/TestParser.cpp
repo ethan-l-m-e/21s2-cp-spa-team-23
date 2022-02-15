@@ -61,6 +61,24 @@ TEST_CASE("Assign parsing") {
     CHECK(testNode->getStmtNumber() == 1);
 }
 
+TEST_CASE("Assign parsing with expression") {
+    string left = "x";
+    string var1 = "y";
+    string constant = "2";
+    string var2 = "randomVariable";
+    string right = var1 + " + " + constant + " * " + var2;
+    string input = left + " = " + right + ";";
+    AssignNode * testNode = Parser::parseAssign(input);
+    CHECK(left ==  testNode ->getLeftNode() ->getVariableName());
+    auto expr = get<BinaryOperatorNode*>(testNode->getRightNode());
+    CHECK(expr->getBinaryOperator() == "+");
+    CHECK(get<VariableNode*>(expr->getLeftExpr())->getVariableName() == var1);
+    CHECK(get<BinaryOperatorNode*>(expr->getRightExpr())->getBinaryOperator() == "*");
+    CHECK(get<ConstValueNode*>(get<BinaryOperatorNode*>(expr->getRightExpr())->getLeftExpr())->getConstValue() == constant);
+    CHECK(get<VariableNode*>(get<BinaryOperatorNode*>(expr->getRightExpr())->getRightExpr())->getVariableName() == var2);
+    CHECK(testNode->getStmtNumber() == 1);
+}
+
 TEST_CASE("Program parsing") {
     string code = "procedure name { X = a; }";
     Program program = Parser::parseProgram(code);
