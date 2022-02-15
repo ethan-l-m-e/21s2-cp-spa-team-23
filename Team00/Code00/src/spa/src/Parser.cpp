@@ -52,11 +52,23 @@ VariableNode* Parser::parseVar(string variable) {
     // convert into a variable node
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
-        cout << "sending " << variable << " to PKB\n";
+        cout << "sending var " << variable << " to PKB\n";
         PKB::getInstance() ->addVariable(variable);
         return new VariableNode(variable);
     } else {
         throw "Invalid varname format: '" + variable + "'\n";
+    }
+}
+
+ConstValueNode *Parser::parseConst(string constValue) {
+    // convert into a const node
+    int check = Identifier::identifyFirstObject(constValue);
+    if(check == CONSTANT_VALUE) {
+        cout << "sending const " << constValue << " to PKB\n";
+        PKB::getInstance() ->addConstant(constValue);
+        return new ConstValueNode(constValue);
+    } else {
+        throw "Invalid const format: '" + constValue + "'\n";
     }
 }
 
@@ -100,7 +112,10 @@ AssignNode* Parser::parseAssign(string assignLine) {
     SourceTokenizer::extractAssign(assignLine, tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
-    return new AssignNode(getStatementNumber(), newVarNode, newExpression);
+    int stmtNo = getStatementNumber();
+    cout << "sending assign " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addAssignStatement(stmtNo);
+    return new AssignNode(stmtNo, newVarNode, newExpression);
 }
 
 // difficult to modify. edit at own risk
@@ -125,6 +140,32 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             break;
         }
             // ADD MORE CASES FOR STATEMENT
+            /*
+        case(WHILE): {
+            vector<string> v = StringFormatter::Trim(*stmt, WHILE);
+            newNode = Parser::parseWhile(v[0]);
+            *stmt = v[1];
+            break;
+        }
+        case(IF_ELSE): {
+            vector<string> v = StringFormatter::Trim(*stmt, IF_ELSE);
+            newNode = Parser::parseIf(v[0]);
+            *stmt = v[1];
+            break;
+        }
+        case(READ): {
+            vector<string> v = StringFormatter::Trim(*stmt, READ);
+            newNode = Parser::parseRead(v[0]);
+            *stmt = v[1];
+            break;
+        }
+        case(PRINT): {
+            vector<string> v = StringFormatter::Trim(*stmt, PRINT);
+            newNode = Parser::parsePrint(v[0]);
+            *stmt = v[1];
+            break;
+        }
+             */
         default:{
             throw "cannot recognise '" + *stmt + "' as a statement";
             break;
@@ -136,8 +177,8 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
 ProcNameNode *Parser::parseProcName(string procedureName) {
     //int check = Identifier::identifyFirstObject(procedureName);
     //if(check == PROCEDURE_NAME) {
-        cout << "sending " << procedureName << " to PKB\n";
-        PKB::getInstance() ->addProcedures(procedureName);
+        cout << "sending proc " << procedureName << " to PKB\n";
+        PKB::getInstance() ->addProcedure(procedureName);
         return new ProcNameNode(procedureName);
     //} else {
         throw "Invalid varname format: '" + procedureName + "'\n";

@@ -58,10 +58,11 @@ TEST_CASE("Assign parsing") {
     AssignNode * testNode = Parser::parseAssign(input);
     CHECK(left ==  testNode ->getLeftNode() ->getVariableName());
     CHECK(right == get<VariableNode*>(testNode ->getRightNode())->getVariableName());
+    CHECK(testNode->getStmtNumber() == 1);
 }
 
 TEST_CASE("Program parsing") {
-    string code = "program { X = a }";
+    string code = "procedure name { X = a; }";
     Program program = Parser::parseProgram(code);
-    CHECK(program[0]->getProcName() == "program");
+    CHECK(program[0]->getProcName() == "name");
 }
