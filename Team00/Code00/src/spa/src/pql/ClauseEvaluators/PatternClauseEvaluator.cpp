@@ -65,7 +65,7 @@ Result PatternClauseEvaluator::evaluateClause() {
         result.resultItemList = assignVarPairList;
     } else {
         // configure resultType to have only a list of assign
-        result.resultType = ResultType::LIST;
+        result.resultType = ResultType::STRING;
         result.resultBoolean = !result.resultItemList.empty();
         result.resultHeader = assignSynonym.argumentValue;
         result.resultItemList = stmtNumberList;

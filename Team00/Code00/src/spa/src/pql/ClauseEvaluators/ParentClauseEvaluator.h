@@ -18,6 +18,7 @@ protected:
     bool isRelation(string left, string right) override;
     unordered_set<std::string> getLeftSynonymValue(std::string right) override;
     unordered_set<std::string> getRightSynonymValue(std::string left) override;
+    pair<DesignEntity, DesignEntity> getWildcardType() override;
 };
 
 

@@ -29,19 +29,19 @@ namespace qp {
         PatternToken* patternToken;
 
         QueryToken() : declarationTokens(nullptr), selectClauseToken(""), suchThatClauseToken(nullptr), patternToken(
-                "") {};
+                nullptr) {};
 
     };
 
     class Tokenizer {
     public:
         QueryToken getQueryToken(std::string);
+    private:
         void getDeclarationTokens(std::string, QueryToken&);
         void getSelectClauseTokens(std::string&, QueryToken&);
         void getSuchThatClauseTokens(std::string&, QueryToken&);
         void getPatternClause(std::string&, QueryToken&);
         std::vector<DeclarationToken>* splitDeclarations(std::vector<std::string>&);
-
     };
 }
 
