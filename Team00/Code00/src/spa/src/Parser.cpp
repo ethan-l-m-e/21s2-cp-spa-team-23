@@ -137,7 +137,7 @@ ProcNameNode *Parser::parseProcName(string procedureName) {
     //int check = Identifier::identifyFirstObject(procedureName);
     //if(check == PROCEDURE_NAME) {
         cout << "sending " << procedureName << " to PKB\n";
-        PKB::getInstance() ->addProcedures(procedureName);
+        PKB::getInstance() ->addProcedure(procedureName);
         return new ProcNameNode(procedureName);
     //} else {
         throw "Invalid varname format: '" + procedureName + "'\n";
