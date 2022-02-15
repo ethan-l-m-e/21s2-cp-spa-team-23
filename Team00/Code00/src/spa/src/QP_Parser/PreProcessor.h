@@ -31,6 +31,7 @@ namespace qp {
     class PreProcessor {
     public:
         Query getQuery(std::string);
+    private:
         void getDeclarations(QueryToken&, Query&);
         void getSynonym(QueryToken&, Query&);
         void getSuchThatClauses(QueryToken&, Query&);
