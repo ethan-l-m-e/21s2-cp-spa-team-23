@@ -36,10 +36,10 @@ int Identifier::identifyFirstObject(string sourceCode) {
     } else if (regex_match(firstLine, std::regex(EXPR_TERM_IDENTIFIER))) {
         bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "()");
         return switchCaseOrError(EXPR_TERM, isCorrect); //ignores stmtLst
-    } else if (regex_match(firstLine, std::regex(COND_EXPR_IDENTIFIER))) {
+    } /*else if (regex_match(firstLine, std::regex(COND_EXPR_IDENTIFIER))) {
         bool isCorrect = Validator::checkParenthesesClosure(sourceCode, "()");
         return switchCaseOrError(COND_EXPR, isCorrect);
-    } else if (regex_match(firstLine, std::regex(VAR_NAME))) {
+    }*/ else if (regex_match(firstLine, std::regex(VAR_NAME))) {
         return VARIABLE_NAME; // same as proc name
     }  else if (regex_match(firstLine, std::regex(CONST_VALUE))) {
         return CONSTANT_VALUE;
