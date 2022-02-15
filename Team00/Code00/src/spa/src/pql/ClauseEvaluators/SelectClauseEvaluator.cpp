@@ -16,10 +16,16 @@ Result SelectClauseEvaluator::evaluateClause() {
     } else {
         DesignEntity entityType = query->getSelectedSynonymType();
         unordered_set<std::string> resultSet = getAllType(entityType);
-        //unordered_set<std::string> dummySet {"1","2","3"};
         resultItemList = std::vector<ResultItem>(resultSet.begin(), resultSet.end());
     }
 
-    return {ResultType::LIST, resultItemList.empty(), query->getSelectedSynonym(), resultItemList};
+     result = {
+            .resultType = ResultType::STRING,
+            .resultBoolean =resultItemList.empty(),
+            .resultHeader = query->getSelectedSynonym(),
+            .resultItemList = resultItemList
+    };
+
+    return result;
 }
 

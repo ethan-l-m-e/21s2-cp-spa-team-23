@@ -5,8 +5,8 @@
 #include "SynonymRelations.h"
 
 SynonymRelations::SynonymRelations(){
-    nTupleHeader = std::vector<std::string>();
-    nTupleList = std::vector<std::vector<std::string>>();
+    nTupleHeader = std::vector<std::string>{};
+    nTupleList = std::vector<std::vector<std::string>>{};
 }
 
 bool SynonymRelations::isEmpty(){
@@ -19,4 +19,8 @@ std::vector<std::string>* SynonymRelations::getHeader() {
 
 std::vector<std::vector<std::string>>* SynonymRelations::getList() {
     return &nTupleList;
+}
+
+void SynonymRelations::assignList(std::vector<std::vector<std::string>>* newList) {
+    nTupleList = *newList;
 }
