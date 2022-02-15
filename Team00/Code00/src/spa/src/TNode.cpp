@@ -12,7 +12,6 @@ Node::Node() { this->parent = nullptr; }
 void Node::setParentNode(Node *parent) {this -> parent = parent;}
 Node *Node::getParentNode() const {return this -> parent;}
 
-
 StmtNode::StmtNode(int num) { this ->statementNumber = num;}
 int StmtNode::getStmtNumber() const { return this ->statementNumber; }
 
@@ -22,6 +21,23 @@ VarName &VariableNode::getVariableName(){ return this ->varName; }
 ConstValueNode::ConstValueNode(const string num) { this -> constValue = num; }
 string ConstValueNode::getConstValue() {return this ->constValue; }
 
+ReadNode::ReadNode(int num, VariableNode *varNode): StmtNode(num) {
+    this->varNode = varNode;
+    this->varNode->setParentNode(this);
+}
+
+VarName ReadNode::getVarName() const {
+    return this->varNode->getVariableName();
+}
+
+PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
+    this->varNode = varNode;
+    this->varNode->setParentNode(this);
+}
+
+VarName PrintNode::getVarName() const {
+    return this->varNode->getVariableName();
+}
 
 AssignNode::AssignNode(int num, VariableNode *leftNode, Expression rightNode) : StmtNode(num) {
     this ->leftNode = leftNode;
@@ -40,7 +56,9 @@ Expression AssignNode::getRightNode() const {
 
 BinaryOperatorNode::BinaryOperatorNode(Expression leftExpr, Expression rightExpr, string binaryOperator) {
     this->leftExpr = leftExpr;
+    visit([this](auto& n){n->setParentNode(this);},this->leftExpr);
     this->rightExpr = rightExpr;
+    visit([this](auto& n){n->setParentNode(this);},this->rightExpr);
     this->binaryOperator = std::move(binaryOperator);
 }
 
@@ -58,7 +76,9 @@ string BinaryOperatorNode::getBinaryOperator() const {
 
 RelExprNode::RelExprNode(RelFactor leftNode, RelFactor rightNode, string relativeOperator) {
     this->leftNode = leftNode;
+    visit([this](auto n){n->setParentNode(this);}, this->leftNode);
     this->rightNode = rightNode;
+    visit([this](auto n){n->setParentNode(this);}, this->rightNode);
     this->relativeOperator = std::move(relativeOperator);
 }
 
@@ -76,17 +96,21 @@ string RelExprNode::getRelativeOperator() const {
 
 CondExprNode::CondExprNode(RelExprNode *relExpr){
     this->relExpr = relExpr;
+    this->relExpr->setParentNode(this);
 }
 
 CondExprNode::CondExprNode(CondExprNode *singleCondExpr) {
     this->condOperator = "!";
     this->rightNode = singleCondExpr;
+    this->rightNode->setParentNode(this);
 }
 
 CondExprNode::CondExprNode(string condOperator, CondExprNode *leftNode, CondExprNode *rightNode) {
     this->condOperator = std::move(condOperator);
     this->leftNode = leftNode;
+    this->leftNode->setParentNode(this);
     this->rightNode = rightNode;
+    this->rightNode->setParentNode(this);
 }
 
 RelExprNode *CondExprNode::getRelExpr() const {
@@ -105,9 +129,13 @@ string CondExprNode::getCondOperator() const {
     return this->condOperator;
 }
 
-WhileNode::WhileNode(CondExprNode *condExpr, StatementList stmtLst) {
+WhileNode::WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst): StmtNode(num) {
     this->condExpr = condExpr;
+    this->condExpr->setParentNode(this);
     this->stmtLst = std::move(stmtLst);
+    for (StmtNode *stmtNode : this->stmtLst) {
+        stmtNode->setParentNode(this);
+    }
 }
 
 CondExprNode *WhileNode::getCondExpr() {
@@ -116,6 +144,31 @@ CondExprNode *WhileNode::getCondExpr() {
 
 StatementList WhileNode::getStmtLst() {
     return this->stmtLst;
+}
+
+IfNode::IfNode(int num, CondExprNode *condExpr, StatementList thenStmtLst, StatementList elseStmtLst): StmtNode(num) {
+    this->condExpr = condExpr;
+    condExpr->setParentNode(this);
+    this->thenStmtLst = std::move(thenStmtLst);
+    for (StmtNode *thenNode: this->thenStmtLst) {
+        thenNode->setParentNode(this);
+    }
+    this->elseStmtLst = std::move(elseStmtLst);
+    for (StmtNode *elseNode: this->elseStmtLst) {
+        elseNode->setParentNode(this);
+    }
+}
+
+CondExprNode *IfNode::getCondExpr() {
+    return this->condExpr;
+}
+
+StatementList IfNode::getThenStmtLst() {
+    return this->thenStmtLst;
+}
+
+StatementList IfNode::getElseStmtLst() {
+    return this->elseStmtLst;
 }
 
 ProcNameNode::ProcNameNode(ProcName name) {
@@ -129,6 +182,9 @@ ProcName ProcNameNode::getProcedureName() {
 ProcedureNode::ProcedureNode(ProcNameNode *procName, StatementList stmtLst) {
     this->procName = procName;
     this->stmtLst = std::move(stmtLst);
+    for (StmtNode *stmtNode : this->stmtLst) {
+        stmtNode->setParentNode(this);
+    }
 }
 
 ProcName ProcedureNode::getProcName() {

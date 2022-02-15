@@ -27,7 +27,7 @@ public:
     void setParentNode(Node *parent);
     Node *getParentNode() const;
 };
-
+//stmt: read | print | while | if | assign
 class StmtNode: public Node {
     int statementNumber;
 public:
@@ -63,15 +63,24 @@ private:
 
 
 
-
-/*
+// Definition:
+// read: 'read' var_name';'
 class ReadNode: public StmtNode {
     VariableNode *varNode;
 public:
-    ReadNode(int, VariableNode*);
-    VariableNode* getVarName() const;
+    ReadNode(int num, VariableNode* varNode);
+    [[nodiscard]] VarName getVarName() const;
 };
-*/
+
+// Definition:
+// print: 'print' var_name';'
+class PrintNode: public StmtNode {
+    VariableNode *varNode;
+public:
+    PrintNode(int num, VariableNode* varNode);
+    [[nodiscard]] VarName getVarName() const;
+};
+
 class BinaryOperatorNode;
 
 // Expression is replaced by BinaryOperatorNode***
@@ -152,13 +161,26 @@ public:
 
 // Definition:
 // while: 'while' '(' cond_expr ')' '{' stmtLst '}'
-class WhileNode: public Node {
+class WhileNode: public StmtNode {
     CondExprNode *condExpr;
     StatementList stmtLst;
 public:
-    WhileNode(CondExprNode *condExpr, StatementList stmtLst);
+    WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst);
     CondExprNode *getCondExpr();
     StatementList getStmtLst();
+};
+
+// Definition:
+// if: 'if' '(' cond_expr ')' 'then' '{' stmtLst '}' 'else' '{' stmtLst '}'
+class IfNode: public StmtNode {
+    CondExprNode *condExpr;
+    StatementList thenStmtLst;
+    StatementList elseStmtLst;
+public:
+    IfNode(int num, CondExprNode *condExpr, StatementList thenStmtLst, StatementList elseStmtLst);
+    CondExprNode *getCondExpr();
+    StatementList getThenStmtLst();
+    StatementList getElseStmtLst();
 };
 
 class ProcedureNode: public Node {
