@@ -14,6 +14,12 @@
 #include "pql/ClauseEvaluators/ParentClauseEvaluator.h"
 #include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
 #include "pql/ClauseEvaluators/SelectClauseEvaluator.h"
+#include "pql/ClauseEvaluators/FollowsTClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ParentTClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ModifiesSClauseEvaluator.h"
+#include "pql/ClauseEvaluators/UsesSClauseEvaluator.h"
+
+
 #include <sstream>
 #include <iostream>
 #include <list>

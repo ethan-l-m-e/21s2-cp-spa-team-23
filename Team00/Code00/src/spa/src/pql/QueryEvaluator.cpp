@@ -47,26 +47,20 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
             return new FollowsClauseEvaluator(clause.argList, pkb, query);
         case RelRef::PARENT:
             return new ParentClauseEvaluator(clause.argList, pkb, query);
-        /*
         case RelRef::FOLLOWS_T:
-            // return FollowsTClauseEvaluator(clause.argList, pkb, query);
-            break;
+            return new FollowsTClauseEvaluator(clause.argList, pkb, query);
         case RelRef::PARENT_T:
-            // return ParentTTClauseEvaluator(clause.argList, pkb, query);
-            break;
+            return new ParentTClauseEvaluator(clause.argList, pkb, query);
         case RelRef::USES_S:
-            // return UsesSClauseEvaluator(clause.argList, pkb, query);
-            break;
+            return new UsesSClauseEvaluator(clause.argList, pkb, query);
         case RelRef::USES_P:
-            // return UsesPClauseEvaluator(clause.argList, pkb, query);
+            // return new UsesPClauseEvaluator(clause.argList, pkb, query);
             break;
         case RelRef::MODIFIES_S:
-            // return ModifiesSClauseEvaluator(clause.argList, pkb, query);
-            break;
+            return new ModifiesSClauseEvaluator(clause.argList, pkb, query);
         case RelRef::MODIFIES_P:
             // return ModifiesPClauseEvaluator(clause.argList, pkb, query);
             break;
-        */
         default:
             return new FollowsClauseEvaluator(clause.argList, pkb, query);
     }
