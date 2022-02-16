@@ -61,7 +61,9 @@ public:
 
     // Getter Functions (Variables, Procedures etc.)
 
+    bool isStatement(int statement);
     bool isStatement(string statement);
+
     bool isVariable(string variable);
     bool isProcedure(string procedure);
     bool isConstant(string constant);

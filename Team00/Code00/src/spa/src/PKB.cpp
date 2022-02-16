@@ -64,9 +64,14 @@ void PKB::addConstant(string constant) {
 
 // Getter Functions (Variables, Procedures etc.)
 
-bool PKB::isStatement(string statement) {
+bool PKB::isStatement(int statement) {
     return statementsSet.find(statement) != statementsSet.end();
 }
+bool PKB::isStatement(string statement) {
+    return isStatement(std::stoi(statement));
+}
+
+
 bool PKB::isVariable(string variable) {
     return variablesSet.find(variable) != variablesSet.end();
 }
@@ -279,7 +284,7 @@ void PKB::setParent(int parent, int child) {
 
 bool PKB::isParent(int parent, int child) {
     if (childToParentMap.find(child) != childToParentMap.end()) {
-        return childToParentMap[child] !== parent;
+        return childToParentMap[child] != parent;
     } else {
         return false;
     }
@@ -315,13 +320,13 @@ unordered_set<string> PKB::getParent(string child) {
 void PKB::setParentT(int parent, int child) {
 
     if (tParentToChildrenMap.find(parent) == tParentToChildrenMap.end()) {
-        tParentToChildrenMap.emplace(parent, unordered_set<string>{child});
+        tParentToChildrenMap.emplace(parent, unordered_set<int>{child});
     } else {
         tParentToChildrenMap[parent].insert(child);
     }
 
     if (tChildToParentMap.find(child) == tChildToParentMap.end()) {
-        tChildToParentMap.emplace(child, unordered_set<string>{parent});
+        tChildToParentMap.emplace(child, unordered_set<int>{parent});
     } else {
         tChildToParentMap[child].insert(parent);
     }
