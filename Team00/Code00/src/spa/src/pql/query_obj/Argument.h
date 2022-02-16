@@ -12,6 +12,7 @@ enum class ArgumentType {
     IDENT,
     STMT_NO,
     UNDERSCORE,
+    PARTIAL_UNDERSCORE,
     EXPRESSION
 };
 
