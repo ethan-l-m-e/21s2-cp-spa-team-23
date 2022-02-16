@@ -10,15 +10,13 @@ std::string const NAME = "[A-Za-z][A-Za-z|0-9]*";
 std::string const INTEGER = DIGIT + "+";
 
 // TODO: Convert to regex
-// const std::regex Synonym::synonym_regex = std::regex("[a-zA-Z](\\d|[a-zA-Z])*");
 std::string const SYNONYM = IDENT;
 std::string const STMT_REF = "(" + SYNONYM + "|_|" + INTEGER + ")";
 std::string const ENT_REF = "(" + SYNONYM + "|_|" + '"' + IDENT + '"' + ")";
 
 // Grammar Rules
-std::string const DESIGN_ENTITY = "stmt" | "read" | "print" | "call" | "while" | "if" | "assign" | "variable"
-        | "constant" | "procedure";
-std::string const DECLARATION = "[" + DESIGN_ENTITY + " " + SYNONYM + "\\(',' " + SYNONYM + "\\)* ';'" + "]"; // not sure
+std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
+std::string const DECLARATION = "(" + DESIGN_ENTITY + " " + SYNONYM + "(, " + SYNONYM + ")*;" + ")";
 std::string const SELECT_CL = DECLARATION + "* Select " + SYNONYM; // incomplete
 
 // Relationships
