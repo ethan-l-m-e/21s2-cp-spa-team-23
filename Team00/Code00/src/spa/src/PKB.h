@@ -22,28 +22,35 @@ private:
 
     static PKB* singleton;
 
-    unordered_set<string> statementsSet;
+    unordered_set<int> statementsSet;
     unordered_set<string> variablesSet;
     unordered_set<string> proceduresSet;
     unordered_set<string> constantsSet;
 
-    unordered_set<string> assignStatementsSet;
-    unordered_set<string> readStatementsSet;
-    unordered_set<string> printStatementsSet;
-    unordered_set<string> ifStatementsSet;
-    unordered_set<string> whileStatementsSet;
+    unordered_set<int> assignStatementsSet;
+    unordered_set<int> readStatementsSet;
+    unordered_set<int> printStatementsSet;
+    unordered_set<int> ifStatementsSet;
+    unordered_set<int> whileStatementsSet;
 
-    unordered_map<string, string> followeeToFollowerMap;
-    unordered_map<string, string> followerToFolloweeMap;
+    unordered_map<int, int> followeeToFollowerMap;
+    unordered_map<int, int> followerToFolloweeMap;
 
-    unordered_map<string, unordered_set<string>> tFolloweeToFollowerMap;
-    unordered_map<string, unordered_set<string>> tFollowerToFolloweeMap;
+    unordered_map<int, unordered_set<int>> tFolloweeToFollowerMap;
+    unordered_map<int, unordered_set<int>> tFollowerToFolloweeMap;
 
-    unordered_map<string, unordered_set<string>> parentToChildrenMap;
-    unordered_map<string, string> childToParentMap;
+    unordered_map<int, unordered_set<int>> parentToChildrenMap;
+    unordered_map<int, int> childToParentMap;
 
-    unordered_map<string, unordered_set<string>> tParentToChildrenMap;
-    unordered_map<string, unordered_set<string>> tChildToParentMap;
+    unordered_map<int, unordered_set<int>> tParentToChildrenMap;
+    unordered_map<int, unordered_set<int>> tChildToParentMap;
+
+
+    unordered_map<int, unordered_set<string>> statementToVariablesUsedMap;
+    unordered_map<string, unordered_set<int>> variableUsedToStatementMap;
+
+    unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap;
+    unordered_map<string, unordered_set<int>> variableModifiedToStatementMap;
 
 public:
 //	static VarTable* varTable;
@@ -54,14 +61,16 @@ public:
     static PKB* getInstance();
 
     // Setter Functions (Variables, Procedures etc.)
-    void addStatement(string statement);
+    void addStatement(int statement);
     void addVariable(string variable);
     void addProcedure(string procedure);
     void addConstant(string constant);
 
     // Getter Functions (Variables, Procedures etc.)
 
+    bool isStatement(int statement);
     bool isStatement(string statement);
+
     bool isVariable(string variable);
     bool isProcedure(string procedure);
     bool isConstant(string constant);
@@ -73,21 +82,29 @@ public:
 
     // Setter Functions (Statement Types)
 
-    void addAssignStatement(string statement);
+    void addAssignStatement(int statement);
 
-    void addReadStatement(string statement);
-    void addPrintStatement(string statement);
+    void addReadStatement(int statement);
+    void addPrintStatement(int statement);
 
-    void addIfStatement(string statement);
-    void addWhileStatement(string statement);
+    void addIfStatement(int statement);
+    void addWhileStatement(int statement);
 
     // Getter Functions (Statement Types)
+
+    bool isAssignStatement(int statement);
+    bool isReadStatement(int statement);
+    bool isPrintStatement(int statement);
+    bool isIfStatement(int statement);
+    bool isWhileStatement(int statement);
 
     bool isAssignStatement(string statement);
     bool isReadStatement(string statement);
     bool isPrintStatement(string statement);
     bool isIfStatement(string statement);
     bool isWhileStatement(string statement);
+
+
 
     unordered_set<string> getAllAssignStatements();
     unordered_set<string> getAllReadStatements();
@@ -97,9 +114,13 @@ public:
 
     // Setter Functions (Follows Relationship)
 
-    void setFollows(string followee, string follower);
+    void setFollows(int followee, int follower);
 
     // Getter Functions (Follows Relationship)
+
+    bool isFollows(int followee, int follower);
+    unordered_set<int> getFollower(int followee);
+    unordered_set<int> getFollowee(int follower);
 
     bool isFollows(string followee, string follower);
     unordered_set<string> getFollower(string followee);
@@ -107,9 +128,13 @@ public:
 
     // Setter Functions (FollowsT Relationship)
 
-    void setFollowsT(string followee, string follower);
+    void setFollowsT(int followee, int follower);
 
     // Getter Functions (FollowsT Relationship)
+
+    bool isFollowsT(int followee, int follower);
+    unordered_set<int> getFollowerT(int followee);
+    unordered_set<int> getFolloweeT(int follower);
 
     bool isFollowsT(string followee, string follower);
     unordered_set<string> getFollowerT(string followee);
@@ -118,26 +143,60 @@ public:
 
     // Setter Functions (Parent Relationship)
 
-    void setParent(string parent, string child);
+    void setParent(int parent, int child);
 
     // Getter Functions (Parent Relationship)
+
+    bool isParent(int parent, int child);
+    unordered_set<int> getChildren(int parent);
+    unordered_set<int> getParent(int child);
 
     bool isParent(string parent, string child);
     unordered_set<string> getChildren(string parent);
     unordered_set<string> getParent(string child);
 
+
     // Setter Functions (ParentT Relationship)
 
-    void setParentT(string parent, string child);
+    void setParentT(int parent, int child);
 
     // Getter Functions (ParentT Relationship)
+
+    bool isParentT(int parent, int child);
+    unordered_set<int> getChildrenT(int parent);
+    unordered_set<int> getParentT(int child);
 
     bool isParentT(string parent, string child);
     unordered_set<string> getChildrenT(string parent);
     unordered_set<string> getParentT(string child);
 
+    // Setter Functions (Uses Relationship)
+
+    void setUses(int statement, unordered_set<string> variables);
+
     // Getter Functions (Uses Relationship)
 
-    void setUses(string procedure, )
+    bool isUses(int statement, string variable);
+    bool isUses(string statement, string variable);
+
+    unordered_set<string> getVariablesUsed(int statement);
+    unordered_set<string> getVariablesUsed(string statement);
+
+    unordered_set<string> getUserStatements(string variable);
+
+    // Setter Functions (Modifies Relationship)
+
+    void setModifies(int statement, unordered_set<string> variables);
+
+    // Getter Functions (Modifies Relationship)
+
+    bool isModifies(int statement, string variable);
+    bool isModifies(string statement, string variable);
+
+    unordered_set<string> getVariablesModified(int statement);
+    unordered_set<string> getVariablesModified(string statement);
+
+    unordered_set<string> getModifierStatements(string variable);
+
 
 };
