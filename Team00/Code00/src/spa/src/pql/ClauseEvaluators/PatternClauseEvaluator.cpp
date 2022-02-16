@@ -5,14 +5,7 @@
 #include "PatternClauseEvaluator.h"
 #include "TNode.h"
 #include "StringFormatter.h"
-
-bool searchForMatchInExpression(Expression expressionNode, string rightArg);
-void addToStmtList(AssignNode* assignNode, vector<ResultItem> stmtNumberList);
-void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> statementAndVarList);
-string retrieveLHSVar(AssignNode* assignNode);
-bool matchLHSValue(AssignNode* assignNode, Argument arg);
-int retrieveStmtNo(AssignNode* assignNode);
-bool matchRHSValue(AssignNode* assignNode, Argument arg);
+#include "Parser.h"
 /**
  * Uses (stmtRef, entRef)
  *
@@ -20,10 +13,21 @@ bool matchRHSValue(AssignNode* assignNode, Argument arg);
  * entRef: synonym, _ or "fixed"
  *
  */
+void addToStmtList(AssignNode* assignNode, vector<ResultItem> stmtNumberList);
+bool searchForMatchInExpression(Expression expressionNode, string rightArg);
+void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> statementAndVarList);
+string retrieveLHSVar(AssignNode* assignNode);
+bool matchLHSValue(AssignNode* assignNode, Argument arg);
+int retrieveStmtNo(AssignNode* assignNode);
+bool matchRHSValue(AssignNode* assignNode, Argument arg);
 
 Result PatternClauseEvaluator::evaluateClause() {
     vector<AssignNode*> listOfAssignNodes;
     //PKB::getInstance() -> getAllAssignPointers();
+    AssignNode* aNode1 = Parser::parseAssign("x = x + 1;");
+    AssignNode* aNode2 = Parser::parseAssign("x = y;");
+    listOfAssignNodes.push_back(aNode1);
+    listOfAssignNodes.push_back(aNode2);
 
     vector<ResultItem> assignVarPairList;
     vector<ResultItem> stmtNumberList;
@@ -59,6 +63,7 @@ Result PatternClauseEvaluator::evaluateClause() {
     // result construction
     if (leftIsSynonym()) {
         // configure resultType, to have both variable names and assign
+        cout << "return assign and var"<< "\n";
         result.resultType = ResultType::TUPLES;
         result.resultBoolean = !result.resultItemList.empty();
         result.resultHeader = tuple<string, string>(assignSynonym.argumentValue, argLeft.argumentValue);

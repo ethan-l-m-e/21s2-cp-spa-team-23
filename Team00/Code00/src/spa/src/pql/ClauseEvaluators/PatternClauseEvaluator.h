@@ -23,6 +23,7 @@ protected:
     Argument assignSynonym = argList[0];
     Argument argLeft = argList[1];
     Argument argRight = argList[2];
+
 };
 
 
