@@ -11,7 +11,9 @@
 using namespace std;
 typedef short PROC;
 
-class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
+class TNode;
+
+class VarTable;  // no need to #include "VarTable.h" as all I need is postringer
 
 class PKB {
 
@@ -24,24 +26,27 @@ private:
     unordered_set<string> proceduresSet;
     unordered_set<string> constantsSet;
 
-    unordered_set<int> assignStatementsSet;
-    unordered_set<int> readStatementsSet;
-    unordered_set<int> printStatementsSet;
-    unordered_set<int> ifStatementsSet;
-    unordered_set<int> whileStatementsSet;
+    unordered_set<string> assignStatementsSet;
+    unordered_set<string> readStatementsSet;
+    unordered_set<string> prstringStatementsSet;
+    unordered_set<string> ifStatementsSet;
+    unordered_set<string> whileStatementsSet;
 
-    unordered_map<int, int> followeeToFollowerMap;
-    unordered_map<int, int> followerToFolloweeMap;
+    unordered_map<string, string> followeeToFollowerMap;
+    unordered_map<string, string> followerToFolloweeMap;
 
-    unordered_map<int, int> tFolloweeToFollowerMap;
-    unordered_map<int, int> tFollowerToFolloweeMap;
+    unordered_map<string, unordered_set<string>> tFolloweeToFollowerMap;
+    unordered_map<string, unordered_set<string>> tFollowerToFolloweeMap;
 
-    unordered_map<int, unordered_set<int>> parentToChildrenMap;
-    unordered_map<int, int> childToParentMap;
+    unordered_map<string, unordered_set<string>> parentToChildrenMap;
+    unordered_map<string, string> childToParentMap;
+
+    unordered_map<string, unordered_set<string>> tParentToChildrenMap;
+    unordered_map<string, unordered_set<string>> tChildToParentMap;
 
 public:
 //	static VarTable* varTable;
-//	static int setProcToAST(PROC p, TNode* r);
+//	static string setProcToAST(PROC p, TNode* r);
 //	static TNode* getRootAST (PROC p);
 
 
@@ -64,58 +69,68 @@ public:
 
     // Setter Functions (Statement Types)
 
-    void addAssignStatement(int statement);
+    void addAssignStatement(string statement);
 
-    void addReadStatement(int statement);
-    void addPrintStatement(int statement);
+    void addReadStatement(string statement);
+    void addPrstringStatement(string statement);
 
-    void addIfStatement(int statement);
-    void addWhileStatement(int statement);
+    void addIfStatement(string statement);
+    void addWhileStatement(string statement);
 
     // Getter Functions (Statement Types)
 
-    bool isAssignStatement(int statement);
-    bool isReadStatement(int statement);
-    bool isPrintStatement(int statement);
-    bool isIfStatement(int statement);
-    bool isWhileStatement(int statement);
+    bool isAssignStatement(string statement);
+    bool isReadStatement(string statement);
+    bool isPrstringStatement(string statement);
+    bool isIfStatement(string statement);
+    bool isWhileStatement(string statement);
 
-    unordered_set<int> getAllAssignStatements();
-    unordered_set<int> getAllReadStatements();
-    unordered_set<int> getAllPrintStatements();
-    unordered_set<int> getAllIfStatements();
-    unordered_set<int> getAllWhileStatements();
+    unordered_set<string> getAllAssignStatements();
+    unordered_set<string> getAllReadStatements();
+    unordered_set<string> getAllPrstringStatements();
+    unordered_set<string> getAllIfStatements();
+    unordered_set<string> getAllWhileStatements();
 
     // Setter Functions (Follows Relationship)
 
-    void setFollows(int followee, int follower);
+    void setFollows(string followee, string follower);
 
     // Getter Functions (Follows Relationship)
 
-    bool isFollows(int followee, int follower);
-    int getFollower(int followee);
-    int getFollowee(int follower);
+    bool isFollows(string followee, string follower);
+    unordered_set<string> getFollower(string followee);
+    unordered_set<string> getFollowee(string follower);
 
     // Setter Functions (FollowsT Relationship)
 
-    void setFollowsT(int followee, int follower);
+    void setFollowsT(string followee, string follower);
 
     // Getter Functions (FollowsT Relationship)
 
-    bool isFollowsT(int followee, int follower);
-    int getFollowerT(int followee);
-    int getFolloweeT(int follower);
+    bool isFollowsT(string followee, string follower);
+    unordered_set<string> getFollowerT(string followee);
+    unordered_set<string> getFolloweeT(string follower);
 
 
     // Setter Functions (Parent Relationship)
 
-    void setParent(int parent, int child);
+    void setParent(string parent, string child);
 
     // Getter Functions (Parent Relationship)
 
-    bool isParent(int parent, int child);
-    unordered_set<int> getChildren(int parent);
-    int getParent(int child);
+    bool isParent(string parent, string child);
+    unordered_set<string> getChildren(string parent);
+    unordered_set<string> getParent(string child);
+
+    // Setter Functions (ParentT Relationship)
+
+    void setParentT(string parent, string child);
+
+    // Getter Functions (ParentT Relationship)
+
+    bool isParentT(string parent, string child);
+    unordered_set<string> getChildrenT(string parent);
+    unordered_set<string> getParentT(string child);
 
 
 };

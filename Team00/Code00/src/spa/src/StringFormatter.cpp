@@ -5,38 +5,47 @@
 #include <regex>
 #include "StringFormatter.h"
 #include "Constants/Constants.h"
+#include "SourceTokenizer.h"
 
 using namespace std;
 
 string ltrim(string);
 string rtrim(string);
-vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
+vector<string> StringFormatter::partitionAccordingToCase(std::string sourceCode, int type) {
     string trimmedCode;
     vector<string> v;
-    //Partition finalStrings = Partition();
     switch(type) {
-        case ASSIGN:{
-            int pos = sourceCode.find('\n');
-            trimmedCode = sourceCode.substr(0, pos);
-            string codeToRecurse;
-            if (pos == -1)
-                codeToRecurse = "";     //empty string for latter half
-            else
-                codeToRecurse = sourceCode.substr(pos + 1,sourceCode.size()); // +1 to get rid of the \n space
-            v.push_back(trimmedCode);
-            v.push_back(codeToRecurse);
+        case ASSIGN: case READ: case PRINT: {
+            v = StringFormatter::partitionBySemiColon(sourceCode);
             break;
         }
-        case PROCEDURE: {
-            trimmedCode = "";
+        case WHILE: {
+            vector<string> cond_leftover = StringFormatter::partitionBasedOnParentheses(sourceCode, "()");
+            vector<string> stmtLst_leftover = StringFormatter::partitionBasedOnParentheses(cond_leftover[1], "{}");
+            string reconstructedWhile = "while" + cond_leftover[0] + stmtLst_leftover[0];
+            v.push_back(reconstructedWhile);
+            v.push_back(stmtLst_leftover[1]);
             break;
         }
-        case BASE_CASE: {
-            trimmedCode = "";
+        case IF_ELSE: {
+            vector<string> cond_leftover = StringFormatter::partitionBasedOnParentheses(sourceCode, "()");
+            vector<string> stmtLst1_leftover = StringFormatter::partitionBasedOnParentheses(cond_leftover[1], "{}");
+            vector<string> stmtLst2_leftover = StringFormatter::partitionBasedOnParentheses(stmtLst1_leftover[1], "{}");
+            string reconstructedIfElse = "if" + cond_leftover[0] + "then" + stmtLst1_leftover[0]  + "else" + stmtLst2_leftover[0];
+            v.push_back(reconstructedIfElse);
+            v.push_back(stmtLst2_leftover[1]);
+            break;
+        }
+        case PROCEDURE: {   // for full iteration 2/3
+            string procFront = StringFormatter::extractFrontStringByRegex(sourceCode, "\\{");
+            vector<string> stmtLst_leftovers = StringFormatter::partitionBasedOnParentheses(sourceCode, "{}");
+            string reconstructedProcedure = procFront + stmtLst_leftovers[0];
+            v.push_back(reconstructedProcedure);
+            v.push_back(stmtLst_leftovers[1]);
             break;
         }
         default: {
-            throw "dk what to trim";
+            throw "dk what to trim. type argument is likely invalid for this method";
         }
     }
     return v;
@@ -76,6 +85,59 @@ vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
     return v;
 }
 
+vector<string> StringFormatter::partitionBySemiColon(string sourceCode) {
+    vector<string> v;
+    int pos = sourceCode.find(';');
+    string trimmedCode = sourceCode.substr(0, pos + 1);
+    string codeToRecurse = sourceCode.substr(pos + 1, sourceCode.size());
+    trimmedCode = StringFormatter::removeTrailingSpace(trimmedCode);
+    codeToRecurse = StringFormatter::removeTrailingSpace(codeToRecurse);
+    v.push_back(trimmedCode);
+    v.push_back(codeToRecurse);
+    return v;
+}
+
+//extracts the parentheses with the stated brackets, then put the string in front, the remaining located at the back
+vector<string> StringFormatter::partitionBasedOnParentheses(string sourceCode, string brackets) {
+    vector<string> v;
+    string bracketedString = "";
+    string leftovers;
+
+    int count = 0;
+    bool startedCount = false;
+    char bracketLeft = brackets[0];
+    char bracketRight = brackets[1];
+    int i = 0;
+
+    while(i < sourceCode.size()) {
+        if (sourceCode[i] == bracketLeft) {
+            if(startedCount == false) {
+                startedCount = true;
+            }
+            bracketedString += sourceCode[i];
+            count++;
+
+        } else if (sourceCode[i] == bracketRight) {
+            bracketedString += sourceCode[i];
+            count--;
+            if(count == 0) {
+                break;
+            }
+        } else {
+            if(startedCount = true && count != 0) {
+                bracketedString += sourceCode[i];
+            }
+        }
+        i++;
+    }
+    leftovers = sourceCode.substr(i + 1, sourceCode.size());
+    bracketedString = StringFormatter::removeTrailingSpace(bracketedString);
+    leftovers = StringFormatter::removeTrailingSpace(leftovers);
+    v.push_back(bracketedString);
+    v.push_back(leftovers);
+    return v;
+}
+
 
 
 string StringFormatter::extractFrontStringByRegex(string sourceCode, string regex) {
@@ -84,17 +146,6 @@ string StringFormatter::extractFrontStringByRegex(string sourceCode, string rege
     strcpy(sourceAsChar, sourceCode.c_str());
     strcpy(regexChar, regex.c_str());
     char *token = strtok(sourceAsChar,regexChar);
-    string s(token);
-    return s;
-}
-
-string StringFormatter::extractSecondStringByRegex(string sourceCode, string regex) {
-    char * sourceAsChar = new char[100];
-    char * regexChar = new char[100];
-    strcpy(sourceAsChar, sourceCode.c_str());
-    strcpy(regexChar, regex.c_str());
-    char *token = strtok(sourceAsChar,regexChar);
-    token = strtok(NULL, regexChar);
     string s(token);
     return s;
 }

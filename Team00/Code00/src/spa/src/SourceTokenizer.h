@@ -11,6 +11,8 @@ using namespace std;
 
 class SourceTokenizer {
 public:
+    static void extractRead(string, vector<string>&);
+    static void extractPrint(string, vector<string>&);
     static void extractAssign(string, vector<string>&);
     static void extractIfElseThen(string, vector<string>&);
     static void extractWhile(string, vector<string>&);
@@ -19,6 +21,7 @@ public:
     static void extractProcedure(string sourceCode, vector<string> &v);
 
     static void extractExpression(string sourceCode, vector<string> &v);
+    static void extractRelExpr(string sourceCode, vector<string> &v);
 };
 
 
