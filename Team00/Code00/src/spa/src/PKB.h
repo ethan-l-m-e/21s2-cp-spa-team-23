@@ -45,6 +45,13 @@ private:
     unordered_map<int, unordered_set<int>> tParentToChildrenMap;
     unordered_map<int, unordered_set<int>> tChildToParentMap;
 
+
+    unordered_map<int, unordered_set<string>> statementToVariablesUsedMap;
+    unordered_map<string, unordered_set<int>> variableUsedToStatementMap;
+
+    unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap;
+    unordered_map<string, unordered_set<int>> variableModifiedToStatementMap;
+
 public:
 //	static VarTable* varTable;
 //	static string setProcToAST(PROC p, TNode* r);
@@ -163,8 +170,33 @@ public:
     unordered_set<string> getChildrenT(string parent);
     unordered_set<string> getParentT(string child);
 
-    // Getter Functions (Uses Relationship)
+    // Setter Functions (Uses Relationship)
 
     void setUses(int statement, unordered_set<string> variables);
+
+    // Getter Functions (Uses Relationship)
+
+    bool isUses(int statement, string variable);
+    bool isUses(string statement, string variable);
+
+    unordered_set<string> getVariablesUsed(int statement);
+    unordered_set<string> getVariablesUsed(string statement);
+
+    unordered_set<string> getUserStatements(string variable);
+
+    // Setter Functions (Modifies Relationship)
+
+    void setModifies(int statement, unordered_set<string> variables);
+
+    // Getter Functions (Modifies Relationship)
+
+    bool isModifies(int statement, string variable);
+    bool isModifies(string statement, string variable);
+
+    unordered_set<string> getVariablesModified(int statement);
+    unordered_set<string> getVariablesModified(string statement);
+
+    unordered_set<string> getModifierStatements(string variable);
+
 
 };

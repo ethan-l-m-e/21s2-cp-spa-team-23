@@ -367,5 +367,95 @@ unordered_set<string> PKB::getParentT(string child) {
 }
 
 
+// Setter Functions (Uses Relationship)
+
+void PKB::setUses(int statement, unordered_set<string> variables) {
+    statementToVariablesUsedMap[statement] = variables;
+
+    for (string v : variables) {
+        if (variableUsedToStatementMap.find(v) == variableUsedToStatementMap.end()) {
+            variableUsedToStatementMap.emplace(v, unordered_set<int>{statement});
+        } else {
+            variableUsedToStatementMap[v].insert(statement);
+        }
+    }
 
 
+}
+
+// Getter Functions (Uses Relationship)
+
+bool PKB::isUses(int statement, string variable) {
+    if (statementToVariablesUsedMap.find(statement) != statementToVariablesUsedMap.end()) {
+        return statementToVariablesUsedMap[statement].find(variable) != statementToVariablesUsedMap[statement].end();
+    } else {
+        return false;
+    }
+}
+bool PKB::isUses(string statement, string variable) {
+    return isUses(std::stoi(statement), variable);
+}
+
+unordered_set<string> PKB::getVariablesUsed(int statement) {
+
+    unordered_set<string> emptySet;
+
+    return (statementToVariablesUsedMap.find(statement) != statementToVariablesUsedMap.end()) ? statementToVariablesUsedMap[statement] : emptySet;
+}
+
+unordered_set<string> PKB::getVariablesUsed(string statement) {
+    return getVariablesUsed(std::stoi(statement));
+}
+
+unordered_set<string> PKB::getUserStatements(string variable) {
+
+    unordered_set<int> emptySet;
+    unordered_set<int> statementsSet = (variableUsedToStatementMap.find(variable) != variableUsedToStatementMap.end()) ? variableUsedToStatementMap[variable] : emptySet;
+
+    return convertSetIntegersToSetStrings(statementsSet);
+}
+
+// Setter Functions (Modifies Relationship)
+
+void PKB::setModifies(int statement, unordered_set<string> variables) {
+    statementToVariablesModifiedMap[statement] = variables;
+
+    for (string v : variables) {
+        if (variableModifiedToStatementMap.find(v) == variableModifiedToStatementMap.end()) {
+            variableModifiedToStatementMap.emplace(v, unordered_set<int>{statement});
+        } else {
+            variableModifiedToStatementMap[v].insert(statement);
+        }
+    }
+}
+
+// Getter Functions (Modifies Relationship)
+
+bool PKB::isModifies(int statement, string variable) {
+    if (statementToVariablesModifiedMap.find(statement) != statementToVariablesModifiedMap.end()) {
+        return statementToVariablesModifiedMap[statement].find(variable) != statementToVariablesModifiedMap[statement].end();
+    } else {
+        return false;
+    }
+}
+
+bool PKB::isModifies(string statement, string variable) {
+    return isModifies(std::stoi(statement), variable);
+}
+
+unordered_set<string> PKB::getVariablesModified(int statement) {
+    unordered_set<string> emptySet;
+
+    return (statementToVariablesModifiedMap.find(statement) != statementToVariablesModifiedMap.end()) ? statementToVariablesModifiedMap[statement] : emptySet;
+}
+
+unordered_set<string> PKB::getVariablesModified(string statement) {
+    return getVariablesModified(std::stoi(statement));
+}
+
+unordered_set<string> PKB::getModifierStatements(string variable) {
+    unordered_set<int> emptySet;
+    unordered_set<int> statementsSet = (variableModifiedToStatementMap.find(variable) != variableModifiedToStatementMap.end()) ? variableModifiedToStatementMap[variable] : emptySet;
+
+    return convertSetIntegersToSetStrings(statementsSet);
+}
