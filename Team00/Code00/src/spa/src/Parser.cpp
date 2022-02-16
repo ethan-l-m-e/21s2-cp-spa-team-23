@@ -121,10 +121,35 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
         case(ASSIGN): {
             vector<string> v = StringFormatter::Trim(*stmt, ASSIGN);
             newNode = Parser::parseAssign(v[0]);
-            *stmt = v[1];
+            *stmt = v[1];   // the other half of the partition
             break;
         }
             // ADD MORE CASES FOR STATEMENT
+        case(PROCEDURE): {
+
+            break;
+        }
+
+        case(READ): {
+
+
+            break;
+        }
+
+        case(WHILE): {
+
+            break;
+        }
+
+        case(IF_ELSE): {
+
+            break;
+        }
+
+        case(PRINT): {
+
+            break;
+        }
         default:{
             throw "cannot recognise '" + *stmt + "' as a statement";
             break;
@@ -137,7 +162,7 @@ ProcNameNode *Parser::parseProcName(string procedureName) {
     //int check = Identifier::identifyFirstObject(procedureName);
     //if(check == PROCEDURE_NAME) {
         cout << "sending " << procedureName << " to PKB\n";
-        PKB::getInstance() ->addProcedures(procedureName);
+        PKB::getInstance() ->addProcedure(procedureName);
         return new ProcNameNode(procedureName);
     //} else {
         throw "Invalid varname format: '" + procedureName + "'\n";

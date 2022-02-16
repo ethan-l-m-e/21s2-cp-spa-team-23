@@ -27,6 +27,7 @@ public:
     ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
     virtual Result evaluateClause() = 0;
     unordered_set<std::string> getAllType(DesignEntity designEntity);
+
 };
 
 
