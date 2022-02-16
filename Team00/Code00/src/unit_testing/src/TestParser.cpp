@@ -57,6 +57,12 @@ TEST_CASE("Read parsing") {
     CHECK(testNode->getVarName() == "x");
 }
 
+TEST_CASE("Print parsing") {
+    string printLine = "print x;";
+    auto testNode = Parser::parsePrint(printLine);
+    CHECK(testNode->getVarName() == "x");
+}
+
 TEST_CASE("Assign parsing") {
     string left = "x";
     string right = "randomVariable";
@@ -154,7 +160,7 @@ TEST_CASE("Condition expression parsing") {
 }
 
 TEST_CASE("Program parsing") {
-    string code = "procedure name { X = a;\nread b; }";
+    string code = "procedure name { X = a;\nread b;\nprint c;\n }";
     Program program = Parser::parseProgram(code);
     CHECK(program[0]->getProcName() == "name");
 }

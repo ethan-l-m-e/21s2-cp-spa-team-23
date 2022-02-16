@@ -18,6 +18,13 @@ void SourceTokenizer::extractRead(string sourceCode, vector<string> &v) {
     v.push_back(varname);
 }
 
+void SourceTokenizer::extractPrint(string sourceCode, vector<string> &v) {
+    int print = sourceCode.find("print")+5;
+    int end = sourceCode.find(';');
+    string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(print, end - print));
+    v.push_back(varname);
+}
+
 void SourceTokenizer::extractAssign(string sourceCode, vector<string> &v) {
     int equal = sourceCode.find('=');
     int end = sourceCode.find(';');

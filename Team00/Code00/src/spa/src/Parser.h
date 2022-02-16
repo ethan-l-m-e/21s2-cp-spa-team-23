@@ -16,8 +16,8 @@ public:
     static StmtNode* parseStatementNode(string * stmt);
 
     static ReadNode* parseRead(string readLine);
-    /*
     static PrintNode* parsePrint(string printLine);
+    /*
     static IfNode* parseIf(string code);
      */
     static WhileNode* parseWhile(string code);

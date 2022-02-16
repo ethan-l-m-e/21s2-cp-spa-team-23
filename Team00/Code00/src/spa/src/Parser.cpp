@@ -119,6 +119,17 @@ ReadNode *Parser::parseRead(string readLine) {
     return new ReadNode(stmtNo, newVar);
 }
 
+PrintNode *Parser::parsePrint(string printLine) {
+    int stmtNo = getStatementNumber();
+    vector<string> tokens;
+    SourceTokenizer::extractPrint(printLine, tokens);
+    VariableNode* newVar = parseVar(tokens[0]);
+
+    cout << "sending print " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addPrintStatement(stmtNo);
+    return new PrintNode(stmtNo, newVar);
+}
+
 AssignNode* Parser::parseAssign(string assignLine) {
     int stmtNo = getStatementNumber();
     vector<string> tokens;
@@ -221,7 +232,7 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
         case(ASSIGN): {
             vector<string> v = StringFormatter::Trim(*stmt, ASSIGN);
             newNode = Parser::parseAssign(v[0]);
-            *stmt = v[1];
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
             // ADD MORE CASES FOR STATEMENT
@@ -230,13 +241,19 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             //cout << "whileCode: "<< v[0] + "\n";
             //cout << "remaining: " << v[1] + "\n";
             newNode = Parser::parseWhile(v[0]);
-            *stmt = v[1];
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
         case(READ): {
             vector<string> v = StringFormatter::Trim(*stmt, READ);
             newNode = Parser::parseRead(v[0]);
-            *stmt = v[1];
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
+            break;
+        }
+        case(PRINT): {
+            vector<string> v = StringFormatter::Trim(*stmt, PRINT);
+            newNode = Parser::parsePrint(v[0]);
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
             /*
@@ -247,12 +264,7 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             *stmt = v[1];
             break;
         }
-        case(PRINT): {
-            vector<string> v = StringFormatter::Trim(*stmt, PRINT);
-            newNode = Parser::parsePrint(v[0]);
-            *stmt = v[1];
-            break;
-        }
+
              */
         default:{
             throw "cannot recognise '" + *stmt + "' as a statement";
