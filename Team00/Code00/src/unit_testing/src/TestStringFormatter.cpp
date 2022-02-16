@@ -23,9 +23,9 @@ TEST_CASE("partition assign") {
     CHECK(arr[0] == "x = x + 1;");
     CHECK(arr[1] == "");
 
-    stmtLst = "x = x + 1;read y;";
-    arr = StringFormatter::partitionAccordingToCase(stmtLst, ASSIGN);
-    CHECK(arr[0] == "x = x + 1;");
+    stmtLst = "read x;read y;";
+    arr = StringFormatter::partitionAccordingToCase(stmtLst, READ);
+    CHECK(arr[0] == "read x;");
     CHECK(arr[1] == "read y;");
 
     stmtLst = "x = x + 1;\nread y;";
@@ -45,6 +45,6 @@ TEST_CASE("partition if-else and while") {
     string ifStmt = "if( x < present ) then   {\n print;\n}else {\nread x;}print y;";
     arr = StringFormatter::partitionAccordingToCase(ifStmt, IF_ELSE);
     CHECK(arr[0] == "if( x < present )then{\n print;\n}else{\nread x;}");
-    CHECK(arr[1] == "print y;");
+    CHECK(arr[1] == " print y;");
 
 }
