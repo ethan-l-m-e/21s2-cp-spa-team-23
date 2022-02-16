@@ -125,6 +125,21 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             break;
         }
             // ADD MORE CASES FOR STATEMENT
+        case(READ): {
+            break;
+        }
+
+        case(WHILE): {
+            break;
+        }
+
+        case(IF_ELSE): {
+            break;
+        }
+
+        case(PRINT): {
+            break;
+        }
         default:{
             throw "cannot recognise '" + *stmt + "' as a statement";
             break;
