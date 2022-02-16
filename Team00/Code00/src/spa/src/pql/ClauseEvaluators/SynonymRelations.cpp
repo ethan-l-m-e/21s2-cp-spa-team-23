@@ -4,6 +4,8 @@
 
 #include "SynonymRelations.h"
 
+#include <utility>
+
 SynonymRelations::SynonymRelations(){
     nTupleHeader = std::vector<std::string>{};
     nTupleList = std::vector<std::vector<std::string>>{};
@@ -21,6 +23,6 @@ std::vector<std::vector<std::string>>* SynonymRelations::getList() {
     return &nTupleList;
 }
 
-void SynonymRelations::assignList(std::vector<std::vector<std::string>>* newList) {
-    nTupleList = *newList;
+void SynonymRelations::assignList(std::vector<std::vector<std::string>> newList) {
+    nTupleList = std::move(newList);
 }
