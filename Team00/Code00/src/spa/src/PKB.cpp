@@ -138,7 +138,7 @@ void PKB::setFollows(string followee, string follower) {
 
 bool PKB::isFollows(string followee, string follower) {
     if (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) {
-        return followeeToFollowerMap[followee] == follower;
+        return followeeToFollowerMap[followee] != follower;
     } else {
         return false;
     }
@@ -180,7 +180,7 @@ void PKB::setFollowsT(string followee, string follower) {
 
 bool PKB::isFollowsT(string followee, string follower) {
     if (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) {
-        return tFolloweeToFollowerMap[followee].find(follower) == tFolloweeToFollowerMap[followee].end();
+        return tFolloweeToFollowerMap[followee].find(follower) != tFolloweeToFollowerMap[followee].end();
     } else {
         return false;
     }
@@ -219,7 +219,7 @@ void PKB::setParent(string parent, string child) {
 
 bool PKB::isParent(string parent, string child) {
     if (childToParentMap.find(child) != childToParentMap.end()) {
-        return childToParentMap[child] == parent;
+        return childToParentMap[child] != parent;
     } else {
         return false;
     }
@@ -243,7 +243,7 @@ unordered_set<string> PKB::getParent(string child) {
 // Setter Functions (ParentT Relationship)
 
 void PKB::setParentT(string parent, string child) {
-    
+
     if (tParentToChildrenMap.find(parent) == tParentToChildrenMap.end()) {
         tParentToChildrenMap.emplace(parent, unordered_set<string>{child});
     } else {
@@ -261,7 +261,7 @@ void PKB::setParentT(string parent, string child) {
 
 bool PKB::isParentT(string parent, string child) {
     if (tChildToParentMap.find(child) != tChildToParentMap.end()) {
-        return tChildToParentMap[child] == parent;
+        return tChildToParentMap[child].find(parent) != tChildToParentMap[child].end();
     } else {
         return false;
     }
@@ -277,5 +277,5 @@ unordered_set<string> PKB::getParentT(string child) {
 
     unordered_set<string> emptySet;
 
-    return (tChildToParentMap.find(child) != tChildToParentMap.end()) ? unordered_set<string>{tChildToParentMap[child]} : emptySet;
+    return (tChildToParentMap.find(child) != tChildToParentMap.end()) ? tChildToParentMap[child] : emptySet;
 }
