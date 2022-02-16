@@ -14,9 +14,10 @@ public:
     static CondExprNode* parseCondExpr(string condExprLine);
     static RelExprNode* parseRelExpr(string relExprLine);
     static StmtNode* parseStatementNode(string * stmt);
+
+    static ReadNode* parseRead(string readLine);
     /*
     static PrintNode* parsePrint(string printLine);
-    static ReadNode* parseRead(string readLine);
     static IfNode* parseIf(string code);
      */
     static WhileNode* parseWhile(string code);

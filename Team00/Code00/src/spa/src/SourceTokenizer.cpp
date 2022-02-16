@@ -11,6 +11,13 @@
 
 using namespace std;
 
+void SourceTokenizer::extractRead(string sourceCode, vector<string> &v) {
+    int read = sourceCode.find("read")+4;
+    int end = sourceCode.find(';');
+    string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(read, end - read));
+    v.push_back(varname);
+}
+
 void SourceTokenizer::extractAssign(string sourceCode, vector<string> &v) {
     int equal = sourceCode.find('=');
     int end = sourceCode.find(';');

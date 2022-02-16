@@ -39,7 +39,7 @@ vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
     vector<string> v;
     //Partition finalStrings = Partition();
     switch(type) {
-        case ASSIGN:{
+        case ASSIGN: case READ:{
             int pos = sourceCode.find('\n');
             trimmedCode = sourceCode.substr(0, pos);
             string codeToRecurse;

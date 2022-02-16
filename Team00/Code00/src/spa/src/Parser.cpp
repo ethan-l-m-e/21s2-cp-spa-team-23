@@ -108,6 +108,17 @@ Expression parseExpression(string expression) {
     return new BinaryOperatorNode(left, right, tokens[2]);
 }
 
+ReadNode *Parser::parseRead(string readLine) {
+    int stmtNo = getStatementNumber();
+    vector<string> tokens;
+    SourceTokenizer::extractRead(readLine, tokens);
+    VariableNode* newVar = parseVar(tokens[0]);
+
+    cout << "sending read " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addReadStatement(stmtNo);
+    return new ReadNode(stmtNo, newVar);
+}
+
 AssignNode* Parser::parseAssign(string assignLine) {
     int stmtNo = getStatementNumber();
     vector<string> tokens;
@@ -222,17 +233,17 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             *stmt = v[1];
             break;
         }
+        case(READ): {
+            vector<string> v = StringFormatter::Trim(*stmt, READ);
+            newNode = Parser::parseRead(v[0]);
+            *stmt = v[1];
+            break;
+        }
             /*
 
         case(IF_ELSE): {
             vector<string> v = StringFormatter::Trim(*stmt, IF_ELSE);
             newNode = Parser::parseIf(v[0]);
-            *stmt = v[1];
-            break;
-        }
-        case(READ): {
-            vector<string> v = StringFormatter::Trim(*stmt, READ);
-            newNode = Parser::parseRead(v[0]);
             *stmt = v[1];
             break;
         }
