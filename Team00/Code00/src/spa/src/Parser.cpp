@@ -121,23 +121,33 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
         case(ASSIGN): {
             vector<string> v = StringFormatter::Trim(*stmt, ASSIGN);
             newNode = Parser::parseAssign(v[0]);
-            *stmt = v[1];
+            *stmt = v[1];   // the other half of the partition
             break;
         }
             // ADD MORE CASES FOR STATEMENT
+        case(PROCEDURE): {
+
+            break;
+        }
+
         case(READ): {
+
+
             break;
         }
 
         case(WHILE): {
+
             break;
         }
 
         case(IF_ELSE): {
+
             break;
         }
 
         case(PRINT): {
+
             break;
         }
         default:{
