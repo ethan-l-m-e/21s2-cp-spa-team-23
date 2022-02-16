@@ -154,7 +154,7 @@ void PKB::setFollows(string followee, string follower) {
 
 bool PKB::isFollows(string followee, string follower) {
     if (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) {
-        return followeeToFollowerMap[followee] != follower;
+        return followeeToFollowerMap[followee] == follower;
     } else {
         return false;
     }
@@ -235,7 +235,7 @@ void PKB::setParent(string parent, string child) {
 
 bool PKB::isParent(string parent, string child) {
     if (childToParentMap.find(child) != childToParentMap.end()) {
-        return childToParentMap[child] != parent;
+        return childToParentMap[child] !== parent;
     } else {
         return false;
     }
