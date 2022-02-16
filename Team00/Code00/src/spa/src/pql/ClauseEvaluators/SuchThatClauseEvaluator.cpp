@@ -116,20 +116,6 @@ std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_s
 };
 
 unordered_set<std::string> SuchThatClauseEvaluator::generateLeftSet (unordered_set<std::string>& rightSet) {
-
-    /*
-    unordered_set<std::string> intersect;
-    for( const std::string& str1 : set1 ) {
-        for( const std::string& str2 : set2 ) {
-            if (str1 == str2) {
-                intersect.emplace(str1);
-            }
-        }
-    };
-    std::cout << '\n' ;
-    cout << intersect.size();
-    return intersect;
-     */
     unordered_set<std::string> leftSet;
     for (const std::string& str : rightSet) {
         unordered_set<std::string> resultSet = getLeftSynonymValue(str);
