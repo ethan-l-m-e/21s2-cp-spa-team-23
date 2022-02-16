@@ -409,38 +409,42 @@ TEST_CASE("Such that clause: 2 synonyms with type") {
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT},
                                                            {"a", DesignEntity::ASSIGN},
                                                            {"pn", DesignEntity::PRINT},
-                                                           {"r", DesignEntity::READ},};
-    Argument a0 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
-    Argument a2 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "2"};
-    Argument a3 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "3"};
-    Argument a5 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "5"};
+                                                           {"r", DesignEntity::READ},
+                                                           {"w", DesignEntity::WHILE},};
     Argument as = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
     Argument aa = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "a"};
     Argument apn = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "pn"};
     Argument ar = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "r"};
-    SuchThatClause clause1 = {.relRef = RelRef::FOLLOWS};
-    clause1.argList = {a3, a2};
+    Argument aw = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "w"};
 
+    SuchThatClause clause_s_pn = {.relRef = RelRef::FOLLOWS};
+    clause_s_pn.argList = {as, apn};
+
+    SuchThatClause clause_r_a = {.relRef = RelRef::FOLLOWS};
+    clause_r_a.argList = {ar, aa};
+
+    SuchThatClause clause_w_a = {.relRef = RelRef::PARENT};
+    clause_w_a.argList = {aw, aa};
 
     Query query1;
     query1.setDeclarations(declarationsMap);
-    query1.setSynonym("s1");
-    query1.setSuchThatClauses(vector<SuchThatClause>{clause1});
+    query1.setSynonym("s");
+    query1.setSuchThatClauses(vector<SuchThatClause>{clause_s_pn});
 
     Query query2;
     query2.setDeclarations(declarationsMap);
-    query2.setSynonym("s2");
-    query2.setSuchThatClauses(vector<SuchThatClause>{clause1});
+    query2.setSynonym("pn");
+    query2.setSuchThatClauses(vector<SuchThatClause>{clause_s_pn});
 
     Query query3;
     query3.setDeclarations(declarationsMap);
-    query3.setSynonym("s1");
-    query3.setSuchThatClauses(vector<SuchThatClause>{clause1});
+    query3.setSynonym("r");
+    query3.setSuchThatClauses(vector<SuchThatClause>{clause_r_a});
 
     Query query4;
     query4.setDeclarations(declarationsMap);
-    query4.setSynonym("s2");
-    query4.setSuchThatClauses(vector<SuchThatClause>{clause1});
+    query4.setSynonym("w");
+    query4.setSuchThatClauses(vector<SuchThatClause>{clause_w_a});
 
 
     auto qe = QueryEvaluator(testPKB);
@@ -456,24 +460,24 @@ TEST_CASE("Such that clause: 2 synonyms with type") {
      */
     list<string> result2 = qe.evaluate(&query2);
     /**
-     * Select a such that Follows(a, p)
+     * Select r such that Follows(r, a)
      * Type: parent, select first arg
      */
     list<string> result3 = qe.evaluate(&query3);
     /**
-     * Select a such that Parent(p, a)
-     * Type: parent, select second arg
+     * Select w such that Parent(w, a)
+     * Type: parent, select first arg
      */
     list<string> result4 = qe.evaluate(&query4);
 
     REQUIRE(std::unordered_set<string> (std::begin(result1), std::end(result1))
-            == std::unordered_set<string> {"1", "2", "3", "4"});
+            == std::unordered_set<string> {"3"});
     REQUIRE(std::unordered_set<string> (std::begin(result2), std::end(result2))
-            == std::unordered_set<string> {"2", "3", "4", "5"});
+            == std::unordered_set<string> {"4"});
     REQUIRE(std::unordered_set<string> (std::begin(result3), std::end(result3))
-            == std::unordered_set<string> {"5"});
+            == std::unordered_set<string> {"1"});
     REQUIRE(std::unordered_set<string> (std::begin(result4), std::end(result4))
-            == std::unordered_set<string> {"6"});
+            == std::unordered_set<string> {"5"});
 }
 
 
