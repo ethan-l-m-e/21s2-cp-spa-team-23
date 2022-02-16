@@ -35,14 +35,14 @@ private:
     unordered_map<string, string> followeeToFollowerMap;
     unordered_map<string, string> followerToFolloweeMap;
 
-    unordered_map<string, string> tFolloweeToFollowerMap;
-    unordered_map<string, string> tFollowerToFolloweeMap;
+    unordered_map<string, unordered_set<string>> tFolloweeToFollowerMap;
+    unordered_map<string, unordered_set<string>> tFollowerToFolloweeMap;
 
     unordered_map<string, unordered_set<string>> parentToChildrenMap;
     unordered_map<string, string> childToParentMap;
 
     unordered_map<string, unordered_set<string>> tParentToChildrenMap;
-    unordered_map<string, string> tChildToParentMap;
+    unordered_map<string, unordered_set<string>> tChildToParentMap;
 
 public:
 //	static VarTable* varTable;

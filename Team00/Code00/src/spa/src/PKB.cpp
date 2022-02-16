@@ -162,15 +162,25 @@ unordered_set<string> PKB::getFollowee(string follower) {
 // Setter Functions (FollowsT Relationship)
 
 void PKB::setFollowsT(string followee, string follower) {
-    tFolloweeToFollowerMap.emplace(followee, follower);
-    tFollowerToFolloweeMap.emplace(follower, followee);
+
+    if (tFolloweeToFollowerMap.find(followee) == tFolloweeToFollowerMap.end()) {
+        tFolloweeToFollowerMap.emplace(followee, unordered_set<string>{follower});
+    } else {
+        tFolloweeToFollowerMap[followee].insert(follower);
+    }
+
+    if (tFollowerToFolloweeMap.find(follower) == tFollowerToFolloweeMap.end()) {
+        tFollowerToFolloweeMap.emplace(follower, unordered_set<string>{followee});
+    } else {
+        tFollowerToFolloweeMap[follower].insert(followee);
+    }
 }
 
 // Getter Functions (FollowsT Relationship)
 
 bool PKB::isFollowsT(string followee, string follower) {
     if (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) {
-        return tFolloweeToFollowerMap[followee] == follower;
+        return tFolloweeToFollowerMap[followee].find(follower) == tFolloweeToFollowerMap[followee].end();
     } else {
         return false;
     }
@@ -180,14 +190,14 @@ unordered_set<string> PKB::getFollowerT(string followee) {
 
     unordered_set<string> emptySet;
 
-    return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? unordered_set<string>{tFolloweeToFollowerMap[followee]} : emptySet;
+    return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? tFolloweeToFollowerMap[followee] : emptySet;
 }
 
 unordered_set<string> PKB::getFolloweeT(string follower) {
 
     unordered_set<string> emptySet;
 
-    return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? unordered_set<string>{tFollowerToFolloweeMap[follower]} : emptySet;
+    return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? tFollowerToFolloweeMap[follower] : emptySet;
 }
 
 
@@ -233,12 +243,17 @@ unordered_set<string> PKB::getParent(string child) {
 // Setter Functions (ParentT Relationship)
 
 void PKB::setParentT(string parent, string child) {
-    tChildToParentMap.emplace(child, parent);
-
+    
     if (tParentToChildrenMap.find(parent) == tParentToChildrenMap.end()) {
         tParentToChildrenMap.emplace(parent, unordered_set<string>{child});
     } else {
         tParentToChildrenMap[parent].insert(child);
+    }
+
+    if (tChildToParentMap.find(child) == tChildToParentMap.end()) {
+        tChildToParentMap.emplace(child, unordered_set<string>{parent});
+    } else {
+        tChildToParentMap[child].insert(parent);
     }
 }
 
