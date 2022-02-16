@@ -9,7 +9,7 @@ using namespace std;
 #include "TNode.h"
 
 
-//int PKB::setProcToAST(PROC p, TNode* r) {
+//string PKB::setProcToAST(PROC p, TNode* r) {
 //	return 0;
 //}
 //TNode* PKB::getRootAST (PROC p){
@@ -72,71 +72,71 @@ unordered_set<string> PKB::getAllConstants() {
 
 // Setter Functions (Statement Types)
 
-void PKB::addAssignStatement(int statement) {
+void PKB::addAssignStatement(string statement) {
     assignStatementsSet.insert(statement);
 }
 
-void PKB::addReadStatement(int statement) {
+void PKB::addReadStatement(string statement) {
     readStatementsSet.insert(statement);
 }
-void PKB::addPrintStatement(int statement) {
-    printStatementsSet.insert(statement);
+void PKB::addPrstringStatement(string statement) {
+    prstringStatementsSet.insert(statement);
 }
-void PKB::addIfStatement(int statement) {
+void PKB::addIfStatement(string statement) {
     ifStatementsSet.insert(statement);
 }
-void PKB::addWhileStatement(int statement) {
+void PKB::addWhileStatement(string statement) {
     whileStatementsSet.insert(statement);
 }
 
 
 // Getter Functions (Statement Types)
 
-bool PKB::isAssignStatement(int statement) {
+bool PKB::isAssignStatement(string statement) {
     return assignStatementsSet.find(statement) != readStatementsSet.end();
 }
 
-bool PKB::isReadStatement(int statement) {
+bool PKB::isReadStatement(string statement) {
     return readStatementsSet.find(statement) != readStatementsSet.end();
 }
 
-bool PKB::isPrintStatement(int statement) {
-    return printStatementsSet.find(statement) != printStatementsSet.end();
+bool PKB::isPrstringStatement(string statement) {
+    return prstringStatementsSet.find(statement) != prstringStatementsSet.end();
 }
-bool PKB::isIfStatement(int statement) {
+bool PKB::isIfStatement(string statement) {
     return ifStatementsSet.find(statement) != ifStatementsSet.end();
 }
-bool PKB::isWhileStatement(int statement) {
+bool PKB::isWhileStatement(string statement) {
     return whileStatementsSet.find(statement) != whileStatementsSet.end();
 }
 
-unordered_set<int> PKB::getAllAssignStatements() {
+unordered_set<string> PKB::getAllAssignStatements() {
     return assignStatementsSet;
 }
-unordered_set<int> PKB::getAllReadStatements() {
+unordered_set<string> PKB::getAllReadStatements() {
     return readStatementsSet;
 }
-unordered_set<int> PKB::getAllPrintStatements() {
-    return printStatementsSet;
+unordered_set<string> PKB::getAllPrstringStatements() {
+    return prstringStatementsSet;
 }
-unordered_set<int> PKB::getAllIfStatements() {
+unordered_set<string> PKB::getAllIfStatements() {
     return ifStatementsSet;
 }
-unordered_set<int> PKB::getAllWhileStatements() {
+unordered_set<string> PKB::getAllWhileStatements() {
     return whileStatementsSet;
 }
 
 
 // Setter Functions (Follows Relationship)
 
-void PKB::setFollows(int followee, int follower) {
+void PKB::setFollows(string followee, string follower) {
     followeeToFollowerMap.emplace(followee, follower);
     followerToFolloweeMap.emplace(follower, followee);
 }
 
 // Getter Functions (Follows Relationship)
 
-bool PKB::isFollows(int followee, int follower) {
+bool PKB::isFollows(string followee, string follower) {
     if (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) {
         return followeeToFollowerMap[followee] == follower;
     } else {
@@ -144,25 +144,25 @@ bool PKB::isFollows(int followee, int follower) {
     }
 }
 
-int PKB::getFollower(int followee) {
+string PKB::getFollower(string followee) {
     return (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) ? followeeToFollowerMap[followee] : -1;
 }
 
-int PKB::getFollowee(int follower) {
+string PKB::getFollowee(string follower) {
     return (followerToFolloweeMap.find(follower) != followerToFolloweeMap.end()) ? followerToFolloweeMap[follower] : -1;
 }
 
 
 // Setter Functions (FollowsT Relationship)
 
-void PKB::setFollowsT(int followee, int follower) {
+void PKB::setFollowsT(string followee, string follower) {
     tFolloweeToFollowerMap.emplace(followee, follower);
     tFollowerToFolloweeMap.emplace(follower, followee);
 }
 
 // Getter Functions (FollowsT Relationship)
 
-bool PKB::isFollowsT(int followee, int follower) {
+bool PKB::isFollowsT(string followee, string follower) {
     if (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) {
         return tFolloweeToFollowerMap[followee] == follower;
     } else {
@@ -170,23 +170,23 @@ bool PKB::isFollowsT(int followee, int follower) {
     }
 }
 
-int PKB::getFollowerT(int followee) {
+string PKB::getFollowerT(string followee) {
     return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? tFolloweeToFollowerMap[followee] : -1;
 }
 
-int PKB::getFolloweeT(int follower) {
+string PKB::getFolloweeT(string follower) {
     return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? tFollowerToFolloweeMap[follower] : -1;
 }
 
 
 // Setter Functions (Parent Relationship)
 
-void PKB::setParent(int parent, int child) {
+void PKB::setParent(string parent, string child) {
 
     childToParentMap.emplace(child, parent);
 
     if (parentToChildrenMap.find(parent) == parentToChildrenMap.end()) {
-        parentToChildrenMap.emplace(parent, unordered_set<int>{child});
+        parentToChildrenMap.emplace(parent, unordered_set<string>{child});
     } else {
         parentToChildrenMap[parent].insert(child);
     }
@@ -195,7 +195,7 @@ void PKB::setParent(int parent, int child) {
 
 // Getter Functions (Parent Relationship)
 
-bool PKB::isParent(int parent, int child) {
+bool PKB::isParent(string parent, string child) {
     if (childToParentMap.find(child) != childToParentMap.end()) {
         return childToParentMap[child] == parent;
     } else {
@@ -203,13 +203,17 @@ bool PKB::isParent(int parent, int child) {
     }
 }
 
-unordered_set<int> PKB::getChildren(int parent) {
+unordered_set<string> PKB::getChildren(string parent) {
 
-    unordered_set<int> emptySet;
+    unordered_set<string> emptySet;
 
     return (parentToChildrenMap.find(parent) != parentToChildrenMap.end()) ? parentToChildrenMap[parent] : emptySet;
 }
 
-int PKB::getParent(int child) {
+string PKB::getParent(string child) {
     return (childToParentMap.find(child) != childToParentMap.end()) ? childToParentMap[child] : -1;
 }
+
+// Setter Functions (ParentT Relationship)
+
+void setParentT(string parent, string child);
