@@ -119,35 +119,35 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
     int switchCase = Identifier::identifyFirstObject(*stmt);
     switch(switchCase){
         case(ASSIGN): {
-            vector<string> v = StringFormatter::Trim(*stmt, ASSIGN);
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, ASSIGN);
             newNode = Parser::parseAssign(v[0]);
             *stmt = v[1];   // the other half of the partition
             break;
         }
-            // ADD MORE CASES FOR STATEMENT
-        case(PROCEDURE): {
-
-            break;
-        }
-
+        // ADD MORE CASES FOR STATEMENT
         case(READ): {
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, READ);
 
-
+            *stmt = v[1];
             break;
         }
-
         case(WHILE): {
-
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, WHILE);
+            //insert parse while here
+            *stmt = v[1];
             break;
         }
-
         case(IF_ELSE): {
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, IF_ELSE);
 
+            *stmt = v[1];
             break;
         }
 
         case(PRINT): {
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, PRINT);
 
+            *stmt = v[1];
             break;
         }
         default:{
@@ -170,7 +170,7 @@ ProcNameNode *Parser::parseProcName(string procedureName) {
 }
 
 ProcedureNode *Parser::parseProcedure(string * procedure) {
-    //vector<string> v = StringFormatter::Trim(*procedure, PROCEDURE);
+    //vector<string> v = StringFormatter::partitionAccordingToCase(*procedure, PROCEDURE);
     // REPLACE WITH ABOVE ONCE IMPLEMENTED
     vector<string> v;
     v.push_back(*procedure);
