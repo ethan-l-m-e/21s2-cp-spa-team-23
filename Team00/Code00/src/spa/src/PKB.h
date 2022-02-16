@@ -41,6 +41,9 @@ private:
     unordered_map<string, unordered_set<string>> parentToChildrenMap;
     unordered_map<string, string> childToParentMap;
 
+    unordered_map<string, unordered_set<string>> tParentToChildrenMap;
+    unordered_map<string, string> tChildToParentMap;
+
 public:
 //	static VarTable* varTable;
 //	static string setProcToAST(PROC p, TNode* r);
@@ -95,8 +98,8 @@ public:
     // Getter Functions (Follows Relationship)
 
     bool isFollows(string followee, string follower);
-    string getFollower(string followee);
-    string getFollowee(string follower);
+    unordered_set<string> getFollower(string followee);
+    unordered_set<string> getFollowee(string follower);
 
     // Setter Functions (FollowsT Relationship)
 
@@ -105,8 +108,8 @@ public:
     // Getter Functions (FollowsT Relationship)
 
     bool isFollowsT(string followee, string follower);
-    string getFollowerT(string followee);
-    string getFolloweeT(string follower);
+    unordered_set<string> getFollowerT(string followee);
+    unordered_set<string> getFolloweeT(string follower);
 
 
     // Setter Functions (Parent Relationship)
@@ -117,9 +120,17 @@ public:
 
     bool isParent(string parent, string child);
     unordered_set<string> getChildren(string parent);
-    string getParent(string child);
+    unordered_set<string> getParent(string child);
 
+    // Setter Functions (ParentT Relationship)
 
+    void setParentT(string parent, string child);
+
+    // Getter Functions (ParentT Relationship)
+
+    bool isParentT(string parent, string child);
+    unordered_set<string> getChildrenT(string parent);
+    unordered_set<string> getParentT(string child);
 
 
 };

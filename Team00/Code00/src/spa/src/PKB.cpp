@@ -144,12 +144,18 @@ bool PKB::isFollows(string followee, string follower) {
     }
 }
 
-string PKB::getFollower(string followee) {
-    return (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) ? followeeToFollowerMap[followee] : -1;
+unordered_set<string> PKB::getFollower(string followee) {
+
+    unordered_set<string> emptySet;
+
+    return (followeeToFollowerMap.find(followee) != followeeToFollowerMap.end()) ? unordered_set<string>{followeeToFollowerMap[followee]} : emptySet;
 }
 
-string PKB::getFollowee(string follower) {
-    return (followerToFolloweeMap.find(follower) != followerToFolloweeMap.end()) ? followerToFolloweeMap[follower] : -1;
+unordered_set<string> PKB::getFollowee(string follower) {
+
+    unordered_set<string> emptySet;
+
+    return (followerToFolloweeMap.find(follower) != followerToFolloweeMap.end()) ? unordered_set<string>{followerToFolloweeMap[follower]} : emptySet;
 }
 
 
@@ -170,12 +176,18 @@ bool PKB::isFollowsT(string followee, string follower) {
     }
 }
 
-string PKB::getFollowerT(string followee) {
-    return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? tFolloweeToFollowerMap[followee] : -1;
+unordered_set<string> PKB::getFollowerT(string followee) {
+
+    unordered_set<string> emptySet;
+
+    return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? unordered_set<string>{tFolloweeToFollowerMap[followee]} : emptySet;
 }
 
-string PKB::getFolloweeT(string follower) {
-    return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? tFollowerToFolloweeMap[follower] : -1;
+unordered_set<string> PKB::getFolloweeT(string follower) {
+
+    unordered_set<string> emptySet;
+
+    return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? unordered_set<string>{tFollowerToFolloweeMap[follower]} : emptySet;
 }
 
 
@@ -210,10 +222,45 @@ unordered_set<string> PKB::getChildren(string parent) {
     return (parentToChildrenMap.find(parent) != parentToChildrenMap.end()) ? parentToChildrenMap[parent] : emptySet;
 }
 
-string PKB::getParent(string child) {
-    return (childToParentMap.find(child) != childToParentMap.end()) ? childToParentMap[child] : -1;
+unordered_set<string> PKB::getParent(string child) {
+
+    unordered_set<string> emptySet;
+
+    return (childToParentMap.find(child) != childToParentMap.end()) ? unordered_set<string>{childToParentMap[child]} : emptySet;
 }
+
 
 // Setter Functions (ParentT Relationship)
 
-void setParentT(string parent, string child);
+void PKB::setParentT(string parent, string child) {
+    tChildToParentMap.emplace(child, parent);
+
+    if (tParentToChildrenMap.find(parent) == tParentToChildrenMap.end()) {
+        tParentToChildrenMap.emplace(parent, unordered_set<string>{child});
+    } else {
+        tParentToChildrenMap[parent].insert(child);
+    }
+}
+
+// Getter Functions (ParentT Relationship)
+
+bool PKB::isParentT(string parent, string child) {
+    if (tChildToParentMap.find(child) != tChildToParentMap.end()) {
+        return tChildToParentMap[child] == parent;
+    } else {
+        return false;
+    }
+}
+unordered_set<string> PKB::getChildrenT(string parent) {
+
+    unordered_set<string> emptySet;
+
+    return (tParentToChildrenMap.find(parent) != tParentToChildrenMap.end()) ? tParentToChildrenMap[parent] : emptySet;
+
+}
+unordered_set<string> PKB::getParentT(string child) {
+
+    unordered_set<string> emptySet;
+
+    return (tChildToParentMap.find(child) != tChildToParentMap.end()) ? unordered_set<string>{tChildToParentMap[child]} : emptySet;
+}
