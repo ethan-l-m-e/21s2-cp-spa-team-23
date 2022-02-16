@@ -14,6 +14,12 @@
 #include "pql/ClauseEvaluators/ParentClauseEvaluator.h"
 #include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
 #include "pql/ClauseEvaluators/SelectClauseEvaluator.h"
+#include "pql/ClauseEvaluators/FollowsTClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ParentTClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ModifiesSClauseEvaluator.h"
+#include "pql/ClauseEvaluators/UsesSClauseEvaluator.h"
+
+
 #include <sstream>
 #include <iostream>
 #include <list>
@@ -24,19 +30,19 @@ private:
 public:
     explicit QueryEvaluator(PKB* pkb) : pkb(pkb) { }
 
-    std::list<std::string> evaluate(Query* query);
+    std::list<std::string> evaluate(Query*);
 
-    ClauseEvaluator* generateEvaluator(SuchThatClause clause, Query* query);
+    ClauseEvaluator* generateEvaluator(SuchThatClause, Query*);
 
-    static void mergeResultToSynonymsRelations(SynonymRelations* sr, Result result);
+    static std::list<std::string> generateResultString(SynonymRelations*, std::string);
 
-    static std::list<std::string> generateResultString(SynonymRelations* sr, string selectedSynonym);
+    static void mergeResultToSynonymsRelations(SynonymRelations&, Result&);
 
-    static vector<std::vector<std::string>> *
-    appendNewSynonym(vector<vector<std::string>> *currentTuples, vector<ResultItem> synonymValues);
+    static vector<std::vector<std::string>> appendNewSynonym(vector<vector<std::string>>&, vector<ResultItem>&);
 
-    static vector<std::vector<std::string>> *
-    appendNewSynonymTuples(vector<vector<string>> *currentTuples, vector<ResultItem> synonymValues);
+    static vector<std::vector<std::string>> appendNewSynonymTuples(vector<vector<std::string>>&, vector<ResultItem>&);
+
+    static unordered_map<std::string, std::vector<string>> convertVectorToMap (std::vector<ResultItem>&, bool);
 };
 
 
