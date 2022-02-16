@@ -59,7 +59,7 @@ vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
                 throw "StringFormatter failed to find matching bracket";
             }
             trimmedCode = sourceCode.substr(0, endPos);
-            string codeToRecurse = sourceCode.substr(endPos, sourceCode.size() - trimmedCode.size());
+            string codeToRecurse = removeTrailingSpace(sourceCode.substr(endPos, sourceCode.size() - trimmedCode.size()));
             v.push_back(trimmedCode);
             v.push_back(codeToRecurse);
         }

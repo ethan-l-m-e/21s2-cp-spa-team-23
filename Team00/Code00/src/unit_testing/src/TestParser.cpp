@@ -80,7 +80,7 @@ TEST_CASE("Assign parsing with expression") {
 }
 
 TEST_CASE("While parsing") {
-    string code = "while (number > 0) { X = a; while (number > 0) { X = a; } } X = a;";
+    string code = "while (number > 0) { X = a;\nwhile (number > 0) { X = a; } } X = a;";
     Parser::parseStatementNode(&code);
 }
 

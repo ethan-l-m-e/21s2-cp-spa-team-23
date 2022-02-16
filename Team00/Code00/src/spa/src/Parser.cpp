@@ -109,18 +109,26 @@ Expression parseExpression(string expression) {
 }
 
 AssignNode* Parser::parseAssign(string assignLine) {
+    int stmtNo = getStatementNumber();
     vector<string> tokens;
     SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
-    int stmtNo = getStatementNumber();
     cout << "sending assign " << stmtNo << " to PKB\n";
     PKB::getInstance()->addAssignStatement(stmtNo);
     return new AssignNode(stmtNo, newVarNode, newExpression);
 }
 
 WhileNode *Parser::parseWhile(string code) {
-    return {};
+    int stmtNo = getStatementNumber();
+    vector<string> tokens;
+    SourceTokenizer::extractWhile(code, tokens);
+    //CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
+    StatementList newStmtLst = parseStatementList(tokens[1]);
+    cout << "sending while " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addWhileStatement(stmtNo);
+
+    return {}; // create whileNode
 }
 
 // difficult to modify. edit at own risk
@@ -147,8 +155,8 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             // ADD MORE CASES FOR STATEMENT
         case(WHILE): {
             vector<string> v = StringFormatter::Trim(*stmt, WHILE);
-            cout << v[0] + "\n";
-            cout << v[1] + "\n";
+            //cout << "whileCode: "<< v[0] + "\n";
+            //cout << "remaining: " << v[1] + "\n";
             newNode = Parser::parseWhile(v[0]);
             *stmt = v[1];
             break;
