@@ -92,8 +92,20 @@ TEST_CASE("Assign parsing with expression") {
 }
 
 TEST_CASE("While parsing") {
-    string code = "while (number > 0) { X = a;\nwhile (number > 0) { X = a; } } X = a;";
-    Parser::parseStatementNode(&code);
+    string code = "while (number > 0) { X = a;\nwhile (number > 0) { X = a; } }";
+    auto testNode = Parser::parseWhile(code);
+    CHECK(testNode->getStmtNumber() == 1);
+    CHECK(testNode->getCondExpr()->getRelExpr()->getRelativeOperator() == ">");
+    CHECK(testNode->getStmtLst().size() == 2);
+}
+
+TEST_CASE("If parsing") {
+    string code = "if (number > 0) then { X = 0; } else { X = 1;\nY = 1; }";
+    auto testNode = Parser::parseIf(code);
+    CHECK(testNode->getStmtNumber() == 1);
+    CHECK(testNode->getCondExpr()->getRelExpr()->getRelativeOperator() == ">");
+    CHECK(testNode->getThenStmtLst().size() == 1);
+    CHECK(testNode->getElseStmtLst().size() == 2);
 }
 
 TEST_CASE("Relative expression parsing") {

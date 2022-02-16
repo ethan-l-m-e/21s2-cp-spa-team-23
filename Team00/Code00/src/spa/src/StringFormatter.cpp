@@ -62,6 +62,18 @@ vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
             string codeToRecurse = removeTrailingSpace(sourceCode.substr(endPos, sourceCode.size() - trimmedCode.size()));
             v.push_back(trimmedCode);
             v.push_back(codeToRecurse);
+            break;
+        }
+        case IF_ELSE: {
+            int firstStartBracket = sourceCode.find('{');
+            int secondStartBracket = sourceCode.substr(firstStartBracket + 1).find('{');
+            int endPos = findMatchingBracket(sourceCode, secondStartBracket);
+            trimmedCode = sourceCode.substr(0, endPos);
+            string codeToRecurse = removeTrailingSpace(
+                    sourceCode.substr(endPos, sourceCode.size() - trimmedCode.size()));
+            v.push_back(trimmedCode);
+            v.push_back(codeToRecurse);
+            break;
         }
         case PROCEDURE: {
             trimmedCode = "";

@@ -110,47 +110,61 @@ Expression parseExpression(string expression) {
 
 ReadNode *Parser::parseRead(string readLine) {
     int stmtNo = getStatementNumber();
+    cout << "sending read " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addReadStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractRead(readLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
 
-    cout << "sending read " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addReadStatement(stmtNo);
     return new ReadNode(stmtNo, newVar);
 }
 
 PrintNode *Parser::parsePrint(string printLine) {
     int stmtNo = getStatementNumber();
+    cout << "sending print " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addPrintStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractPrint(printLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
 
-    cout << "sending print " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addPrintStatement(stmtNo);
     return new PrintNode(stmtNo, newVar);
 }
 
 AssignNode* Parser::parseAssign(string assignLine) {
     int stmtNo = getStatementNumber();
+    cout << "sending assign " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addAssignStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
-    cout << "sending assign " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addAssignStatement(stmtNo);
+
     return new AssignNode(stmtNo, newVarNode, newExpression);
 }
 
 WhileNode *Parser::parseWhile(string code) {
     int stmtNo = getStatementNumber();
-    vector<string> tokens;
-    SourceTokenizer::extractWhile(code, tokens);
-    //CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
-    StatementList newStmtLst = parseStatementList(tokens[1]);
     cout << "sending while " << stmtNo << " to PKB\n";
     PKB::getInstance()->addWhileStatement(stmtNo);
+    vector<string> tokens;
+    SourceTokenizer::extractWhile(code, tokens);
+    CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
+    StatementList newStmtLst = parseStatementList(tokens[1]);
 
-    return {}; // create whileNode
+    return new WhileNode(stmtNo, newCondExpr, newStmtLst);
+}
+
+IfNode *Parser::parseIf(string code) {
+    int stmtNo = getStatementNumber();
+    cout << "sending if " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addIfStatement(stmtNo);
+    vector<string> tokens;
+    SourceTokenizer::extractIfElseThen(code, tokens);
+    CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
+    StatementList newThenStmtLst = parseStatementList(tokens[1]);
+    StatementList newElseStmtLst = parseStatementList(tokens[2]);
+
+    return new IfNode(stmtNo, newCondExpr, newThenStmtLst, newElseStmtLst);
 }
 
 RelExprNode *Parser::parseRelExpr(string relExprLine) {
@@ -256,16 +270,12 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
-            /*
-
         case(IF_ELSE): {
             vector<string> v = StringFormatter::Trim(*stmt, IF_ELSE);
             newNode = Parser::parseIf(v[0]);
-            *stmt = v[1];
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
-
-             */
         default:{
             throw "cannot recognise '" + *stmt + "' as a statement";
             break;
