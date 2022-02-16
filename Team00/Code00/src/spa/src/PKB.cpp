@@ -78,7 +78,7 @@ bool PKB::isConstant(string constant) {
 }
 
 unordered_set<string> PKB::getAllStatements() {
-    return statementsSet;
+    return convertSetIntegersToSetStrings(statementsSet);
 }
 unordered_set <string> PKB::getAllVariables() {
     return variablesSet;

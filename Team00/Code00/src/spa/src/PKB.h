@@ -163,6 +163,6 @@ public:
 
     // Getter Functions (Uses Relationship)
 
-    
+    void setUses(int statement, unordered_set<string> variables);
 
 };
