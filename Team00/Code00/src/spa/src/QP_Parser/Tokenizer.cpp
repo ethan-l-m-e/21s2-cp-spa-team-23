@@ -16,13 +16,8 @@ QueryToken Tokenizer::getQueryToken(string query) {
     }
 
     // Gets all the different tokens
-    cout << "getDeclarationTokens" << "\n";
     getDeclarationTokens(query, queryToken);
-    cout << "getSelectClauseTokens" << "\n";
-
     getSelectClauseTokens(query, queryToken);
-    cout << "getSuchThatClauseTokens" << "\n";
-
     getSuchThatClauseTokens(query, queryToken);
     getPatternClause(query, queryToken);
 
