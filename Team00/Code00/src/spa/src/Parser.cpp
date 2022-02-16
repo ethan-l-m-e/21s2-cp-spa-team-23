@@ -139,6 +139,59 @@ RelExprNode *Parser::parseRelExpr(string relExprLine) {
     return new RelExprNode(newLeftRelFactor, newRightRelFactor, tokens[2]);
 }
 
+// DELETE ONCE SourceTokenizer HAS ITS OWN EXTRACT COND EXPR
+////////////////////////////////////////////////////////////
+void extractCondExpr(string sourceCode, vector<string> &v) {
+    int operPos = -1;
+    bool notFound = true;
+    string left, right, oper;
+    if ((operPos = sourceCode.find("&&")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
+    }
+    if (notFound && (operPos = sourceCode.find("||")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
+    }
+    if (notFound && (operPos = sourceCode.find("!")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 1));
+    }
+    if (notFound) {
+        // just rel exp
+        left = "";
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
+        oper = "";
+    }
+
+    v.push_back(oper); // 0
+    v.push_back(left); // 1
+    v.push_back(right); // 2
+}
+////////////////////////////////////////////////////////////
+
+CondExprNode *Parser::parseCondExpr(string condExprLine) {
+    vector<string> tokens;
+    extractCondExpr(std::move(condExprLine), tokens);
+    if (tokens[0].empty()) {
+        RelExprNode* newRelExpr = parseRelExpr(tokens[2]);
+        return new CondExprNode(newRelExpr);
+    }
+    if (tokens[0] == "!") {
+        CondExprNode* newCondExpr = parseCondExpr(tokens[2]);
+        return new CondExprNode(newCondExpr);
+    }
+    CondExprNode* newLeftCondExpr = parseCondExpr(tokens[1]);
+    CondExprNode* newRightCondExpr = parseCondExpr(tokens[2]);
+    return new CondExprNode(tokens[0],newLeftCondExpr, newRightCondExpr);
+}
+
 // difficult to modify. edit at own risk
 StatementList Parser::parseStatementList(string statementListString) {
     StatementList stmtLst;

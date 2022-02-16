@@ -125,6 +125,28 @@ TEST_CASE("Relative expression parsing") {
     CHECK(testNode->getRelativeOperator() == "!=");
 }
 
+TEST_CASE("Condition expression parsing") {
+    cout << "Check && expr\n";
+    string condExprString = "A == a && B > b";
+    auto testNode = Parser::parseCondExpr(condExprString);
+    CHECK(testNode->getCondOperator() == "&&");
+
+    cout << "Check || expr\n";
+    condExprString = "A == a || B > b";
+    testNode = Parser::parseCondExpr(condExprString);
+    CHECK(testNode->getCondOperator() == "||");
+
+    cout << "Check ! expr\n";
+    condExprString = "! B > b";
+    testNode = Parser::parseCondExpr(condExprString);
+    CHECK(testNode->getCondOperator() == "!");
+
+    cout << "Check rel expr\n";
+    condExprString = "B > b";
+    testNode = Parser::parseCondExpr(condExprString);
+    CHECK(testNode->getCondOperator().empty());
+}
+
 TEST_CASE("Program parsing") {
     string code = "procedure name { X = a; }";
     Program program = Parser::parseProgram(code);
