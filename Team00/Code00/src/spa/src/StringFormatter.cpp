@@ -10,6 +10,30 @@ using namespace std;
 
 string ltrim(string);
 string rtrim(string);
+// Return index of closing bracket given the index of the starting bracket.
+// Return -1 if not found.
+int findMatchingBracket(const std::string& sourceCode, int startPos) {
+    int bracketCheck = 1;
+    int endPos = -1;
+    for (int i = startPos+1; i < sourceCode.length(); i++) {
+        char c = sourceCode[i];
+        switch (sourceCode[i]) {
+            case('}'): {
+                bracketCheck--;
+                if (bracketCheck == 0) {
+                    endPos = i+1;
+                    goto exit_loop;
+                }
+                continue;
+            }
+            case('{'): {
+                bracketCheck++;
+            }
+        }
+    }
+    exit_loop:;
+    return endPos;
+}
 vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
     string trimmedCode;
     vector<string> v;
@@ -26,6 +50,18 @@ vector<string> StringFormatter::Trim(std::string sourceCode, int type) {
             v.push_back(trimmedCode);
             v.push_back(codeToRecurse);
             break;
+        }
+        case WHILE: {
+            int startBracket = sourceCode.find("{");
+            int bracketCheck = 1;
+            int endPos = findMatchingBracket(sourceCode, startBracket);
+            if (endPos == -1) {
+                throw "StringFormatter failed to find matching bracket";
+            }
+            trimmedCode = sourceCode.substr(0, endPos);
+            string codeToRecurse = sourceCode.substr(endPos, sourceCode.size() - trimmedCode.size());
+            v.push_back(trimmedCode);
+            v.push_back(codeToRecurse);
         }
         case PROCEDURE: {
             trimmedCode = "";

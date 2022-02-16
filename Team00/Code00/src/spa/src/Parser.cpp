@@ -119,6 +119,10 @@ AssignNode* Parser::parseAssign(string assignLine) {
     return new AssignNode(stmtNo, newVarNode, newExpression);
 }
 
+WhileNode *Parser::parseWhile(string code) {
+    return {};
+}
+
 // difficult to modify. edit at own risk
 StatementList Parser::parseStatementList(string statementListString) {
     StatementList stmtLst;
@@ -141,13 +145,16 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             break;
         }
             // ADD MORE CASES FOR STATEMENT
-            /*
         case(WHILE): {
             vector<string> v = StringFormatter::Trim(*stmt, WHILE);
+            cout << v[0] + "\n";
+            cout << v[1] + "\n";
             newNode = Parser::parseWhile(v[0]);
             *stmt = v[1];
             break;
         }
+            /*
+
         case(IF_ELSE): {
             vector<string> v = StringFormatter::Trim(*stmt, IF_ELSE);
             newNode = Parser::parseIf(v[0]);

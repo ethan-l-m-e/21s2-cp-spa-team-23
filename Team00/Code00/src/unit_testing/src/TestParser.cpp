@@ -79,6 +79,11 @@ TEST_CASE("Assign parsing with expression") {
     CHECK(testNode->getStmtNumber() == 1);
 }
 
+TEST_CASE("While parsing") {
+    string code = "while (number > 0) { X = a; while (number > 0) { X = a; } } X = a;";
+    Parser::parseStatementNode(&code);
+}
+
 TEST_CASE("Program parsing") {
     string code = "procedure name { X = a; }";
     Program program = Parser::parseProgram(code);
