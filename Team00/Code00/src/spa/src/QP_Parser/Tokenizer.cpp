@@ -27,7 +27,7 @@ QueryToken Tokenizer::getQueryToken(string query) {
 void Tokenizer::getDeclarationTokens(string pql, QueryToken& queryToken) {
     string declarationsLine = StringFormatter::extractFrontStringByRegex(pql, "\n");
     // Separates declarations by design entities
-    vector<string> declarations = StringFormatter::tokenizeByRegex(declarationsLine, "[]*;");
+    vector<string> declarations = StringFormatter::tokenizeByRegex(declarationsLine, "[ ]*;[ ]*");
     auto declarationPtr = splitDeclarations(declarations);
     queryToken.declarationTokens = declarationPtr;
 }
@@ -39,7 +39,7 @@ vector<DeclarationToken>* Tokenizer::splitDeclarations(vector<string> &declarati
     for (string &declaration : declarations) {
         designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
         synonymsString = declaration.substr(designEntity.length() + 1);
-        vector<string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, "[]*, ");
+        vector<string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, "[ ]*,[ ]*");
 
         // Create Declaration token
         DeclarationToken declarationToken = DeclarationToken();
