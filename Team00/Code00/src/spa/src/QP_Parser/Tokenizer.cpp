@@ -8,13 +8,13 @@
 using namespace qp;
 // TODO: transfer regex to constants file
 QueryToken Tokenizer::getQueryToken(string query) {
-
     QueryToken queryToken = QueryToken();
 
     // check if length of query is non-zero
     if (query.length() == 0) {
         return queryToken;
     }
+
     // Gets all the different tokens
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
@@ -51,14 +51,12 @@ vector<DeclarationToken>* Tokenizer::splitDeclarations(vector<string> &declarati
 }
 
 void Tokenizer::getSelectClauseTokens(string& pql, QueryToken& queryToken) {
-    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
-    vector<string> tokens = StringFormatter::tokenizeByRegex(selectLine, "(Select[ ]*|[ ]+)");
+    vector<string> tokens = StringFormatter::tokenizeByRegex(pql, "(Select[ ]+|[ ]+|(.*;))");
     queryToken.selectClauseToken = tokens[0];
 }
 
 void Tokenizer::getSuchThatClauseTokens(string& pql, QueryToken& queryToken) {
-    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
-    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)such [ ]*that[ ]+");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)such [ ]*that[ ]+");
     vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
 
     auto suchThatClausesPtr = new vector<string>(suchThatClauses);
@@ -66,8 +64,7 @@ void Tokenizer::getSuchThatClauseTokens(string& pql, QueryToken& queryToken) {
 }
 
 void Tokenizer::getPatternClause(string& pql, QueryToken& queryToken) {
-    string selectLine = StringFormatter::extractSecondStringByRegex(pql, "\n");
-    vector<string> backClauses = StringFormatter::tokenizeByRegex(selectLine, "(.*)[ ]+pattern[ ]+");
+    vector<string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
     vector<string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
 
     string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
