@@ -1,6 +1,5 @@
 #include <fstream>
 #include "TestWrapper.h"
-#include "Parser.h"
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;
@@ -15,6 +14,9 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
+  pkb = PKB::getInstance();
+  preProcessor = new qp::PreProcessor();
+  queryEvaluator = new QueryEvaluator(pkb);
 }
 
 // method for parsing the SIMPLE source
@@ -27,8 +29,10 @@ void TestWrapper::parse(std::string filename) {
 
 // method to evaluating a query
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
-// call your evaluator to evaluate the query here
+  // call your ClauseEvaluators to evaluate the query here
   // ...code to evaluate query...
+  Query processedQuery = preProcessor->getQuery(query);
+  results = queryEvaluator->evaluate(&processedQuery);
 
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.

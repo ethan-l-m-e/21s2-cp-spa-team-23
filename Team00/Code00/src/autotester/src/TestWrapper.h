@@ -4,11 +4,19 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include "Parser.h"
+#include "PKB.h"
+#include "QP_Parser/PreProcessor.h"
+#include "pql/QueryEvaluator.h"
 
 // include your other headers here
 #include "AbstractWrapper.h"
 
 class TestWrapper : public AbstractWrapper {
+private:
+    PKB* pkb;
+    qp::PreProcessor* preProcessor;
+    QueryEvaluator* queryEvaluator;
  public:
   // default constructor
   TestWrapper();
