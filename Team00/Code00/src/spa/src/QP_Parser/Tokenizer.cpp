@@ -1,10 +1,13 @@
 #include "Tokenizer.h"
 #include "StringFormatter.h"
+#include "Constants.h"
 
 #include <string>
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <regex>
+
 using namespace qp;
 // TODO: transfer regex to constants file
 QueryToken Tokenizer::getQueryToken(string query) {
@@ -56,6 +59,12 @@ void Tokenizer::getSelectClauseTokens(string& pql, QueryToken& queryToken) {
 }
 
 void Tokenizer::getSuchThatClauseTokens(string& pql, QueryToken& queryToken) {
+    std::regex relationshipReg(RELATIONSHIP_MATCH);
+    bool hasRelationship = regex_match(pql, relationshipReg);
+    if (!hasRelationship) {
+        return;
+    }
+
     vector<string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)such [ ]*that[ ]+");
     vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
     auto suchThatClausesPtr = new vector<string>(suchThatClauses);
@@ -63,6 +72,12 @@ void Tokenizer::getSuchThatClauseTokens(string& pql, QueryToken& queryToken) {
 }
 
 void Tokenizer::getPatternClause(string& pql, QueryToken& queryToken) {
+    std::regex patternReg(PATTERN_MATCH);
+    bool hasPattern = regex_match(pql, patternReg);
+    if (!hasPattern) {
+        return;
+    }
+
     vector<string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
     vector<string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
 

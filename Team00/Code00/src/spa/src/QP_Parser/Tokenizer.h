@@ -27,9 +27,11 @@ namespace qp {
         std::string selectClauseToken;
         std::vector<std::string>* suchThatClauseToken;
         PatternToken* patternToken;
+        std::vector<std::string>* declarationNames;
+        std::vector<std::string>* designEntities;
 
         QueryToken() : declarationTokens(nullptr), selectClauseToken(""), suchThatClauseToken(nullptr), patternToken(
-                nullptr) {};
+                nullptr), declarationNames(nullptr), designEntities(nullptr) {};
 
     };
 
