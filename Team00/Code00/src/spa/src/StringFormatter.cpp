@@ -15,15 +15,7 @@ vector<string> StringFormatter::partitionAccordingToCase(std::string sourceCode,
     string trimmedCode;
     vector<string> v;
     switch(type) {
-        case ASSIGN:{
-            v = StringFormatter::partitionBySemiColon(sourceCode);
-            break;
-        }
-        case READ:{
-            v = StringFormatter::partitionBySemiColon(sourceCode);
-            break;
-        }
-        case PRINT:{
+        case ASSIGN: case READ: case PRINT: {
             v = StringFormatter::partitionBySemiColon(sourceCode);
             break;
         }
@@ -105,7 +97,6 @@ vector<string> StringFormatter::partitionBySemiColon(string sourceCode) {
     return v;
 }
 
-// assumes front string a leftBracket
 //extracts the parentheses with the stated brackets, then put the string in front, the remaining located at the back
 vector<string> StringFormatter::partitionBasedOnParentheses(string sourceCode, string brackets) {
     vector<string> v;
@@ -155,17 +146,6 @@ string StringFormatter::extractFrontStringByRegex(string sourceCode, string rege
     strcpy(sourceAsChar, sourceCode.c_str());
     strcpy(regexChar, regex.c_str());
     char *token = strtok(sourceAsChar,regexChar);
-    string s(token);
-    return s;
-}
-
-string StringFormatter::extractSecondStringByRegex(string sourceCode, string regex) {
-    char * sourceAsChar = new char[100];
-    char * regexChar = new char[100];
-    strcpy(sourceAsChar, sourceCode.c_str());
-    strcpy(regexChar, regex.c_str());
-    char *token = strtok(sourceAsChar,regexChar);
-    token = strtok(NULL, regexChar);
     string s(token);
     return s;
 }
