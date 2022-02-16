@@ -84,6 +84,47 @@ TEST_CASE("While parsing") {
     Parser::parseStatementNode(&code);
 }
 
+TEST_CASE("Relative expression parsing") {
+    cout << "Check less than equals\n";
+    string relExprString = "X <= Y * 1";
+    RelExprNode* testNode = Parser::parseRelExpr(relExprString);
+    CHECK(testNode->getRelativeOperator() == "<=");
+    CHECK(get<VariableNode*>(testNode->getLeftFactor())->getVariableName() == "X");
+    CHECK(get<BinaryOperatorNode*>(testNode->getRightFactor())->getBinaryOperator() == "*");
+    CHECK(get<VariableNode*>(get<BinaryOperatorNode*>(testNode->getRightFactor())->getLeftExpr())->getVariableName() == "Y");
+    CHECK(get<ConstValueNode*>(get<BinaryOperatorNode*>(testNode->getRightFactor())->getRightExpr())->getConstValue() == "1");
+
+    cout << "Check greater than equals\n";
+    relExprString = "X >= Y * 1";
+    testNode = Parser::parseRelExpr(relExprString);
+    CHECK(testNode->getRelativeOperator() == ">=");
+
+    cout << "Check less than\n";
+    relExprString = "X < Y * 1";
+    testNode = Parser::parseRelExpr(relExprString);
+    CHECK(testNode->getRelativeOperator() == "<");
+
+    cout << "Check greater than\n";
+    relExprString = "X > Y * 1";
+    testNode = Parser::parseRelExpr(relExprString);
+    CHECK(testNode->getRelativeOperator() == ">");
+
+    cout << "Check less than\n";
+    relExprString = "X < Y * 1";
+    testNode = Parser::parseRelExpr(relExprString);
+    CHECK(testNode->getRelativeOperator() == "<");
+
+    cout << "Check equals\n";
+    relExprString = "X == Y * 1";
+    testNode = Parser::parseRelExpr(relExprString);
+    CHECK(testNode->getRelativeOperator() == "==");
+
+    cout << "Check not equals\n";
+    relExprString = "X != Y * 1";
+    testNode = Parser::parseRelExpr(relExprString);
+    CHECK(testNode->getRelativeOperator() == "!=");
+}
+
 TEST_CASE("Program parsing") {
     string code = "procedure name { X = a; }";
     Program program = Parser::parseProgram(code);

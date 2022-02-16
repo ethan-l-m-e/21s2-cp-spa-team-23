@@ -11,6 +11,8 @@ public:
     static ConstValueNode* parseConst(string constValue);
     static ProcNameNode* parseProcName(string procedureName);
 
+    static CondExprNode* parseCondExpr(string condExprLine);
+    static RelExprNode* parseRelExpr(string relExprLine);
     static StmtNode* parseStatementNode(string * stmt);
     /*
     static PrintNode* parsePrint(string printLine);

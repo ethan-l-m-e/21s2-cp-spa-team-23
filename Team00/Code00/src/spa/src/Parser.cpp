@@ -131,6 +131,14 @@ WhileNode *Parser::parseWhile(string code) {
     return {}; // create whileNode
 }
 
+RelExprNode *Parser::parseRelExpr(string relExprLine) {
+    vector<string> tokens;
+    SourceTokenizer::extractRelExpr(relExprLine, tokens);
+    RelFactor newLeftRelFactor = parseExpression(tokens[0]);
+    RelFactor newRightRelFactor = parseExpression(tokens[1]);
+    return new RelExprNode(newLeftRelFactor, newRightRelFactor, tokens[2]);
+}
+
 // difficult to modify. edit at own risk
 StatementList Parser::parseStatementList(string statementListString) {
     StatementList stmtLst;

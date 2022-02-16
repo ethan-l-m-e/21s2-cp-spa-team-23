@@ -19,6 +19,7 @@ public:
     static void extractProcedure(string sourceCode, vector<string> &v);
 
     static void extractExpression(string sourceCode, vector<string> &v);
+    static void extractRelExpr(string sourceCode, vector<string> &v);
 };
 
 
