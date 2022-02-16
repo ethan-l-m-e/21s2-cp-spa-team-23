@@ -8,17 +8,17 @@
 std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     // Initialise an empty result
     auto* synonymRelations = new SynonymRelations();
-/*
+
     // Create ClauseEvaluators and evaluate each of the pattern clause
     if(query->hasPatternClause()) {
-        for(PatternClause clause : query->getPatternClauses()) {
-            PatternClauseEvaluator patternClauseEvaluator = PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
-            Result patternResult = patternClauseEvaluator.evaluateClause();
-            if (!patternResult.resultBoolean) return convertResultToString(result, query->getSelectedSynonym());
-            result = mergeResults(result, patternResult);
+        for(const PatternClause& clause : query->getPatternClauses()) {
+            auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
+            Result patternResult = patternClauseEvaluator->evaluateClause();
+            delete patternClauseEvaluator;
+            if (!patternResult.resultBoolean) return {};
+            mergeResultToSynonymsRelations(*synonymRelations, patternResult);
         }
     }
-*/
 
     // Create ClauseEvaluators and evaluate each of the suchThat clause
     if(query->hasSuchThatClause()) {
@@ -30,8 +30,6 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             mergeResultToSynonymsRelations(*synonymRelations, suchThatResult);
         }
     }
-
-
 
     if (synonymRelations->isEmpty()) {
         auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
@@ -118,10 +116,13 @@ void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations& sr, Result
         } else {
 
             long index = std::distance(header->begin(), it);
-            for (auto value = values->begin(); value != values->end(); ++value) {
+            for (auto value = values->begin(); value != values->end();) {
+                string curr = (*value)[index];
                 if (!std::count(result.resultItemList.begin(), result.resultItemList.end(),
                                 (ResultItem) (*value)[index])) {
                     values->erase(value);
+                } else {
+                    ++value;
                 }
             }
         }
@@ -144,13 +145,15 @@ void QueryEvaluator::mergeResultToSynonymsRelations(SynonymRelations& sr, Result
         } else if (it1 != header->end() && it2 != header->end()) {
             long index1 = std::distance(header->begin(), it1);
             long index2 = std::distance(header->begin(), it2);
-            for (auto value = values->begin(); value != values->end(); ++value) {
+            for (auto value = values->begin(); value != values->end();) {
                 std::string left = (*value)[index1];
                 std::string right = (*value)[index2];
                 std::tuple<std::string, std::string> curr = make_tuple(left, right);
                 if (!std::count(result.resultItemList.begin(), result.resultItemList.end(),
                                 (ResultItem) curr)) {
                     values->erase(value);
+                } else {
+                    ++value;
                 }
             }
         // if only one synonym is in the relation, join the tuples
@@ -243,7 +246,9 @@ unordered_map<std::string, std::vector<string>> QueryEvaluator::convertVectorToM
     for(auto resultItem : resultItemList) {
         auto curr = std::get<tuple<string,string>>(resultItem);
         if (reversed) {
-            curr.swap(curr);
+            std::string s1 = std::get<0>(curr);
+            std::string s2 = std::get<1>(curr);
+            curr = tuple<string,string>{s2, s1};
         }
         auto it = map.find(std::get<0>(curr));
         if(it != map.end()) {
