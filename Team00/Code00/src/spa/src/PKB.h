@@ -22,6 +22,7 @@ private:
 
     static PKB* singleton;
 
+    unordered_set<string> statementsSet;
     unordered_set<string> variablesSet;
     unordered_set<string> proceduresSet;
     unordered_set<string> constantsSet;
@@ -53,16 +54,19 @@ public:
     static PKB* getInstance();
 
     // Setter Functions (Variables, Procedures etc.)
+    void addStatement(string statement);
     void addVariable(string variable);
     void addProcedure(string procedure);
     void addConstant(string constant);
 
     // Getter Functions (Variables, Procedures etc.)
 
+    bool isStatement(string statement);
     bool isVariable(string variable);
     bool isProcedure(string procedure);
     bool isConstant(string constant);
 
+    unordered_set<string> getAllStatements();
     unordered_set<string> getAllVariables();
     unordered_set<string> getAllProcedures();
     unordered_set<string> getAllConstants();

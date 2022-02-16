@@ -34,6 +34,11 @@ PKB* PKB::getInstance() {
 
 
 // Setter Functions (Variables, Procedures etc.)
+
+void PKB::addStatement(string statement) {
+    statementsSet.insert(statement);
+}
+
 void PKB::addVariable(string variable) {
     variablesSet.insert(variable);
 }
@@ -48,6 +53,9 @@ void PKB::addConstant(string constant) {
 
 // Getter Functions (Variables, Procedures etc.)
 
+bool PKB::isStatement(string statement) {
+    return statementsSet.find(statement) != statementsSet.end();
+}
 bool PKB::isVariable(string variable) {
     return variablesSet.find(variable) != variablesSet.end();
 }
@@ -58,6 +66,9 @@ bool PKB::isConstant(string constant) {
     return proceduresSet.find(constant) != proceduresSet.end();
 }
 
+unordered_set<string> PKB::getAllStatements() {
+    return statementsSet;
+}
 unordered_set <string> PKB::getAllVariables() {
     return variablesSet;
 }
