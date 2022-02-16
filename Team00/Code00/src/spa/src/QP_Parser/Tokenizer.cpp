@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <regex>
+#include <map>
 
 using namespace qp;
 // TODO: transfer regex to constants file
@@ -31,26 +32,29 @@ void Tokenizer::getDeclarationTokens(string pql, QueryToken& queryToken) {
     string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, "[ |\n]*(Select.*)")[0];
     // Separates declarations by design entities
     vector<string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, "[ ]*;[ ]*");
-    auto declarationPtr = splitDeclarations(declarationsToken);
-    queryToken.declarationTokens = declarationPtr;
+    splitDeclarations(declarationsToken, queryToken);
 }
 
-vector<DeclarationToken>* Tokenizer::splitDeclarations(vector<string> &declarations) {
-    auto declarationPtr = new vector<DeclarationToken>();
+void Tokenizer::splitDeclarations(vector<string>& declarations, QueryToken& queryToken) {
+    // TODO: Refactor Code
+    map<string, string>* declarationsMap = new map<string, string>();
     string designEntity, synonymsString, declarationString;
+    vector<string> declarationNames = vector<string>();
+    vector<string> designEntities = vector<string>();
 
     for (string &declaration : declarations) {
         designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
         synonymsString = declaration.substr(designEntity.length() + 1);
         vector<string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, "[ ]*,[ ]*");
 
-        // Create Declaration token
-        DeclarationToken declarationToken = DeclarationToken();
-        declarationToken.designEntity = designEntity;
-        declarationToken.synonyms = new vector<string>(synonyms);
-        declarationPtr->push_back(declarationToken);
+        for (string synonym : synonyms) {
+            declarationNames.push_back(synonym);
+            declarationsMap->insert({synonym, designEntity});
+        }
+        designEntities.push_back(designEntity);
     }
-    return declarationPtr;
+    queryToken.declarationTokens = declarationsMap;
+    queryToken.declarations = new pair<vector<string>, vector<string>>(declarationNames, designEntities);
 }
 
 void Tokenizer::getSelectClauseTokens(string& pql, QueryToken& queryToken) {
@@ -67,8 +71,11 @@ void Tokenizer::getSuchThatClauseTokens(string& pql, QueryToken& queryToken) {
 
     vector<string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)such [ ]*that[ ]+");
     vector<string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
-    auto suchThatClausesPtr = new vector<string>(suchThatClauses);
-    queryToken.suchThatClauseToken = suchThatClausesPtr;
+
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
+    suchThatClauseToken.relRef = suchThatClauses[0];
+    suchThatClauseToken.arguments = new pair<string, string>(suchThatClauses[1], suchThatClauses[2]);
+    queryToken.suchThatClauseTokens = new vector<SuchThatClauseToken>{suchThatClauseToken};
 }
 
 void Tokenizer::getPatternClause(string& pql, QueryToken& queryToken) {
@@ -82,8 +89,8 @@ void Tokenizer::getPatternClause(string& pql, QueryToken& queryToken) {
     vector<string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
 
     string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
-    PatternToken* patternToken = new PatternToken();
-    patternToken->synonym = synonym;
-    patternToken->arguments = new pair<string, string>(patternClause[1], patternClause[2]);
-    queryToken.patternToken = patternToken;
+    PatternToken patternToken = PatternToken();
+    patternToken.synonym = synonym;
+    patternToken.arguments = new pair<string, string>(patternClause[1], patternClause[2]);
+    queryToken.patternToken = new vector<PatternToken>{patternToken};
 }

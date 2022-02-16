@@ -16,51 +16,19 @@ bool Validator::validateQueryStructure(std::string pql) {
     return isValid;
 }
 
-//bool Validator::validateRelationship(std::string pql) {
-//    std::regex relationshipReg(RELATIONSHIP_MATCH);
-//    bool hasRelationship = regex_match(pql, relationshipReg);
-//    if (!hasRelationship) {
-//        return true;
-//    }
-//    std::string relationshipString = StringFormatter::tokenizeByRegex(pql, "(.*)such [ ]*that[ ]+")[0];
-//    bool isValid = regex_match(relationshipString, std::regex (SUCH_THAT_CL_ARG));
-//    return isValid;
-//}
-//
-//bool Validator::validatePattern(std::string pql) {
-//    std::regex patternReg(PATTERN_MATCH);
-//    bool hasPattern = regex_match(pql, patternReg);
-//    if (!hasPattern) {
-//        return true;
-//    }
-//    std::string patternString = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+")[0];
-//    bool isValid = regex_match(patternString, std::regex (PATTERN_CL_ARG));
-//    return isValid;
-//}
-
 bool Validator::checkForSemantics(QueryToken& queryToken) {
-    // TODO: need declarationNames, designEntities
-    set<string> declarationSet = convertVectorToSet(*(queryToken.declarationNames));
+    set<string> declarationSet = convertVectorToSet(queryToken.declarations->first);
 
     // check declarations
-    bool isValid = validateDeclarations(declarationSet, queryToken.declarationNames->size(), *(queryToken.designEntities));
+    bool isValid = validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
 
     // Check if Select Clause synonym is part of the declarations
     isValid = isValid && declarationSet.find(queryToken.selectClauseToken) != declarationSet.end();
 
     // Check pattern arguments
-    std::regex synonymReg(SYNONYM);
-    if (regex_match(queryToken.patternToken->arguments->first, synonymReg)) {
-        isValid = isValid && declarationSet.find(queryToken.patternToken->arguments->first) != declarationSet.end();
-    }
-    isValid = isValid && declarationSet.find(queryToken.patternToken->synonym) != declarationSet.end();
+    isValid = isValid && validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
 
-    // Check synonm for such that clause arguments
-    for (auto str = std::next(queryToken.suchThatClauseToken->begin()); str != queryToken.suchThatClauseToken->end(); ++str) {
-        if (regex_match(*str, synonymReg)) {
-            isValid = isValid && declarationSet.find(*str) != declarationSet.end();
-        }
-    }
+    isValid = isValid && validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
     return isValid;
 }
 
@@ -76,6 +44,60 @@ bool Validator::validateDeclarations(set<string> declarationSet, int length, vec
         return false;
     }
     return true;
+}
+
+bool Validator::validateSuchThatClauses(map<string, string> declarationTokens,
+                                        vector<SuchThatClauseToken> suchThatClauseTokens) {
+    // TODO: Refactor Code
+    string relationshipCheck = "Follows|Follows*|Parent|Parent*";
+    bool isValid = true;
+    for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
+        // Check for rs
+        bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, regex(relationshipCheck));
+        if (isStatementRelationship) {
+            // TODO: check if argument is a number, if yes, skip
+            if (suchThatClauseToken.arguments->first != "_") {
+                if (declarationTokens.find(suchThatClauseToken.arguments->first) == declarationTokens.end()) {
+                    return false;
+                }
+                isValid = isValid && stmtSet.find(declarationTokens.at(suchThatClauseToken.arguments->first)) != stmtSet.end();
+            }
+
+            if (suchThatClauseToken.arguments->second != "_") {
+                if (declarationTokens.find(suchThatClauseToken.arguments->second) == declarationTokens.end()) {
+                    return false;
+                }
+                isValid = isValid && stmtSet.find(declarationTokens.at(suchThatClauseToken.arguments->second)) != stmtSet.end();
+            }
+        } else {
+            // TODO: Check if the argument is an expression aka "smth". if yes, then skip
+            std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
+            if (suchThatClauseToken.arguments->first == "_") {
+                return false;
+            }
+            if (argSet.find(suchThatClauseToken.arguments->first) == argSet.end()) {
+                return false;
+            }
+            isValid = isValid && argSet.find(declarationTokens.at(suchThatClauseToken.arguments->first)) != argSet.end();
+
+            if (suchThatClauseToken.arguments->second != "_") {
+                if (argSet.find(suchThatClauseToken.arguments->second) == argSet.end()) {
+                    return false;
+                }
+                isValid = isValid && suchThatClauseToken.arguments->second == "variable";
+            }
+        }
+    }
+    return isValid;
+}
+
+bool Validator::validatePatterns(map<string, string> declarationTokens, std::vector<PatternToken> patternTokens) {
+    for (PatternToken patternToken : patternTokens) {
+        if (declarationTokens.find(patternToken.synonym) == declarationTokens.end()
+        || declarationTokens.at(patternToken.synonym) != "assign") {
+            return false;
+        }
+    }
 }
 
 set<string> Validator::convertVectorToSet(vector<string> vec) {
