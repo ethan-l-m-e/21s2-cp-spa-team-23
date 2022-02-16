@@ -26,18 +26,18 @@ PKB* generateSamplePKB() {
     testPKB->addVariable("yeast");
     testPKB->addVariable("zealous");
 
-    testPKB->addReadStatement(1);
-    testPKB->addAssignStatement(2);
-    testPKB->addAssignStatement(3);
-    testPKB->addPrintStatement(4);
-    testPKB->addWhileStatement(5);
-    testPKB->addAssignStatement(6);
+    testPKB->addReadStatement("1");
+    testPKB->addAssignStatement("2");
+    testPKB->addAssignStatement("3");
+    testPKB->addPrintStatement("4");
+    testPKB->addWhileStatement("5");
+    testPKB->addAssignStatement("6");
 
-    testPKB->setFollows(1, 2);
-    testPKB->setFollows(2, 3);
-    testPKB->setFollows(3, 4);
-    testPKB->setFollows(4, 5);
-    testPKB->setParent(5, 6);
+    testPKB->setFollows("1", "2");
+    testPKB->setFollows("2", "3");
+    testPKB->setFollows("3", "4");
+    testPKB->setFollows("4", "5");
+    testPKB->setParent("5", "6");
     return testPKB;
 }
 
@@ -56,7 +56,7 @@ TEST_CASE("Select query with no clauses") {
      * Type: select all variables
      */
     list<string> result = qe.evaluate(&query);
-    list<string> expected = {"x", "y", "xylophone", "yeast", "z"};
+    list<string> expected = {"x", "y", "xylophone", "yeast", "z", "zealous"};
     REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
 }
@@ -395,7 +395,6 @@ TEST_CASE("Merge synonyms") {
      * Type: join tuples, both value don't exist
      */
     list<string> result_6 = qe.evaluate(&query_6);
-
 
     REQUIRE(std::unordered_set<string> (std::begin(result_0), std::end(result_0))
             == std::unordered_set<string> {"1","2","3","4"});

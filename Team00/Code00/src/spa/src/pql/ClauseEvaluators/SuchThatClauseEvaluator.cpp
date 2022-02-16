@@ -167,18 +167,18 @@ bool SuchThatClauseEvaluator::isEntityType (std::string ident, DesignEntity enti
         case DesignEntity::CONSTANT:
             return pkb->isConstant(ident);
         case DesignEntity::ASSIGN:
-            return pkb->isAssignStatement(stoi(ident));
+            return pkb->isAssignStatement(ident);
         case DesignEntity::PRINT:
-            return pkb->isPrintStatement(stoi(ident));
+            return pkb->isPrintStatement(ident);
         case DesignEntity::READ:
-            return pkb->isReadStatement(stoi(ident));
+            return pkb->isReadStatement(ident);
         case DesignEntity::WHILE:
-            return pkb->isWhileStatement(stoi(ident));
+            return pkb->isWhileStatement(ident);
         case DesignEntity::IF:
-            return pkb->isIfStatement(stoi(ident));
+            return pkb->isIfStatement(ident);
         case DesignEntity::CALL:
             //TODO: update call check
-            //return pkb->isCall(stoi(ident));
+            //return pkb->isCall(ident);
             return true;
         case DesignEntity::PROCEDURE:
             return pkb->isProcedure(ident);
