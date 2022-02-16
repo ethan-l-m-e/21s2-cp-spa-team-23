@@ -136,5 +136,8 @@ public:
     unordered_set<string> getChildrenT(string parent);
     unordered_set<string> getParentT(string child);
 
+    // Getter Functions (Uses Relationship)
+
+    void setUses(string procedure, )
 
 };
