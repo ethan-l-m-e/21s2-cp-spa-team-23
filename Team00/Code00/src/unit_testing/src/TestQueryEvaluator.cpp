@@ -6,23 +6,23 @@
 #include "catch.hpp"
 using namespace std;
 
-PKB* testPKB = PKB::getInstance();
-void generateSamplePKB() {
-    /**
-     * 01 read x;
-     * 02 read y;
-     * 03 print yeast;
-     * 04 print xylophone;
-     * 05 while (x = 1) { ## print z;
-     * 06 x = 5 ## print x;
-     * }
-     */
+PKB* generateSamplePKB() {
+    PKB *testPKB = PKB::getInstance();
+/**
+ * 01 read x;
+ * 02 read y;
+ * 03 print yeast;
+ * 04 print xylophone;
+ * 05 while (x = 1) { ## print z;
+ * 06 x = 5 ## print x;
+ * }
+ */
     testPKB->addVariable("x");
     testPKB->addVariable("y");
     testPKB->addVariable("z");
     testPKB->addVariable("xylophone");
     testPKB->addVariable("yeast");
-    //testPKB->addVariable("zealous");
+//testPKB->addVariable("zealous");
 
     testPKB->addReadStatement(1);
     testPKB->addReadStatement(2);
@@ -31,16 +31,18 @@ void generateSamplePKB() {
     testPKB->addPrintStatement(5);
     testPKB->addPrintStatement(6);
 
-    testPKB->setFollows(1,2);
-    testPKB->setFollows(2,3);
-    testPKB->setFollows(3,4);
-    testPKB->setFollows(4,5);
+    testPKB->setFollows(1, 2);
+    testPKB->setFollows(2, 3);
+    testPKB->setFollows(3, 4);
+    testPKB->setFollows(4, 5);
 
-    testPKB->setParent(5,6);
+    testPKB->setParent(5, 6);
+    return testPKB;
 }
 
+static PKB *testPKB = generateSamplePKB();
+
 TEST_CASE("Select query with no clauses") {
-    generateSamplePKB();
     Query query;
     unordered_map<string, DesignEntity> declarationsMap = {{"v", DesignEntity::VARIABLE}};
     query.setDeclarations(declarationsMap);
@@ -53,8 +55,6 @@ TEST_CASE("Select query with no clauses") {
 }
 
 TEST_CASE("Such that clause: 1 synonym") {
-    generateSamplePKB();
-
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT}};
     Argument a0 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
     Argument a = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
@@ -155,8 +155,6 @@ TEST_CASE("Such that clause: 1 synonym") {
 }
 
 TEST_CASE("Such that clause: 2 synonyms") {
-    generateSamplePKB();
-
     unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT}, {"s2", DesignEntity::STMT}};
     Argument a1 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s1"};
     Argument a2 = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s2"};
@@ -203,10 +201,8 @@ TEST_CASE("Such that clause: 2 synonyms") {
     REQUIRE(std::unordered_set<string> (std::begin(result4), std::end(result4))
             == std::unordered_set<string> {"6"});
 }
-
 /*
 TEST_CASE("Query8") {
-    generateSamplePKB();
     Query query;
     unordered_map<string, DesignEntity> declarationsMap = {
             {"s1", DesignEntity::STMT},

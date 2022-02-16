@@ -159,24 +159,31 @@ void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, Des
 
 bool SuchThatClauseEvaluator::isEntityType (std::string ident, DesignEntity entityType) {
     switch (entityType) {
-        /*
         case DesignEntity::STMT:
-            return pkb->isStatement(ident);
+            //TODO: update stmt check
+            return true;
         case DesignEntity::VARIABLE:
             return pkb->isVariable(ident);
+        case DesignEntity::CONSTANT:
+            return pkb->isConstant(ident);
         case DesignEntity::ASSIGN:
-            return pkb->isAssign(ident);
+            return pkb->isAssignStatement(stoi(ident));
         case DesignEntity::PRINT:
-            return pkb->isPrint(ident);
+            return pkb->isPrintStatement(stoi(ident));
         case DesignEntity::READ:
-            return pkb->isRead(ident);
+            return pkb->isReadStatement(stoi(ident));
         case DesignEntity::WHILE:
-            return pkb->isWhile(ident);
+            return pkb->isWhileStatement(stoi(ident));
         case DesignEntity::IF:
-            return pkb->isIf(ident);
-            */
-        default:
+            return pkb->isIfStatement(stoi(ident));
+        case DesignEntity::CALL:
+            //TODO: update call check
+            //return pkb->isCall(stoi(ident));
             return true;
+        case DesignEntity::PROCEDURE:
+            return pkb->isProcedure(ident);
+        default:
+            return false;
     }
 }
 
