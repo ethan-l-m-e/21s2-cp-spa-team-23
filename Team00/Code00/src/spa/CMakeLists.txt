@@ -23,7 +23,6 @@ set(headers ${headers}
         )
 add_library(spa ${srcs} ${headers} src/Parser.cpp src/Parser.h
         src/Identifier.cpp src/Identifier.h
-        src/Validator.cpp src/Validator.h
         src/Extractor.cpp src/Extractor.h
         src/StringFormatter.cpp src/StringFormatter.h
         src/Partition.cpp src/Partition.h

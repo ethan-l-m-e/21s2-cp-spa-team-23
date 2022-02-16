@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "QP_Parser/Tokenizer.h"
+#include "pql/query_obj/Argument.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -16,4 +17,11 @@ TEST_CASE ("DECLARATIONS") {
 //    std::cout << "\n";
 //    std::cout << queryToken.declarationTokens[0][1];
 //    CHECK(queryToken.declarationTokens[0][1] == "assign a");
+}
+
+TEST_CASE("PATTERN CLAUSE") {
+    std::string second = "variable v; assign a;\nSelect a such that pattern a (    v , \"x\"      )";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = QueryToken();
+    QueryToken token = tokenizer.getQueryToken(second);
 }

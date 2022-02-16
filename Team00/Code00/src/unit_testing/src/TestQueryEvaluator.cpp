@@ -89,42 +89,42 @@ TEST_CASE("Such that clause: 1 synonym") {
     Query query1;
     query1.setDeclarations(declarationsMap);
     query1.setSynonym("s");
-    query1.addSuchThatClause(clause1);
+    query1.setSuchThatClauses(vector<SuchThatClause>{clause1});
 
     Query query2;
     query2.setDeclarations(declarationsMap);
     query2.setSynonym("s");
-    query2.addSuchThatClause(clause2);
+    query2.setSuchThatClauses(vector<SuchThatClause>{clause2});
 
     Query query3;
     query3.setDeclarations(declarationsMap);
     query3.setSynonym("s");
-    query3.addSuchThatClause(clause3);
+    query3.setSuchThatClauses(vector<SuchThatClause>{clause3});
 
     Query query4;
     query4.setDeclarations(declarationsMap);
     query4.setSynonym("s");
-    query4.addSuchThatClause(clause4);
+    query4.setSuchThatClauses(vector<SuchThatClause>{clause4});
 
     Query query5;
     query5.setDeclarations(declarationsMap);
     query5.setSynonym("s");
-    query5.addSuchThatClause(clause5);
+    query5.setSuchThatClauses(vector<SuchThatClause>{clause5});
 
     Query query6;
     query6.setDeclarations(declarationsMap);
     query6.setSynonym("s");
-    query6.addSuchThatClause(clause6);
+    query6.setSuchThatClauses(vector<SuchThatClause>{clause6});
 
     Query query7;
     query7.setDeclarations(declarationsMap);
     query7.setSynonym("s");
-    query7.addSuchThatClause(clause7);
+    query7.setSuchThatClauses(vector<SuchThatClause>{clause7});
 
     Query query8;
     query8.setDeclarations(declarationsMap);
     query8.setSynonym("s");
-    query8.addSuchThatClause(clause8);
+    query8.setSuchThatClauses(vector<SuchThatClause>{clause8});
 
     auto qe = QueryEvaluator(testPKB);
     list<string> result1 = qe.evaluate(&query1);
@@ -169,22 +169,23 @@ TEST_CASE("Such that clause: 2 synonyms") {
     Query query1;
     query1.setDeclarations(declarationsMap);
     query1.setSynonym("s1");
-    query1.addSuchThatClause(clause1);
+    query1.setSuchThatClauses(vector<SuchThatClause>{clause1});
 
     Query query2;
     query2.setDeclarations(declarationsMap);
     query2.setSynonym("s2");
-    query2.addSuchThatClause(clause1);
+    query2.setSuchThatClauses(vector<SuchThatClause>{clause1});
+
 
     Query query3;
     query3.setDeclarations(declarationsMap);
     query3.setSynonym("s1");
-    query3.addSuchThatClause(clause2);
+    query3.setSuchThatClauses(vector<SuchThatClause>{clause2});
 
     Query query4;
     query4.setDeclarations(declarationsMap);
     query4.setSynonym("s2");
-    query4.addSuchThatClause(clause2);
+    query4.setSuchThatClauses(vector<SuchThatClause>{clause2});
 
 
     auto qe = QueryEvaluator(testPKB);
