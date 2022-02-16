@@ -55,12 +55,10 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
             return new UsesSClauseEvaluator(clause.argList, pkb, query);
         case RelRef::USES_P:
             // return new UsesPClauseEvaluator(clause.argList, pkb, query);
-            break;
         case RelRef::MODIFIES_S:
             return new ModifiesSClauseEvaluator(clause.argList, pkb, query);
         case RelRef::MODIFIES_P:
             // return ModifiesPClauseEvaluator(clause.argList, pkb, query);
-            break;
         default:
             return new FollowsClauseEvaluator(clause.argList, pkb, query);
     }

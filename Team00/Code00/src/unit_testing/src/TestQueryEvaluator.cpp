@@ -19,6 +19,7 @@ PKB* generateSamplePKB() {
  *    };
  * }
  */
+
     testPKB->addVariable("x");
     testPKB->addVariable("y");
     testPKB->addVariable("z");
@@ -193,6 +194,152 @@ TEST_CASE("Such that clause: 1 synonym") {
             == std::unordered_set<string> {"6"});
 }
 
+TEST_CASE("Such that clause: 1 synonym with stmt type") {
+    unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT},
+                                                           {"a", DesignEntity::ASSIGN},
+                                                           {"pn", DesignEntity::PRINT},
+                                                           {"r", DesignEntity::READ},};
+    Argument a0 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
+    Argument a2 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "2"};
+    Argument a3 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "3"};
+    Argument a5 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "5"};
+    Argument as = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
+    Argument aa = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "a"};
+    Argument apn = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "pn"};
+    Argument ar = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "r"};
+
+
+    SuchThatClause clause_0_a = {.relRef = RelRef::FOLLOWS};
+    clause_0_a.argList = {a0, aa};
+
+    SuchThatClause clause_2_a = {.relRef = RelRef::FOLLOWS};
+    clause_2_a.argList = {a2, aa};
+
+    SuchThatClause clause_a_2 = {.relRef = RelRef::FOLLOWS};
+    clause_a_2.argList = {aa, a2};
+
+    SuchThatClause clause_pn_0 = {.relRef = RelRef::FOLLOWS};
+    clause_pn_0.argList = {apn, a0};
+
+    SuchThatClause clause_2_pn = {.relRef = RelRef::FOLLOWS};
+    clause_2_pn.argList = {a2, apn};
+
+    SuchThatClause clause_r_2 = {.relRef = RelRef::FOLLOWS};
+    clause_r_2.argList = {ar, a2};
+
+    SuchThatClause clause_5_r = {.relRef = RelRef::FOLLOWS};
+    clause_5_r.argList = {a5, ar};
+
+    SuchThatClause clause_5_a = {.relRef = RelRef::PARENT};
+    clause_5_a.argList = {a5, aa};
+
+    Query query1;
+    query1.setDeclarations(declarationsMap);
+    query1.setSynonym("a");
+    query1.setSuchThatClauses(vector<SuchThatClause>{clause_0_a});
+
+    Query query2;
+    query2.setDeclarations(declarationsMap);
+    query2.setSynonym("a");
+    query2.setSuchThatClauses(vector<SuchThatClause>{clause_2_a});
+
+    Query query3;
+    query3.setDeclarations(declarationsMap);
+    query3.setSynonym("a");
+    query3.setSuchThatClauses(vector<SuchThatClause>{clause_a_2});
+
+    Query query4;
+    query4.setDeclarations(declarationsMap);
+    query4.setSynonym("pn");
+    query4.setSuchThatClauses(vector<SuchThatClause>{clause_pn_0});
+
+    Query query5;
+    query5.setDeclarations(declarationsMap);
+    query5.setSynonym("pn");
+    query5.setSuchThatClauses(vector<SuchThatClause>{clause_2_pn});
+
+    Query query6;
+    query6.setDeclarations(declarationsMap);
+    query6.setSynonym("r");
+    query6.setSuchThatClauses(vector<SuchThatClause>{clause_r_2});
+
+    Query query7;
+    query7.setDeclarations(declarationsMap);
+    query7.setSynonym("r");
+    query7.setSuchThatClauses(vector<SuchThatClause>{clause_5_r});
+
+    Query query8;
+    query8.setDeclarations(declarationsMap);
+    query8.setSynonym("a");
+    query8.setSuchThatClauses(vector<SuchThatClause>{clause_5_a});
+
+    auto qe = QueryEvaluator(testPKB);
+    /**
+     * Select a such that Follows(_, a)
+     * Type: follows, select second arg, wildcard, assign
+     */
+    list<string> result1 = qe.evaluate(&query1);
+
+    /**
+     * Select a such that Follows(2, a)
+     * Type: follows, select second arg, assign
+     */
+    list<string> result2 = qe.evaluate(&query2);
+
+    /**
+     * Select a such that Follows(a, 2)
+     * Type: follows, select first arg, assign
+     */
+    list<string> result3 = qe.evaluate(&query3);
+
+    /**
+     * Select pn such that Follows(pn, _)
+     * Type: follows, select first arg, wildcard, print
+     */
+    list<string> result4 = qe.evaluate(&query4);
+
+    /**
+     * Select pn such that Follows(2, pn)
+     * Type: follows, select second arg, print
+     */
+    list<string> result5 = qe.evaluate(&query5);
+
+    /**
+     * Select r such that Follows(r, 2)
+     * Type: follows, select first arg, read
+     */
+    list<string> result6 = qe.evaluate(&query6);
+
+    /**
+     * Select r such that Follows(5, r)
+     * Type: follows, select second arg, read
+     */
+    list<string> result7 = qe.evaluate(&query7);
+
+    /**
+     * Select a such that Parent(5, a)
+     * Type: parent, select second arg, assign
+     */
+    list<string> result8 = qe.evaluate(&query8);
+
+    REQUIRE(std::unordered_set<string> (std::begin(result1), std::end(result1))
+            == std::unordered_set<string> {"2","3"});
+    REQUIRE(std::unordered_set<string> (std::begin(result2), std::end(result2))
+            == std::unordered_set<string> {"3"});
+    REQUIRE(std::unordered_set<string> (std::begin(result3), std::end(result3))
+            == std::unordered_set<string> {});
+    REQUIRE(std::unordered_set<string> (std::begin(result4), std::end(result4))
+            == std::unordered_set<string> {"4"});
+    REQUIRE(std::unordered_set<string> (std::begin(result5), std::end(result5))
+            == std::unordered_set<string> {});
+    REQUIRE(std::unordered_set<string> (std::begin(result6), std::end(result6))
+            == std::unordered_set<string> {"1"});
+    REQUIRE(std::unordered_set<string> (std::begin(result7), std::end(result7))
+            == std::unordered_set<string> {});
+    REQUIRE(std::unordered_set<string> (std::begin(result8), std::end(result8))
+            == std::unordered_set<string> {"6"});
+}
+
 TEST_CASE("Such that clause: 2 synonyms") {
     unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT},
                                                            {"s2", DesignEntity::STMT}};
@@ -244,6 +391,77 @@ TEST_CASE("Such that clause: 2 synonyms") {
     list<string> result3 = qe.evaluate(&query3);
     /**
      * Select s2 such that Parent(s1, s2)
+     * Type: parent, select second arg
+     */
+    list<string> result4 = qe.evaluate(&query4);
+
+    REQUIRE(std::unordered_set<string> (std::begin(result1), std::end(result1))
+            == std::unordered_set<string> {"1", "2", "3", "4"});
+    REQUIRE(std::unordered_set<string> (std::begin(result2), std::end(result2))
+            == std::unordered_set<string> {"2", "3", "4", "5"});
+    REQUIRE(std::unordered_set<string> (std::begin(result3), std::end(result3))
+            == std::unordered_set<string> {"5"});
+    REQUIRE(std::unordered_set<string> (std::begin(result4), std::end(result4))
+            == std::unordered_set<string> {"6"});
+}
+
+TEST_CASE("Such that clause: 2 synonyms with type") {
+    unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT},
+                                                           {"a", DesignEntity::ASSIGN},
+                                                           {"pn", DesignEntity::PRINT},
+                                                           {"r", DesignEntity::READ},};
+    Argument a0 = {.argumentType = ArgumentType::UNDERSCORE, .argumentValue = "_"};
+    Argument a2 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "2"};
+    Argument a3 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "3"};
+    Argument a5 = {.argumentType = ArgumentType::STMT_NO, .argumentValue = "5"};
+    Argument as = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "s"};
+    Argument aa = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "a"};
+    Argument apn = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "pn"};
+    Argument ar = {.argumentType = ArgumentType::SYNONYM, .argumentValue = "r"};
+    SuchThatClause clause1 = {.relRef = RelRef::FOLLOWS};
+    clause1.argList = {a3, a2};
+
+
+    Query query1;
+    query1.setDeclarations(declarationsMap);
+    query1.setSynonym("s1");
+    query1.setSuchThatClauses(vector<SuchThatClause>{clause1});
+
+    Query query2;
+    query2.setDeclarations(declarationsMap);
+    query2.setSynonym("s2");
+    query2.setSuchThatClauses(vector<SuchThatClause>{clause1});
+
+    Query query3;
+    query3.setDeclarations(declarationsMap);
+    query3.setSynonym("s1");
+    query3.setSuchThatClauses(vector<SuchThatClause>{clause1});
+
+    Query query4;
+    query4.setDeclarations(declarationsMap);
+    query4.setSynonym("s2");
+    query4.setSuchThatClauses(vector<SuchThatClause>{clause1});
+
+
+    auto qe = QueryEvaluator(testPKB);
+
+    /**
+     * Select s such that Follows(s, p)
+     * Type: follows, select first arg
+     */
+    list<string> result1 = qe.evaluate(&query1);
+    /**
+     * Select p such that Follows(s, p)
+     * Type: follows, select second arg
+     */
+    list<string> result2 = qe.evaluate(&query2);
+    /**
+     * Select a such that Follows(a, p)
+     * Type: parent, select first arg
+     */
+    list<string> result3 = qe.evaluate(&query3);
+    /**
+     * Select a such that Parent(p, a)
      * Type: parent, select second arg
      */
     list<string> result4 = qe.evaluate(&query4);

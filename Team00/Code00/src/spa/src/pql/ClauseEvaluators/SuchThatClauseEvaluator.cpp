@@ -149,9 +149,12 @@ unordered_set<std::string> SuchThatClauseEvaluator::generateRightSet (unordered_
 }
 
 void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, DesignEntity entityType) {
-    for (const std::string& str : set) {
-        if(!isEntityType(str, entityType)) {
-            set.erase(str);
+    for (auto it = set.begin(); it != set.end(); ) {
+        if(!isEntityType(*it, entityType)) {
+            set.erase(it++);
+        }
+        else {
+            ++it;
         }
     }
 }
