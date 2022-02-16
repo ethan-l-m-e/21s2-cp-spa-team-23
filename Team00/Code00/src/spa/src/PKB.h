@@ -29,7 +29,7 @@ private:
 
     unordered_set<string> assignStatementsSet;
     unordered_set<string> readStatementsSet;
-    unordered_set<string> prstringStatementsSet;
+    unordered_set<string> printStatementsSet;
     unordered_set<string> ifStatementsSet;
     unordered_set<string> whileStatementsSet;
 
@@ -76,7 +76,7 @@ public:
     void addAssignStatement(string statement);
 
     void addReadStatement(string statement);
-    void addPrstringStatement(string statement);
+    void addPrintStatement(string statement);
 
     void addIfStatement(string statement);
     void addWhileStatement(string statement);
@@ -85,13 +85,13 @@ public:
 
     bool isAssignStatement(string statement);
     bool isReadStatement(string statement);
-    bool isPrstringStatement(string statement);
+    bool isPrintStatement(string statement);
     bool isIfStatement(string statement);
     bool isWhileStatement(string statement);
 
     unordered_set<string> getAllAssignStatements();
     unordered_set<string> getAllReadStatements();
-    unordered_set<string> getAllPrstringStatements();
+    unordered_set<string> getAllPrintStatements();
     unordered_set<string> getAllIfStatements();
     unordered_set<string> getAllWhileStatements();
 

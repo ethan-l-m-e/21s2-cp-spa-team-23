@@ -84,19 +84,24 @@ unordered_set<string> PKB::getAllConstants() {
 // Setter Functions (Statement Types)
 
 void PKB::addAssignStatement(string statement) {
+    addStatement(statement);
     assignStatementsSet.insert(statement);
 }
 
 void PKB::addReadStatement(string statement) {
+    addStatement(statement);
     readStatementsSet.insert(statement);
 }
-void PKB::addPrstringStatement(string statement) {
-    prstringStatementsSet.insert(statement);
+void PKB::addPrintStatement(string statement) {
+    addStatement(statement);
+    printStatementsSet.insert(statement);
 }
 void PKB::addIfStatement(string statement) {
+    addStatement(statement);
     ifStatementsSet.insert(statement);
 }
 void PKB::addWhileStatement(string statement) {
+    addStatement(statement);
     whileStatementsSet.insert(statement);
 }
 
@@ -111,8 +116,8 @@ bool PKB::isReadStatement(string statement) {
     return readStatementsSet.find(statement) != readStatementsSet.end();
 }
 
-bool PKB::isPrstringStatement(string statement) {
-    return prstringStatementsSet.find(statement) != prstringStatementsSet.end();
+bool PKB::isPrintStatement(string statement) {
+    return printStatementsSet.find(statement) != printStatementsSet.end();
 }
 bool PKB::isIfStatement(string statement) {
     return ifStatementsSet.find(statement) != ifStatementsSet.end();
@@ -127,8 +132,8 @@ unordered_set<string> PKB::getAllAssignStatements() {
 unordered_set<string> PKB::getAllReadStatements() {
     return readStatementsSet;
 }
-unordered_set<string> PKB::getAllPrstringStatements() {
-    return prstringStatementsSet;
+unordered_set<string> PKB::getAllPrintStatements() {
+    return printStatementsSet;
 }
 unordered_set<string> PKB::getAllIfStatements() {
     return ifStatementsSet;
