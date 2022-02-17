@@ -21,7 +21,7 @@ Result SelectClauseEvaluator::evaluateClause() {
 
      result = {
             .resultType = ResultType::STRING,
-            .resultBoolean =resultItemList.empty(),
+            .resultBoolean =true,
             .resultHeader = query->getSelectedSynonym(),
             .resultItemList = resultItemList
     };
