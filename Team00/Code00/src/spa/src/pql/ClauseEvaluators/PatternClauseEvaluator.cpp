@@ -12,8 +12,8 @@
 
 
 
-void addToStmtList(AssignNode* assignNode, vector<ResultItem> stmtNumberList);
-void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> statementAndVarList);
+void addToStmtList(AssignNode* assignNode, vector<ResultItem> *stmtNumberList);
+void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> *statementAndVarList);
 bool matchLHSValue(AssignNode* assignNode, Argument arg);
 bool matchRHSValue(AssignNode* assignNode, Argument arg);
 bool searchForPotentialMatchInExpression(Expression expressionNode, string rightArg);
@@ -22,9 +22,7 @@ string retrieveLHSVar(AssignNode* assignNode);
 string retrieveStmtNo(AssignNode* assignNode);
 
 Result PatternClauseEvaluator::evaluateClause() {
-    vector<AssignNode*> listOfAssignNodes;
-    // = PKB::getInstance() -> getAllAssignNodes();
-
+    vector<AssignNode*> listOfAssignNodes = PKB::getInstance()->getAllAssignNodes();
     vector<ResultItem> assignVarPairList;
     vector<ResultItem> stmtNumberList;
 
@@ -39,36 +37,41 @@ Result PatternClauseEvaluator::evaluateClause() {
     for (int i = 0; i < listOfAssignNodes.size(); i++) {
         AssignNode * currentNode = listOfAssignNodes[i];
         if (leftIsSynonym() && rightIsWildCard()) {
-            addToStmtAndVariableList(currentNode, assignVarPairList);
+            addToStmtAndVariableList(currentNode, &assignVarPairList);
         } else if (leftIsSynonym() && rightIsPartWildCard()) {
-            if(matchRHSValue(currentNode, argRight))
-                addToStmtAndVariableList(currentNode, assignVarPairList);
+            if(matchRHSValue(currentNode, argRight)) {
+                addToStmtAndVariableList(currentNode, &assignVarPairList);
+            }
         } else if (leftIsIdent() && rightIsWildCard()) {
-            if(matchLHSValue(currentNode, argLeft))
-                addToStmtList(currentNode, stmtNumberList);
+            if(matchLHSValue(currentNode, argLeft)) {
+                addToStmtList(currentNode, &stmtNumberList);
+            }
         } else if (leftIsIdent() && rightIsPartWildCard()) {
-            if(matchLHSValue(currentNode, argLeft) && matchRHSValue(currentNode, argRight))
-                addToStmtList(currentNode, stmtNumberList);
+            if(matchLHSValue(currentNode, argLeft) && matchRHSValue(currentNode, argRight)) {
+                addToStmtList(currentNode, &stmtNumberList);
+            }
         } else if (leftIsWildCard() && rightIsPartWildCard()) {
-            if(matchRHSValue(currentNode, argRight))
-                addToStmtList(currentNode, stmtNumberList);
+            if(matchRHSValue(currentNode, argRight)) {
+                addToStmtList(currentNode, &stmtNumberList);
+            }
         } else if (leftIsWildCard() && rightIsWildCard()) {
-            addToStmtList(currentNode, stmtNumberList);
+            addToStmtList(currentNode, &stmtNumberList);
+        } else {
+            throw "arguments in pattern clause mismatch " + argLeft.argumentValue + " " + argRight.argumentValue;
         }
     }
-
 
     // result construction
     if (leftIsSynonym()) {
         // configure resultType, to have both variable names and assign
         result.resultType = ResultType::TUPLES;
-        result.resultBoolean = !result.resultItemList.empty();
+        result.resultBoolean = !assignVarPairList.empty();
         result.resultHeader = tuple<string, string>(assignSynonym.argumentValue, argLeft.argumentValue);
         result.resultItemList = assignVarPairList;
     } else {
         // configure resultType to have only a list of assign
         result.resultType = ResultType::STRING;
-        result.resultBoolean = !result.resultItemList.empty();
+        result.resultBoolean = !stmtNumberList.empty();
         result.resultHeader = assignSynonym.argumentValue;
         result.resultItemList = stmtNumberList;
     }
@@ -80,7 +83,7 @@ bool PatternClauseEvaluator::leftIsSynonym() {
     return argLeft.argumentType == ArgumentType::SYNONYM;
 }
 bool PatternClauseEvaluator::leftIsIdent() {
-    return argLeft.argumentType != ArgumentType::IDENT;
+    return argLeft.argumentType == ArgumentType::IDENT;
 }
 bool PatternClauseEvaluator::leftIsWildCard() {
     return argLeft.argumentType == ArgumentType::UNDERSCORE;
@@ -94,13 +97,14 @@ bool PatternClauseEvaluator::rightIsWildCard() {
 
 }
 
-void addToStmtList(AssignNode *assignNode, vector<ResultItem> stmtNumberList) {
-    stmtNumberList.push_back(retrieveStmtNo(assignNode) + "");
+void addToStmtList(AssignNode *assignNode, vector<ResultItem> *stmtNumberList) {
+    string stmtNo = retrieveStmtNo(assignNode);
+    stmtNumberList->push_back(stmtNo);
 }
 
-void addToStmtAndVariableList(AssignNode *assignNode, vector<ResultItem> statementAndVarList) {
-    ResultItem assignVarPair = tuple<string, string>(retrieveLHSVar(assignNode), retrieveStmtNo(assignNode) + "");
-    statementAndVarList.push_back(assignVarPair);
+void addToStmtAndVariableList(AssignNode *assignNode, vector<ResultItem> *statementAndVarList) {
+    ResultItem assignVarPair = tuple<string, string>(retrieveLHSVar(assignNode), retrieveStmtNo(assignNode));
+    statementAndVarList->push_back(assignVarPair);
 }
 
 
@@ -130,7 +134,8 @@ bool searchForPotentialMatchInExpression(Expression expressionNode, string right
 }
 
 bool matchLHSValue(AssignNode *assignNode, Argument arg) {
-    if (retrieveLHSVar(assignNode) == arg.argumentValue)
+    string trimmed = StringFormatter::tokenizeByRegex(arg.argumentValue, "[ ]*\"[ ]*")[0];
+    if (retrieveLHSVar(assignNode) == trimmed)
         return true;
     else
         return false;
@@ -140,7 +145,7 @@ bool matchLHSValue(AssignNode *assignNode, Argument arg) {
 bool matchRHSValue(AssignNode *assignNode, Argument arg) {
     // convert arg to variable (or expression in the future)
     string rightArg = StringFormatter::tokenizeByRegex(arg.argumentValue, "(_\")|(\"_)")[0];
-    Expression rightAsExpr = Parser::parseExpression(rightArg); //no usage yet for iteration 1
+    //Expression rightAsExpr = Parser::parseExpression(rightArg); //no usage yet for iteration 1
     Expression RHSExpression = assignNode ->getRightNode();
     return searchForPotentialMatchInExpression(RHSExpression, rightArg);
 }
@@ -151,7 +156,7 @@ string retrieveLHSVar(AssignNode *assignNode) {
 }
 
 string retrieveStmtNo(AssignNode *assignNode) {
-    return assignNode->getStmtNumber() + "";
+    return to_string(assignNode->getStmtNumber());
 }
 
 
