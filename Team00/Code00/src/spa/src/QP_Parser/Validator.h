@@ -19,16 +19,16 @@ namespace qp {
                                                                       });
     class Validator {
     public:
-        bool validateQueryStructure(std::string);
-        bool validateDeclarations(std::set<std::string>, int, std::vector<std::string>);
-        bool checkForSemantics(QueryToken& queryToken);
+        void validateQueryStructure(std::string);
+        void validateDeclarations(std::set<std::string>, int, std::vector<std::string>);
+        void checkForSemantics(QueryToken& queryToken);
         std::set<std::string> convertVectorToSet(std::vector<std::string>);
-        bool validateSuchThatClauses(std::map<std::string, std::string>, std::vector<SuchThatClauseToken>);
-        bool validatePatterns(std::map<std::string, std::string>, std::vector<PatternToken>);
-        bool handleSuchThatStatementClause(std::map<std::string, std::string>&, std::pair<std::string, std::string>&);
-        bool checkSynonymForStatementClauses(std::map<std::string, std::string>&, std::string, std::string);
-        bool checkFirstArgForOtherClauses(std::string, std::set<std::string>&, std::map<std::string, std::string>&);
-        bool checkSecondArgForOtherClauses(std::string, std::map<std::string, std::string>&);
+        void validateSuchThatClauses(std::map<std::string, std::string>, std::vector<SuchThatClauseToken>);
+        void validatePatterns(std::map<std::string, std::string>, std::vector<PatternToken>);
+        void handleSuchThatStatementClause(std::map<std::string, std::string>&, std::pair<std::string, std::string>&);
+        void checkArgumentForStatementClauses(std::map<std::string, std::string>&, std::string, std::string);
+        void checkFirstArgForOtherClauses(std::string, std::set<std::string>&, std::map<std::string, std::string>&);
+        void checkSecondArgForOtherClauses(std::string, std::map<std::string, std::string>&);
     };
 }
 

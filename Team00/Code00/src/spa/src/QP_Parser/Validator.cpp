@@ -1,6 +1,7 @@
 #include "Validator.h"
 #include "Constants.h"
 #include "Tokenizer.h"
+#include "Exception.h"
 #include "StringFormatter.h"
 
 #include <string>
@@ -10,104 +11,101 @@
 
 using namespace qp;
 
-bool Validator::validateQueryStructure(std::string pql) {
+void Validator::validateQueryStructure(std::string pql) {
     std::string formatRegex = PQL_FORMAT;
     std::regex reg(formatRegex);
     bool isValid = regex_match(pql, reg);
-    return isValid;
+
+    if (!isValid) {
+        throw QPInvalidSyntacticException("Invalid Syntax");
+    }
 }
 
-bool Validator::checkForSemantics(QueryToken& queryToken) {
+void Validator::checkForSemantics(QueryToken& queryToken) {
     set<string> declarationSet = convertVectorToSet(queryToken.declarations->first);
 
     // check declarations
-    bool isValid = validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
+    validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
 
     // Check if Select Clause synonym is part of the declarations
-    isValid = isValid && declarationSet.find(queryToken.selectClauseToken) != declarationSet.end();
+    if (declarationSet.find(queryToken.selectClauseToken) == declarationSet.end()) {
+        throw QPInvalidSemanticException("Synonym not declared");
+    };
 
     // Check pattern arguments
-    isValid = isValid && validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
+    validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
 
-    isValid = isValid && validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
-    return isValid;
+    validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
 }
 
-bool Validator::validateDeclarations(set<string> declarationSet, int length, vector<string> designEntities) {
+void Validator::validateDeclarations(set<string> declarationSet, int length, vector<string> designEntities) {
     // check duplicate declaration names
     if (declarationSet.size() != length) {
-        return false;
+        throw QPInvalidSemanticException("Repeated declaration names");
     }
 
     // check duplicate design entity declarations
     set<string> designEntitySet = convertVectorToSet(designEntities);
     if (designEntitySet.size() != designEntities.size()) {
-        return false;
+        throw QPInvalidSemanticException("Repeated declarations of same design entity");
     }
-    return true;
 }
 
-bool Validator::validateSuchThatClauses(map<string, string> declarationTokens,
+void Validator::validateSuchThatClauses(map<string, string> declarationTokens,
                                         vector<SuchThatClauseToken> suchThatClauseTokens) {
     string relationshipCheck = "Follows|Follows*|Parent|Parent*";
-    bool isValid = true;
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
         // Check for relationship
         bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, regex(relationshipCheck));
         if (isStatementRelationship) {
-            isValid = isValid && handleSuchThatStatementClause(declarationTokens, *suchThatClauseToken.arguments);
+            handleSuchThatStatementClause(declarationTokens, *suchThatClauseToken.arguments);
         } else {
             std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
-            isValid = isValid && checkFirstArgForOtherClauses(suchThatClauseToken.arguments->first, argSet, declarationTokens);
-            isValid = isValid && checkSecondArgForOtherClauses(suchThatClauseToken.arguments->first, declarationTokens);
+            checkFirstArgForOtherClauses(suchThatClauseToken.arguments->first, argSet, declarationTokens);
+            checkSecondArgForOtherClauses(suchThatClauseToken.arguments->first, declarationTokens);
         }
     }
-    return isValid;
 }
 
-bool Validator::handleSuchThatStatementClause(map<string, string>& declarationTokens, std::pair<std::string, std::string>& arguments) {
-    bool isValidFirstArg = checkSynonymForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.first);
-    bool isValidSecondArg = checkSynonymForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.first);
-    return isValidFirstArg && isValidSecondArg;
+void Validator::handleSuchThatStatementClause(map<string, string>& declarationTokens, std::pair<std::string, std::string>& arguments) {
+    checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.first);
+    checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.second);
 }
 
-bool Validator::checkSynonymForStatementClauses(map<string, string>& declarationTokens, string reg, string synonym) {
-    if (!regex_match(synonym, regex(reg))) {
-        if (declarationTokens.find(synonym) == declarationTokens.end()) {
-            return false;
+void Validator::checkArgumentForStatementClauses(map<string, string>& declarationTokens, string reg, string argument) {
+    if (!regex_match(argument, regex(reg))) {
+        if (declarationTokens.find(argument) == declarationTokens.end() ||
+        stmtSet.find(declarationTokens.at(argument)) == stmtSet.end()) {
+            throw QPInvalidSemanticException("Invalid Argument");
         }
-        return stmtSet.find(declarationTokens.at(synonym)) != stmtSet.end();
     }
-    return true;
 }
 
-bool Validator::checkFirstArgForOtherClauses(string argument, std::set<std::string>& argSet, map<string, string>& declarationTokens) {
+void Validator::checkFirstArgForOtherClauses(string argument, std::set<std::string>& argSet, map<string, string>& declarationTokens) {
     if (argument == "_") {
-        return false;
+        throw QPInvalidSemanticException("Invalid First Argument");
     }
 
-    if (!regex_match(argument, regex("\""+ IDENT + "\""))) {
-        return argSet.find(declarationTokens.at(argument)) != argSet.end();
+    bool isArgumentIdent = regex_match(argument, regex("\""+ IDENT + "\""));
+    if (!isArgumentIdent && argSet.find(declarationTokens.at(argument)) == argSet.end()) {
+        throw QPInvalidSemanticException("Invalid First Argument");
     }
-
-    return true;
 }
 
-bool Validator::checkSecondArgForOtherClauses(string argument, map<string, string>& declarationTokens) {
+void Validator::checkSecondArgForOtherClauses(string argument, map<string, string>& declarationTokens) {
     if (!regex_match(argument, regex("(_|\""+ IDENT + "\")"))) {
-        if (declarationTokens.find(argument) == declarationTokens.end()) {
-            return false;
+        if (declarationTokens.find(argument) == declarationTokens.end()
+        || declarationTokens.at(argument) != "variable") {
+            throw QPInvalidSemanticException("Invalid Second Argument");
         }
-        return declarationTokens.at(argument) == "variable";
     }
-    return true;
 }
 
-bool Validator::validatePatterns(map<string, string> declarationTokens, std::vector<PatternToken> patternTokens) {
+void Validator::validatePatterns(map<string, string> declarationTokens, std::vector<PatternToken> patternTokens) {
     for (PatternToken patternToken : patternTokens) {
         if (declarationTokens.find(patternToken.synonym) == declarationTokens.end()
         || declarationTokens.at(patternToken.synonym) != "assign") {
-            return false;
+            throw QPInvalidSemanticException("Invalid Pattern");
         }
     }
 }
