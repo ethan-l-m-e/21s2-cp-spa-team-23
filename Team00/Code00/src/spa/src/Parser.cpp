@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -52,11 +53,23 @@ VariableNode* Parser::parseVar(string variable) {
     // convert into a variable node
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
-        cout << "sending " << variable << " to PKB\n";
+        cout << "sending var " << variable << " to PKB\n";
         PKB::getInstance() ->addVariable(variable);
         return new VariableNode(variable);
     } else {
         throw "Invalid varname format: '" + variable + "'\n";
+    }
+}
+
+ConstValueNode *Parser::parseConst(string constValue) {
+    // convert into a const node
+    int check = Identifier::identifyFirstObject(constValue);
+    if(check == CONSTANT_VALUE) {
+        cout << "sending const " << constValue << " to PKB\n";
+        PKB::getInstance() ->addConstant(constValue);
+        return new ConstValueNode(constValue);
+    } else {
+        throw "Invalid const format: '" + constValue + "'\n";
     }
 }
 
@@ -84,7 +97,7 @@ bool isNumber(string s) {
 Expression parseExpression(string expression) {
     if (isLeaf(expression)) {
         if (isNumber(expression)) {
-            return new ConstValueNode(expression);
+            return Parser::parseConst(expression);
         }
         return Parser::parseVar(expression);
     }
@@ -95,12 +108,124 @@ Expression parseExpression(string expression) {
     return new BinaryOperatorNode(left, right, tokens[2]);
 }
 
-AssignNode* Parser::parseAssign(string assignLine) {
+ReadNode *Parser::parseRead(string readLine) {
+    int stmtNo = getStatementNumber();
+    cout << "sending read " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addReadStatement(stmtNo);
     vector<string> tokens;
-    SourceTokenizer::extractAssign(assignLine, tokens);
+    SourceTokenizer::extractRead(readLine, tokens);
+    VariableNode* newVar = parseVar(tokens[0]);
+
+    return new ReadNode(stmtNo, newVar);
+}
+
+PrintNode *Parser::parsePrint(string printLine) {
+    int stmtNo = getStatementNumber();
+    cout << "sending print " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addPrintStatement(stmtNo);
+    vector<string> tokens;
+    SourceTokenizer::extractPrint(printLine, tokens);
+    VariableNode* newVar = parseVar(tokens[0]);
+
+    return new PrintNode(stmtNo, newVar);
+}
+
+AssignNode* Parser::parseAssign(string assignLine) {
+    int stmtNo = getStatementNumber();
+    cout << "sending assign " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addAssignStatement(stmtNo);
+    vector<string> tokens;
+    SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
-    return new AssignNode(getStatementNumber(), newVarNode, newExpression);
+
+    return new AssignNode(stmtNo, newVarNode, newExpression);
+}
+
+WhileNode *Parser::parseWhile(string code) {
+    int stmtNo = getStatementNumber();
+    cout << "sending while " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addWhileStatement(stmtNo);
+    vector<string> tokens;
+    SourceTokenizer::extractWhile(code, tokens);
+    CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
+    StatementList newStmtLst = parseStatementList(tokens[1]);
+
+    return new WhileNode(stmtNo, newCondExpr, newStmtLst);
+}
+
+IfNode *Parser::parseIf(string code) {
+    int stmtNo = getStatementNumber();
+    cout << "sending if " << stmtNo << " to PKB\n";
+    PKB::getInstance()->addIfStatement(stmtNo);
+    vector<string> tokens;
+    SourceTokenizer::extractIfElseThen(code, tokens);
+    CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
+    StatementList newThenStmtLst = parseStatementList(tokens[1]);
+    StatementList newElseStmtLst = parseStatementList(tokens[2]);
+
+    return new IfNode(stmtNo, newCondExpr, newThenStmtLst, newElseStmtLst);
+}
+
+RelExprNode *Parser::parseRelExpr(string relExprLine) {
+    vector<string> tokens;
+    SourceTokenizer::extractRelExpr(relExprLine, tokens);
+    RelFactor newLeftRelFactor = parseExpression(tokens[0]);
+    RelFactor newRightRelFactor = parseExpression(tokens[1]);
+    return new RelExprNode(newLeftRelFactor, newRightRelFactor, tokens[2]);
+}
+
+// DELETE ONCE SourceTokenizer HAS ITS OWN EXTRACT COND EXPR
+////////////////////////////////////////////////////////////
+void extractCondExpr(string sourceCode, vector<string> &v) {
+    int operPos = -1;
+    bool notFound = true;
+    string left, right, oper;
+    if ((operPos = sourceCode.find("&&")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
+    }
+    if (notFound && (operPos = sourceCode.find("||")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
+    }
+    if (notFound && (operPos = sourceCode.find("!")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 1));
+    }
+    if (notFound) {
+        // just rel exp
+        left = "";
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
+        oper = "";
+    }
+
+    v.push_back(oper); // 0
+    v.push_back(left); // 1
+    v.push_back(right); // 2
+}
+////////////////////////////////////////////////////////////
+
+CondExprNode *Parser::parseCondExpr(string condExprLine) {
+    vector<string> tokens;
+    extractCondExpr(std::move(condExprLine), tokens);
+    if (tokens[0].empty()) {
+        RelExprNode* newRelExpr = parseRelExpr(tokens[2]);
+        return new CondExprNode(newRelExpr);
+    }
+    if (tokens[0] == "!") {
+        CondExprNode* newCondExpr = parseCondExpr(tokens[2]);
+        return new CondExprNode(newCondExpr);
+    }
+    CondExprNode* newLeftCondExpr = parseCondExpr(tokens[1]);
+    CondExprNode* newRightCondExpr = parseCondExpr(tokens[2]);
+    return new CondExprNode(tokens[0],newLeftCondExpr, newRightCondExpr);
 }
 
 // difficult to modify. edit at own risk
@@ -119,12 +244,37 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
     int switchCase = Identifier::identifyFirstObject(*stmt);
     switch(switchCase){
         case(ASSIGN): {
-            vector<string> v = StringFormatter::Trim(*stmt, ASSIGN);
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, ASSIGN);
             newNode = Parser::parseAssign(v[0]);
-            *stmt = v[1];
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
-            // ADD MORE CASES FOR STATEMENT
+        case(WHILE): {
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, WHILE);
+            //cout << "whileCode: "<< v[0] + "\n";
+            //cout << "remaining: " << v[1] + "\n";
+            newNode = Parser::parseWhile(v[0]);
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
+            break;
+        }
+        case(READ): {
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, READ);
+            newNode = Parser::parseRead(v[0]);
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
+            break;
+        }
+        case(PRINT): {
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, PRINT);
+            newNode = Parser::parsePrint(v[0]);
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
+            break;
+        }
+        case(IF_ELSE): {
+            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, IF_ELSE);
+            newNode = Parser::parseIf(v[0]);
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
+            break;
+        }
         default:{
             throw "cannot recognise '" + *stmt + "' as a statement";
             break;
@@ -136,8 +286,9 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
 ProcNameNode *Parser::parseProcName(string procedureName) {
     //int check = Identifier::identifyFirstObject(procedureName);
     //if(check == PROCEDURE_NAME) {
-        cout << "sending " << procedureName << " to PKB\n";
-        PKB::getInstance() ->addProcedures(procedureName);
+        cout << "sending proc " << procedureName << " to PKB\n";
+        PKB::getInstance() ->addProcedure(procedureName);
+  
         return new ProcNameNode(procedureName);
     //} else {
         throw "Invalid varname format: '" + procedureName + "'\n";
@@ -145,7 +296,7 @@ ProcNameNode *Parser::parseProcName(string procedureName) {
 }
 
 ProcedureNode *Parser::parseProcedure(string * procedure) {
-    //vector<string> v = StringFormatter::Trim(*procedure, PROCEDURE);
+    //vector<string> v = StringFormatter::partitionAccordingToCase(*procedure, PROCEDURE);
     // REPLACE WITH ABOVE ONCE IMPLEMENTED
     vector<string> v;
     v.push_back(*procedure);

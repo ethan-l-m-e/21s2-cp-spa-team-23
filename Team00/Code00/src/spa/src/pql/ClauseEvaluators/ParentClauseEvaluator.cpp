@@ -5,16 +5,17 @@
 #include "ParentClauseEvaluator.h"
 
 bool ParentClauseEvaluator::isRelation(std::string left, std::string right) {
-    //return pkb->isParent(left, right);
-    return false;
+    return pkb->isParent(left, right);
 }
 
 unordered_set<std::string> ParentClauseEvaluator::getLeftSynonymValue(std::string right) {
-    //return pkb->getParent(right);
-    return unordered_set<std::string>{};
+    return pkb->getParent(right);
 }
 
 unordered_set<std::string> ParentClauseEvaluator::getRightSynonymValue(std::string left) {
-    //return pkb->getChild(left);
-    return unordered_set<std::string>{};
+    return pkb->getChildren(left);
+}
+
+pair<DesignEntity, DesignEntity> ParentClauseEvaluator::getWildcardType () {
+    return make_pair(DesignEntity::STMT, DesignEntity::STMT);
 }

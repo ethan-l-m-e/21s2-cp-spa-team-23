@@ -25,8 +25,10 @@ protected:
 public:
     ClauseEvaluator(std::vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
     ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
+    virtual ~ClauseEvaluator() = default;
     virtual Result evaluateClause() = 0;
     unordered_set<std::string> getAllType(DesignEntity designEntity);
+
 };
 
 

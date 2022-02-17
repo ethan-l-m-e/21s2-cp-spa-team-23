@@ -4,12 +4,7 @@
 
 #include "Query.h"
 
-std::string Query::generateResult(
-        PKB *pkb) {
-    // Combine results and return
-    std::string result; // remove later
-    return result;
-}
+#include <utility>
 
 bool Query::hasSuchThatClause(){
     return !suchThatClauses.empty();
@@ -35,7 +30,7 @@ DesignEntity Query::getSelectedSynonymType() {
     return declarations.find(selectedSynonym)->second;
 }
 
-DesignEntity Query::findEntityType(std::string synonym) {
+DesignEntity Query::findEntityType(const std::string& synonym) {
     auto got = declarations.find (synonym);
     if ( got == declarations.end() )
         return DesignEntity::EMPTY;
@@ -44,11 +39,19 @@ DesignEntity Query::findEntityType(std::string synonym) {
 }
 
 void Query::setDeclarations(unordered_map<string, DesignEntity> declarationsMap) {
-    declarations = declarationsMap;
+    this->declarations = std::move(declarationsMap);
 }
 
 void Query::setSynonym(std::string synonym) {
-    selectedSynonym = synonym;
+    this->selectedSynonym = std::move(synonym);
+}
+
+void Query::setSuchThatClauses(vector<SuchThatClause> clauses) {
+    this->suchThatClauses = std::move(clauses);
+}
+
+void Query::setPatternClauses(vector<PatternClause> clauses) {
+    this->patternClauses = std::move(clauses);
 }
 
 

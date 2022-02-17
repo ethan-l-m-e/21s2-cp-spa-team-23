@@ -33,7 +33,7 @@ public:
     virtual vector<VarName> getListOfVarUsed();
     virtual vector<string> getListOfVarModified();
 };
-
+//stmt: read | print | while | if | assign
 class StmtNode: public Node {
     int statementNumber;
 public:
@@ -41,7 +41,7 @@ public:
     int getStmtNumber() const override;
 };
 
-typedef std::vector<Node *> StatementList;
+typedef std::vector<StmtNode *> StatementList;
 
 class StmtLstNode: public StmtNode{
     StatementList stmtLst;
@@ -79,15 +79,24 @@ private:
 
 
 
-
-/*
+// Definition:
+// read: 'read' var_name';'
 class ReadNode: public StmtNode {
     VariableNode *varNode;
 public:
-    ReadNode(int, VariableNode*);
-    VariableNode* getVarName() const;
+    ReadNode(int num, VariableNode* varNode);
+    [[nodiscard]] VarName getVarName() const;
 };
-*/
+
+// Definition:
+// print: 'print' var_name';'
+class PrintNode: public StmtNode {
+    VariableNode *varNode;
+public:
+    PrintNode(int num, VariableNode* varNode);
+    [[nodiscard]] VarName getVarName() const;
+};
+
 class BinaryOperatorNode;
 
 // Expression is replaced by BinaryOperatorNode***
@@ -176,6 +185,19 @@ class WhileNode: public StmtLstNode {
 public:
     WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst);
     CondExprNode *getCondExpr();
+};
+
+// Definition:
+// if: 'if' '(' cond_expr ')' 'then' '{' stmtLst '}' 'else' '{' stmtLst '}'
+class IfNode: public StmtNode {
+    CondExprNode *condExpr;
+    StatementList thenStmtLst;
+    StatementList elseStmtLst;
+public:
+    IfNode(int num, CondExprNode *condExpr, StatementList thenStmtLst, StatementList elseStmtLst);
+    CondExprNode *getCondExpr();
+    StatementList getThenStmtLst();
+    StatementList getElseStmtLst();
 };
 
 class ProcedureNode: public StmtLstNode {

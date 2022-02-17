@@ -24,10 +24,14 @@ protected:
     virtual unordered_set<std::string> getLeftSynonymValue(std::string right) = 0;
     virtual unordered_set<std::string> getRightSynonymValue(std::string left) = 0;
     virtual RelRef getRelRef() = 0;
+    virtual pair<DesignEntity, DesignEntity> getWildcardType() = 0;
 
     vector<ResultItem> generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet);
     vector<ResultItem> convertSetToVector(unordered_set<string> set);
-    unordered_set<string> findIntersection(unordered_set<string> set1, unordered_set<string> set2);
+    unordered_set<std::string> generateLeftSet (unordered_set<std::string>& rightSet);
+    unordered_set<std::string> generateRightSet (unordered_set<std::string>& rightSet);
+    void filterByType (unordered_set<std::string>& set, DesignEntity entityType);
+    bool isEntityType (std::string ident, DesignEntity entityType);
 
     ClauseSynonymType getClauseSynonymType();
     void evaluateNoSynonym();
@@ -37,8 +41,6 @@ protected:
 
     Argument argLeft = argList[0];
     Argument argRight = argList[1];
-
-
 };
 
 

@@ -30,16 +30,17 @@ protected:
     vector<PatternClause> patternClauses;
     std::string selectedSynonym;
 public:
-    virtual std::string generateResult(PKB* pkb);
     bool hasSuchThatClause();
     bool hasPatternClause();
     vector<PatternClause> getPatternClauses();
     vector<SuchThatClause> getSuchThatClauses();
     std::string getSelectedSynonym();
     DesignEntity getSelectedSynonymType();
-    DesignEntity findEntityType(std::string synonym);
+    DesignEntity findEntityType(const std::string&);
     void setDeclarations(unordered_map<string, DesignEntity>);
     void setSynonym(std::string);
+    void setSuchThatClauses(vector<SuchThatClause>);
+    void setPatternClauses(vector<PatternClause>);
 };
 
 #endif //SPA_QUERY_H

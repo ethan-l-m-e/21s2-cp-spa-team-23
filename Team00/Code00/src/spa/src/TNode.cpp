@@ -26,6 +26,23 @@ VarName &VariableNode::getVariableName(){ return this ->varName; }
 ConstValueNode::ConstValueNode(const string num) { this -> constValue = num; }
 string ConstValueNode::getConstValue() {return this ->constValue; }
 
+ReadNode::ReadNode(int num, VariableNode *varNode): StmtNode(num) {
+    this->varNode = varNode;
+    this->varNode->setParentNode(this);
+}
+
+VarName ReadNode::getVarName() const {
+    return this->varNode->getVariableName();
+}
+
+PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
+    this->varNode = varNode;
+    this->varNode->setParentNode(this);
+}
+
+VarName PrintNode::getVarName() const {
+    return this->varNode->getVariableName();
+}
 bool StmtLstNode::hasStmtLst() {return true;}
 StmtLstNode::StmtLstNode(int num, StatementList lst):StmtNode(num) {stmtLst=lst;}
 vector<Node *> StmtLstNode::getStmtLst() {return this->stmtLst;}
@@ -88,7 +105,9 @@ Expression AssignNode::getRightNode() const {
 
 BinaryOperatorNode::BinaryOperatorNode(Expression leftExpr, Expression rightExpr, string binaryOperator) {
     this->leftExpr = leftExpr;
+    visit([this](auto& n){n->setParentNode(this);},this->leftExpr);
     this->rightExpr = rightExpr;
+    visit([this](auto& n){n->setParentNode(this);},this->rightExpr);
     this->binaryOperator = std::move(binaryOperator);
 }
 
@@ -106,7 +125,9 @@ string BinaryOperatorNode::getBinaryOperator() const {
 
 RelExprNode::RelExprNode(RelFactor leftNode, RelFactor rightNode, string relativeOperator) {
     this->leftNode = leftNode;
+    visit([this](auto n){n->setParentNode(this);}, this->leftNode);
     this->rightNode = rightNode;
+    visit([this](auto n){n->setParentNode(this);}, this->rightNode);
     this->relativeOperator = std::move(relativeOperator);
 }
 
@@ -124,17 +145,21 @@ string RelExprNode::getRelativeOperator() const {
 
 CondExprNode::CondExprNode(RelExprNode *relExpr){
     this->relExpr = relExpr;
+    this->relExpr->setParentNode(this);
 }
 
 CondExprNode::CondExprNode(CondExprNode *singleCondExpr) {
     this->condOperator = "!";
     this->rightNode = singleCondExpr;
+    this->rightNode->setParentNode(this);
 }
 
 CondExprNode::CondExprNode(string condOperator, CondExprNode *leftNode, CondExprNode *rightNode) {
     this->condOperator = std::move(condOperator);
     this->leftNode = leftNode;
+    this->leftNode->setParentNode(this);
     this->rightNode = rightNode;
+    this->rightNode->setParentNode(this);
 }
 
 RelExprNode *CondExprNode::getRelExpr() const {
@@ -155,7 +180,11 @@ string CondExprNode::getCondOperator() const {
 
 WhileNode::WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst) : StmtLstNode(num, stmtLst) {
     this->condExpr = condExpr;
+    this->condExpr->setParentNode(this);
     this->stmtLst = std::move(stmtLst);
+    for (StmtNode *stmtNode : this->stmtLst) {
+        stmtNode->setParentNode(this);
+    }
 }
 
 CondExprNode *WhileNode::getCondExpr() {
@@ -170,6 +199,31 @@ CondExprNode *WhileNode::getCondExpr() {
 //    return this->stmtLst;
 //}
 
+IfNode::IfNode(int num, CondExprNode *condExpr, StatementList thenStmtLst, StatementList elseStmtLst): StmtNode(num) {
+    this->condExpr = condExpr;
+    condExpr->setParentNode(this);
+    this->thenStmtLst = std::move(thenStmtLst);
+    for (StmtNode *thenNode: this->thenStmtLst) {
+        thenNode->setParentNode(this);
+    }
+    this->elseStmtLst = std::move(elseStmtLst);
+    for (StmtNode *elseNode: this->elseStmtLst) {
+        elseNode->setParentNode(this);
+    }
+}
+
+CondExprNode *IfNode::getCondExpr() {
+    return this->condExpr;
+}
+
+StatementList IfNode::getThenStmtLst() {
+    return this->thenStmtLst;
+}
+
+StatementList IfNode::getElseStmtLst() {
+    return this->elseStmtLst;
+}
+
 ProcNameNode::ProcNameNode(ProcName name) {
     this->procedureName = std::move(name);
 }
@@ -182,6 +236,9 @@ ProcedureNode::ProcedureNode(int num, ProcNameNode *procName, StatementList stmt
         : StmtLstNode(num, stmtLst) {
     this->procName = procName;
     this->stmtLst = std::move(stmtLst);
+    for (StmtNode *stmtNode : this->stmtLst) {
+        stmtNode->setParentNode(this);
+    }
 }
 
 ProcName ProcedureNode::getProcName() {
