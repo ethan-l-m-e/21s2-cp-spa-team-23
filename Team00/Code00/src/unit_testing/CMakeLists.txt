@@ -3,7 +3,7 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_
 set(srcs ${srcs}
         src/QP_Parser/TestValidator.cpp
         src/QP_Parser/TestQueryTokenizer.cpp
-        src/QP_Parser/TestPreProcessor.cpp
+        src/QP_Parser/TestQueryParser.cpp
         src/TestStringFormatter.cpp
         src/TestQueryEvaluator.cpp
         src/QP-evaluator/TestPatternClauseEvaluator.cpp

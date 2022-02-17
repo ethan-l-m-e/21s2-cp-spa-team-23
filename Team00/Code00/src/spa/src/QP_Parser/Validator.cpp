@@ -55,22 +55,20 @@ bool Validator::validateSuchThatClauses(map<string, string> declarationTokens,
         // Check for rs
         bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, regex(relationshipCheck));
         if (isStatementRelationship) {
-            // TODO: check if argument is a number, if yes, skip
-            if (suchThatClauseToken.arguments->first != "_") {
+            if (!regex_match(suchThatClauseToken.arguments->first, regex("(_|[0-9]+)"))) {
                 if (declarationTokens.find(suchThatClauseToken.arguments->first) == declarationTokens.end()) {
                     return false;
                 }
                 isValid = isValid && stmtSet.find(declarationTokens.at(suchThatClauseToken.arguments->first)) != stmtSet.end();
             }
 
-            if (suchThatClauseToken.arguments->second != "_") {
+            if (!regex_match(suchThatClauseToken.arguments->second, regex("(_|[0-9]+)"))) {
                 if (declarationTokens.find(suchThatClauseToken.arguments->second) == declarationTokens.end()) {
                     return false;
                 }
                 isValid = isValid && stmtSet.find(declarationTokens.at(suchThatClauseToken.arguments->second)) != stmtSet.end();
             }
         } else {
-            // TODO: Check if the argument is an expression aka "smth". if yes, then skip
             std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
             if (suchThatClauseToken.arguments->first == "_") {
                 return false;
@@ -78,9 +76,12 @@ bool Validator::validateSuchThatClauses(map<string, string> declarationTokens,
             if (argSet.find(suchThatClauseToken.arguments->first) == argSet.end()) {
                 return false;
             }
-            isValid = isValid && argSet.find(declarationTokens.at(suchThatClauseToken.arguments->first)) != argSet.end();
 
-            if (suchThatClauseToken.arguments->second != "_") {
+            if (!regex_match(suchThatClauseToken.arguments->first, regex("\""+ IDENT + "\""))) {
+                isValid = isValid && argSet.find(declarationTokens.at(suchThatClauseToken.arguments->first)) != argSet.end();
+            }
+
+            if (!regex_match(suchThatClauseToken.arguments->second, regex("(_|\""+ IDENT + "\")"))) {
                 if (argSet.find(suchThatClauseToken.arguments->second) == argSet.end()) {
                     return false;
                 }

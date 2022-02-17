@@ -28,7 +28,7 @@ namespace qp {
                                                                         {"Modifies_P", RelRef::MODIFIES_P},
                                                                 });
 
-    class PreProcessor {
+    class QueryParser {
     public:
         Query getQuery(std::string);
     private:
