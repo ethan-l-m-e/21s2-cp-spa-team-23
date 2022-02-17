@@ -34,15 +34,15 @@ PKB* PKB::getInstance() {
 
 // Setter Functions (Assign Nodes)
 
-void PKB::addAssignNode(TNode *assignNode) {
+void PKB::addAssignNode(AssignNode *assignNode) {
     assignNodesSet.insert(assignNode);
 }
 
 // Getter Functions (Assign Nodes)
 
-vector<TNode *> PKB::getAllAssignNodes() {
+vector<AssignNode *> PKB::getAllAssignNodes() {
 
-    vector<TNode *> assignNodesVector;
+    vector<AssignNode *> assignNodesVector;
 
     assignNodesVector.insert(assignNodesVector.end(), assignNodesSet.begin(), assignNodesSet.end());
 
