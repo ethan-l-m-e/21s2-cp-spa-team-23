@@ -11,9 +11,10 @@
 #include "TNode.h"
 
 class PatternClauseEvaluator : public ClauseEvaluator {
-protected:
+public:
     PatternClauseEvaluator (SynonymType synonymType, std::vector<Argument> args, PKB* pkb, Query* query): ClauseEvaluator(std::move(args), pkb, query) {}
     Result evaluateClause() override;
+protected:
 
     bool leftIsSynonym();
     bool leftIsIdent();

@@ -31,7 +31,7 @@ protected:
     unordered_set<std::string> generateLeftSet (unordered_set<std::string>& rightSet);
     unordered_set<std::string> generateRightSet (unordered_set<std::string>& rightSet);
     void filterByType (unordered_set<std::string>& set, DesignEntity entityType);
-    static bool isEntityType (std::string ident, DesignEntity entityType);
+    bool isEntityType (std::string ident, DesignEntity entityType);
 
     ClauseSynonymType getClauseSynonymType();
     void evaluateNoSynonym();
@@ -41,8 +41,6 @@ protected:
 
     Argument argLeft = argList[0];
     Argument argRight = argList[1];
-
-
 };
 
 

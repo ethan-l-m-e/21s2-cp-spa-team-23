@@ -116,20 +116,6 @@ std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_s
 };
 
 unordered_set<std::string> SuchThatClauseEvaluator::generateLeftSet (unordered_set<std::string>& rightSet) {
-
-    /*
-    unordered_set<std::string> intersect;
-    for( const std::string& str1 : set1 ) {
-        for( const std::string& str2 : set2 ) {
-            if (str1 == str2) {
-                intersect.emplace(str1);
-            }
-        }
-    };
-    std::cout << '\n' ;
-    cout << intersect.size();
-    return intersect;
-     */
     unordered_set<std::string> leftSet;
     for (const std::string& str : rightSet) {
         unordered_set<std::string> resultSet = getLeftSynonymValue(str);
@@ -149,9 +135,12 @@ unordered_set<std::string> SuchThatClauseEvaluator::generateRightSet (unordered_
 }
 
 void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, DesignEntity entityType) {
-    for (const std::string& str : set) {
-        if(!isEntityType(str, entityType)) {
-            set.erase(str);
+    for (auto it = set.begin(); it != set.end(); ) {
+        if(!isEntityType(*it, entityType)) {
+            set.erase(it++);
+        }
+        else {
+            ++it;
         }
     }
 }
@@ -159,24 +148,31 @@ void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, Des
 
 bool SuchThatClauseEvaluator::isEntityType (std::string ident, DesignEntity entityType) {
     switch (entityType) {
-        /*
         case DesignEntity::STMT:
-            return pkb->isStatement(ident);
+            //TODO: update stmt check
+            return true;
         case DesignEntity::VARIABLE:
             return pkb->isVariable(ident);
+        case DesignEntity::CONSTANT:
+            return pkb->isConstant(ident);
         case DesignEntity::ASSIGN:
-            return pkb->isAssign(ident);
+            return pkb->isAssignStatement(ident);
         case DesignEntity::PRINT:
-            return pkb->isPrint(ident);
+            return pkb->isPrintStatement(ident);
         case DesignEntity::READ:
-            return pkb->isRead(ident);
+            return pkb->isReadStatement(ident);
         case DesignEntity::WHILE:
-            return pkb->isWhile(ident);
+            return pkb->isWhileStatement(ident);
         case DesignEntity::IF:
-            return pkb->isIf(ident);
-            */
-        default:
+            return pkb->isIfStatement(ident);
+        case DesignEntity::CALL:
+            //TODO: update call check
+            //return pkb->isCall(ident);
             return true;
+        case DesignEntity::PROCEDURE:
+            return pkb->isProcedure(ident);
+        default:
+            return false;
     }
 }
 
