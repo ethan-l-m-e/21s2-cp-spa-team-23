@@ -59,9 +59,7 @@ vector<VarName> StmtLstNode::getListOfVarUsed() {
 }
 vector<VarName> StmtLstNode::getListOfVarModified() {
     vector<VarName> toReturn;
-//    cout<<"does this even run 5";
     for(int i = 0; i < getStmtLst().size() ; i++) {
-        cout<<"for loop of getListOf\n";
         vector<VarName> list = getStmtLst().at(i)->getListOfVarModified();
         toReturn.insert(toReturn.end(),
                         list.begin(),
@@ -98,9 +96,7 @@ vector<string> AssignNode::getListOfVarUsed(){
     return getAllVarFnHelper(this->getRightNode());
 }
 vector<string> AssignNode::getListOfVarModified(){
-    cout<<"assign node's get list of \n";
     vector<string> v = getAllVarFnHelper(this->getLeftNode());
-    cout<< v.at(0);
     return v;
 }
 

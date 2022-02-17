@@ -19,7 +19,6 @@ CondExprNode defaultCond = CondExprNode(relPtr);
 CondExprNode* condPtr = &defaultCond;
 StatementList emptyStmtLst = {};
 
-//    Node pNode = Node();
 auto aNode= AssignNode(1,&v2,&v1);
 auto bNode= AssignNode(2,&v3,&v4);
 auto cNode= AssignNode(3,&v1,&v4);
@@ -168,13 +167,13 @@ TEST_CASE("test Modifies - container statement") {
     REQUIRE(PKB::getInstance()->isModifies(3,"x"));
 }
 
-TEST_CASE("test") {
-
-    PKB::getInstance()->setParent(0,1);
-    std::unordered_set<string> set;
-    set.insert("x");
-;
-    PKB::getInstance()->setUses(1,set);
-    REQUIRE(PKB::getInstance()->isUses(1,"x"));
-//    REQUIRE(PKB::getInstance()->isParent(0,1));
-}
+//TEST_CASE("test") {
+//
+//    PKB::getInstance()->setParent(0,1);
+//    std::unordered_set<string> set;
+//    set.insert("x");
+//;
+//    PKB::getInstance()->setUses(1,set);
+//    REQUIRE(PKB::getInstance()->isUses(1,"x"));
+////    REQUIRE(PKB::getInstance()->isParent(0,1));
+//}

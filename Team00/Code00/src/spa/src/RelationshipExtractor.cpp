@@ -12,10 +12,8 @@
 //extracts all follows relationship starting from given node
 void RelationshipExtractor::extractFollows(Node * node) {
      if(node->hasStmtLst()) {
-//         cout<<"has stmt lst";
          int numOfChildNodes = node->getStmtLst().size();
          if (numOfChildNodes > 1) {
-//             cout<<"child node more than 1";
              for (int i = 0; i < (numOfChildNodes - 1); i++) {
                  Node *child = node->getStmtLst().at(i);
                  for(int j = i; j<numOfChildNodes-1;j++){
@@ -54,7 +52,7 @@ void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> pare
         }
     }
 }
-
+//set all variables used by the node in the pkb
 void RelationshipExtractor::extractUses (Node * node) {
     vector<string> varList = node->getListOfVarUsed();
     if (!varList.empty()) {
@@ -62,9 +60,6 @@ void RelationshipExtractor::extractUses (Node * node) {
         std::unordered_set<string> set;
         for (string &i: varList) {
             set.insert(i);
-//            cout<<"\n";
-//            cout<<i;
-//            cout<<"\n";
         }
 
         PKB::getInstance()->setUses(node->getStmtNumber(),set);
@@ -77,18 +72,14 @@ void RelationshipExtractor::extractUses (Node * node) {
     }
 }
 
+//set all variables modified by the node in the pkb
 void RelationshipExtractor::extractModifies (Node * node) {
 
     vector<string> varList = node->getListOfVarModified();
-    cout<<"this has to run\n";
     if (!varList.empty()) {
-        cout<<"does this even run\n";
         std::unordered_set<string> set;
         for (string &i: varList) {
             set.insert(i);
-            cout<<"\n";
-            cout<<i;
-            cout<<"\n";
         }
         PKB::getInstance()->setModifies(node->getStmtNumber(),set);
     }
