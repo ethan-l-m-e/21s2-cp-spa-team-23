@@ -31,14 +31,11 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
-    if (synonymRelations->isEmpty()) {
-        auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
-        Result selectResult = selectClauseEvaluator->evaluateClause();
-        delete selectClauseEvaluator;
-        mergeResultToSynonymsRelations(*synonymRelations, selectResult);
-    }
-
-    return generateResultString(synonymRelations, query->getSelectedSynonym());
+    auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
+    Result selectResult = selectClauseEvaluator->evaluateClause();
+    delete selectClauseEvaluator;
+    delete synonymRelations;
+    return generateResultString(selectResult);
 }
 
 ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
@@ -55,36 +52,24 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
             return new UsesSClauseEvaluator(clause.argList, pkb, query);
         case RelRef::USES_P:
             // return new UsesPClauseEvaluator(clause.argList, pkb, query);
-            break;
         case RelRef::MODIFIES_S:
             return new ModifiesSClauseEvaluator(clause.argList, pkb, query);
         case RelRef::MODIFIES_P:
             // return ModifiesPClauseEvaluator(clause.argList, pkb, query);
-            break;
         default:
-            return new FollowsClauseEvaluator(clause.argList, pkb, query);
+            return new FollowsClauseEvaluator(clause.argList, pkb, query); // TODO: Throw error.
     }
 }
 
-std::list<std::string> QueryEvaluator::generateResultString(SynonymRelations* sr, string selectedSynonym) {
-
+std::list<std::string> QueryEvaluator::generateResultString(Result& result) {
     std::list<std::string> stringList;
-    std::vector<std::string>* header  = sr->getHeader();
-    for(size_t j = 0; j < header->size(); ++j) {
-        std::string str = (*header)[j];
-        if (str == selectedSynonym) {
-            std::vector<std::vector<std::string>>* vec = sr->getList();
-            std::string s;
-            for(auto & i : *vec)
-            {
-                s = i[j];
-                stringList.emplace_back(s);
-            }
-            return stringList;
+
+    if (result.resultType == ResultType::STRING && !result.resultItemList.empty()) {
+        for (auto &resultItem: result.resultItemList) {
+            auto s = std::get<std::string>(resultItem);
+            stringList.emplace_back(s);
         }
     }
-
-    delete sr;
     return stringList;
 }
 
