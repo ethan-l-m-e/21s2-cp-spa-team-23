@@ -31,6 +31,7 @@ void generateSamplePKB() {
     testPKB->addPrintStatement(5);
     testPKB->addPrintStatement(6);
 
+
     testPKB->setFollows(1,2);
     testPKB->setFollows(2,3);
     testPKB->setFollows(3,4);
@@ -42,7 +43,8 @@ void generateSamplePKB() {
 TEST_CASE("Select query with no clauses") {
     generateSamplePKB();
     Query query;
-    unordered_map<string, DesignEntity> declarationsMap = {{"v", DesignEntity::VARIABLE}};
+    unordered_map<string, DesignEntity> declarationsMap = {{"v", DesignEntity::VARIABLE}
+    };
     query.setDeclarations(declarationsMap);
     query.setSynonym("v");
     auto qe = QueryEvaluator(testPKB);
@@ -50,6 +52,33 @@ TEST_CASE("Select query with no clauses") {
     list<string> expected = {"x", "y", "xylophone", "yeast", "z"};
     REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+
+    declarationsMap = {{"s", DesignEntity::STMT}};
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("s");
+    result = qe.evaluate(&query);
+    expected = {"1", "2", "3", "4", "5", "6"};
+    REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
+            == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+
+
+    declarationsMap = {{"rd", DesignEntity::READ}};
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("rd");
+    result = qe.evaluate(&query);
+    expected = {"1", "2"};
+    REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
+            == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+
+
+    declarationsMap = {{"a", DesignEntity::ASSIGN}};
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("pr");
+    result = qe.evaluate(&query);
+    expected = {"3", "4", "5", "6"};
+    REQUIRE(std::unordered_set<string> (std::begin(result), std::end(result))
+            == std::unordered_set<string> (std::begin(expected), std::end(expected)));
+
 }
 
 TEST_CASE("Such that clause: 1 synonym") {
@@ -235,3 +264,35 @@ TEST_CASE("Query8") {
             == std::unordered_set<string> (std::begin(expected), std::end(expected)));
 }
 */
+
+void generateSamplePKBForPatternMatching() {
+    /**
+     *    x = y;        // test var
+     *    x = 1;        //test const
+     *    x = y + 1;    //test basic expression
+     *    y = (y + x + 2) + 1;  //test 1-nested expression
+     *    y = ((y + (3 - z)) * (x + 2)) + 1;    // test >2-nested expression
+     *    y = y + x * 1 + z;        // test AST structure
+     */
+}
+
+
+TEST_CASE("Pattern clause: left Synonym") {
+    // synonym, _
+    // synonym, _Expression-spec_
+    generateSamplePKBForPatternMatching();
+    Query query;
+    unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}};
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("v");
+    auto qe = QueryEvaluator(testPKB);
+
+    list<string> result = qe.evaluate(&query);
+    list<string> expected = {};
+
+
+}
+
+TEST_CASE("Pattern clause: left ident/_") {
+
+}
