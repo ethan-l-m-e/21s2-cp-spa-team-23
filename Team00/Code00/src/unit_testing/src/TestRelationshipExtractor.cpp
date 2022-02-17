@@ -38,8 +38,8 @@ TEST_CASE("test follows - basic") {
     ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
 
     RelationshipExtractor::extractFollows(&pNode);
-    REQUIRE(PKB::getInstance()->isFollows(1,2));
-    REQUIRE(PKB::getInstance()->isFollows(2,3));
+    REQUIRE(PKB::getInstance()->isFollows("1","2"));
+    REQUIRE(PKB::getInstance()->isFollows("2","3"));
 }
 
 TEST_CASE("test follows - fail test") {
@@ -54,8 +54,8 @@ TEST_CASE("test follows - fail test") {
     WhileNode wNode = WhileNode(0, condPtr, defaultStmtLst);
 
     RelationshipExtractor::extractFollows(&pNode);
-    REQUIRE(PKB::getInstance()->isFollows(0,2)==false);
-    REQUIRE(PKB::getInstance()->isFollows(1,3)==false);
+    REQUIRE(PKB::getInstance()->isFollows("0","2")==false);
+    REQUIRE(PKB::getInstance()->isFollows("1","3")==false);
 }
 
 TEST_CASE("test follows* - basic") {
@@ -69,7 +69,7 @@ TEST_CASE("test follows* - basic") {
     ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
 
     RelationshipExtractor::extractFollows(&pNode);
-    REQUIRE(PKB::getInstance()->isFollowsT(1,3));
+    REQUIRE(PKB::getInstance()->isFollowsT("1","3"));
 }
 
 //pkb parents doesnt seem to work yet so these will fail
@@ -85,7 +85,7 @@ TEST_CASE("test parents - basic") {
     vector<StmtLstNode*> v;
     v.push_back(&pNode);
     RelationshipExtractor::extractParent(&pNode,v);
-    REQUIRE(PKB::getInstance()->isParent(0,2));
+    REQUIRE(PKB::getInstance()->isParent("0","2"));
 }
 
 TEST_CASE("test parents - fail") {
@@ -100,7 +100,7 @@ TEST_CASE("test parents - fail") {
     vector<StmtLstNode*> v;
     v.push_back(&pNode);
     RelationshipExtractor::extractParent(&pNode,v);
-    REQUIRE(PKB::getInstance()->isParent(1,2));
+    REQUIRE(PKB::getInstance()->isParent("1","2"));
 }
 
 TEST_CASE("test parents* - basic") {
@@ -125,12 +125,12 @@ TEST_CASE("test parents* - basic") {
     vector<StmtLstNode*> v;
     v.push_back(&pNode);
     RelationshipExtractor::extractParent(&pNode,v);
-    REQUIRE(PKB::getInstance()->isParent(0,2));
+    REQUIRE(PKB::getInstance()->isParent("0","2"));
 }
 
 TEST_CASE("test uses - basic") {
     RelationshipExtractor::extractUses(&aNode);
-    REQUIRE(PKB::getInstance()->isUses(1,"y"));
+    REQUIRE(PKB::getInstance()->isUses("1","y"));
 }
 
 TEST_CASE("test uses - container statement") {
@@ -145,11 +145,11 @@ TEST_CASE("test uses - container statement") {
 
     auto wNode = WhileNode(3, condPtr, defaultStmtLst3);
     RelationshipExtractor::extractUses(&wNode);
-    REQUIRE(PKB::getInstance()->isUses(3,"a"));
+    REQUIRE(PKB::getInstance()->isUses("3","a"));
 }
 TEST_CASE("test modifies - basic") {
     RelationshipExtractor::extractModifies(&aNode);
-    REQUIRE(PKB::getInstance()->isModifies(1,"x"));
+    REQUIRE(PKB::getInstance()->isModifies("1","x"));
 }
 
 TEST_CASE("test Modifies - container statement") {
@@ -164,16 +164,11 @@ TEST_CASE("test Modifies - container statement") {
     auto wNode = WhileNode(3, condPtr, defaultStmtLst4);
     cout<<defaultStmtLst4.size();
     RelationshipExtractor::extractModifies(&wNode);
-    REQUIRE(PKB::getInstance()->isModifies(3,"x"));
+    REQUIRE(PKB::getInstance()->isModifies("3","x"));
 }
 
-//TEST_CASE("test") {
-//
-//    PKB::getInstance()->setParent(0,1);
-//    std::unordered_set<string> set;
-//    set.insert("x");
-//;
-//    PKB::getInstance()->setUses(1,set);
-//    REQUIRE(PKB::getInstance()->isUses(1,"x"));
-////    REQUIRE(PKB::getInstance()->isParent(0,1));
-//}
+TEST_CASE("test") {
+
+    PKB::getInstance()->setParent(5,6);
+    REQUIRE(PKB::getInstance()->isParent("5","6"));
+}
