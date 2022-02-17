@@ -4,6 +4,8 @@
 
 #include "pql/QueryEvaluator.h"
 #include "catch.hpp"
+#include "Parser.h"
+
 using namespace std;
 
 PKB* generateSamplePKB() {
@@ -72,10 +74,8 @@ PKB* generateSamplePKB() {
 }
 
 
-
-PKB *testPKB = generateSamplePKB();
-
 TEST_CASE("Select query with no clauses") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {{"v", DesignEntity::VARIABLE},
                                                            {"a", DesignEntity::ASSIGN},
                                                            {"pn", DesignEntity::PRINT},
@@ -134,6 +134,7 @@ TEST_CASE("Select query with no clauses") {
 }
 
 TEST_CASE("Such that clause: 1 synonym") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT}};
     Argument a0 = {ArgumentType::UNDERSCORE, "_"};
     Argument as = {ArgumentType::SYNONYM, "s"};
@@ -251,6 +252,7 @@ TEST_CASE("Such that clause: 1 synonym") {
 }
 
 TEST_CASE("Follows/Parent/Follows* clause: 1 synonym with stmt type") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT},
                                                            {"a", DesignEntity::ASSIGN},
                                                            {"pn", DesignEntity::PRINT},
@@ -379,6 +381,7 @@ TEST_CASE("Follows/Parent/Follows* clause: 1 synonym with stmt type") {
 }
 
 TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {{"s1", DesignEntity::STMT},
                                                            {"s2", DesignEntity::STMT}};
     Argument as1 = {ArgumentType::SYNONYM, "s1"};
@@ -456,6 +459,7 @@ TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms") {
 }
 
 TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms with type") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT},
                                                            {"a", DesignEntity::ASSIGN},
                                                            {"pn", DesignEntity::PRINT},
@@ -526,6 +530,7 @@ TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms with type") {
 }
 
 TEST_CASE("Modifies/Uses clause: 1 synonym with stmt type") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT},
                                                            {"a", DesignEntity::ASSIGN},
                                                            {"pn", DesignEntity::PRINT},
@@ -665,6 +670,7 @@ TEST_CASE("Modifies/Uses clause: 1 synonym with stmt type") {
 }
 
 TEST_CASE("Modifies/Uses clause: 2 synonyms with stmt type") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {{"s", DesignEntity::STMT},
                                                            {"a", DesignEntity::ASSIGN},
                                                            {"pn", DesignEntity::PRINT},
@@ -796,6 +802,7 @@ TEST_CASE("Modifies/Uses clause: 2 synonyms with stmt type") {
 }
 
 TEST_CASE("Merge synonyms") {
+    PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarationsMap = {
             {"s1", DesignEntity::STMT},
             {"s2", DesignEntity::STMT},
@@ -913,10 +920,7 @@ TEST_CASE("Merge synonyms") {
             == std::unordered_set<string> {"1","2","3","4"});
 }
 
-
-
-
-void generateSamplePKBForPatternMatching() {
+PKB* generateSamplePKBForPatternMatching() {
     /**
      *    x = y;        // test var
      *    x = 1;        //test const
@@ -925,26 +929,158 @@ void generateSamplePKBForPatternMatching() {
      *    y = ((y + (3 - z)) * (x + 2)) + 1;    // test >2-nested expression
      *    y = y + x * 1 + z;        // test AST structure
      */
+    string a1 = "x = y;";
+    string a2 = "x = 1;";
+    string a3 = "x = y + 1;";
+    string a4 = "y = (y + x + 2) + 1;";
+    string a5 = "y = ((y + (3 - z)) * (x + 2)) + 1;";
+    string a6 = "y = y + x * 1 + z;";
+    string a7 = "x = (y + (3 - z)) + 1;";
+
+    PKB *testPKB = PKB::getInstance();
+    testPKB->addAssignNode(Parser::parseAssign(a1));
+    testPKB->addAssignNode(Parser::parseAssign(a2));
+    testPKB->addAssignNode(Parser::parseAssign(a3));
+    testPKB->addAssignNode(Parser::parseAssign(a4));
+    testPKB->addAssignNode(Parser::parseAssign(a5));
+    testPKB->addAssignNode(Parser::parseAssign(a6));
+    testPKB->addAssignNode(Parser::parseAssign(a7));
+    return testPKB;
 }
 
-
-TEST_CASE("Pattern clause: left Synonym") {
-    // synonym, _
-    // synonym, _Expression-spec_
-    generateSamplePKBForPatternMatching();
+TEST_CASE("Pattern clause: return stmt") {
+    PKB *testPKB = generateSamplePKBForPatternMatching();
     Query query;
-    unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}};
-    query.setDeclarations(declarationsMap);
-    query.setSynonym("v");
+    list<string> resultList;
+    unordered_set<string> results;
+    unordered_set<string> expected;
+    generateSamplePKBForPatternMatching();
     auto qe = QueryEvaluator(testPKB);
 
-    list<string> result = qe.evaluate(&query);
-    list<string> expected = {};
+    unordered_map<string, DesignEntity> declarationsMap = {{"a1", DesignEntity::ASSIGN}};
+    Argument assignSyn = {ArgumentType::SYNONYM, "a1"};
 
+    Argument leftIdent = {ArgumentType::IDENT, "\"x\""};
+    Argument wild = {ArgumentType::UNDERSCORE, "_"};
+    Argument noResultLeft = {ArgumentType::IDENT, "noResult"};
 
+    Argument rightVar = {ArgumentType::PARTIAL_UNDERSCORE, "_\"y\"_"};
+    Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"3\"_"};
+    Argument noResultsRight = {ArgumentType::PARTIAL_UNDERSCORE, "_\"asdsadsadasdsa\"_"};
+
+    // create PatternClause using arguments and synonym
+    PatternClause wild_wild = {std::vector<Argument>{assignSyn, wild, wild}, SynonymType::ASSIGN};
+    PatternClause ident_wild = {std::vector<Argument>{assignSyn, leftIdent, wild}, SynonymType::ASSIGN};
+    PatternClause wild_const = {std::vector<Argument>{assignSyn, wild, rightConst}, SynonymType::ASSIGN};
+    PatternClause ident_const = {std::vector<Argument>{assignSyn, leftIdent, rightConst}, SynonymType::ASSIGN};
+    PatternClause wild_var = {std::vector<Argument>{assignSyn, wild, rightVar}, SynonymType::ASSIGN};
+    PatternClause ident_var = {std::vector<Argument>{assignSyn, leftIdent, rightVar}, SynonymType::ASSIGN};
+
+    PatternClause none_wild = {std::vector<Argument>{assignSyn, noResultLeft, wild}, SynonymType::ASSIGN};
+    PatternClause wild_none = {std::vector<Argument>{assignSyn, wild, noResultsRight}, SynonymType::ASSIGN};
+
+    query.setDeclarations(declarationsMap);
+    query.setSynonym("a1");
+
+    query.setPatternClauses(vector<PatternClause>{wild_wild});  //a1(_,_)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"1", "2", "3", "4", "5", "6", "7"};
+    REQUIRE(results == expected);
+
+    query.setPatternClauses(vector<PatternClause>{ident_wild});  //a1("x",_)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"1", "2", "3", "7"};
+    REQUIRE(results == expected);
+
+    query.setPatternClauses(vector<PatternClause>{wild_const});  //a1(_, 3)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"5", "7"};
+    REQUIRE(results == expected);
+
+    query.setPatternClauses(vector<PatternClause>{ident_const});  //a1("x",3)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"7"};
+    REQUIRE(results == expected);
+
+    query.setPatternClauses(vector<PatternClause>{wild_var});  //a1(_, _"y"_)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"1", "3", "4", "5", "6", "7"};
+    REQUIRE(results == expected);
+
+    query.setPatternClauses(vector<PatternClause>{ident_var});  //a1("x",_"y"_)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"1", "3", "7"};
+    REQUIRE(results == expected);
+
+    query.setPatternClauses(vector<PatternClause>{none_wild});  //a1("noResults",_"asdasdsad"_)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {};
+    REQUIRE(results == expected);
+
+    query.setPatternClauses(vector<PatternClause>{wild_none});
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {};
+    REQUIRE(results == expected);
 }
 
-TEST_CASE("Pattern clause: left ident/_") {
+
+TEST_CASE("Pattern clause: return var + Stmt") {
+    PKB *testPKB = generateSamplePKBForPatternMatching();
+    Query query;
+    list<string> resultList;
+    unordered_set<string> results;
+    unordered_set<string> expected;
+    auto qe = QueryEvaluator(testPKB);
+
+    unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
+    Argument assignSyn = {ArgumentType::SYNONYM, "a"};
+
+    Argument leftSynonym = {ArgumentType::SYNONYM, "v"};
+
+    Argument wild = {ArgumentType::UNDERSCORE, "_"};
+    Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
+
+    PatternClause synonym_wild = {std::vector<Argument>{assignSyn, leftSynonym, wild}, SynonymType::ASSIGN};
+    PatternClause synonym_var = {std::vector<Argument>{assignSyn, leftSynonym, rightConst}, SynonymType::ASSIGN};
+
+    query.setDeclarations(declarationsMap);
+
+    query.setSynonym("a");
+    query.setPatternClauses(vector<PatternClause>{synonym_wild});   //a1(v1, _)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"1", "2", "3", "4", "5", "6", "7"};
+    REQUIRE(results == expected);
+
+    query.setSynonym("a");
+    query.setPatternClauses(vector<PatternClause>{synonym_var});   //a1(v1, _"2"_)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"4", "5"};
+    REQUIRE(results == expected);
+
+    query.setSynonym("v");
+    query.setPatternClauses(vector<PatternClause>{synonym_wild});   //a1(v1, _)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"x", "y"};
+    REQUIRE(results == expected);
+
+    query.setSynonym("v");
+    query.setPatternClauses(vector<PatternClause>{synonym_var});   //a1(v1, _"2"_)
+    resultList = qe.evaluate(&query);
+    results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
+    expected = std::unordered_set<string> {"y"};
+    REQUIRE(results == expected);
+
 
 }
 
