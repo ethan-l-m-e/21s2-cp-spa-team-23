@@ -23,7 +23,7 @@ string retrieveStmtNo(AssignNode* assignNode);
 
 Result PatternClauseEvaluator::evaluateClause() {
     vector<AssignNode*> listOfAssignNodes;
-    //PKB::getInstance() -> getAllAssignPointers();
+    // = PKB::getInstance() -> getAllAssignNodes();
 
     vector<ResultItem> assignVarPairList;
     vector<ResultItem> stmtNumberList;
