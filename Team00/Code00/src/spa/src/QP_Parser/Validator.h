@@ -25,6 +25,10 @@ namespace qp {
         std::set<std::string> convertVectorToSet(std::vector<std::string>);
         bool validateSuchThatClauses(std::map<std::string, std::string>, std::vector<SuchThatClauseToken>);
         bool validatePatterns(std::map<std::string, std::string>, std::vector<PatternToken>);
+        bool handleSuchThatStatementClause(std::map<std::string, std::string>&, std::pair<std::string, std::string>&);
+        bool checkSynonymForStatementClauses(std::map<std::string, std::string>&, std::string, std::string);
+        bool checkFirstArgForOtherClauses(std::string, std::set<std::string>&, std::map<std::string, std::string>&);
+        bool checkSecondArgForOtherClauses(std::string, std::map<std::string, std::string>&);
     };
 }
 

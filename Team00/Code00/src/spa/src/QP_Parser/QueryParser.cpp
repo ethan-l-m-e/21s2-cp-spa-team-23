@@ -1,11 +1,11 @@
 #include "QueryParser.h"
-#include "Constants.h"
+#include "Exception.h"
+#include "Tokenizer.h"
 
 #include <string>
 #include <vector>
 #include <utility>
 #include <regex>
-#include "Tokenizer.h"
 
 using namespace qp;
 
@@ -45,7 +45,6 @@ void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
     std::vector<SuchThatClauseToken> suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
     vector<SuchThatClause> suchThatClauses = vector<SuchThatClause>();
 
-    // TODO: Refactor Code
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
         string relationship = suchThatClauseToken.relRef;
         pair<string, string> argumentTokens = *(suchThatClauseToken.arguments);
@@ -103,26 +102,20 @@ Argument QueryParser::getArgument(string argumentString, string synonym) {
 }
 
 ArgumentType QueryParser::getArgumentType(string argumentString, string synonym) {
-    ArgumentType argumentType;
-    regex stmtNo(INTEGER);
-    regex ident(IDENT);
     if (argumentString == synonym) {
-        argumentType = ArgumentType::SYNONYM;
-    } else if (regex_match(argumentString.c_str(), stmtNo)) {
-        argumentType = ArgumentType::STMT_NO;
-    } else if (argumentString == "_") {
-        argumentType = ArgumentType::UNDERSCORE;
-    } else if (regex_match(argumentString.c_str(), ident)) {
-        argumentType = ArgumentType::IDENT;
-    } else {
-        // TODO: Throw Exception
-        throw "PreProcessor::getArgumentType cannot identify '" + argumentString + "'";
+        return ArgumentType::SYNONYM;
     }
-    return argumentType;
+
+    for (string reg : argumentTypeRegex) {
+        if (regex_match(argumentString, regex(reg))) {
+            return stringToArgumentType.at(reg);
+        }
+    }
+
+    throw QPParserException("Parser::getArgumentType cannot identify " + argumentString + "'");
 }
 
 void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
-    // TODO: Refactor Code
     std::vector<PatternToken> patternTokens = *(queryToken.patternTokens);
     vector<PatternClause> patternClauses = vector<PatternClause>();
 
@@ -134,6 +127,7 @@ void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
 
         PatternClause patternClause = PatternClause();
         patternClause.argList = argList;
+        patternClause.synonymType = SynonymType::ASSIGN;
         patternClauses.push_back(patternClause);
     }
 

@@ -49,48 +49,58 @@ bool Validator::validateDeclarations(set<string> declarationSet, int length, vec
 
 bool Validator::validateSuchThatClauses(map<string, string> declarationTokens,
                                         vector<SuchThatClauseToken> suchThatClauseTokens) {
-    // TODO: Refactor Code
     string relationshipCheck = "Follows|Follows*|Parent|Parent*";
     bool isValid = true;
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
-        // Check for rs
+        // Check for relationship
         bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, regex(relationshipCheck));
         if (isStatementRelationship) {
-            if (!regex_match(suchThatClauseToken.arguments->first, regex("(_|[0-9]+)"))) {
-                if (declarationTokens.find(suchThatClauseToken.arguments->first) == declarationTokens.end()) {
-                    return false;
-                }
-                isValid = isValid && stmtSet.find(declarationTokens.at(suchThatClauseToken.arguments->first)) != stmtSet.end();
-            }
-
-            if (!regex_match(suchThatClauseToken.arguments->second, regex("(_|[0-9]+)"))) {
-                if (declarationTokens.find(suchThatClauseToken.arguments->second) == declarationTokens.end()) {
-                    return false;
-                }
-                isValid = isValid && stmtSet.find(declarationTokens.at(suchThatClauseToken.arguments->second)) != stmtSet.end();
-            }
+            isValid = isValid && handleSuchThatStatementClause(declarationTokens, *suchThatClauseToken.arguments);
         } else {
             std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
-            if (suchThatClauseToken.arguments->first == "_") {
-                return false;
-            }
-            if (argSet.find(suchThatClauseToken.arguments->first) == argSet.end()) {
-                return false;
-            }
-
-            if (!regex_match(suchThatClauseToken.arguments->first, regex("\""+ IDENT + "\""))) {
-                isValid = isValid && argSet.find(declarationTokens.at(suchThatClauseToken.arguments->first)) != argSet.end();
-            }
-
-            if (!regex_match(suchThatClauseToken.arguments->second, regex("(_|\""+ IDENT + "\")"))) {
-                if (argSet.find(suchThatClauseToken.arguments->second) == argSet.end()) {
-                    return false;
-                }
-                isValid = isValid && suchThatClauseToken.arguments->second == "variable";
-            }
+            isValid = isValid && checkFirstArgForOtherClauses(suchThatClauseToken.arguments->first, argSet, declarationTokens);
+            isValid = isValid && checkSecondArgForOtherClauses(suchThatClauseToken.arguments->first, declarationTokens);
         }
     }
     return isValid;
+}
+
+bool Validator::handleSuchThatStatementClause(map<string, string>& declarationTokens, std::pair<std::string, std::string>& arguments) {
+    bool isValidFirstArg = checkSynonymForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.first);
+    bool isValidSecondArg = checkSynonymForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.first);
+    return isValidFirstArg && isValidSecondArg;
+}
+
+bool Validator::checkSynonymForStatementClauses(map<string, string>& declarationTokens, string reg, string synonym) {
+    if (!regex_match(synonym, regex(reg))) {
+        if (declarationTokens.find(synonym) == declarationTokens.end()) {
+            return false;
+        }
+        return stmtSet.find(declarationTokens.at(synonym)) != stmtSet.end();
+    }
+    return true;
+}
+
+bool Validator::checkFirstArgForOtherClauses(string argument, std::set<std::string>& argSet, map<string, string>& declarationTokens) {
+    if (argument == "_") {
+        return false;
+    }
+
+    if (!regex_match(argument, regex("\""+ IDENT + "\""))) {
+        return argSet.find(declarationTokens.at(argument)) != argSet.end();
+    }
+
+    return true;
+}
+
+bool Validator::checkSecondArgForOtherClauses(string argument, map<string, string>& declarationTokens) {
+    if (!regex_match(argument, regex("(_|\""+ IDENT + "\")"))) {
+        if (declarationTokens.find(argument) == declarationTokens.end()) {
+            return false;
+        }
+        return declarationTokens.at(argument) == "variable";
+    }
+    return true;
 }
 
 bool Validator::validatePatterns(map<string, string> declarationTokens, std::vector<PatternToken> patternTokens) {

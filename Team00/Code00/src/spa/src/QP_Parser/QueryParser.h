@@ -1,7 +1,10 @@
+#include "Tokenizer.h"
+#include "Constants.h"
+#include "pql/query_obj/Query.h"
+
 #include <string>
 #include <map>
-#include "Tokenizer.h"
-#include "pql/query_obj/Query.h"
+#include <set>
 
 namespace qp {
     const std::map<std::string, DesignEntity> stringToDesignEntityMap({
@@ -27,6 +30,14 @@ namespace qp {
                                                                         {"Modifies_S", RelRef::MODIFIES_S},
                                                                         {"Modifies_P", RelRef::MODIFIES_P},
                                                                 });
+
+    const std::set<std::string> argumentTypeRegex({INTEGER, IDENT, "_", "_(.)*_"});
+    const std::map<std::string, ArgumentType> stringToArgumentType({
+                                                                           {INTEGER, ArgumentType::STMT_NO},
+                                                                           {IDENT, ArgumentType::IDENT},
+                                                                           {"_", ArgumentType::UNDERSCORE},
+                                                                           {"_(.)*_", ArgumentType::PARTIAL_UNDERSCORE},
+    });
 
     class QueryParser {
     public:
