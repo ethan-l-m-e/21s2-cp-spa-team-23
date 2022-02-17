@@ -1,7 +1,10 @@
+#include "Tokenizer.h"
+#include "Constants.h"
+#include "pql/query_obj/Query.h"
+
 #include <string>
 #include <map>
-#include "Tokenizer.h"
-#include "pql/query_obj/Query.h"
+#include <set>
 
 namespace qp {
     const std::map<std::string, DesignEntity> stringToDesignEntityMap({
@@ -28,7 +31,15 @@ namespace qp {
                                                                         {"Modifies_P", RelRef::MODIFIES_P},
                                                                 });
 
-    class PreProcessor {
+    const std::set<std::string> argumentTypeRegex({INTEGER, IDENT, "_", "_(.)*_"});
+    const std::map<std::string, ArgumentType> stringToArgumentType({
+                                                                           {INTEGER, ArgumentType::STMT_NO},
+                                                                           {IDENT, ArgumentType::IDENT},
+                                                                           {"_", ArgumentType::UNDERSCORE},
+                                                                           {"_(.)*_", ArgumentType::PARTIAL_UNDERSCORE},
+    });
+
+    class QueryParser {
     public:
         Query getQuery(std::string);
     private:
@@ -39,9 +50,9 @@ namespace qp {
         Argument getArgument(std::string, std::string);
         ArgumentType getArgumentType(std::string, std::string);
         DesignEntity getDesignEntity(std::string);
-        vector<Argument> getArgumentList(pair<string, string>, string);
-        RelRef getRelRefFromString(string, Argument);
-        string determineRelationshipBasedOnArg(Argument);
+        std::vector<Argument> getArgumentList(std::pair<std::string, std::string>, std::string);
+        RelRef getRelRefFromString(std::string, Argument);
+        std::string determineRelationshipBasedOnArg(Argument);
     };
 }
 

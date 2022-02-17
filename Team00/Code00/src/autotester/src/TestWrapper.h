@@ -6,7 +6,7 @@
 #include <list>
 #include "Parser.h"
 #include "PKB.h"
-#include "QP_Parser/PreProcessor.h"
+#include "QP_Parser/QueryParser.h"
 #include "pql/QueryEvaluator.h"
 
 // include your other headers here
@@ -15,7 +15,7 @@
 class TestWrapper : public AbstractWrapper {
 private:
     PKB* pkb;
-    qp::PreProcessor* preProcessor;
+    qp::QueryParser* preProcessor;
     QueryEvaluator* queryEvaluator;
  public:
   // default constructor
