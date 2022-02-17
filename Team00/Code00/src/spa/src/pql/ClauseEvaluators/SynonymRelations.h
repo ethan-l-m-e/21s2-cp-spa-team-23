@@ -14,7 +14,7 @@ public:
     bool isEmpty();
     std::vector<std::string>* getHeader();
     std::vector<std::vector<std::string>>* getList();
-    void assignList(std::vector<std::vector<std::string>> *newList);
+    void assignList(std::vector<std::vector<std::string>> newList);
 
 private:
     std::vector<std::string> nTupleHeader;

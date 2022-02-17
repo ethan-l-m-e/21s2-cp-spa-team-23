@@ -11,6 +11,20 @@
 
 using namespace std;
 
+void SourceTokenizer::extractRead(string sourceCode, vector<string> &v) {
+    int read = sourceCode.find("read")+4;
+    int end = sourceCode.find(';');
+    string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(read, end - read));
+    v.push_back(varname);
+}
+
+void SourceTokenizer::extractPrint(string sourceCode, vector<string> &v) {
+    int print = sourceCode.find("print")+5;
+    int end = sourceCode.find(';');
+    string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(print, end - print));
+    v.push_back(varname);
+}
+
 void SourceTokenizer::extractAssign(string sourceCode, vector<string> &v) {
     int equal = sourceCode.find('=');
     int end = sourceCode.find(';');
@@ -142,4 +156,37 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
     v.push_back(left);
     v.push_back(right);
     v.push_back(sign);
+}
+
+void SourceTokenizer::extractRelExpr(string sourceCode, vector<string> &v) {
+    int operPos = -1;
+    int operLength = 2;
+    operPos = sourceCode.find(">=");
+    if (operPos == -1 || operPos == string::npos) {
+        operPos = sourceCode.find("<=");
+    }
+    if (operPos == -1 || operPos == string::npos) {
+        operPos = sourceCode.find("==");
+    }
+    if (operPos == -1 || operPos == string::npos) {
+        operPos = sourceCode.find("!=");
+    }
+    if (operPos == -1 || operPos == string::npos) {
+        operPos = sourceCode.find("<");
+        operLength = 1;
+    }
+    if (operPos == -1 || operPos == string::npos) {
+        operPos = sourceCode.find(">");
+        operLength = 1;
+    }
+    if (operPos == -1 || operPos == string::npos) {
+        throw "Relative operator not found";
+    }
+
+    string left = StringFormatter::removeTrailingSpace(sourceCode.substr(0,operPos));
+    string right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos+operLength));
+    string oper = sourceCode.substr(operPos, operLength);
+    v.push_back(left);
+    v.push_back(right);
+    v.push_back(oper);
 }

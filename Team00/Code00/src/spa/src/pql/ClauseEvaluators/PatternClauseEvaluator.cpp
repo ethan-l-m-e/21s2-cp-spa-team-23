@@ -75,6 +75,8 @@ Result PatternClauseEvaluator::evaluateClause() {
         result.resultHeader = assignSynonym.argumentValue;
         result.resultItemList = stmtNumberList;
     }
+
+    return result;
 }
 
 void addToStmtList(AssignNode* assignNode, vector<ResultItem> stmtNumberList) {

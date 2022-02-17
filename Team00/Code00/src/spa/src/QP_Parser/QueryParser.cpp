@@ -116,6 +116,7 @@ ArgumentType QueryParser::getArgumentType(string argumentString, string synonym)
         argumentType = ArgumentType::IDENT;
     } else {
         // TODO: Throw Exception
+        throw "PreProcessor::getArgumentType cannot identify '" + argumentString + "'";
     }
     return argumentType;
 }

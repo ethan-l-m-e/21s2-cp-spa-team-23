@@ -5,16 +5,17 @@
 #include "FollowsTClauseEvaluator.h"
 
 bool FollowsTClauseEvaluator::isRelation(std::string left, std::string right) {
-    //return pkb->isFollowsT(left, right);
-    return false;
+    return pkb->isFollowsT(left, right);
 }
 
 unordered_set<std::string> FollowsTClauseEvaluator::getLeftSynonymValue(std::string right) {
-    //return pkb->getStmtFollowedTBy(right);
-    return unordered_set<std::string>{};
+    return pkb->getFolloweeT(right);
 }
 
 unordered_set<std::string> FollowsTClauseEvaluator::getRightSynonymValue(std::string left) {
-    //return pkb->getStmtFollowsT(left);
-    return unordered_set<std::string>{};
+    return pkb->getFollowerT(left);
+}
+
+pair<DesignEntity, DesignEntity> FollowsTClauseEvaluator::getWildcardType () {
+    return make_pair(DesignEntity::STMT, DesignEntity::STMT);
 }
