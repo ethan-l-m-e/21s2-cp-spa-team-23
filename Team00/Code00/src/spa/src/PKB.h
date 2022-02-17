@@ -52,6 +52,8 @@ private:
     unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap;
     unordered_map<string, unordered_set<int>> variableModifiedToStatementMap;
 
+    unordered_set<TNode*> assignNodesSet;
+
 public:
 //	static VarTable* varTable;
 //	static string setProcToAST(PROC p, TNode* r);
@@ -59,6 +61,14 @@ public:
 
 
     static PKB* getInstance();
+
+    // Setter Functions (Assign Nodes)
+
+    void addAssignNode(TNode* assignNode);
+
+    // Getter Functions (Assign Nodes)
+
+    vector<TNode*> getAllAssignNodes();
 
     // Setter Functions (Variables, Procedures etc.)
     void addStatement(int statement);

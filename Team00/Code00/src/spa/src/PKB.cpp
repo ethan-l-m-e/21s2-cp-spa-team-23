@@ -32,6 +32,22 @@ PKB* PKB::getInstance() {
 
 }
 
+// Setter Functions (Assign Nodes)
+
+void PKB::addAssignNode(TNode *assignNode) {
+    assignNodesSet.insert(assignNode);
+}
+
+// Getter Functions (Assign Nodes)
+
+vector<TNode *> PKB::getAllAssignNodes() {
+
+    vector<TNode *> assignNodesVector;
+
+    assignNodesVector.insert(assignNodesVector.end(), assignNodesSet.begin(), assignNodesSet.end());
+
+    return assignNodesVector;
+}
 
 unordered_set<string> convertSetIntegersToSetStrings(unordered_set<int> setIntegers) {
 
