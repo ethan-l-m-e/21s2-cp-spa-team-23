@@ -34,7 +34,7 @@ public:
 
     ClauseEvaluator* generateEvaluator(SuchThatClause, Query*);
 
-    static std::list<std::string> generateResultString(SynonymRelations*, std::string);
+    static std::list<std::string> generateResultString(Result&);
 
     static void mergeResultToSynonymsRelations(SynonymRelations&, Result&);
 
