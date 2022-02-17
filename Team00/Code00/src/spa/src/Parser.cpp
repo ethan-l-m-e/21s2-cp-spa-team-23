@@ -132,14 +132,15 @@ PrintNode *Parser::parsePrint(string printLine) {
 
 AssignNode* Parser::parseAssign(string assignLine) {
     int stmtNo = getStatementNumber();
-    cout << "sending assign " << stmtNo << " to PKB\n";
+    //cout << "sending assign " << stmtNo << " to PKB\n";
     PKB::getInstance()->addAssignStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
-
-    return new AssignNode(stmtNo, newVarNode, newExpression);
+    AssignNode* newNode = new AssignNode(stmtNo, newVarNode, newExpression);
+    PKB::getInstance()->addAssignNode(newNode);
+    return newNode;
 }
 
 WhileNode *Parser::parseWhile(string code) {
