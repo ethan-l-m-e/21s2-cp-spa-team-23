@@ -8,6 +8,7 @@
 #include <vector>
 #include "ClauseEvaluator.h"
 #include "pql/query_obj/Argument.h"
+#include "TNode.h"
 
 class PatternClauseEvaluator : public ClauseEvaluator {
 protected:
@@ -15,15 +16,16 @@ protected:
     Result evaluateClause() override;
 
     bool leftIsSynonym();
-    bool leftIsFixed();
+    bool leftIsIdent();
     bool leftIsWildCard();
     bool rightIsWildCard();
     bool rightIsPartWildCard();
 
+
+
     Argument assignSynonym = argList[0];
     Argument argLeft = argList[1];
     Argument argRight = argList[2];
-
 };
 
 
