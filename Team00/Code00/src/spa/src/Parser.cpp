@@ -94,7 +94,7 @@ bool isNumber(string s) {
     }
     return true;
 }
-Expression parseExpression(string expression) {
+Expression Parser::parseExpression(string expression) {
     if (isLeaf(expression)) {
         if (isNumber(expression)) {
             return Parser::parseConst(expression);

@@ -24,5 +24,7 @@ public:
     static StatementList parseStatementList(string stmtList);
     static ProcedureNode* parseProcedure(string * procedure);
     static Program parseProgram(string sourceCode);
+
+    static Expression parseExpression(string expression);
 };
 
