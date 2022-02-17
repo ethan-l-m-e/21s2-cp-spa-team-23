@@ -26,16 +26,32 @@ public:
     Node();
     void setParentNode(Node *parent);
     Node *getParentNode() const;
+
+    virtual bool hasStmtLst();
+    virtual vector<Node *> getStmtLst();
+    virtual int getStmtNumber() const;
+    virtual vector<VarName> getListOfVarUsed();
+    virtual vector<string> getListOfVarModified();
 };
 //stmt: read | print | while | if | assign
 class StmtNode: public Node {
     int statementNumber;
 public:
     StmtNode(int num);
-    int getStmtNumber() const;
+    int getStmtNumber() const override;
 };
 
-typedef std::vector<StmtNode *> StatementList;
+typedef std::vector<Node *> StatementList;
+
+class StmtLstNode: public StmtNode{
+    StatementList stmtLst;
+public:
+    StmtLstNode(int num, StatementList stmtLst);
+    vector<Node *> getStmtLst() override;
+    vector<VarName> getListOfVarUsed() override;
+    vector<VarName> getListOfVarModified() override;
+    bool hasStmtLst() override;
+};
 
 class VariableNode: public Node {
 public:
@@ -106,6 +122,8 @@ class AssignNode: public StmtNode {
     Expression rightNode;
 public:
     explicit AssignNode(int num, VariableNode *leftNode, Expression rightNode);
+    vector<VarName> getListOfVarUsed() override;
+    vector<VarName> getListOfVarModified() override;
     VariableNode* getLeftNode() const;
     Expression getRightNode() const;
 };
@@ -161,13 +179,12 @@ public:
 
 // Definition:
 // while: 'while' '(' cond_expr ')' '{' stmtLst '}'
-class WhileNode: public StmtNode {
+class WhileNode: public StmtLstNode {
     CondExprNode *condExpr;
     StatementList stmtLst;
 public:
     WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst);
     CondExprNode *getCondExpr();
-    StatementList getStmtLst();
 };
 
 // Definition:
@@ -183,13 +200,13 @@ public:
     StatementList getElseStmtLst();
 };
 
-class ProcedureNode: public Node {
+class ProcedureNode: public StmtLstNode {
     ProcNameNode *procName;
     StatementList stmtLst;
 public:
     ProcedureNode(ProcNameNode *procName, StatementList stmtLst);
     ProcName getProcName();
-    StatementList getStmtLst();
+
 };
 
 typedef std::vector<ProcedureNode*> Program;
