@@ -38,7 +38,7 @@ TEST_CASE("test follows - basic") {
     defaultStmtLst2.push_back(&dNode);
     defaultStmtLst2.push_back(&eNode);
 
-    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+    ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
 
     RelationshipExtractor::extractFollows(&pNode);
     REQUIRE(PKB::getInstance()->isFollows(1,2));
@@ -46,7 +46,7 @@ TEST_CASE("test follows - basic") {
 }
 
 TEST_CASE("test follows - fail test") {
-    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+    ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
     WhileNode wNode = WhileNode(0, condPtr, defaultStmtLst);
 
     RelationshipExtractor::extractFollows(&pNode);
@@ -55,14 +55,15 @@ TEST_CASE("test follows - fail test") {
 }
 
 TEST_CASE("test follows* - basic") {
-    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+    ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
 
     RelationshipExtractor::extractFollows(&pNode);
     REQUIRE(PKB::getInstance()->isFollowsT(1,3));
 }
 
+//pkb parents doesnt seem to work yet so these will fail
 TEST_CASE("test parents - basic") {
-    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+    ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
     vector<StmtLstNode*> v;
     v.push_back(&pNode);
     RelationshipExtractor::extractParent(&pNode,v);
@@ -70,7 +71,7 @@ TEST_CASE("test parents - basic") {
 }
 
 TEST_CASE("test parents - fail") {
-    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+    ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
     vector<StmtLstNode*> v;
     v.push_back(&pNode);
     RelationshipExtractor::extractParent(&pNode,v);
