@@ -32,6 +32,39 @@ PKB* PKB::getInstance() {
 
 }
 
+
+void PKB::clearPKB() {
+    statementsSet.clear();
+    variablesSet.clear();
+    proceduresSet.clear();
+    constantsSet.clear();
+
+    assignStatementsSet.clear();
+    printStatementsSet.clear();
+    readStatementsSet.clear();
+    printStatementsSet.clear();
+    ifStatementsSet.clear();
+    whileStatementsSet.clear();
+
+    followeeToFollowerMap.clear();
+    followerToFolloweeMap.clear();
+
+    tFolloweeToFollowerMap.clear();
+    tFollowerToFolloweeMap.clear();
+
+    parentToChildrenMap.clear();
+    childToParentMap.clear();
+
+    tParentToChildrenMap.clear();
+    tChildToParentMap.clear();
+
+    statementToVariablesUsedMap.clear();
+    variableUsedToStatementMap.clear();
+
+    statementToVariablesModifiedMap.clear();
+    variableModifiedToStatementMap.clear();
+}
+
 // Setter Functions (Assign Nodes)
 
 void PKB::addAssignNode(AssignNode *assignNode) {
