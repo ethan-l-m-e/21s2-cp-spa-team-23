@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "QP_Parser/PreProcessor.h"
+#include "QP_Parser/QueryParser.h"
 #include "QP_Parser/Tokenizer.h"
 #include "pql/query_obj/Query.h"
 #include <string>
@@ -9,7 +9,7 @@ using namespace qp;
 
 TEST_CASE ("PREPROCESSOR") {
     string firstQuery = "variable v; assign a;\nSelect v";
-    PreProcessor preProcessor = PreProcessor();
+    QueryParser preProcessor = QueryParser();
     Query query = preProcessor.getQuery(firstQuery);
     cout << query.getSelectedSynonym();
     CHECK(query.getSelectedSynonym() == "v");

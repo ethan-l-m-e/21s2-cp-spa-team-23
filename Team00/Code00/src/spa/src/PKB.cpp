@@ -32,17 +32,50 @@ PKB* PKB::getInstance() {
 
 }
 
+
+void PKB::clearPKB() {
+    statementsSet.clear();
+    variablesSet.clear();
+    proceduresSet.clear();
+    constantsSet.clear();
+
+    assignStatementsSet.clear();
+    printStatementsSet.clear();
+    readStatementsSet.clear();
+    printStatementsSet.clear();
+    ifStatementsSet.clear();
+    whileStatementsSet.clear();
+
+    followeeToFollowerMap.clear();
+    followerToFolloweeMap.clear();
+
+    tFolloweeToFollowerMap.clear();
+    tFollowerToFolloweeMap.clear();
+
+    parentToChildrenMap.clear();
+    childToParentMap.clear();
+
+    tParentToChildrenMap.clear();
+    tChildToParentMap.clear();
+
+    statementToVariablesUsedMap.clear();
+    variableUsedToStatementMap.clear();
+
+    statementToVariablesModifiedMap.clear();
+    variableModifiedToStatementMap.clear();
+}
+
 // Setter Functions (Assign Nodes)
 
-void PKB::addAssignNode(TNode *assignNode) {
+void PKB::addAssignNode(AssignNode *assignNode) {
     assignNodesSet.insert(assignNode);
 }
 
 // Getter Functions (Assign Nodes)
 
-vector<TNode *> PKB::getAllAssignNodes() {
+vector<AssignNode *> PKB::getAllAssignNodes() {
 
-    vector<TNode *> assignNodesVector;
+    vector<AssignNode *> assignNodesVector;
 
     assignNodesVector.insert(assignNodesVector.end(), assignNodesSet.begin(), assignNodesSet.end());
 
@@ -302,7 +335,7 @@ void PKB::setParent(int parent, int child) {
 
 bool PKB::isParent(int parent, int child) {
     if (childToParentMap.find(child) != childToParentMap.end()) {
-        return childToParentMap[child] != parent;
+        return childToParentMap[child] == parent;
     } else {
         return false;
     }

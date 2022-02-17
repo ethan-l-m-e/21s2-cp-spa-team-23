@@ -13,6 +13,8 @@ typedef short PROC;
 
 class TNode;
 
+class AssignNode;
+
 class VarTable;  // no need to #include "VarTable.h" as all I need is postringer
 
 class PKB {
@@ -52,7 +54,7 @@ private:
     unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap;
     unordered_map<string, unordered_set<int>> variableModifiedToStatementMap;
 
-    unordered_set<TNode*> assignNodesSet;
+    unordered_set<AssignNode *> assignNodesSet;
 
 
     // Getter Functions (Follows Relationship)
@@ -98,13 +100,15 @@ public:
 
     static PKB* getInstance();
 
+    void clearPKB();
+
     // Setter Functions (Assign Nodes)
 
-    void addAssignNode(TNode* assignNode);
+    void addAssignNode(AssignNode *assignNode);
 
     // Getter Functions (Assign Nodes)
 
-    vector<TNode*> getAllAssignNodes();
+    vector<AssignNode *> getAllAssignNodes();
 
     // Setter Functions (Variables, Procedures etc.)
     void addStatement(int statement);

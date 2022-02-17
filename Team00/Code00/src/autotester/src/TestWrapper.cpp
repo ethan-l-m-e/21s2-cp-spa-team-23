@@ -15,7 +15,7 @@ TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
   pkb = PKB::getInstance();
-  preProcessor = new qp::PreProcessor();
+  preProcessor = new qp::QueryParser();
   queryEvaluator = new QueryEvaluator(pkb);
 }
 
