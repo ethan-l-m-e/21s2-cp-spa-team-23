@@ -19,6 +19,7 @@ set(headers ${headers}
         src/QP_Parser/QueryParser.h
         src/QP_Parser/Tokenizer.h
         src/QP_Parser/Validator.h
+        src/QP_Parser/Exception.h
         src/pql/QueryEvaluator.h
         )
 add_library(spa ${srcs} ${headers} src/Parser.cpp src/Parser.h

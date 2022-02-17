@@ -6,14 +6,6 @@
 #define SPA_TOKENIZER_H
 
 namespace qp {
-//    class DeclarationToken {
-//    public:
-//        std::string designEntity;
-//        std::vector<std::string>* synonyms;
-//
-//        DeclarationToken() : designEntity(""), synonyms(nullptr) {};
-//    };
-
     class PatternToken {
     public:
         std::string synonym;
@@ -50,7 +42,7 @@ namespace qp {
         void getDeclarationTokens(std::string, QueryToken&);
         void getSelectClauseTokens(std::string&, QueryToken&);
         void getSuchThatClauseTokens(std::string&, QueryToken&);
-        void getPatternClause(std::string&, QueryToken&);
+        void getPatternClauseTokens(std::string&, QueryToken&);
         void splitDeclarations(std::vector<std::string>&, QueryToken&);
     };
 }

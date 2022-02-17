@@ -5,7 +5,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <iostream>
 #include <regex>
 #include <map>
 
@@ -23,12 +22,12 @@ QueryToken Tokenizer::getQueryToken(string query) {
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
     getSuchThatClauseTokens(query, queryToken);
-    getPatternClause(query, queryToken);
+    getPatternClauseTokens(query, queryToken);
 
     return queryToken;
 }
 
-void Tokenizer::getDeclarationTokens(string pql, QueryToken& queryToken) {
+void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
     string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, "[ |\n]*(Select.*)")[0];
     // Separates declarations by design entities
     vector<string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, "[ ]*;[ ]*");
@@ -36,8 +35,7 @@ void Tokenizer::getDeclarationTokens(string pql, QueryToken& queryToken) {
 }
 
 void Tokenizer::splitDeclarations(vector<string>& declarations, QueryToken& queryToken) {
-    // TODO: Refactor Code
-    map<string, string>* declarationsMap = new map<string, string>();
+    auto declarationsMap = new map<string, string>();
     string designEntity, synonymsString, declarationString;
     vector<string> declarationNames = vector<string>();
     vector<string> designEntities = vector<string>();
@@ -47,7 +45,7 @@ void Tokenizer::splitDeclarations(vector<string>& declarations, QueryToken& quer
         synonymsString = declaration.substr(designEntity.length() + 1);
         vector<string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, "[ ]*,[ ]*");
 
-        for (string synonym : synonyms) {
+        for (auto synonym : synonyms) {
             declarationNames.push_back(synonym);
             declarationsMap->insert({synonym, designEntity});
         }
@@ -78,7 +76,7 @@ void Tokenizer::getSuchThatClauseTokens(string& pql, QueryToken& queryToken) {
     queryToken.suchThatClauseTokens = new vector<SuchThatClauseToken>{suchThatClauseToken};
 }
 
-void Tokenizer::getPatternClause(string& pql, QueryToken& queryToken) {
+void Tokenizer::getPatternClauseTokens(string& pql, QueryToken& queryToken) {
     std::regex patternReg(PATTERN_MATCH);
     bool hasPattern = regex_match(pql, patternReg);
     if (!hasPattern) {
@@ -87,10 +85,10 @@ void Tokenizer::getPatternClause(string& pql, QueryToken& queryToken) {
 
     vector<string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
     vector<string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
-
     string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
+
     PatternToken patternToken = PatternToken();
     patternToken.synonym = synonym;
     patternToken.arguments = new pair<string, string>(patternClause[1], patternClause[2]);
-    queryToken.patternToken = new vector<PatternToken>{patternToken};
+    queryToken.patternTokens = new vector<PatternToken>{patternToken};
 }

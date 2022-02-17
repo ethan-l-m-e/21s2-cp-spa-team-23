@@ -1,8 +1,9 @@
+#include "Tokenizer.h"
+
 #include <string>
 #include <vector>
 #include <set>
 #include <map>
-#include "Tokenizer.h"
 
 #ifndef SPA_VALIDATOR_H
 #define SPA_VALIDATOR_H
