@@ -9,7 +9,15 @@
 using namespace std;
 
 TEST_CASE("assign token - basic") {
-    string a = "x = y + 1;";
+    string a = " x = y + 1;";
+    vector<string> v;
+    SourceTokenizer::extractAssign(a, v);
+    REQUIRE(v[0] == "x");
+    REQUIRE(v[1] == "y + 1");
+}
+
+TEST_CASE("assign token - weird whitespaces") {
+    string a = " x  = y   +  1   ;  ";
     vector<string> v;
     SourceTokenizer::extractAssign(a, v);
     REQUIRE(v[0] == "x");

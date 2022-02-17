@@ -98,7 +98,7 @@ TEST_CASE("While node test") {
     RelExprNode relExprNode(&constValueNode, &constValueNode, andOperator);
     CondExprNode condExprNode(&relExprNode);
     StatementList stmtLst = {};
-    auto testNode = WhileNode(&condExprNode, stmtLst);
+    auto testNode = WhileNode(0, &condExprNode, stmtLst);
     CHECK(testNode.getStmtLst().size() == 0);
     // TODO: WRITE EQUALITY CHECK FOR NODE
 }

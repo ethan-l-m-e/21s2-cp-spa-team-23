@@ -157,7 +157,7 @@ ProcedureNode *Parser::parseProcedure(string * procedure) {
     *procedure = v[1];
     ProcNameNode* newProcNameNode = Parser::parseProcName(tokens[0]);
     StatementList stmtLst = parseStatementList(tokens[1]);
-    return new ProcedureNode(newProcNameNode, stmtLst);
+    return new ProcedureNode(0, newProcNameNode, stmtLst);
 }
 
 Program Parser::parseProgram(string sourceCode) {
