@@ -13,7 +13,7 @@ void Node::setParentNode(Node *parent) {this -> parent = parent;}
 Node *Node::getParentNode() const {return this -> parent;}
 bool Node::hasStmtLst() {return false;}
 StatementList Node::getStmtLst() {return {};}
-int Node::getStmtNumber() const {return 0;}
+int Node::getStmtNumber() const {return -1;}
 vector<string> Node::getListOfVarUsed() {return {};}
 vector<string> Node::getListOfVarModified() {return {};}
 
@@ -182,7 +182,7 @@ WhileNode::WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst) : S
     this->condExpr = condExpr;
     this->condExpr->setParentNode(this);
     this->stmtLst = std::move(stmtLst);
-    for (StmtNode *stmtNode : this->stmtLst) {
+    for (Node *stmtNode : this->stmtLst) {
         stmtNode->setParentNode(this);
     }
 }
@@ -203,11 +203,11 @@ IfNode::IfNode(int num, CondExprNode *condExpr, StatementList thenStmtLst, State
     this->condExpr = condExpr;
     condExpr->setParentNode(this);
     this->thenStmtLst = std::move(thenStmtLst);
-    for (StmtNode *thenNode: this->thenStmtLst) {
+    for (Node *thenNode: this->thenStmtLst) {
         thenNode->setParentNode(this);
     }
     this->elseStmtLst = std::move(elseStmtLst);
-    for (StmtNode *elseNode: this->elseStmtLst) {
+    for (Node *elseNode: this->elseStmtLst) {
         elseNode->setParentNode(this);
     }
 }
@@ -232,11 +232,11 @@ ProcName ProcNameNode::getProcedureName() {
     return this->procedureName;
 }
 
-ProcedureNode::ProcedureNode(int num, ProcNameNode *procName, StatementList stmtLst)
-        : StmtLstNode(num, stmtLst) {
+ProcedureNode::ProcedureNode(ProcNameNode *procName, StatementList stmtLst)
+        : StmtLstNode(-1, stmtLst) {
     this->procName = procName;
     this->stmtLst = std::move(stmtLst);
-    for (StmtNode *stmtNode : this->stmtLst) {
+    for (Node *stmtNode : this->stmtLst) {
         stmtNode->setParentNode(this);
     }
 }

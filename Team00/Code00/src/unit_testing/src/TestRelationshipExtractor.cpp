@@ -5,55 +5,96 @@
 #include "RelationshipExtractor.h"
 #include "TNode.h"
 #include "catch.hpp"
+#include "PKB.h"
 
 using namespace std;
 
-TEST_CASE("test follows - basic") {
-    VariableNode v1 = VariableNode("y");
-    VariableNode* varPtrY = &v1;
-    VariableNode v2 = VariableNode("x");
-    VariableNode* varPtrX = &v2;
-    VariableNode v3 = VariableNode("a");
-    VariableNode* varPtrA = &v3;
-    VariableNode v4 = VariableNode("b");
-    VariableNode* varPtrB = &v4;
-    RelExprNode relNode = RelExprNode(varPtrX,varPtrY,"<");
-    RelExprNode* relPtr = &relNode;
-    CondExprNode defaultCond = CondExprNode(relPtr);
-    CondExprNode* condPtr = &defaultCond;
-    StatementList emptyStmtLst = {};
+VariableNode v1 = VariableNode("y");
+VariableNode v2 = VariableNode("x");
+VariableNode v3 = VariableNode("a");
+VariableNode v4 = VariableNode("b");
+RelExprNode relNode = RelExprNode(&v2,&v1,"<");
+RelExprNode* relPtr = &relNode;
+CondExprNode defaultCond = CondExprNode(relPtr);
+CondExprNode* condPtr = &defaultCond;
+StatementList emptyStmtLst = {};
 
 //    Node pNode = Node();
-    Node aNode= AssignNode(1,varPtrX,varPtrY);
-    Node bNode= AssignNode(2,varPtrA,varPtrB);
-    StatementList defaultStmtLst;
+StmtNode aNode= AssignNode(1,&v2,&v1);
+StmtNode bNode= AssignNode(2,&v3,&v4);
+StmtNode cNode= AssignNode(3,&v1,&v4);
+StmtNode dNode= AssignNode(5,&v2,&v3);
+StmtNode eNode= AssignNode(6,&v4,&v1);
+StatementList defaultStmtLst;
+StatementList defaultStmtLst2;
+
+
+ProcNameNode p = ProcNameNode("test");
+
+TEST_CASE("test follows - basic") {
     defaultStmtLst.push_back(&aNode);
     defaultStmtLst.push_back(&bNode);
+    defaultStmtLst.push_back(&cNode);
+    defaultStmtLst2.push_back(&dNode);
+    defaultStmtLst2.push_back(&eNode);
 
+    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+
+    RelationshipExtractor::extractFollows(&pNode);
+    REQUIRE(PKB::getInstance()->isFollows(1,2));
+    REQUIRE(PKB::getInstance()->isFollows(2,3));
+}
+
+TEST_CASE("test follows - fail test") {
+    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
     WhileNode wNode = WhileNode(0, condPtr, defaultStmtLst);
 
-    ProcNameNode p = ProcNameNode("test");
-    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
-    cout<<defaultStmtLst.size();
-    cout<<"\n";
     RelationshipExtractor::extractFollows(&pNode);
+    REQUIRE(PKB::getInstance()->isFollows(0,2)==false);
+    REQUIRE(PKB::getInstance()->isFollows(1,3)==false);
+}
 
-    REQUIRE("fail" == "test");
+TEST_CASE("test follows* - basic") {
+    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
 
-//    Node cNode("read:x", 6);
-//    Node dNode("cond");
-//    Node eNode("assign", 4);
-//    Node fNode("print:x", 5);
+    RelationshipExtractor::extractFollows(&pNode);
+    REQUIRE(PKB::getInstance()->isFollowsT(1,3));
+}
 
-    /*
-    pNode.addNode(&aNode);
-    pNode.addNode(&bNode);
-    pNode.addNode(&cNode);
+TEST_CASE("test parents - basic") {
+    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+    vector<StmtLstNode*> v;
+    v.push_back(&pNode);
+    RelationshipExtractor::extractParent(&pNode,v);
+    REQUIRE(PKB::getInstance()->isParent(0,2));
+}
 
-    bNode.addNode(&dNode);
-    bNode.addNode(&eNode);
-    bNode.addNode(&fNode);
-    */
+TEST_CASE("test parents - fail") {
+    ProcedureNode pNode = ProcedureNode(0, &p, defaultStmtLst);
+    vector<StmtLstNode*> v;
+    v.push_back(&pNode);
+    RelationshipExtractor::extractParent(&pNode,v);
+    REQUIRE(PKB::getInstance()->isParent(1,2));
+}
 
-//    RelationshipExtractor::extractFollows(&pNode);
+TEST_CASE("test parents* - basic") {
+    StatementList nestedStatementList;
+    nestedStatementList.push_back(&aNode);
+    nestedStatementList.push_back(&bNode);
+
+    WhileNode wNode = WhileNode(3, condPtr, defaultStmtLst2);
+    nestedStatementList.push_back(&wNode);
+
+    ProcedureNode pNode = ProcedureNode(&p, nestedStatementList);
+
+    vector<StmtLstNode*> v;
+    v.push_back(&pNode);
+    RelationshipExtractor::extractParent(&pNode,v);
+    REQUIRE(PKB::getInstance()->isParent(0,2));
+}
+
+
+TEST_CASE("test") {
+    PKB::getInstance()->setParent(0,1);
+    REQUIRE(PKB::getInstance()->isParent(0,1));
 }

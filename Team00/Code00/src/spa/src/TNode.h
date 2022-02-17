@@ -41,7 +41,7 @@ public:
     int getStmtNumber() const override;
 };
 
-typedef std::vector<StmtNode *> StatementList;
+typedef std::vector<Node *> StatementList;
 
 class StmtLstNode: public StmtNode{
     StatementList stmtLst;
@@ -204,7 +204,7 @@ class ProcedureNode: public StmtLstNode {
     ProcNameNode *procName;
     StatementList stmtLst;
 public:
-    ProcedureNode(int num, ProcNameNode *procName, StatementList stmtLst);
+    ProcedureNode(ProcNameNode *procName, StatementList stmtLst);
     ProcName getProcName();
 
 };

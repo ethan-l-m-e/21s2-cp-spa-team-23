@@ -21,7 +21,7 @@ TEST_CASE("assign token - weird whitespaces") {
     vector<string> v;
     SourceTokenizer::extractAssign(a, v);
     REQUIRE(v[0] == "x");
-    REQUIRE(v[1] == "y + 1");
+    REQUIRE(v[1] == "y   +  1");
 }
 
 TEST_CASE("procedure token - basic") {
@@ -143,5 +143,5 @@ TEST_CASE("fail test") {
     SourceTokenizer::extractExpression(p, v);
     REQUIRE(v[0] == "x");
     REQUIRE(v[1] == "y");
-    REQUIRE(v[2] == "*");
+    REQUIRE(v[2] != "*");
 }

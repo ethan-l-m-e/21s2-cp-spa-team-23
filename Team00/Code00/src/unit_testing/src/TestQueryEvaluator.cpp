@@ -26,18 +26,18 @@ PKB* generateSamplePKB() {
     testPKB->addVariable("yeast");
     testPKB->addVariable("zealous");
 
-    testPKB->addReadStatement("1");
-    testPKB->addAssignStatement("2");
-    testPKB->addAssignStatement("3");
-    testPKB->addPrintStatement("4");
-    testPKB->addWhileStatement("5");
-    testPKB->addAssignStatement("6");
-
-    testPKB->setFollows("1", "2");
-    testPKB->setFollows("2", "3");
-    testPKB->setFollows("3", "4");
-    testPKB->setFollows("4", "5");
-    testPKB->setParent("5", "6");
+//    testPKB->addReadStatement("1");
+//    testPKB->addAssignStatement("2");
+//    testPKB->addAssignStatement("3");
+//    testPKB->addPrintStatement("4");
+//    testPKB->addWhileStatement("5");
+//    testPKB->addAssignStatement("6");
+//
+//    testPKB->setFollows("1", "2");
+//    testPKB->setFollows("2", "3");
+//    testPKB->setFollows("3", "4");
+//    testPKB->setFollows("4", "5");
+//    testPKB->setParent("5", "6");
     return testPKB;
 }
 

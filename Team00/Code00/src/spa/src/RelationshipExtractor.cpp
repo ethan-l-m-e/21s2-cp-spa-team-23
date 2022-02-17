@@ -11,21 +11,23 @@
 
 //extracts all follows relationship starting from given node
 void RelationshipExtractor::extractFollows(Node * node) {
-     cout<<"outer\n";
-     cout<<node->getStmtNumber();
      if(node->hasStmtLst()) {
+//         cout<<"has stmt lst";
          int numOfChildNodes = node->getStmtLst().size();
-         cout<<(node->getStmtLst().size());
          if (numOfChildNodes > 1) {
-             cout<<"second if\n";
+//             cout<<"child node more than 1";
              for (int i = 0; i < (numOfChildNodes - 1); i++) {
-                 cout<<"for loop\n";
                  Node *child = node->getStmtLst().at(i);
-                 Node *nextChild = node->getStmtLst().at(i + 1);
-                 PKB::getInstance()->setFollows(child->getStmtNumber(),nextChild -> getStmtNumber());
-                 cout<<(child -> getStmtNumber());
-                 cout<<(nextChild -> getStmtNumber());
+                 for(int j = i; j<numOfChildNodes-1;j++){
+                     Node *nextChild = node->getStmtLst().at(j + 1);
+                     cout << child->getStmtNumber();
+                     cout << nextChild->getStmtNumber();
+                    if(j==i) {
+                        PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
+                    }
+                     PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
 
+                 }
              }
          }
          for (int i = 0; i < (numOfChildNodes); i++) {
@@ -34,19 +36,24 @@ void RelationshipExtractor::extractFollows(Node * node) {
      }
 }
 //extracts all parents relationship starting from given node
-void RelationshipExtractor::extractParent(Node * node) {
+void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> parentList) {
     if(node->hasStmtLst()) {
         int numOfChildNodes = node->getStmtLst().size();
-        for (int i = 0; i < (numOfChildNodes); i++) {
+        if(node->getStmtNumber()!=-1) {
+            parentList.push_back((StmtLstNode *) node);
             Node *parent = node;
-            Node *child = node->getStmtLst().at(i);
-            PKB::getInstance()->setParent(parent->getStmtNumber(),child -> getStmtNumber());
-
+            for (int i = 0; i < (numOfChildNodes); i++) {
+                Node *child = node->getStmtLst().at(i);
+                PKB::getInstance()->setParent(parent->getStmtNumber(), child->getStmtNumber());
+                for (int j = 0; j < parentList.size(); j++) {
+                    Node *parentT = parentList.at(j);
+                    PKB::getInstance()->setParentT(parentT->getStmtNumber(), child->getStmtNumber());
+                }
+            }
         }
         for (int i = 0; i < (numOfChildNodes); i++) {
-            extractParent(node->getStmtLst().at(i));
+            extractParent(node->getStmtLst().at(i), parentList);
         }
-
     }
 }
 
@@ -87,8 +94,9 @@ void RelationshipExtractor::extractModifies (Node * node) {
 }
 
 void RelationshipExtractor::extractRelationships(Node * node){
+    vector<StmtLstNode*> v;
     extractFollows(node);
-    extractParent(node);
+    extractParent(node,v);
     extractUses(node);
     extractModifies(node);
 }
