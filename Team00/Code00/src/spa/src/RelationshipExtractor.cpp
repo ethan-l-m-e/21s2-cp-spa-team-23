@@ -7,11 +7,10 @@
 #include "PKB.h"
 #include "TNode.h"
 #include "Constants/Constants.h"
+#include <unordered_set>
 
+//extracts all follows relationship starting from given node
 void RelationshipExtractor::extractFollows(Node * node) {
-     /**
-     * NOTE: Syntax of Tnode changed, so try to fix Tnode to work with the new Node(or nodes).
-     */
      cout<<"outer\n";
      cout<<node->getStmtNumber();
      if(node->hasStmtLst()) {
@@ -23,32 +22,25 @@ void RelationshipExtractor::extractFollows(Node * node) {
                  cout<<"for loop\n";
                  Node *child = node->getStmtLst().at(i);
                  Node *nextChild = node->getStmtLst().at(i + 1);
+                 PKB::getInstance()->setFollows(child->getStmtNumber(),nextChild -> getStmtNumber());
                  cout<<(child -> getStmtNumber());
                  cout<<(nextChild -> getStmtNumber());
-//                 pkb.setFollows(child -> getStmtNumber(), nextChild -> getStmtNumber());
 
-                 // if child is if/while/procedure, perform recursion extractFollows(child)
-                 /* might not need this but just gonna keep this first
-                 if (string("procedure while if").find(child->getValue()) != string::npos) {
-                     extractFollows(child);
-                 }
-                  */
              }
          }
          for (int i = 0; i < (numOfChildNodes); i++) {
              extractFollows(node->getStmtLst().at(i));
          }
-
      }
 }
-
+//extracts all parents relationship starting from given node
 void RelationshipExtractor::extractParent(Node * node) {
     if(node->hasStmtLst()) {
         int numOfChildNodes = node->getStmtLst().size();
         for (int i = 0; i < (numOfChildNodes); i++) {
             Node *parent = node;
             Node *child = node->getStmtLst().at(i);
-//            pkb.setParent(parent -> getStmtNumber(), child -> getStmtNumber());
+            PKB::getInstance()->setParent(parent->getStmtNumber(),child -> getStmtNumber());
 
         }
         for (int i = 0; i < (numOfChildNodes); i++) {
@@ -58,10 +50,15 @@ void RelationshipExtractor::extractParent(Node * node) {
     }
 }
 
-vector<string> RelationshipExtractor::extractUses (Node * node) {
+void RelationshipExtractor::extractUses (Node * node) {
     vector<string> varList = node->getListOfVarUsed();
     if (!varList.empty()) {
-            pkb.createUses(node->getStmtNumber(), varList);
+        std::unordered_set<string> set;
+        for (string &i: varList) {
+            set.insert(i);
+        }
+
+        PKB::getInstance()->setUses(node->getStmtNumber(),set);
     }
 
     if(node->hasStmtLst()) {
@@ -69,26 +66,17 @@ vector<string> RelationshipExtractor::extractUses (Node * node) {
             extractUses(node->getStmtLst().at(i));
         }
     }
-    // if node is assign/print statement
-    //      search list of variables that is on the right side of node
-    //      perform createUses(stmtNo, list of v)
-    //      return list of v;
-    // else if node is in while/procedure/call/if/while
-    //      for each childNode in the node
-    //          vector = extractUses(childNode)
-    //          sum up all the vectors
-    //      createUses(whatever, sum of all vectors)
-    //      return list of v;
-    // else return empty vector
-    vector<string> v;
-    return v;
 }
 
-vector<string> RelationshipExtractor::extractModifies (Node * node) {
+void RelationshipExtractor::extractModifies (Node * node) {
 
     vector<string> varList = node->getListOfVarModified();
     if (!varList.empty()) {
-//            pkb.createUses(node->getStmtNumber(), varList);
+        std::unordered_set<string> set;
+        for (string &i: varList) {
+            set.insert(i);
+        }
+        PKB::getInstance()->setModifies(node->getStmtNumber(),set);
     }
 
     if(node->hasStmtLst()) {
@@ -96,20 +84,6 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
             extractModifies(node->getStmtLst().at(i));
         }
     }
-
-    // if node is assign/print statement
-    //      search list of variables that is on the right side of node
-    //      perform createUses(stmtNo, list of v)
-    //      return list of v;
-    // else if node is in while/procedure/call/if
-    //      for each childNode in the node
-    //          vector = extractUses(childNode)
-    //          sum up all the vectors
-    //      createUses(whatever, sum of all vectors)
-    //      return list of v;
-    // else return empty vector
-    vector<string> v;
-    return v;
 }
 
 void RelationshipExtractor::extractRelationships(Node * node){
