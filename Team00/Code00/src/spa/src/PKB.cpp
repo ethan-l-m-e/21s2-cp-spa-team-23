@@ -302,7 +302,7 @@ void PKB::setParent(int parent, int child) {
 
 bool PKB::isParent(int parent, int child) {
     if (childToParentMap.find(child) != childToParentMap.end()) {
-        return childToParentMap[child] != parent;
+        return childToParentMap[child] == parent;
     } else {
         return false;
     }
