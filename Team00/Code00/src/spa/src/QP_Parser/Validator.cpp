@@ -2,7 +2,6 @@
 #include "Constants.h"
 #include "Tokenizer.h"
 #include "Exception.h"
-#include "StringFormatter.h"
 
 #include <string>
 #include <regex>
@@ -22,7 +21,7 @@ void Validator::validateQueryStructure(std::string pql) {
 }
 
 void Validator::checkForSemantics(QueryToken& queryToken) {
-    set<string> declarationSet = convertVectorToSet(queryToken.declarations->first);
+    std::set<std::string> declarationSet = convertVectorToSet(queryToken.declarations->first);
 
     // check declarations
     validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
@@ -38,25 +37,25 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
     validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
 }
 
-void Validator::validateDeclarations(set<string> declarationSet, int length, vector<string> designEntities) {
+void Validator::validateDeclarations(std::set<std::string> declarationSet, int length, std::vector<std::string> designEntities) {
     // check duplicate declaration names
     if (declarationSet.size() != length) {
         throw QPInvalidSemanticException("Repeated declaration names");
     }
 
     // check duplicate design entity declarations
-    set<string> designEntitySet = convertVectorToSet(designEntities);
+    std::set<std::string> designEntitySet = convertVectorToSet(designEntities);
     if (designEntitySet.size() != designEntities.size()) {
         throw QPInvalidSemanticException("Repeated declarations of same design entity");
     }
 }
 
-void Validator::validateSuchThatClauses(map<string, string> declarationTokens,
-                                        vector<SuchThatClauseToken> suchThatClauseTokens) {
-    string relationshipCheck = "Follows|Follows*|Parent|Parent*";
+void Validator::validateSuchThatClauses(std::map<std::string, std::string> declarationTokens,
+                                        std::vector<SuchThatClauseToken> suchThatClauseTokens) {
+    std::string relationshipCheck = "Follows|Follows*|Parent|Parent*";
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
         // Check for relationship
-        bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, regex(relationshipCheck));
+        bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, std::regex(relationshipCheck));
         if (isStatementRelationship) {
             handleSuchThatStatementClause(declarationTokens, *suchThatClauseToken.arguments);
         } else {
@@ -67,13 +66,15 @@ void Validator::validateSuchThatClauses(map<string, string> declarationTokens,
     }
 }
 
-void Validator::handleSuchThatStatementClause(map<string, string>& declarationTokens, std::pair<std::string, std::string>& arguments) {
+void Validator::handleSuchThatStatementClause(std::map<std::string, std::string>& declarationTokens,
+                                              std::pair<std::string, std::string>& arguments) {
     checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.first);
     checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.second);
 }
 
-void Validator::checkArgumentForStatementClauses(map<string, string>& declarationTokens, string reg, string argument) {
-    if (!regex_match(argument, regex(reg))) {
+void Validator::checkArgumentForStatementClauses(std::map<std::string, std::string>& declarationTokens,
+                                                 std::string reg, std::string argument) {
+    if (!regex_match(argument, std::regex(reg))) {
         if (declarationTokens.find(argument) == declarationTokens.end() ||
         stmtSet.find(declarationTokens.at(argument)) == stmtSet.end()) {
             throw QPInvalidSemanticException("Invalid Argument");
@@ -81,19 +82,21 @@ void Validator::checkArgumentForStatementClauses(map<string, string>& declaratio
     }
 }
 
-void Validator::checkFirstArgForOtherClauses(string argument, std::set<std::string>& argSet, map<string, string>& declarationTokens) {
+void Validator::checkFirstArgForOtherClauses(std::string argument, std::set<std::string>& argSet,
+                                             std::map<std::string, std::string>& declarationTokens) {
     if (argument == "_") {
         throw QPInvalidSemanticException("Invalid First Argument");
     }
 
-    bool isArgumentIdent = regex_match(argument, regex("\""+ IDENT + "\""));
+    bool isArgumentIdent = regex_match(argument, std::regex("\""+ IDENT + "\""));
     if (!isArgumentIdent && argSet.find(declarationTokens.at(argument)) == argSet.end()) {
         throw QPInvalidSemanticException("Invalid First Argument");
     }
 }
 
-void Validator::checkSecondArgForOtherClauses(string argument, map<string, string>& declarationTokens) {
-    if (!regex_match(argument, regex("(_|\""+ IDENT + "\")"))) {
+void Validator::checkSecondArgForOtherClauses(std::string argument, std::map<std::string,
+                                              std::string>& declarationTokens) {
+    if (!regex_match(argument, std::regex("(_|\""+ IDENT + "\")"))) {
         if (declarationTokens.find(argument) == declarationTokens.end()
         || declarationTokens.at(argument) != "variable") {
             throw QPInvalidSemanticException("Invalid Second Argument");
@@ -101,7 +104,8 @@ void Validator::checkSecondArgForOtherClauses(string argument, map<string, strin
     }
 }
 
-void Validator::validatePatterns(map<string, string> declarationTokens, std::vector<PatternToken> patternTokens) {
+void Validator::validatePatterns(std::map<std::string, std::string> declarationTokens,
+                                 std::vector<PatternToken> patternTokens) {
     for (PatternToken patternToken : patternTokens) {
         if (declarationTokens.find(patternToken.synonym) == declarationTokens.end()
         || declarationTokens.at(patternToken.synonym) != "assign") {
@@ -110,9 +114,9 @@ void Validator::validatePatterns(map<string, string> declarationTokens, std::vec
     }
 }
 
-set<string> Validator::convertVectorToSet(vector<string> vec) {
-    set<string> s;
-    for (string x : vec) {
+std::set<std::string> Validator::convertVectorToSet(std::vector<std::string> vec) {
+    std::set<std::string> s;
+    for (std::string x : vec) {
         s.insert(x);
     }
     return s;

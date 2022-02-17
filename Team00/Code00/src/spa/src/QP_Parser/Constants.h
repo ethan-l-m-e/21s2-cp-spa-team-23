@@ -1,6 +1,4 @@
 #pragma once
-#include <regex>
-//using namespace qp;
 
 // Regex for Lexical Tokens
 std::string const LETTER = "[A-Za-z]";

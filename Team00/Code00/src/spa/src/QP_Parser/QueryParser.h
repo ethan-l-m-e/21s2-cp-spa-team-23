@@ -50,9 +50,9 @@ namespace qp {
         Argument getArgument(std::string, std::string);
         ArgumentType getArgumentType(std::string, std::string);
         DesignEntity getDesignEntity(std::string);
-        vector<Argument> getArgumentList(pair<string, string>, string);
-        RelRef getRelRefFromString(string, Argument);
-        string determineRelationshipBasedOnArg(Argument);
+        std::vector<Argument> getArgumentList(std::pair<std::string, std::string>, std::string);
+        RelRef getRelRefFromString(std::string, Argument);
+        std::string determineRelationshipBasedOnArg(Argument);
     };
 }
 
