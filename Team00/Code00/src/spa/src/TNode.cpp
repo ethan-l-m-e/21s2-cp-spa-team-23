@@ -50,19 +50,24 @@ vector<Node *> StmtLstNode::getStmtLst() {return this->stmtLst;}
 vector<VarName> StmtLstNode::getListOfVarUsed() {
     vector<VarName> toReturn;
     for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<VarName> list = getStmtLst().at(i)->getListOfVarUsed();
         toReturn.insert(toReturn.end(),
-                        getStmtLst().at(i)->getListOfVarUsed().begin(),
-                        getStmtLst().at(i)->getListOfVarUsed().end());
+                        list.begin(),
+                        list.end());
     }
     return toReturn;
 }
 vector<VarName> StmtLstNode::getListOfVarModified() {
     vector<VarName> toReturn;
+//    cout<<"does this even run 5";
     for(int i = 0; i < getStmtLst().size() ; i++) {
+        cout<<"for loop of getListOf\n";
+        vector<VarName> list = getStmtLst().at(i)->getListOfVarModified();
         toReturn.insert(toReturn.end(),
-                        getStmtLst().at(i)->getListOfVarModified().begin(),
-                        getStmtLst().at(i)->getListOfVarModified().end());
+                        list.begin(),
+                        list.end());
     }
+    cout<<toReturn.at(0);
     return toReturn;
 }
 
@@ -75,6 +80,7 @@ AssignNode::AssignNode(int num, VariableNode *leftNode, Expression rightNode) : 
 
 vector<VarName> getAllVarFnHelper(Factor e){
     vector<VarName> vec1;
+
     if(VariableNode** v = std::get_if<VariableNode*>(&e)){
         VariableNode varNode = **v;
         vec1.push_back(varNode.getVariableName());
@@ -92,7 +98,10 @@ vector<string> AssignNode::getListOfVarUsed(){
     return getAllVarFnHelper(this->getRightNode());
 }
 vector<string> AssignNode::getListOfVarModified(){
-    return getAllVarFnHelper(this->getLeftNode());
+    cout<<"assign node's get list of \n";
+    vector<string> v = getAllVarFnHelper(this->getLeftNode());
+    cout<< v.at(0);
+    return v;
 }
 
 VariableNode* AssignNode::getLeftNode() const {
