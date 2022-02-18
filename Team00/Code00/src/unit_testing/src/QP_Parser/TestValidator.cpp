@@ -715,6 +715,106 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT INTEGER SECOND ARGUMENT FOR MODIFI
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
+// Check Valid queries for Pattern
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SIMPLE PATTERN") {
+    std::string query = "assign a; Select a pattern a(_, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH DOUBLE CHAR SYN-ASSIGN") {
+    std::string query = "assign a; Select a pattern ab(_, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH CHAR+INT SYN-ASSIGN") {
+    std::string query = "assign a; Select a pattern a1(_, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH SYNONYM FOR FIRST ARGUMENT") {
+    std::string query = "assign a; stmt s; Select a pattern a1(s, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH IDENT FOR FIRST ARGUMENT") {
+    std::string query = "assign a; stmt s; Select a pattern a1(\"x\", _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH PARTIAL WILDCARD FOR SECOND ARGUMENT") {
+    std::string query = "assign a; stmt s; Select a pattern a1(_, _\"x\"_)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH IDENT FOR SECOND ARGUMENT") {
+    std::string query = "assign a; stmt s; Select a pattern a1(_, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH PATTERN FOR SYN-ASSIGN") {
+    std::string query = "assign a; stmt s; Select pattern pattern pattern(_, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH SELECT FOR SYN-ASSIGN") {
+    std::string query = "assign a; stmt s; Select Select pattern Select(_, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+// Invalid queries for pattern
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH INTEGER FOR FIRST ARGUMENT") {
+    std::string query = "assign a; stmt s; Select Select pattern Select(3, _)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH INTEGER FOR SECOND ARGUMENT") {
+    std::string query = "assign a; stmt s; Select a pattern a(_, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH PARTIAL WILDCARD FOR FIRST ARGUMENT") {
+    std::string query = "assign a; stmt s; Select a pattern a(_\"x\"_, _)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH SYNONYM FOR SECOND ARGUMENT") {
+    std::string query = "assign a; stmt s; Select a pattern a(_, s)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH INTEGER AS SYN-ASSIGN") {
+    std::string query = "assign a; stmt s; Select a pattern 3(_, s)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
 // TODO: Edit below
 
 TEST_CASE ("VALIDATION") {
