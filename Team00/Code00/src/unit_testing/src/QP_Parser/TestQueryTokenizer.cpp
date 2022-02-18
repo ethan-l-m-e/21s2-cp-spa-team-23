@@ -757,17 +757,128 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYN-ASSIGN") {
     CHECK(*(patternToken.arguments) == expectedArguments);
 }
 
-
-// TODO: Edit
-
-TEST_CASE ("DECLARATIONS") {
-    std::string firstQuery = "variable v1, v2; assign a;\nSelect v";
+TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST PATTERN FIRST THEN SUCH THAT CLAUSE") {
+    std::string firstQuery = "assign a; \nSelect a pattern a(_, _) such that Follows(2, 1)";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check declarations
+    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"}});
+    std::vector<std::string> expectedDeclarationNames({"a"});
+    std::vector<std::string> expectedDesignEntities({"assign"});
+
+    auto declarationTokens = *(queryToken.declarationTokens);
+    auto declarations = *(queryToken.declarations);
+    auto declarationNames = declarations.first;
+    auto designEntities = declarations.second;
+
+    CHECK(declarationTokens == expectedDeclarationTokens);
+    CHECK(declarationNames == expectedDeclarationNames);
+    CHECK(designEntities == expectedDesignEntities);
+
+    // Check Synonym
+    std::string expectedSynonym = "a";
+    auto synonym = queryToken.selectClauseToken;
+
+    CHECK(synonym == expectedSynonym);
+
+    // Check Such That Clauses
+    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    auto suchThatClauseToken = suchThatClauseTokens[0];
+    std::pair<std::string, std::string> expectedSuchThatArguments = std::make_pair("2", "1");
+
+    CHECK(suchThatClauseToken.relRef == "Follows");
+    CHECK(*(suchThatClauseToken.arguments) == expectedSuchThatArguments);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("_", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "a");
+    CHECK(*(patternToken.arguments) == expectedArguments);
 }
 
-TEST_CASE("PATTERN CLAUSE") {
-    std::string second = "variable v; assign a;\nSelect a pattern a (    v , \"x\"      )";
+TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST SUCH THAT CLAUSE FIRST THEN PATTERN") {
+    std::string firstQuery = "assign a; \nSelect a such that Follows(2, 1) pattern a(_, _)";
     Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(second);
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check declarations
+    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"}});
+    std::vector<std::string> expectedDeclarationNames({"a"});
+    std::vector<std::string> expectedDesignEntities({"assign"});
+
+    auto declarationTokens = *(queryToken.declarationTokens);
+    auto declarations = *(queryToken.declarations);
+    auto declarationNames = declarations.first;
+    auto designEntities = declarations.second;
+
+    CHECK(declarationTokens == expectedDeclarationTokens);
+    CHECK(declarationNames == expectedDeclarationNames);
+    CHECK(designEntities == expectedDesignEntities);
+
+    // Check Synonym
+    std::string expectedSynonym = "a";
+    auto synonym = queryToken.selectClauseToken;
+
+    CHECK(synonym == expectedSynonym);
+
+    // Check Such That Clauses
+    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    auto suchThatClauseToken = suchThatClauseTokens[0];
+    std::pair<std::string, std::string> expectedSuchThatArguments = std::make_pair("2", "1");
+
+    CHECK(suchThatClauseToken.relRef == "Follows");
+    CHECK(*(suchThatClauseToken.arguments) == expectedSuchThatArguments);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("_", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "a");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST SUCH THAT CLAUSE FIRST THEN PATTERN WITH PATTERN AS SYN-ASSIGN") {
+    std::string firstQuery = "assign pattern; \nSelect pattern such that Follows(2, 1) pattern pattern(_, _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check declarations
+    std::map<std::string, std::string> expectedDeclarationTokens({{"pattern", "assign"}});
+    std::vector<std::string> expectedDeclarationNames({"pattern"});
+    std::vector<std::string> expectedDesignEntities({"assign"});
+
+    auto declarationTokens = *(queryToken.declarationTokens);
+    auto declarations = *(queryToken.declarations);
+    auto declarationNames = declarations.first;
+    auto designEntities = declarations.second;
+
+    CHECK(declarationTokens == expectedDeclarationTokens);
+    CHECK(declarationNames == expectedDeclarationNames);
+    CHECK(designEntities == expectedDesignEntities);
+
+    // Check Synonym
+    std::string expectedSynonym = "pattern";
+    auto synonym = queryToken.selectClauseToken;
+
+    CHECK(synonym == expectedSynonym);
+
+    // Check Such That Clauses
+    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    auto suchThatClauseToken = suchThatClauseTokens[0];
+    std::pair<std::string, std::string> expectedSuchThatArguments = std::make_pair("2", "1");
+
+    CHECK(suchThatClauseToken.relRef == "Follows");
+    CHECK(*(suchThatClauseToken.arguments) == expectedSuchThatArguments);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("_", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "pattern");
+    CHECK(*(patternToken.arguments) == expectedArguments);
 }
