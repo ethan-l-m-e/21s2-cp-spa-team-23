@@ -81,6 +81,7 @@ void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken
     queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>{suchThatClauseToken};
 }
 
+
 void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
     std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
     if (backClauses[0] == pql) {
