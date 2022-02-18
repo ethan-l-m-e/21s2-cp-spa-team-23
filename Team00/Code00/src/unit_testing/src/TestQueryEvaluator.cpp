@@ -947,3 +947,6 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     REQUIRE(results == expected);
 }
 
+TEST_CASE("PATTERN FULL EXPRESSION MATCHING") {
+
+}
