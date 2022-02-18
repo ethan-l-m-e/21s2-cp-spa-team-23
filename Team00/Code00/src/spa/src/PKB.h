@@ -38,14 +38,14 @@ private:
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
 
-    unordered_map<int, unordered_set<int>> tFolloweeToFollowerMap;
-    unordered_map<int, unordered_set<int>> tFollowerToFolloweeMap;
+    unordered_map<int, unordered_set<int>> tFolloweeToFollowersMap;
+    unordered_map<int, unordered_set<int>> tFollowerToFolloweesMap;
 
     unordered_map<int, unordered_set<int>> parentToChildrenMap;
     unordered_map<int, int> childToParentMap;
 
     unordered_map<int, unordered_set<int>> tParentToChildrenMap;
-    unordered_map<int, unordered_set<int>> tChildToParentMap;
+    unordered_map<int, unordered_set<int>> tChildToParentsMap;
 
 
     unordered_map<int, unordered_set<string>> statementToVariablesUsedMap;
@@ -56,6 +56,17 @@ private:
 
     unordered_set<AssignNode *> assignNodesSet;
 
+    // Getter Functions (Variables, Procedures etc.)
+
+    bool isStatement(int statement);
+
+    // Getter Functions (Statement Types)
+
+    bool isAssignStatement(int statement);
+    bool isReadStatement(int statement);
+    bool isPrintStatement(int statement);
+    bool isIfStatement(int statement);
+    bool isWhileStatement(int statement);
 
     // Getter Functions (Follows Relationship)
 
@@ -128,7 +139,6 @@ public:
 
     // Getter Functions (Variables, Procedures etc.)
 
-    bool isStatement(int statement);
     bool isStatement(string statement);
 
     bool isVariable(string variable);
@@ -141,12 +151,6 @@ public:
     unordered_set<string> getAllConstants();
 
     // Getter Functions (Statement Types)
-
-    bool isAssignStatement(int statement);
-    bool isReadStatement(int statement);
-    bool isPrintStatement(int statement);
-    bool isIfStatement(int statement);
-    bool isWhileStatement(int statement);
 
     bool isAssignStatement(string statement);
     bool isReadStatement(string statement);
