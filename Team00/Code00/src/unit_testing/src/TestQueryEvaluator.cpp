@@ -1080,7 +1080,5 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     results = std::unordered_set<string> (std::begin(resultList), std::end(resultList));
     expected = std::unordered_set<string> {"y"};
     REQUIRE(results == expected);
-
-
 }
 
