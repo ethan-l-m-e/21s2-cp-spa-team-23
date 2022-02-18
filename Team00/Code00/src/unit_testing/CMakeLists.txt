@@ -10,7 +10,13 @@ set(srcs ${srcs}
         src/QP-evaluator/TestPatternClauseEvaluator.cpp
         )
 
-add_executable(unit_testing ${srcs} src/TestAST.cpp src/TestIdentifier.cpp src/TestIdentifier.cpp src/TestRelationshipExtractor.cpp src/TestSourceTokenizer.cpp src/TestTNode.cpp src/TestParser.cpp)
+add_executable(unit_testing ${srcs} src/TestAST.cpp
+        src/TestIdentifier.cpp
+        src/TestIdentifier.cpp
+        src/TestRelationshipExtractor.cpp
+        src/TestSourceTokenizer.cpp
+        src/TestTNode.cpp
+        src/TestParser.cpp)
 
 target_link_libraries(unit_testing spa)
 
