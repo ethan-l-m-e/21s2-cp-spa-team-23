@@ -5,8 +5,8 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <regex>
 #include <map>
+#include <regex>
 
 using namespace qp;
 // TODO: transfer regex to constants file
@@ -18,6 +18,8 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
         return queryToken;
     }
 
+    query = std::regex_replace(query, regex("\n"), "");
+
     // Gets all the different tokens
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
@@ -28,7 +30,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 }
 
 void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
-    std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, "[ |\n]*(Select.*)")[0];
+    std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, "[ |\n]*;[ |\n]*(Select.*)")[0];
     // Separates declarations by design entities
     std::vector<std::string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, "[ ]*;[ ]*");
     splitDeclarations(declarationsToken, queryToken);
@@ -56,35 +58,39 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
             std::vector<std::string>>(declarationNames, designEntities);
 }
 
-void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
-    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, "(Select[ ]+|[ ]+|(.*;))");
-    queryToken.selectClauseToken = tokens[0];
+void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
+    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, "(.*);[ |\n]*(Select[ ]+|[ ]+|(.*;))");
+    std::string synonym = tokens[0].substr(0, tokens[0].find(" "));
+    queryToken.selectClauseToken = synonym;
 }
 
 void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
-    std::regex relationshipReg(RELATIONSHIP_MATCH);
-    bool hasRelationship = regex_match(pql, relationshipReg);
-    if (!hasRelationship) {
+    pql = std::regex_replace(pql, regex("\\*"), "-");
+    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.)*such [ ]*that[ ]+");
+
+    if (backClauses[0] == pql) {
         return;
     }
 
-    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)such [ ]*that[ ]+");
     std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
+    std::string relRef = std::regex_replace(suchThatClauses[0], regex("-"), "*");
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    suchThatClauseToken.relRef = suchThatClauses[0];
+    suchThatClauseToken.relRef = relRef;
     suchThatClauseToken.arguments = new std::pair<std::string, std::string>(suchThatClauses[1], suchThatClauses[2]);
     queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>{suchThatClauseToken};
 }
 
-void Tokenizer::getPatternClauseTokens(std::string& pql, QueryToken& queryToken) {
-    std::regex patternReg(PATTERN_MATCH);
-    bool hasPattern = regex_match(pql, patternReg);
-    if (!hasPattern) {
+
+void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
+    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
+    if (backClauses[0] == pql) {
         return;
+    } else if (queryToken.selectClauseToken == "pattern") {
+        backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+" + SYNONYM + "[ ]*\\(");
+        backClauses[0] = "pattern (" + backClauses[0];
     }
 
-    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
     std::vector<std::string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
     std::string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
 
