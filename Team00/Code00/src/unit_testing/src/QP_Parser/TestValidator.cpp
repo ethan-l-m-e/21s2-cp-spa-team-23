@@ -50,7 +50,8 @@ TEST_CASE ("VALIDATION SEMANTIC2") {
     auto declarationNames = std::vector<std::string>({"v"});
     auto designEntities = std::vector<std::string>({"variable"});
     auto declarations = std::make_pair(declarationNames, designEntities);
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken("Follows*", std::make_pair("1", "2"));
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken("Follows*",
+                                                                  new std::pair<std::string, std::string>("1", "2"));
     auto suchThatClauseTokens = new std::vector<SuchThatClauseToken>({suchThatClauseToken});
 
     QueryToken queryToken = QueryToken();

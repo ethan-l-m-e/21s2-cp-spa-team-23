@@ -20,8 +20,8 @@ namespace qp {
         std::pair<std::string, std::string>* arguments;
 
         SuchThatClauseToken() : relRef(""), arguments(nullptr) {};
-        SuchThatClauseToken(std::string relRef, std::pair<std::string, std::string> arguments) : relRef(relRef),
-        arguments(&arguments) {};
+        SuchThatClauseToken(std::string relRef, std::pair<std::string, std::string>* arguments) : relRef(relRef),
+        arguments(arguments) {};
     };
 
     class QueryToken {
