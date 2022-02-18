@@ -32,9 +32,13 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
     };
 
     // Check pattern arguments
-    validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
+    if (queryToken.patternTokens != NULL) {
+        validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
+    }
 
-    validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
+    if (queryToken.suchThatClauseTokens != NULL) {
+        validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
+    }
 }
 
 void Validator::validateDeclarations(std::set<std::string> declarationSet, int length, std::vector<std::string> designEntities) {
@@ -52,7 +56,7 @@ void Validator::validateDeclarations(std::set<std::string> declarationSet, int l
 
 void Validator::validateSuchThatClauses(std::map<std::string, std::string> declarationTokens,
                                         std::vector<SuchThatClauseToken> suchThatClauseTokens) {
-    std::string relationshipCheck = "Follows|Follows*|Parent|Parent*";
+    std::string relationshipCheck = "(Follows|Follows\\*|Parent|Parent\\*)";
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
         // Check for relationship
         bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, std::regex(relationshipCheck));
