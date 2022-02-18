@@ -100,6 +100,8 @@ public:
 
     static PKB* getInstance();
 
+    void clearPKB();
+
     // Setter Functions (Assign Nodes)
 
     void addAssignNode(AssignNode *assignNode);

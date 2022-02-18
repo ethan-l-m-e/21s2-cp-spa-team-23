@@ -11,6 +11,11 @@ Node::Node() { this->parent = nullptr; }
 
 void Node::setParentNode(Node *parent) {this -> parent = parent;}
 Node *Node::getParentNode() const {return this -> parent;}
+bool Node::hasStmtLst() {return false;}
+StatementList Node::getStmtLst() {return {};}
+int Node::getStmtNumber() const {return -1;}
+vector<string> Node::getListOfVarUsed() {return {};}
+vector<string> Node::getListOfVarModified() {return {};}
 
 StmtNode::StmtNode(int num) { this ->statementNumber = num;}
 int StmtNode::getStmtNumber() const { return this ->statementNumber; }
@@ -38,12 +43,61 @@ PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
 VarName PrintNode::getVarName() const {
     return this->varNode->getVariableName();
 }
+bool StmtLstNode::hasStmtLst() {return true;}
+StmtLstNode::StmtLstNode(int num, StatementList lst):StmtNode(num) {stmtLst=lst;}
+vector<Node *> StmtLstNode::getStmtLst() {return this->stmtLst;}
+
+vector<VarName> StmtLstNode::getListOfVarUsed() {
+    vector<VarName> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<VarName> list = getStmtLst().at(i)->getListOfVarUsed();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    return toReturn;
+}
+vector<VarName> StmtLstNode::getListOfVarModified() {
+    vector<VarName> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<VarName> list = getStmtLst().at(i)->getListOfVarModified();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    cout<<toReturn.at(0);
+    return toReturn;
+}
 
 AssignNode::AssignNode(int num, VariableNode *leftNode, Expression rightNode) : StmtNode(num) {
     this ->leftNode = leftNode;
     this ->rightNode = rightNode;
     this ->leftNode ->setParentNode(this);
     visit([this](auto& n){n->setParentNode(this);},this->rightNode);
+}
+
+vector<VarName> getAllVarFnHelper(Factor e){
+    vector<VarName> vec1;
+
+    if(VariableNode** v = std::get_if<VariableNode*>(&e)){
+        VariableNode varNode = **v;
+        vec1.push_back(varNode.getVariableName());
+    }else if (BinaryOperatorNode** b = std::get_if<BinaryOperatorNode*>(&e)){
+        BinaryOperatorNode binNode = **b;
+        vector<VarName> left = getAllVarFnHelper(binNode.getLeftExpr());
+        vec1.insert(vec1.begin(),left.begin(),left.end());
+        vector<VarName> right=getAllVarFnHelper(binNode.getRightExpr());
+        vec1.insert(vec1.end(),right.begin(),right.end());
+    }
+    return vec1;
+}
+
+vector<string> AssignNode::getListOfVarUsed(){
+    return getAllVarFnHelper(this->getRightNode());
+}
+vector<string> AssignNode::getListOfVarModified(){
+    vector<string> v = getAllVarFnHelper(this->getLeftNode());
+    return v;
 }
 
 VariableNode* AssignNode::getLeftNode() const {
@@ -129,11 +183,11 @@ string CondExprNode::getCondOperator() const {
     return this->condOperator;
 }
 
-WhileNode::WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst): StmtNode(num) {
+WhileNode::WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst) : StmtLstNode(num, stmtLst) {
     this->condExpr = condExpr;
     this->condExpr->setParentNode(this);
     this->stmtLst = std::move(stmtLst);
-    for (StmtNode *stmtNode : this->stmtLst) {
+    for (Node *stmtNode : this->stmtLst) {
         stmtNode->setParentNode(this);
     }
 }
@@ -142,19 +196,23 @@ CondExprNode *WhileNode::getCondExpr() {
     return this->condExpr;
 }
 
-StatementList WhileNode::getStmtLst() {
-    return this->stmtLst;
-}
+//bool WhileNode::hasStmtLst() {
+//    return true;
+//}
+//
+//StatementList WhileNode::getStmtLst() {
+//    return this->stmtLst;
+//}
 
 IfNode::IfNode(int num, CondExprNode *condExpr, StatementList thenStmtLst, StatementList elseStmtLst): StmtNode(num) {
     this->condExpr = condExpr;
     condExpr->setParentNode(this);
     this->thenStmtLst = std::move(thenStmtLst);
-    for (StmtNode *thenNode: this->thenStmtLst) {
+    for (Node *thenNode: this->thenStmtLst) {
         thenNode->setParentNode(this);
     }
     this->elseStmtLst = std::move(elseStmtLst);
-    for (StmtNode *elseNode: this->elseStmtLst) {
+    for (Node *elseNode: this->elseStmtLst) {
         elseNode->setParentNode(this);
     }
 }
@@ -179,10 +237,11 @@ ProcName ProcNameNode::getProcedureName() {
     return this->procedureName;
 }
 
-ProcedureNode::ProcedureNode(ProcNameNode *procName, StatementList stmtLst) {
+ProcedureNode::ProcedureNode(ProcNameNode *procName, StatementList stmtLst)
+        : StmtLstNode(-1, stmtLst) {
     this->procName = procName;
     this->stmtLst = std::move(stmtLst);
-    for (StmtNode *stmtNode : this->stmtLst) {
+    for (Node *stmtNode : this->stmtLst) {
         stmtNode->setParentNode(this);
     }
 }
@@ -191,6 +250,10 @@ ProcName ProcedureNode::getProcName() {
     return this->procName->getProcedureName();
 }
 
-StatementList ProcedureNode::getStmtLst() {
-    return this->stmtLst;
-}
+//StatementList ProcedureNode::getStmtLst() {
+//    return this->stmtLst;
+//}
+//
+//bool ProcedureNode::hasStmtLst() {
+//    return true;
+//}

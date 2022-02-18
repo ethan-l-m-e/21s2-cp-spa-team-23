@@ -11,12 +11,15 @@ file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/ClauseEvaluators/*.h"
         )
 set(srcs ${srcs}
-        src/QP_Parser/PreProcessor.cpp
+        src/QP_Parser/QueryParser.cpp
         src/QP_Parser/Tokenizer.cpp
+        src/QP_Parser/Validator.cpp
         )
 set(headers ${headers}
-        src/QP_Parser/PreProcessor.h
+        src/QP_Parser/QueryParser.h
         src/QP_Parser/Tokenizer.h
+        src/QP_Parser/Validator.h
+        src/QP_Parser/Exception.h
         src/pql/QueryEvaluator.h
         )
 add_library(spa ${srcs} ${headers} src/Parser.cpp src/Parser.h

@@ -103,7 +103,7 @@ void addToStmtList(AssignNode *assignNode, vector<ResultItem> *stmtNumberList) {
 }
 
 void addToStmtAndVariableList(AssignNode *assignNode, vector<ResultItem> *statementAndVarList) {
-    ResultItem assignVarPair = tuple<string, string>(retrieveLHSVar(assignNode), retrieveStmtNo(assignNode));
+    ResultItem assignVarPair = tuple<string, string>(retrieveStmtNo(assignNode), retrieveLHSVar(assignNode));
     statementAndVarList->push_back(assignVarPair);
 }
 
