@@ -45,6 +45,6 @@ std::string const PATTERN_CL = "pattern[ ]+" + SYNONYM + "[ ]*\\([ ]*" + ENT_REF
 std::string const PATTERN_MATCH = "(.)*" + PATTERN_CL + "(.)*";
 
 
-std::string const SELECT_CL = "[ |\n]*Select[ ]+" + SYNONYM + "([ ]+" + SUCH_THAT_CL + "|[ ]+" + PATTERN_CL + ")*";
+std::string const SELECT_CL = "[ |\n]*Select[ ]+" + SYNONYM + "([ ]+" + SUCH_THAT_CL + "|[ ]+" + PATTERN_CL + "[ ]*)*";
 std::string const DECLARATION_REGEX = "([ |\n]*" + DECLARATION+ ")+";
 std::string const PQL_FORMAT = DECLARATION_REGEX + "[ |\n]+" + SELECT_CL;

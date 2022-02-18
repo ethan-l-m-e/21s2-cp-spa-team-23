@@ -815,6 +815,35 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH INTEGER AS SYN-ASSIGN") {
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
+// Check valid queries for multi-clauses
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MULTI CLAUSES") {
+    std::string query = "assign a; stmt s; Select a pattern a(_, _) such that Follows(3, 2)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MULTI CLAUSES SUCH THAT CLAUSE FIRST THEN PATTERN") {
+    std::string query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a(_, _) ";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SUCH THAT PATTERN INSTEAD OF RELATIONSHIP") {
+    std::string query = "assign a; stmt s; Select a such that pattern a(_, _) ";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NO SUCH THAT WITH RELATIONSHIP") {
+    std::string query = "assign a; stmt s; Select a Follows(3, 2)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
 // TODO: Edit below
 
 TEST_CASE ("VALIDATION") {
