@@ -42,6 +42,9 @@ void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
 }
 
 void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
+    if (queryToken.suchThatClauseTokens == NULL) {
+        return;
+    }
     std::vector<SuchThatClauseToken> suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
     std::vector<SuchThatClause> suchThatClauses = std::vector<SuchThatClause>();
 
@@ -117,6 +120,9 @@ ArgumentType QueryParser::getArgumentType(std::string argumentString, std::strin
 }
 
 void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
+    if (queryToken.patternTokens == NULL) {
+        return;
+    }
     std::vector<PatternToken> patternTokens = *(queryToken.patternTokens);
     std::vector<PatternClause> patternClauses = std::vector<PatternClause>();
 

@@ -18,7 +18,7 @@ std::string const DECLARATION = DESIGN_ENTITY + "[ ]+" + SYNONYM + "(,[ ]*" + SY
 
 // Relationships
 std::string const REF = "(" + SYNONYM + "|_|" + INTEGER + "|\"" + IDENT + "\"" + ")";
-std::string const REL_REF = "(Follows|Follows*|Parent|Parent*|Uses|Modifies)";
+std::string const REL_REF = "(Follows|Follows\\*|Parent|Parent\\*|Uses|Modifies)";
 std::string const RELATIONSHIP = REL_REF + "\\([ ]*" + REF + "[ ]*,[ ]*" + REF + "[ ]*\\)";
 std::string const RELATIONSHIP_MATCH = "(.)*" + RELATIONSHIP + "(.)*";
 
@@ -41,10 +41,10 @@ std::string const SUCH_THAT_CL = "such[ ]+that[ ]+(" + FOLLOWS + "|" + FOLLOWS_T
 // pattern regex
 std::string const EXPRESSION_SPEC = "(_|_\"(.)*\"_|\"(.)*\")";
 std::string const PATTERN_CL = "pattern[ ]+" + SYNONYM + "[ ]*\\([ ]*" + ENT_REF + "[ ]*,[ ]*"
-        + EXPRESSION_SPEC + "\\)";
+        + EXPRESSION_SPEC + "[ ]*\\)";
 std::string const PATTERN_MATCH = "(.)*" + PATTERN_CL + "(.)*";
 
 
-std::string const SELECT_CL = "[ |\n]*Select[ ]+" + SYNONYM + "([ ]+" + SUCH_THAT_CL + "|[ ]+" + PATTERN_CL + ")*";
+std::string const SELECT_CL = "[ |\n]*Select[ ]+" + SYNONYM + "([ ]+" + SUCH_THAT_CL + "|[ ]+" + PATTERN_CL + "[ ]*)*";
 std::string const DECLARATION_REGEX = "([ |\n]*" + DECLARATION+ ")+";
 std::string const PQL_FORMAT = DECLARATION_REGEX + "[ |\n]+" + SELECT_CL;

@@ -24,7 +24,7 @@ Result SuchThatClauseEvaluator::evaluateClause(){
     return result;
 }
 
-ClauseSynonymType SuchThatClauseEvaluator::getClauseSynonymType() {
+ClauseSynonymType SuchThatClauseEvaluator::getClauseSynonymType() const {
     if (argLeft.argumentType == ArgumentType::SYNONYM){
         if (argRight.argumentType == ArgumentType::SYNONYM) {
             return ClauseSynonymType::SYNONYM_BOTH;
@@ -40,17 +40,20 @@ ClauseSynonymType SuchThatClauseEvaluator::getClauseSynonymType() {
 
 void SuchThatClauseEvaluator::evaluateNoSynonym() {
 
+    unordered_set<std::string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
+    unordered_set<std::string> rightSet = generateValueSet(argRight, std::get<1>(getWildcardType()));
+
     result = {
             .resultType = ResultType::BOOLEAN,
-            .resultBoolean = isRelation(argLeft.argumentValue, argRight.argumentValue)};
+            .resultBoolean = validateRelation(leftSet, rightSet)};
 }
+
 void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
     DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
     DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
     unordered_set<std::string> leftSet = getAllType(entityLeft);
     unordered_set<std::string> rightSet = getAllType(entityRight);
     vector<ResultItem> resultItemList = generateTuples(leftSet, rightSet);
-
     result = {
             .resultType = ResultType::TUPLES,
             .resultBoolean = !resultItemList.empty(),
@@ -60,12 +63,7 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
 }
 void SuchThatClauseEvaluator::evaluateLeftSynonym() {
     DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
-    unordered_set<std::string> rightSet;
-    if(argRight.argumentType == ArgumentType::UNDERSCORE) {
-        rightSet = getAllType(std::get<1>(getWildcardType()));
-    } else {
-        rightSet = {argRight.argumentValue};
-    }
+    unordered_set<std::string> rightSet = generateValueSet(argRight, std::get<1>(getWildcardType()));
     unordered_set<std::string> resultSet = generateLeftSet(rightSet);
     filterByType(resultSet, entityLeft);
     bool isEmpty = resultSet.empty();
@@ -77,13 +75,7 @@ void SuchThatClauseEvaluator::evaluateLeftSynonym() {
 
 void SuchThatClauseEvaluator::evaluateRightSynonym() {
     DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
-    unordered_set<std::string> leftSet;
-    if(argLeft.argumentType == ArgumentType::UNDERSCORE) {
-        leftSet = getAllType(std::get<0>(getWildcardType()));
-    } else {
-        leftSet = {argLeft.argumentValue};
-    }
-
+    unordered_set<std::string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
     unordered_set<std::string> resultSet = generateRightSet(leftSet);
     filterByType(resultSet, entityRight);
     bool isEmpty = resultSet.empty();
@@ -106,13 +98,13 @@ std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<st
     return tuples;
 };
 
-std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_set<std::string> set) {
-    std::vector<ResultItem> vector {};
-    vector.reserve(set.size());
-    for (auto it = set.begin(); it != set.end(); ) {
-        vector.emplace_back(std::move(set.extract(it++).value()));
+bool SuchThatClauseEvaluator::validateRelation(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
+    for (const auto & left : leftSet) {
+        for (const auto & right : rightSet) {
+            if (isRelation(left, right)) return true;
+        }
     }
-    return vector;
+    return false;
 };
 
 unordered_set<std::string> SuchThatClauseEvaluator::generateLeftSet (unordered_set<std::string>& rightSet) {
@@ -146,11 +138,10 @@ void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, Des
 }
 
 
-bool SuchThatClauseEvaluator::isEntityType (std::string ident, DesignEntity entityType) {
+bool SuchThatClauseEvaluator::isEntityType (const std::string& ident, DesignEntity entityType) {
     switch (entityType) {
         case DesignEntity::STMT:
-            //TODO: update stmt check
-            return true;
+            return pkb->isStatement(ident);
         case DesignEntity::VARIABLE:
             return pkb->isVariable(ident);
         case DesignEntity::CONSTANT:
@@ -175,6 +166,23 @@ bool SuchThatClauseEvaluator::isEntityType (std::string ident, DesignEntity enti
             return false;
     }
 }
+
+unordered_set<string> SuchThatClauseEvaluator::generateValueSet(Argument& argument, DesignEntity wildCardType) {
+    if(argument.argumentType == ArgumentType::UNDERSCORE) {
+        return getAllType(wildCardType);
+    } else {
+        return {argument.argumentValue};
+    }
+}
+
+std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_set<std::string> set) {
+    std::vector<ResultItem> vector {};
+    vector.reserve(set.size());
+    for (auto it = set.begin(); it != set.end(); ) {
+        vector.emplace_back(std::move(set.extract(it++).value()));
+    }
+    return vector;
+};
 
 
 

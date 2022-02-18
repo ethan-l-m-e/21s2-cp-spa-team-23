@@ -3,7 +3,7 @@
 //
 #include <iostream>
 
-#include "Parser.h"
+#include "SourceProcessor/Parser.h"
 #include "catch.hpp"
 using namespace std;
 

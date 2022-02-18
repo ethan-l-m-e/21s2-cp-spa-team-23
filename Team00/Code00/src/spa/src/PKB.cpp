@@ -49,14 +49,14 @@ void PKB::clearPKB() {
     followeeToFollowerMap.clear();
     followerToFolloweeMap.clear();
 
-    tFolloweeToFollowerMap.clear();
-    tFollowerToFolloweeMap.clear();
+    tFolloweeToFollowersMap.clear();
+    tFollowerToFolloweesMap.clear();
 
     parentToChildrenMap.clear();
     childToParentMap.clear();
 
     tParentToChildrenMap.clear();
-    tChildToParentMap.clear();
+    tChildToParentsMap.clear();
 
     statementToVariablesUsedMap.clear();
     variableUsedToStatementMap.clear();
@@ -128,7 +128,7 @@ bool PKB::isProcedure(string procedure) {
     return proceduresSet.find(procedure) != proceduresSet.end();
 }
 bool PKB::isConstant(string constant) {
-    return proceduresSet.find(constant) != proceduresSet.end();
+    return constantsSet.find(constant) != constantsSet.end();
 }
 
 unordered_set<string> PKB::getAllStatements() {
@@ -271,24 +271,24 @@ unordered_set<string> PKB::getFollowee(string follower) {
 
 void PKB::setFollowsT(int followee, int follower) {
 
-    if (tFolloweeToFollowerMap.find(followee) == tFolloweeToFollowerMap.end()) {
-        tFolloweeToFollowerMap.emplace(followee, unordered_set<int>{follower});
+    if (tFolloweeToFollowersMap.find(followee) == tFolloweeToFollowersMap.end()) {
+        tFolloweeToFollowersMap.emplace(followee, unordered_set<int>{follower});
     } else {
-        tFolloweeToFollowerMap[followee].insert(follower);
+        tFolloweeToFollowersMap[followee].insert(follower);
     }
 
-    if (tFollowerToFolloweeMap.find(follower) == tFollowerToFolloweeMap.end()) {
-        tFollowerToFolloweeMap.emplace(follower, unordered_set<int>{followee});
+    if (tFollowerToFolloweesMap.find(follower) == tFollowerToFolloweesMap.end()) {
+        tFollowerToFolloweesMap.emplace(follower, unordered_set<int>{followee});
     } else {
-        tFollowerToFolloweeMap[follower].insert(followee);
+        tFollowerToFolloweesMap[follower].insert(followee);
     }
 }
 
 // Getter Functions (FollowsT Relationship)
 
 bool PKB::isFollowsT(int followee, int follower) {
-    if (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) {
-        return tFolloweeToFollowerMap[followee].find(follower) != tFolloweeToFollowerMap[followee].end();
+    if (tFolloweeToFollowersMap.find(followee) != tFolloweeToFollowersMap.end()) {
+        return tFolloweeToFollowersMap[followee].find(follower) != tFolloweeToFollowersMap[followee].end();
     } else {
         return false;
     }
@@ -301,7 +301,7 @@ unordered_set<int> PKB::getFollowerT(int followee) {
 
     unordered_set<int> emptySet;
 
-    return (tFolloweeToFollowerMap.find(followee) != tFolloweeToFollowerMap.end()) ? tFolloweeToFollowerMap[followee] : emptySet;
+    return (tFolloweeToFollowersMap.find(followee) != tFolloweeToFollowersMap.end()) ? tFolloweeToFollowersMap[followee] : emptySet;
 }
 unordered_set<string> PKB::getFollowerT(string followee) {
     return convertSetIntegersToSetStrings(getFollowerT(std::stoi(followee)));
@@ -311,7 +311,7 @@ unordered_set<int> PKB::getFolloweeT(int follower) {
 
     unordered_set<int> emptySet;
 
-    return (tFollowerToFolloweeMap.find(follower) != tFollowerToFolloweeMap.end()) ? tFollowerToFolloweeMap[follower] : emptySet;
+    return (tFollowerToFolloweesMap.find(follower) != tFollowerToFolloweesMap.end()) ? tFollowerToFolloweesMap[follower] : emptySet;
 }
 unordered_set<string> PKB::getFolloweeT(string follower) {
     return convertSetIntegersToSetStrings(getFolloweeT(std::stoi(follower)));
@@ -376,24 +376,24 @@ void PKB::setParentT(int parent, int child) {
         tParentToChildrenMap[parent].insert(child);
     }
 
-    if (tChildToParentMap.find(child) == tChildToParentMap.end()) {
-        tChildToParentMap.emplace(child, unordered_set<int>{parent});
+    if (tChildToParentsMap.find(child) == tChildToParentsMap.end()) {
+        tChildToParentsMap.emplace(child, unordered_set<int>{parent});
     } else {
-        tChildToParentMap[child].insert(parent);
+        tChildToParentsMap[child].insert(parent);
     }
 }
 
 // Getter Functions (ParentT Relationship)
 
 bool PKB::isParentT(int parent, int child) {
-    if (tChildToParentMap.find(child) != tChildToParentMap.end()) {
-        return tChildToParentMap[child].find(parent) != tChildToParentMap[child].end();
+    if (tChildToParentsMap.find(child) != tChildToParentsMap.end()) {
+        return tChildToParentsMap[child].find(parent) != tChildToParentsMap[child].end();
     } else {
         return false;
     }
 }
 bool PKB::isParentT(string parent, string child) {
-    return isParent(std::stoi(parent), std::stoi(child));
+    return isParentT(std::stoi(parent), std::stoi(child));
 }
 
 unordered_set<int> PKB::getChildrenT(int parent) {
@@ -411,7 +411,7 @@ unordered_set<int> PKB::getParentT(int child) {
 
     unordered_set<int> emptySet;
 
-    return (tChildToParentMap.find(child) != tChildToParentMap.end()) ? tChildToParentMap[child] : emptySet;
+    return (tChildToParentsMap.find(child) != tChildToParentsMap.end()) ? tChildToParentsMap[child] : emptySet;
 }
 unordered_set<string> PKB::getParentT(string child) {
     return convertSetIntegersToSetStrings(getParentT(std::stoi(child)));
@@ -510,3 +510,5 @@ unordered_set<string> PKB::getModifierStatements(string variable) {
 
     return convertSetIntegersToSetStrings(statementsSet);
 }
+
+
