@@ -335,6 +335,386 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: NO SELECT CLAUSE") {
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
+// Valid Queries for Such That Clauses
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows(_, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows(5, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows(3, s)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows(s, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS CLAUSE WITH INTEGER SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS* CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows*(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS* CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows*(_, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS* CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows*(5, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS* CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows*(3, s)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS* CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows*(s, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: FOLLOWS* CLAUSE WITH INTEGER SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Follows*(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent(_, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent(5, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent(3, s)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent(s, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT CLAUSE WITH INTEGER SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT* CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent*(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT* CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent*(_, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT* CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent*(5, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT* CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent*(3, s)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT* CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent*(s, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: PARENT* CLAUSE WITH INTEGER SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Parent*(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Uses(s, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Uses(_, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Uses(5, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE WITH IDENT FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Uses(\"x\", v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Uses(s, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Uses(v, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE WITH IDENT SECOND ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Uses(v, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Modifies(s, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Modifies(_, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Modifies(5, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH IDENT FIRST ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Modifies(\"x\", v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Modifies(s, v)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Modifies(v, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH IDENT SECOND ARGUMENT") {
+    std::string query = "stmt s; variable v; Select s such that Modifies(v, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+// Invalid Queries for Such That Clauses
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NO SPACE FOR SUCH THAT") {
+    std::string query = "stmt s; variable v; Select s suchthat Modifies(v, _)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MISSPELLED SUCH THAT") {
+    std::string query = "stmt s; variable v; Select s such tht Modifies(v, _)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MISSPELLED MODIFIES CLAUSE") {
+    std::string query = "stmt s; variable v; Select s such tht Modifie(v, _)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT CAPS FOR MODIFIES CLAUSE") {
+    std::string query = "stmt s; variable v; Select s such tht modifies(v, _)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT FIRST ARGUMENT FOR FOLLOWS") {
+    std::string query = "stmt s; variable v; Select s such tht Follows(\"x\", 3)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT SECOND ARGUMENT FOR FOLLOWS") {
+    std::string query = "stmt s; variable v; Select s such tht Follows(2, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT FIRST ARGUMENT FOR FOLLOWS*") {
+    std::string query = "stmt s; variable v; Select s such tht Follows*(\"x\", 3)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT SECOND ARGUMENT FOR FOLLOWS*") {
+    std::string query = "stmt s; variable v; Select s such tht Follows*(2, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT FIRST ARGUMENT FOR PARENT") {
+    std::string query = "stmt s; variable v; Select s such tht Parent(\"x\", 3)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT SECOND ARGUMENT FOR PARENT") {
+    std::string query = "stmt s; variable v; Select s such tht Parent(2, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT FIRST ARGUMENT FOR PARENT*") {
+    std::string query = "stmt s; variable v; Select s such tht Parent*(\"x\", 3)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT IDENT SECOND ARGUMENT FOR PARENT*") {
+    std::string query = "stmt s; variable v; Select s such tht Parent*(2, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT INTEGER FIRST ARGUMENT FOR USES") {
+    std::string query = "stmt s; variable v; Select v such tht Uses(3, v)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT INTEGER SECOND ARGUMENT FOR USES") {
+    std::string query = "stmt s; variable v; Select v such tht Uses(v, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT INTEGER FIRST ARGUMENT FOR MODIFIES") {
+    std::string query = "stmt s; variable v; Select v such tht Modifies(3, v)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT INTEGER SECOND ARGUMENT FOR MODIFIES") {
+    std::string query = "stmt s; variable v; Select v such tht Modifies(v, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
 // TODO: Edit below
 
 TEST_CASE ("VALIDATION") {
