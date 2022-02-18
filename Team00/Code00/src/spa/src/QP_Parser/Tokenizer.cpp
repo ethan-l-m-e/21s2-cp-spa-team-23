@@ -59,8 +59,9 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
 }
 
 void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
-    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, "[ |\n]*(Select[ ]+|[ ]+|(.*;))");
-    queryToken.selectClauseToken = tokens[0];
+    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, "(.*);[ |\n]*(Select[ ]+|[ ]+|(.*;))");
+    std::string synonym = tokens[0].substr(0, tokens[0].find(" "));
+    queryToken.selectClauseToken = synonym;
 }
 
 void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
@@ -84,6 +85,9 @@ void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) 
     std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
     if (backClauses[0] == pql) {
         return;
+    } else if (queryToken.selectClauseToken == "pattern") {
+        backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+" + SYNONYM + "[ ]*\\(");
+        backClauses[0] = "pattern (" + backClauses[0];
     }
 
     std::vector<std::string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");

@@ -461,6 +461,28 @@ TEST_CASE ("QP TOKENIZER: DECLARATION NAMED SELECT") {
     CHECK(designEntities == expectedDesignEntities);
 }
 
+TEST_CASE ("QP TOKENIZER: DECLARATION NAMED SELECT AND SELECT SYNONYM IS ALSO SELECT") {
+    std::string firstQuery = "stmt Select; \nSelect Select";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check declarations
+    std::map<std::string, std::string> expectedDeclarationTokens({{"Select", "stmt"}});
+    std::vector<std::string> expectedDeclarationNames({"Select"});
+    std::vector<std::string> expectedDesignEntities({"stmt"});
+
+    auto declarationTokens = *(queryToken.declarationTokens);
+    auto declarations = *(queryToken.declarations);
+    auto declarationNames = declarations.first;
+    auto designEntities = declarations.second;
+    std::string synonym = queryToken.selectClauseToken;
+
+    CHECK(declarationTokens == expectedDeclarationTokens);
+    CHECK(declarationNames == expectedDeclarationNames);
+    CHECK(designEntities == expectedDesignEntities);
+    CHECK(synonym == "Select");
+}
+
 TEST_CASE ("QP TOKENIZER: DECLARATION NAMED SELECT WITH NO NEWLINE") {
     std::string firstQuery = "stmt Select; Select s";
     Tokenizer tokenizer = Tokenizer();
@@ -524,6 +546,7 @@ TEST_CASE ("QP TOKENIZER: FOLLOWS* SUCH THAT CLAUSE") {
 
     CHECK(suchThatClauseToken.relRef == "Follows*");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
+    CHECK(queryToken.selectClauseToken == "s");
 }
 
 TEST_CASE ("QP TOKENIZER: PARENT SUCH THAT CLAUSE") {
@@ -608,6 +631,130 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM AND WILDCARD AS
 
     CHECK(suchThatClauseToken.relRef == "Modifies");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN") {
+    std::string firstQuery = "assign a; \nSelect a pattern a(_, _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check declarations
+    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"}});
+    std::vector<std::string> expectedDeclarationNames({"a"});
+    std::vector<std::string> expectedDesignEntities({"assign"});
+
+    auto declarationTokens = *(queryToken.declarationTokens);
+    auto declarations = *(queryToken.declarations);
+    auto declarationNames = declarations.first;
+    auto designEntities = declarations.second;
+
+    CHECK(declarationTokens == expectedDeclarationTokens);
+    CHECK(declarationNames == expectedDeclarationNames);
+    CHECK(designEntities == expectedDesignEntities);
+
+    // Check Synonym
+    std::string expectedSynonym = "a";
+    auto synonym = queryToken.selectClauseToken;
+
+    CHECK(synonym == expectedSynonym);
+
+    // Check Such That Clauses
+    std::vector<SuchThatClauseToken>* expectedSuchThatClauseTokens = nullptr;
+    auto suchThatClauseTokens = queryToken.suchThatClauseTokens;
+
+    CHECK(suchThatClauseTokens == expectedSuchThatClauseTokens);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("_", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "a");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN WITH SYNONYM ARGUMENT") {
+    std::string firstQuery = "assign a; variable v; \nSelect a pattern a(v, _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("v", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "a");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN WITH IDENT ARGUMENT") {
+    std::string firstQuery = "assign a; variable v; \nSelect a pattern a(\"x\", _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("\"x\"", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "a");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN WITH DOUBLE CHAR SYN-ASSIGN") {
+    std::string firstQuery = "assign as; variable v; \nSelect as pattern as (\"x\", _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("\"x\"", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "as");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN WITH DOUBLE CHAR AND INT SYN-ASSIGN") {
+    std::string firstQuery = "assign as1; variable v; \nSelect as1 pattern as1 (\"x\", _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("\"x\"", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "as1");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN WITH SELECT AS SYN-ASSIGN") {
+    std::string firstQuery = "assign Select; variable v; \nSelect Select pattern Select (\"x\", _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("\"x\"", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "Select");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYN-ASSIGN") {
+    std::string firstQuery = "assign pattern; variable v; \nSelect pattern pattern pattern (\"x\", _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("\"x\"", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "pattern");
+    CHECK(*(patternToken.arguments) == expectedArguments);
 }
 
 
