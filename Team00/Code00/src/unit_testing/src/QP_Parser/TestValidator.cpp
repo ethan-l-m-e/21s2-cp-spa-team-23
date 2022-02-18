@@ -938,7 +938,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as first argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -949,7 +949,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("_", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -959,7 +959,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("s", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -969,7 +969,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("r", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -979,7 +979,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("pn", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -989,7 +989,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("a", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -999,7 +999,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("c", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1009,7 +1009,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("w", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1019,7 +1019,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("ifs", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1029,7 +1029,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("v", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1039,7 +1039,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("con", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1049,8 +1049,18 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("p", "2");
+    suchThatClauseToken.relRef = "Follows";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // Ident as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("\"x\"", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1082,7 +1092,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as second argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1093,7 +1103,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "_");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1103,7 +1113,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "s");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1113,7 +1123,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "r");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1123,7 +1133,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "pn");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1133,7 +1143,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "a");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1143,7 +1153,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "c");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1153,7 +1163,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "w");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1163,7 +1173,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "ifs");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1173,7 +1183,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "v");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1183,7 +1193,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "con");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
@@ -1193,8 +1203,18 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "p");
+    suchThatClauseToken.relRef = "Follows";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // ident as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("3", "\"x\"");
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1226,7 +1246,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as first argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1237,7 +1257,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("_", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1247,7 +1267,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("s", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1257,7 +1277,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("r", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1267,7 +1287,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("pn", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1277,7 +1297,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("a", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1287,7 +1307,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("c", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1297,7 +1317,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("w", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1307,7 +1327,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("ifs", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1317,7 +1337,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("v", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1327,7 +1347,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("con", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1337,8 +1357,18 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("p", "2");
+    suchThatClauseToken.relRef = "Follows*";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // ident as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("\"x\"", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1370,7 +1400,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as second argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1381,7 +1411,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "_");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1391,7 +1421,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "s");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1401,7 +1431,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "r");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1411,7 +1441,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "pn");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1421,7 +1451,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "a");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1431,7 +1461,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "c");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1441,7 +1471,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "w");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1451,7 +1481,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "ifs");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1461,7 +1491,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "v");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1471,7 +1501,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "con");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
@@ -1481,8 +1511,18 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "p");
+    suchThatClauseToken.relRef = "Follows*";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // ident as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("3", "\"x\"");
     suchThatClauseToken.relRef = "Follows*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1514,7 +1554,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as first argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1525,7 +1565,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("_", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1535,7 +1575,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("s", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1545,7 +1585,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("r", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1555,7 +1595,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("pn", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1565,7 +1605,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("a", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1575,7 +1615,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("c", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1585,7 +1625,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("w", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1595,7 +1635,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("ifs", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1605,7 +1645,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("v", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1615,7 +1655,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("con", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1625,8 +1665,18 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("p", "2");
+    suchThatClauseToken.relRef = "Parent";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // ident as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("\"x\"", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1669,7 +1719,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "_");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1679,7 +1729,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "s");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1689,7 +1739,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "r");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1699,7 +1749,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "pn");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1709,7 +1759,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "a");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1719,7 +1769,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "c");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1729,7 +1779,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "w");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1739,7 +1789,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "ifs");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1749,7 +1799,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "v");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1759,7 +1809,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "con");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
@@ -1769,8 +1819,18 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "p");
+    suchThatClauseToken.relRef = "Parent";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // ident as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("3", "\"x\"");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1802,7 +1862,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as first argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1813,7 +1873,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("_", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1823,7 +1883,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("s", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1833,7 +1893,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("r", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1843,7 +1903,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("pn", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1853,7 +1913,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("a", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1863,7 +1923,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("c", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1873,7 +1933,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("w", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1883,7 +1943,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("ifs", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1893,7 +1953,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("v", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1903,7 +1963,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("con", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1913,8 +1973,18 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as first argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("p", "2");
+    suchThatClauseToken.relRef = "Parent*";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // ident as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("\"x\"", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1946,7 +2016,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as second argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1957,7 +2027,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // Wildcard as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "_");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1967,7 +2037,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // stmt synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "s");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1977,7 +2047,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "r");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1987,7 +2057,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "pn");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -1997,7 +2067,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // assign synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "a");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -2007,7 +2077,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // call synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "c");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -2017,7 +2087,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "w");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -2027,7 +2097,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // while synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "ifs");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -2037,7 +2107,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // variable synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "v");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -2047,7 +2117,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // constant synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "con");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
@@ -2057,12 +2127,551 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // procedure synonym as second argument
-    suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    suchThatClauseToken = SuchThatClauseToken();
     arguments = std::make_pair("3", "p");
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
     queryToken.suchThatClauseTokens = &suchThatClauseTokens;
 
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // ident as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("3", "\"x\"");
+    suchThatClauseToken.relRef = "Parent*";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+}
+
+TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
+    Validator validator = Validator();
+    auto declarationTokens = new std::map<std::string, std::string>({
+                                                                            {"s",   "stmt"},
+                                                                            {"r",   "read"},
+                                                                            {"pn",  "print"},
+                                                                            {"a",   "assign"},
+                                                                            {"c",   "call"},
+                                                                            {"w",   "while"},
+                                                                            {"ifs", "if"},
+                                                                            {"v",   "variable"},
+                                                                            {"con", "constant"},
+                                                                            {"p",   "procedure"}});
+    auto declarationNames = std::vector<std::string>({"s", "r", "pn", "a", "c", "w", "ifs", "v", "con", "p"});
+    auto designEntities = std::vector<std::string>({"stmt", "read", "assign", "call", "while", "if", "variable",
+                                                    "constant", "procedure"});
+    auto declarations = std::make_pair(declarationNames, designEntities);
+
+    QueryToken queryToken = QueryToken();
+    queryToken.declarations = &declarations;
+    queryToken.declarationTokens = declarationTokens;
+    queryToken.selectClauseToken = "s";
+
+    // IDENT as first argument
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
+    std::pair<std::string, std::string> arguments = std::make_pair("\"x\"", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // assign synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // print synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("pn", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // if synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("ifs", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // while synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("w", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // procedure synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("p", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // call synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("c", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // stmt synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("s", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // read synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("r", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // variable synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("v", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // constant synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("con", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // wildcard as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("_", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+}
+
+TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
+    Validator validator = Validator();
+    auto declarationTokens = new std::map<std::string, std::string>({
+                                                                            {"s",   "stmt"},
+                                                                            {"r",   "read"},
+                                                                            {"pn",  "print"},
+                                                                            {"a",   "assign"},
+                                                                            {"c",   "call"},
+                                                                            {"w",   "while"},
+                                                                            {"ifs", "if"},
+                                                                            {"v",   "variable"},
+                                                                            {"con", "constant"},
+                                                                            {"p",   "procedure"}});
+    auto declarationNames = std::vector<std::string>({"s", "r", "pn", "a", "c", "w", "ifs", "v", "con", "p"});
+    auto designEntities = std::vector<std::string>({"stmt", "read", "assign", "call", "while", "if", "variable",
+                                                    "constant", "procedure"});
+    auto declarations = std::make_pair(declarationNames, designEntities);
+
+    QueryToken queryToken = QueryToken();
+    queryToken.declarations = &declarations;
+    queryToken.declarationTokens = declarationTokens;
+    queryToken.selectClauseToken = "s";
+
+    // variable synonym as second argument
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
+    std::pair<std::string, std::string> arguments = std::make_pair("a", "v");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // ident as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "\"x\"");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // wildcard as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "_");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // assign synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "a");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // print synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "pn");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // if synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "ifs");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // while synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "w");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // procedure synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "p");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // call synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "c");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // stmt synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "s");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // read synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "r");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // constant synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "con");
+    suchThatClauseToken.relRef = "Uses";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+}
+
+TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
+    Validator validator = Validator();
+    auto declarationTokens = new std::map<std::string, std::string>({
+                                                                            {"s",   "stmt"},
+                                                                            {"r",   "read"},
+                                                                            {"pn",  "print"},
+                                                                            {"a",   "assign"},
+                                                                            {"c",   "call"},
+                                                                            {"w",   "while"},
+                                                                            {"ifs", "if"},
+                                                                            {"v",   "variable"},
+                                                                            {"con", "constant"},
+                                                                            {"p",   "procedure"}});
+    auto declarationNames = std::vector<std::string>({"s", "r", "pn", "a", "c", "w", "ifs", "v", "con", "p"});
+    auto designEntities = std::vector<std::string>({"stmt", "read", "assign", "call", "while", "if", "variable",
+                                                    "constant", "procedure"});
+    auto declarations = std::make_pair(declarationNames, designEntities);
+
+    QueryToken queryToken = QueryToken();
+    queryToken.declarations = &declarations;
+    queryToken.declarationTokens = declarationTokens;
+    queryToken.selectClauseToken = "s";
+
+    // IDENT as first argument
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
+    std::pair<std::string, std::string> arguments = std::make_pair("\"x\"", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // assign synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // read synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("r", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // if synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("ifs", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // while synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("w", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // procedure synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("p", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // call synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("c", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // stmt synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("s", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // print synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("pn", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // variable synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("v", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // constant synonym as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("con", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // wildcard as first argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("_", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+}
+
+TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
+    Validator validator = Validator();
+    auto declarationTokens = new std::map<std::string, std::string>({
+                                                                            {"s",   "stmt"},
+                                                                            {"r",   "read"},
+                                                                            {"pn",  "print"},
+                                                                            {"a",   "assign"},
+                                                                            {"c",   "call"},
+                                                                            {"w",   "while"},
+                                                                            {"ifs", "if"},
+                                                                            {"v",   "variable"},
+                                                                            {"con", "constant"},
+                                                                            {"p",   "procedure"}});
+    auto declarationNames = std::vector<std::string>({"s", "r", "pn", "a", "c", "w", "ifs", "v", "con", "p"});
+    auto designEntities = std::vector<std::string>({"stmt", "read", "assign", "call", "while", "if", "variable",
+                                                    "constant", "procedure"});
+    auto declarations = std::make_pair(declarationNames, designEntities);
+
+    QueryToken queryToken = QueryToken();
+    queryToken.declarations = &declarations;
+    queryToken.declarationTokens = declarationTokens;
+    queryToken.selectClauseToken = "s";
+
+    // variable synonym as second argument
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
+    std::pair<std::string, std::string> arguments = std::make_pair("a", "v");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    validator.checkForSemantics(queryToken);
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // ident as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "\"x\"");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // wildcard as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "_");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // assign synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "a");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // print synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "pn");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // if synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "ifs");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // while synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "w");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // procedure synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "p");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // call synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "c");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // stmt synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "s");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // read synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "r");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // constant synonym as second argument
+    suchThatClauseToken = SuchThatClauseToken();
+    arguments = std::make_pair("a", "con");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 }

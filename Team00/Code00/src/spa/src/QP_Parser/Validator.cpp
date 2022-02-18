@@ -65,7 +65,7 @@ void Validator::validateSuchThatClauses(std::map<std::string, std::string> decla
         } else {
             std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
             checkFirstArgForOtherClauses(suchThatClauseToken.arguments->first, argSet, declarationTokens);
-            checkSecondArgForOtherClauses(suchThatClauseToken.arguments->first, declarationTokens);
+            checkSecondArgForOtherClauses(suchThatClauseToken.arguments->second, declarationTokens);
         }
     }
 }
