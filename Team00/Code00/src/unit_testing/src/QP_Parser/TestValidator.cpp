@@ -277,6 +277,63 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT COMMA USAGE - 2") {
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
+// Valid Syntactic Queries for Select Clause
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE") {
+    std::string query = "variable v; \n Select v";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH SYNONYM HAVING AN INT") {
+    std::string query = "variable v; \n Select v2";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH MULTI CHAR SYNONYM") {
+    std::string query = "variable v; \n Select var";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH SELECT AS SYNONYM") {
+    std::string query = "variable v; \n Select Select";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+// Invalid queries for select clause
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH INT AS SYNONYM") {
+    std::string query = "variable v; \n Select 123";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: LOWER CASE SELECT CLAUSE") {
+    std::string query = "variable v; \n select v1";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: MISSPELLED SELECT CLAUSE") {
+    std::string query = "variable v; \n Selec v1";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NO SELECT CLAUSE") {
+    std::string query = "variable v;";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
 
 // TODO: Edit below
 
