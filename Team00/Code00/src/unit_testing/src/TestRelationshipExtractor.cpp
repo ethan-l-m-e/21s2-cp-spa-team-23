@@ -2,7 +2,7 @@
 // Created by Tin Hong Wen on 5/2/22.
 //
 #include "iostream"
-#include "RelationshipExtractor.h"
+#include "SourceProcessor/RelationshipExtractor.h"
 #include "TNode.h"
 #include "catch.hpp"
 #include "PKB.h"

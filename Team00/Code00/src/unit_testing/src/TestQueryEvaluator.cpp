@@ -6,7 +6,7 @@
 
 #include <utility>
 #include "catch.hpp"
-#include "Parser.h"
+#include "SourceProcessor/Parser.h"
 
 using namespace std;
 using ArgList = std::vector<Argument>;

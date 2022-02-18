@@ -5,7 +5,7 @@
 #include "PatternClauseEvaluator.h"
 #include "TNode.h"
 #include "StringFormatter.h"
-#include "Parser.h"
+#include "SourceProcessor/Parser.h"
 
 #include <iostream>
 

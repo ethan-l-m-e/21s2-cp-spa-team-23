@@ -18,7 +18,6 @@ using namespace std;
 //#include "RelationshipExtractor.h"
 #include "Extractor.h"
 #include "StringFormatter.h"
-#include "Partition.cpp"
 #include "SourceTokenizer.h"
 
 

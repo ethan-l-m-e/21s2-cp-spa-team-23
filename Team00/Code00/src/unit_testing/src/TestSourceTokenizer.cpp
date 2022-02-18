@@ -2,7 +2,7 @@
 // Created by Tin Hong Wen on 6/2/22.
 //
 
-#include "SourceTokenizer.h"
+#include "SourceProcessor/SourceTokenizer.h"
 
 #include "catch.hpp"
 

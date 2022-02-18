@@ -5,7 +5,7 @@
 #include "catch.hpp"
 #include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
 #include "TNode.h"
-#include "Parser.h"
+#include "SourceProcessor/Parser.h"
 #include <vector>
 
 using namespace std;

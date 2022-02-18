@@ -5,7 +5,6 @@
 #ifndef SPA_STRINGFORMATTER_H
 #define SPA_STRINGFORMATTER_H
 #include <string>
-#include <Partition.h>
 
 using namespace std;
 

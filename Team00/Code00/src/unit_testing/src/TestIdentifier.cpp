@@ -2,7 +2,7 @@
 // Created by Tin Hong Wen on 4/2/22.
 //
 
-#include "Identifier.h"
+#include "SourceProcessor/Identifier.h"
 #include "catch.hpp"
 #include "Constants/Constants.h"
 
