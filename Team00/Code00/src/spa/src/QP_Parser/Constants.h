@@ -23,17 +23,17 @@ std::string const RELATIONSHIP = REL_REF + "\\([( |\t)]*" + REF + "[( |\t)]*,[( 
 std::string const RELATIONSHIP_MATCH = "(.)*" + RELATIONSHIP + "(.)*";
 
 // TODO: Edit Later
-std::string const FOLLOWS = "Follows\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
-std::string const FOLLOWS_T = "Follows\\*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+std::string const FOLLOWS = "Follows[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+std::string const FOLLOWS_T = "Follows[( |\t)]*\\*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
 
-std::string const PARENT = "Parent\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
-std::string const PARENT_T = "Parent\\*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+std::string const PARENT = "Parent[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+std::string const PARENT_T = "Parent\\*[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
 
-std::string const USES_S = "Uses\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
-std::string const USES_P = "Uses\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
+std::string const USES_S = "Uses[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
+std::string const USES_P = "Uses[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
 
-std::string const MODIFIES_S = "Modifies\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
-std::string const MODIFIES_P = "Modifies\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
+std::string const MODIFIES_S = "Modifies[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
+std::string const MODIFIES_P = "Modifies[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
 
 std::string const SUCH_THAT_CL = "such[( |\t)]+that[( |\t)]+(" + FOLLOWS + "|" + FOLLOWS_T + "|" + PARENT + "|" + PARENT_T
                                  + "|" + USES_S + "|" + USES_P + "|" + MODIFIES_S + "|" + MODIFIES_P + ")";
@@ -45,10 +45,10 @@ std::string const PATTERN_CL = "pattern[( |\t)]+" + SYNONYM + "[( |\t)]*\\([( |\
 std::string const PATTERN_MATCH = "(.)*" + PATTERN_CL + "(.)*";
 
 
-std::string const SELECT_CL = "[( |\n|\t)]*Select[ ]+" + SYNONYM + "([( |\t)]+" + SUCH_THAT_CL + "|[( |\t)]+"
+std::string const SELECT_CL = "[( |\n|\t)]*Select[( |\n|\t)]+" + SYNONYM + "([( |\t)]+" + SUCH_THAT_CL + "|[( |\t)]+"
         + PATTERN_CL + "[( |\t)]*)*";
 std::string const DECLARATION_REGEX = "([( |\n|\t)]*" + DECLARATION+ ")+";
-std::string const PQL_FORMAT = DECLARATION_REGEX + "[( |\n|\t)]+" + SELECT_CL;
+std::string const PQL_FORMAT = DECLARATION_REGEX + "[( |\n|\t)]*" + SELECT_CL + "[( |\t|\n)]*";
 
 // regex needed for semantic validation
 std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*)";
