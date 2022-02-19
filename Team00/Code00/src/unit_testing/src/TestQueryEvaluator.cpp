@@ -134,34 +134,30 @@ TEST_CASE("Select query with no clauses") {
      * Select v
      * Type: select all variables
      */
-    list<string> result1 = qe.evaluate(&query_1);
-    REQUIRE(generateResultSet(result1) == ResultSet {"x", "y", "xylophone", "yeast", "z", "zealous"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"x", "y", "xylophone", "yeast", "z", "zealous"});
 
     /**
      * Select s
      * Type: select all statements
      */
-    list<string> result2 = qe.evaluate(&query_2);
-    REQUIRE(generateResultSet(result2) == ResultSet {"1", "2", "3", "4", "5", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1", "2", "3", "4", "5", "6"});
 
     /**
      * Select pn
      * Type: select all print
      */
-    list<string> result3 = qe.evaluate(&query_3);
-    REQUIRE(generateResultSet(result3) == ResultSet {"4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"4"});
 
     /**
      * Select a
      * Type: select all assign
      */
-    list<string> result4 = qe.evaluate(&query_4);
-    REQUIRE(generateResultSet(result4) == ResultSet {"2", "3", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"2", "3", "6"});
 
     /*
-    list<string> result5 = qe.evaluate(&query_5);
+    list<string> qe.evaluate(&query_5) = qe.evaluate(&query_5);
 
-    REQUIRE(generateResultSet(result5).empty());
+    REQUIRE(generateResultSet(qe.evaluate(&query_5)).empty());
     */
 
 }
@@ -206,54 +202,46 @@ TEST_CASE("Follows/Parent/Follows* clause: 0 or 1 synonym") {
          * Select s such that Follows(3, s)
          * Type: follows, select second arg
          */
-        list<string> result1 = qe.evaluate(&query_1);
-        REQUIRE(generateResultSet(result1) == ResultSet{"4"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet{"4"});
 
         /**
          * Select s such that Follows(s, 3)
          * Type: follows, select first arg
          */
-        list<string> result2 = qe.evaluate(&query_2);
-        REQUIRE(generateResultSet(result2) == ResultSet{"2"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet{"2"});
 
         /**
          * Select s such that Follows(_, s)
          * Type: follows, select second arg, wildcard
          */
-        list<string> result3 = qe.evaluate(&query_3);
-        REQUIRE(generateResultSet(result3) == ResultSet{"2", "3", "4", "5"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet{"2", "3", "4", "5"});
         /**
          * Select s such that Follows(_, _)
          * Type: follows, boolean, wildcard
          */
-        list<string> result4 = qe.evaluate(&query_4);
-        REQUIRE(generateResultSet(result4) == ResultSet{"1", "2", "3", "4", "5", "6"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet{"1", "2", "3", "4", "5", "6"});
 
         /**
          * Select s such that Parent(s, 6)
          * Type: parent, select first arg
          */
-        list<string> result5 = qe.evaluate(&query_5);
-        REQUIRE(generateResultSet(result5) == ResultSet{"5"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_5)) == ResultSet{"5"});
         /**
          * Select s such that Parent(5, s)
          * Type: parent, select second arg
          */
-        list<string> result6 = qe.evaluate(&query_6);
-        REQUIRE(generateResultSet(result6) == ResultSet{"6"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_6)) == ResultSet{"6"});
 
         /**
          * Select s such that Parent(s, _)
          * Type: parent, select first arg, wildcard
          */
-        list<string> result7 = qe.evaluate(&query_7);
-        REQUIRE(generateResultSet(result7) == ResultSet{"5"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_7)) == ResultSet{"5"});
         /**
          * Select s such that Parent(_, s)
          * Type: parent, select second arg, wildcard
          */
-        list<string> result8 = qe.evaluate(&query_8);
-        REQUIRE(generateResultSet(result8) == ResultSet{"6"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_8)) == ResultSet{"6"});
     }
 
     SECTION("invalid cases") {
@@ -261,15 +249,13 @@ TEST_CASE("Follows/Parent/Follows* clause: 0 or 1 synonym") {
          * Select s such that Follows(_, 10)
          * Type: follows, boolean, semantic error
          */
-        list<string> result9 = qe.evaluate(&query_9);
-        REQUIRE(generateResultSet(result9).empty());
+        REQUIRE(generateResultSet(qe.evaluate(&query_9)).empty());
 
         /**
          * Select s such that Parent(0, s)
          * Type: follows, one synonym, semantic error
          */
-        list<string> result10 = qe.evaluate(&query_10);
-        REQUIRE(generateResultSet(result10).empty());
+        REQUIRE(generateResultSet(qe.evaluate(&query_10)).empty());
     }
 
 }
@@ -319,57 +305,49 @@ TEST_CASE("Follows/Parent/Follows* clause: 1 synonym with stmt type") {
          * Select a such that Follows(_, a)
          * Type: follows, select second arg, wildcard, assign
          */
-        list<string> result1 = qe.evaluate(&query_1);
-        REQUIRE(generateResultSet(result1) == ResultSet{"2", "3"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet{"2", "3"});
 
         /**
          * Select a such that Follows*(1, a)
          * Type: follows*, select second arg, assign
          */
-        list<string> result2 = qe.evaluate(&query_2);
-        REQUIRE(generateResultSet(result2) == ResultSet{"2", "3"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet{"2", "3"});
 
         /**
          * Select a such that Follows(a, 2)
          * Type: follows, select first arg, assign
          */
-        list<string> result3 = qe.evaluate(&query_3);
-        REQUIRE(generateResultSet(result3).empty());
+        REQUIRE(generateResultSet(qe.evaluate(&query_3)).empty());
 
         /**
          * Select pn such that Follows(pn, _)
          * Type: follows, select first arg, wildcard, print
          */
-        list<string> result4 = qe.evaluate(&query_4);
-        REQUIRE(generateResultSet(result4) == ResultSet{"4"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet{"4"});
 
         /**
          * Select pn such that Follows(2, pn)
          * Type: follows, select second arg, print
          */
-        list<string> result5 = qe.evaluate(&query_5);
-        REQUIRE(generateResultSet(result5).empty());
+        REQUIRE(generateResultSet(qe.evaluate(&query_5)).empty());
 
         /**
          * Select r such that Follows(r, 2)
          * Type: follows, select first arg, read
          */
-        list<string> result6 = qe.evaluate(&query_6);
-        REQUIRE(generateResultSet(result6) == ResultSet{"1"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_6)) == ResultSet{"1"});
 
         /**
          * Select r such that Follows(5, r)
          * Type: follows, select second arg, read
          */
-        list<string> result7 = qe.evaluate(&query_7);
-        REQUIRE(generateResultSet(result7).empty());
+        REQUIRE(generateResultSet(qe.evaluate(&query_7)).empty());
 
         /**
          * Select a such that Parent(5, a)
          * Type: parent, select second arg, assign
          */
-        list<string> result8 = qe.evaluate(&query_8);
-        REQUIRE(generateResultSet(result8) == ResultSet{"6"});
+        REQUIRE(generateResultSet(qe.evaluate(&query_8)) == ResultSet{"6"});
     }
 
     SECTION("invalid cases") {
@@ -427,36 +405,31 @@ TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms") {
      * Select s such that Follows(s1, s2)
      * Type: follows, select none
      */
-    list<string> result1 = qe.evaluate(&query_1);
-    REQUIRE(generateResultSet(result1) == ResultSet{"1", "2", "3", "4", "5", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet{"1", "2", "3", "4", "5", "6"});
 
     /**
      * Select s2 such that Follows(s1, s2)
      * Type: follows, select second arg
      */
-    list<string> result2 = qe.evaluate(&query_2);
-    REQUIRE(generateResultSet(result2) == ResultSet{"2", "3", "4", "5"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet{"2", "3", "4", "5"});
 
     /**
      * Select s1 such that Parent(s1, s2)
      * Type: parent, select first arg
      */
-    list<string> result3 = qe.evaluate(&query_3);
-    REQUIRE(generateResultSet(result3) == ResultSet{"5"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet{"5"});
 
     /**
      * Select s2 such that Parent(s1, s2)
      * Type: parent, select second arg
      */
-    list<string> result4 = qe.evaluate(&query_4);
-    REQUIRE(generateResultSet(result4) == ResultSet{"6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet{"6"});
 
     /**
      * Select s2 such that Follows*(s1, s2)
      * Type: follows*, select second arg
      */
-    list<string> result5 = qe.evaluate(&query_5);
-    REQUIRE(generateResultSet(result5) == ResultSet{"2", "3", "4", "5"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_5)) == ResultSet{"2", "3", "4", "5"});
 }
 
 TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms with type") {
@@ -488,29 +461,25 @@ TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms with type") {
      * Select s such that Follows*(s, p)
      * Type: follows*, select first arg
      */
-    list<string> result1 = qe.evaluate(&query_1);
-    REQUIRE(generateResultSet(result1) == ResultSet {"1", "2", "3"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"1", "2", "3"});
 
     /**
      * Select p such that Follows(s, p)
      * Type: follows, select second arg
      */
-    list<string> result2 = qe.evaluate(&query_2);
-    REQUIRE(generateResultSet(result2) == ResultSet {"4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"4"});
 
     /**
      * Select r such that Follows(r, a)
      * Type: parent, select first arg
      */
-    list<string> result3 = qe.evaluate(&query_3);
-    REQUIRE(generateResultSet(result3) == ResultSet {"1"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"1"});
 
     /**
      * Select w such that Parent(w, a)
      * Type: parent, select first arg
      */
-    list<string> result4 = qe.evaluate(&query_4);
-    REQUIRE(generateResultSet(result4) == ResultSet {"5"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"5"});
 
 }
 
@@ -529,6 +498,7 @@ TEST_CASE("Modifies/Uses clause: 1 synonym with stmt type") {
     Argument a3 = {ArgumentType::STMT_NO, "3"};
     Argument a5 = {ArgumentType::STMT_NO, "5"};
     Argument a6 = {ArgumentType::STMT_NO, "6"};
+    Argument a7 = {ArgumentType::STMT_NO, "7"};
     Argument as = {ArgumentType::SYNONYM, "s"};
     Argument aa = {ArgumentType::SYNONYM, "a"};
     Argument apn = {ArgumentType::SYNONYM, "pn"};
@@ -537,6 +507,7 @@ TEST_CASE("Modifies/Uses clause: 1 synonym with stmt type") {
     Argument av = {ArgumentType::SYNONYM, "v"};
     Argument ax = {ArgumentType::IDENT, "x"};
     Argument az = {ArgumentType::IDENT, "z"};
+    Argument ax1 = {ArgumentType::IDENT, "x1"};
 
     SuchThatClause clause_2_v = {ArgList{a2, av},RelRef::USES_S};
     SuchThatClause clauseU_s_x = {ArgList{as, ax},RelRef::USES_S};
@@ -546,6 +517,8 @@ TEST_CASE("Modifies/Uses clause: 1 synonym with stmt type") {
     SuchThatClause clause_r_x = {ArgList{ar, ax},RelRef::MODIFIES_S};
     SuchThatClause clauseM_s_x = {ArgList{as, ax},RelRef::MODIFIES_S};
     SuchThatClause clause_s_0 = {ArgList{as, a0},RelRef::MODIFIES_S};
+    SuchThatClause clause_s_x1 = {ArgList{as, ax1},RelRef::MODIFIES_S};
+    SuchThatClause clause_7_v = {ArgList{a7, av},RelRef::USES_S};
 
     Query query_1 = makeQuery(declarations, "v", {clause_2_v});
     Query query_2 = makeQuery(declarations, "s", {clauseU_s_x});
@@ -555,63 +528,74 @@ TEST_CASE("Modifies/Uses clause: 1 synonym with stmt type") {
     Query query_6 = makeQuery(declarations, "r", {clause_r_x});
     Query query_7 = makeQuery(declarations, "s", {clauseM_s_x});
     Query query_8 = makeQuery(declarations, "s", {clause_s_0});
+    Query query_9 = makeQuery(declarations, "s", {clause_s_x1});
+    Query query_10 = makeQuery(declarations, "v", {clause_7_v});
 
     auto qe = QueryEvaluator(testPKB);
-    /**
-     * Select v such that Uses(2, v)
-     * Type: uses, select second arg
-     */
-    list<string> result1 = qe.evaluate(&query_1);
-    REQUIRE(generateResultSet(result1) == ResultSet {"yeast", "zealous", "x"});
 
-    /**
-     * Select s such that Uses(s, "x")
-     * Type: uses, select first arg
-     */
-    list<string> result2 = qe.evaluate(&query_2);
-    REQUIRE(generateResultSet(result2) == ResultSet {"2", "5", "6"});
+    SECTION("valid cases") {
+        /**
+         * Select v such that Uses(2, v)
+         * Type: uses, select second arg
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet{"yeast", "zealous", "x"});
 
-    /**
-     * Select a such that Uses(a, _) {"2", "6"}
-     * Type: uses, select first arg, wildcard
-     */
-    list<string> result3 = qe.evaluate(&query_3);
-    REQUIRE(generateResultSet(result3) == ResultSet {"2", "6"});
+        /**
+         * Select s such that Uses(s, "x")
+         * Type: uses, select first arg
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet{"2", "5", "6"});
 
-    /**
-     * Select a such that Uses(a, "z") {}
-     * Type: uses, select first arg, assign
-     */
-    list<string> result4 = qe.evaluate(&query_4);
-    REQUIRE(generateResultSet(result4).empty());
+        /**
+         * Select a such that Uses(a, _)
+         * Type: uses, select first arg, wildcard
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet{"2", "6"});
 
-    /**
-     * Select v such that Modifies(6, v)
-     * Type: modifies, select second arg
-     */
-    list<string> result5 = qe.evaluate(&query_5);
-    REQUIRE(generateResultSet(result5) == ResultSet {"x"});
+        /**
+         * Select a such that Uses(a, "z") {}
+         * Type: uses, select first arg, assign
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_4)).empty());
 
-    /**
-     * Select r such that Modifies(r, "x")
-     * Type: modifies, select first arg, read
-     */
-    list<string> result6 = qe.evaluate(&query_6);
-    REQUIRE(generateResultSet(result6) == ResultSet {"1"});
+        /**
+         * Select v such that Modifies(6, v)
+         * Type: modifies, select second arg
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_5)) == ResultSet{"x"});
 
-    /**
-     * Select s such that Modifies(s, "x")
-     * Type: modifies, select second arg, read
-     */
-    list<string> result7 = qe.evaluate(&query_7);
-    REQUIRE(generateResultSet(result7) == ResultSet {"1", "5", "6"});
+        /**
+         * Select r such that Modifies(r, "x")
+         * Type: modifies, select first arg, read
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_6)) == ResultSet{"1"});
 
-    /**
-     * Select s such that Modifies(s, _) {"1", "2", "3", "6"}
-     * Type: modifies, select first arg, assign
-     */
-    list<string> result8 = qe.evaluate(&query_8);
-    REQUIRE(generateResultSet(result8) == ResultSet {"1", "2", "3", "5", "6"});
+        /**
+         * Select s such that Modifies(s, "x")
+         * Type: modifies, select second arg, read
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_7)) == ResultSet{"1", "5", "6"});
+
+        /**
+         * Select s such that Modifies(s, _)
+         * Type: modifies, select first arg, assign
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_8)) == ResultSet{"1", "2", "3", "5", "6"});
+    }
+
+    SECTION("invalid cases") {
+        /**
+         * Select s such that Modifies(s, "x1")
+         * Type: modifies, select first arg, assign
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_9)).empty());
+
+        /**
+         * Select v such that Uses(7, v)
+         * Type: modifies, select first arg, assign
+         */
+        REQUIRE(generateResultSet(qe.evaluate(&query_10)).empty());
+    }
 
 }
 
@@ -655,57 +639,49 @@ TEST_CASE("Modifies/Uses clause: 2 synonyms with stmt type") {
      * Select s such that Uses(s, v)
      * Type: uses, select first arg
      */
-    list<string> result1 = qe.evaluate(&query_1);
-    REQUIRE(generateResultSet(result1) == ResultSet {"2", "4", "5", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"2", "4", "5", "6"});
 
     /**
      * Select a such that Uses(a, v)
      * Type: uses, select first arg
      */
-    list<string> result2 = qe.evaluate(&query_2);
-    REQUIRE(generateResultSet(result2) == ResultSet {"2", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"2", "6"});
 
     /**
      * Select v such that Uses(p, v)
      * Type: uses, select second arg
      */
-    list<string> result3 = qe.evaluate(&query_3);
-    REQUIRE(generateResultSet(result3) == ResultSet {"xylophone"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"xylophone"});
 
     /**
      * Select v such that Uses(r, v)
      * Type: uses, select second arg
      */
-    list<string> result4 = qe.evaluate(&query_4);
-    REQUIRE(generateResultSet(result4).empty()); //TODO: HANDLE ERROR
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)).empty()); //TODO: HANDLE ERROR
 
     /**
      * Select v such that Modifies(s, v)
      * Type: modifies, select second arg
      */
-    list<string> result5 = qe.evaluate(&query_5);
-    REQUIRE(generateResultSet(result5) == ResultSet {"x", "y", "zealous"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_5)) == ResultSet {"x", "y", "zealous"});
 
     /**
      * Select v such that Modifies(w, v)
      * Type: modifies, select second arg
      */
-    list<string> result6 = qe.evaluate(&query_6);
-    REQUIRE(generateResultSet(result6) == ResultSet {"x"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_6)) == ResultSet {"x"});
 
     /**
      * Select s such that Modifies(s, v)
      * Type: modifies, select first arg
      */
-    list<string> result7 = qe.evaluate(&query_7);
-    REQUIRE(generateResultSet(result7) == ResultSet {"1", "2", "3", "5", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_7)) == ResultSet {"1", "2", "3", "5", "6"});
 
     /**
      * Select c such that Modifies(s, v)
      * Type: modifies, select no arg
      */
-    list<string> result8 = qe.evaluate(&query_8);
-    REQUIRE(generateResultSet(result8) == ResultSet {"1", "3", "5"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_8)) == ResultSet {"1", "3", "5"});
 
 }
 
@@ -746,50 +722,43 @@ TEST_CASE("Merge synonyms") {
      * Select s1 such that Follows(s1, s2) such that Follows(4, 5)
      * Type: boolean clause, no merge needed
      */
-    list<string> result_0 = qe.evaluate(&query_0);
-    REQUIRE(generateResultSet(result_0) == ResultSet {"1","2","3","4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_0)) == ResultSet {"1","2","3","4"});
 
     /**
      * elect s1 such that Follows(s1, s2) such that Follows(s2, 5)
      * Type: join string, value exists
      */
-    list<string> result_1 = qe.evaluate(&query_1);
-    REQUIRE(generateResultSet(result_1) == ResultSet {"3"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"3"});
 
     /**
      * Select s1 such that Follows(s1, s3) such that Follows(s2, 5)
      * Type: join string, value doesn't exist
      */
-    list<string> result_2 = qe.evaluate(&query_2);
-    REQUIRE(generateResultSet(result_2) == ResultSet {"1","2","3","4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1","2","3","4"});
 
     /**
     * Select s2 such that Follows(s1, s2) such that Follows(s2, s3)
     * Type: join tuples, left value exists
     */
-    list<string> result_3 = qe.evaluate(&query_3);
-    REQUIRE(generateResultSet(result_3) == ResultSet {"2","3","4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"2","3","4"});
 
     /**
      * Select s1 such that Follows(s2, 5) such that Follows(s1, s2)
      * Type: join tuples, right value exists
      */
-    list<string> result_4 = qe.evaluate(&query_4);
-    REQUIRE(generateResultSet(result_4) == ResultSet {"3"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"3"});
 
     /**
      * Select s1 such that Follows(s1, _) such that Follows(s2, _) such that Follows(s1, s2)
      * Type: join tuples, both value exist
      */
-    list<string> result_5 = qe.evaluate(&query_5);
-    REQUIRE(generateResultSet(result_5) == ResultSet {"1","2","3"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_5)) == ResultSet {"1","2","3"});
 
     /**
      * Select s1 such that Follows(s2, 5) such that Follows(s1, s3)
      * Type: join tuples, both value don't exist
      */
-    list<string> result_6 = qe.evaluate(&query_6);
-    REQUIRE(generateResultSet(result_6) == ResultSet {"1","2","3","4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_6)) == ResultSet {"1","2","3","4"});
 
 }
 

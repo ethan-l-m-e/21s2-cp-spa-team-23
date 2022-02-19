@@ -3,6 +3,7 @@
 //
 
 #include "QueryEvaluator.h"
+#include "QP_Parser/Exception.h"
 #include "pql/ClauseEvaluators/FollowsClauseEvaluator.h"
 #include "pql/ClauseEvaluators/ParentClauseEvaluator.h"
 #include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
@@ -55,7 +56,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
  * @param query  a Query object pointer
  * @return  a pointer for the generated ClauseEvaluator.
  */
-ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
+ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause, Query* query) {
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
             return new FollowsClauseEvaluator(clause.argList, pkb, query);
@@ -74,7 +75,7 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
         case RelRef::MODIFIES_P:
             // return ModifiesPClauseEvaluator(clause.argList, pkb, query);
         default:
-            throw std::runtime_error("No valid clause evaluator is found for relationship type");
+            throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
 }
 

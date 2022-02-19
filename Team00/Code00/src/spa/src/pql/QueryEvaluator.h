@@ -23,7 +23,7 @@ public:
 
     std::list<std::string> evaluate(Query*);
 
-    ClauseEvaluator* generateEvaluator(SuchThatClause, Query*);
+    ClauseEvaluator* generateEvaluator(const SuchThatClause&, Query*);
 
     static std::list<std::string> generateResultString(Result&);
 };

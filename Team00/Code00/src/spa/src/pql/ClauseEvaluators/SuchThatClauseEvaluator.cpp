@@ -3,6 +3,7 @@
 //
 
 #include "SuchThatClauseEvaluator.h"
+#include "QP_Parser/Exception.h"
 
 /**
  * Evaluate the such that clause.
@@ -123,7 +124,7 @@ std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<st
         }
     }
     return tuples;
-};
+}
 
 /**
  * Find whether any of the combination of the left and set values satisfies the relation.
@@ -138,7 +139,7 @@ bool SuchThatClauseEvaluator::validateRelation(unordered_set<std::string>& leftS
         }
     }
     return false;
-};
+}
 
 /**
  * Generate the set of possible values for the left synonym given the possible values for the right set.
@@ -153,7 +154,7 @@ unordered_set<std::string> SuchThatClauseEvaluator::generateLeftSet (unordered_s
     }
 
     return leftSet;
-};
+}
 
 /**
  * Generate the set of possible values for the right synonym given the possible values for the left set.
@@ -215,7 +216,7 @@ bool SuchThatClauseEvaluator::isEntityType (const std::string& ident, DesignEnti
             //TODO: required update in future iterations
             //return pkb->isCall(ident);
         default:
-            throw std::runtime_error("Invalid design entity found.");
+            throw qp::QPEvaluatorException("Invalid design entity found.");
     }
 }
 
@@ -248,7 +249,7 @@ std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_s
         vector.emplace_back(std::move(set.extract(it++).value()));
     }
     return vector;
-};
+}
 
 
 

@@ -14,7 +14,7 @@ SynonymRelations::SynonymRelations(){
 SynonymRelations::SynonymRelations(std::vector<std::string> header,String2DVector values){
     tableHeader = std::move(header);
     tableEntries = std::move(values);
-};
+}
 
 bool SynonymRelations::isEmpty(){
     return tableEntries.empty();
@@ -130,7 +130,7 @@ void SynonymRelations::crossJoinStrings(std::vector<ResultItem>& synonymValues) 
         }
     }
     updateEntries(updatedTuples);
-};
+}
 
 /**
  * Compute cross product of the table and a tuple result and assign the updated values to the table.
@@ -155,7 +155,7 @@ void SynonymRelations::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
         }
     }
     updateEntries(updatedTuples);
-};
+}
 
 /**
  * Inner join method to join the table with a string result, with a common synonym.
