@@ -2,8 +2,8 @@
 #include "QP_Parser/QueryParser.h"
 #include "QP_Parser/Tokenizer.h"
 #include "pql/query_obj/Query.h"
+
 #include <string>
-#include <iostream>
 
 using namespace qp;
 
@@ -113,7 +113,7 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     CHECK(query.getSelectedSynonym() == "pattern");
 
     // synonym named pattern with pattern clause
-    pql = "variable pattern; \nSelect pattern pattern pattern(_, _)";
+    pql = "assign pattern; \nSelect pattern pattern pattern(_, _)";
     query = parser.getQuery(pql);
 
     CHECK(query.getSelectedSynonym() == "pattern");
@@ -599,17 +599,17 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
     CHECK(argList[1].argumentValue == "_");
 }
 
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - PRINT, WILDCARD") {
+TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - READ, WILDCARD") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "variable v; assign a; stmt s; print pn; \nSelect v such that Modifies(pn, _)";
+    std::string pql = "variable v; assign a; stmt s; read r; \nSelect v such that Modifies(r, _)";
     Query query = parser.getQuery(pql);
     SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
     CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "pn");
+    CHECK(argList[0].argumentValue == "r");
 
     CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
     CHECK(argList[1].argumentValue == "_");
@@ -806,11 +806,11 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     CHECK(patternArgList[0].argumentType == ArgumentType::SYNONYM);
     CHECK(patternArgList[0].argumentValue == "a");
 
-    CHECK(patternArgList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(patternArgList[1].argumentValue == "v");
+    CHECK(patternArgList[1].argumentType == ArgumentType::UNDERSCORE);
+    CHECK(patternArgList[1].argumentValue == "_");
 
-    CHECK(patternArgList[2].argumentType == ArgumentType::PARTIAL_UNDERSCORE);
-    CHECK(patternArgList[2].argumentValue == "_\"x\"_");
+    CHECK(patternArgList[2].argumentType == ArgumentType::UNDERSCORE);
+    CHECK(patternArgList[2].argumentValue == "_");
 }
 
 

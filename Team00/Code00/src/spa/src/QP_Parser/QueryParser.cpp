@@ -1,6 +1,7 @@
 #include "QueryParser.h"
 #include "Exception.h"
 #include "Tokenizer.h"
+#include "Validator.h"
 
 #include <string>
 #include <vector>
@@ -11,12 +12,18 @@ using namespace qp;
 
 Query QueryParser::getQuery(std::string pql) {
     Tokenizer tokenizer = Tokenizer();
+    Validator validator = Validator();
+
+    validator.validateQueryStructure(pql);
     QueryToken queryToken = tokenizer.getQueryToken(pql);
+    validator.checkForSemantics(queryToken);
+
     Query query = Query();
     getDeclarations(queryToken, query);
     getSynonym(queryToken, query);
     getSuchThatClauses(queryToken, query);
     getPattern(queryToken, query);
+
     return query;
 };
 

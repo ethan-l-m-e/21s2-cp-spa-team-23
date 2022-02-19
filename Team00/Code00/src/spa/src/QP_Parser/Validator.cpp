@@ -23,49 +23,78 @@ void Validator::validateQueryStructure(std::string pql) {
 void Validator::checkForSemantics(QueryToken& queryToken) {
     std::set<std::string> declarationSet = convertVectorToSet(queryToken.declarations->first);
 
-    // check declarations
+    // Check declarations
     validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
 
     // Check if Select Clause synonym is part of the declarations
-    if (declarationSet.find(queryToken.selectClauseToken) == declarationSet.end()) {
+    bool isSelectClauseDeclared = declarationSet.find(queryToken.selectClauseToken) == declarationSet.end();
+    if (isSelectClauseDeclared) {
         throw QPInvalidSemanticException("Synonym not declared");
     };
 
     // Check pattern arguments
-    if (queryToken.patternTokens != NULL) {
-        validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
-    }
+    validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
 
-    if (queryToken.suchThatClauseTokens != NULL) {
-        validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
-    }
+    // Check Such That clauses
+    validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
 }
 
 void Validator::validateDeclarations(std::set<std::string> declarationSet, int length, std::vector<std::string> designEntities) {
     // check duplicate declaration names
-    if (declarationSet.size() != length) {
+    bool isDeclarationNamesDuplicate = declarationSet.size() != length;
+    if (isDeclarationNamesDuplicate) {
         throw QPInvalidSemanticException("Repeated declaration names");
     }
 
     // check duplicate design entity declarations
     std::set<std::string> designEntitySet = convertVectorToSet(designEntities);
-    if (designEntitySet.size() != designEntities.size()) {
+    bool isDesignEntityDeclarationsDuplicate = designEntitySet.size() != designEntities.size();
+    if (isDesignEntityDeclarationsDuplicate) {
         throw QPInvalidSemanticException("Repeated declarations of same design entity");
     }
 }
 
 void Validator::validateSuchThatClauses(std::map<std::string, std::string> declarationTokens,
                                         std::vector<SuchThatClauseToken> suchThatClauseTokens) {
-    std::string relationshipCheck = "(Follows|Follows\\*|Parent|Parent\\*)";
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
-        // Check for relationship
-        bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, std::regex(relationshipCheck));
+        checkArguments(*(suchThatClauseToken.arguments), declarationTokens);
+        // Check for type of relationship
+        bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, std::regex(STMT_RS));
+
         if (isStatementRelationship) {
             handleSuchThatStatementClause(declarationTokens, *suchThatClauseToken.arguments);
         } else {
+            // Get set of possible first argument types
             std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
+
+            // Check arguments
             checkFirstArgForOtherClauses(suchThatClauseToken.arguments->first, argSet, declarationTokens);
             checkSecondArgForOtherClauses(suchThatClauseToken.arguments->second, declarationTokens);
+        }
+    }
+}
+
+void Validator::checkArguments(std::pair<std::string, std::string> arguments,
+                                           std::map<std::string, std::string> declarationTokens) {
+    // Check if both arguments contain the same synonym
+    bool isArgumentsSameSynonym = (std::regex_match(arguments.first, std::regex (SYNONYM))
+            && arguments.first == arguments.second);
+    if (isArgumentsSameSynonym) {
+        throw QPInvalidSemanticException("Both arguments contain the same synonym");
+    }
+
+    // Check if the synonym is declared if the argument is a synonym
+    checkSynonymIsDeclared(arguments.first, declarationTokens);
+    checkSynonymIsDeclared(arguments.second, declarationTokens);
+
+}
+
+void Validator::checkSynonymIsDeclared(std::string argument,
+                                           std::map<std::string, std::string> declarationTokens) {
+    // If argument is a synonym, check that the synonym is declared
+    if (std::regex_match(argument, std::regex (SYNONYM))) {
+        if (declarationTokens.find(argument) == declarationTokens.end()) {
+            throw QPInvalidSemanticException("Argument synonym is not declared!");
         }
     }
 }
@@ -111,6 +140,8 @@ void Validator::checkSecondArgForOtherClauses(std::string argument, std::map<std
 void Validator::validatePatterns(std::map<std::string, std::string> declarationTokens,
                                  std::vector<PatternToken> patternTokens) {
     for (PatternToken patternToken : patternTokens) {
+        std::pair<std::string, std::string> arguments = std::make_pair(patternToken.synonym, patternToken.arguments->first);
+        checkArguments(arguments, declarationTokens);
         if (declarationTokens.find(patternToken.synonym) == declarationTokens.end()
         || declarationTokens.at(patternToken.synonym) != "assign") {
             throw QPInvalidSemanticException("Invalid Pattern");
@@ -126,7 +157,7 @@ void Validator::validatePatternFirstArgument(std::map<std::string, std::string> 
     }
 
     if (declarationTokens.find(argument) ==  declarationTokens.end() ||
-        declarationTokens.at(argument) == "variable") {
+        declarationTokens.at(argument) != "variable") {
         throw QPInvalidSemanticException("Invalid Pattern First Argument");
     }
 }

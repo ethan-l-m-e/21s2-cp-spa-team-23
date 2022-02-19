@@ -1,10 +1,9 @@
 #include "catch.hpp"
 #include "QP_Parser/Tokenizer.h"
-#include "pql/query_obj/Argument.h"
+
 #include <vector>
 #include <string>
 #include <map>
-#include <iostream>
 
 using namespace qp;
 
