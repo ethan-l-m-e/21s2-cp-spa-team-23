@@ -20,6 +20,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 
     // Replace all newlines in the query
     query = std::regex_replace(query, regex("\n"), "");
+    query = std::regex_replace(query, regex("\\*"), "-");
 
     // Gets all the different tokens
     getDeclarationTokens(query, queryToken);
@@ -67,7 +68,6 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
 
 void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
     // Replace * with - in the query
-    pql = std::regex_replace(pql, regex("\\*"), "-");
     std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, SUCH_THAT_CLAUSE);
 
     bool noSuchThatClause = backClauses[0] == pql;
