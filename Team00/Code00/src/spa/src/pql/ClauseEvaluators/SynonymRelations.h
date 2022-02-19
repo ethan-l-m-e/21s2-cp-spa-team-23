@@ -22,18 +22,19 @@ public:
     bool isEmpty();
     std::vector<std::string> *getHeader();
     String2DVector *getList();
-    void mergeResultToSynonymsRelations(Result& result);
+    void mergeResultToSynonymsRelations(Result&);
 private:
-    void updateEntries(String2DVector newList);
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
-    void appendNewSynonym(String2DVector&, std::vector<ResultItem>&);
-    void appendNewSynonymTuples(String2DVector&, std::vector<ResultItem>&);
     void appendHeader(const std::vector<std::string>&);
+    void updateEntries(String2DVector newList);
+    void crossJoinStrings(std::vector<ResultItem>&);
+    void crossJoinTuples(std::vector<ResultItem>&);
     void innerJoin(size_t, std::vector<ResultItem>&);
     void innerJoin(std::pair<size_t, size_t>, std::vector<ResultItem>&);
-    void innerJoin(size_t index, std::unordered_map<std::string,std::vector<std::string>>);
-    std::unordered_map<std::string, std::vector<std::string>> convertVectorToMap(std::vector<ResultItem>&, bool);
+    void innerJoin(size_t, std::unordered_map<std::string,std::vector<std::string>>);
+    static std::unordered_map<std::string, std::vector<std::string>> convertVectorToMap(std::vector<ResultItem>&, bool);
+
 
     std::vector<std::string> tableHeader;
     String2DVector tableEntries;
