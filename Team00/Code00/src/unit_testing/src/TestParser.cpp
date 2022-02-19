@@ -172,7 +172,7 @@ TEST_CASE("Condition expression parsing") {
 }
 
 TEST_CASE("Program parsing") {
-    string code = "procedure name { X = a;\nread b;\nprint c;\n }";
-    Program program = Parser::parseProgram(code);
-    CHECK(program[0]->getProcName() == "name");
+    string code = "procedure name {\n X = a;\nread b;\nprint c;\nwhile(1 == 1) {\n Y = b;\n } }";
+    ProgramNode* program = Parser::parseProgram(code);
+    CHECK(program->getProcLst()[0]->getProcName() == "name");
 }
