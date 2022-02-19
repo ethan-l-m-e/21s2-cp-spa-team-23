@@ -875,3 +875,41 @@ TEST_CASE("Pattern clause: return var + Stmt") {
 TEST_CASE("PATTERN FULL EXPRESSION MATCHING") {
 
 }
+
+TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
+    PKB *testPKB = generateSamplePKBForPatternMatching();
+    unordered_map<string, DesignEntity> declarations = {
+            {"s1", DesignEntity::STMT},
+            {"s2", DesignEntity::STMT},
+            {"s3", DesignEntity::STMT},
+    };
+
+    unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
+    Argument aa = {ArgumentType::SYNONYM, "a"};
+    Argument av = {ArgumentType::SYNONYM, "v"};
+    Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
+    Argument wild = {ArgumentType::UNDERSCORE, "_"};
+    Argument a5 = {ArgumentType::STMT_NO, "5"};
+
+    SuchThatClause clause_a_5 = {ArgList{aa, a5},RelRef::FOLLOWS};
+    SuchThatClause clause_5_v = {ArgList{a5, av},RelRef::USES_S};
+    PatternClause synonym_var = {ArgList {aa, av, rightConst}, SynonymType::ASSIGN};
+
+
+    Query query_1 = makeQuery(declarations, "s1", {clause_a_5}, {synonym_var});
+    Query query_2 = makeQuery(declarations, "s1", {clause_5_v}, {synonym_var});
+
+    auto qe = QueryEvaluator(testPKB);
+
+    /**
+     * Select a such that Follows(a, 5) Pattern a(v, _"2"_)
+     * Tuple -> single
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"4"});
+
+    /**
+     * Select v such that Uses(5, v) Pattern a(v, _"2"_)
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"y"});
+
+}
