@@ -115,6 +115,19 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
         || declarationTokens.at(patternToken.synonym) != "assign") {
             throw QPInvalidSemanticException("Invalid Pattern");
         }
+
+        validatePatternFirstArgument(declarationTokens, patternToken.arguments->first);
+    }
+}
+
+void Validator::validatePatternFirstArgument(std::map<std::string, std::string> declarationTokens, std::string argument) {
+    if (std::regex_match(argument, std::regex("(_|\"(.)*\")"))) {
+        return;
+    }
+
+    if (declarationTokens.find(argument) ==  declarationTokens.end() ||
+        declarationTokens.at(argument) == "variable") {
+        throw QPInvalidSemanticException("Invalid Pattern First Argument");
     }
 }
 

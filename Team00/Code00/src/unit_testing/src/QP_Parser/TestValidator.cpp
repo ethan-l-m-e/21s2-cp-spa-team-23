@@ -2573,7 +2573,6 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
     queryToken.suchThatClauseTokens = &suchThatClauseTokens;
-    validator.checkForSemantics(queryToken);
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // ident as second argument
@@ -2674,4 +2673,94 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
     queryToken.suchThatClauseTokens = &suchThatClauseTokens;
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+}
+
+TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK SYNONYM") {
+    Validator validator = Validator();
+    auto declarationTokens = new std::map<std::string, std::string>({
+                                                                            {"s",   "stmt"},
+                                                                            {"r",   "read"},
+                                                                            {"pn",  "print"},
+                                                                            {"a",   "assign"},
+                                                                            {"c",   "call"},
+                                                                            {"w",   "while"},
+                                                                            {"ifs", "if"},
+                                                                            {"v",   "variable"},
+                                                                            {"con", "constant"},
+                                                                            {"p",   "procedure"}});
+    auto declarationNames = std::vector<std::string>({"s", "r", "pn", "a", "c", "w", "ifs", "v", "con", "p"});
+    auto designEntities = std::vector<std::string>({"stmt", "read", "assign", "call", "while", "if", "variable",
+                                                    "constant", "procedure"});
+    auto declarations = std::make_pair(declarationNames, designEntities);
+
+    QueryToken queryToken = QueryToken();
+    queryToken.declarations = &declarations;
+    queryToken.declarationTokens = declarationTokens;
+    queryToken.selectClauseToken = "s";
+
+    // valid synonym
+    PatternToken patternToken = PatternToken();
+    std::pair<std::string, std::string> arguments = std::make_pair("_", "_");
+    patternToken.synonym = "a";
+    patternToken.arguments = &arguments;
+    std::vector<PatternToken> patternTokens = std::vector<PatternToken>({patternToken});
+    queryToken.patternTokens = &patternTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+
+    // invalid synonym that does not exit in declarations
+    patternToken = PatternToken();
+    arguments = std::make_pair("_", "_");
+    patternToken.synonym = "unknown";
+    patternToken.arguments = &arguments;
+    patternTokens = std::vector<PatternToken>({patternToken});
+    queryToken.patternTokens = &patternTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+
+    // synonym that is not an assign statement
+    patternToken = PatternToken();
+    arguments = std::make_pair("_", "_");
+    patternToken.synonym = "c";
+    patternToken.arguments = &arguments;
+    patternTokens = std::vector<PatternToken>({patternToken});
+    queryToken.patternTokens = &patternTokens;
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+}
+
+TEST_CASE ("QP SEMANTIC VALIDATOR: MULTI-CLAUSE CHECK") {
+    Validator validator = Validator();
+    auto declarationTokens = new std::map<std::string, std::string>({
+                                                                            {"s",   "stmt"},
+                                                                            {"r",   "read"},
+                                                                            {"pn",  "print"},
+                                                                            {"a",   "assign"},
+                                                                            {"c",   "call"},
+                                                                            {"w",   "while"},
+                                                                            {"ifs", "if"},
+                                                                            {"v",   "variable"},
+                                                                            {"con", "constant"},
+                                                                            {"p",   "procedure"}});
+    auto declarationNames = std::vector<std::string>({"s", "r", "pn", "a", "c", "w", "ifs", "v", "con", "p"});
+    auto designEntities = std::vector<std::string>({"stmt", "read", "assign", "call", "while", "if", "variable",
+                                                    "constant", "procedure"});
+    auto declarations = std::make_pair(declarationNames, designEntities);
+
+    QueryToken queryToken = QueryToken();
+    queryToken.declarations = &declarations;
+    queryToken.declarationTokens = declarationTokens;
+    queryToken.selectClauseToken = "s";
+
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
+    std::pair<std::string, std::string> arguments = std::make_pair("a", "v");
+    suchThatClauseToken.relRef = "Modifies";
+    suchThatClauseToken.arguments = &arguments;
+    std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
+    queryToken.suchThatClauseTokens = &suchThatClauseTokens;
+
+    PatternToken patternToken = PatternToken();
+    std::pair<std::string, std::string> patternArguments = std::make_pair("_", "_");
+    patternToken.synonym = "a";
+    patternToken.arguments = &patternArguments;
+    std::vector<PatternToken> patternTokens = std::vector<PatternToken>({patternToken});
+    queryToken.patternTokens = &patternTokens;
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 }

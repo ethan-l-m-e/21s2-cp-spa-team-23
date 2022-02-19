@@ -29,6 +29,7 @@ namespace qp {
         void checkArgumentForStatementClauses(std::map<std::string, std::string>&, std::string, std::string);
         void checkFirstArgForOtherClauses(std::string, std::set<std::string>&, std::map<std::string, std::string>&);
         void checkSecondArgForOtherClauses(std::string, std::map<std::string, std::string>&);
+        void validatePatternFirstArgument(std::map<std::string, std::string>, std::string);
     };
 }
 
