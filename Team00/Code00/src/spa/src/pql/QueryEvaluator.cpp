@@ -3,10 +3,19 @@
 //
 
 #include "QueryEvaluator.h"
-
+#include "QP_Parser/Exception.h"
+#include "pql/ClauseEvaluators/FollowsClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ParentClauseEvaluator.h"
+#include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
+#include "pql/ClauseEvaluators/SelectClauseEvaluator.h"
+#include "pql/ClauseEvaluators/FollowsTClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ParentTClauseEvaluator.h"
+#include "pql/ClauseEvaluators/ModifiesSClauseEvaluator.h"
+#include "pql/ClauseEvaluators/UsesSClauseEvaluator.h"
 
 std::list<std::string> QueryEvaluator::evaluate(Query* query) {
-    // Initialise an empty result
+
+    // Initialise an empty synonym relations for storing intermediate result
     auto* synonymRelations = new SynonymRelations();
 
     // Create ClauseEvaluators and evaluate each of the pattern clause
@@ -15,6 +24,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
             Result patternResult = patternClauseEvaluator->evaluateClause();
             delete patternClauseEvaluator;
+            // if the clause evaluates to false, terminate evaluation and output an empty list.
             if (!patternResult.resultBoolean) return {};
             synonymRelations->mergeResultToSynonymsRelations( patternResult);
         }
@@ -26,11 +36,13 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
             Result suchThatResult = suchThatClauseEvaluator->evaluateClause();
             delete suchThatClauseEvaluator;
+            // if the clause evaluates to false, terminate evaluation and output an empty list.
             if (!suchThatResult.resultBoolean) return {};
             synonymRelations->mergeResultToSynonymsRelations( suchThatResult);
         }
     }
 
+    // Evaluate select clause and output the result
     auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
     Result selectResult = selectClauseEvaluator->evaluateClause();
     delete selectClauseEvaluator;
@@ -38,7 +50,13 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     return generateResultString(selectResult);
 }
 
-ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
+/**
+ * Generate a clause evaluator from an such that clause based on the relationship type.
+ * @param clause  a reference to an SuchThatClause object
+ * @param query  a Query object pointer
+ * @return  a pointer for the generated ClauseEvaluator.
+ */
+ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause, Query* query) {
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
             return new FollowsClauseEvaluator(clause.argList, pkb, query);
@@ -57,10 +75,15 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
         case RelRef::MODIFIES_P:
             // return ModifiesPClauseEvaluator(clause.argList, pkb, query);
         default:
-            return new FollowsClauseEvaluator(clause.argList, pkb, query); // TODO: Throw error.
+            throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
 }
 
+/**
+ * Generate result list from a result object.
+ * @param result  an Result object from a select clause evaluator
+ * @return  a list of strings representing the result items
+ */
 std::list<std::string> QueryEvaluator::generateResultString(Result& result) {
     std::list<std::string> stringList;
 

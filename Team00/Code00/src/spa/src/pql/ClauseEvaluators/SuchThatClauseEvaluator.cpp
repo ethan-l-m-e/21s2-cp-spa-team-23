@@ -3,7 +3,12 @@
 //
 
 #include "SuchThatClauseEvaluator.h"
+#include "QP_Parser/Exception.h"
 
+/**
+ * Evaluate the such that clause.
+ * @return  an result object for the evaluation of the clause
+ */
 Result SuchThatClauseEvaluator::evaluateClause(){
     switch(getClauseSynonymType()){
         case ClauseSynonymType::SYNONYM_NONE:
@@ -24,6 +29,10 @@ Result SuchThatClauseEvaluator::evaluateClause(){
     return result;
 }
 
+/**
+ * Get clause synonym type of the such that clause.
+ * @return  a clause synonym type to indicate the number and position of synonym in the clause
+ */
 ClauseSynonymType SuchThatClauseEvaluator::getClauseSynonymType() const {
     if (argLeft.argumentType == ArgumentType::SYNONYM){
         if (argRight.argumentType == ArgumentType::SYNONYM) {
@@ -38,6 +47,9 @@ ClauseSynonymType SuchThatClauseEvaluator::getClauseSynonymType() const {
     }
 }
 
+/**
+ * Evaluate a clause with no synonym in its arguments.
+ */
 void SuchThatClauseEvaluator::evaluateNoSynonym() {
 
     unordered_set<std::string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
@@ -48,6 +60,9 @@ void SuchThatClauseEvaluator::evaluateNoSynonym() {
             .resultBoolean = validateRelation(leftSet, rightSet)};
 }
 
+/**
+ * Evaluate a clause with two synonym in its arguments.
+ */
 void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
     DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
     DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
@@ -61,6 +76,10 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
             .resultItemList = resultItemList
     };
 }
+
+/**
+ * Evaluate a clause with a synonym in its left argument.
+ */
 void SuchThatClauseEvaluator::evaluateLeftSynonym() {
     DesignEntity entityLeft = query->findEntityType(argLeft.argumentValue);
     unordered_set<std::string> rightSet = generateValueSet(argRight, std::get<1>(getWildcardType()));
@@ -73,6 +92,9 @@ void SuchThatClauseEvaluator::evaluateLeftSynonym() {
             .resultItemList = convertSetToVector(resultSet)};
 }
 
+/**
+ * Evaluate a clause with a synonym in its right argument.
+ */
 void SuchThatClauseEvaluator::evaluateRightSynonym() {
     DesignEntity entityRight = query->findEntityType(argRight.argumentValue);
     unordered_set<std::string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
@@ -85,6 +107,12 @@ void SuchThatClauseEvaluator::evaluateRightSynonym() {
               .resultItemList = convertSetToVector(resultSet)};
 }
 
+/**
+ * Generate a vector of the result item tuples for a 2-synonym clause.
+ * @param leftSet  the set of possible values for the left synonym
+ * @param rightSet  the set of possible values for the right synonym
+ * @return  a vector of ResultItem of the type tuples
+ */
 std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
     std::vector<ResultItem> tuples = std::vector<ResultItem>{};
     for (const auto & left : leftSet) {
@@ -96,8 +124,14 @@ std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<st
         }
     }
     return tuples;
-};
+}
 
+/**
+ * Find whether any of the combination of the left and set values satisfies the relation.
+ * @param leftSet  the set of possible values for the left argument
+ * @param rightSet  the set of possible values for the right argument
+ * @return  a boolean value indicating whether there is at least one pair that satisfies the relation
+ */
 bool SuchThatClauseEvaluator::validateRelation(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
     for (const auto & left : leftSet) {
         for (const auto & right : rightSet) {
@@ -105,8 +139,13 @@ bool SuchThatClauseEvaluator::validateRelation(unordered_set<std::string>& leftS
         }
     }
     return false;
-};
+}
 
+/**
+ * Generate the set of possible values for the left synonym given the possible values for the right set.
+ * @param rightSet  the set of possible values for the right argument
+ * @return  a set of possible values for the left argument
+ */
 unordered_set<std::string> SuchThatClauseEvaluator::generateLeftSet (unordered_set<std::string>& rightSet) {
     unordered_set<std::string> leftSet;
     for (const std::string& str : rightSet) {
@@ -115,8 +154,13 @@ unordered_set<std::string> SuchThatClauseEvaluator::generateLeftSet (unordered_s
     }
 
     return leftSet;
-};
+}
 
+/**
+ * Generate the set of possible values for the right synonym given the possible values for the left set.
+ * @param leftSet  the set of possible values for the left argument
+ * @return  a set of possible values for the right argument
+ */
 unordered_set<std::string> SuchThatClauseEvaluator::generateRightSet (unordered_set<std::string>& leftSet) {
     unordered_set<std::string> rightSet;
     for (const std::string& str : leftSet) {
@@ -126,6 +170,11 @@ unordered_set<std::string> SuchThatClauseEvaluator::generateRightSet (unordered_
     return rightSet;
 }
 
+/**
+ * Filter a set of values by the entity type.
+ * @param set  a set of values for an argument
+ * @param entityType  an DesignEntity value
+ */
 void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, DesignEntity entityType) {
     for (auto it = set.begin(); it != set.end(); ) {
         if(!isEntityType(*it, entityType)) {
@@ -137,7 +186,12 @@ void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, Des
     }
 }
 
-
+/**
+ * Check if a string identifier belongs to an entity type.
+ * @param ident  reference to an string identifier
+ * @param entityType  an DesignEntity value
+ * @return  a boolean value indicating whether the identifier belongs to an entity type.
+ */
 bool SuchThatClauseEvaluator::isEntityType (const std::string& ident, DesignEntity entityType) {
     switch (entityType) {
         case DesignEntity::STMT:
@@ -156,25 +210,38 @@ bool SuchThatClauseEvaluator::isEntityType (const std::string& ident, DesignEnti
             return pkb->isWhileStatement(ident);
         case DesignEntity::IF:
             return pkb->isIfStatement(ident);
-        case DesignEntity::CALL:
-            //TODO: update call check
-            //return pkb->isCall(ident);
-            return true;
         case DesignEntity::PROCEDURE:
             return pkb->isProcedure(ident);
+        case DesignEntity::CALL:
+            //TODO: required update in future iterations
+            //return pkb->isCall(ident);
         default:
-            return false;
+            throw qp::QPEvaluatorException("Invalid design entity found.");
     }
 }
 
+/**
+ * Generate a set of values for an argument given the type of value for the argument.
+ * For wildcard argument, generate all values for that design entity.
+ * For other arguments, simply return the string value for the argument in a set.
+ * @param argument  reference to an argument object
+ * @param wildCardType  the DesignEntity used for the argument if the argument is a wildcard.
+ * @return  return the set of values for the argument
+ */
 unordered_set<string> SuchThatClauseEvaluator::generateValueSet(Argument& argument, DesignEntity wildCardType) {
     if(argument.argumentType == ArgumentType::UNDERSCORE) {
         return getAllType(wildCardType);
     } else {
+        assert(argument.argumentType != ArgumentType::SYNONYM);
         return {argument.argumentValue};
     }
 }
 
+/**
+ * Utility function for converting an unordered set to a vector.
+ * @param set  the set to be converted
+ * @return  a vector object containing the items of the original set
+ */
 std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_set<std::string> set) {
     std::vector<ResultItem> vector {};
     vector.reserve(set.size());
@@ -182,7 +249,7 @@ std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_s
         vector.emplace_back(std::move(set.extract(it++).value()));
     }
     return vector;
-};
+}
 
 
 

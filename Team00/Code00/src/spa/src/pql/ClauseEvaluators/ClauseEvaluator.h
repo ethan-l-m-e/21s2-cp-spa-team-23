@@ -8,6 +8,7 @@
 
 #include <utility>
 #include <vector>
+#include <cassert>
 #include "PKB.h"
 #include "Result.h"
 #include "SynonymRelations.h"
