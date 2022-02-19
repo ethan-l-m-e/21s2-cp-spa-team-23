@@ -29,8 +29,8 @@ Node* Parser::Parse (string sourceCode) {
     //extract relationship entities from AST and transmit data to PKB
     //TODO: replace parseProcedure with parseMain/parseProgram
     //StatementList statementList = Parser::parseStatementList(sourceCode);
-    Node* programNode = parseProcedure(&sourceCode);
-    return programNode;
+    Node* procedureNode = parseProcedure(&sourceCode);
+    return procedureNode;
 }
 
 VariableNode* Parser::parseVar(string variable) {
