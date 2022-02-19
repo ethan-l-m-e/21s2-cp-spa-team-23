@@ -158,6 +158,40 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
     v.push_back(sign);
 }
 
+void SourceTokenizer::extractCondExpr(string sourceCode, vector<string> &v) {
+    int operPos = -1;
+    bool notFound = true;
+    string left, right, oper;
+    if ((operPos = sourceCode.find("&&")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
+    }
+    if (notFound && (operPos = sourceCode.find("||")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
+    }
+    if (notFound && (operPos = sourceCode.find("!")) != string::npos) {
+        notFound = false;
+        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
+        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 1));
+    }
+    if (notFound) {
+        // just rel exp
+        left = "";
+        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
+        oper = "";
+    }
+
+    v.push_back(oper); // 0
+    v.push_back(left); // 1
+    v.push_back(right); // 2
+}
+
 void SourceTokenizer::extractRelExpr(string sourceCode, vector<string> &v) {
     int operPos = -1;
     int operLength = 2;

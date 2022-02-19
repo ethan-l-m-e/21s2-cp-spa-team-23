@@ -5,7 +5,7 @@ using namespace std;
 
 class Parser {
 public:
-    static int Parse(string);
+    static Node* Parse(string);
 
     static VariableNode* parseVar(string variable);
     static ConstValueNode* parseConst(string constValue);
