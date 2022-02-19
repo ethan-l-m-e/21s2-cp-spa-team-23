@@ -83,7 +83,7 @@ void SourceTokenizer::extractWhile(string sourceCode, vector<string> &v) {
 
 void SourceTokenizer::extractProcedure(string sourceCode, vector<string> &v) {
     int start = sourceCode.find('{');
-    int end = sourceCode.find('}');
+    int end = sourceCode.rfind('}');
     string procedureName = sourceCode.substr(10, start-10);
     string procedureCode = sourceCode.substr(start+1, end-start-1);
     procedureName = StringFormatter::removeTrailingSpace(procedureName);
@@ -128,6 +128,12 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
                     }
                     break;
                 case ('/'):
+                    if (bracketCheck == 0) {
+                        exprPos = i;
+                        goto exit_loop;
+                    }
+                    break;
+                case ('%'):
                     if (bracketCheck == 0) {
                         exprPos = i;
                         goto exit_loop;

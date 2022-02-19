@@ -41,7 +41,7 @@ int Parser::Parse (string filename) {
 
     //extract relationship entities from AST and transmit data to PKB
     //TODO: create a relationshipExtractor class to pull methods
-    StatementList statementList = Parser::parseStatementList(sourceCode);
+    Parser::parseProgram(sourceCode);
 
     //RelationshipExtractor::extractFollows(&rootNode);
 

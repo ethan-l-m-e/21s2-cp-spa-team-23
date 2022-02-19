@@ -17,7 +17,7 @@ string const BASE_CASE_REGEX = VAR_NAME + "|" + PROC_NAME + "|" + CONST_VALUE;
 string const COND_EXPR_REGEX;
 string const COND_EXPR_IDENTIFIER = "([!]?[\\(]?(.*)[(&&)(||)<>(>=)(<=)(==)(!=)](.*)[\\)]?)";
 string const EXPR_REGEX;
-string const EXPR_TERM_IDENTIFIER = "([^=;\\[\\]\\{\\}]*)[+-/*]{1}([^=;\\[\\]\\{\\}]*)";
+string const EXPR_TERM_IDENTIFIER = "([^=;\\[\\]\\{\\}]*)[+-/*%]{1}([^=;\\[\\]\\{\\}]*)";
 string const TERM_REGEX;
 string const TERM_IDENTIFIER;
 string const REL_FACTOR_REGEX;
