@@ -91,11 +91,75 @@ void RelationshipExtractor::extractModifies (Node * node) {
     }
 }
 
+void extractAllVariables(Node *node) {
+    vector<string> list;
+    list = node->getAllVariables();
+    for(string variable: list) {
+        cout << "sending var " << variable << " to PKB\n";
+        PKB::getInstance() ->addVariable(variable);
+    }
+}
+
+void extractAllConstant(Node *node) {
+    vector<string> list;
+    list = node->getAllConstants();
+    for(string constant: list) {
+        cout << "sending const " << constant << " to PKB\n";
+        PKB::getInstance() ->addConstant(constant);
+    }
+}
+
+void extractAllReadStmt(Node *node) {
+    vector<stmtNo> list;
+    list = node->getAllReadStmt();
+    for(int num: list) {
+        cout << "sending read " << num << " to PKB\n";
+        PKB::getInstance()->addReadStatement(num);
+    }
+}
+
+void extractAllPrintStmt(Node *node) {
+    vector<stmtNo> list;
+    list = node->getAllPrintStmt();
+    for(int num: list) {
+        cout << "sending print " << num << " to PKB\n";
+        PKB::getInstance()->addPrintStatement(num);
+    }
+}
+
+void extractAllAssignStmt(Node *node) {
+    vector<stmtNo> list;
+    list = node->getAllAssignStmt();
+    for(int num: list) {
+        cout << "sending assign " << num << " to PKB\n";
+        PKB::getInstance()->addAssignStatement(num);
+    }
+}
+
+void extractAllAssignNodes(Node *node) {
+    vector<AssignNode*> list;
+    list = node-> getAllAssignNodes();
+    for(AssignNode* a: list) {
+        cout << "assign pointers " << to_string(a->getStmtNumber()) << "\n";
+        PKB::getInstance()->addAssignNode(a);
+    }
+}
+
 void RelationshipExtractor::extractRelationships(Node * node){
+    //extract relationship
     vector<StmtLstNode*> v;
     extractFollows(node);
     extractParent(node,v);
     extractUses(node);
     extractModifies(node);
+
+    //extract entities
+    extractAllVariables(node);
+    extractAllConstant(node);
+    extractAllReadStmt(node);
+    extractAllPrintStmt(node);
+    extractAllAssignStmt(node);
+    extractAllAssignNodes(node);
+
 }
 

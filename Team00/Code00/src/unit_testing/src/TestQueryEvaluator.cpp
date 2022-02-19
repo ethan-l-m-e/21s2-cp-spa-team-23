@@ -780,6 +780,7 @@ PKB* generateSamplePKBForPatternMatching() {
     string a7 = "x = (y + (3 - z)) + 1;";
 
     PKB *testPKB = PKB::getInstance();
+    testPKB->clearPKB();
     testPKB->addAssignNode(Parser::parseAssign(a1));
     testPKB->addAssignNode(Parser::parseAssign(a2));
     testPKB->addAssignNode(Parser::parseAssign(a3));
