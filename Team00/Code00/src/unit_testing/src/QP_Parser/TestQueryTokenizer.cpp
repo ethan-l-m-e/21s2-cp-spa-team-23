@@ -1,10 +1,9 @@
 #include "catch.hpp"
 #include "QP_Parser/Tokenizer.h"
-#include "pql/query_obj/Argument.h"
+
 #include <vector>
 #include <string>
 #include <map>
-#include <iostream>
 
 using namespace qp;
 
@@ -35,16 +34,14 @@ TEST_CASE ("QP TOKENIZER: SINGLE VARIABLE DECLARATION-SINGLE CHAR") {
     CHECK(synonym == expectedSynonym);
 
     // Check Such That Clauses
-    std::vector<SuchThatClauseToken>* expectedSuchThatClauseTokens = nullptr;
     auto suchThatClauseTokens = queryToken.suchThatClauseTokens;
 
-    CHECK(suchThatClauseTokens == expectedSuchThatClauseTokens);
+    CHECK(suchThatClauseTokens->empty());
 
     // Check Pattern
-    std::vector<PatternToken>* expectedPatternTokens = nullptr;
     auto patternTokens = queryToken.patternTokens;
 
-    CHECK(patternTokens == expectedPatternTokens);
+    CHECK(patternTokens->empty());
 }
 
 TEST_CASE ("QP TOKENIZER: SINGLE VARIABLE DECLARATION-DOUBLE CHAR") {
@@ -659,10 +656,9 @@ TEST_CASE ("QP TOKENIZER: PATTERN") {
     CHECK(synonym == expectedSynonym);
 
     // Check Such That Clauses
-    std::vector<SuchThatClauseToken>* expectedSuchThatClauseTokens = nullptr;
     auto suchThatClauseTokens = queryToken.suchThatClauseTokens;
 
-    CHECK(suchThatClauseTokens == expectedSuchThatClauseTokens);
+    CHECK(suchThatClauseTokens->empty());
 
     // Check Pattern
     std::pair<std::string, std::string> expectedArguments = std:: make_pair("_", "_");
