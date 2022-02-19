@@ -37,9 +37,6 @@ VariableNode* Parser::parseVar(string variable) {
     // convert into a variable node
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
-        cout << "sending var " << variable << " to PKB\n";
-        //TODO: abstract PKB methods to another class away from Parser
-        PKB::getInstance() ->addVariable(variable);
         return new VariableNode(variable);
     } else {
         throw "Invalid varname format: '" + variable + "'\n";
@@ -50,8 +47,6 @@ ConstValueNode *Parser::parseConst(string constValue) {
     // convert into a const node
     int check = Identifier::identifyFirstObject(constValue);
     if(check == CONSTANT_VALUE) {
-        cout << "sending const " << constValue << " to PKB\n";
-        PKB::getInstance() ->addConstant(constValue);
         return new ConstValueNode(constValue);
     } else {
         throw "Invalid const format: '" + constValue + "'\n";
@@ -95,8 +90,6 @@ Expression Parser::parseExpression(string expression) {
 
 ReadNode *Parser::parseRead(string readLine) {
     int stmtNo = getStatementNumber();
-    cout << "sending read " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addReadStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractRead(readLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -106,8 +99,6 @@ ReadNode *Parser::parseRead(string readLine) {
 
 PrintNode *Parser::parsePrint(string printLine) {
     int stmtNo = getStatementNumber();
-    cout << "sending print " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addPrintStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractPrint(printLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -123,9 +114,7 @@ AssignNode* Parser::parseAssign(string assignLine) {
     SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
-    AssignNode* newNode = new AssignNode(stmtNo, newVarNode, newExpression);
-    PKB::getInstance()->addAssignNode(newNode);
-    return newNode;
+    return new AssignNode(stmtNo, newVarNode, newExpression);
 }
 
 WhileNode *Parser::parseWhile(string code) {
