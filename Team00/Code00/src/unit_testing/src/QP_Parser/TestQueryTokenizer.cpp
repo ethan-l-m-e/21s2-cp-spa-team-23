@@ -739,8 +739,22 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SELECT AS SYN-ASSIGN") {
     CHECK(*(patternToken.arguments) == expectedArguments);
 }
 
-TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYN-ASSIGN") {
+TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYNONYM") {
     std::string firstQuery = "assign pattern; variable v; \nSelect pattern pattern pattern (\"x\", _)";
+    Tokenizer tokenizer = Tokenizer();
+    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+
+    // Check Pattern
+    std::pair<std::string, std::string> expectedArguments = std:: make_pair("\"x\"", "_");
+    auto patternTokens = *(queryToken.patternTokens);
+    auto patternToken = patternTokens[0];
+
+    CHECK(patternToken.synonym == "pattern");
+    CHECK(*(patternToken.arguments) == expectedArguments);
+}
+
+TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYN-ASSIGN") {
+    std::string firstQuery = "assign pattern, a; \nSelect a pattern pattern (\"x\", _)";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
