@@ -75,32 +75,31 @@ TEST_CASE("test follows* - basic") {
 //pkb parents doesnt seem to work yet so these will fail
 TEST_CASE("test parents - basic") {
     StatementList defaultStmtLst;
-    StatementList defaultStmtLst2;
 
     defaultStmtLst.push_back(&aNode);
     defaultStmtLst.push_back(&bNode);
     defaultStmtLst.push_back(&cNode);
 
-    ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
+    WhileNode wNode = WhileNode(0, condPtr, defaultStmtLst);
     vector<StmtLstNode*> v;
-    v.push_back(&pNode);
-    RelationshipExtractor::extractParent(&pNode,v);
+    v.push_back(&wNode);
+    RelationshipExtractor::extractParent(&wNode,v);
     REQUIRE(PKB::getInstance()->isParent("0","2"));
+    REQUIRE(PKB::getInstance()->isParent("0","1"));
 }
 
 TEST_CASE("test parents - fail") {
     StatementList defaultStmtLst;
-    StatementList defaultStmtLst2;
 
     defaultStmtLst.push_back(&aNode);
     defaultStmtLst.push_back(&bNode);
     defaultStmtLst.push_back(&cNode);
 
-    ProcedureNode pNode = ProcedureNode(&p, defaultStmtLst);
+    WhileNode wNode = WhileNode(0, condPtr, defaultStmtLst);
     vector<StmtLstNode*> v;
-    v.push_back(&pNode);
-    RelationshipExtractor::extractParent(&pNode,v);
-    REQUIRE(PKB::getInstance()->isParent("1","2"));
+    v.push_back(&wNode);
+    RelationshipExtractor::extractParent(&wNode,v);
+    REQUIRE(PKB::getInstance()->isParent("1","2")==false);
 }
 
 TEST_CASE("test parents* - basic") {
@@ -109,23 +108,22 @@ TEST_CASE("test parents* - basic") {
 
     defaultStmtLst.push_back(&aNode);
     defaultStmtLst.push_back(&bNode);
-    defaultStmtLst.push_back(&cNode);
+//    defaultStmtLst.push_back(&cNode);
 
-    StatementList nestedStatementList;
-    nestedStatementList.push_back(&aNode);
-    nestedStatementList.push_back(&bNode);
+//    StatementList nestedStatementList;
+//    nestedStatementList.push_back(&aNode);
+//    nestedStatementList.push_back(&bNode);
     defaultStmtLst2.push_back(&dNode);
     defaultStmtLst2.push_back(&eNode);
 
-    WhileNode wNode = WhileNode(3, condPtr, defaultStmtLst2);
-    nestedStatementList.push_back(&wNode);
-
-    ProcedureNode pNode = ProcedureNode(&p, nestedStatementList);
+    WhileNode w1Node = WhileNode(3, condPtr, defaultStmtLst2);
+    defaultStmtLst.push_back(&w1Node);
+    WhileNode w2Node = WhileNode(0, condPtr, defaultStmtLst);
 
     vector<StmtLstNode*> v;
-    v.push_back(&pNode);
-    RelationshipExtractor::extractParent(&pNode,v);
-    REQUIRE(PKB::getInstance()->isParent("0","2"));
+    RelationshipExtractor::extractParent(&w2Node,v);
+    REQUIRE(PKB::getInstance()->isParentT("0","6"));
+    REQUIRE(PKB::getInstance()->isParentT("0","5"));
 }
 
 TEST_CASE("test uses - basic") {
