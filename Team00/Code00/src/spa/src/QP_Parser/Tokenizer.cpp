@@ -9,7 +9,7 @@
 #include <regex>
 
 using namespace qp;
-// TODO: transfer regex to constants file
+
 QueryToken Tokenizer::getQueryToken(std::string query) {
     QueryToken queryToken = QueryToken();
 
@@ -18,6 +18,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
         return queryToken;
     }
 
+    // Replace all newlines in the query
     query = std::regex_replace(query, regex("\n"), "");
 
     // Gets all the different tokens
@@ -30,9 +31,9 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 }
 
 void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
-    std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, "[ |\n]*;[ |\n]*(Select.*)")[0];
+    std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, DECLARATIONS_LINE)[0];
     // Separates declarations by design entities
-    std::vector<std::string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, "[ ]*;[ ]*");
+    std::vector<std::string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, SPLIT_DESIGN_ENTITIES);
     splitDeclarations(declarationsToken, queryToken);
 }
 
@@ -45,7 +46,7 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
     for (std::string &declaration : declarations) {
         designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
         synonymsString = declaration.substr(designEntity.length() + 1);
-        std::vector<std::string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, "[ ]*,[ ]*");
+        std::vector<std::string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, SPLIT_DECLARATIONS);
 
         for (auto synonym : synonyms) {
             declarationNames.push_back(synonym);
@@ -59,20 +60,22 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
 }
 
 void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
-    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, "(.*);[ |\n]*(Select[ ]+|[ ]+|(.*;))");
+    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, SELECT_LINE);
     std::string synonym = tokens[0].substr(0, tokens[0].find(" "));
     queryToken.selectClauseToken = synonym;
 }
 
 void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
+    // Replace * with - in the query
     pql = std::regex_replace(pql, regex("\\*"), "-");
-    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.)*such [ ]*that[ ]+");
+    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, SUCH_THAT_CLAUSE);
 
-    if (backClauses[0] == pql) {
+    bool noSuchThatClause = backClauses[0] == pql;
+    if (noSuchThatClause) {
         return;
     }
 
-    std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
+    std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], SPLIT_SUCH_THAT_CLAUSE);
     std::string relRef = std::regex_replace(suchThatClauses[0], regex("-"), "*");
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -83,15 +86,19 @@ void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken
 
 
 void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
-    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+");
-    if (backClauses[0] == pql) {
+    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, PATTERN_LINE);
+    bool noPattern = backClauses[0] == pql;
+    bool isSynonymCalledPattern = queryToken.selectClauseToken == "pattern";
+
+    if (noPattern) {
         return;
-    } else if (queryToken.selectClauseToken == "pattern") {
-        backClauses = StringFormatter::tokenizeByRegex(pql, "(.*)[ ]+pattern[ ]+" + SYNONYM + "[ ]*\\(");
+    } else if (isSynonymCalledPattern) {
+        // Handle the case where pattern is chosen as a synonym
+        backClauses = StringFormatter::tokenizeByRegex(pql, REGEX_FOR_PATTERN_SYNONYM);
         backClauses[0] = "pattern (" + backClauses[0];
     }
 
-    std::vector<std::string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], "[ ]*[\\(\\),][ ]*");
+    std::vector<std::string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], PATTERN_ARGUMENTS);
     std::string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
 
     PatternToken patternToken = PatternToken();

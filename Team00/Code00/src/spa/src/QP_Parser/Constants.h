@@ -53,3 +53,17 @@ std::string const PQL_FORMAT = DECLARATION_REGEX + "[( |\n|\t)]+" + SELECT_CL;
 // regex needed for semantic validation
 std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*)";
 std::string const IDENT_CHECK = "\"" + IDENT + "\"";
+std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";
+
+// regex strings for tokenizer
+std::string const DECLARATIONS_LINE = "[ |\n|\t]*;[ |\n|\t]*(Select.*)";
+std::string const SPLIT_DESIGN_ENTITIES = "[ |\t]*;[ |\t]*";
+std::string const SPLIT_DECLARATIONS = "[ |\t]*,[ |\t]*";
+
+std::string const SELECT_LINE = "(.*);[ |\n]*(Select[ ]+|[ ]+|(.*;))";
+std::string const SUCH_THAT_CLAUSE = "(.)*such [ ]*that[ ]+";
+std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
+
+std::string const PATTERN_LINE = "(.*)[ ]+pattern[ ]+";
+std::string const REGEX_FOR_PATTERN_SYNONYM = "(.*)[ ]+pattern[ ]+" + SYNONYM + "[ ]*\\(";
+std::string const PATTERN_ARGUMENTS = "[ ]*[\\(\\),][ ]*";
