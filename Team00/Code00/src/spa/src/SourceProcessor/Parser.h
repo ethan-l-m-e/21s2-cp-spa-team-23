@@ -23,7 +23,7 @@ public:
     static AssignNode* parseAssign(string assignLine);
     static StatementList parseStatementList(string stmtList);
     static ProcedureNode* parseProcedure(string * procedure);
-    static Program parseProgram(string sourceCode);
+    static ProgramNode* parseProgram(string sourceCode);
 
     static Expression parseExpression(string expression);
 };

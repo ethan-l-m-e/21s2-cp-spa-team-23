@@ -29,8 +29,8 @@ Node* Parser::Parse (string sourceCode) {
     //extract relationship entities from AST and transmit data to PKB
     //TODO: replace parseProcedure with parseMain/parseProgram
     //StatementList statementList = Parser::parseStatementList(sourceCode);
-    Node* procedureNode = parseProcedure(&sourceCode);
-    return procedureNode;
+    auto programNode = parseProgram(sourceCode);
+    return programNode;
 }
 
 VariableNode* Parser::parseVar(string variable) {
@@ -260,14 +260,14 @@ ProcedureNode *Parser::parseProcedure(string * procedure) {
     return new ProcedureNode(newProcNameNode, stmtLst);
 }
 
-Program Parser::parseProgram(string sourceCode) {
+ProgramNode* Parser::parseProgram(string sourceCode) {
     vector<string> tokens;
-    Program program;
+    ProcedureList newProcLst;
     string * procedurePtr;
     procedurePtr = &sourceCode;
     //while(procedurePtr -> length() > 0) {
-        ProcedureNode *newProcedureNode = Parser::parseProcedure(&sourceCode);
-        program.push_back(newProcedureNode);
+        ProcedureNode *newProcedureNode = Parser::parseProcedure(procedurePtr);
+        newProcLst.push_back(newProcedureNode);
     //}
-    return program;
+    return new ProgramNode(newProcLst);
 }

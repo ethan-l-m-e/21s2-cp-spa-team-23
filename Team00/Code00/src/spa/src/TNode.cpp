@@ -250,6 +250,14 @@ ProcName ProcedureNode::getProcName() {
     return this->procName->getProcedureName();
 }
 
+ProgramNode::ProgramNode(ProcedureList procLst) {
+    this->procLst = procLst;
+}
+
+ProcedureList ProgramNode::getProcLst() {
+    return this->procLst;
+}
+
 //StatementList ProcedureNode::getStmtLst() {
 //    return this->stmtLst;
 //}
