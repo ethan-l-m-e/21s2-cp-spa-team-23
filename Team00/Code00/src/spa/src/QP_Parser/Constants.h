@@ -52,3 +52,4 @@ std::string const PQL_FORMAT = DECLARATION_REGEX + "[( |\n|\t)]+" + SELECT_CL;
 
 // regex needed for semantic validation
 std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*)";
+std::string const IDENT_CHECK = "\"" + IDENT + "\"";

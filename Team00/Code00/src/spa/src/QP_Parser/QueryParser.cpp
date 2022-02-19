@@ -14,10 +14,13 @@ Query QueryParser::getQuery(std::string pql) {
     Tokenizer tokenizer = Tokenizer();
     Validator validator = Validator();
 
+    // Check for syntactic errors
     validator.validateQueryStructure(pql);
     QueryToken queryToken = tokenizer.getQueryToken(pql);
+    // Check for semantic errors
     validator.checkForSemantics(queryToken);
 
+    // Process query tokens and create query object
     Query query = Query();
     getDeclarations(queryToken, query);
     getSynonym(queryToken, query);
