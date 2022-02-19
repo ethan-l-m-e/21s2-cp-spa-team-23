@@ -23,13 +23,15 @@ set(headers ${headers}
         src/QP_Parser/Validator.h
         src/QP_Parser/Exception.h
         src/pql/QueryEvaluator.h
-        src/SourceProcessor/SourceProcessor.h)
+        src/SourceProcessor/SourceProcessor.h
+        )
 add_library(spa ${srcs} ${headers} src/SourceProcessor/Parser.cpp
         src/SourceProcessor/SourceProcessor.cpp src/SourceProcessor/SourceProcessor.h
         src/SourceProcessor/Parser.h
         src/SourceProcessor/Identifier.cpp src/SourceProcessor/Identifier.h
         src/StringFormatter.cpp src/StringFormatter.h
         src/SourceProcessor/SourceTokenizer.cpp src/SourceProcessor/SourceTokenizer.h
+        #src/TNode.cpp src/TNode.h src/TNode.cpp
         )
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
