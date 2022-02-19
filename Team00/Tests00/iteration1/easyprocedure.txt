@@ -1,0 +1,19 @@
+procedure Procedure {
+  read a;
+  print b;
+  X = c;
+  while (Y == 1) {
+    read d;
+    print e;
+    X = f;
+  }
+  if (Y == 1) then {
+    read g;
+    print h;
+    X = i;
+  } else {
+    read j;
+    print k;
+    X = l;
+  }
+}

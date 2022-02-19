@@ -1,0 +1,120 @@
+1.0 - [valid] select stmt with wildcard ===========================================================[Generic tests start]
+stmt s;
+Select s such that Uses(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+5000
+1.1.1 - [valid] select stmt with wildcard ================================================[Select statement tests start]
+stmt s;
+Select s such that Uses(s, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+5000
+1.1.2 - [valid] select stmt with var synonym
+stmt s; variable v;
+Select s such that Uses(s, v)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+5000
+1.1.3 - [valid] select stmt with var name
+stmt s; variable v;
+Select s such that Uses(s, "a")
+1, 3, 4, 5, 6, 7, 10, 11, 13, 15
+5000
+1.2.1 - [valid] select assign with wildcard =================================================[Select assign tests start]
+assign a;
+Select a such that Uses(a, _)
+1, 4, 6, 8, 9, 11, 12, 14, 15
+5000
+1.2.2 - [valid] select assign with var synonym
+assign a; variable v;
+Select a such that Uses(a, v)
+1, 4, 6, 8, 9, 11, 12, 14, 15
+5000
+1.2.3 - [valid] select assign with var name
+assign a;
+Select a such that Uses(a, "a")
+1, 6, 11, 15
+5000
+1.3.1 - [valid] select print with wildcard ===================================================[Select print tests start]
+print p;
+Select p such that Uses(p, _)
+2
+5000
+1.3.2 - [valid] select print with var synonym
+print p; variable v;
+Select a such that Uses(p, v)
+2
+5000
+1.3.3 - [valid] select print with var name
+print p;
+Select a such that Uses(p, "X")
+2
+5000
+1.4.1 - [valid] select while with wildcard ===================================================[Select while tests start]
+while w;
+Select w such that Uses(w, _)
+3, 5
+5000
+1.4.2 - [valid] while with var synonym
+while w; variable v;
+Select w such that Uses(w, v)
+3, 5
+5000
+1.4.3 - [valid] while with var name
+while w;
+Select w such that Uses(w, "X")
+3, 5
+5000
+1.4.4 - [valid] var used in while
+variable v;
+Select v such that Uses(3, v)
+X, a, Y, b
+5000
+1.5.1 - [valid] select while with wildcard ======================================================[Select if tests start]
+while ifs;
+Select ifs such that Uses(ifs, _)
+7, 10, 13
+5000
+1.5.2 - [valid] if with var synonym
+if ifs; variable v;
+Select ifs such that Uses(ifs, v)
+7, 10, 13
+5000
+1.5.3 - [valid] while with var name
+if ifs;
+Select ifs such that Uses(ifs, "X")
+7, 10, 13
+5000
+1.5.4 - [valid] variables used in if
+variable v;
+Select v such that Uses(7, v)
+X, a, Y, b
+5000
+2.1 - [not valid] lhs not entRef or stmtRef (read) ================================================[Invalid tests start]
+read r; variable v;
+Select v such that Uses(r, v)
+none
+5000
+2.2 - [not valid] lhs not entRef or stmtRef (variable)
+variable v, v1;
+Select v such that Uses(v1, v)
+none
+5000
+2.3 - [not valid] lhs not entRef or stmtRef (constant)
+variable v; constant c;
+Select v such that Uses(c, v)
+none
+5000
+2.4 - [not valid] non existent stmt synonym
+variable v;
+Select v such that Uses(s, v)
+none
+5000
+2.5 - [not valid] non existent var synonym
+variable v;
+Select v such that Uses(_, v1)
+none
+5000
+2.6 - [not valid] non existent var name
+variable v;
+Select v such that Uses(_, "unknownVar")
+none
+5000
