@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <list>
-#include "SourceProcessor/Parser.h"
+#include "SourceProcessor/SourceProcessor.h"
 #include "PKB.h"
 #include "QP_Parser/QueryParser.h"
 #include "pql/QueryEvaluator.h"

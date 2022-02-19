@@ -23,10 +23,11 @@ set(headers ${headers}
         src/QP_Parser/Validator.h
         src/QP_Parser/Exception.h
         src/pql/QueryEvaluator.h
-        )
-add_library(spa ${srcs} ${headers} src/SourceProcessor/Parser.cpp src/SourceProcessor/Parser.h
+        src/SourceProcessor/SourceProcessor.h)
+add_library(spa ${srcs} ${headers} src/SourceProcessor/Parser.cpp
+        src/SourceProcessor/SourceProcessor.cpp src/SourceProcessor/SourceProcessor.h
+        src/SourceProcessor/Parser.h
         src/SourceProcessor/Identifier.cpp src/SourceProcessor/Identifier.h
-        src/SourceProcessor/Extractor.cpp src/SourceProcessor/Extractor.h
         src/StringFormatter.cpp src/StringFormatter.h
         src/SourceProcessor/SourceTokenizer.cpp src/SourceProcessor/SourceTokenizer.h
         )

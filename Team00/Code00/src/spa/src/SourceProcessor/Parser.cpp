@@ -16,7 +16,6 @@ using namespace std;
 #include "Constants/regex.h"
 #include "Identifier.h"
 //#include "RelationshipExtractor.h"
-#include "Extractor.h"
 #include "StringFormatter.h"
 #include "SourceTokenizer.h"
 
@@ -26,26 +25,12 @@ int statementNumber = 0;
 Identifier identifier;
 string extractFrontStringByRegex(string sourceCode, string regex);
 
-int Parser::Parse (string filename) {
-    // load file
-    ifstream file;
-    file.open(filename);
-    // preferably throw exception if file invalid
-    // extract text
-    stringstream codeStream;
-    codeStream << file.rdbuf();
-    string sourceCode = codeStream.str();
-    file.close();
-
-
-
+Node* Parser::Parse (string sourceCode) {
     //extract relationship entities from AST and transmit data to PKB
-    //TODO: create a relationshipExtractor class to pull methods
-    Parser::parseProgram(sourceCode);
-
-    //RelationshipExtractor::extractFollows(&rootNode);
-
-    return 0;
+    //TODO: replace parseProcedure with parseMain/parseProgram
+    //StatementList statementList = Parser::parseStatementList(sourceCode);
+    Node* procedureNode = parseProcedure(&sourceCode);
+    return procedureNode;
 }
 
 VariableNode* Parser::parseVar(string variable) {
@@ -53,6 +38,7 @@ VariableNode* Parser::parseVar(string variable) {
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
         cout << "sending var " << variable << " to PKB\n";
+        //TODO: abstract PKB methods to another class away from Parser
         PKB::getInstance() ->addVariable(variable);
         return new VariableNode(variable);
     } else {
@@ -175,46 +161,9 @@ RelExprNode *Parser::parseRelExpr(string relExprLine) {
     return new RelExprNode(newLeftRelFactor, newRightRelFactor, tokens[2]);
 }
 
-// DELETE ONCE SourceTokenizer HAS ITS OWN EXTRACT COND EXPR
-////////////////////////////////////////////////////////////
-void extractCondExpr(string sourceCode, vector<string> &v) {
-    int operPos = -1;
-    bool notFound = true;
-    string left, right, oper;
-    if ((operPos = sourceCode.find("&&")) != string::npos) {
-        notFound = false;
-        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
-        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
-    }
-    if (notFound && (operPos = sourceCode.find("||")) != string::npos) {
-        notFound = false;
-        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
-        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
-    }
-    if (notFound && (operPos = sourceCode.find("!")) != string::npos) {
-        notFound = false;
-        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
-        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 1));
-    }
-    if (notFound) {
-        // just rel exp
-        left = "";
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
-        oper = "";
-    }
-
-    v.push_back(oper); // 0
-    v.push_back(left); // 1
-    v.push_back(right); // 2
-}
-////////////////////////////////////////////////////////////
-
 CondExprNode *Parser::parseCondExpr(string condExprLine) {
     vector<string> tokens;
-    extractCondExpr(std::move(condExprLine), tokens);
+    SourceTokenizer::extractCondExpr(std::move(condExprLine), tokens);
     if (tokens[0].empty()) {
         RelExprNode* newRelExpr = parseRelExpr(tokens[2]);
         return new CondExprNode(newRelExpr);
