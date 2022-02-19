@@ -17,6 +17,17 @@ int Node::getStmtNumber() const {return -1;}
 vector<string> Node::getListOfVarUsed() {return {};}
 vector<string> Node::getListOfVarModified() {return {};}
 
+vector<VarName> Node::getAllVariables() {return {};}
+vector<ProcName> Node::getAllProcedure() { return {};};
+vector<Constant> Node::getAllConstants() { return {};};
+vector<stmtNo> Node::getAllStatementNumber() { return {};}
+vector<stmtNo> Node::getAllReadStmt() { return {};}
+vector<stmtNo> Node::getAllPrintStmt() { return {};}
+vector<stmtNo> Node::getAllAssignStmt() { return {};}
+vector<AssignNode*> Node::getAllAssignNodes() {return {};}
+vector<stmtNo> Node::getAllWhileStmtNo() { return {};}
+vector<stmtNo> Node::getAllIfStmtNo() { return {};}
+
 StmtNode::StmtNode(int num) { this ->statementNumber = num;}
 int StmtNode::getStmtNumber() const { return this ->statementNumber; }
 
@@ -35,6 +46,18 @@ VarName ReadNode::getVarName() const {
     return this->varNode->getVariableName();
 }
 
+vector<VarName> ReadNode::getAllVariables() {
+    return vector<VarName> {this->varNode->getVariableName()};
+}
+
+vector<VarName> ReadNode::getListOfVarModified() {
+    return this->getAllVariables();
+}
+
+vector<stmtNo> ReadNode::getAllReadStmt() {
+    return vector<stmtNo>{this->getStmtNumber()};
+}
+
 PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
     this->varNode = varNode;
     this->varNode->setParentNode(this);
@@ -43,6 +66,20 @@ PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
 VarName PrintNode::getVarName() const {
     return this->varNode->getVariableName();
 }
+
+vector<VarName> PrintNode::getAllVariables() {
+    return vector<VarName> {this->varNode->getVariableName()};
+}
+
+vector<VarName> PrintNode::getListOfVarUsed() {
+    return this->getAllVariables();
+}
+
+vector<stmtNo> PrintNode::getAllPrintStmt() {
+    return vector<stmtNo>{this->getStmtNumber()};
+}
+
+
 bool StmtLstNode::hasStmtLst() {return true;}
 StmtLstNode::StmtLstNode(int num, StatementList lst):StmtNode(num) {stmtLst=lst;}
 vector<Node *> StmtLstNode::getStmtLst() {return this->stmtLst;}
@@ -65,7 +102,80 @@ vector<VarName> StmtLstNode::getListOfVarModified() {
                         list.begin(),
                         list.end());
     }
-    cout<<toReturn.at(0);
+    //cout<<toReturn.at(0);
+    return toReturn;
+}
+
+
+vector<VarName> StmtLstNode::getAllVariables() {
+    vector<VarName> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<VarName> list = getStmtLst().at(i)->getAllVariables();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    //cout<<toReturn.at(0);
+    return toReturn;
+}
+
+vector<VarName> StmtLstNode::getAllConstants() {
+    vector<Constant> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<Constant> list = getStmtLst().at(i)->getAllConstants();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    //cout<<toReturn.at(0);
+    return toReturn;
+}
+
+vector<stmtNo> StmtLstNode::getAllReadStmt() {
+    vector<stmtNo> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<stmtNo> list = getStmtLst().at(i)->getAllReadStmt();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    //cout<<toReturn.at(0);
+    return toReturn;
+}
+
+vector<stmtNo> StmtLstNode::getAllPrintStmt() {
+    vector<stmtNo> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<stmtNo> list = getStmtLst().at(i)->getAllPrintStmt();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    //cout<<toReturn.at(0);
+    return toReturn;
+}
+
+vector<stmtNo> StmtLstNode::getAllAssignStmt() {
+    vector<stmtNo> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<stmtNo> list = getStmtLst().at(i)->getAllAssignStmt();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    //cout<<toReturn.at(0);
+    return toReturn;
+}
+
+vector<AssignNode*> StmtLstNode::getAllAssignNodes() {
+    vector<AssignNode*> toReturn;
+    for(int i = 0; i < getStmtLst().size() ; i++) {
+        vector<AssignNode*> list = getStmtLst().at(i)->getAllAssignNodes();
+        toReturn.insert(toReturn.end(),
+                        list.begin(),
+                        list.end());
+    }
+    //cout<<toReturn.at(0);
     return toReturn;
 }
 
@@ -74,6 +184,21 @@ AssignNode::AssignNode(int num, VariableNode *leftNode, Expression rightNode) : 
     this ->rightNode = rightNode;
     this ->leftNode ->setParentNode(this);
     visit([this](auto& n){n->setParentNode(this);},this->rightNode);
+}
+
+vector<Constant> getAllConstantHelper(Factor e) {
+    vector<Constant> vec1;
+    if(ConstValueNode** v = std::get_if<ConstValueNode*>(&e)){
+        ConstValueNode constNode = **v;
+        vec1.push_back(constNode.getConstValue());
+    }else if (BinaryOperatorNode** b = std::get_if<BinaryOperatorNode*>(&e)){
+        BinaryOperatorNode binNode = **b;
+        vector<VarName> left = getAllConstantHelper(binNode.getLeftExpr());
+        vec1.insert(vec1.begin(),left.begin(),left.end());
+        vector<VarName> right=getAllConstantHelper(binNode.getRightExpr());
+        vec1.insert(vec1.end(),right.begin(),right.end());
+    }
+    return vec1;
 }
 
 vector<VarName> getAllVarFnHelper(Factor e){
@@ -92,18 +217,32 @@ vector<VarName> getAllVarFnHelper(Factor e){
     return vec1;
 }
 
-vector<string> AssignNode::getListOfVarUsed(){
+vector<VarName> AssignNode::getListOfVarUsed(){
     return getAllVarFnHelper(this->getRightNode());
 }
-vector<string> AssignNode::getListOfVarModified(){
+vector<VarName> AssignNode::getListOfVarModified(){
     vector<string> v = getAllVarFnHelper(this->getLeftNode());
     return v;
+}
+vector<VarName> AssignNode::getAllVariables() {
+    vector<VarName> vector1 = AssignNode::getListOfVarModified();
+    vector<VarName> vector2 = AssignNode::getListOfVarUsed();
+    vector1.insert(vector1.end(), vector2.begin(), vector2.end());
+    return vector1;
+}
+vector<int> AssignNode::getAllAssignStmt() {
+    return vector<int>{this->getStmtNumber()};
+}
+vector<AssignNode*> AssignNode::getAllAssignNodes() {
+    return vector<AssignNode*> {this};
+}
+vector<Constant> AssignNode::getAllConstants() {
+    return getAllConstantHelper(this->getRightNode());
 }
 
 VariableNode* AssignNode::getLeftNode() const {
     return this ->leftNode;
 }
-
 Expression AssignNode::getRightNode() const {
     return this ->rightNode;
 }
@@ -195,6 +334,8 @@ WhileNode::WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst) : S
 CondExprNode *WhileNode::getCondExpr() {
     return this->condExpr;
 }
+
+
 
 //bool WhileNode::hasStmtLst() {
 //    return true;
