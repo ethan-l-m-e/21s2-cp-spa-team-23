@@ -215,7 +215,7 @@ bool SuchThatClauseEvaluator::isEntityType (const std::string& ident, DesignEnti
             //TODO: required update in future iterations
             //return pkb->isCall(ident);
         default:
-            return false;
+            throw std::runtime_error("Invalid design entity found.");
     }
 }
 

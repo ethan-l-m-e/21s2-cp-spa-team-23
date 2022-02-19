@@ -34,6 +34,6 @@ unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity
             //TODO: To be updated in future iterations
             //return pkb->getAllCalls();
         default:
-            return {};
+            throw std::runtime_error("Invalid design entity found.");
     }
 };

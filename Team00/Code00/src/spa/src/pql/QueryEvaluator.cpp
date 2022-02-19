@@ -74,7 +74,7 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query*
         case RelRef::MODIFIES_P:
             // return ModifiesPClauseEvaluator(clause.argList, pkb, query);
         default:
-            return new FollowsClauseEvaluator(clause.argList, pkb, query); // TODO: Throw error.
+            throw std::runtime_error("No valid clause evaluator is found for relationship type");
     }
 }
 
