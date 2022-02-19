@@ -88,14 +88,13 @@ void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken
 void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
     std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, PATTERN_LINE);
     bool noPattern = backClauses[0] == pql;
-    bool isSynonymCalledPattern = queryToken.selectClauseToken == "pattern";
+    // When syn-assign is "pattern"
+    bool isSynAssignCalledPattern = std::regex_match(backClauses[0], std::regex(PATTERN_ARGUMENTS_MATCH));
 
     if (noPattern) {
         return;
-    } else if (isSynonymCalledPattern) {
-        // Handle the case where pattern is chosen as a synonym
-        backClauses = StringFormatter::tokenizeByRegex(pql, REGEX_FOR_PATTERN_SYNONYM);
-        backClauses[0] = "pattern (" + backClauses[0];
+    } else if (isSynAssignCalledPattern) {
+        backClauses[0] = "pattern " + backClauses[0];
     }
 
     std::vector<std::string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], PATTERN_ARGUMENTS);
