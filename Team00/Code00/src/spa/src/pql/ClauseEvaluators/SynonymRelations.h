@@ -12,25 +12,31 @@
 #include <string>
 #include <vector>
 
+using String2DVector = std::vector<std::vector<std::string>>;
+
 
 class SynonymRelations {
 public:
     SynonymRelations();
-    SynonymRelations(std::vector<std::string>, std::vector<std::vector<std::string>>);
+    SynonymRelations(std::vector<std::string>, String2DVector);
     bool isEmpty();
     std::vector<std::string> *getHeader();
-    std::vector<std::vector<std::string>> *getList();
+    String2DVector *getList();
     void mergeResultToSynonymsRelations(Result& result);
-
-
 private:
-    void assignList(std::vector<std::vector<std::string>> newList);
+    void updateEntries(String2DVector newList);
+    void mergeStringResult(Result &result);
+    void mergeTuplesResult(Result &result);
+    void appendNewSynonym(String2DVector&, std::vector<ResultItem>&);
+    void appendNewSynonymTuples(String2DVector&, std::vector<ResultItem>&);
+    void appendHeader(const std::vector<std::string>&);
+    void innerJoin(size_t, std::vector<ResultItem>&);
+    void innerJoin(std::pair<size_t, size_t>, std::vector<ResultItem>&);
+    void innerJoin(size_t index, std::unordered_map<std::string,std::vector<std::string>>);
     std::unordered_map<std::string, std::vector<std::string>> convertVectorToMap(std::vector<ResultItem>&, bool);
-    std::vector<std::vector<std::string>> appendNewSynonym(std::vector<std::vector<std::string>>&, std::vector<ResultItem>&);
-    std::vector<std::vector<std::string>> appendNewSynonymTuples(std::vector<std::vector<std::string>>&, std::vector<ResultItem>&);
 
-    std::vector<std::string> nTupleHeader;
-    std::vector<std::vector<std::string>> nTupleList;
+    std::vector<std::string> tableHeader;
+    String2DVector tableEntries;
 };
 
 #endif //SPA_SYNONYMRELATIONS_H
