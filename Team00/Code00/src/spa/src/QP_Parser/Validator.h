@@ -11,8 +11,8 @@
 
 namespace qp {
     const std::set<std::string> stmtSet({"stmt", "read", "print", "assign", "call", "while", "if"});
-    const std::set<std::string> usesFirstArgSet({"assign", "print", "if", "while", "procedure", "call"});
-    const std::set<std::string> modifiesFirstArgSet({"assign", "read", "if", "while", "procedure", "call"});
+    const std::set<std::string> usesFirstArgSet({"assign", "print", "if", "while", "procedure", "call", "stmt"});
+    const std::set<std::string> modifiesFirstArgSet({"assign", "read", "if", "while", "procedure", "call", "stmt"});
     const std::map<std::string, std::set<std::string>> relationshipAndArgumentsMap({
                                                                               {"Uses", usesFirstArgSet},
                                                                               {"Modifies", modifiesFirstArgSet},

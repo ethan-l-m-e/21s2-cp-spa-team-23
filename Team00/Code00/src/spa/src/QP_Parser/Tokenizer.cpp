@@ -66,7 +66,7 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
     queryToken.selectClauseToken = synonym;
 }
 
-void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
+void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken) {
     // Replace * with - in the query
     std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, SUCH_THAT_CLAUSE);
 

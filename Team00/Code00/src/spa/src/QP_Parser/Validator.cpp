@@ -127,7 +127,7 @@ void Validator::checkFirstArgForOtherClauses(std::string argument, std::set<std:
     }
 
     // If argument is a synonym but is not declared, throw semantic exception
-    bool isArgumentIdent = regex_match(argument, std::regex(IDENT_CHECK));
+    bool isArgumentIdent = regex_match(argument, std::regex(IDENT_INT_CHECK));
     bool isSynonymArgumentNotInDeclarations = !isArgumentIdent &&
             argSet.find(declarationTokens.at(argument)) == argSet.end();
     if (isSynonymArgumentNotInDeclarations) {

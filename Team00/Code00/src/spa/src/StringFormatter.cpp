@@ -73,7 +73,7 @@ vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
     std::regex r(regex);
     string spaced = std::regex_replace(s, r, "//");
 
-    char * sourceAsChar = new char[spaced.size()];
+    char * sourceAsChar = new char[spaced.size()+1];
     char * regexChar = "//*";
     strcpy(sourceAsChar, spaced.c_str());
     char *token = strtok(sourceAsChar,regexChar);
