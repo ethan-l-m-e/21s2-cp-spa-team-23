@@ -788,6 +788,33 @@ PKB* generateSamplePKBForPatternMatching() {
     testPKB->addAssignNode(Parser::parseAssign(a5));
     testPKB->addAssignNode(Parser::parseAssign(a6));
     testPKB->addAssignNode(Parser::parseAssign(a7));
+
+    testPKB->addVariable("x");
+    testPKB->addVariable("y");
+    testPKB->addVariable("z");
+
+    testPKB->addAssignStatement(1);
+    testPKB->addAssignStatement(2);
+    testPKB->addAssignStatement(3);
+    testPKB->addAssignStatement(4);
+    testPKB->addAssignStatement(5);
+    testPKB->addAssignStatement(6);
+    testPKB->addAssignStatement(7);
+
+
+    testPKB->setFollows(1, 2);
+    testPKB->setFollows(2, 3);
+    testPKB->setFollows(3, 4);
+    testPKB->setFollows(4, 5);
+    testPKB->setFollows(5, 6);
+    testPKB->setFollows(6, 7);
+
+    testPKB->setUses(1, {"y"});
+    testPKB->setUses(3, {"y"});
+    testPKB->setUses(4, {"y", "x"});
+    testPKB->setUses(5, {"y", "x", "z"});
+    testPKB->setUses(6, {"y", "x", "z"});
+
     return testPKB;
 }
 
@@ -878,17 +905,10 @@ TEST_CASE("PATTERN FULL EXPRESSION MATCHING") {
 
 TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
     PKB *testPKB = generateSamplePKBForPatternMatching();
-    unordered_map<string, DesignEntity> declarations = {
-            {"s1", DesignEntity::STMT},
-            {"s2", DesignEntity::STMT},
-            {"s3", DesignEntity::STMT},
-    };
-
     unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
     Argument aa = {ArgumentType::SYNONYM, "a"};
     Argument av = {ArgumentType::SYNONYM, "v"};
     Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
-    Argument wild = {ArgumentType::UNDERSCORE, "_"};
     Argument a5 = {ArgumentType::STMT_NO, "5"};
 
     SuchThatClause clause_a_5 = {ArgList{aa, a5},RelRef::FOLLOWS};
@@ -896,8 +916,8 @@ TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
     PatternClause synonym_var = {ArgList {aa, av, rightConst}, SynonymType::ASSIGN};
 
 
-    Query query_1 = makeQuery(declarations, "s1", {clause_a_5}, {synonym_var});
-    Query query_2 = makeQuery(declarations, "s1", {clause_5_v}, {synonym_var});
+    Query query_1 = makeQuery(declarationsMap, "a", {clause_a_5}, {synonym_var});
+    Query query_2 = makeQuery(declarationsMap, "v", {clause_5_v}, {synonym_var});
 
     auto qe = QueryEvaluator(testPKB);
 
