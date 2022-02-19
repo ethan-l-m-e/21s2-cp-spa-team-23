@@ -10,15 +10,6 @@
 #include "pql/query_obj/Query.h"
 #include "pql/ClauseEvaluators/Result.h"
 #include "pql/ClauseEvaluators/ClauseEvaluator.h"
-#include "pql/ClauseEvaluators/FollowsClauseEvaluator.h"
-#include "pql/ClauseEvaluators/ParentClauseEvaluator.h"
-#include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
-#include "pql/ClauseEvaluators/SelectClauseEvaluator.h"
-#include "pql/ClauseEvaluators/FollowsTClauseEvaluator.h"
-#include "pql/ClauseEvaluators/ParentTClauseEvaluator.h"
-#include "pql/ClauseEvaluators/ModifiesSClauseEvaluator.h"
-#include "pql/ClauseEvaluators/UsesSClauseEvaluator.h"
-
 
 #include <sstream>
 #include <iostream>
@@ -32,7 +23,7 @@ public:
 
     std::list<std::string> evaluate(Query*);
 
-    ClauseEvaluator* generateEvaluator(SuchThatClause, Query*);
+    ClauseEvaluator* generateEvaluator(SuchThatClause&, Query*);
 
     static std::list<std::string> generateResultString(Result&);
 
