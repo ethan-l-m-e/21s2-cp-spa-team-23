@@ -1,0 +1,58 @@
+procedure Nested {
+    entryPoint = 1;
+    while (1 == 1) {
+        mainWhileLoop = ((((a))));
+        while (1 == 1) {
+            while (1 == 1) {
+                while (1 == 1) {
+                    nestWithOnlyWhileLoops = 1;
+                }
+            }
+        }
+        if (1 == 1) then {
+            while (1 == 1) {
+                while (1 == 1) {
+                    nestedWhileInWhileInIf = 1;
+                }
+            }
+        } else {
+            while (1 == 1) {
+                if (1 == 1) then {
+                    while (1 == 1) {
+                        if (1 == 1) then {
+                            nestedAlternateIfAndWhile = 1;
+                        } else {
+                            X = a%b;
+                        }
+                    }
+                } else {
+                    print doNothing;
+                }
+            }
+        }
+        endOfMainWhileLoop = 1
+    }
+    if (1 == 1) then {
+        startMainIfLoop = 1;
+        if (1 == 1) then {
+            if (1 == 1) then {
+                nestedIfLoopOnly = 1;
+            } else {
+                X = a*b;
+            }
+        } else {
+            X = a/b;
+        }
+    } else {
+        if (1 == 1) then {
+            X = a+b;
+        } else {
+            if (1 == 1) then {
+                X = a-b;
+            } else {
+                nestedElseLoopOnly = 1;
+            }
+        }
+    }
+    endMainIfLoop = 1;
+}
