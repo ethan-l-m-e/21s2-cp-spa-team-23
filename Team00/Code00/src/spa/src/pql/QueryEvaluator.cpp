@@ -55,7 +55,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
  * @param query  a Query object pointer
  * @return  a pointer for the generated ClauseEvaluator.
  */
-ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, Query* query) {
+ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause clause, Query* query) {
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
             return new FollowsClauseEvaluator(clause.argList, pkb, query);

@@ -23,17 +23,9 @@ public:
 
     std::list<std::string> evaluate(Query*);
 
-    ClauseEvaluator* generateEvaluator(SuchThatClause&, Query*);
+    ClauseEvaluator* generateEvaluator(SuchThatClause, Query*);
 
     static std::list<std::string> generateResultString(Result&);
-
-    static void mergeResultToSynonymsRelations(SynonymRelations&, Result&);
-
-    static vector<std::vector<std::string>> appendNewSynonym(vector<vector<std::string>>&, vector<ResultItem>&);
-
-    static vector<std::vector<std::string>> appendNewSynonymTuples(vector<vector<std::string>>&, vector<ResultItem>&);
-
-    static unordered_map<std::string, std::vector<string>> convertVectorToMap (std::vector<ResultItem>&, bool);
 };
 
 
