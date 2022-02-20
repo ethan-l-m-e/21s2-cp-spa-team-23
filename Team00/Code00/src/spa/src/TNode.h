@@ -160,6 +160,8 @@ public:
     [[nodiscard]] RelFactor getLeftFactor() const;
     [[nodiscard]] RelFactor getRightFactor() const;
     [[nodiscard]] string getRelativeOperator() const;
+    vector<VarName>  getAllVariables() override;
+    vector<VarName> getAllConstants() override;
 };
 
 // Definition:
@@ -183,6 +185,9 @@ public:
     [[nodiscard]] CondExprNode *getLeftNode() const;
     [[nodiscard]] CondExprNode *getRightNode() const;
     [[nodiscard]] string getCondOperator() const;
+    vector<VarName>  getListOfVarUsed() override;
+    vector<VarName>  getAllVariables() override;
+    vector<Constant> getAllConstants() override;
 };
 
 // Definition:
@@ -207,6 +212,8 @@ public:
     CondExprNode *getCondExpr();
     StatementList getThenStmtLst();
     StatementList getElseStmtLst();
+    StatementList getStmtLst() override;
+    bool hasStmtLst() override;
     //vector<stmtNo> getAllIfStmtNo() override;
 };
 
