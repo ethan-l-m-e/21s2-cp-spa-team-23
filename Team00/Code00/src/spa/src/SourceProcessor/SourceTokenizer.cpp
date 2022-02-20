@@ -181,32 +181,26 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
     v.push_back(sign);
 }
 
+
+
 void SourceTokenizer::extractCondExpr(string sourceCode, vector<string> &v) {
-    int operPos = -1;
-    bool notFound = true;
     string left, right, oper;
-    if ((operPos = sourceCode.find("&&")) != string::npos) {
-        notFound = false;
-        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
-        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
-    }
-    if (notFound && (operPos = sourceCode.find("||")) != string::npos) {
-        notFound = false;
-        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 2));
-        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 2));
-    }
-    if (notFound && (operPos = sourceCode.find("!")) != string::npos) {
-        notFound = false;
-        left = StringFormatter::removeTrailingSpace(sourceCode.substr(0, operPos));
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
-        oper = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos, 1));
-    }
-    if (notFound) {
-        // just rel exp
+    if(regex_match(sourceCode, std::regex("[ ]*![ ]*\\((.*)\\)[ ]*"))) {
+        int pos = sourceCode.find("!");
+        string removedBrackets = sourceCode.substr(pos + 2, sourceCode.size() - 3);
+        extractCondExpr(removedBrackets, v);
+    }else if(regex_match(sourceCode, std::regex("\\((.*)\\)[ ]*\\&\\&[ ]*\\((.*)\\)|\\((.*)\\)[ ]*\\|\\|[ ]*\\((.*)\\)"))) {
+        vector<string> partition = StringFormatter::partitionBasedOnParentheses(sourceCode, "()");
+        string front = StringFormatter::removeTrailingSpace(partition[0]);
+        string opAndBack = partition[1];
+        left = StringFormatter::removeTrailingSpace(front.substr(1, front.size() - 2));
+        oper = opAndBack.substr(0,2);
+        string back = StringFormatter::removeTrailingSpace(opAndBack.substr(2, opAndBack.size()));
+        right = StringFormatter::removeTrailingSpace(back.substr(1, back.size() - 2));
+        cout << right << "\n";
+    } else {        //rel_expr
         left = "";
-        right = StringFormatter::removeTrailingSpace(sourceCode.substr(operPos + 1));
+        right = StringFormatter::removeTrailingSpace(sourceCode);
         oper = "";
     }
 
