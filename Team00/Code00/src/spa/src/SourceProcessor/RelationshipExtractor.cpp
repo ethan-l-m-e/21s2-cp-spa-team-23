@@ -43,7 +43,7 @@ void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> pare
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode *> v = value->getProcLst();
         for (ProcedureNode *p: v)
-            extractParent(p);
+            extractParent(p,parentList);
 
     }else if(node->hasStmtLst()) {
         int numOfChildNodes = node->getStmtLst().size();
