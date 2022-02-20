@@ -449,7 +449,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: IDENT, WILDCARD
 
     CHECK(suchThatClause.relRef == RelRef::USES_P);
     CHECK(argList[0].argumentType == ArgumentType::IDENT);
-    CHECK(argList[0].argumentValue == "\"x\"");
+    CHECK(argList[0].argumentValue == "x");
 
     CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
     CHECK(argList[1].argumentValue == "_");
@@ -564,7 +564,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, I
     CHECK(argList[0].argumentValue == "a");
 
     CHECK(argList[1].argumentType == ArgumentType::IDENT);
-    CHECK(argList[1].argumentValue == "\"x\"");
+    CHECK(argList[1].argumentValue == "x");
 }
 
 TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
@@ -577,7 +577,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: IDENT, WILD
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_P);
     CHECK(argList[0].argumentType == ArgumentType::IDENT);
-    CHECK(argList[0].argumentValue == "\"x\"");
+    CHECK(argList[0].argumentValue == "x");
 
     CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
     CHECK(argList[1].argumentValue == "_");
@@ -692,7 +692,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
     CHECK(argList[0].argumentValue == "a");
 
     CHECK(argList[1].argumentType == ArgumentType::IDENT);
-    CHECK(argList[1].argumentValue == "\"x\"");
+    CHECK(argList[1].argumentValue == "x");
 }
 
 TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
@@ -707,7 +707,7 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
     CHECK(argList[0].argumentValue == "a");
 
     CHECK(argList[1].argumentType == ArgumentType::IDENT);
-    CHECK(argList[1].argumentValue == "\"x\"");
+    CHECK(argList[1].argumentValue == "x");
 
     CHECK(argList[2].argumentType == ArgumentType::UNDERSCORE);
     CHECK(argList[2].argumentValue == "_");
@@ -764,7 +764,7 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, IDENT") {
     CHECK(argList[1].argumentValue == "v");
 
     CHECK(argList[2].argumentType == ArgumentType::IDENT);
-    CHECK(argList[2].argumentValue == "\"x\"");
+    CHECK(argList[2].argumentValue == "x");
 }
 
 TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTIAL WILDCARD") {
