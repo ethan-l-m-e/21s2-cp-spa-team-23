@@ -11,13 +11,13 @@
 
 using std::begin, std::end;
 
+/*
 //extracts all follows relationship starting from given node
 void RelationshipExtractor::extractFollows(Node * node) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode *> v = value->getProcLst();
         for (ProcedureNode *p: v)
             extractFollows(p);
-
     }else if(node->hasStmtLst()) {
          int numOfChildNodes = node->getStmtLst().size();
          if (numOfChildNodes > 1) {
@@ -38,6 +38,52 @@ void RelationshipExtractor::extractFollows(Node * node) {
          }
      }
 }
+ */
+
+void extractFollowsFromStatementList(StatementList statementList) {
+    int numOfChildNodes = statementList.size();
+    if (numOfChildNodes > 1) {
+        for (int i = 0; i < (numOfChildNodes - 1); i++) {
+            Node *child = statementList.at(i);
+            for (int j = i; j < numOfChildNodes - 1; j++) {
+                Node *nextChild = statementList.at(j + 1);
+                if (j == i) {
+                    PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
+                }
+                PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
+            }
+        }
+    }
+}
+
+void RelationshipExtractor::extractFollows(Node * node) {
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode *> v = value->getProcLst();
+        for (ProcedureNode *p: v)
+            extractFollows(p);
+    } else if (auto value = dynamic_cast<ProcedureNode*>(node)) {
+        StatementList statementList = value->getStmtLst();
+        extractFollowsFromStatementList(statementList);
+        for(Node* node: statementList)
+            extractFollows(node);
+    } else if (auto value = dynamic_cast<WhileNode*>(node)) {
+        StatementList statementList = value->getStmtLst();
+        extractFollowsFromStatementList(statementList);
+        for(Node* node: statementList)
+            extractFollows(node);
+    } else if (auto value = dynamic_cast<IfNode*>(node)) {
+        StatementList elseStatementList = value->getElseStmtLst();
+        extractFollowsFromStatementList(elseStatementList);
+        StatementList thenStatementList = value->getThenStmtLst();
+        extractFollowsFromStatementList(thenStatementList);
+        for(Node* node: elseStatementList)
+            extractFollows(node);
+        for(Node* node: thenStatementList)
+            extractFollows(node);
+    }
+}
+
+
 //extracts all parents relationship starting from given node
 void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> parentList) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
