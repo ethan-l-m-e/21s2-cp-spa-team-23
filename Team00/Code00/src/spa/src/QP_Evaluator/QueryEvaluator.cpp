@@ -4,14 +4,14 @@
 
 #include "QueryEvaluator.h"
 #include "QP_Parser/Exception.h"
-#include "pql/ClauseEvaluators/FollowsClauseEvaluator.h"
-#include "pql/ClauseEvaluators/ParentClauseEvaluator.h"
-#include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
-#include "pql/ClauseEvaluators/SelectClauseEvaluator.h"
-#include "pql/ClauseEvaluators/FollowsTClauseEvaluator.h"
-#include "pql/ClauseEvaluators/ParentTClauseEvaluator.h"
-#include "pql/ClauseEvaluators/ModifiesSClauseEvaluator.h"
-#include "pql/ClauseEvaluators/UsesSClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/FollowsClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/ParentClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/PatternClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/SelectClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/FollowsTClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/ParentTClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/ModifiesSClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/UsesSClauseEvaluator.h"
 
 std::list<std::string> QueryEvaluator::evaluate(Query* query) {
 
