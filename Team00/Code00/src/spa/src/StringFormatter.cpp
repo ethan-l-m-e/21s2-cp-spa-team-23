@@ -73,7 +73,7 @@ vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
     std::regex r(regex);
     string spaced = std::regex_replace(s, r, "//");
 
-    char * sourceAsChar = new char[spaced.size()+1];
+    char * sourceAsChar = new char[spaced.size() + 1];
     char * regexChar = "//*";
     strcpy(sourceAsChar, spaced.c_str());
     char *token = strtok(sourceAsChar,regexChar);
@@ -82,6 +82,7 @@ vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
         v.push_back(token);
         token = strtok(NULL, regexChar);
     }
+    delete [] sourceAsChar;
     return v;
 }
 
@@ -124,7 +125,7 @@ vector<string> StringFormatter::partitionBasedOnParentheses(string sourceCode, s
                 break;
             }
         } else {
-            if(startedCount == true && count != 0) {
+            if(startedCount = true && count != 0) {
                 bracketedString += sourceCode[i];
             }
         }
@@ -141,11 +142,13 @@ vector<string> StringFormatter::partitionBasedOnParentheses(string sourceCode, s
 
 
 string StringFormatter::extractFrontStringByRegex(string sourceCode, string regex) {
-    char * sourceAsChar = new char[100];
-    char * regexChar = new char[100];
+    char * sourceAsChar = new char[sourceCode.size() + 1];
+    char * regexChar = new char[regex.size() + 1];
     strcpy(sourceAsChar, sourceCode.c_str());
     strcpy(regexChar, regex.c_str());
     char *token = strtok(sourceAsChar,regexChar);
     string s(token);
+    delete [] sourceAsChar;
+    delete [] regexChar;
     return s;
 }
