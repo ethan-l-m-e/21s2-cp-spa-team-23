@@ -132,7 +132,7 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
         for(VarName v: allUsedVariables)
             cout << v << ", ";
         cout << "\n";
-        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+        PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
