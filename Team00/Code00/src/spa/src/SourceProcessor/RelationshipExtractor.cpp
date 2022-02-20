@@ -109,16 +109,18 @@ void extractAllEntities(Node *node) {
         PKB::getInstance()->addProcedure(value->getProcName());
 
     } else if(auto value = dynamic_cast<WhileNode*>(node)) {
-        // TODO: insert conditional expression for cond
+        Node* condExprNode = value->getCondExpr();
+        extractAllEntities(condExprNode);
         vector<Node*> v = value->getStmtLst();
         for(Node* s: v)
             extractAllEntities(s);
         PKB::getInstance()->addWhileStatement(value->getStmtNumber());
 
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
-        // TODO: insert conditional expression for cond
+        Node* condExprNode = value->getCondExpr();
         vector<Node*> elseVector = value->getElseStmtLst();
         vector<Node*> thenVector = value->getThenStmtLst();
+        extractAllEntities(condExprNode);
         for(Node* s: elseVector)
             extractAllEntities(s);
         for(Node* s: thenVector)
@@ -136,6 +138,15 @@ void extractAllEntities(Node *node) {
         }
         PKB::getInstance()->addAssignNode(value);
         PKB::getInstance()->addAssignStatement(value->getStmtNumber());
+    } else if(auto value = dynamic_cast<CondExprNode*>(node)) {
+        vector<VarName> variables = value->getAllVariables();
+        vector<Constant> constants = value->getAllConstants();
+        for(VarName variable: variables ) {
+            PKB::getInstance() ->addVariable(variable);
+        }
+        for(Constant constant: constants) {
+            PKB::getInstance() ->addConstant(constant);
+        }
     } else if(auto value = dynamic_cast<ReadNode*>(node)) {
         PKB::getInstance()->addReadStatement(value->getStmtNumber());
         PKB::getInstance()->addVariable(value->getVarName());
