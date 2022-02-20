@@ -5,9 +5,9 @@ set(srcs ${srcs}
         src/QP_Parser/TestQueryTokenizer.cpp
         src/QP_Parser/TestQueryParser.cpp
         src/TestStringFormatter.cpp
-        src/TestQueryEvaluator.cpp
-        src/TestSynonymRelations.cpp
-        src/QP-evaluator/TestPatternClauseEvaluator.cpp
+        src/QP_Evaluator/TestQueryEvaluator.cpp
+        src/QP_Evaluator/TestSynonymRelations.cpp
+        src/QP_Evaluator/TestPatternClauseEvaluator.cpp
         )
 
 add_executable(unit_testing ${srcs} src/TestAST.cpp

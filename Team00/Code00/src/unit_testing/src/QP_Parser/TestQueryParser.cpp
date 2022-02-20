@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "QP_Parser/QueryParser.h"
 #include "QP_Parser/Tokenizer.h"
-#include "pql/query_obj/Query.h"
+#include "QP_Evaluator/Query/Query.h"
 
 #include <string>
 
