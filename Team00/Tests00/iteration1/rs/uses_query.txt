@@ -61,10 +61,10 @@ Select w such that Uses(w, "X")
 1.4.4 - [valid] var used in while
 variable v;
 Select v such that Uses(3, v)
-X, a, Y, b
+X, a, b
 5000
 1.5.1 - [valid] select while with wildcard ======================================================[Select if tests start]
-while ifs;
+if ifs;
 Select ifs such that Uses(ifs, _)
 7, 10, 13
 5000
@@ -81,7 +81,7 @@ Select ifs such that Uses(ifs, "X")
 1.5.4 - [valid] variables used in if
 variable v;
 Select v such that Uses(7, v)
-X, a, Y, b
+X, a, b
 5000
 2.1 - [not valid] lhs not entRef or stmtRef (read) ================================================[Invalid tests start]
 read r; variable v;

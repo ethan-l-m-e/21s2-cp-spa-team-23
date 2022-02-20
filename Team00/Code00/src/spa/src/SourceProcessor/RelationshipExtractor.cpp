@@ -98,10 +98,6 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
             vector<VarName> usedVariables = extractUses(stmt);
             allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
         }
-        cout << "sending " << value-> getStmtNumber() << " whileVar: ";
-        for(VarName v: allUsedVariables)
-            cout << v << ", ";
-        cout << "\n";
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
@@ -118,20 +114,15 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
             vector<VarName> usedVariables = extractUses(stmt);
             allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
         }
-        cout << "sending " << value-> getStmtNumber() << " ifVar: ";
-        for(VarName v: allUsedVariables)
-            cout << v << ", ";
-        cout << "\n";
+
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
-        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if(auto value = dynamic_cast<PrintNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
-        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else {
@@ -201,7 +192,6 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
         return allModifiedVariables;
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getListOfVarModified();
-        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
         PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if(auto value = dynamic_cast<ReadNode*>(node)) {
