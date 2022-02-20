@@ -73,11 +73,6 @@ if ifs;
 Select ifs such that Modifies(ifs, "modifiedVar1")
 5, 8
 5000
-1.6.1 - [valid] select variable with wildcard =============================================[Select variable tests start]
-variable v;
-Select v such that Modifies(_, v)
-modifiedVar1, modifiedVar2
-5000
 1.6.2 - [valid] var with assign stmt number
 variable v;
 Select v such that Modifies(1, v)
