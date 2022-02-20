@@ -33,17 +33,8 @@ public:
     virtual int getStmtNumber() const;
     virtual vector<VarName> getListOfVarUsed();
     virtual vector<VarName> getListOfVarModified();
-
     virtual vector<VarName> getAllVariables();
-    virtual vector<ProcName> getAllProcedure();
-    virtual vector<Constant> getAllConstants();
-    virtual vector<stmtNo> getAllReadStmt();
-    virtual vector<stmtNo> getAllPrintStmt();
-    virtual vector<stmtNo> getAllAssignStmt();
-    virtual vector<AssignNode*> getAllAssignNodes();
-    virtual vector<stmtNo> getAllWhileStmtNo();
-    virtual vector<stmtNo> getAllIfStmtNo();
-    virtual vector<stmtNo> getAllStatementNumber();
+    virtual vector<VarName> getAllConstants();
 };
 
 //stmt: read | print | while | if | assign
@@ -61,21 +52,9 @@ class StmtLstNode: public StmtNode{
 public:
     StmtLstNode(int num, StatementList stmtLst);
     vector<Node *> getStmtLst() override;
-    vector<VarName> getListOfVarUsed() override;
-    vector<VarName> getListOfVarModified() override;
+    //vector<VarName> getListOfVarUsed() override;
+    //vector<VarName> getListOfVarModified() override;
 
-    vector<AssignNode*> getAllAssignNodes() override;
-    vector<VarName> getAllVariables() override;
-    vector<Constant> getAllConstants() override;
-    vector<stmtNo> getAllReadStmt() override;
-    vector<stmtNo> getAllPrintStmt() override;
-    vector<stmtNo> getAllAssignStmt() override;
-
-    //vector<stmtNo> getAllWhileStmtNo() override;
-    //vector<stmtNo> getAllIfStmtNo() override;
-    /*
-    vector<stmtNo> getAllStatementNumber() override;
-    */
     bool hasStmtLst() override;
 };
 
@@ -112,8 +91,6 @@ public:
     ReadNode(int num, VariableNode* varNode);
     [[nodiscard]] VarName getVarName() const;
     vector<VarName> getListOfVarModified() override;
-    vector<VarName> getAllVariables() override;
-    vector<stmtNo> getAllReadStmt() override;
 };
 
 // Definition:
@@ -124,8 +101,6 @@ public:
     PrintNode(int num, VariableNode* varNode);
     [[nodiscard]] VarName getVarName() const;
     vector<VarName> getListOfVarUsed() override;
-    vector<VarName> getAllVariables() override;
-    vector<stmtNo> getAllPrintStmt() override;
 };
 
 class BinaryOperatorNode;
@@ -157,8 +132,6 @@ public:
     vector<VarName> getListOfVarModified() override;
     vector<VarName> getAllVariables() override;
     vector<Constant> getAllConstants() override;
-    vector<stmtNo> getAllAssignStmt() override;
-    vector<AssignNode*> getAllAssignNodes() override;
     VariableNode* getLeftNode() const;
     Expression getRightNode() const;
 };
@@ -187,6 +160,8 @@ public:
     [[nodiscard]] RelFactor getLeftFactor() const;
     [[nodiscard]] RelFactor getRightFactor() const;
     [[nodiscard]] string getRelativeOperator() const;
+    vector<VarName>  getAllVariables() override;
+    vector<VarName> getAllConstants() override;
 };
 
 // Definition:
@@ -210,6 +185,9 @@ public:
     [[nodiscard]] CondExprNode *getLeftNode() const;
     [[nodiscard]] CondExprNode *getRightNode() const;
     [[nodiscard]] string getCondOperator() const;
+    vector<VarName>  getListOfVarUsed() override;
+    vector<VarName>  getAllVariables() override;
+    vector<Constant> getAllConstants() override;
 };
 
 // Definition:

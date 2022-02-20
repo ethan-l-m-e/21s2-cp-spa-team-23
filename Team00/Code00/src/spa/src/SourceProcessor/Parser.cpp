@@ -119,8 +119,8 @@ AssignNode* Parser::parseAssign(string assignLine) {
 
 WhileNode *Parser::parseWhile(string code) {
     int stmtNo = getStatementNumber();
-    cout << "sending while " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addWhileStatement(stmtNo);
+    //cout << "sending while " << stmtNo << " to PKB\n";
+    //PKB::getInstance()->addWhileStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractWhile(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -131,8 +131,8 @@ WhileNode *Parser::parseWhile(string code) {
 
 IfNode *Parser::parseIf(string code) {
     int stmtNo = getStatementNumber();
-    cout << "sending if " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addIfStatement(stmtNo);
+    //cout << "sending if " << stmtNo << " to PKB\n";
+    //PKB::getInstance()->addIfStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractIfElseThen(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -224,8 +224,8 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
 ProcNameNode *Parser::parseProcName(string procedureName) {
     //int check = Identifier::identifyFirstObject(procedureName);
     //if(check == PROCEDURE_NAME) {
-        cout << "sending proc " << procedureName << " to PKB\n";
-        PKB::getInstance() ->addProcedure(procedureName);
+        //cout << "sending proc " << procedureName << " to PKB\n";
+        //PKB::getInstance() ->addProcedure(procedureName);
   
         return new ProcNameNode(procedureName);
     //} else {

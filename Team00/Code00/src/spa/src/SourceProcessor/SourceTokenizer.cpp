@@ -36,6 +36,7 @@ void SourceTokenizer::extractAssign(string sourceCode, vector<string> &v) {
     v.push_back(expr);
 }
 void SourceTokenizer::extractIfElseThen(string sourceCode, vector<string> &v) {
+    /*
     int then = sourceCode.find("then");
     int firstIf = sourceCode.find("if");
     string cond = sourceCode.substr(firstIf+2, then-firstIf-2); //extracts the condition with brackets and whitespaces
@@ -65,7 +66,23 @@ void SourceTokenizer::extractIfElseThen(string sourceCode, vector<string> &v) {
     ifBlock = StringFormatter::removeFrontBackBrackets(ifBlock);
     string elseBlock = sourceCode.substr(posOfElse,sourceCode.length()-posOfElse);
     elseBlock = StringFormatter::removeFrontBackBrackets(elseBlock);
-    v.push_back(ifBlock);
+    */
+    string condBlock = StringFormatter::tokenizeByRegex(sourceCode, "[ ]*if[ ]*\\(|\\)[ ]*then[ ]*\\{")[0];
+    v.push_back(condBlock);
+
+    vector<string> thenElse = StringFormatter::partitionBasedOnParentheses(sourceCode, "{}");
+    string thenBlockWithBrackets = StringFormatter::removeTrailingSpace(thenElse[0]);
+    int frontBracket = thenBlockWithBrackets.find("{");
+    int backBracket = thenBlockWithBrackets.size() - 2;
+    string thenBlock = StringFormatter::removeTrailingSpace(thenBlockWithBrackets.substr(frontBracket + 1, backBracket));
+
+    string elseBlockWithBrackets = StringFormatter::removeTrailingSpace(StringFormatter::partitionBasedOnParentheses(thenElse[1], "{}")[0]);
+    frontBracket = elseBlockWithBrackets.find("{");
+    backBracket = elseBlockWithBrackets.size() - 2;
+
+    string elseBlock = StringFormatter::removeTrailingSpace(elseBlockWithBrackets.substr(frontBracket + 1, backBracket));
+
+    v.push_back(thenBlock);
     v.push_back(elseBlock);
 
 }
