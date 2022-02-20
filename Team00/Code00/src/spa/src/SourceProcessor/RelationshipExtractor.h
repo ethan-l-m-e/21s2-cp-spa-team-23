@@ -12,7 +12,7 @@ class RelationshipExtractor {
 public:
     static void extractFollows(Node*);
     static void extractParent(Node*,vector<StmtLstNode*>);
-    static void extractModifies(Node*);
+    static vector<string> extractModifies(Node*);
     static void extractUses(Node*);
     static void extractRelationships(Node*);
 };
