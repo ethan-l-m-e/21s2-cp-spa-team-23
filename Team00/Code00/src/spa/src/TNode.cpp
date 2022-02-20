@@ -41,7 +41,7 @@ VarName ReadNode::getVarName() const {
 
 
 vector<VarName> ReadNode::getListOfVarModified() {
-    return this->getAllVariables();
+    return vector<VarName>{this->getVarName()};
 }
 
 PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
