@@ -52,8 +52,10 @@ void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> pare
         }
     }
 }
+
 //set all variables used by the node in the pkb
 void RelationshipExtractor::extractUses (Node * node) {
+
     vector<string> varList = node->getListOfVarUsed();
     if (!varList.empty()) {
 
@@ -91,57 +93,55 @@ void RelationshipExtractor::extractModifies (Node * node) {
     }
 }
 
-void extractAllVariables(Node *node) {
-    vector<string> list;
-    list = node->getAllVariables();
-    for(string variable: list) {
-        cout << "sending var " << variable << " to PKB\n";
-        PKB::getInstance() ->addVariable(variable);
-    }
-}
 
-void extractAllConstant(Node *node) {
-    vector<string> list;
-    list = node->getAllConstants();
-    for(string constant: list) {
-        cout << "sending const " << constant << " to PKB\n";
-        PKB::getInstance() ->addConstant(constant);
-    }
-}
 
-void extractAllReadStmt(Node *node) {
-    vector<stmtNo> list;
-    list = node->getAllReadStmt();
-    for(int num: list) {
-        cout << "sending read " << num << " to PKB\n";
-        PKB::getInstance()->addReadStatement(num);
-    }
-}
+void extractAllEntities(Node *node) {
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode*> v = value -> getProcLst();
+        for(ProcedureNode* p: v)
+            extractAllEntities(p);
 
-void extractAllPrintStmt(Node *node) {
-    vector<stmtNo> list;
-    list = node->getAllPrintStmt();
-    for(int num: list) {
-        cout << "sending print " << num << " to PKB\n";
-        PKB::getInstance()->addPrintStatement(num);
-    }
-}
+    } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
+        vector<Node*> v = value->getStmtLst();
+        for(Node* s: v) {
+            extractAllEntities(s);
+        }
+        PKB::getInstance()->addProcedure(value->getProcName());
 
-void extractAllAssignStmt(Node *node) {
-    vector<stmtNo> list;
-    list = node->getAllAssignStmt();
-    for(int num: list) {
-        cout << "sending assign " << num << " to PKB\n";
-        PKB::getInstance()->addAssignStatement(num);
-    }
-}
+    } else if(auto value = dynamic_cast<WhileNode*>(node)) {
+        // TODO: insert conditional expression for cond
+        vector<Node*> v = value->getStmtLst();
+        for(Node* s: v)
+            extractAllEntities(s);
+        PKB::getInstance()->addWhileStatement(value->getStmtNumber());
 
-void extractAllAssignNodes(Node *node) {
-    vector<AssignNode*> list;
-    list = node-> getAllAssignNodes();
-    for(AssignNode* a: list) {
-        cout << "assign pointers " << to_string(a->getStmtNumber()) << "\n";
-        PKB::getInstance()->addAssignNode(a);
+    } else if(auto value = dynamic_cast<IfNode*>(node)) {
+        // TODO: insert conditional expression for cond
+        vector<Node*> elseVector = value->getElseStmtLst();
+        vector<Node*> thenVector = value->getThenStmtLst();
+        for(Node* s: elseVector)
+            extractAllEntities(s);
+        for(Node* s: thenVector)
+            extractAllEntities(s);
+        PKB::getInstance()->addIfStatement(value->getStmtNumber());
+
+    } else if(auto value = dynamic_cast<AssignNode*>(node)) {
+        vector<VarName> variables = value->getAllVariables();
+        vector<Constant> constants = value->getAllConstants();
+        for(VarName variable: variables ) {
+            PKB::getInstance() ->addVariable(variable);
+        }
+        for(Constant constant: constants) {
+            PKB::getInstance() ->addConstant(constant);
+        }
+        PKB::getInstance()->addAssignNode(value);
+        PKB::getInstance()->addAssignStatement(value->getStmtNumber());
+    } else if(auto value = dynamic_cast<ReadNode*>(node)) {
+        PKB::getInstance()->addReadStatement(value->getStmtNumber());
+        PKB::getInstance()->addVariable(value->getVarName());
+    } else if(auto value = dynamic_cast<PrintNode*>(node)) {
+        PKB::getInstance()->addPrintStatement(value->getStmtNumber());
+        PKB::getInstance()->addVariable(value->getVarName());
     }
 }
 
@@ -153,13 +153,7 @@ void RelationshipExtractor::extractRelationships(Node * node){
     extractUses(node);
     extractModifies(node);
 
+    extractAllEntities(node);
     //extract entities
-    extractAllVariables(node);
-    extractAllConstant(node);
-    extractAllReadStmt(node);
-    extractAllPrintStmt(node);
-    extractAllAssignStmt(node);
-    extractAllAssignNodes(node);
-
 }
 
