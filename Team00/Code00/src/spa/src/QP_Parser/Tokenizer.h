@@ -44,7 +44,7 @@ namespace qp {
     private:
         void getDeclarationTokens(std::string, QueryToken&);
         void getSelectClauseTokens(std::string, QueryToken&);
-        void getSuchThatClauseTokens(std::string&, QueryToken&);
+        void getSuchThatClauseTokens(std::string, QueryToken&);
         void getPatternClauseTokens(std::string, QueryToken&);
         void splitDeclarations(std::vector<std::string>&, QueryToken&);
     };
