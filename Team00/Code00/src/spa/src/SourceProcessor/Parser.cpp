@@ -29,17 +29,14 @@ Node* Parser::Parse (string sourceCode) {
     //extract relationship entities from AST and transmit data to PKB
     //TODO: replace parseProcedure with parseMain/parseProgram
     //StatementList statementList = Parser::parseStatementList(sourceCode);
-    Node* procedureNode = parseProcedure(&sourceCode);
-    return procedureNode;
+    auto programNode = parseProgram(sourceCode);
+    return programNode;
 }
 
 VariableNode* Parser::parseVar(string variable) {
     // convert into a variable node
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
-        cout << "sending var " << variable << " to PKB\n";
-        //TODO: abstract PKB methods to another class away from Parser
-        PKB::getInstance() ->addVariable(variable);
         return new VariableNode(variable);
     } else {
         throw "Invalid varname format: '" + variable + "'\n";
@@ -50,8 +47,6 @@ ConstValueNode *Parser::parseConst(string constValue) {
     // convert into a const node
     int check = Identifier::identifyFirstObject(constValue);
     if(check == CONSTANT_VALUE) {
-        cout << "sending const " << constValue << " to PKB\n";
-        PKB::getInstance() ->addConstant(constValue);
         return new ConstValueNode(constValue);
     } else {
         throw "Invalid const format: '" + constValue + "'\n";
@@ -95,8 +90,6 @@ Expression Parser::parseExpression(string expression) {
 
 ReadNode *Parser::parseRead(string readLine) {
     int stmtNo = getStatementNumber();
-    cout << "sending read " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addReadStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractRead(readLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -106,8 +99,6 @@ ReadNode *Parser::parseRead(string readLine) {
 
 PrintNode *Parser::parsePrint(string printLine) {
     int stmtNo = getStatementNumber();
-    cout << "sending print " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addPrintStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractPrint(printLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -123,15 +114,13 @@ AssignNode* Parser::parseAssign(string assignLine) {
     SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
     Expression newExpression = parseExpression(tokens[1]);
-    AssignNode* newNode = new AssignNode(stmtNo, newVarNode, newExpression);
-    PKB::getInstance()->addAssignNode(newNode);
-    return newNode;
+    return new AssignNode(stmtNo, newVarNode, newExpression);
 }
 
 WhileNode *Parser::parseWhile(string code) {
     int stmtNo = getStatementNumber();
-    cout << "sending while " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addWhileStatement(stmtNo);
+    //cout << "sending while " << stmtNo << " to PKB\n";
+    //PKB::getInstance()->addWhileStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractWhile(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -142,8 +131,8 @@ WhileNode *Parser::parseWhile(string code) {
 
 IfNode *Parser::parseIf(string code) {
     int stmtNo = getStatementNumber();
-    cout << "sending if " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addIfStatement(stmtNo);
+    //cout << "sending if " << stmtNo << " to PKB\n";
+    //PKB::getInstance()->addIfStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractIfElseThen(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -235,8 +224,8 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
 ProcNameNode *Parser::parseProcName(string procedureName) {
     //int check = Identifier::identifyFirstObject(procedureName);
     //if(check == PROCEDURE_NAME) {
-        cout << "sending proc " << procedureName << " to PKB\n";
-        PKB::getInstance() ->addProcedure(procedureName);
+        //cout << "sending proc " << procedureName << " to PKB\n";
+        //PKB::getInstance() ->addProcedure(procedureName);
   
         return new ProcNameNode(procedureName);
     //} else {
@@ -260,14 +249,14 @@ ProcedureNode *Parser::parseProcedure(string * procedure) {
     return new ProcedureNode(newProcNameNode, stmtLst);
 }
 
-Program Parser::parseProgram(string sourceCode) {
+ProgramNode* Parser::parseProgram(string sourceCode) {
     vector<string> tokens;
-    Program program;
+    ProcedureList newProcLst;
     string * procedurePtr;
     procedurePtr = &sourceCode;
     //while(procedurePtr -> length() > 0) {
-        ProcedureNode *newProcedureNode = Parser::parseProcedure(&sourceCode);
-        program.push_back(newProcedureNode);
+        ProcedureNode *newProcedureNode = Parser::parseProcedure(procedurePtr);
+        newProcLst.push_back(newProcedureNode);
     //}
-    return program;
+    return new ProgramNode(newProcLst);
 }

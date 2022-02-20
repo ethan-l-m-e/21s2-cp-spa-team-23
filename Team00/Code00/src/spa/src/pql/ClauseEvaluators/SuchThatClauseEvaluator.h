@@ -33,7 +33,7 @@ protected:
     void filterByType (unordered_set<std::string>&, DesignEntity);
     bool isEntityType (const std::string&, DesignEntity);
     unordered_set<string> generateValueSet(Argument&, DesignEntity);
-    static vector<ResultItem> convertSetToVector(unordered_set<string>);
+    static vector<ResultItem> convertSetToVector(unordered_set<std::string>);
 
     [[nodiscard]] ClauseSynonymType getClauseSynonymType() const;
     void evaluateNoSynonym();

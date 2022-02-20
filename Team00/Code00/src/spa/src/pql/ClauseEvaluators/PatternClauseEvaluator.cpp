@@ -5,12 +5,6 @@
 #include "PatternClauseEvaluator.h"
 #include "TNode.h"
 #include "StringFormatter.h"
-#include "SourceProcessor/Parser.h"
-
-#include <iostream>
-
-
-
 
 void addToStmtList(AssignNode* assignNode, vector<ResultItem> *stmtNumberList);
 void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> *statementAndVarList);

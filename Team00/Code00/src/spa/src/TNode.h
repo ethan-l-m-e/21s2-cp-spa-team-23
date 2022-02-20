@@ -18,8 +18,9 @@ using namespace std;
 //    stmtNo
 //    list of pointers to other nodes (i hate pointers)
 
-typedef std::string VarName, ProcName;
-
+typedef std::string VarName, ProcName, Constant;
+using stmtNo = int;
+class AssignNode;
 class Node {
     Node* parent;
 public:
@@ -31,8 +32,11 @@ public:
     virtual vector<Node *> getStmtLst();
     virtual int getStmtNumber() const;
     virtual vector<VarName> getListOfVarUsed();
-    virtual vector<string> getListOfVarModified();
+    virtual vector<VarName> getListOfVarModified();
+    virtual vector<VarName> getAllVariables();
+    virtual vector<VarName> getAllConstants();
 };
+
 //stmt: read | print | while | if | assign
 class StmtNode: public Node {
     int statementNumber;
@@ -48,8 +52,9 @@ class StmtLstNode: public StmtNode{
 public:
     StmtLstNode(int num, StatementList stmtLst);
     vector<Node *> getStmtLst() override;
-    vector<VarName> getListOfVarUsed() override;
-    vector<VarName> getListOfVarModified() override;
+    //vector<VarName> getListOfVarUsed() override;
+    //vector<VarName> getListOfVarModified() override;
+
     bool hasStmtLst() override;
 };
 
@@ -78,7 +83,6 @@ private:
 };
 
 
-
 // Definition:
 // read: 'read' var_name';'
 class ReadNode: public StmtNode {
@@ -86,6 +90,7 @@ class ReadNode: public StmtNode {
 public:
     ReadNode(int num, VariableNode* varNode);
     [[nodiscard]] VarName getVarName() const;
+    vector<VarName> getListOfVarModified() override;
 };
 
 // Definition:
@@ -95,6 +100,7 @@ class PrintNode: public StmtNode {
 public:
     PrintNode(int num, VariableNode* varNode);
     [[nodiscard]] VarName getVarName() const;
+    vector<VarName> getListOfVarUsed() override;
 };
 
 class BinaryOperatorNode;
@@ -124,6 +130,8 @@ public:
     explicit AssignNode(int num, VariableNode *leftNode, Expression rightNode);
     vector<VarName> getListOfVarUsed() override;
     vector<VarName> getListOfVarModified() override;
+    vector<VarName> getAllVariables() override;
+    vector<Constant> getAllConstants() override;
     VariableNode* getLeftNode() const;
     Expression getRightNode() const;
 };
@@ -185,6 +193,7 @@ class WhileNode: public StmtLstNode {
 public:
     WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst);
     CondExprNode *getCondExpr();
+    //vector<stmtNo> getAllWhileStmtNo() override;
 };
 
 // Definition:
@@ -200,6 +209,7 @@ public:
     StatementList getElseStmtLst();
     StatementList getStmtLst() override;
     bool hasStmtLst() override;
+    //vector<stmtNo> getAllIfStmtNo() override;
 };
 
 class ProcedureNode: public StmtLstNode {
@@ -208,9 +218,16 @@ class ProcedureNode: public StmtLstNode {
 public:
     ProcedureNode(ProcNameNode *procName, StatementList stmtLst);
     ProcName getProcName();
-
+    //vector<ProcName> getAllProcedure() override;
 };
 
-typedef std::vector<ProcedureNode*> Program;
+typedef std::vector<ProcedureNode*> ProcedureList;
+
+class ProgramNode: public Node {
+    ProcedureList procLst;
+public:
+    ProgramNode(ProcedureList procLst);
+    ProcedureList getProcLst();
+};
 
 #endif //SPA_NODE_H

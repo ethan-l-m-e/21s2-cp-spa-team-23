@@ -3,7 +3,13 @@
 //
 
 #include "ClauseEvaluator.h"
+#include "QP_Parser/Exception.h"
 
+/**
+ * Get all values for a given design entity from the pkb
+ * @param designEntity  a design entity
+ * @return  set of all string identifiers belonging the design entity
+ */
 unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity) {
 
     switch (designEntity) {
@@ -26,8 +32,9 @@ unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity
         case DesignEntity::PROCEDURE:
             return pkb->getAllProcedures();
         case DesignEntity::CALL:
+            //TODO: To be updated in future iterations
             //return pkb->getAllCalls();
         default:
-            return {};
+            throw qp::QPEvaluatorException("Invalid design entity found.");
     }
-};
+}

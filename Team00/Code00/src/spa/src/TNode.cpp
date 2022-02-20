@@ -14,8 +14,12 @@ Node *Node::getParentNode() const {return this -> parent;}
 bool Node::hasStmtLst() {return false;}
 StatementList Node::getStmtLst() {return {};}
 int Node::getStmtNumber() const {return -1;}
-vector<string> Node::getListOfVarUsed() {return {};}
-vector<string> Node::getListOfVarModified() {return {};}
+
+vector<VarName> Node::getListOfVarUsed() {return {};}
+vector<VarName> Node::getListOfVarModified() {return {};}
+vector<VarName> Node::getAllVariables() {return {};}
+vector<Constant> Node::getAllConstants() { return {};};
+
 
 StmtNode::StmtNode(int num) { this ->statementNumber = num;}
 int StmtNode::getStmtNumber() const { return this ->statementNumber; }
@@ -35,6 +39,11 @@ VarName ReadNode::getVarName() const {
     return this->varNode->getVariableName();
 }
 
+
+vector<VarName> ReadNode::getListOfVarModified() {
+    return vector<VarName>{this->getVarName()};
+}
+
 PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
     this->varNode = varNode;
     this->varNode->setParentNode(this);
@@ -43,10 +52,16 @@ PrintNode::PrintNode(int num, VariableNode *varNode): StmtNode(num) {
 VarName PrintNode::getVarName() const {
     return this->varNode->getVariableName();
 }
+
+vector<VarName> PrintNode::getListOfVarUsed() {
+    return this->getAllVariables();
+}
+
 bool StmtLstNode::hasStmtLst() {return true;}
 StmtLstNode::StmtLstNode(int num, StatementList lst):StmtNode(num) {stmtLst=lst;}
 vector<Node *> StmtLstNode::getStmtLst() {return this->stmtLst;}
 
+/*
 vector<VarName> StmtLstNode::getListOfVarUsed() {
     vector<VarName> toReturn;
     for(int i = 0; i < getStmtLst().size() ; i++) {
@@ -65,15 +80,33 @@ vector<VarName> StmtLstNode::getListOfVarModified() {
                         list.begin(),
                         list.end());
     }
-    cout<<toReturn.at(0);
+    //cout<<toReturn.at(0);
     return toReturn;
 }
+*/
+
+
 
 AssignNode::AssignNode(int num, VariableNode *leftNode, Expression rightNode) : StmtNode(num) {
     this ->leftNode = leftNode;
     this ->rightNode = rightNode;
     this ->leftNode ->setParentNode(this);
     visit([this](auto& n){n->setParentNode(this);},this->rightNode);
+}
+
+vector<Constant> getAllConstantHelper(Factor e) {
+    vector<Constant> vec1;
+    if(ConstValueNode** v = std::get_if<ConstValueNode*>(&e)){
+        ConstValueNode constNode = **v;
+        vec1.push_back(constNode.getConstValue());
+    }else if (BinaryOperatorNode** b = std::get_if<BinaryOperatorNode*>(&e)){
+        BinaryOperatorNode binNode = **b;
+        vector<VarName> left = getAllConstantHelper(binNode.getLeftExpr());
+        vec1.insert(vec1.begin(),left.begin(),left.end());
+        vector<VarName> right=getAllConstantHelper(binNode.getRightExpr());
+        vec1.insert(vec1.end(),right.begin(),right.end());
+    }
+    return vec1;
 }
 
 vector<VarName> getAllVarFnHelper(Factor e){
@@ -92,18 +125,29 @@ vector<VarName> getAllVarFnHelper(Factor e){
     return vec1;
 }
 
-vector<string> AssignNode::getListOfVarUsed(){
+
+vector<VarName> AssignNode::getListOfVarUsed(){
     return getAllVarFnHelper(this->getRightNode());
 }
-vector<string> AssignNode::getListOfVarModified(){
+vector<VarName> AssignNode::getListOfVarModified(){
     vector<string> v = getAllVarFnHelper(this->getLeftNode());
     return v;
+}
+
+vector<VarName> AssignNode::getAllVariables() {
+    vector<VarName> vector1 = getAllVarFnHelper(this->leftNode);
+    vector<VarName> vector2 = getAllVarFnHelper(this->rightNode);
+    vector1.insert(vector1.end(), vector2.begin(), vector2.end());
+    return vector1;
+}
+
+vector<Constant> AssignNode::getAllConstants() {
+    return getAllConstantHelper(this->getRightNode());
 }
 
 VariableNode* AssignNode::getLeftNode() const {
     return this ->leftNode;
 }
-
 Expression AssignNode::getRightNode() const {
     return this ->rightNode;
 }
@@ -196,6 +240,8 @@ CondExprNode *WhileNode::getCondExpr() {
     return this->condExpr;
 }
 
+
+
 //bool WhileNode::hasStmtLst() {
 //    return true;
 //}
@@ -261,10 +307,10 @@ ProcName ProcedureNode::getProcName() {
     return this->procName->getProcedureName();
 }
 
-//StatementList ProcedureNode::getStmtLst() {
-//    return this->stmtLst;
-//}
-//
-//bool ProcedureNode::hasStmtLst() {
-//    return true;
-//}
+ProgramNode::ProgramNode(ProcedureList procLst) {
+    this->procLst = procLst;
+}
+
+ProcedureList ProgramNode::getProcLst() {
+    return this->procLst;
+}

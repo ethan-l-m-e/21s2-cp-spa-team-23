@@ -142,4 +142,17 @@ TEST_CASE("If node test") {
     CHECK(testNode == testNode->getElseStmtLst()[0]->getParentNode());
 }
 
+TEST_CASE("Procedure node test") {
+    StatementList newStmtLst = {new StmtNode(1)};
+    auto testNode = new ProcedureNode(new ProcNameNode("name"), newStmtLst);
+    CHECK(testNode->getProcName() == "name");
+    CHECK(testNode->getStmtLst()[0]->getStmtNumber() == 1);
+}
 
+TEST_CASE("Program node test") {
+    StatementList newStmtLst = {new StmtNode(1)};
+    ProcedureList newProcLst = {new ProcedureNode(new ProcNameNode("name"), newStmtLst)};
+    auto testNode = new ProgramNode(newProcLst);
+    CHECK(testNode->getProcLst()[0]->getProcName() == "name");
+    CHECK(testNode->getProcLst()[0]->getStmtLst()[0]->getStmtNumber() == 1);
+}

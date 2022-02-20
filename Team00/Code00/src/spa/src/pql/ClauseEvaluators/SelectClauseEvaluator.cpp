@@ -5,27 +5,20 @@
 #include "SelectClauseEvaluator.h"
 Result SelectClauseEvaluator::evaluateClause() {
     std::vector<ResultItem> resultItemList;
-    // search
-    auto lst = synonymRelations->getHeader();
-    auto it = std::find(lst->begin(), lst->end(), query->getSelectedSynonym());
-    if (it != lst->end()) {
-        auto index =  it - lst->begin();
-        for(vector<std::string> nTuple : *synonymRelations->getList()) {
-            resultItemList.emplace_back(nTuple[index]);
-        }
+    auto header = synonymRelations->getHeader();
+    auto it = std::find(header->begin(), header->end(), query->getSelectedSynonym());
+    if (it != header->end()) {
+        auto index =  it - header->begin();
+        for (auto& entry : *synonymRelations->getList()) resultItemList.emplace_back(entry[index]);
     } else {
-        DesignEntity entityType = query->getSelectedSynonymType();
-        unordered_set<std::string> resultSet = getAllType(entityType);
+        std::unordered_set<std::string> resultSet = getAllType(query->getSelectedSynonymType());
         resultItemList = std::vector<ResultItem>(resultSet.begin(), resultSet.end());
     }
-
      result = {
             .resultType = ResultType::STRING,
             .resultBoolean =true,
             .resultHeader = query->getSelectedSynonym(),
             .resultItemList = resultItemList
     };
-
     return result;
 }
-

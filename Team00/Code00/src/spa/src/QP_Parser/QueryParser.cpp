@@ -1,6 +1,7 @@
 #include "QueryParser.h"
 #include "Exception.h"
 #include "Tokenizer.h"
+#include "Validator.h"
 
 #include <string>
 #include <vector>
@@ -11,10 +12,21 @@ using namespace qp;
 
 Query QueryParser::getQuery(std::string pql) {
     Tokenizer tokenizer = Tokenizer();
+    Validator validator = Validator();
+
+    // Check for syntactic errors
+    validator.validateQueryStructure(pql);
     QueryToken queryToken = tokenizer.getQueryToken(pql);
+    // Check for semantic errors
+    validator.checkForSemantics(queryToken);
+
+    // Process query tokens and create query object
     Query query = Query();
     getDeclarations(queryToken, query);
     getSynonym(queryToken, query);
+    getSuchThatClauses(queryToken, query);
+    getPattern(queryToken, query);
+
     return query;
 };
 
@@ -23,6 +35,7 @@ void QueryParser::getDeclarations(QueryToken& queryToken, Query& query) {
     std::vector<std::string> declarationNames = queryToken.declarations->first;
     unordered_map<std::string, DesignEntity> declarationsMap = unordered_map<std::string, DesignEntity>();
 
+    // Create a declarations map with declaration names as keys and design entities as values
     for (std::string declarationName : declarationNames) {
         std::string designEntityString = declarationTokens.at(declarationName);
         DesignEntity designEntity = getDesignEntity(designEntityString);
@@ -32,9 +45,13 @@ void QueryParser::getDeclarations(QueryToken& queryToken, Query& query) {
 }
 
 DesignEntity QueryParser::getDesignEntity(std::string designEntityString) {
-    DesignEntity designEntity = stringToDesignEntityMap.at(designEntityString);
-    // TODO: catch exception if DesignEntity cannot be found
-    return designEntity;
+    // Find DesignEntity based on the given string
+    try {
+        DesignEntity designEntity = stringToDesignEntityMap.at(designEntityString);
+        return designEntity;
+    } catch (...) {
+        throw QPParserException("design entity string cannot be found");
+    }
 }
 
 void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
@@ -42,9 +59,6 @@ void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
 }
 
 void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
-    if (queryToken.suchThatClauseTokens == NULL) {
-        return;
-    }
     std::vector<SuchThatClauseToken> suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
     std::vector<SuchThatClause> suchThatClauses = std::vector<SuchThatClause>();
 
@@ -52,9 +66,10 @@ void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
         std::string relationship = suchThatClauseToken.relRef;
         std::pair<std::string, std::string> argumentTokens = *(suchThatClauseToken.arguments);
         std::string synonym = queryToken.selectClauseToken;
-        std::vector<Argument> argList = getArgumentList(argumentTokens, synonym);
-        RelRef relRef = getRelRefFromString(relationship, argList[0]);
+        std::vector<Argument> argList = getArgumentList(argumentTokens, *(queryToken.declarationTokens));
+        RelRef relRef = getRelRefFromString(relationship, argList[0], *(queryToken.declarationTokens));
 
+        // Create SuchThatClause Object
         SuchThatClause suchThatClause = SuchThatClause();
         suchThatClause.argList = argList;
         suchThatClause.relRef = relRef;
@@ -63,32 +78,51 @@ void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
     query.setSuchThatClauses(suchThatClauses);
 }
 
-RelRef QueryParser::getRelRefFromString(std::string relationship, Argument firstArgument) {
-    std::string additionalString = determineRelationshipBasedOnArg(firstArgument);
+RelRef QueryParser::getRelRefFromString(std::string relationship, Argument firstArgument,
+                                        std::map<std::string, std::string> declarationsMap) {
+    std::string additionalString = determineRelationshipBasedOnArg(firstArgument, relationship, declarationsMap);
     relationship += additionalString;
-    RelRef relRef = stringToRelRefMap.at(relationship);
-    // TODO: Handle any exception thrown
-    return relRef;
+    try {
+        RelRef relRef = stringToRelRefMap.at(relationship);
+        return relRef;
+    } catch (...) {
+        throw QPParserException("RelRef: " + relationship + " cannot be found!");
+    }
 }
 
-std::string QueryParser::determineRelationshipBasedOnArg(Argument firstArgument) {
+std::string QueryParser::determineRelationshipBasedOnArg(Argument firstArgument, std::string relationship,
+                                                         std::map<std::string, std::string> declarationsMap) {
+    // TODO: Refactor code
+    bool isStmtRelationship = std::regex_match(relationship, std::regex(STMT_RS));
+    if (isStmtRelationship) {
+        return "";
+    }
+
+    // Check for arguments that are not of synonym type
     if (firstArgument.argumentType == ArgumentType::STMT_NO) {
         return "_S";
-    } else if (firstArgument.argumentType == ArgumentType::IDENT) {
+    } else if (firstArgument.argumentType != ArgumentType::SYNONYM) {
         return "_P";
     }
-    return "";
+
+    // Check for arguments that are of synonym type
+    std::string designEntity = declarationsMap.at(firstArgument.argumentValue);
+    bool isStmtDesignEntity = std::regex_match(designEntity, std::regex(STMT_DESIGN_ENTITIES));
+    if (isStmtDesignEntity) {
+        return "_S";
+    }
+    return "_P";
 };
 
 std::vector<Argument> QueryParser::getArgumentList(std::pair<std::string, std::string> argumentTokens,
-                                                   std::string synonym) {
+                                                   std::map<std::string, std::string> declarations) {
     // Get Argument Strings from clauseToken
     std::string firstArgumentString = argumentTokens.first;
     std::string secondArgumentString = argumentTokens.second;
 
     // Convert strings to arguments
-    Argument firstArgument = getArgument(firstArgumentString, synonym);
-    Argument secondArgument = getArgument(secondArgumentString, synonym);
+    Argument firstArgument = getArgument(firstArgumentString, declarations);
+    Argument secondArgument = getArgument(secondArgumentString, declarations);
 
     // Create Argument List
     std::vector<Argument> argList = std::vector<Argument>();
@@ -97,21 +131,24 @@ std::vector<Argument> QueryParser::getArgumentList(std::pair<std::string, std::s
     return argList;
 }
 
-Argument QueryParser::getArgument(std::string argumentString, std::string synonym) {
+Argument QueryParser::getArgument(std::string argumentString, std::map<std::string, std::string> declarations) {
     Argument argument = Argument();
-    ArgumentType argumentType = getArgumentType(argumentString, synonym);
+    ArgumentType argumentType = getArgumentType(argumentString, declarations);
     argument.argumentType = argumentType;
     argument.argumentValue = argumentString;
     return argument;
 }
 
-ArgumentType QueryParser::getArgumentType(std::string argumentString, std::string synonym) {
-    if (argumentString == synonym) {
+ArgumentType QueryParser::getArgumentType(std::string argumentString, std::map<std::string, std::string> declarations) {
+    bool isArgumentASynonym = declarations.find(argumentString) != declarations.end();
+    if (isArgumentASynonym) {
         return ArgumentType::SYNONYM;
     }
 
+    // Find Argument Type based on regex expressions
     for (std::string reg : argumentTypeRegex) {
-        if (regex_match(argumentString, std::regex(reg))) {
+        bool isMatch = regex_match(argumentString, std::regex(reg));
+        if (isMatch) {
             return stringToArgumentType.at(reg);
         }
     }
@@ -120,18 +157,16 @@ ArgumentType QueryParser::getArgumentType(std::string argumentString, std::strin
 }
 
 void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
-    if (queryToken.patternTokens == NULL) {
-        return;
-    }
     std::vector<PatternToken> patternTokens = *(queryToken.patternTokens);
     std::vector<PatternClause> patternClauses = std::vector<PatternClause>();
 
     for (PatternToken patternToken : patternTokens) {
         std::pair<std::string, std::string> argumentTokens = *(patternToken.arguments);
-        std::vector<Argument> argList = getArgumentList(argumentTokens, queryToken.selectClauseToken);
-        Argument synAssign = getArgument(patternToken.synonym, queryToken.selectClauseToken);
+        std::vector<Argument> argList = getArgumentList(argumentTokens, *(queryToken.declarationTokens));
+        Argument synAssign = getArgument(patternToken.synonym, *(queryToken.declarationTokens));
         argList.insert(argList.begin(), synAssign);
 
+        // Create PatternClause Object
         PatternClause patternClause = PatternClause();
         patternClause.argList = argList;
         patternClause.synonymType = SynonymType::ASSIGN;

@@ -1,0 +1,90 @@
+1.0 - [valid] select stmt with wildcards ==========================================================[Generic tests start]
+stmt s;
+Select s pattern a(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+1.1.1 - [valid] select assign with wildcards ================================================[Select assign tests start]
+assign a;
+Select a pattern a(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+1.1.4 - [valid] select assign with lhs wildcard and single var with wildcards pattern
+assign a;
+Select a pattern a(_, _"a"_)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 11
+5000
+1.1.8 - [valid] select assign with lhs varname and single var with wildcards pattern
+assign a;
+Select a pattern a("X", _"a"_)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 11
+5000
+1.1.12 - [valid] select assign with lhs var synonym and single var with wildcards pattern
+assign a; variable v;
+Select a pattern a(v, _"a"_)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 11
+5000
+1.1.12 - [valid] select assign with lhs var synonym and single var with wildcards pattern
+assign a; variable v;
+Select a pattern a(v, _"a"_)
+1, 2, 3, 4, 5, 6, 7, 8, 9
+5000
+1.1.13 - [valid] select assign with lhs var synonym and constant with wildcards
+assign a;
+Select a pattern a(_, _"1"_)
+10, 11
+5000
+1.1.14 - [valid] select assign with lhs var synonym and single var and constant with wildcards pattern
+assign a; variable v;
+Select a pattern a(v, _"1"_)
+10, 11
+5000
+2.1 - [not valid] synonym type not assign (stmt) ==================================================[Invalid tests start]
+stmt s;
+Select s pattern s(_, _)
+none
+5000
+2.2 - [not valid] synonym type not assign (read)
+stmt s; read r;
+Select s pattern r(_, _)
+none
+5000
+2.3 - [not valid] synonym type not assign (print)
+stmt s; print p;
+Select s pattern p(_, _)
+none
+5000
+2.4 - [not valid] synonym type not assign (variable)
+stmt s; variable v;
+Select s pattern v(_, _)
+none
+5000
+2.5 - [not valid] synonym type not assign (constant)
+stmt s; constant c;
+Select s pattern c(_, _)
+none
+5000
+2.6 - [not valid] synonym type not assign (constant)
+stmt s; procedure p;
+Select s pattern p(_, _)
+none
+5000
+2.7 - [not valid] lhs not entRef
+assign a;
+Select a pattern a(a, _)
+none
+5000
+2.8 - [not valid] rhs not expression
+assign a;
+Select a pattern a(_, _a_)
+none
+5000
+2.10 - [not valid] missing factor
+assign a;
+Select a pattern a(_, _""_)
+none
+5000
+2.11 - [not valid] missing quotes
+assign a;
+Select a pattern a(_, _x_)
+none
+5000
