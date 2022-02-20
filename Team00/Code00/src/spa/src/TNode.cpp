@@ -18,13 +18,13 @@ int Node::getStmtNumber() const {return -1;}
 vector<VarName> Node::getListOfVarUsed() {return {};}
 vector<VarName> Node::getListOfVarModified() {return {};}
 vector<VarName> Node::getAllVariables() {return {};}
-vector<Constant> Node::getAllConstants() { return {};};
+vector<Constant> Node::getAllConstants() { return {};}
 
 
 StmtNode::StmtNode(int num) { this ->statementNumber = num;}
 int StmtNode::getStmtNumber() const { return this ->statementNumber; }
 
-VariableNode::VariableNode(VarName name) { this ->varName = name; }
+VariableNode::VariableNode(VarName name) { this ->varName = std::move(name); }
 VarName &VariableNode::getVariableName(){ return this ->varName; }
 
 ConstValueNode::ConstValueNode(const string num) { this -> constValue = num; }
@@ -54,7 +54,7 @@ VarName PrintNode::getVarName() const {
 }
 
 vector<VarName> PrintNode::getListOfVarUsed() {
-    return this->getAllVariables();
+    return vector<VarName>{this->getVarName()};
 }
 
 bool StmtLstNode::hasStmtLst() {return true;}
@@ -329,6 +329,17 @@ StatementList IfNode::getThenStmtLst() {
 
 StatementList IfNode::getElseStmtLst() {
     return this->elseStmtLst;
+}
+
+bool IfNode::hasStmtLst(){
+    return true;
+}
+
+StatementList IfNode::getStmtLst() {
+    StatementList combinedStmtLst;
+    combinedStmtLst.insert( combinedStmtLst.end(), this->thenStmtLst.begin(), this->thenStmtLst.end() );
+    combinedStmtLst.insert( combinedStmtLst.end(), this->elseStmtLst.begin(), this->elseStmtLst.end() );
+    return combinedStmtLst;
 }
 
 ProcNameNode::ProcNameNode(ProcName name) {
