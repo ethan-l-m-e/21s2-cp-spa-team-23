@@ -136,6 +136,10 @@ Argument QueryParser::getArgument(std::string argumentString, std::map<std::stri
     ArgumentType argumentType = getArgumentType(argumentString, declarations);
     argument.argumentType = argumentType;
     argument.argumentValue = argumentString;
+    if (argumentType == ArgumentType::IDENT) {
+        // remove quotation marks from the string
+        argument.argumentValue = argumentString.substr(1, argumentString.size()-2);
+    }
     return argument;
 }
 
