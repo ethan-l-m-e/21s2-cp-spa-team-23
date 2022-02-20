@@ -41,6 +41,31 @@ TEST_CASE("test follows - basic") {
     REQUIRE(PKB::getInstance()->isFollows("1","2"));
     REQUIRE(PKB::getInstance()->isFollows("2","3"));
 }
+TEST_CASE("test follows - basic - if/else") {
+    StatementList defaultStmtLst;
+    StatementList defaultStmtLst2;
+
+    defaultStmtLst.push_back(&aNode);
+    defaultStmtLst.push_back(&bNode);
+    defaultStmtLst.push_back(&cNode);
+
+    defaultStmtLst2.push_back(&dNode);
+    defaultStmtLst2.push_back(&eNode);
+
+    IfNode iNode = IfNode(0,condPtr,defaultStmtLst,defaultStmtLst2);
+    RelationshipExtractor::extractFollows(&iNode);
+    REQUIRE(PKB::getInstance()->isFollows("1","2"));
+    REQUIRE(PKB::getInstance()->isFollows("2","3"));
+    REQUIRE(PKB::getInstance()->isFollows("3","5")==false);
+    REQUIRE(PKB::getInstance()->isFollows("5","6"));
+    REQUIRE(PKB::getInstance()->isFollows("2","1")==false);
+    REQUIRE(PKB::getInstance()->isFollows("3","2")==false);
+    REQUIRE(PKB::getInstance()->isFollows("5","3")==false);
+    REQUIRE(PKB::getInstance()->isFollows("6","5")==false);
+    REQUIRE(PKB::getInstance()->isFollows("1","3")==false);
+    REQUIRE(PKB::getInstance()->isFollows("1","4")==false);
+
+}
 TEST_CASE("test follows - nested") {
     auto aaNode= AssignNode(1,&v2,&v1);
     auto abNode= AssignNode(2,&v3,&v4);

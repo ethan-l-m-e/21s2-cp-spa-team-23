@@ -11,35 +11,6 @@
 
 using std::begin, std::end;
 
-/*
-//extracts all follows relationship starting from given node
-void RelationshipExtractor::extractFollows(Node * node) {
-    if(auto value = dynamic_cast<ProgramNode*>(node)) {
-        vector<ProcedureNode *> v = value->getProcLst();
-        for (ProcedureNode *p: v)
-            extractFollows(p);
-    }else if(node->hasStmtLst()) {
-         int numOfChildNodes = node->getStmtLst().size();
-         if (numOfChildNodes > 1) {
-             for (int i = 0; i < (numOfChildNodes - 1); i++) {
-                 Node *child = node->getStmtLst().at(i);
-                 for(int j = i; j<numOfChildNodes-1;j++){
-                     Node *nextChild = node->getStmtLst().at(j + 1);
-                    if(j==i) {
-                        PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
-                    }
-                     PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
-
-                 }
-             }
-         }
-         for (int i = 0; i < (numOfChildNodes); i++) {
-             extractFollows(node->getStmtLst().at(i));
-         }
-     }
-}
- */
-
 void extractFollowsFromStatementList(StatementList statementList) {
     int numOfChildNodes = statementList.size();
     if (numOfChildNodes > 1) {
