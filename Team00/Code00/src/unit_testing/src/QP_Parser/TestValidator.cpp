@@ -2574,7 +2574,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
     queryToken.suchThatClauseTokens = &suchThatClauseTokens;
-    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // read synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
@@ -2838,7 +2838,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
     queryToken.suchThatClauseTokens = &suchThatClauseTokens;
-    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 
     // print synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
