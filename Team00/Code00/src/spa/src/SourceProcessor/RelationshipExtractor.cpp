@@ -40,7 +40,12 @@ void RelationshipExtractor::extractFollows(Node * node) {
 }
 //extracts all parents relationship starting from given node
 void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> parentList) {
-    if(node->hasStmtLst()) {
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode *> v = value->getProcLst();
+        for (ProcedureNode *p: v)
+            extractParent(p);
+
+    }else if(node->hasStmtLst()) {
         int numOfChildNodes = node->getStmtLst().size();
         if(node->getStmtNumber()!=-1) {
             parentList.push_back((StmtLstNode *) node);
