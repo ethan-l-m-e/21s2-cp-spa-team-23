@@ -1,114 +1,42 @@
 1.0 - [valid] select stmt with wildcards ==========================================================[Generic tests start]
 stmt s;
 Select s pattern a(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
 1.1.1 - [valid] select assign with wildcards ================================================[Select assign tests start]
 assign a;
 Select a pattern a(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-5000
-1.1.2 - [valid] select assign with lhs wildcard and single var pattern
-assign a;
-Select a pattern a(_, "a")
-1
-1.1.3 - [valid] select assign with lhs wildcard and single var with number pattern
-assign a;
-Select a pattern a(_, "a1")
-2
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
 1.1.4 - [valid] select assign with lhs wildcard and single var with wildcards pattern
 assign a;
 Select a pattern a(_, _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-5000
-1.1.5 - [valid] select assign with lhs wildcard and exp with wildcards pattern
-assign a;
-Select a pattern a(_, _"a+b"_)
-3
-5000
-1.1.6 - [valid] select assign with lhs varname and single var pattern
-assign a;
-Select a pattern a("X", "a")
-1
-1.1.7 - [valid] select assign with lhs varname and single var with number pattern
-assign a;
-Select a pattern a("X1", "a1")
-2
+1, 2, 3, 4, 5, 6, 7, 8, 9, 11
 5000
 1.1.8 - [valid] select assign with lhs varname and single var with wildcards pattern
 assign a;
 Select a pattern a("X", _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-5000
-1.1.9 - [valid] select assign with lhs varname and exp with wildcards pattern
-assign a;
-Select a pattern a("X", _"a+b"_)
-3
-5000
-1.1.10 - [valid] select assign with lhs var synonym and single var pattern
-assign a; variable v;
-Select a pattern a(v, "a")
-1
-1.1.11 - [valid] select assign with lhs var synonym and single var with number pattern
-assign a;
-Select a pattern a(v, "a1")
-2
+1, 2, 3, 4, 5, 6, 7, 8, 9, 11
 5000
 1.1.12 - [valid] select assign with lhs var synonym and single var with wildcards pattern
-assign a;
+assign a; variable v;
 Select a pattern a(v, _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+1, 2, 3, 4, 5, 6, 7, 8, 9, 11
 5000
-1.1.13 - [valid] select assign with lhs var synonym and exp with wildcards pattern
-assign a;
-Select a pattern a(v, _"a+b"_)
-3
+1.1.12 - [valid] select assign with lhs var synonym and single var with wildcards pattern
+assign a; variable v;
+Select a pattern a(v, _"a"_)
+1, 2, 3, 4, 5, 6, 7, 8, 9
 5000
-1.1.14 - [valid] more partial matching (no match)
+1.1.13 - [valid] select assign with lhs var synonym and constant with wildcards
 assign a;
-Select a pattern a(_, _"a+b*c-d"_)
-none
+Select a pattern a(_, _"1"_)
+10, 11
 5000
-1.1.15 - [valid] more partial matching (match)
-assign a;
-Select a pattern a(_, _"c-d%e*f"_)
-9
-5000
-1.2.1 - [valid] right partial match minus =================================================================[Other tests]
-assign a;
-Select a pattern a(_, _"a - b"_)
-4
-5000
-1.2.2 - [valid] right partial match multiply
-assign a;
-Select a pattern a(_, _"a * b"_)
-5
-5000
-1.2.3 - [valid] right partial match divide
-assign a;
-Select a pattern a(_, _"a / b"_)
-6
-5000
-1.2.4 - [valid] right partial match modulo
-assign a;
-Select a pattern a(_, _"a % b"_)
-7
-5000
-1.3.1 - [valid] right partial match plus; with brackets ============================================[Syntax tests start]
-assign a;
-Select a pattern a(_, _"(a + b)"_)
-3, 8
-5000
-1.3.2 - [valid] different spacing 1
-assign a;
-Select a pattern a(_, _"(a +b)"_)
-3, 8
-5000
-1.3.3 - [valid] different spacing 2
-assign a;
-Select a pattern a(_, _"(     a   +    b      )"       _)
-3, 8
+1.1.14 - [valid] select assign with lhs var synonym and single var and constant with wildcards pattern
+assign a; variable v;
+Select a pattern a(v, _"1"_)
+10, 11
 5000
 2.1 - [not valid] synonym type not assign (stmt) ==================================================[Invalid tests start]
 stmt s;
@@ -147,12 +75,7 @@ none
 5000
 2.8 - [not valid] rhs not expression
 assign a;
-Select a pattern a(_, _"a"_)
-none
-5000
-2.9 - [not valid] rhs not expression
-assign a;
-Select a pattern a(_, _"a"_)
+Select a pattern a(_, _a_)
 none
 5000
 2.10 - [not valid] missing factor
