@@ -121,7 +121,7 @@ Select p such that Follows(10, p)
 1.5.1 - [valid] stmt does not follow parent (inside while) ============================[Container statement tests start]
 read r;
 Select r such that Follows(3, 4)
-2 6 10
+2, 6, 10
 5000
 1.5.2 - [valid] stmt does not follow parent (inside if-then)
 stmt s;
