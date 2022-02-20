@@ -124,7 +124,7 @@ vector<string> StringFormatter::partitionBasedOnParentheses(string sourceCode, s
                 break;
             }
         } else {
-            if(startedCount = true && count != 0) {
+            if(startedCount == true && count != 0) {
                 bracketedString += sourceCode[i];
             }
         }
