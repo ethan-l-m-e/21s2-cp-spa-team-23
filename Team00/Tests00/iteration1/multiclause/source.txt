@@ -30,7 +30,7 @@ procedure Nested {
                 }
             }
         }
-        endOfMainWhileLoop = 1
+        endOfMainWhileLoop = 1;
     }
     if (1 == 1) then {
         startMainIfLoop = 1;

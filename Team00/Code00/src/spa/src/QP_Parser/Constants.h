@@ -53,7 +53,7 @@ std::string const PQL_FORMAT = DECLARATION_REGEX + "[( |\n|\t)]*" + SELECT_CL + 
 // regex needed for semantic validation
 std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*)";
 std::string const NON_STMT_RS = "(Modifies|Uses)";
-std::string const IDENT_CHECK = "\"" + IDENT + "\"";
+std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|[0-9]+)";
 std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";
 
 // regex strings for tokenizer
