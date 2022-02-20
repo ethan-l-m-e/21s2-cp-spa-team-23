@@ -6,7 +6,7 @@ Select s such that Follows(_, _)
 1.1.1 - [valid] select stmt with wildcard ================================================[Select statement tests start]
 stmt s;
 Select s such that Follows(s, _)
-2, 3, 4, 6, 7, 8, 10, 11
+1,2,3,4,5,6,8, 9, 10
 5000
 1.1.2 - [valid] select stmt with stmt synonym
 stmt s1, s2;
@@ -17,6 +17,7 @@ Select s1 such that Follows(s1, s2)
 stmt s; variable v;
 Select s such that Follows(s, 2)
 1
+5000
 1.1.4 - [valid] select stmt with lhs stmt number
 stmt s;
 Select s such that Follows(1, s)
@@ -120,7 +121,7 @@ Select p such that Follows(10, p)
 1.5.1 - [valid] stmt does not follow parent (inside while) ============================[Container statement tests start]
 read r;
 Select r such that Follows(3, 4)
-none
+2 6 10
 5000
 1.5.2 - [valid] stmt does not follow parent (inside if-then)
 stmt s;
