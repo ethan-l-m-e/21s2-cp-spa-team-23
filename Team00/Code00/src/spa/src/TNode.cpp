@@ -192,6 +192,20 @@ string RelExprNode::getRelativeOperator() const {
     return this->relativeOperator;
 }
 
+vector<VarName> RelExprNode::getAllVariables() {
+    vector<VarName> vector1 = getAllVarFnHelper(this->leftNode);
+    vector<VarName> vector2 = getAllVarFnHelper(this->rightNode);
+    vector1.insert(vector1.end(), vector2.begin(), vector2.end());
+    return vector1;
+}
+
+vector<VarName> RelExprNode::getAllConstants() {
+    vector<VarName> vector1 = getAllConstantHelper(this->leftNode);
+    vector<VarName> vector2 = getAllConstantHelper(this->rightNode);
+    vector1.insert(vector1.end(), vector2.begin(), vector2.end());
+    return vector1;
+}
+
 CondExprNode::CondExprNode(RelExprNode *relExpr){
     this->relExpr = relExpr;
     this->relExpr->setParentNode(this);
@@ -225,6 +239,48 @@ CondExprNode *CondExprNode::getRightNode() const {
 
 string CondExprNode::getCondOperator() const {
     return this->condOperator;
+}
+
+vector<VarName> CondExprNode::getListOfVarUsed() {
+    return this->getAllVariables();
+}
+
+vector<VarName> CondExprNode::getAllVariables() {
+    vector<VarName> vector1;
+    // Case: rel_expr
+    if (this->getCondOperator().empty()) {
+        vector1 = this->relExpr->getAllVariables();
+        return vector1;
+    }
+    // Case: '!' '(' cond_expr ')'
+    if (this->getCondOperator() == "!") {
+        vector1 = this->rightNode->getAllVariables();
+        return vector1;
+    }
+    // Case: '(' cond_expr ')' '&&' '(' cond_expr ')' |'(' cond_expr ')' '||' '(' cond_expr ')'
+    vector1 = this->leftNode->getAllVariables();
+    vector<VarName> vector2 = this->rightNode->getAllVariables();
+    vector1.insert(vector1.end(), vector2.begin(), vector2.end());
+    return vector1;
+}
+
+vector<Constant> CondExprNode::getAllConstants() {
+    vector<Constant> vector1;
+    // Case: rel_expr
+    if (this->getCondOperator().empty()) {
+        vector1 = this->relExpr->getAllConstants();
+        return vector1;
+    }
+    // Case: '!' '(' cond_expr ')'
+    if (this->getCondOperator() == "!") {
+        vector1 = this->rightNode->getAllConstants();
+        return vector1;
+    }
+    // Case: '(' cond_expr ')' '&&' '(' cond_expr ')' |'(' cond_expr ')' '||' '(' cond_expr ')'
+    vector1 = this->leftNode->getAllVariables();
+    vector<Constant> vector2 = this->rightNode->getAllConstants();
+    vector1.insert(vector1.end(), vector2.begin(), vector2.end());
+    return vector1;
 }
 
 WhileNode::WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst) : StmtLstNode(num, stmtLst) {
