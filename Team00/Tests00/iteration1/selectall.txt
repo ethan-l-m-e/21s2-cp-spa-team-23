@@ -42,6 +42,7 @@ Select c
 procedure proc;
 Select proc
 Procedure
+5000
 11 - Synonym named stmt
 stmt stmt;
 Select stmt
@@ -86,10 +87,12 @@ Select constant
 procedure procedure;
 Select procedure
 Procedure
+5000
 20 - Synonym named Select
 procedure Select;
 Select Select
 Procedure
+5000
 21 - Invalid (query has semicolon)
 constant c;
 Select c;
