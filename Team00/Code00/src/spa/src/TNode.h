@@ -212,6 +212,8 @@ public:
     CondExprNode *getCondExpr();
     StatementList getThenStmtLst();
     StatementList getElseStmtLst();
+    StatementList getStmtLst() override;
+    bool hasStmtLst() override;
     //vector<stmtNo> getAllIfStmtNo() override;
 };
 

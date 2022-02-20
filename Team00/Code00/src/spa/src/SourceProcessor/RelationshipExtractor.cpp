@@ -13,7 +13,12 @@ using std::begin, std::end;
 
 //extracts all follows relationship starting from given node
 void RelationshipExtractor::extractFollows(Node * node) {
-     if(node->hasStmtLst()) {
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode *> v = value->getProcLst();
+        for (ProcedureNode *p: v)
+            extractFollows(p);
+
+    }else if(node->hasStmtLst()) {
          int numOfChildNodes = node->getStmtLst().size();
          if (numOfChildNodes > 1) {
              for (int i = 0; i < (numOfChildNodes - 1); i++) {
@@ -35,7 +40,12 @@ void RelationshipExtractor::extractFollows(Node * node) {
 }
 //extracts all parents relationship starting from given node
 void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> parentList) {
-    if(node->hasStmtLst()) {
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode *> v = value->getProcLst();
+        for (ProcedureNode *p: v)
+            extractParent(p,parentList);
+
+    }else if(node->hasStmtLst()) {
         int numOfChildNodes = node->getStmtLst().size();
         if(node->getStmtNumber()!=-1) {
             parentList.push_back((StmtLstNode *) node);
