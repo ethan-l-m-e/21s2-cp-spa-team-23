@@ -138,7 +138,9 @@ bool matchLHSValue(AssignNode *assignNode, Argument arg) {
 
 bool matchRHSValue(AssignNode *assignNode, Argument arg) {
     // convert arg to variable (or expression in the future)
-    string rightArg = StringFormatter::tokenizeByRegex(arg.argumentValue, "(_\")|(\"_)")[0];
+    int first = arg.argumentValue.find("\"");
+    string rightArg = arg.argumentValue.substr(first + 1, arg.argumentValue.size() - 4);
+    //string rightArg = StringFormatter::tokenizeByRegex(arg.argumentValue, "_\"|\"_")[0];
     //Expression rightAsExpr = Parser::parseExpression(rightArg); //no usage yet for iteration 1
     Expression RHSExpression = assignNode ->getRightNode();
     return searchForPotentialMatchInExpression(RHSExpression, rightArg);
