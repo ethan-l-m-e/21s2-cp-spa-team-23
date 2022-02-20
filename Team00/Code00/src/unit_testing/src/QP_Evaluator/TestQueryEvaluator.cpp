@@ -2,7 +2,7 @@
 // Created by Tianyi Wang on 14/2/22.
 //
 
-#include "pql/QueryEvaluator.h"
+#include "QP_Evaluator/QueryEvaluator.h"
 
 #include <utility>
 #include "catch.hpp"
@@ -788,6 +788,33 @@ PKB* generateSamplePKBForPatternMatching() {
     testPKB->addAssignNode(Parser::parseAssign(a5));
     testPKB->addAssignNode(Parser::parseAssign(a6));
     testPKB->addAssignNode(Parser::parseAssign(a7));
+
+    testPKB->addVariable("x");
+    testPKB->addVariable("y");
+    testPKB->addVariable("z");
+
+    testPKB->addAssignStatement(1);
+    testPKB->addAssignStatement(2);
+    testPKB->addAssignStatement(3);
+    testPKB->addAssignStatement(4);
+    testPKB->addAssignStatement(5);
+    testPKB->addAssignStatement(6);
+    testPKB->addAssignStatement(7);
+
+
+    testPKB->setFollows(1, 2);
+    testPKB->setFollows(2, 3);
+    testPKB->setFollows(3, 4);
+    testPKB->setFollows(4, 5);
+    testPKB->setFollows(5, 6);
+    testPKB->setFollows(6, 7);
+
+    testPKB->setUses(1, {"y"});
+    testPKB->setUses(3, {"y"});
+    testPKB->setUses(4, {"y", "x"});
+    testPKB->setUses(5, {"y", "x", "z"});
+    testPKB->setUses(6, {"y", "x", "z"});
+
     return testPKB;
 }
 
@@ -873,5 +900,36 @@ TEST_CASE("Pattern clause: return var + Stmt") {
 }
 
 TEST_CASE("PATTERN FULL EXPRESSION MATCHING") {
+
+}
+
+TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
+    PKB *testPKB = generateSamplePKBForPatternMatching();
+    unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
+    Argument aa = {ArgumentType::SYNONYM, "a"};
+    Argument av = {ArgumentType::SYNONYM, "v"};
+    Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
+    Argument a5 = {ArgumentType::STMT_NO, "5"};
+
+    SuchThatClause clause_a_5 = {ArgList{aa, a5},RelRef::FOLLOWS};
+    SuchThatClause clause_5_v = {ArgList{a5, av},RelRef::USES_S};
+    PatternClause synonym_var = {ArgList {aa, av, rightConst}, SynonymType::ASSIGN};
+
+
+    Query query_1 = makeQuery(declarationsMap, "a", {clause_a_5}, {synonym_var});
+    Query query_2 = makeQuery(declarationsMap, "v", {clause_5_v}, {synonym_var});
+
+    auto qe = QueryEvaluator(testPKB);
+
+    /**
+     * Select a such that Follows(a, 5) Pattern a(v, _"2"_)
+     * Tuple -> single
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"4"});
+
+    /**
+     * Select v such that Uses(5, v) Pattern a(v, _"2"_)
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"y"});
 
 }

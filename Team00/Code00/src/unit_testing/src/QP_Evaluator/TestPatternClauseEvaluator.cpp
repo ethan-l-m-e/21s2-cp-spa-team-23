@@ -3,7 +3,7 @@
 //
 
 #include "catch.hpp"
-#include "pql/ClauseEvaluators/PatternClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/PatternClauseEvaluator.h"
 #include "TNode.h"
 #include "SourceProcessor/Parser.h"
 #include <vector>

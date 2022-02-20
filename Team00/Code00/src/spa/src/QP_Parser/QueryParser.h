@@ -1,6 +1,6 @@
 #include "Tokenizer.h"
 #include "Constants.h"
-#include "pql/query_obj/Query.h"
+#include "QP_Evaluator/Query/Query.h"
 
 #include <string>
 #include <map>

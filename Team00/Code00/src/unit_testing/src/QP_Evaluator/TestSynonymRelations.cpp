@@ -2,7 +2,7 @@
 // Created by Tianyi Wang on 18/2/22.
 //
 
-#include "pql/ClauseEvaluators/SynonymRelations.h"
+#include "QP_Evaluator/ClauseEvaluators/SynonymRelations.h"
 #include "catch.hpp"
 #include <set>
 

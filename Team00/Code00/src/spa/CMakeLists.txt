@@ -1,15 +1,15 @@
 file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/query_obj/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/ClauseEvaluators/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/Query/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/ClauseEvaluators/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SourceProcessor/*.cpp"
         )
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/query_obj/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/pql/ClauseEvaluators/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/Query/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/ClauseEvaluators/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SourceProcessor/*.h"
         )
 set(srcs ${srcs}
@@ -22,7 +22,7 @@ set(headers ${headers}
         src/QP_Parser/Tokenizer.h
         src/QP_Parser/Validator.h
         src/QP_Parser/Exception.h
-        src/pql/QueryEvaluator.h
+        src/QP_Evaluator/QueryEvaluator.h
         src/SourceProcessor/SourceProcessor.h
         )
 add_library(spa ${srcs} ${headers} src/SourceProcessor/Parser.cpp

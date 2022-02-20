@@ -7,9 +7,9 @@
 
 
 #include "PKB.h"
-#include "pql/query_obj/Query.h"
-#include "pql/ClauseEvaluators/Result.h"
-#include "pql/ClauseEvaluators/ClauseEvaluator.h"
+#include "QP_Evaluator/Query/Query.h"
+#include "QP_Evaluator/ClauseEvaluators/Result.h"
+#include "QP_Evaluator/ClauseEvaluators/ClauseEvaluator.h"
 
 #include <sstream>
 #include <iostream>
