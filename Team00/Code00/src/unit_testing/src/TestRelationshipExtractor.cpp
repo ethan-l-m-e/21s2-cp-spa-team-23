@@ -72,8 +72,7 @@ TEST_CASE("test follows* - basic") {
     REQUIRE(PKB::getInstance()->isFollowsT("1","3"));
 }
 
-//pkb parents doesnt seem to work yet so these will fail
-TEST_CASE("test parents - basic") {
+TEST_CASE("test parents - basic while") {
     StatementList defaultStmtLst;
 
     defaultStmtLst.push_back(&aNode);
@@ -84,8 +83,37 @@ TEST_CASE("test parents - basic") {
     vector<StmtLstNode*> v;
     v.push_back(&wNode);
     RelationshipExtractor::extractParent(&wNode,v);
+    unordered_set<string> mySet = PKB::getInstance()->getParent("2");
+    for (const auto& elem: mySet) {
+        /* ... process elem ... */
+        cout<<elem;
+        cout<<"\n";
+    }
     REQUIRE(PKB::getInstance()->isParent("0","2"));
-    REQUIRE(PKB::getInstance()->isParent("0","1"));
+    REQUIRE(PKB::getInstance()->isParent("1","1"));
+}
+TEST_CASE("test parents - basic if") {
+    StatementList defaultStmtLst;
+    StatementList defaultStmtLst2;
+
+    defaultStmtLst.push_back(&aNode);
+    defaultStmtLst.push_back(&bNode);
+    defaultStmtLst.push_back(&cNode);
+
+    defaultStmtLst2.push_back(&dNode);
+    defaultStmtLst2.push_back(&eNode);
+
+    IfNode iNode = IfNode(0,condPtr,defaultStmtLst,defaultStmtLst2);
+    vector<StmtLstNode*> v;
+    RelationshipExtractor::extractParent(&iNode,v);
+    unordered_set<string> mySet = PKB::getInstance()->getParent("2");
+    for (const auto& elem: mySet) {
+        /* ... process elem ... */
+        cout<<elem;
+        cout<<"\n";
+    }
+    REQUIRE(PKB::getInstance()->isParent("0","2"));
+    REQUIRE(PKB::getInstance()->isParent("0","5"));
 }
 
 TEST_CASE("test parents - fail") {

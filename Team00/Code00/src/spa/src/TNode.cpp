@@ -229,6 +229,17 @@ StatementList IfNode::getElseStmtLst() {
     return this->elseStmtLst;
 }
 
+bool IfNode::hasStmtLst(){
+    return true;
+}
+
+StatementList IfNode::getStmtLst() {
+    StatementList combinedStmtLst;
+    combinedStmtLst.insert( combinedStmtLst.end(), this->thenStmtLst.begin(), this->thenStmtLst.end() );
+    combinedStmtLst.insert( combinedStmtLst.end(), this->elseStmtLst.begin(), this->elseStmtLst.end() );
+    return combinedStmtLst;
+}
+
 ProcNameNode::ProcNameNode(ProcName name) {
     this->procedureName = std::move(name);
 }
