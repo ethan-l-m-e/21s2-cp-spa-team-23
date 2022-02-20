@@ -78,6 +78,9 @@ TEST_CASE("test follows - nested") {
     REQUIRE(PKB::getInstance()->isFollows("6","7")==false);
     REQUIRE(PKB::getInstance()->isFollows("4","3")==false);
     REQUIRE(PKB::getInstance()->isFollows("3","4")==false);
+    REQUIRE(PKB::getInstance()->isFollows("3","5")==false);
+    REQUIRE(PKB::getInstance()->isFollows("3","6")==false);
+    REQUIRE(PKB::getInstance()->isFollows("3","7")==false);
 }
 
 TEST_CASE("test follows - fail test") {
