@@ -1,8 +1,3 @@
-1.0 - [valid] select stmt with wildcards ==========================================================[Generic tests start]
-stmt s;
-Select s pattern a(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-5000
 1.1.1 - [valid] select assign with wildcards ================================================[Select assign tests start]
 assign a;
 Select a pattern a(_, _)
@@ -11,22 +6,17 @@ Select a pattern a(_, _)
 1.1.4 - [valid] select assign with lhs wildcard and single var with wildcards pattern
 assign a;
 Select a pattern a(_, _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 11
+1, 3, 4, 5, 6, 7, 8, 9, 11
 5000
 1.1.8 - [valid] select assign with lhs varname and single var with wildcards pattern
 assign a;
 Select a pattern a("X", _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 11
+1, 3, 4, 5, 6, 7, 8, 9, 11
 5000
 1.1.12 - [valid] select assign with lhs var synonym and single var with wildcards pattern
 assign a; variable v;
 Select a pattern a(v, _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 11
-5000
-1.1.12 - [valid] select assign with lhs var synonym and single var with wildcards pattern
-assign a; variable v;
-Select a pattern a(v, _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9
+1, 3, 4, 5, 6, 7, 8, 9, 11
 5000
 1.1.13 - [valid] select assign with lhs var synonym and constant with wildcards
 assign a;

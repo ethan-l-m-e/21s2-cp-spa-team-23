@@ -2,24 +2,16 @@ procedure Uses {
     X = a;
     print X;
     while(X == a) {
-        Y = b;
-    }
+        Y = b;}
     while(Y == b) {
-        X = a;
-    }
+        X = a;}
     if(X == a) then {
         Y = b;
-    } else {
-        Y = b;
-    }
+    } else {  Y = b;}
     if(Y == b) then {
         X = a;
-    } else {
-        Y = b;
-    }
+    } else { Y = b;}
     if(Y == b) then {
         Y = b;
-    } else {
-        X = a;
-    }
+    } else {  X = a;    }
 }

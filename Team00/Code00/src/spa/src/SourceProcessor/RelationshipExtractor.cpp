@@ -11,70 +11,50 @@
 
 using std::begin, std::end;
 
-//extracts all follows relationship starting from given node
+void extractFollowsFromStatementList(StatementList statementList) {
+    int numOfChildNodes = statementList.size();
+    if (numOfChildNodes > 1) {
+        for (int i = 0; i < (numOfChildNodes - 1); i++) {
+            Node *child = statementList.at(i);
+            for (int j = i; j < numOfChildNodes - 1; j++) {
+                Node *nextChild = statementList.at(j + 1);
+                if (j == i) {
+                    PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
+                }
+                PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
+            }
+        }
+    }
+}
+
 void RelationshipExtractor::extractFollows(Node * node) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode *> v = value->getProcLst();
         for (ProcedureNode *p: v)
             extractFollows(p);
-    }else if(auto value = dynamic_cast<IfNode*>(node)) {
-        int numOfChildNodes1 = value->getThenStmtLst().size();
-        if (numOfChildNodes1 > 1) {
-            for (int i = 0; i < (numOfChildNodes1 - 1); i++) {
-                Node *child = value->getThenStmtLst().at(i);
-                for(int j = i; j<numOfChildNodes1-1;j++){
-                    Node *nextChild = value->getThenStmtLst().at(j + 1);
-                    if(j==i) {
-                        PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
-                    }
-                    PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
-
-                }
-            }
-        }
-        for (int i = 0; i < (numOfChildNodes1); i++) {
-            extractFollows(node->getStmtLst().at(i));
-        }
-        int numOfChildNodes2 = value->getElseStmtLst().size();
-        if (numOfChildNodes2 > 1) {
-            for (int i = 0; i < (numOfChildNodes2 - 1); i++) {
-                Node *child = value->getElseStmtLst().at(i);
-                for(int j = i; j<numOfChildNodes2-1;j++){
-                    Node *nextChild = value->getElseStmtLst().at(j + 1);
-                    if(j==i) {
-                        cout<<child->getStmtNumber();
-                        cout<<nextChild->getStmtNumber();
-                        PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
-                    }
-                    PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
-
-                }
-            }
-        }
-        for (int i = 0; i < (numOfChildNodes2); i++) {
-            extractFollows(node->getStmtLst().at(i));
-        }
-
-    }else if(node->hasStmtLst()) {
-         int numOfChildNodes = node->getStmtLst().size();
-         if (numOfChildNodes > 1) {
-             for (int i = 0; i < (numOfChildNodes - 1); i++) {
-                 Node *child = node->getStmtLst().at(i);
-                 for(int j = i; j<numOfChildNodes-1;j++){
-                     Node *nextChild = node->getStmtLst().at(j + 1);
-                    if(j==i) {
-                        PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
-                    }
-                     PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
-
-                 }
-             }
-         }
-         for (int i = 0; i < (numOfChildNodes); i++) {
-             extractFollows(node->getStmtLst().at(i));
-         }
-     }
+    } else if (auto value = dynamic_cast<ProcedureNode*>(node)) {
+        StatementList statementList = value->getStmtLst();
+        extractFollowsFromStatementList(statementList);
+        for(Node* node: statementList)
+            extractFollows(node);
+    } else if (auto value = dynamic_cast<WhileNode*>(node)) {
+        StatementList statementList = value->getStmtLst();
+        extractFollowsFromStatementList(statementList);
+        for(Node* node: statementList)
+            extractFollows(node);
+    } else if (auto value = dynamic_cast<IfNode*>(node)) {
+        StatementList elseStatementList = value->getElseStmtLst();
+        extractFollowsFromStatementList(elseStatementList);
+        StatementList thenStatementList = value->getThenStmtLst();
+        extractFollowsFromStatementList(thenStatementList);
+        for(Node* node: elseStatementList)
+            extractFollows(node);
+        for(Node* node: thenStatementList)
+            extractFollows(node);
+    }
 }
+
+
 //extracts all parents relationship starting from given node
 void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> parentList) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
@@ -145,10 +125,6 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
             vector<VarName> usedVariables = extractUses(stmt);
             allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
         }
-        cout << "sending " << value-> getStmtNumber() << " whileVar: ";
-        for(VarName v: allUsedVariables)
-            cout << v << ", ";
-        cout << "\n";
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
@@ -165,20 +141,15 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
             vector<VarName> usedVariables = extractUses(stmt);
             allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
         }
-        cout << "sending " << value-> getStmtNumber() << " ifVar: ";
-        for(VarName v: allUsedVariables)
-            cout << v << ", ";
-        cout << "\n";
+
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
-        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if(auto value = dynamic_cast<PrintNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
-        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else {
@@ -248,7 +219,6 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
         return allModifiedVariables;
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getListOfVarModified();
-        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
         PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if(auto value = dynamic_cast<ReadNode*>(node)) {
