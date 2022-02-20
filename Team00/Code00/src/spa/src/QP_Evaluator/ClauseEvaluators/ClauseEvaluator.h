@@ -12,8 +12,8 @@
 #include "PKB.h"
 #include "Result.h"
 #include "SynonymRelations.h"
-#include "pql/query_obj/Argument.h"
-#include "pql/query_obj/Query.h"
+#include "QP_Evaluator/Query/Argument.h"
+#include "QP_Evaluator/Query/Query.h"
 
 
 class ClauseEvaluator {

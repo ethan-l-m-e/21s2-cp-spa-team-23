@@ -7,7 +7,7 @@
 #include "SourceProcessor/SourceProcessor.h"
 #include "PKB.h"
 #include "QP_Parser/QueryParser.h"
-#include "pql/QueryEvaluator.h"
+#include "QP_Evaluator/QueryEvaluator.h"
 
 // include your other headers here
 #include "AbstractWrapper.h"

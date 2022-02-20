@@ -1508,29 +1508,29 @@ namespace Catch {
 #define CATCH_ARC_ENABLED 0
 #endif
 
-void arcSafeRelease( NSObject* query_obj );
-id performOptionalSelector( id query_obj, SEL sel );
+void arcSafeRelease( NSObject* Query );
+id performOptionalSelector( id Query, SEL sel );
 
 #if !CATCH_ARC_ENABLED
-inline void arcSafeRelease( NSObject* query_obj ) {
-    [query_obj release];
+inline void arcSafeRelease( NSObject* Query ) {
+    [Query release];
 }
-inline id performOptionalSelector( id query_obj, SEL sel ) {
-    if( [query_obj respondsToSelector: sel] )
-        return [query_obj performSelector: sel];
+inline id performOptionalSelector( id Query, SEL sel ) {
+    if( [Query respondsToSelector: sel] )
+        return [Query performSelector: sel];
     return nil;
 }
 #define CATCH_UNSAFE_UNRETAINED
 #define CATCH_ARC_STRONG
 #else
 inline void arcSafeRelease( NSObject* ){}
-inline id performOptionalSelector( id query_obj, SEL sel ) {
+inline id performOptionalSelector( id Query, SEL sel ) {
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 #endif
-    if( [query_obj respondsToSelector: sel] )
-        return [query_obj performSelector: sel];
+    if( [Query respondsToSelector: sel] )
+        return [Query performSelector: sel];
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif
@@ -4854,7 +4854,7 @@ namespace Catch {
 
 // NB. Any general catch headers included here must be included
 // in catch.hpp first to make sure they are included by the single
-// header for non query_obj-usage
+// header for non Query-usage
 
 ///////////////////////////////////////////////////////////////////////////////
 // This protocol is really only here for (self) documenting purposes, since
@@ -4876,13 +4876,13 @@ namespace Catch {
         OcMethod( Class cls, SEL sel ) : m_cls( cls ), m_sel( sel ) {}
 
         virtual void invoke() const {
-            id query_obj = [[m_cls alloc] init];
+            id Query = [[m_cls alloc] init];
 
-            performOptionalSelector( query_obj, @selector(setUp)  );
-            performOptionalSelector( query_obj, m_sel );
-            performOptionalSelector( query_obj, @selector(tearDown)  );
+            performOptionalSelector( Query, @selector(setUp)  );
+            performOptionalSelector( Query, m_sel );
+            performOptionalSelector( Query, @selector(tearDown)  );
 
-            arcSafeRelease( query_obj );
+            arcSafeRelease( Query );
         }
     private:
         virtual ~OcMethod() {}
