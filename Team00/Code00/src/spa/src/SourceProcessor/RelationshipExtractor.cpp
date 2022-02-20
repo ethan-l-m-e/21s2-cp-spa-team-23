@@ -17,6 +17,43 @@ void RelationshipExtractor::extractFollows(Node * node) {
         vector<ProcedureNode *> v = value->getProcLst();
         for (ProcedureNode *p: v)
             extractFollows(p);
+    }else if(auto value = dynamic_cast<IfNode*>(node)) {
+        int numOfChildNodes1 = value->getThenStmtLst().size();
+        if (numOfChildNodes1 > 1) {
+            for (int i = 0; i < (numOfChildNodes1 - 1); i++) {
+                Node *child = value->getThenStmtLst().at(i);
+                for(int j = i; j<numOfChildNodes1-1;j++){
+                    Node *nextChild = value->getThenStmtLst().at(j + 1);
+                    if(j==i) {
+                        PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
+                    }
+                    PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
+
+                }
+            }
+        }
+        for (int i = 0; i < (numOfChildNodes1); i++) {
+            extractFollows(node->getStmtLst().at(i));
+        }
+        int numOfChildNodes2 = value->getElseStmtLst().size();
+        if (numOfChildNodes2 > 1) {
+            for (int i = 0; i < (numOfChildNodes2 - 1); i++) {
+                Node *child = value->getElseStmtLst().at(i);
+                for(int j = i; j<numOfChildNodes2-1;j++){
+                    Node *nextChild = value->getElseStmtLst().at(j + 1);
+                    if(j==i) {
+                        cout<<child->getStmtNumber();
+                        cout<<nextChild->getStmtNumber();
+                        PKB::getInstance()->setFollows(child->getStmtNumber(), nextChild->getStmtNumber());
+                    }
+                    PKB::getInstance()->setFollowsT(child->getStmtNumber(), nextChild->getStmtNumber());
+
+                }
+            }
+        }
+        for (int i = 0; i < (numOfChildNodes2); i++) {
+            extractFollows(node->getStmtLst().at(i));
+        }
 
     }else if(node->hasStmtLst()) {
          int numOfChildNodes = node->getStmtLst().size();
