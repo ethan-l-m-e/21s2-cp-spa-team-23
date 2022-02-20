@@ -76,7 +76,7 @@ Select ifs such that Uses(ifs, v)
 1.5.3 - [valid] while with var name
 if ifs;
 Select ifs such that Uses(ifs, "X")
-7, 10, 13
+7
 5000
 1.5.4 - [valid] variables used in if
 variable v;
