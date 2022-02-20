@@ -9,6 +9,8 @@
 #include "Constants/Constants.h"
 #include <unordered_set>
 
+using std::begin, std::end;
+
 //extracts all follows relationship starting from given node
 void RelationshipExtractor::extractFollows(Node * node) {
      if(node->hasStmtLst()) {
@@ -55,7 +57,7 @@ void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> pare
 
 //set all variables used by the node in the pkb
 void RelationshipExtractor::extractUses (Node * node) {
-
+    /*
     vector<string> varList = node->getListOfVarUsed();
     if (!varList.empty()) {
 
@@ -72,11 +74,18 @@ void RelationshipExtractor::extractUses (Node * node) {
             extractUses(node->getStmtLst().at(i));
         }
     }
+     */
 }
 
-//set all variables modified by the node in the pkb
-void RelationshipExtractor::extractModifies (Node * node) {
 
+
+
+
+
+
+//set all variables modified by the node in the pkb
+vector<string> RelationshipExtractor::extractModifies (Node * node) {
+    /*
     vector<string> varList = node->getListOfVarModified();
     if (!varList.empty()) {
         std::unordered_set<string> set;
@@ -85,14 +94,63 @@ void RelationshipExtractor::extractModifies (Node * node) {
         }
         PKB::getInstance()->setModifies(node->getStmtNumber(),set);
     }
-
     if(node->hasStmtLst()) {
         for (int i = 0; i < (node->getStmtLst().size()); i++) {
             extractModifies(node->getStmtLst().at(i));
         }
+    }*/
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode*> v = value -> getProcLst();
+        for(ProcedureNode* p: v)
+            extractModifies(p);
+
+        return {};
+    } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
+        vector<Node*> stmtLst = value->getStmtLst();
+        for(Node* s: stmtLst) {
+            extractModifies(s);
+        }
+        //TODO: for future iterations
+        return {};
+    } else if(auto value = dynamic_cast<WhileNode*>(node)) {
+        vector<Node*> stmtLst = value->getStmtLst();
+        vector<VarName> allModifiedVariables;
+        for(Node* stmt: stmtLst) {
+            vector<VarName> modifiedVariables = extractModifies(stmt);
+            allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
+        }
+        cout << "sending " << value-> getStmtNumber() << " allModifiedVariables.size: " << allModifiedVariables.size() << "\n";
+        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+        return allModifiedVariables;
+    } else if(auto value = dynamic_cast<IfNode*>(node)) {
+        vector<Node*> elseVector = value->getElseStmtLst();
+        vector<Node*> thenVector = value->getThenStmtLst();
+        vector<VarName> allModifiedVariables;
+        for(Node* stmt: elseVector) {
+            vector<VarName> modifiedVariables = extractModifies(stmt);
+            allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
+        }
+        for(Node* stmt: thenVector) {
+            vector<VarName> modifiedVariables = extractModifies(stmt);
+            allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
+        }
+        cout << "sending " << value-> getStmtNumber() << " allModifiedVariables.size: " << allModifiedVariables.size() << "\n";
+        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+        return allModifiedVariables;
+    } else if(auto value = dynamic_cast<AssignNode*>(node)) {
+        vector<VarName> variables = value->getListOfVarModified();
+        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
+        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+        return variables;
+    } else if(auto value = dynamic_cast<ReadNode*>(node)) {
+        vector<VarName> variables = value->getListOfVarModified();
+        cout << "sending " << value-> getStmtNumber() << " size: " << variables.size() << "\n";
+        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+        return variables;
+    } else {
+        return {};
     }
 }
-
 
 
 void extractAllEntities(Node *node) {
