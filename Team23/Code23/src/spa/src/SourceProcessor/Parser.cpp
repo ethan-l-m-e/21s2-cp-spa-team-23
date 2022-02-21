@@ -80,6 +80,7 @@ bool isNumber(string s) {
     return true;
 }
 Expression Parser::parseExpression(string expression) {
+    expression = StringFormatter::removeMatchingFrontBackBrackets(expression);
     if (isLeaf(expression)) {
         if (isNumber(expression)) {
             return Parser::parseConst(expression);
@@ -148,6 +149,7 @@ IfNode *Parser::parseIf(string code) {
 }
 
 RelExprNode *Parser::parseRelExpr(string relExprLine) {
+    relExprLine = StringFormatter::removeMatchingFrontBackBrackets(relExprLine);
     vector<string> tokens;
     SourceTokenizer::extractRelExpr(relExprLine, tokens);
     RelFactor newLeftRelFactor = parseExpression(tokens[0]);
@@ -156,6 +158,7 @@ RelExprNode *Parser::parseRelExpr(string relExprLine) {
 }
 
 CondExprNode *Parser::parseCondExpr(string condExprLine) {
+    condExprLine = StringFormatter::removeMatchingFrontBackBrackets(condExprLine);
     vector<string> tokens;
     SourceTokenizer::extractCondExpr(std::move(condExprLine), tokens);
     if (tokens[0].empty()) {
