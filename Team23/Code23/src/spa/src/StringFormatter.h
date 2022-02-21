@@ -17,7 +17,6 @@ class StringFormatter {
         static vector<string> tokenizeByRegex(string code, string regex);
         static string removeFrontBackBrackets(const string s);
         static string removeMatchingFrontBackBrackets(const string& s);
-        static string removeAllSpaces(const string& s);
         static vector<string> partitionBasedOnParentheses(string sourceCode, string brackets);
         static vector<string> partitionBySemiColon(string sourceCode);
 };
