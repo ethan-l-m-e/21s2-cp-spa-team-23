@@ -35,6 +35,7 @@ Node* Parser::Parse (string sourceCode) {
 
 VariableNode* Parser::parseVar(string variable) {
     // convert into a variable node
+    //string removedBrackets = StringFormatter::removeMatchingFrontBackBrackets(variable);
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
         return new VariableNode(variable);
