@@ -187,7 +187,8 @@ void SourceTokenizer::extractCondExpr(string sourceCode, vector<string> &v) {
     string left, right, oper;
     if(regex_match(sourceCode, std::regex("[ ]*![ ]*\\((.*)\\)[ ]*"))) {
         int pos = sourceCode.find("!");
-        string removedBrackets = sourceCode.substr(pos + 2, sourceCode.size() - 3);
+        sourceCode = StringFormatter::removeTrailingSpace(sourceCode.substr(pos + 1, sourceCode.size()));
+        string removedBrackets = sourceCode.substr(1, sourceCode.size() - 2);
         extractCondExpr(removedBrackets, v);
     }else if(regex_match(sourceCode, std::regex("\\((.*)\\)[ ]*\\&\\&[ ]*\\((.*)\\)|\\((.*)\\)[ ]*\\|\\|[ ]*\\((.*)\\)"))) {
         vector<string> partition = StringFormatter::partitionBasedOnParentheses(sourceCode, "()");
