@@ -788,7 +788,7 @@ PKB* generateSamplePKBForPatternMatching() {
     testPKB->addAssignNode(Parser::parseAssign(a5));
     testPKB->addAssignNode(Parser::parseAssign(a6));
     testPKB->addAssignNode(Parser::parseAssign(a7));
-
+    Parser::resetStatementNumber();
     testPKB->addVariable("x");
     testPKB->addVariable("y");
     testPKB->addVariable("z");

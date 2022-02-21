@@ -45,6 +45,7 @@ void PKB::clearPKB() {
     printStatementsSet.clear();
     ifStatementsSet.clear();
     whileStatementsSet.clear();
+    assignNodesSet.clear();
 
     followeeToFollowerMap.clear();
     followerToFolloweeMap.clear();
