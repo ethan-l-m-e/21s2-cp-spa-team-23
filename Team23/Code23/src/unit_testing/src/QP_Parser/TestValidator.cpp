@@ -2042,7 +2042,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.selectClauseToken = "s";
 
     // Integer as second argument
-    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken(suchThatClauseToken);
+    SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;

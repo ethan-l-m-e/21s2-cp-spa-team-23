@@ -58,11 +58,6 @@ stmt s; assign a; variable v; print p;
 Select p such that Uses(p, v) pattern a(_, _)
 18
 5000
-13 - (2 synonym)
-stmt s; assign a; variable v; print p;
-Select p such that Uses(p, v) pattern a(v, _)
-none
-5000
 14 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Uses(s, v) pattern a(_, _)
@@ -236,11 +231,6 @@ none
 48 - (2 synonym + varname)
 print p; assign a; variable v;
 Select p such that Modifies(p, v) pattern a(v, _"a"_)
-none
-5000
-49 - (no relation queries)
-stmt s1, s2; variable v; assign a;
-Select s1 such that Modifies(s2, v) pattern a("nestedAlternateIfAndWhile", "a")
 none
 5000
 50 - (1 synonym)
@@ -527,11 +517,6 @@ none
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows(ifs1, _) pattern a(v, _"a"_)
 8
-5000
-107 - (3 synonym + var name)
-stmt s; assign a; variable v;
-Select s such that Follows(s, a) pattern a(v, _"a"_)
-none
 5000
 108 - (no relation queries)
 stmt s, s1, s2; assign a; variable v;
@@ -822,11 +807,6 @@ none
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows*(ifs1, _) pattern a(v, _"a"_)
 8
-5000
-166 - (3 synonym + var name)
-stmt s; assign a; variable v;
-Select s such that Follows*(s, a) pattern a(v, _"a"_)
-none
 5000
 167 - (no relation queries)
 stmt s, s1, s2; assign a; variable v;
