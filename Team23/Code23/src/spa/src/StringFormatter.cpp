@@ -69,7 +69,7 @@ string StringFormatter::removeFrontBackBrackets(const string s){
 }
 
 string StringFormatter::removeMatchingFrontBackBrackets(const string& s) {
-    string temp = s;
+    string temp = removeTrailingSpace(s);
     while(temp[0] == '(') {
         int bracketCount = 1;
         for (int i = 1; i < temp.length(); i ++) {
