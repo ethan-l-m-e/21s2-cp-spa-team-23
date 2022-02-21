@@ -68,6 +68,29 @@ string StringFormatter::removeFrontBackBrackets(const string s){
     return toReturn.substr(1,toReturn.length()-2);
 }
 
+string StringFormatter::removeMatchingFrontBackBrackets(const string& s) {
+    string temp = s;
+    while(temp[0] == '(') {
+        int bracketCount = 1;
+        for (int i = 1; i < temp.length(); i ++) {
+            if (temp[i] == '(') {
+                bracketCount++;
+            } else if (temp[i] == ')') {
+                bracketCount--;
+            }
+            if (bracketCount == 0) {
+                if (i == temp.length() -1) {
+                    temp = temp.substr(1,temp.length()-2);
+                } else {
+                    goto exit_loop;
+                }
+            }
+        }
+    }
+    exit_loop:;
+    return temp;
+}
+
 vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
 
     std::regex r(regex);
