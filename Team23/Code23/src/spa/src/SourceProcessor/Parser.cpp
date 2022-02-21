@@ -46,6 +46,7 @@ VariableNode* Parser::parseVar(string variable) {
 
 ConstValueNode *Parser::parseConst(string constValue) {
     // convert into a const node
+    //string removedBrackets = StringFormatter::removeMatchingFrontBackBrackets(constValue);
     int check = Identifier::identifyFirstObject(constValue);
     if(check == CONSTANT_VALUE) {
         return new ConstValueNode(constValue);
