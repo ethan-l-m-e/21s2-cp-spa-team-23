@@ -33,9 +33,9 @@ Node* Parser::Parse (string sourceCode) {
     return programNode;
 }
 
-VariableNode* Parser::parseVar(string variable) {
+VariableNode* Parser::parseVar(string input) {
     // convert into a variable node
-    //string removedBrackets = StringFormatter::removeMatchingFrontBackBrackets(variable);
+    string variable = StringFormatter::removeMatchingFrontBackBrackets(input);
     int check = Identifier::identifyFirstObject(variable);
     if(check == VARIABLE_NAME) {
         return new VariableNode(variable);
@@ -44,9 +44,9 @@ VariableNode* Parser::parseVar(string variable) {
     }
 }
 
-ConstValueNode *Parser::parseConst(string constValue) {
+ConstValueNode *Parser::parseConst(string input) {
     // convert into a const node
-    //string removedBrackets = StringFormatter::removeMatchingFrontBackBrackets(constValue);
+    string constValue = StringFormatter::removeMatchingFrontBackBrackets(input);
     int check = Identifier::identifyFirstObject(constValue);
     if(check == CONSTANT_VALUE) {
         return new ConstValueNode(constValue);
