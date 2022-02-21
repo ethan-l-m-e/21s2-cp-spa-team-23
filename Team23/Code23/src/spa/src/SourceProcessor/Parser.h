@@ -26,5 +26,7 @@ public:
     static ProgramNode* parseProgram(string sourceCode);
 
     static Expression parseExpression(string expression);
+
+    static void resetStatementNumber();
 };
 

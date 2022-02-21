@@ -53,7 +53,12 @@ ConstValueNode *Parser::parseConst(string constValue) {
     }
 }
 
+void Parser::resetStatementNumber() {
+    statementNumber = 0;
+}
+
 int getStatementNumber() {
+    cout << "getStatermentMNumber: " << statementNumber << "\n";
     statementNumber = statementNumber + 1;
     return statementNumber;
 }
