@@ -33,7 +33,7 @@ TEST_CASE("procedure token - basic") {
 }
 
 TEST_CASE("if-else token - basic") {
-    string p = "if (x==1) then {y = 1} else {y = 2}";
+    string p = "if (x==1 )then {y = 1} else {y = 2}";
     vector<string> v;
     SourceTokenizer::extractIfElseThen(p, v);
     REQUIRE(v[0] == "x==1");
