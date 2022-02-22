@@ -139,7 +139,13 @@ TEST_CASE("WHILE") {
 }
 
 TEST_CASE("IF") {
-    string ifString = "if (x < present) then {\n x = y + 1;\n } else {\n y = 1;\n}";
+    string ifString = "if (x < present )then {\n x = y + 1;\n } else {\n y = 1;\n}";
+    switchCase = Identifier::identifyFirstObject(ifString);
+    CHECK(switchCase == IF_ELSE);
+    ifString = "if (     x <     present )        then        {\n         x = y + 1;\n } else {\n   y    =   1  ;\n}";
+    switchCase = Identifier::identifyFirstObject(ifString);
+    CHECK(switchCase == IF_ELSE);
+    ifString = "if(x<present)then{\nx=y+1;\n}else{\ny=1;\n}";
     switchCase = Identifier::identifyFirstObject(ifString);
     CHECK(switchCase == IF_ELSE);
 }

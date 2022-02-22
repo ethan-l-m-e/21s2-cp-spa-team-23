@@ -29,7 +29,7 @@ string const PRINT_REGEX = "[ ]*(print )[ ]*(" + VAR_NAME + ")[ ]*(;)(.*)";
 
 
 string const WHILE_IDENTIFIER = "(while)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]*(\\{)(.*)";
-string const IF_IDENTIFIER  = "(if)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]* (then)[ ]*(\\{)(.*)";
+string const IF_IDENTIFIER  = "(if)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]*(then)[ ]*(\\{)(.*)";
 
 
 string const PROCEDURE_IDENTIFIER = "(procedure )[ ]*(" + PROC_NAME + ")[ ]*(\\{)(.*)" ;
