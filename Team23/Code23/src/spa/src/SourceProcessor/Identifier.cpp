@@ -99,3 +99,28 @@ bool Identifier::checkParenthesesClosure(string code, string brackets) {
         return true;
     }
 }
+/**
+ * more accurate than checkParenthesesCorrectness. However usage is much more limited
+ * @param code
+ * @param brackets
+ * @return
+ */
+bool Identifier::checkParenthesesCorrectness(string code, string brackets)  {
+    int count = 0;
+    char bracketLeft = brackets[0];
+    char bracketRight = brackets[1];
+    for (int i = 0; i < code.size(); i++) {
+        if (code[i]== bracketLeft) {
+            count++;
+        } else if (code[i] == bracketRight) {
+            count--;
+            if ( count < 0) {
+                cout << "excessive " << bracketRight <<"\n";
+                return false;
+            }
+        }
+    }
+
+    if(count == 0) return true;
+    else return false;
+}
