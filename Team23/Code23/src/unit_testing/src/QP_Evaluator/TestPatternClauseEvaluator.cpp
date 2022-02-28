@@ -30,12 +30,12 @@ TEST_CASE("PATTERN METHODS MATCHING TEST") {
     /*
     Argument leftArgIdent = {.argumentType = ArgumentType::IDENT, .argumentValue = "x"};
     CHECK(PatternClauseEvaluator::matchLHSValue(assignNode1, leftArgIdent));
-    CHECK(!PatternClauseEvaluator::matchLHSValue(assignNode2, leftArgIdent));
+    CHECK(!PatternClauseEvaluator::matchVariableValue(assignNode2, leftArgIdent));
 
     Argument rightArgPartial = {.argumentType = ArgumentType::PARTIAL_UNDERSCORE, .argumentValue = "_\"x\"_"};
     CHECK(PatternClauseEvaluator::matchRHSValue(assignNode1, rightArgPartial));
     CHECK(PatternClauseEvaluator::matchRHSValue(assignNode2, rightArgPartial));
-    CHECK(!PatternClauseEvaluator::matchRHSValue(assignNode3, rightArgPartial));
+    CHECK(!PatternClauseEvaluator::matchExpressionValue(assignNode3, rightArgPartial));
     */
 
     //PatternClauseEvaluator::
