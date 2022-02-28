@@ -7,6 +7,7 @@
 #include <utility>
 #include "catch.hpp"
 #include "SourceProcessor/Parser.h"
+#include <exception>
 
 using namespace std;
 using ArgList = std::vector<Argument>;
@@ -764,6 +765,7 @@ TEST_CASE("Merge synonyms") {
 
 PKB* generateSamplePKBForPatternMatching() {
     /**
+     * Original. DO NOT DELETE OR MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING.
      *    x = y;        // test var
      *    x = 1;        //test const
      *    x = y + 1;    //test basic expression
@@ -788,6 +790,7 @@ PKB* generateSamplePKBForPatternMatching() {
     testPKB->addAssignNode(Parser::parseAssign(a5));
     testPKB->addAssignNode(Parser::parseAssign(a6));
     testPKB->addAssignNode(Parser::parseAssign(a7));
+
     Parser::resetStatementNumber();
     testPKB->addVariable("x");
     testPKB->addVariable("y");
@@ -827,7 +830,6 @@ TEST_CASE("Pattern clause: return stmt") {
     PKB *testPKB = generateSamplePKBForPatternMatching();
     Query query;
     auto qe = QueryEvaluator(testPKB);
-
     unordered_map<string, DesignEntity> declarationsMap = {{"a1", DesignEntity::ASSIGN}};
     Argument assignSyn = {ArgumentType::SYNONYM, "a1"};
     Argument leftIdent = {ArgumentType::IDENT, "\"x\""};
@@ -854,20 +856,21 @@ TEST_CASE("Pattern clause: return stmt") {
     query = makeQuery(declarationsMap, "a1", {ident_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "2", "3", "7"});
 
-    query = makeQuery(declarationsMap, "a1", {wild_const});
-    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5", "7"});
+    query = makeQuery(declarationsMap, "a1", {none_wild});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
 
+    // not working
     query = makeQuery(declarationsMap, "a1", {ident_const});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"7"});
+
+    query = makeQuery(declarationsMap, "a1", {wild_const});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5", "7"});
 
     query = makeQuery(declarationsMap, "a1", {wild_var});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "4", "5", "6", "7"});
 
     query = makeQuery(declarationsMap, "a1", {ident_var});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "7"});
-
-    query = makeQuery(declarationsMap, "a1", {none_wild});
-    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
 
     query = makeQuery(declarationsMap, "a1", {wild_none});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
@@ -899,7 +902,69 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet{"y"});
 }
 
-TEST_CASE("PATTERN FULL EXPRESSION MATCHING") {
+TEST_CASE("Pattern clause: full expression and exact matching") {
+    PKB *testPKB = generateSamplePKBForPatternMatching();
+    Query query;
+    auto qe = QueryEvaluator(testPKB);
+    unordered_map<string, DesignEntity> declarationsMap = {{"a1", DesignEntity::ASSIGN}};
+    Argument assignSyn = {ArgumentType::SYNONYM, "a1"};
+    Argument leftWild = {ArgumentType::UNDERSCORE, "_"};
+
+
+    // exact matching simple
+    PatternClause clauseIdentEasy = {ArgList {assignSyn, leftWild,
+                                          {ArgumentType::IDENT, "\"y + 1\""}},
+                                 SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {clauseIdentEasy});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"3"});
+
+     // exact matching difficult
+    PatternClause clauseIdentHard = {ArgList {assignSyn, leftWild,
+                                              {ArgumentType::IDENT, "\"((y + (3 - z)) * (x + 2)) + 1\""}},
+                                     SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {clauseIdentHard});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5"});
+
+    // no exact match
+    PatternClause clauseIdentNoResults = {ArgList {assignSyn, leftWild,
+                                              {ArgumentType::IDENT, "\"((y + (3 - z)) * (x + 2))\""}},
+                                     SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {clauseIdentNoResults});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
+
+    // wild easy match
+    PatternClause clauseWildEasy = {ArgList {assignSyn, leftWild,
+                                                   {ArgumentType::PARTIAL_UNDERSCORE, "_\"x * 1\"_"}},
+                                          SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {clauseWildEasy});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"6"});
+
+
+    // wild medium match
+    PatternClause clauseWildMedium = {ArgList {assignSyn, leftWild,
+                                             {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + x\"_"}},
+                                    SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {clauseWildMedium});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"4"});
+
+    // wild difficult match
+    PatternClause clauseWildHard = {ArgList {assignSyn, leftWild,
+                                               {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + (3 - z)\"_"}},
+                                      SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {clauseWildHard});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5" , "7"});
+
+
+    // invalid queries
+    /*
+    PatternClause invalid1 = {ArgList {assignSyn, leftWild,
+                                             {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + ((3 - 5asdsa)))\"_"}},
+                                    SynonymType::ASSIGN};
+
+    query = makeQuery(declarationsMap, "a1", {invalid1});
+    evaluateAndCreateResultSet(qe, &query);
+    */
+
 
 }
 
