@@ -60,7 +60,6 @@ void Parser::resetStatementNumber() {
 }
 
 int getStatementNumber() {
-    cout << "getStatermentMNumber: " << statementNumber << "\n";
     statementNumber = statementNumber + 1;
     return statementNumber;
 }
