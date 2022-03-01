@@ -17,7 +17,7 @@ int switchCaseOrError(int, bool);
 int Identifier::identifyFirstObject(string sourceCode) {
     string firstLine = StringFormatter::extractFrontStringByRegex(sourceCode, "\n");
     firstLine = StringFormatter::removeTrailingSpace(firstLine);
-    if(regex_match(firstLine, std::regex(PROCEDURE_IDENTIFIER))) {
+    if (regex_match(firstLine, std::regex(PROCEDURE_IDENTIFIER))) {
         bool isCorrect = checkParenthesesClosure(sourceCode, "{}");
         return switchCaseOrError(PROCEDURE, isCorrect); //ignores stmtLst
     } else if (regex_match(firstLine, std::regex(ASSIGN_IDENTIFIER))) {
@@ -26,6 +26,8 @@ int Identifier::identifyFirstObject(string sourceCode) {
         return READ; // done
     } else if (regex_match(firstLine, std::regex(PRINT_REGEX))) {
         return PRINT; // done
+    } else if (regex_match(firstLine, std::regex(CALL_REGEX))) {
+        return CALL;
     } else if (regex_match(firstLine, std::regex(WHILE_IDENTIFIER))) {
         bool isCorrect = checkParenthesesClosure(sourceCode, "()") && checkParenthesesClosure(sourceCode, "{}");
         return switchCaseOrError(WHILE, isCorrect); //ignores stmtLst
