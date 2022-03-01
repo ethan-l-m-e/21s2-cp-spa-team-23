@@ -91,13 +91,19 @@ string StringFormatter::removeMatchingFrontBackBrackets(const string& s) {
     return temp;
 }
 
+/**
+ * converts string input a vector of tokens based on regex
+ * @param s
+ * @param regex
+ * @return
+ */
 vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
-
+    /*
     std::regex r(regex);
     string spaced = std::regex_replace(s, r, "//");
 
     char * sourceAsChar = new char[spaced.size() + 1];
-    char * regexChar = "//*";
+    char * regexChar = "//";
     strcpy(sourceAsChar, spaced.c_str());
     char *token = strtok(sourceAsChar,regexChar);
     vector<string> v;
@@ -107,6 +113,21 @@ vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
     }
     delete [] sourceAsChar;
     return v;
+    */
+    std::regex rgx(regex);
+    vector<string> v;
+    copy( std::sregex_token_iterator(s.begin(), s.end(), rgx, -1),
+              std::sregex_token_iterator(), back_inserter(v));
+
+    vector<string>::iterator i;
+    vector<string> outputVector;
+    for (i = v.begin(); i != v.end(); ++i) {
+        if(*i != "")
+            outputVector.push_back(*i);
+    }
+
+    return outputVector;
+
 }
 
 vector<string> StringFormatter::partitionBySemiColon(string sourceCode) {
@@ -148,7 +169,7 @@ vector<string> StringFormatter::partitionBasedOnParentheses(string sourceCode, s
                 break;
             }
         } else {
-            if(startedCount = true && count != 0) {
+            if(startedCount == true && count != 0) {
                 bracketedString += sourceCode[i];
             }
         }

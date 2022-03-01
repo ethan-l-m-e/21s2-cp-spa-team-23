@@ -23,7 +23,11 @@ enum class RelRef{
     MODIFIES_P
 };
 
-enum class SynonymType { ASSIGN };
+enum class SynonymType {
+    ASSIGN,
+    WHILE,
+    IF
+};
 
 typedef struct Clause {
     std::vector<Argument> argList;
