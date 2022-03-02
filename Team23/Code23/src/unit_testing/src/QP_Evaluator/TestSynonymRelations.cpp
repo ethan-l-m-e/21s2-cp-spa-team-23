@@ -137,7 +137,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     sr->mergeResultToSynonymsRelations(result1);
 
     REQUIRE(*(sr->getHeader()) == std::vector<std::string>{"a", "c"});
-    REQUIRE(generateValueSet(*(sr->getList())) == ValueSet {{"1", "w"}, {"2", "w"}});
+    REQUIRE(generateValueSet(*(sr->getList())) == ValueSet {{"1", "w"},{"2", "w"}});
     delete sr;
 
     // merge tuple into sr, one common s
