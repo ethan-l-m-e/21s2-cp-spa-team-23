@@ -22,7 +22,7 @@ vector<PatternClause> Query::getPatternClauses(){
     return patternClauses;
 }
 
-std::vector<string> Query::getSelectedSynonym() {
+std::vector<string> Query::getSelectedSynonyms() {
     return selectedSynonyms;
 }
 
