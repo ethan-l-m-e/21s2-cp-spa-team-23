@@ -60,7 +60,6 @@ void Parser::resetStatementNumber() {
 }
 
 int getStatementNumber() {
-    cout << "getStatermentMNumber: " << statementNumber << "\n";
     statementNumber = statementNumber + 1;
     return statementNumber;
 }
@@ -82,7 +81,7 @@ bool isNumber(string s) {
     return true;
 }
 Expression Parser::parseExpression(string expression) {
-    expression = StringFormatter::removeMatchingFrontBackBrackets(expression);
+    expression = StringFormatter::removeTrailingSpace(StringFormatter::removeMatchingFrontBackBrackets(expression));
     if (isLeaf(expression)) {
         if (isNumber(expression)) {
             return Parser::parseConst(expression);
@@ -151,7 +150,7 @@ IfNode *Parser::parseIf(string code) {
 }
 
 RelExprNode *Parser::parseRelExpr(string relExprLine) {
-    relExprLine = StringFormatter::removeMatchingFrontBackBrackets(relExprLine);
+    relExprLine = StringFormatter::removeTrailingSpace(StringFormatter::removeMatchingFrontBackBrackets(relExprLine));
     vector<string> tokens;
     SourceTokenizer::extractRelExpr(relExprLine, tokens);
     RelFactor newLeftRelFactor = parseExpression(tokens[0]);
@@ -160,7 +159,7 @@ RelExprNode *Parser::parseRelExpr(string relExprLine) {
 }
 
 CondExprNode *Parser::parseCondExpr(string condExprLine) {
-    condExprLine = StringFormatter::removeMatchingFrontBackBrackets(condExprLine);
+    condExprLine = StringFormatter::removeTrailingSpace(StringFormatter::removeMatchingFrontBackBrackets(condExprLine));
     vector<string> tokens;
     SourceTokenizer::extractCondExpr(std::move(condExprLine), tokens);
     if (tokens[0].empty()) {

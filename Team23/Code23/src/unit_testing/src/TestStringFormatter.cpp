@@ -48,3 +48,9 @@ TEST_CASE("partition if-else and while") {
     CHECK(arr[1] == " print y;");
 
 }
+
+TEST_CASE("tokenize by regex") {
+    string arg = "_\"This is an item\"_";
+    vector<string> v = StringFormatter::tokenizeByRegex(arg, "_\"|\"_");
+    CHECK(v[0] == "This is an item");
+}

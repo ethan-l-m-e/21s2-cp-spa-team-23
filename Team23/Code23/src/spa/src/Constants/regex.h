@@ -26,10 +26,10 @@ string const FACTOR_REGEX;
 
 string const READ_REGEX = "[ ]*(read )[ ]*(" + VAR_NAME +")[ ]*(;)(.*)";
 string const PRINT_REGEX = "[ ]*(print )[ ]*(" + VAR_NAME + ")[ ]*(;)(.*)";
-
+string const CALL_REGEX = "[ ]*(call )[ ]*(" + PROC_NAME + ")[ ]*(;)(.*)";
 
 string const WHILE_IDENTIFIER = "(while)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]*(\\{)(.*)";
-string const IF_IDENTIFIER  = "(if)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]* (then)[ ]*(\\{)(.*)";
+string const IF_IDENTIFIER  = "(if)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]*(then)[ ]*(\\{)(.*)";
 
 
 string const PROCEDURE_IDENTIFIER = "(procedure )[ ]*(" + PROC_NAME + ")[ ]*(\\{)(.*)" ;

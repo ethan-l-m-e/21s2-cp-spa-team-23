@@ -12,5 +12,7 @@ class Identifier {
     public:
         static int identifyFirstObject(string);
         static bool checkParenthesesClosure(string code, string brackets);
+
+    static bool checkParenthesesCorrectness(string code, string brackets);
 };
 #endif //SPA_IDENTIFIER_H

@@ -21,12 +21,13 @@ protected:
     bool leftIsWildCard();
     bool rightIsWildCard();
     bool rightIsPartWildCard();
+    bool rightIsIdent();
 
-
-
-    Argument assignSynonym = argList[0];
-    Argument argLeft = argList[1];
-    Argument argRight = argList[2];
+    Argument syn = argList[0];
+    Argument arg1 = argList[1];
+    Argument arg2 = argList[2];
+    Argument arg3;
+    // get argument 3 if is if-node
 };
 
 
