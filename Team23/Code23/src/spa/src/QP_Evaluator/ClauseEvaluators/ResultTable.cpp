@@ -2,29 +2,29 @@
 // Created by Tianyi Wang on 9/2/22.
 //
 
-#include "SynonymRelations.h"
+#include "ResultTable.h"
 
 #include <utility>
 
-SynonymRelations::SynonymRelations(){
+ResultTable::ResultTable(){
     tableHeader = std::vector<std::string>{};
     tableEntries = String2DVector{};
 }
 
-SynonymRelations::SynonymRelations(std::vector<std::string> header,String2DVector values){
+ResultTable::ResultTable(std::vector<std::string> header, String2DVector values){
     tableHeader = std::move(header);
     tableEntries = std::move(values);
 }
 
-bool SynonymRelations::isEmpty(){
+bool ResultTable::isEmpty(){
     return tableEntries.empty();
 }
 
-std::vector<std::string>* SynonymRelations::getHeader() {
+std::vector<std::string>* ResultTable::getHeader() {
     return &tableHeader;
 }
 
-String2DVector* SynonymRelations::getList() {
+String2DVector* ResultTable::getList() {
     return &tableEntries;
 }
 
@@ -32,7 +32,7 @@ String2DVector* SynonymRelations::getList() {
  * Merge a result to the table.
  * @param result  reference to the result object to be merged
  */
-void SynonymRelations::mergeResultToSynonymsRelations(Result& result) {
+void ResultTable::mergeResultToSynonymsRelations(Result& result) {
     //if result is boolean type, do nothing;
     if (result.resultType == ResultType::BOOLEAN) {
         return;
@@ -52,7 +52,7 @@ void SynonymRelations::mergeResultToSynonymsRelations(Result& result) {
  * Merge a string result to the table.
  * @param result  reference to the result object to be merged
  */
-void SynonymRelations::mergeStringResult(Result& result) {
+void ResultTable::mergeStringResult(Result& result) {
     auto it = std::find(tableHeader.begin(), tableHeader.end(), std::get<std::string>(result.resultHeader));
     if (it == tableHeader.end()) {
         // compute cross product if the synonym is not in the header
@@ -68,7 +68,7 @@ void SynonymRelations::mergeStringResult(Result& result) {
  * Merge a tuples result to the table.
  * @param result  reference to the result object to be merged
  */
-void SynonymRelations::mergeTuplesResult(Result& result) {
+void ResultTable::mergeTuplesResult(Result& result) {
     auto headerTuple = std::get<std::tuple<std::string, std::string>>(result.resultHeader);
     auto it1 = std::find(tableHeader.begin(), tableHeader.end(), std::get<0>(headerTuple));
     auto it2 = std::find(tableHeader.begin(), tableHeader.end(), std::get<1>(headerTuple));
@@ -95,7 +95,7 @@ void SynonymRelations::mergeTuplesResult(Result& result) {
  * Append a list of synonyms to the table header.
  * @param synonymList  reference to the list of synonyms to be appended
  */
-void SynonymRelations::appendHeader(const std::vector<std::string>& synonymList) {
+void ResultTable::appendHeader(const std::vector<std::string>& synonymList) {
     for (const auto& synonym : synonymList) {
         tableHeader.emplace_back(synonym);
     }
@@ -105,7 +105,7 @@ void SynonymRelations::appendHeader(const std::vector<std::string>& synonymList)
  * Replace the current table entries with a new set of entries.
  * @param newList  a new vector of table entries to replace the current table entries
  */
-void SynonymRelations::updateEntries(String2DVector newList) {
+void ResultTable::updateEntries(String2DVector newList) {
     tableEntries = std::move(newList);
 }
 
@@ -113,7 +113,7 @@ void SynonymRelations::updateEntries(String2DVector newList) {
  * Compute cross product of the table and a string result and assign the updated values to the table.
  * @param synonymValues  reference to the list of ResultItem of the type string
  */
-void SynonymRelations::crossJoinStrings(std::vector<ResultItem>& synonymValues) {
+void ResultTable::crossJoinStrings(std::vector<ResultItem>& synonymValues) {
     String2DVector updatedTuples;
 
     for(auto resultItem : synonymValues) {
@@ -136,7 +136,7 @@ void SynonymRelations::crossJoinStrings(std::vector<ResultItem>& synonymValues) 
  * Compute cross product of the table and a tuple result and assign the updated values to the table.
  * @param synonymValues  reference to the list of ResultItem of the type tuple
  */
-void SynonymRelations::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
+void ResultTable::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
     String2DVector updatedTuples;
 
     for(auto resultItem : synonymValues) {
@@ -162,7 +162,7 @@ void SynonymRelations::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
  * @param index  the index of the common synonym in the table header
  * @param resultItemList  a list of ResultItem of the type string
  */
-void SynonymRelations::innerJoin(size_t index, std::vector<ResultItem>& resultItemList) {
+void ResultTable::innerJoin(size_t index, std::vector<ResultItem>& resultItemList) {
     for (auto value = tableEntries.begin(); value != tableEntries.end();) {
         std::string curr = (*value)[index];
         if (!std::count(resultItemList.begin(), resultItemList.end(),
@@ -179,7 +179,7 @@ void SynonymRelations::innerJoin(size_t index, std::vector<ResultItem>& resultIt
  * @param indices  pair of indices representing the position of the two synonyms in the table header
  * @param resultItemList  a list of ResultItem of the type tuple
  */
-void SynonymRelations::innerJoin(std::pair<size_t, size_t> indices, std::vector<ResultItem>& resultItemList) {
+void ResultTable::innerJoin(std::pair<size_t, size_t> indices, std::vector<ResultItem>& resultItemList) {
     for (auto value = tableEntries.begin(); value != tableEntries.end();) {
         std::string left = (*value)[indices.first];
         std::string right = (*value)[indices.second];
@@ -198,7 +198,7 @@ void SynonymRelations::innerJoin(std::pair<size_t, size_t> indices, std::vector<
  * @param index  the index of the common synonym in the table header
  * @param map  an unordered map representation of the tuple result with the values of the common synonym as the key
  */
-void SynonymRelations::innerJoin(size_t index, std::unordered_map<std::string,std::vector<std::string>> map){
+void ResultTable::innerJoin(size_t index, std::unordered_map<std::string,std::vector<std::string>> map){
     String2DVector updatedTuples;
     for (auto & value : tableEntries) {
         std::string left = value[index];
@@ -221,7 +221,7 @@ void SynonymRelations::innerJoin(size_t index, std::unordered_map<std::string,st
  * @param flipped  a boolean to indicate whether to generate the map with the right value as the key
  * @return  an unordered map representation of the original tuples vector
  */
-std::unordered_map<std::string, std::vector<std::string>> SynonymRelations::convertVectorToMap (std::vector<ResultItem>& resultItemList, bool flipped) {
+std::unordered_map<std::string, std::vector<std::string>> ResultTable::convertVectorToMap (std::vector<ResultItem>& resultItemList, bool flipped) {
     std::unordered_map<std::string, std::vector<std::string>> map;
     for(auto resultItem : resultItemList) {
         auto curr = std::get<std::tuple<std::string,std::string>>(resultItem);

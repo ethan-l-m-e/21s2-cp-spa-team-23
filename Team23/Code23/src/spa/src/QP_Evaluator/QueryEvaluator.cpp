@@ -16,7 +16,7 @@
 std::list<std::string> QueryEvaluator::evaluate(Query* query) {
 
     // Initialise an empty synonym relations for storing intermediate result
-    auto* synonymRelations = new SynonymRelations();
+    auto* resultTable = new ResultTable();
 
     // Create ClauseEvaluators and evaluate each of the pattern clause
     if(query->hasPatternClause()) {
@@ -26,7 +26,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
             if (!patternResult.resultBoolean) return {};
-            synonymRelations->mergeResultToSynonymsRelations( patternResult);
+            resultTable->mergeResultToSynonymsRelations( patternResult);
         }
     }
 
@@ -38,15 +38,15 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
             if (!suchThatResult.resultBoolean) return {};
-            synonymRelations->mergeResultToSynonymsRelations( suchThatResult);
+            resultTable->mergeResultToSynonymsRelations( suchThatResult);
         }
     }
 
     // Evaluate select clause and output the result
-    auto* selectClauseEvaluator = new SelectClauseEvaluator(synonymRelations, pkb, query);
+    auto* selectClauseEvaluator = new SelectClauseEvaluator(resultTable, pkb, query);
     Result selectResult = selectClauseEvaluator->evaluateClause();
     delete selectClauseEvaluator;
-    delete synonymRelations;
+    delete resultTable;
     return generateResultString(selectResult);
 }
 

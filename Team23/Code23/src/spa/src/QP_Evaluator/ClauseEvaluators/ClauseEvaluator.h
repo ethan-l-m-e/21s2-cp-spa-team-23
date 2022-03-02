@@ -11,7 +11,7 @@
 #include <cassert>
 #include "PKB.h"
 #include "Result.h"
-#include "SynonymRelations.h"
+#include "ResultTable.h"
 #include "QP_Evaluator/Query/Argument.h"
 #include "QP_Evaluator/Query/Query.h"
 

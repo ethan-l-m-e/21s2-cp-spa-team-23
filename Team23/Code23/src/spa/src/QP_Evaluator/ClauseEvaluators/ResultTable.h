@@ -2,8 +2,8 @@
 // Created by Tianyi Wang on 9/2/22.
 //
 
-#ifndef SPA_SYNONYMRELATIONS_H
-#define SPA_SYNONYMRELATIONS_H
+#ifndef SPA_RESULTTABLE_H
+#define SPA_RESULTTABLE_H
 
 #include "Result.h"
 
@@ -15,10 +15,10 @@
 using String2DVector = std::vector<std::vector<std::string>>;
 
 
-class SynonymRelations {
+class ResultTable {
 public:
-    SynonymRelations();
-    SynonymRelations(std::vector<std::string>, String2DVector);
+    ResultTable();
+    ResultTable(std::vector<std::string>, String2DVector);
     bool isEmpty();
     std::vector<std::string> *getHeader();
     String2DVector *getList();
@@ -40,4 +40,4 @@ private:
     String2DVector tableEntries;
 };
 
-#endif //SPA_SYNONYMRELATIONS_H
+#endif //SPA_RESULTTABLE_H

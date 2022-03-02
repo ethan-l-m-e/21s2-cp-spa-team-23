@@ -5,14 +5,14 @@
 #include "SelectClauseEvaluator.h"
 Result SelectClauseEvaluator::evaluateClause() {
     std::unordered_set<std::string> resultSet;
-    auto header = synonymRelations->getHeader();
-    SynonymRelations* resultTable = new SynonymRelations();
+    auto header = resultTable->getHeader();
+    ResultTable* newTable = new ResultTable();
     for(string synonym : query->getSelectedSynonyms()) {
         vector<ResultItem> resultItemList;
         auto it = std::find(header->begin(), header->end(), query->getSelectedSynonyms());
         if (it != header->end()) {
             auto index =  it - header->begin();
-            for (auto& entry : *synonymRelations->getList()) resultItemList.emplace_back(entry[index]);
+            for (auto& entry : *resultTable->getList()) resultItemList.emplace_back(entry[index]);
         } else {
             unordered_set<std::string> set = getAllType(query->getSynonymType(synonym));
             resultItemList = std::vector<ResultItem>(set.begin(), set.end());
@@ -22,10 +22,10 @@ Result SelectClauseEvaluator::evaluateClause() {
                 .resultHeader = synonym,
                 .resultItemList = resultItemList
         };
-        resultTable->mergeResultToSynonymsRelations(result);
+        newTable->mergeResultToSynonymsRelations(result);
     }
     return {.resultType = ResultType::STRING,
             .resultBoolean =true,
-            .resultHeader = resultTable->getHeader()->front(),
+            .resultHeader = newTable->getHeader()->front(),
             .resultItemList = {}}
 }

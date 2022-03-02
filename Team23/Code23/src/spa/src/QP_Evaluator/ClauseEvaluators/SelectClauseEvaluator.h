@@ -10,10 +10,10 @@
 
 class SelectClauseEvaluator : public ClauseEvaluator {
 public:
-    SelectClauseEvaluator (SynonymRelations* nTuple, PKB* pkb, Query* query) : synonymRelations(nTuple), ClauseEvaluator(pkb, query) {};
+    SelectClauseEvaluator (ResultTable* nTuple, PKB* pkb, Query* query) : resultTable(nTuple), ClauseEvaluator(pkb, query) {};
     Result evaluateClause() override;
 private:
-    SynonymRelations* synonymRelations;
+    ResultTable* resultTable;
 };
 
 
