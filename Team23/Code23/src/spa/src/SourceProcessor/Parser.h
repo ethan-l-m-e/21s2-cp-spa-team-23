@@ -1,5 +1,11 @@
 #pragma once
-#include "TNode.h"
+#include "TNode/Node.h"
+#include "TNode/ProgramNode.h"
+#include "TNode/AssignNode.h"
+#include "TNode/WhileNode.h"
+#include "TNode/IfNode.h"
+#include "TNode/ReadNode.h"
+#include "TNode/PrintNode.h"
 
 using namespace std;
 

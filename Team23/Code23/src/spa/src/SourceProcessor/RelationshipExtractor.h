@@ -6,7 +6,8 @@
 #define SPA_RELATIONSHIPEXTRACTOR_H
 
 
-#include "TNode.h"
+#include "TNode/Node.h"
+#include "TNode/StmtLstNode.h"
 
 class RelationshipExtractor {
 public:

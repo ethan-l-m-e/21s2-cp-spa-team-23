@@ -8,7 +8,7 @@
 #include <vector>
 #include "ClauseEvaluator.h"
 #include "QP_Evaluator/Query/Argument.h"
-#include "TNode.h"
+#include "TNode/Node.h"
 
 class PatternClauseEvaluator : public ClauseEvaluator {
 public:

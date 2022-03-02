@@ -3,7 +3,7 @@
 //
 #include "iostream"
 #include "SourceProcessor/RelationshipExtractor.h"
-#include "TNode.h"
+#include "TNode/Node.h"
 #include "catch.hpp"
 #include "PKB.h"
 
