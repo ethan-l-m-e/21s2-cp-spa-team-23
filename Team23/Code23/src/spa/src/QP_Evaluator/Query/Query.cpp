@@ -22,12 +22,16 @@ vector<PatternClause> Query::getPatternClauses(){
     return patternClauses;
 }
 
-std::string Query::getSelectedSynonym() {
-    return selectedSynonym;
+std::vector<string> Query::getSelectedSynonym() {
+    return selectedSynonyms;
 }
 
-DesignEntity Query::getSelectedSynonymType() {
-    return declarations.find(selectedSynonym)->second;
+std::vector<DesignEntity> Query::getSelectedSynonymType() {
+    std::vector<DesignEntity> designEntities;
+    for(const string& selectedSynonym : selectedSynonyms){
+        designEntities.emplace_back(declarations.find(selectedSynonym)->second);
+    }
+    return designEntities;
 }
 
 DesignEntity Query::findEntityType(const std::string& synonym) {
@@ -42,8 +46,8 @@ void Query::setDeclarations(unordered_map<string, DesignEntity> declarationsMap)
     this->declarations = std::move(declarationsMap);
 }
 
-void Query::setSynonym(std::string synonym) {
-    this->selectedSynonym = std::move(synonym);
+void Query::setSynonyms(std::vector<std::string> synonyms) {
+    this->selectedSynonyms = std::move(synonyms);
 }
 
 void Query::setSuchThatClauses(vector<SuchThatClause> clauses) {
@@ -52,6 +56,10 @@ void Query::setSuchThatClauses(vector<SuchThatClause> clauses) {
 
 void Query::setPatternClauses(vector<PatternClause> clauses) {
     this->patternClauses = std::move(clauses);
+}
+
+void Query::setWithClauses(vector<WithClause> clauses) {
+    this->withClauses = std::move(clauses);
 }
 
 

@@ -29,6 +29,13 @@ enum class SynonymType {
     IF
 };
 
+enum class AttrName {
+    PROC_NAME,
+    VAR_NAME,
+    VALUE,
+    STMT_NO
+};
+
 typedef struct Clause {
     std::vector<Argument> argList;
 } Clause;
@@ -40,6 +47,11 @@ typedef struct SuchThatClause : Clause {
 typedef struct PatternClause : Clause {
     SynonymType synonymType;
 } PatternClause;
+
+typedef struct WithClause : Clause {
+    AttrName attrNameLeft;
+    AttrName attrNameRight;
+} WithClause;
 
 
 
