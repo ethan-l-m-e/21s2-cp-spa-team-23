@@ -26,12 +26,8 @@ std::vector<string> Query::getSelectedSynonyms() {
     return selectedSynonyms;
 }
 
-std::vector<DesignEntity> Query::getSelectedSynonymTypes() {
-    std::vector<DesignEntity> designEntities;
-    for(const string& selectedSynonym : selectedSynonyms){
-        designEntities.emplace_back(declarations.find(selectedSynonym)->second);
-    }
-    return designEntities;
+DesignEntity Query::getSynonymType(std::string synonym) {
+    return declarations.find(synonym)->second);
 }
 
 DesignEntity Query::findEntityType(const std::string& synonym) {

@@ -36,7 +36,7 @@ public:
     vector<PatternClause> getPatternClauses();
     vector<SuchThatClause> getSuchThatClauses();
     vector<string> getSelectedSynonyms();
-    vector<DesignEntity> getSelectedSynonymTypes();
+    DesignEntity getSynonymType(string synonym);
     DesignEntity findEntityType(const std::string&);
     void setDeclarations(unordered_map<string, DesignEntity>);
     void setSynonyms(vector<std::string>);
