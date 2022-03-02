@@ -28,19 +28,21 @@ protected:
     unordered_map<string, DesignEntity> declarations;
     vector<SuchThatClause> suchThatClauses;
     vector<PatternClause> patternClauses;
-    std::string selectedSynonym;
+    vector<WithClause> withClauses;
+    vector<string> selectedSynonyms;
 public:
     bool hasSuchThatClause();
     bool hasPatternClause();
     vector<PatternClause> getPatternClauses();
     vector<SuchThatClause> getSuchThatClauses();
-    std::string getSelectedSynonym();
-    DesignEntity getSelectedSynonymType();
+    vector<string> getSelectedSynonyms();
+    DesignEntity getSynonymType(string synonym);
     DesignEntity findEntityType(const std::string&);
     void setDeclarations(unordered_map<string, DesignEntity>);
-    void setSynonym(std::string);
+    void setSynonyms(vector<std::string>);
     void setSuchThatClauses(vector<SuchThatClause>);
     void setPatternClauses(vector<PatternClause>);
+    void setWithClauses(vector<WithClause>);
 };
 
 #endif //SPA_QUERY_H

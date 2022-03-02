@@ -726,7 +726,7 @@ TEST_CASE("Merge synonyms") {
     REQUIRE(generateResultSet(qe.evaluate(&query_0)) == ResultSet {"1","2","3","4"});
 
     /**
-     * elect s1 such that Follows(s1, s2) such that Follows(s2, 5)
+     * Select s1 such that Follows(s1, s2) such that Follows(s2, 5)
      * Type: join string, value exists
      */
     REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"3"});

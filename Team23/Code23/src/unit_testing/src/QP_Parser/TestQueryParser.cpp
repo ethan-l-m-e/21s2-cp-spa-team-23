@@ -614,7 +614,6 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
     CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
     CHECK(argList[1].argumentValue == "_");
 }
-
 TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - IF, WILDCARD") {
     QueryParser parser = QueryParser();
 

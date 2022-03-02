@@ -2,7 +2,7 @@
 // Created by Tianyi Wang on 18/2/22.
 //
 
-#include "QP_Evaluator/ClauseEvaluators/SynonymRelations.h"
+#include "QP_Evaluator/ClauseEvaluators/ResultTable.h"
 #include "catch.hpp"
 #include <set>
 
@@ -14,7 +14,7 @@ ValueSet generateValueSet(std::vector<std::vector<std::string>> values) {
 }
 
 TEST_CASE("Add result to empty synonym relations") {
-    auto* sr = new SynonymRelations();
+    auto* sr = new ResultTable();
     Result result1 = {
             ResultType::BOOLEAN,
             true,
@@ -23,7 +23,7 @@ TEST_CASE("Add result to empty synonym relations") {
     REQUIRE(sr->isEmpty() == true);
     delete sr;
 
-    sr = new SynonymRelations();
+    sr = new ResultTable();
     Result result2 = {
             ResultType::STRING,
             true,
@@ -36,7 +36,7 @@ TEST_CASE("Add result to empty synonym relations") {
     REQUIRE(generateValueSet(*(sr->getList())) == ValueSet{{"1"}, {"2"}, {"3"}, {"4"}, {"5"}});
     delete sr;
 
-    sr = new SynonymRelations();
+    sr = new ResultTable();
     Result result3 = {
             ResultType::TUPLES,
             true,
@@ -58,7 +58,7 @@ TEST_CASE("Add result to empty synonym relations") {
 }
 
 TEST_CASE("Add result to existing synonym relations") {
-    auto* sr = new SynonymRelations(
+    auto* sr = new ResultTable(
             {"x"},
             {{"1"}, {"2"}, {"3"}, {"4"}});
     Result result1 = {
@@ -71,7 +71,7 @@ TEST_CASE("Add result to existing synonym relations") {
     REQUIRE(generateValueSet(*(sr->getList())) == ValueSet{{"1"}, {"2"}, {"3"}, {"4"}});
     delete sr;
 
-    sr = new SynonymRelations(
+    sr = new ResultTable(
             {"x"},
             {{"1"}, {"2"}, {"3"}, {"4"}});
 
@@ -90,7 +90,7 @@ TEST_CASE("Add result to existing synonym relations") {
         });
     delete sr;
 
-    sr = new SynonymRelations(
+    sr = new ResultTable(
             {"x"},
             {{"1"}, {"2"}, {"3"}, {"4"}});
 
@@ -124,7 +124,7 @@ TEST_CASE("Add result to existing synonym relations") {
 TEST_CASE("Add result to existing synonym relations, join required") {
 
     // merge string into sr
-    auto* sr = new SynonymRelations(
+    auto* sr = new ResultTable(
             {"a", "c"},
             {{"1", "w"}, {"2", "w"}, {"3", "w"}, {"4", "r"}});
 
@@ -137,11 +137,11 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     sr->mergeResultToSynonymsRelations(result1);
 
     REQUIRE(*(sr->getHeader()) == std::vector<std::string>{"a", "c"});
-    REQUIRE(generateValueSet(*(sr->getList())) == ValueSet {{"1", "w"}, {"2", "w"}});
+    REQUIRE(generateValueSet(*(sr->getList())) == ValueSet {{"1", "w"},{"2", "w"}});
     delete sr;
 
     // merge tuple into sr, one common s
-    sr = new SynonymRelations(
+    sr = new ResultTable(
             {"a", "c"},
             {{"1", "w"}, {"1", "r"}, {"2", "w"}, {"3", "w"}, {"4", "r"}});
 
@@ -168,7 +168,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     delete sr;
 
     // merge tuple into sr, two common s
-    sr = new SynonymRelations(
+    sr = new ResultTable(
             {"a", "c"},
             {{"1", "w"}, {"1", "r"}, {"2", "w"}, {"3", "w"}, {"4", "r"}});
 
@@ -196,7 +196,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
 TEST_CASE("Multi-steps") {
 
     // merge string into sr
-    auto* sr = new SynonymRelations();
+    auto* sr = new ResultTable();
 
     Result result1 = {
             ResultType::STRING,
