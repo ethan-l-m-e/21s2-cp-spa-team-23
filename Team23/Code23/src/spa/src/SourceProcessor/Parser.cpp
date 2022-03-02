@@ -191,13 +191,13 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
     int switchCase = Identifier::identifyFirstObject(*stmt);
     switch(switchCase){
         case(ASSIGN): {
-            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, ASSIGN);
+            vector<string> v = SourceTokenizer::partitionAccordingToCase(*stmt, ASSIGN);
             newNode = Parser::parseAssign(v[0]);
             *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
         case(WHILE): {
-            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, WHILE);
+            vector<string> v = SourceTokenizer::partitionAccordingToCase(*stmt, WHILE);
             //cout << "whileCode: "<< v[0] + "\n";
             //cout << "remaining: " << v[1] + "\n";
             newNode = Parser::parseWhile(v[0]);
@@ -205,19 +205,19 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             break;
         }
         case(READ): {
-            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, READ);
+            vector<string> v = SourceTokenizer::partitionAccordingToCase(*stmt, READ);
             newNode = Parser::parseRead(v[0]);
             *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
         case(PRINT): {
-            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, PRINT);
+            vector<string> v = SourceTokenizer::partitionAccordingToCase(*stmt, PRINT);
             newNode = Parser::parsePrint(v[0]);
             *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
         case(IF_ELSE): {
-            vector<string> v = StringFormatter::partitionAccordingToCase(*stmt, IF_ELSE);
+            vector<string> v = SourceTokenizer::partitionAccordingToCase(*stmt, IF_ELSE);
             newNode = Parser::parseIf(v[0]);
             *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;

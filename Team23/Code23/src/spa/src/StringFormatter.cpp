@@ -4,53 +4,12 @@
 #include <iostream>
 #include <regex>
 #include "StringFormatter.h"
-#include "Constants/Constants.h"
 #include "SourceProcessor/SourceTokenizer.h"
 
 using namespace std;
 
 string ltrim(string);
 string rtrim(string);
-vector<string> StringFormatter::partitionAccordingToCase(std::string sourceCode, int type) {
-    string trimmedCode;
-    vector<string> v;
-    switch(type) {
-        case ASSIGN: case READ: case PRINT: {
-            v = StringFormatter::partitionBySemiColon(sourceCode);
-            break;
-        }
-        case WHILE: {
-            vector<string> cond_leftover = StringFormatter::partitionBasedOnParentheses(sourceCode, "()");
-            vector<string> stmtLst_leftover = StringFormatter::partitionBasedOnParentheses(cond_leftover[1], "{}");
-            string reconstructedWhile = "while" + cond_leftover[0] + stmtLst_leftover[0];
-            v.push_back(reconstructedWhile);
-            v.push_back(stmtLst_leftover[1]);
-            break;
-        }
-        case IF_ELSE: {
-            vector<string> cond_leftover = StringFormatter::partitionBasedOnParentheses(sourceCode, "()");
-            vector<string> stmtLst1_leftover = StringFormatter::partitionBasedOnParentheses(cond_leftover[1], "{}");
-            vector<string> stmtLst2_leftover = StringFormatter::partitionBasedOnParentheses(stmtLst1_leftover[1], "{}");
-            string reconstructedIfElse = "if" + cond_leftover[0] + "then" + stmtLst1_leftover[0]  + "else" + stmtLst2_leftover[0];
-            v.push_back(reconstructedIfElse);
-            v.push_back(stmtLst2_leftover[1]);
-            break;
-        }
-        case PROCEDURE: {   // for full iteration 2/3
-            string procFront = StringFormatter::extractFrontStringByRegex(sourceCode, "\\{");
-            vector<string> stmtLst_leftovers = StringFormatter::partitionBasedOnParentheses(sourceCode, "{}");
-            string reconstructedProcedure = procFront + stmtLst_leftovers[0];
-            v.push_back(reconstructedProcedure);
-            v.push_back(stmtLst_leftovers[1]);
-            break;
-        }
-        default: {
-            throw "dk what to trim. type argument is likely invalid for this method";
-        }
-    }
-    return v;
-}
-
 
 string StringFormatter::removeTrailingSpace(const string s) {
     return ltrim(rtrim(s));
