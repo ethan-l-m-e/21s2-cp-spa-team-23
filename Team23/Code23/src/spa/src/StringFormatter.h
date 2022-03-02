@@ -10,7 +10,6 @@ using namespace std;
 
 class StringFormatter {
     public:
-        static vector<string> partitionAccordingToCase(std::string sourceCode, int type);
         static string removeTrailingSpace(string);
         static string extractFrontStringByRegex(string, string);
         static string extractSecondStringByRegex(string, string);
