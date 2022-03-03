@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 #include "QP_Evaluator/ClauseEvaluators/PatternClauseEvaluator.h"
-#include "TNode.h"
+#include "TNode/Node.h"
 #include "SourceProcessor/Parser.h"
 #include <vector>
 

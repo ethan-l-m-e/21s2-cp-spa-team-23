@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "TNode.h"
+#include "TNode/Node.h"
 
 #include "catch.hpp"
 using namespace std;

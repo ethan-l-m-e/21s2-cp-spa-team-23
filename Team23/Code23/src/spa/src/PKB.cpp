@@ -6,7 +6,7 @@
 using namespace std;
 
 #include "PKB.h"
-#include "TNode.h"
+#include "TNode/Node.h"
 
 
 //string PKB::setProcToAST(PROC p, TNode* r) {

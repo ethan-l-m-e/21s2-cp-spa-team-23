@@ -5,7 +5,7 @@
 
 #include "PKB.h"
 #include "PatternClauseEvaluator.h"
-#include "TNode.h"
+#include "TNode/Node.h"
 #include "StringFormatter.h"
 #include "SourceProcessor/Parser.h"
 #include "SourceProcessor/Identifier.h"

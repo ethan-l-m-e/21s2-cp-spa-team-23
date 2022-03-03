@@ -1,12 +1,15 @@
 //
 // Created by Tin Hong Wen on 4/2/22.
 //
-#include <iostream>
-
 #include "RelationshipExtractor.h"
 #include "PKB.h"
-#include "TNode.h"
-#include "Constants/Constants.h"
+#include "TNode/Node.h"
+#include "TNode/ProgramNode.h"
+#include "TNode/AssignNode.h"
+#include "TNode/WhileNode.h"
+#include "TNode/IfNode.h"
+#include "TNode/ReadNode.h"
+#include "TNode/PrintNode.h"
 #include <unordered_set>
 
 using std::begin, std::end;
