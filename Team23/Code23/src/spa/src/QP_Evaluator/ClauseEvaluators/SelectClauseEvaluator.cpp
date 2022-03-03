@@ -27,5 +27,5 @@ Result SelectClauseEvaluator::evaluateClause() {
     return {.resultType = ResultType::STRING,
             .resultBoolean =true,
             .resultHeader = newTable->getHeader()->front(),
-            .resultItemList = {}}
+            .resultItemList = {}};
 }
