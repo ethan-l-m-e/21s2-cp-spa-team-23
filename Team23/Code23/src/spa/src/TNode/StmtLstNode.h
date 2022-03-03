@@ -13,11 +13,7 @@ class StmtLstNode: public StmtNode {
 public:
     StmtLstNode(int num, StatementList stmtLst);
     vector<Node *> getStmtLst() override;
-    //vector<VarName> getListOfVarUsed() override;
-    //vector<VarName> getListOfVarModified() override;
-
     bool hasStmtLst() override;
 };
-
 
 #endif //SPA_STMTLSTNODE_H

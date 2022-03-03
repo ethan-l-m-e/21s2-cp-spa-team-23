@@ -14,7 +14,6 @@ class ProcedureNode: public StmtLstNode {
 public:
     ProcedureNode(ProcNameNode *procName, StatementList stmtLst);
     ProcName getProcName();
-    //vector<ProcName> getAllProcedure() override;
 };
 
 #endif //SPA_PROCEDURENODE_H

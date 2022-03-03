@@ -17,7 +17,6 @@ class WhileNode: public StmtLstNode {
 public:
     WhileNode(int num, CondExprNode *condExpr, StatementList stmtLst);
     CondExprNode *getCondExpr();
-    //vector<stmtNo> getAllWhileStmtNo() override;
 };
 
 #endif //SPA_WHILENODE_H

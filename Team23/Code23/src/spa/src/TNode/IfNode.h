@@ -21,7 +21,6 @@ public:
     StatementList getElseStmtLst();
     StatementList getStmtLst() override;
     bool hasStmtLst() override;
-    //vector<stmtNo> getAllIfStmtNo() override;
 };
 
 #endif //SPA_IFNODE_H
