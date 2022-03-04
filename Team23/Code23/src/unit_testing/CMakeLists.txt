@@ -8,7 +8,7 @@ set(srcs ${srcs}
         src/QP_Evaluator/TestQueryEvaluator.cpp
         src/QP_Evaluator/TestSynonymRelations.cpp
         src/QP_Evaluator/TestPatternClauseEvaluator.cpp
-        )
+        src/TestCFG.cpp)
 
 add_executable(unit_testing ${srcs} src/TestAST.cpp
         src/TestIdentifier.cpp
