@@ -859,7 +859,6 @@ TEST_CASE("Pattern clause: return stmt") {
     query = makeQuery(declarationsMap, "a1", {none_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
 
-    // not working
     query = makeQuery(declarationsMap, "a1", {ident_const});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"7"});
 
@@ -874,6 +873,12 @@ TEST_CASE("Pattern clause: return stmt") {
 
     query = makeQuery(declarationsMap, "a1", {wild_none});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
+
+    //non-standardized spacing
+    Argument spacingRightVar = {ArgumentType::PARTIAL_UNDERSCORE, "_\"   y  \"_"};
+    PatternClause wild_weirdVar = {ArgList {assignSyn, wild, spacingRightVar}, SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {wild_weirdVar});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "4", "5", "6", "7"});
 }
 
 TEST_CASE("Pattern clause: return var + Stmt") {
@@ -910,7 +915,6 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     Argument assignSyn = {ArgumentType::SYNONYM, "a1"};
     Argument leftWild = {ArgumentType::UNDERSCORE, "_"};
 
-
     // exact matching simple
     PatternClause clauseIdentEasy = {ArgList {assignSyn, leftWild,
                                           {ArgumentType::IDENT, "\"y + 1\""}},
@@ -939,7 +943,6 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     query = makeQuery(declarationsMap, "a1", {clauseWildEasy});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"6"});
 
-
     // wild medium match
     PatternClause clauseWildMedium = {ArgList {assignSyn, leftWild,
                                              {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + x\"_"}},
@@ -955,15 +958,16 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5" , "7"});
 
 
-    // invalid queries
-    /*
-    PatternClause invalid1 = {ArgList {assignSyn, leftWild,
-                                             {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + ((3 - 5asdsa)))\"_"}},
-                                    SynonymType::ASSIGN};
+    // valid queries with non standardised spacing
+    PatternClause weirdSpacing = {ArgList {assignSyn, leftWild,
+                                           {ArgumentType::PARTIAL_UNDERSCORE, "_\"  y  +   x   \"_"}},
+                                  SynonymType::ASSIGN};
+    query = makeQuery(declarationsMap, "a1", {weirdSpacing});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"4"});
 
-    query = makeQuery(declarationsMap, "a1", {invalid1});
-    evaluateAndCreateResultSet(qe, &query);
-    */
+    //invalid query: wrong brackets
+    //invalid query: wrong var/const
+
 
 
 }

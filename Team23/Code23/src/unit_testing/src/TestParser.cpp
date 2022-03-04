@@ -91,6 +91,49 @@ TEST_CASE("Assign parsing with expression") {
     CHECK(testNode->getStmtNumber() == 1);
 }
 
+TEST_CASE("parse with Expression") {
+    //simple
+    //complex expression
+    // invalid expression: wrong brackets
+    string simple = "x + 1";
+    Expression expr = Parser::parseExpression(simple);
+    BinaryOperatorNode* op = *std::get_if<BinaryOperatorNode*>(&expr);
+    CHECK("+" == op->getBinaryOperator());
+    Expression left = op->getLeftExpr();
+    Expression right = op->getRightExpr();
+    VariableNode* var1 = *std::get_if<VariableNode*>(&left);
+    ConstValueNode* constant1 = *std::get_if<ConstValueNode*>(&right);
+    CHECK("x" == var1->getVariableName());
+    CHECK("1" == constant1->getConstValue());
+
+    string difficult = "((x + 1) + y * 30 *(3 - y))";
+    expr = Parser::parseExpression(difficult);
+    op = *std::get_if<BinaryOperatorNode*>(&expr);
+    CHECK("+" == op->getBinaryOperator());
+    left = op->getLeftExpr();
+    right = op->getRightExpr();
+    op = *std::get_if<BinaryOperatorNode*>(&left);
+    CHECK("+" == op->getBinaryOperator());
+    op = *std::get_if<BinaryOperatorNode*>(&right);
+    CHECK("*" == op->getBinaryOperator());
+    right = op->getRightExpr();
+    op = *std::get_if<BinaryOperatorNode*>(&right);
+    CHECK("-" == op->getBinaryOperator());
+    left = op->getLeftExpr();
+    right = op->getRightExpr();
+    constant1 = *std::get_if<ConstValueNode*>(&left);
+    var1 = *std::get_if<VariableNode*>(&right);
+    CHECK("y" == var1->getVariableName());
+    CHECK("3" == constant1->getConstValue());
+
+    // can't catch properly, need some help
+    //string wrongBrackets= "(x + 1))";
+    //expr = Parser::parseExpression(wrongBrackets);
+
+    //string wrongBrackets= "(x + 2dsad)";
+    //expr = Parser::parseExpression(wrongBrackets);
+}
+
 TEST_CASE("While parsing") {
     string code = "while (number > 0) { X = a;\nwhile (number > 0) { X = a; } }";
     auto testNode = Parser::parseWhile(code);

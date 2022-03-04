@@ -22,7 +22,11 @@ TestWrapper::TestWrapper() {
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-    SourceProcessor::run(filename);
+    try {
+        SourceProcessor::run(filename);
+    } catch (std::exception ex) {
+
+    }
     // call your parser to do the parsing
     // ...rest of your code...
 }
