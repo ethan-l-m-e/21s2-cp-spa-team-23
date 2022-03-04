@@ -3,7 +3,7 @@
 //
 
 #include "PKB.h"
-#include "TNode/Node.h"
+#include "TNode/TNode.h"
 
 #include "catch.hpp"
 
