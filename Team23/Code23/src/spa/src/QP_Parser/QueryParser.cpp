@@ -55,7 +55,7 @@ DesignEntity QueryParser::getDesignEntity(std::string designEntityString) {
 }
 
 void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
-    query.setSynonym(queryToken.selectClauseToken);
+    query.setSynonyms({queryToken.selectClauseToken});
 }
 
 void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
