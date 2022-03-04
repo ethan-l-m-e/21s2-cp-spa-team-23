@@ -27,7 +27,7 @@ std::vector<string> Query::getSelectedSynonyms() {
 }
 
 DesignEntity Query::getSynonymType(std::string synonym) {
-    return declarations.find(synonym)->second);
+    return declarations.find(synonym)->second;
 }
 
 DesignEntity Query::findEntityType(const std::string& synonym) {
