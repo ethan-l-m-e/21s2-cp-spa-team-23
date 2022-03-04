@@ -145,3 +145,35 @@ TEST_CASE("fail test") {
     REQUIRE(v[1] == "y");
     REQUIRE(v[2] != "*");
 }
+
+TEST_CASE("partition assign") {
+    string stmtLst = "x = x + 1;";
+    vector<string> arr = SourceTokenizer::partitionAccordingToCase(stmtLst, ASSIGN);
+    CHECK(arr[0] == "x = x + 1;");
+    CHECK(arr[1] == "");
+
+    stmtLst = "read x;read y;";
+    arr = SourceTokenizer::partitionAccordingToCase(stmtLst, READ);
+    CHECK(arr[0] == "read x;");
+    CHECK(arr[1] == "read y;");
+
+    stmtLst = "x = x + 1;\nread y;";
+    arr = SourceTokenizer::partitionAccordingToCase(stmtLst, ASSIGN);
+    CHECK(arr[0] == "x = x + 1;");
+    CHECK(arr[1] == "read y;");
+}
+
+
+TEST_CASE("partition if-else and while") {
+    string whileStatement = "while(x < present) {\n     read = print;\n}";
+    vector<string> arr = SourceTokenizer::partitionAccordingToCase(whileStatement, WHILE);
+    CHECK(arr[0] == "while(x < present){\n     read = print;\n}");
+    whileStatement = "while(x < present) {\n     read = print;\n} read print;print x;";
+    arr = SourceTokenizer::partitionAccordingToCase(whileStatement, WHILE);
+    CHECK(arr[1] == "read print;print x;");
+    string ifStmt = "if( x < present ) then   {\n print;\n}else {\nread x;}print y;";
+    arr = SourceTokenizer::partitionAccordingToCase(ifStmt, IF_ELSE);
+    CHECK(arr[0] == "if( x < present )then{\n print;\n}else{\nread x;}");
+    CHECK(arr[1] == " print y;");
+
+}

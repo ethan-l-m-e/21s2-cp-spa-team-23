@@ -6,10 +6,10 @@
 Result SelectClauseEvaluator::evaluateClause() {
     std::unordered_set<std::string> resultSet;
     auto header = resultTable->getHeader();
-    ResultTable* newTable = new ResultTable();
+    auto* newTable = new ResultTable();
     for(string synonym : query->getSelectedSynonyms()) {
         vector<ResultItem> resultItemList;
-        auto it = std::find(header->begin(), header->end(), query->getSelectedSynonyms());
+        auto it = std::find(header->begin(),header->end(), synonym);
         if (it != header->end()) {
             auto index =  it - header->begin();
             for (auto& entry : *resultTable->getList()) resultItemList.emplace_back(entry[index]);

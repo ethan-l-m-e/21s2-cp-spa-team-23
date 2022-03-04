@@ -82,6 +82,8 @@ bool isNumber(string s) {
 }
 Expression Parser::parseExpression(string expression) {
     expression = StringFormatter::removeTrailingSpace(StringFormatter::removeMatchingFrontBackBrackets(expression));
+    if(!Identifier::checkParenthesesCorrectness(expression, "()"))
+        throw "incorrect brackets in expression: " + expression + "\n";
     if (isLeaf(expression)) {
         if (isNumber(expression)) {
             return Parser::parseConst(expression);

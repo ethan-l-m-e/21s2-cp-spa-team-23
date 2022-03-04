@@ -13,12 +13,11 @@
 
 void addToStmtList(AssignNode* assignNode, vector<ResultItem> *stmtNumberList);
 void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> *statementAndVarList);
-bool validateExpression(string arg);
+Expression validateAndParseExpression(string arg);
 bool matchVariableValue(VariableNode* assignNode, Argument arg);
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg);
 bool searchForMatchInExpr(Expression expressionNode, Expression arg);
 bool performExactMatchExpr(Expression expressionNode, Expression arg);
-
 
 string retrieveLHSVar(AssignNode* assignNode);
 string retrieveStmtNo(AssignNode* assignNode);
@@ -32,15 +31,12 @@ Result PatternClauseEvaluator::evaluateClause() {
 
     //check validity of arg and then convert them into expression
     Argument argLeft = arg1;
-
-    vector<string> argRightList = StringFormatter::tokenizeByRegex(arg2.argumentValue, "[_]?\"|\"[_]?");
-    if(argRightList.size() <= 0) throw arg2.argumentValue + "is invalid";
-    string trimmedArg = argRightList[0];
-    if(!Identifier::checkParenthesesCorrectness(trimmedArg, "()")) throw trimmedArg + "is an invalid expression";
     Argument argRight = arg2;
     Expression exprRight;
-    if(!rightIsWildCard())
-        exprRight = Parser::parseExpression(trimmedArg);
+
+    if(!rightIsWildCard()) {
+        exprRight = validateAndParseExpression(argRight.argumentValue);
+    }
 
     /**
      * Chart for pattern clause:
@@ -112,14 +108,18 @@ bool PatternClauseEvaluator::rightIsPartWildCard() {
 bool PatternClauseEvaluator::rightIsIdent() {
     return arg2.argumentType == ArgumentType::IDENT;
 }
+
 bool PatternClauseEvaluator::rightIsWildCard() {
     return arg2.argumentType == ArgumentType::UNDERSCORE;
 
 }
 
-bool validateExpression(string arg) {
-
-    return true;
+Expression validateAndParseExpression(string arg) {
+    vector<string> exprTokenList = StringFormatter::tokenizeByRegex(arg, "[_]?\"[ ]*|[ ]*\"[_]?");
+    if(exprTokenList.size() <= 0) throw arg + "is invalid";
+    string trimmedArg = exprTokenList[0];
+    if(!Identifier::checkParenthesesCorrectness(trimmedArg, "()")) throw trimmedArg + "is an invalid expression";
+    return Parser::parseExpression(trimmedArg);
 }
 
 void addToStmtList(AssignNode *assignNode, vector<ResultItem> *stmtNumberList) {
