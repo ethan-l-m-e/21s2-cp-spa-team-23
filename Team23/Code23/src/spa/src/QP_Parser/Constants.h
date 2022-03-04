@@ -24,7 +24,7 @@ std::string const RELATIONSHIP_MATCH = "(.)*" + RELATIONSHIP + "(.)*";
 
 // TODO: Edit Later
 std::string const FOLLOWS = "Follows[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
-std::string const FOLLOWS_T = "Follows[( |\t)]*\\*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+std::string const FOLLOWS_T = "Follows\\*[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
 
 std::string const PARENT = "Parent[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
 std::string const PARENT_T = "Parent\\*[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
