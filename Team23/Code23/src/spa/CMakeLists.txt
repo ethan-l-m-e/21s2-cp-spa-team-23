@@ -25,7 +25,7 @@ set(headers ${headers}
         src/QP_Parser/Exception.h
         src/QP_Evaluator/QueryEvaluator.h
         src/SourceProcessor/SourceProcessor.h
-)
+        src/TNode/TNode.h)
 add_library(spa ${srcs} ${headers} src/SourceProcessor/Parser.cpp
         src/SourceProcessor/SourceProcessor.cpp src/SourceProcessor/SourceProcessor.h
         src/SourceProcessor/Parser.h
