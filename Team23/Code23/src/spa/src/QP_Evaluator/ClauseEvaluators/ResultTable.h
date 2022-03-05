@@ -22,20 +22,21 @@ public:
     bool isEmpty();
     std::vector<std::string> *getHeader();
     String2DVector *getList();
+    size_t getTableSize();
     void clearTable();
-    void mergeResultToSynonymsRelations(Result&);
+    void mergeResultToTable(Result &result);
+    void rearrangeSynonyms(std::vector<int>&);
 private:
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
     void appendHeader(const std::vector<std::string>&);
-    void updateEntries(String2DVector newList);
     void crossJoinStrings(std::vector<ResultItem>&);
     void crossJoinTuples(std::vector<ResultItem>&);
     void innerJoin(size_t, std::vector<ResultItem>&);
     void innerJoin(std::pair<size_t, size_t>, std::vector<ResultItem>&);
     void innerJoin(size_t, std::unordered_map<std::string,std::vector<std::string>>);
     static std::unordered_map<std::string, std::vector<std::string>> convertVectorToMap(std::vector<ResultItem>&, bool);
-
+    std::unordered_map<std::string, std::vector<std::string>> createSnapShot();
 
     std::vector<std::string> tableHeader;
     String2DVector tableEntries;
