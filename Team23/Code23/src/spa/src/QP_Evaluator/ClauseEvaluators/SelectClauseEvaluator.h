@@ -10,10 +10,8 @@
 
 class SelectClauseEvaluator : public ClauseEvaluator {
 public:
-    SelectClauseEvaluator (ResultTable* nTuple, PKB* pkb, Query* query) : resultTable(nTuple), ClauseEvaluator(pkb, query) {};
-    Result evaluateClause() override;
-private:
-    ResultTable* resultTable;
+    SelectClauseEvaluator (PKB* pkb, Query* query) : ClauseEvaluator(pkb, query) {};
+    bool evaluateClause(ResultTable* resultTable) override;
 };
 
 

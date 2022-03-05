@@ -3,7 +3,7 @@
 //
 
 #include "SelectClauseEvaluator.h"
-Result SelectClauseEvaluator::evaluateClause() {
+bool SelectClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     std::unordered_set<std::string> resultSet;
     auto header = resultTable->getHeader();
     auto* newTable = new ResultTable();
@@ -24,8 +24,6 @@ Result SelectClauseEvaluator::evaluateClause() {
         };
         newTable->mergeResultToSynonymsRelations(result);
     }
-    return {.resultType = ResultType::STRING,
-            .resultBoolean =true,
-            .resultHeader = newTable->getHeader()->front(),
-            .resultItemList = {}};
+    *resultTable = *newTable;
+    return true;
 }

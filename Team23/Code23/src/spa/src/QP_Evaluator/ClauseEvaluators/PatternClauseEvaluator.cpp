@@ -22,7 +22,7 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg);
 string retrieveLHSVar(AssignNode* assignNode);
 string retrieveStmtNo(AssignNode* assignNode);
 
-Result PatternClauseEvaluator::evaluateClause() {
+bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     //first, figure out the synonymType
     // then perform accordingly
     vector<AssignNode*> listOfAssignNodes = PKB::getInstance()->getAllAssignNodes();
@@ -90,7 +90,9 @@ Result PatternClauseEvaluator::evaluateClause() {
         result.resultItemList = stmtNumberList;
     }
 
-    return result;
+    if(!result.resultBoolean) return false;
+    mergeResult(resultTable);
+    return true;
 }
 
 bool PatternClauseEvaluator::leftIsSynonym() {
