@@ -122,7 +122,7 @@ using namespace qp;
 TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
         QueryParser parser = QueryParser();
 
-        std::string pql = "stmt s   ;     \n   Select    s such that Follows(s,_)";
+        std::string pql = "stmt s; \nSelect s such that Follows(s,_)";
         Query query = parser.getQuery(pql);
         SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
         std::vector<Argument> argList = suchThatClause.argList;
