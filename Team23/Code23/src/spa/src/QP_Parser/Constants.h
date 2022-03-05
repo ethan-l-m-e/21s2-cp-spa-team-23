@@ -18,9 +18,9 @@ std::string const ELEM = "(" + SYNONYM + "|" + ATTR_REF + ")";
 
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
-std::string const DECLARATION = DESIGN_ENTITY + "[( |\t)]+" + SYNONYM + "(,[( |\t)]*" + SYNONYM + "[( |\t)]*)*;";
+std::string const DECLARATION = "[( |\t)]*" + DESIGN_ENTITY + "[( |\t)]+" + SYNONYM + "(,[( |\t)]*" + SYNONYM + "[( |\t)]*)*[( |\t)]*;";
 
-std::string const TUPLE = "(" + ELEM + "|" + "<" + ELEM + "(,[( |\t)]*" + ELEM + "[( |\t)]*)*>)";
+std::string const TUPLE = "([( |\t)]*" + ELEM + "|" + "[( |\t)]*<[( |\t)]*" + ELEM + "[( |\t)]*([( |\t)]*,[( |\t)]*" + ELEM + "[( |\t)]*)*>)";
 std::string const RESULT_CL = "(" + TUPLE + "|BOOLEAN)";
 
 // Relationships
