@@ -97,6 +97,15 @@ Expression Parser::parseExpression(string expression) {
     return new BinaryOperatorNode(left, right, tokens[2]);
 }
 
+CallNode *Parser::parseCall(string callLine) {
+    int stmtNo = getStatementNumber();
+    vector<string> tokens;
+    SourceTokenizer::extractCall(callLine, tokens);
+    ProcNameNode* newProcName = parseProcName(tokens[0]);
+
+    return new CallNode(stmtNo, newProcName);
+}
+
 ReadNode *Parser::parseRead(string readLine) {
     int stmtNo = getStatementNumber();
 //    PKB::getInstance()->addReadStatement(stmtNo);
@@ -228,6 +237,12 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
             *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
         }
+        case(CALL): {
+            vector<string> v = SourceTokenizer::partitionAccordingToCase(*stmt, CALL);
+            newNode = Parser::parseCall(v[0]);
+            *stmt = StringFormatter::removeTrailingSpace(v[1]);
+            break;
+        }
         default:{
             throw "cannot recognise '" + *stmt + "' as a statement";
             break;
@@ -249,16 +264,10 @@ ProcNameNode *Parser::parseProcName(string procedureName) {
 }
 
 ProcedureNode *Parser::parseProcedure(string * procedure) {
-    //vector<string> v = StringFormatter::partitionAccordingToCase(*procedure, PROCEDURE);
-    // REPLACE WITH ABOVE ONCE IMPLEMENTED
-    vector<string> v;
-    v.push_back(*procedure);
-    v.push_back("");
-    // ---------------------------------- //
-
+    vector<string> v = SourceTokenizer::partitionAccordingToCase(*procedure, PROCEDURE);
     vector<string> tokens;
     SourceTokenizer::extractProcedure(v[0], tokens);
-    *procedure = v[1];
+    *procedure = StringFormatter::removeTrailingSpace(v[1]);
     ProcNameNode* newProcNameNode = Parser::parseProcName(tokens[0]);
     StatementList stmtLst = parseStatementList(tokens[1]);
     return new ProcedureNode(newProcNameNode, stmtLst);
@@ -269,9 +278,9 @@ ProgramNode* Parser::parseProgram(string sourceCode) {
     ProcedureList newProcLst;
     string * procedurePtr;
     procedurePtr = &sourceCode;
-    //while(procedurePtr -> length() > 0) {
+    while(procedurePtr->length() > 0) {
         ProcedureNode *newProcedureNode = Parser::parseProcedure(procedurePtr);
         newProcLst.push_back(newProcedureNode);
-    //}
+    }
     return new ProgramNode(newProcLst);
 }

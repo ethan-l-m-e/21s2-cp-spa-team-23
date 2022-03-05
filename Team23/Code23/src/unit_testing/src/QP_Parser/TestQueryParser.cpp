@@ -7,117 +7,117 @@
 
 using namespace qp;
 
-TEST_CASE ("PARSER - DECLARATIONS CHECK") {
-    QueryParser parser = QueryParser();
-
-    // variable design entity
-    string pql = "variable v; \nSelect v";
-    Query query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "v");
-    CHECK(query.findEntityType("v") == DesignEntity::VARIABLE);
-
-    // constant design entity
-    pql = "constant c; \nSelect c";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "c");
-    CHECK(query.findEntityType("c") == DesignEntity::CONSTANT);
-
-    // procedure design entity
-    pql = "procedure p; \nSelect p";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "p");
-    CHECK(query.findEntityType("p") == DesignEntity::PROCEDURE);
-
-    // stmt design entity
-    pql = "stmt s; \nSelect s";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "s");
-    CHECK(query.findEntityType("s") == DesignEntity::STMT);
-
-    // read design entity
-    pql = "read r; \nSelect r";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "r");
-    CHECK(query.findEntityType("r") == DesignEntity::READ);
-
-    // print design entity
-    pql = "print pn; \nSelect pn";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "pn");
-    CHECK(query.findEntityType("pn") == DesignEntity::PRINT);
-
-    // assign design entity
-    pql = "assign a; \nSelect a";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "a");
-    CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
-
-    // call design entity
-    pql = "call c; \nSelect c";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "c");
-    CHECK(query.findEntityType("c") == DesignEntity::CALL);
-
-    // while design entity
-    pql = "while w; \nSelect w";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "w");
-    CHECK(query.findEntityType("w") == DesignEntity::WHILE);
-
-    // if design entity
-    pql = "if ifs; \nSelect ifs";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "ifs");
-    CHECK(query.findEntityType("ifs") == DesignEntity::IF);
-
-    // multiple declarations
-    pql = "if ifs; assign a; \nSelect ifs";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "ifs");
-    CHECK(query.findEntityType("ifs") == DesignEntity::IF);
-    CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
-
-    // multiple declarations under same design entity
-    pql = "assign a1, a2; \nSelect a1";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "a1");
-    CHECK(query.findEntityType("a1") == DesignEntity::ASSIGN);
-    CHECK(query.findEntityType("a2") == DesignEntity::ASSIGN);
-}
-
-TEST_CASE ("PARSER - SYNONYM CHECK") {
-    QueryParser parser = QueryParser();
-
-    // synonym named Select
-    string pql = "variable Select; \nSelect Select";
-    Query query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "Select");
-
-    // synonym named pattern
-    pql = "variable pattern; \nSelect pattern";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "pattern");
-
-    // synonym named pattern with pattern clause
-    pql = "assign pattern; \nSelect pattern pattern pattern(_, _)";
-    query = parser.getQuery(pql);
-
-    CHECK(query.getSelectedSynonym() == "pattern");
-}
+//TEST_CASE ("PARSER - DECLARATIONS CHECK") {
+//    QueryParser parser = QueryParser();
+//
+//    // variable design entity
+//    string pql = "variable v; \nSelect v";
+//    Query query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "v");
+//    CHECK(query.findEntityType("v") == DesignEntity::VARIABLE);
+//
+//    // constant design entity
+//    pql = "constant c; \nSelect c";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "c");
+//    CHECK(query.findEntityType("c") == DesignEntity::CONSTANT);
+//
+//    // procedure design entity
+//    pql = "procedure p; \nSelect p";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "p");
+//    CHECK(query.findEntityType("p") == DesignEntity::PROCEDURE);
+//
+//    // stmt design entity
+//    pql = "stmt s; \nSelect s";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "s");
+//    CHECK(query.findEntityType("s") == DesignEntity::STMT);
+//
+//    // read design entity
+//    pql = "read r; \nSelect r";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "r");
+//    CHECK(query.findEntityType("r") == DesignEntity::READ);
+//
+//    // print design entity
+//    pql = "print pn; \nSelect pn";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "pn");
+//    CHECK(query.findEntityType("pn") == DesignEntity::PRINT);
+//
+//    // assign design entity
+//    pql = "assign a; \nSelect a";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "a");
+//    CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
+//
+//    // call design entity
+//    pql = "call c; \nSelect c";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "c");
+//    CHECK(query.findEntityType("c") == DesignEntity::CALL);
+//
+//    // while design entity
+//    pql = "while w; \nSelect w";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "w");
+//    CHECK(query.findEntityType("w") == DesignEntity::WHILE);
+//
+//    // if design entity
+//    pql = "if ifs; \nSelect ifs";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "ifs");
+//    CHECK(query.findEntityType("ifs") == DesignEntity::IF);
+//
+//    // multiple declarations
+//    pql = "if ifs; assign a; \nSelect ifs";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "ifs");
+//    CHECK(query.findEntityType("ifs") == DesignEntity::IF);
+//    CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
+//
+//    // multiple declarations under same design entity
+//    pql = "assign a1, a2; \nSelect a1";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "a1");
+//    CHECK(query.findEntityType("a1") == DesignEntity::ASSIGN);
+//    CHECK(query.findEntityType("a2") == DesignEntity::ASSIGN);
+//}
+//
+//TEST_CASE ("PARSER - SYNONYM CHECK") {
+//    QueryParser parser = QueryParser();
+//
+//    // synonym named Select
+//    string pql = "variable Select; \nSelect Select";
+//    Query query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "Select");
+//
+//    // synonym named pattern
+//    pql = "variable pattern; \nSelect pattern";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "pattern");
+//
+//    // synonym named pattern with pattern clause
+//    pql = "assign pattern; \nSelect pattern pattern pattern(_, _)";
+//    query = parser.getQuery(pql);
+//
+//    CHECK(query.getSelectedSynonym() == "pattern");
+//}
 
 TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
         QueryParser parser = QueryParser();

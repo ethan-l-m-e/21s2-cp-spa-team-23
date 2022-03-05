@@ -38,3 +38,8 @@ unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity
             throw qp::QPEvaluatorException("Invalid design entity found.");
     }
 }
+
+void ClauseEvaluator::mergeResult(ResultTable* resultTable) {
+    resultTable->mergeResultToTable(result);
+}
+

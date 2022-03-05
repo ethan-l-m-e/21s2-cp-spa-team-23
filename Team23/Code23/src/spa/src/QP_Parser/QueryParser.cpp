@@ -55,7 +55,7 @@ DesignEntity QueryParser::getDesignEntity(std::string designEntityString) {
 }
 
 void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
-    query.setSynonyms({queryToken.selectClauseToken});
+    query.setSynonyms(*(queryToken.selectClauseTokens));
 }
 
 void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
@@ -65,7 +65,6 @@ void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
         std::string relationship = suchThatClauseToken.relRef;
         std::pair<std::string, std::string> argumentTokens = *(suchThatClauseToken.arguments);
-        std::string synonym = queryToken.selectClauseToken;
         std::vector<Argument> argList = getArgumentList(argumentTokens, *(queryToken.declarationTokens));
         RelRef relRef = getRelRefFromString(relationship, argList[0], *(queryToken.declarationTokens));
 

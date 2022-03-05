@@ -5,7 +5,10 @@
 #include "ProgramNode.h"
 
 ProgramNode::ProgramNode(ProcedureList procLst) {
-    this->procLst = procLst;
+    this->procLst = std::move(procLst);
+    for (Node *procNode : this->procLst) {
+        procNode->setParentNode(this);
+    }
 }
 
 ProcedureList ProgramNode::getProcLst() {
