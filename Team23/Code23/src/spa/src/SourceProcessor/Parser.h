@@ -6,6 +6,7 @@
 #include "TNode/IfNode.h"
 #include "TNode/ReadNode.h"
 #include "TNode/PrintNode.h"
+#include "TNode/CallNode.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
     static RelExprNode* parseRelExpr(string relExprLine);
     static StmtNode* parseStatementNode(string * stmt);
 
+    static CallNode* parseCall(string callLine);
     static ReadNode* parseRead(string readLine);
     static PrintNode* parsePrint(string printLine);
     static IfNode* parseIf(string code);

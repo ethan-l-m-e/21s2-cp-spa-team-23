@@ -26,6 +26,8 @@ auto dNode= AssignNode(5,&v2,&v3);
 auto eNode= AssignNode(6,&v4,&v1);
 
 ProcNameNode p = ProcNameNode("test");
+ProcNameNode p1 = ProcNameNode("name1");
+ProcNameNode p2 = ProcNameNode("name2");
 
 TEST_CASE("test follows - basic") {
     StatementList defaultStmtLst;
@@ -257,6 +259,21 @@ TEST_CASE("test Modifies - container statement") {
     cout<<defaultStmtLst4.size();
     RelationshipExtractor::extractModifies(&wNode);
     REQUIRE(PKB::getInstance()->isModifies("3","x"));
+}
+
+TEST_CASE("test Modifies - call statement") {
+    ProcedureList procLst;
+    StatementList s1, s2;
+    auto callNode = CallNode(2, &p1);
+    s1.push_back(&aNode);
+    s2.push_back(&callNode);
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    ProcedureNode proc2 = ProcedureNode(&p2, s2);
+    procLst.push_back(&proc1);
+    procLst.push_back(&proc2);
+    ProgramNode prog = ProgramNode(procLst);
+    RelationshipExtractor::extractModifies(&callNode);
+    REQUIRE(PKB::getInstance()->isModifies("2","x"));
 }
 
 TEST_CASE("test") {

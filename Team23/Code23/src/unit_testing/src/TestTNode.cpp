@@ -36,6 +36,14 @@ TEST_CASE("constValueNode Test") {
     CHECK(value == constValueNode->getConstValue());
 }
 
+TEST_CASE("Call node test") {
+    string proc = "name";
+    int stmtNo = 4;
+    ProcNameNode * procNameNode = new ProcNameNode(proc);
+    auto testNode = new CallNode(stmtNo, procNameNode);
+    CHECK(proc == testNode->getProcName());
+}
+
 TEST_CASE("Read node test") {
     string var = "x";
     int stmtNo = 4;
