@@ -14,77 +14,77 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     string pql = "variable v; \nSelect v";
     Query query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "v");
+    CHECK(query.getSelectedSynonyms()[0] == "v");
     CHECK(query.findEntityType("v") == DesignEntity::VARIABLE);
 
     // constant design entity
     pql = "constant c; \nSelect c";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "c");
+    CHECK(query.getSelectedSynonyms()[0] == "c");
     CHECK(query.findEntityType("c") == DesignEntity::CONSTANT);
 
     // procedure design entity
     pql = "procedure p; \nSelect p";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "p");
+    CHECK(query.getSelectedSynonyms()[0] == "p");
     CHECK(query.findEntityType("p") == DesignEntity::PROCEDURE);
 
     // stmt design entity
     pql = "stmt s; \nSelect s";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "s");
+    CHECK(query.getSelectedSynonyms()[0] == "s");
     CHECK(query.findEntityType("s") == DesignEntity::STMT);
 
     // read design entity
     pql = "read r; \nSelect r";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "r");
+    CHECK(query.getSelectedSynonyms()[0] == "r");
     CHECK(query.findEntityType("r") == DesignEntity::READ);
 
     // print design entity
     pql = "print pn; \nSelect pn";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "pn");
+    CHECK(query.getSelectedSynonyms()[0] == "pn");
     CHECK(query.findEntityType("pn") == DesignEntity::PRINT);
 
     // assign design entity
     pql = "assign a; \nSelect a";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "a");
+    CHECK(query.getSelectedSynonyms()[0] == "a");
     CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
 
     // call design entity
     pql = "call c; \nSelect c";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "c");
+    CHECK(query.getSelectedSynonyms()[0] == "c");
     CHECK(query.findEntityType("c") == DesignEntity::CALL);
 
     // while design entity
     pql = "while w; \nSelect w";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "w");
+    CHECK(query.getSelectedSynonyms()[0] == "w");
     CHECK(query.findEntityType("w") == DesignEntity::WHILE);
 
     // if design entity
     pql = "if ifs; \nSelect ifs";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "ifs");
+    CHECK(query.getSelectedSynonyms()[0] == "ifs");
     CHECK(query.findEntityType("ifs") == DesignEntity::IF);
 
     // multiple declarations
     pql = "if ifs; assign a; \nSelect ifs";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "ifs");
+    CHECK(query.getSelectedSynonyms()[0] == "ifs");
     CHECK(query.findEntityType("ifs") == DesignEntity::IF);
     CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
 
@@ -92,7 +92,7 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     pql = "assign a1, a2; \nSelect a1";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "a1");
+    CHECK(query.getSelectedSynonyms()[0] == "a1");
     CHECK(query.findEntityType("a1") == DesignEntity::ASSIGN);
     CHECK(query.findEntityType("a2") == DesignEntity::ASSIGN);
 }
@@ -104,19 +104,19 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     string pql = "variable Select; \nSelect Select";
     Query query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "Select");
+    CHECK(query.getSelectedSynonyms()[0] == "Select");
 
     // synonym named pattern
     pql = "variable pattern; \nSelect pattern";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "pattern");
+    CHECK(query.getSelectedSynonyms()[0] == "pattern");
 
     // synonym named pattern with pattern clause
     pql = "assign pattern; \nSelect pattern pattern pattern(_, _)";
     query = parser.getQuery(pql);
 
-    CHECK(query.getSelectedSynonym() == "pattern");
+    CHECK(query.getSelectedSynonyms()[0] == "pattern");
 }
 
 TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {

@@ -82,14 +82,14 @@ PKB* generateSamplePKB() {
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, string synonym) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonym(std::move(synonym));
+    query.setSynonyms({std::move(synonym)});
     return query;
 }
 
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, string synonym, vector<SuchThatClause> suchThatClauses, vector<PatternClause> patternClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonym(std::move(synonym));
+    query.setSynonyms({std::move(synonym)});
     query.setSuchThatClauses(std::move(suchThatClauses));
     query.setPatternClauses(std::move(patternClauses));
     return query;
@@ -98,7 +98,7 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, string synony
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, string synonym, vector<SuchThatClause> suchThatClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonym(std::move(synonym));
+    query.setSynonyms({std::move(synonym)});
     query.setSuchThatClauses(std::move(suchThatClauses));
     return query;
 }
@@ -106,7 +106,7 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, string synony
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, string synonym, vector<PatternClause> patternClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonym(std::move(synonym));
+    query.setSynonyms({std::move(synonym)});
     query.setPatternClauses(std::move(patternClauses));
     return query;
 }
@@ -376,27 +376,27 @@ TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms") {
 
     Query query_1;
     query_1.setDeclarations(declarations);
-    query_1.setSynonym("s");
+    query_1.setSynonyms({"s"});
     query_1.setSuchThatClauses(vector<SuchThatClause>{clause1});
 
     Query query_2;
     query_2.setDeclarations(declarations);
-    query_2.setSynonym("s2");
+    query_2.setSynonyms({"s2"});
     query_2.setSuchThatClauses(vector<SuchThatClause>{clause1});
 
     Query query_3;
     query_3.setDeclarations(declarations);
-    query_3.setSynonym("s1");
+    query_3.setSynonyms({"s1"});
     query_3.setSuchThatClauses(vector<SuchThatClause>{clause2});
 
     Query query_4;
     query_4.setDeclarations(declarations);
-    query_4.setSynonym("s2");
+    query_4.setSynonyms({"s2"});
     query_4.setSuchThatClauses(vector<SuchThatClause>{clause2});
 
     Query query_5;
     query_5.setDeclarations(declarations);
-    query_5.setSynonym("s2");
+    query_5.setSynonyms({"s2"});
     query_5.setSuchThatClauses(vector<SuchThatClause>{clause3});
 
 
