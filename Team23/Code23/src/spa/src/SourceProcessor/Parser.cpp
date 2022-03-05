@@ -129,7 +129,7 @@ PrintNode *Parser::parsePrint(string printLine) {
 AssignNode* Parser::parseAssign(string assignLine) {
     int stmtNo = getStatementNumber();
     //cout << "sending assign " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addAssignStatement(stmtNo);
+//    PKB::getInstance()->addAssignStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
@@ -140,7 +140,7 @@ AssignNode* Parser::parseAssign(string assignLine) {
 WhileNode *Parser::parseWhile(string code) {
     int stmtNo = getStatementNumber();
     //cout << "sending while " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addWhileStatement(stmtNo);
+//    PKB::getInstance()->addWhileStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractWhile(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -152,7 +152,7 @@ WhileNode *Parser::parseWhile(string code) {
 IfNode *Parser::parseIf(string code) {
     int stmtNo = getStatementNumber();
     //cout << "sending if " << stmtNo << " to PKB\n";
-    PKB::getInstance()->addIfStatement(stmtNo);
+//    PKB::getInstance()->addIfStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractIfElseThen(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
