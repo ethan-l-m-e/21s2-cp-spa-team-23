@@ -99,6 +99,7 @@ Expression Parser::parseExpression(string expression) {
 
 ReadNode *Parser::parseRead(string readLine) {
     int stmtNo = getStatementNumber();
+    PKB::getInstance()->addReadStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractRead(readLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -108,6 +109,7 @@ ReadNode *Parser::parseRead(string readLine) {
 
 PrintNode *Parser::parsePrint(string printLine) {
     int stmtNo = getStatementNumber();
+    PKB::getInstance()->addPrintStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractPrint(printLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -129,7 +131,7 @@ AssignNode* Parser::parseAssign(string assignLine) {
 WhileNode *Parser::parseWhile(string code) {
     int stmtNo = getStatementNumber();
     //cout << "sending while " << stmtNo << " to PKB\n";
-    //PKB::getInstance()->addWhileStatement(stmtNo);
+    PKB::getInstance()->addWhileStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractWhile(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -141,7 +143,7 @@ WhileNode *Parser::parseWhile(string code) {
 IfNode *Parser::parseIf(string code) {
     int stmtNo = getStatementNumber();
     //cout << "sending if " << stmtNo << " to PKB\n";
-    //PKB::getInstance()->addIfStatement(stmtNo);
+    PKB::getInstance()->addIfStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractIfElseThen(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -164,7 +166,9 @@ CondExprNode *Parser::parseCondExpr(string condExprLine) {
     condExprLine = StringFormatter::removeTrailingSpace(StringFormatter::removeMatchingFrontBackBrackets(condExprLine));
     vector<string> tokens;
     SourceTokenizer::extractCondExpr(std::move(condExprLine), tokens);
+
     if (tokens[0].empty()) {
+
         RelExprNode* newRelExpr = parseRelExpr(tokens[2]);
         return new CondExprNode(newRelExpr);
     }
