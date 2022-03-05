@@ -238,6 +238,8 @@ bool matchExpressionValue(Expression firstExpression, Expression secondExpressio
          bool result =  searchForMatchInExpr(firstExpression, secondExpression);
          return result;
      }
+
+     return false;
 }
 
 

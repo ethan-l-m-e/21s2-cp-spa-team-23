@@ -13,6 +13,7 @@ class SourceTokenizer {
 public:
     static vector<string> partitionAccordingToCase(std::string sourceCode, int type);
 
+    static void extractCall(string, vector<string>&);
     static void extractRead(string, vector<string>&);
     static void extractPrint(string, vector<string>&);
     static void extractAssign(string, vector<string>&);

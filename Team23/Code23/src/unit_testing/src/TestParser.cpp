@@ -51,6 +51,12 @@ TEST_CASE("Statement parsing") {
     CHECK(2 == testNode2 -> getStmtNumber());
 }
 
+TEST_CASE("Call parsing") {
+    string callLine = "call name";
+    auto testNode = Parser::parseCall(callLine);
+
+}
+
 TEST_CASE("Read parsing") {
     string readLine = "read x;";
     auto testNode = Parser::parseRead(readLine);
@@ -218,4 +224,11 @@ TEST_CASE("Program parsing") {
     string code = "procedure name {\n X = a;\nread b;\nprint c;\nwhile(1 == 1) {\n Y = b;\n } }";
     ProgramNode* program = Parser::parseProgram(code);
     CHECK(program->getProcLst()[0]->getProcName() == "name");
+}
+
+TEST_CASE("Program with multiple procedure parsing") {
+    string code = "procedure name1 {\n X = a;\n }\n procedure name2 { Y = b;call name3; }procedure name3 {read Z;}       ";
+    ProgramNode* program = Parser::parseProgram(code);
+    CHECK(program->getProcLst()[0]->getProcName() == "name1");
+    CHECK(program->getProcLst()[1]->getProcName() == "name2");
 }

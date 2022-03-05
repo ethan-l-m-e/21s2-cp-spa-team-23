@@ -8,6 +8,13 @@
 
 using namespace std;
 
+TEST_CASE("call token - basic") {
+    string a = "    call     name       ;  ";
+    vector<string> v;
+    SourceTokenizer::extractCall(a, v);
+    REQUIRE(v[0] == "name");
+}
+
 TEST_CASE("assign token - basic") {
     string a = "     x = y + 1;";
     vector<string> v;
