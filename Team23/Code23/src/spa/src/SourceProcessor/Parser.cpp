@@ -99,7 +99,7 @@ Expression Parser::parseExpression(string expression) {
 
 ReadNode *Parser::parseRead(string readLine) {
     int stmtNo = getStatementNumber();
-    PKB::getInstance()->addReadStatement(stmtNo);
+//    PKB::getInstance()->addReadStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractRead(readLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -109,7 +109,7 @@ ReadNode *Parser::parseRead(string readLine) {
 
 PrintNode *Parser::parsePrint(string printLine) {
     int stmtNo = getStatementNumber();
-    PKB::getInstance()->addPrintStatement(stmtNo);
+//    PKB::getInstance()->addPrintStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractPrint(printLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);

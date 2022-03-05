@@ -4,55 +4,18 @@
 #include "SourceProcessor/Parser.h"
 #include "PKB.h"
 #include "SourceProcessor/RelationshipExtractor.h"
+#include "SourceProcessor/SourceProcessor.h"
 using namespace std;
-
-string sourceCode = "procedure NestedWithOtherConditions {\n"
-                        "    entryPoint = 1;\n"
-                        "    while (A < a) {\n"
-                        "        mainWhileLoop = a;\n"
-                        "        while (A > a) {\n"
-                        "            while (A <= a) {\n"
-                        "                while (A >= a) {\n"
-                        "                    nestWithOnlyWhileLoops = 1;\n"
-                        "                }\n"
-                        "            }\n"
-                        "        }\n"
-                        "        if (A != a) then {\n"
-                        "            while (A == 1) {\n"
-                        "                while ((A == 1) || (B == 1)) {\n"
-                        "                    nestedWhileInWhileInIf = 1;\n"
-                        "                }\n"
-                        "            }\n"
-                        "        } else {\n"
-                        "            while ((A == 1) && (B == 1)) {\n"
-                        "                if ((A != 1) && ((B <= 1) && (C == 1))) then {\n"
-                        "                    while (A == 1) {\n"
-                        "                        if (((A != 1) && (1 < 2)) || ((longVariableName > 123456789) && (0 <= var123))) then {\n"
-                        "                            nestedAlternateIfAndWhile = 1;\n"
-                        "                        } else {\n"
-                        "                            X = a%b;\n"
-                        "                        }\n"
-                        "                    }\n"
-                        "                } else {\n"
-                        "                    print doNothing;\n"
-                        "                }\n"
-                        "            }\n"
-                        "        }\n"
-                        "        endOfMainWhileLoop = 1;\n"
-                        "    }\n"
-                        "    genericAssignStatement = 1;\n"
-                        "    read genericRead;\n"
-                        "    print genericPrint;\n"
-                        "}";
 
 void require(bool b) {
     REQUIRE(b);
 }
 
 TEST_CASE("statement type check from parser to pkb") {
-    auto programNode = dynamic_cast<ProgramNode*>(Parser::Parse(sourceCode));
+//    auto programNode = dynamic_cast<ProgramNode*>(Parser::Parse(sourceCode));
 
-    CHECK(programNode->getProcLst()[0]->getProcName() == "NestedWithOtherConditions");
+    SourceProcessor::run("integration_source.txt");
+
     CHECK(PKB::getInstance()->isAssignStatement("1"));
     CHECK(PKB::getInstance()->isWhileStatement("2"));
     CHECK(PKB::getInstance()->isAssignStatement("3"));
@@ -81,8 +44,10 @@ TEST_CASE("statement type check from parser to pkb") {
 }
 
 TEST_CASE("follows relationship type check from parser to pkb") {
-    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
-    RelationshipExtractor::extractRelationships(programNode);
+
+//    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
+//    RelationshipExtractor::extractRelationships(programNode);
+    SourceProcessor::run("integration_source.txt");
 
     CHECK(PKB::getInstance()->isFollows("1", "2"));
     CHECK(PKB::getInstance()->isFollows("2", "3") == false);
@@ -95,8 +60,9 @@ TEST_CASE("follows relationship type check from parser to pkb") {
 }
 TEST_CASE("parent relationship type check from parser to pkb") {
 
-    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
-    RelationshipExtractor::extractRelationships(programNode);
+//    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
+//    RelationshipExtractor::extractRelationships(programNode);
+    SourceProcessor::run("integration_source.txt");
 
     CHECK(PKB::getInstance()->isParent("3", "4") == false);
     CHECK(PKB::getInstance()->isParent("2", "3"));
@@ -108,8 +74,9 @@ TEST_CASE("parent relationship type check from parser to pkb") {
 }
 TEST_CASE("modifies relationship type check from parser to pkb") {
 
-    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
-    RelationshipExtractor::extractRelationships(programNode);
+//    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
+//    RelationshipExtractor::extractRelationships(programNode);
+    SourceProcessor::run("integration_source.txt");
 
     CHECK(PKB::getInstance()->isModifies("1", "entryPoint"));
     CHECK(PKB::getInstance()->isModifies("2", "A") == false);
@@ -123,8 +90,9 @@ TEST_CASE("modifies relationship type check from parser to pkb") {
 }
 TEST_CASE("uses relationship type check from parser to pkb") {
 
-    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
-    RelationshipExtractor::extractRelationships(programNode);
+//    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
+//    RelationshipExtractor::extractRelationships(programNode);
+    SourceProcessor::run("integration_source.txt");
 
     CHECK(PKB::getInstance()->isUses("1","entryPoint") == false);
     CHECK(PKB::getInstance()->isUses("2","A"));
