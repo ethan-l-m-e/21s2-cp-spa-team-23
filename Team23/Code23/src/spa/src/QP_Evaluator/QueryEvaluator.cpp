@@ -22,11 +22,10 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     if(query->hasPatternClause()) {
         for(const PatternClause& clause : query->getPatternClauses()) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
-            Result patternResult = patternClauseEvaluator->evaluateClause();
+            bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!patternResult.resultBoolean) return {};
-            resultTable->mergeResultToSynonymsRelations( patternResult);
+            if (!patternResult) return {};
         }
     }
 
@@ -34,20 +33,21 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     if(query->hasSuchThatClause()) {
         for(const SuchThatClause& clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
-            Result suchThatResult = suchThatClauseEvaluator->evaluateClause();
+            bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!suchThatResult.resultBoolean) return {};
-            resultTable->mergeResultToSynonymsRelations( suchThatResult);
+            if (!suchThatResult) return {};
         }
     }
 
     // Evaluate select clause and output the result
-    auto* selectClauseEvaluator = new SelectClauseEvaluator(resultTable, pkb, query);
-    Result selectResult = selectClauseEvaluator->evaluateClause();
+    auto* selectClauseEvaluator = new SelectClauseEvaluator(pkb, query);
+    bool selectResult = selectClauseEvaluator->evaluateClause(resultTable);
     delete selectClauseEvaluator;
+    if (!selectResult) return {};
+    std::list<std::string> output = generateResultString(resultTable);
     delete resultTable;
-    return generateResultString(selectResult);
+    return output;
 }
 
 /**
@@ -84,15 +84,20 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
  * @param result  an Result object from a select clause evaluator
  * @return  a list of strings representing the result items
  */
-std::list<std::string> QueryEvaluator::generateResultString(Result& result) {
+std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
     std::list<std::string> stringList;
-
-    if (result.resultType == ResultType::STRING && !result.resultItemList.empty()) {
-        for (auto &resultItem: result.resultItemList) {
-            auto s = std::get<std::string>(resultItem);
+    if (!resultTable->isEmpty()) {
+        for (auto &tableEntry: *resultTable->getList()) {
+            std::string s;
+            for(const auto &value : tableEntry) {
+                if(!s.empty())
+                    s += " ";
+                s += value;
+            }
             stringList.emplace_back(s);
         }
     }
+    //delete resultTable;
     return stringList;
 }
 

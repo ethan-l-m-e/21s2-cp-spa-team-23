@@ -22,6 +22,7 @@ public:
     bool isEmpty();
     std::vector<std::string> *getHeader();
     String2DVector *getList();
+    void clearTable();
     void mergeResultToSynonymsRelations(Result&);
 private:
     void mergeStringResult(Result &result);

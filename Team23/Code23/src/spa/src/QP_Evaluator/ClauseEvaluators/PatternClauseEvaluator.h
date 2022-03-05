@@ -13,7 +13,7 @@
 class PatternClauseEvaluator : public ClauseEvaluator {
 public:
     PatternClauseEvaluator (SynonymType synonymType, std::vector<Argument> args, PKB* pkb, Query* query): ClauseEvaluator(std::move(args), pkb, query) {}
-    Result evaluateClause() override;
+    bool evaluateClause(ResultTable* resultTable) override;
 protected:
 
     bool leftIsSynonym();
