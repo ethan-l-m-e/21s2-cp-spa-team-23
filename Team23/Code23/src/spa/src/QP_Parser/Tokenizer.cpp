@@ -47,8 +47,8 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
 
     for (std::string declaration : declarations) {
         designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
-        synonymsString = std::regex_replace(declaration, std::regex("(" + DESIGN_ENTITY + "|[ |\t]+)"), "");
-//                declaration.substr(designEntity.length() + 1);
+        synonymsString = declaration.substr(designEntity.length() + 1);
+        synonymsString = StringFormatter::removeTrailingSpace(synonymsString);
         std::vector<std::string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, SPLIT_DECLARATIONS);
 
         for (auto synonym : synonyms) {
