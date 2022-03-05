@@ -241,6 +241,22 @@ TEST_CASE("test uses - container statement") {
     RelationshipExtractor::extractUses(&wNode);
     REQUIRE(PKB::getInstance()->isUses("3","a"));
 }
+
+TEST_CASE("test uses - call statement") {
+    ProcedureList procLst;
+    StatementList s1, s2;
+    auto callNode = CallNode(2, &p1);
+    s1.push_back(&aNode);
+    s2.push_back(&callNode);
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    ProcedureNode proc2 = ProcedureNode(&p2, s2);
+    procLst.push_back(&proc1);
+    procLst.push_back(&proc2);
+    ProgramNode prog = ProgramNode(procLst);
+    RelationshipExtractor::extractUses(&callNode);
+    REQUIRE(PKB::getInstance()->isUses("2","y"));
+}
+
 TEST_CASE("test modifies - basic") {
     RelationshipExtractor::extractModifies(&aNode);
     REQUIRE(PKB::getInstance()->isModifies("1","x"));

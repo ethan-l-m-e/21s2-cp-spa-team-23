@@ -114,11 +114,12 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
         return {};
     } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
         vector<Node*> stmtLst = value->getStmtLst();
+        vector<VarName> allUsedVariables, e;
         for(Node* s: stmtLst) {
-            extractUses(s);
+            e = extractUses(s);
+            allUsedVariables.insert(allUsedVariables.end(), e.begin(), e.end());
         }
-        //TODO: for future iterations
-        return {};
+        return allUsedVariables;
     } else if(auto value = dynamic_cast<WhileNode*>(node)) {
         //gather variables from cond_expr and stmtLst
         vector<VarName> condVariables = value->getCondExpr()->getListOfVarUsed();
@@ -155,6 +156,12 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
     } else if(auto value = dynamic_cast<PrintNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
         PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+        return variables;
+    } else if (auto value = dynamic_cast<CallNode*>(node)) {
+        Node* procedureCalled = value->getProcedure();
+        vector<VarName> variables = extractUses(procedureCalled);
+        PKB::getInstance()->setUses(value->getStmtNumber(),
+                                        unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else {
         return {};
