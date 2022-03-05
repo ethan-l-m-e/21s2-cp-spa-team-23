@@ -22,6 +22,7 @@ namespace qp {
         void validateQueryStructure(std::string);
         void checkForSemantics(QueryToken& queryToken);
     private:
+        void validateSelectClauseTokens(std::set<std::string>, std::vector<std::string>);
         void validateDeclarations(std::set<std::string>, int, std::vector<std::string>);
         std::set<std::string> convertVectorToSet(std::vector<std::string>);
         void validateSuchThatClauses(std::map<std::string, std::string>, std::vector<SuchThatClauseToken>);

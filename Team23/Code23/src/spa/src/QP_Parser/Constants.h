@@ -3,18 +3,25 @@
 // Regex for Lexical Tokens
 std::string const LETTER = "[A-Za-z]";
 std::string const DIGIT = "[0-9]";
+std::string const NZDIGIT = "[1-9]";
 std::string const IDENT = "[A-Za-z][A-Za-z|0-9]*";
 std::string const NAME = "[A-Za-z][A-Za-z|0-9]*";
-std::string const INTEGER = DIGIT + "+";
+std::string const INTEGER = "(0|" + NZDIGIT + DIGIT + "*)";
 
 std::string const SYNONYM = IDENT;
 std::string const STMT_REF = "(" + SYNONYM + "|_|" + INTEGER + ")";
 std::string const ENT_REF = "(" + SYNONYM + "|_|" + '"' + IDENT + '"' + ")";
 
+std::string const ATTR_NAME = "(procName|varName|value|stmt#)";
+std::string const ATTR_REF = SYNONYM + "\\." + ATTR_NAME;
+std::string const ELEM = "(" + SYNONYM + "|" + ATTR_REF + ")";
+
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
 std::string const DECLARATION = DESIGN_ENTITY + "[( |\t)]+" + SYNONYM + "(,[( |\t)]*" + SYNONYM + "[( |\t)]*)*;";
 
+std::string const TUPLE = "(" + ELEM + "|" + "<" + ELEM + "(,[( |\t)]*" + ELEM + "[( |\t)]*)*>)";
+std::string const RESULT_CL = "(" + TUPLE + "|BOOLEAN)";
 
 // Relationships
 std::string const REF = "(" + SYNONYM + "|_|" + INTEGER + "|\"" + IDENT + "\"" + ")";
@@ -22,7 +29,7 @@ std::string const REL_REF = "(Follows|Follows\\*|Parent|Parent\\*|Uses|Modifies)
 std::string const RELATIONSHIP = REL_REF + "\\([( |\t)]*" + REF + "[( |\t)]*,[( |\t)]*" + REF + "[( |\t)]*\\)";
 std::string const RELATIONSHIP_MATCH = "(.)*" + RELATIONSHIP + "(.)*";
 
-// TODO: Edit Later
+
 std::string const FOLLOWS = "Follows[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
 std::string const FOLLOWS_T = "Follows\\*[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
 
@@ -45,7 +52,7 @@ std::string const PATTERN_CL = "pattern[( |\t)]+" + SYNONYM + "[( |\t)]*\\([( |\
 std::string const PATTERN_MATCH = "(.)*" + PATTERN_CL + "(.)*";
 
 
-std::string const SELECT_CL = "[( |\n|\t)]*Select[( |\n|\t)]+" + SYNONYM + "([( |\t)]+" + SUCH_THAT_CL + "|[( |\t)]+"
+std::string const SELECT_CL = "[( |\n|\t)]*Select[( |\n|\t)]+" + RESULT_CL + "([( |\t)]+" + SUCH_THAT_CL + "|[( |\t)]+"
         + PATTERN_CL + "[( |\t)]*)*";
 std::string const DECLARATION_REGEX = "([( |\n|\t)]*" + DECLARATION+ ")+";
 std::string const PQL_FORMAT = DECLARATION_REGEX + "[( |\n|\t)]*" + SELECT_CL + "[( |\t|\n)]*";

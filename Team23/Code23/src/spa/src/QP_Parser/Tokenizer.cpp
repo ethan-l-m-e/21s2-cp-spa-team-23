@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <regex>
+#include <sstream>
 
 using namespace qp;
 
@@ -61,9 +62,23 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
 }
 
 void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
-    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, SELECT_LINE);
-    std::string synonym = tokens[0].substr(0, tokens[0].find(" "));
-    queryToken.selectClauseToken = synonym;
+    std::smatch sm;
+    std::regex_search (pql, sm, std::regex("Select " + RESULT_CL));
+    std::string synonym = sm[0];
+    std::string synonyms = std::regex_replace(synonym, regex("(Select|[ |\t]+|<|>)"), "");
+    synonyms = std::regex_replace(synonyms, regex(","), " ");
+
+    std::vector<std::string>* selectClauseTokens = new std::vector<std::string>();
+    std::stringstream ss(synonyms);
+    std::string selectClauseToken;
+    while (getline(ss, selectClauseToken, ' ')) {
+        selectClauseTokens->push_back(selectClauseToken);
+    }
+
+    queryToken.selectClauseTokens = selectClauseTokens;
+//    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, SELECT_LINE);
+//    std::string synonym = tokens[0].substr(0, tokens[0].find("(>| )"));
+//    queryToken.selectClauseToken = synonym;
 }
 
 void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken) {
