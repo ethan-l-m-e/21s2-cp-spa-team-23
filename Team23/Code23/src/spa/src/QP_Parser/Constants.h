@@ -42,6 +42,15 @@ std::string const USES_P = "Uses[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[(
 std::string const MODIFIES_S = "Modifies[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
 std::string const MODIFIES_P = "Modifies[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
 
+std::string const CALLS = "Calls[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
+std::string const CALLS_T = "Calls\\*[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + ENT_REF + "[( |\t)]*\\)";
+
+std::string const NEXT = "Next[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+std::string const NEXT_T = "Next\\*[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+
+std::string const AFFECTS = "Affects[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+std::string const AFFECTS_T = "Affects\\*[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)";
+
 std::string const SUCH_THAT_CL = "such[( |\t)]+that[( |\t)]+(" + FOLLOWS + "|" + FOLLOWS_T + "|" + PARENT + "|" + PARENT_T
                                  + "|" + USES_S + "|" + USES_P + "|" + MODIFIES_S + "|" + MODIFIES_P + ")";
 

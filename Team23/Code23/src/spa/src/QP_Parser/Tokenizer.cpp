@@ -76,9 +76,6 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
     }
 
     queryToken.selectClauseTokens = selectClauseTokens;
-//    std::vector<std::string> tokens = StringFormatter::tokenizeByRegex(pql, SELECT_LINE);
-//    std::string synonym = tokens[0].substr(0, tokens[0].find("(>| )"));
-//    queryToken.selectClauseToken = synonym;
 }
 
 void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken) {

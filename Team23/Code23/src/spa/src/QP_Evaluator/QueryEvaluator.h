@@ -25,7 +25,7 @@ public:
 
     ClauseEvaluator* generateEvaluator(const SuchThatClause&, Query*);
 
-    static std::list<std::string> generateResultString(Result&);
+    static std::list<std::string> generateResultString(ResultTable*);
 };
 
 
