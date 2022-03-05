@@ -88,16 +88,14 @@ std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultT
     std::list<std::string> stringList;
     if (!resultTable->isEmpty()) {
         for(int i = 0; i < resultTable->getTableSize(); i++) {
-            for (auto &tableEntry: *resultTable->getList()) {
-                std::string s;
-                if (!s.empty())
-                    s += " ";
-                s += tableEntry[i];
-                stringList.emplace_back(s);
+            std::string s;
+            for (auto &col: *resultTable->getList()) {
+                if (!s.empty()) s += " ";
+                s += col[i];
             }
+            stringList.emplace_back(s);
         }
     }
-    //delete resultTable;
     return stringList;
 }
 

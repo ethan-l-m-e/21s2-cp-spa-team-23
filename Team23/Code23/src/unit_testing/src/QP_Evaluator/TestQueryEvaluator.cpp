@@ -795,19 +795,19 @@ TEST_CASE("Select tuples") {
      * Select s1 s2 such that Follows(s1, s2) such that Follows(4, 5)
      * Type: boolean clause, no merge needed
      */
-    //REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"1 2","2 3","3 4","4 5"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"1 2","2 3","3 4","4 5"});
 
     /**
      * Select s1 s2 s3 such that Follows(s1, s2) such that Follows(4, 5)
      * Type: boolean clause, no merge needed
      */
-    /*REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1 2 1","2 3 1","3 4 1","4 5 1",
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1 2 1","2 3 1","3 4 1","4 5 1",
                                                                    "1 2 2","2 3 2","3 4 2","4 5 2",
                                                                    "1 2 3","2 3 3","3 4 3","4 5 3",
                                                                    "1 2 4","2 3 4","3 4 4","4 5 4",
                                                                    "1 2 5","2 3 5","3 4 5","4 5 5",
+                                                                   "1 2 6","2 3 6","3 4 6","4 5 6",
                                                                    });
-                                                                   */
 }
 
 PKB* generateSamplePKBForPatternMatching() {
