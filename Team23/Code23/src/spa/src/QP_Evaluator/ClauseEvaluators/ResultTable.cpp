@@ -28,6 +28,12 @@ String2DVector* ResultTable::getList() {
     return &tableEntries;
 }
 
+void ResultTable::clearTable() {
+    tableHeader = std::vector<std::string>{};
+    tableEntries = String2DVector{};
+}
+
+
 /**
  * Merge a result to the table.
  * @param result  reference to the result object to be merged

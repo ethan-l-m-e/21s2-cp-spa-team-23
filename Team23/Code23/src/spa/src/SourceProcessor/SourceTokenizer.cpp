@@ -11,6 +11,13 @@
 
 using namespace std;
 
+void SourceTokenizer::extractCall(string sourceCode, vector<string> &v) {
+    int call = sourceCode.find("call")+4;
+    int end = sourceCode.find(';');
+    string procName = StringFormatter::removeTrailingSpace(sourceCode.substr(call, end - call));
+    v.push_back(procName);
+}
+
 void SourceTokenizer::extractRead(string sourceCode, vector<string> &v) {
     int read = sourceCode.find("read")+4;
     int end = sourceCode.find(';');
@@ -247,7 +254,7 @@ vector<string> SourceTokenizer::partitionAccordingToCase(std::string sourceCode,
     string trimmedCode;
     vector<string> v;
     switch(type) {
-        case ASSIGN: case READ: case PRINT: {
+        case ASSIGN: case READ: case PRINT: case CALL: {
             v = StringFormatter::partitionBySemiColon(sourceCode);
             break;
         }

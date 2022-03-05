@@ -33,4 +33,4 @@ string const IF_IDENTIFIER  = "(if)[ ]*(\\()" + COND_EXPR_IDENTIFIER + "(\\))[ ]
 
 
 string const PROCEDURE_IDENTIFIER = "(procedure )[ ]*(" + PROC_NAME + ")[ ]*(\\{)(.*)" ;
-string const ASSIGN_IDENTIFIER = VAR_NAME + "[ ]*(=)[ ]*(" + EXPR_TERM_IDENTIFIER + "|" +  BASE_CASE_REGEX + ")(;)(.*)";
+string const ASSIGN_IDENTIFIER = VAR_NAME + "[ ]*(=)[ ]*(" + EXPR_TERM_IDENTIFIER + "|" +  BASE_CASE_REGEX + ")[ ]*(;)(.*)";

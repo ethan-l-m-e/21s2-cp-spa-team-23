@@ -22,12 +22,13 @@ protected:
     PKB* pkb;
     Query* query;
     Result result;
+    void mergeResult(ResultTable* resultTable);
 
 public:
     ClauseEvaluator(std::vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
     ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
     virtual ~ClauseEvaluator() = default;
-    virtual Result evaluateClause() = 0;
+    virtual bool evaluateClause(ResultTable* resultTable) = 0;
     unordered_set<std::string> getAllType(DesignEntity designEntity);
 
 };

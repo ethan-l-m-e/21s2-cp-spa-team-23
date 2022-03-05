@@ -9,7 +9,7 @@
  * Evaluate the such that clause.
  * @return  an result object for the evaluation of the clause
  */
-Result SuchThatClauseEvaluator::evaluateClause(){
+bool SuchThatClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     switch(getClauseSynonymType()){
         case ClauseSynonymType::SYNONYM_NONE:
             evaluateNoSynonym();
@@ -26,7 +26,9 @@ Result SuchThatClauseEvaluator::evaluateClause(){
         default:
             break;
     }
-    return result;
+    if(!result.resultBoolean) return false;
+    mergeResult(resultTable);
+    return true;
 }
 
 /**
