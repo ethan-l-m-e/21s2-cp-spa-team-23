@@ -88,6 +88,7 @@ private:
     bool isPrintStatement(int statement);
     bool isIfStatement(int statement);
     bool isWhileStatement(int statement);
+    bool isCallStatement(int statement);
 
     // Getter Functions (Follows Relationship)
 
@@ -181,6 +182,7 @@ public:
     bool isPrintStatement(string statement);
     bool isIfStatement(string statement);
     bool isWhileStatement(string statement);
+    bool isCallStatement(string statement);
 
 
 
