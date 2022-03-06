@@ -27,12 +27,12 @@ namespace qp {
     class QueryToken {
     public:
         std::map<std::string, std::string>* declarationTokens;
-        std::string selectClauseToken;
+        std::vector<std::string>* selectClauseTokens;
         std::vector<SuchThatClauseToken>* suchThatClauseTokens;
         std::vector<PatternToken>* patternTokens;
         std::pair<std::vector<std::string>, std::vector<std::string>>* declarations;
 
-        QueryToken() : declarationTokens(nullptr), selectClauseToken(""),
+        QueryToken() : declarationTokens(nullptr), selectClauseTokens(nullptr),
         suchThatClauseTokens(new std::vector<SuchThatClauseToken>()),
         patternTokens( new std::vector<PatternToken>()), declarations(nullptr) {};
 

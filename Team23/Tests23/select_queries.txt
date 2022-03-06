@@ -1,4 +1,4 @@
-2 - Stmt
+../../../../Tests23/select_source.txt ../../../../Tests23/select_queries.txt ../../../tests/out.xml
 stmt s;
 Select s
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
@@ -19,8 +19,8 @@ Select w
 4
 5000
 6 - If
-if ifs
-Select ifs;
+if ifs;
+Select ifs
 8
 5000
 7 - Assign
@@ -65,7 +65,7 @@ Select while
 5000
 15 - Synonym named if
 if if;
-Select if;
+Select if
 8
 5000
 16 - Synonym named assign

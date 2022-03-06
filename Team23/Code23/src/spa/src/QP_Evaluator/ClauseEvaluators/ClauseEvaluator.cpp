@@ -40,6 +40,6 @@ unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity
 }
 
 void ClauseEvaluator::mergeResult(ResultTable* resultTable) {
-    resultTable->mergeResultToSynonymsRelations(result);
+    resultTable->mergeResultToTable(result);
 }
 

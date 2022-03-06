@@ -26,17 +26,22 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
     // Check declarations
     validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
 
-    // Check if Select Clause synonym is part of the declarations
-    bool isSelectClauseDeclared = declarationSet.find(queryToken.selectClauseToken) == declarationSet.end();
-    if (isSelectClauseDeclared) {
-        throw QPInvalidSemanticException("Synonym not declared");
-    };
+    // Check if Select Clause synonyms are part of the declarations
+    validateSelectClauseTokens(declarationSet, *(queryToken.selectClauseTokens));
 
     // Check pattern arguments
     validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
 
     // Check Such That clauses
     validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
+}
+
+void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet, std::vector<std::string> selectClauseTokens) {
+    for (std::string selectClauseToken : selectClauseTokens) {
+        if (declarationSet.find(selectClauseToken) == declarationSet.end()) {
+            throw QPInvalidSemanticException("Invalid Select Clause");
+        }
+    }
 }
 
 void Validator::validateDeclarations(std::set<std::string> declarationSet, int length, std::vector<std::string> designEntities) {

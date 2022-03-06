@@ -14,4 +14,9 @@ procedure Uses {
     if(Y == b) then {
         Y = b;
     } else {  X = a;    }
+    call UsesAgain;
+}
+
+procedure UsesAgain {
+    print Z;
 }

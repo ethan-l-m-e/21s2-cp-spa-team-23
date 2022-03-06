@@ -87,17 +87,15 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
 std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
     std::list<std::string> stringList;
     if (!resultTable->isEmpty()) {
-        for (auto &tableEntry: *resultTable->getList()) {
+        for(int i = 0; i < resultTable->getTableSize(); i++) {
             std::string s;
-            for(const auto &value : tableEntry) {
-                if(!s.empty())
-                    s += " ";
-                s += value;
+            for (auto &col: *resultTable->getList()) {
+                if (!s.empty()) s += " ";
+                s += col[i];
             }
             stringList.emplace_back(s);
         }
     }
-    //delete resultTable;
     return stringList;
 }
 
