@@ -219,6 +219,12 @@ bool PKB::isWhileStatement(int statement) {
 bool PKB::isWhileStatement(string statement) {
     return isWhileStatement(std::stoi(statement));
 }
+bool PKB::isCallStatement(int statement) {
+    return callStatementsSet.find(statement) != callStatementsSet.end();
+}
+bool PKB::isCallStatement(string statement) {
+    return isCallStatement(std::stoi(statement));
+}
 
 
 
