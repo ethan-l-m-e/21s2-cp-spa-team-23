@@ -14,6 +14,7 @@ TEST_CASE("Integration testing - Extra spaces on both ends") {
 
     CHECK(PKB::getInstance()->isAssignStatement("3"));
     CHECK(PKB::getInstance()->isAssignStatement("6"));
+    CHECK(PKB::getInstance()->isAssignStatement("18"));
     CHECK(PKB::getInstance()->isReadStatement("12"));
     CHECK(PKB::getInstance()->isPrintStatement("13"));
     CHECK(PKB::getInstance()->isConstant("12"));
@@ -27,10 +28,10 @@ TEST_CASE("Integration testing - Extra spaces on both ends") {
     CHECK(PKB::getInstance()->isParent("5", "6"));
     CHECK(PKB::getInstance()->isParentT("5", "8"));
 
-    CHECK(PKB::getInstance()->isUses("3","a"));
+    CHECK(PKB::getInstance()->isUsesS("3","a"));
 
-    CHECK(PKB::getInstance()->isModifies("3", "a") == false);
-    CHECK(PKB::getInstance()->isModifies("3", "assignThree"));
+    CHECK(PKB::getInstance()->isModifiesS("3", "a") == false);
+    CHECK(PKB::getInstance()->isModifiesS("3", "assignThree"));
 
 
 }
@@ -52,10 +53,10 @@ TEST_CASE("Integration testing - no spaces") {
     CHECK(PKB::getInstance()->isParent("5", "7"));
     CHECK(PKB::getInstance()->isParentT("5", "8"));
 
-    CHECK(PKB::getInstance()->isUses("4","a"));
+    CHECK(PKB::getInstance()->isUsesS("4","a"));
 
-    CHECK(PKB::getInstance()->isModifies("4", "a") == false);
-    CHECK(PKB::getInstance()->isModifies("4", "assignFour"));
+    CHECK(PKB::getInstance()->isModifiesS("4", "a") == false);
+    CHECK(PKB::getInstance()->isModifiesS("4", "assignFour"));
 
 }
 TEST_CASE("Integration testing - spaces within inequalities") {
@@ -64,9 +65,8 @@ TEST_CASE("Integration testing - spaces within inequalities") {
 //    RelationshipExtractor::extractRelationships(programNode);
     SourceProcessor::run("integration_non_standardised_spacing.txt");
     CHECK(PKB::getInstance()->isWhileStatement("10"));
-    unordered_set<string> toCheck;
-    CHECK(PKB::getInstance()->getVariablesUsed("10").count("A")==1);
-    CHECK(PKB::getInstance()->getVariablesUsed("10").count("B")==1);
+    CHECK(PKB::getInstance()->isUsesS("10","A"));
+    CHECK(PKB::getInstance()->isUsesS("10","B"));
 
 }
 TEST_CASE("Integration testing - extra line spaces") {
@@ -83,7 +83,7 @@ TEST_CASE("Integration testing - extra line spaces") {
 
     CHECK(PKB::getInstance()->isParent("16", "17"));
 
-    CHECK(PKB::getInstance()->isUses("15","a"));
+    CHECK(PKB::getInstance()->isUsesS("15","a"));
 
-    CHECK(PKB::getInstance()->isModifies("15", "genericAssign2"));
+    CHECK(PKB::getInstance()->isModifiesS("15", "genericAssign2"));
 }

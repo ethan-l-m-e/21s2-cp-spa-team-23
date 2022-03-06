@@ -35,3 +35,9 @@ while(A<a){
 
 
 }
+
+procedure        genericProcedure{
+
+
+genericAssign4    =     a
+}

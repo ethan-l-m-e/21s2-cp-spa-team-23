@@ -40,5 +40,5 @@ procedure NestedWithOtherConditions {
 }
 
 procedure genericProcedure{
-    insideGenricProcedure = 1;
+    insideGenericProcedure = a;
 }

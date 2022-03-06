@@ -35,7 +35,7 @@ TEST_CASE("Integration testing - statement type check from parser to pkb") {
     CHECK(PKB::getInstance()->isAssignStatement("17"));
     CHECK(PKB::getInstance()->isPrintStatement("18"));
     CHECK(PKB::getInstance()->isAssignStatement("19"));
-//    CHECK(PKB::getInstance()->isCallStatement("23"));
+    CHECK(PKB::getInstance()->isCallStatement("23"));
 
     //these 3 dont work because the test cases here all run at different timings, creating multiple overlaps in the pkb (not sure how to fix yet)
 //    CHECK(PKB::getInstance()->getAllAssignStatements().size()==8);
@@ -79,14 +79,16 @@ TEST_CASE("Integration testing - modifies relationship type check from parser to
 //    RelationshipExtractor::extractRelationships(programNode);
     SourceProcessor::run("integration_source.txt");
 
-    CHECK(PKB::getInstance()->isModifies("1", "entryPoint"));
-    CHECK(PKB::getInstance()->isModifies("2", "A") == false);
-    CHECK(PKB::getInstance()->isModifies("2", "a") == false);
-    CHECK(PKB::getInstance()->isModifies("3", "mainWhileLoop"));
-    CHECK(PKB::getInstance()->isModifies("3", "a") == false);
-    CHECK(PKB::getInstance()->isModifies("2", "mainWhileLoop"));
-    CHECK(PKB::getInstance()->isModifies("21", "genericRead"));
-    CHECK(PKB::getInstance()->isModifies("22", "genericPrint") == false);
+    CHECK(PKB::getInstance()->isModifiesS("1", "entryPoint"));
+    CHECK(PKB::getInstance()->isModifiesS("2", "A") == false);
+    CHECK(PKB::getInstance()->isModifiesS("2", "a") == false);
+    CHECK(PKB::getInstance()->isModifiesS("3", "mainWhileLoop"));
+    CHECK(PKB::getInstance()->isModifiesS("3", "a") == false);
+    CHECK(PKB::getInstance()->isModifiesS("2", "mainWhileLoop"));
+    CHECK(PKB::getInstance()->isModifiesS("21", "genericRead"));
+    CHECK(PKB::getInstance()->isModifiesS("22", "genericPrint") == false);
+    CHECK(PKB::getInstance()->isModifiesP("NestedWithOtherConditions", "mainWhileLoop"));
+    CHECK(PKB::getInstance()->isModifiesP("genericProcedure", "insideGenericProcedure"));
 
 }
 TEST_CASE("Integration testing - uses relationship type check from parser to pkb") {
@@ -95,25 +97,26 @@ TEST_CASE("Integration testing - uses relationship type check from parser to pkb
 //    RelationshipExtractor::extractRelationships(programNode);
     SourceProcessor::run("integration_source.txt");
 
-    CHECK(PKB::getInstance()->isUses("1","entryPoint") == false);
-    CHECK(PKB::getInstance()->isUses("2","A"));
-    CHECK(PKB::getInstance()->isUses("2","a"));
-    CHECK(PKB::getInstance()->isUses("3","a"));
-    CHECK(PKB::getInstance()->isUses("3","mainWhileLoop")==false);
-    CHECK(PKB::getInstance()->isUses("2","a"));
-    CHECK(PKB::getInstance()->isUses("21","genericRead")==false);
-    CHECK(PKB::getInstance()->isUses("22","genericPrint"));
+    CHECK(PKB::getInstance()->isUsesS("1","entryPoint") == false);
+    CHECK(PKB::getInstance()->isUsesS("2","A"));
+    CHECK(PKB::getInstance()->isUsesS("2","a"));
+    CHECK(PKB::getInstance()->isUsesS("3","a"));
+    CHECK(PKB::getInstance()->isUsesS("3","mainWhileLoop")==false);
+    CHECK(PKB::getInstance()->isUsesS("2","a"));
+    CHECK(PKB::getInstance()->isUsesS("21","genericRead")==false);
+    CHECK(PKB::getInstance()->isUsesS("22","genericPrint"));
 
-    unordered_set<string> stmtTenUses = PKB::getInstance()->getVariablesUsed("10");
-    unordered_set<string> stmtTwelveUses = PKB::getInstance()->getVariablesUsed("12");
-    unordered_set<string> stmtThirteenUses = PKB::getInstance()->getVariablesUsed("13");
-    CHECK(stmtTenUses.count("A") == 1);
-    CHECK(stmtTenUses.count("B") == 1);
-    CHECK(stmtTwelveUses.count("A") == 1);
-    CHECK(stmtTwelveUses.count("B") == 1);
-    CHECK(stmtThirteenUses.count("A") == 1);
-    CHECK(stmtThirteenUses.count("B") == 1);
-    CHECK(stmtThirteenUses.count("C") == 1);
+    CHECK(PKB::getInstance()->isUsesS("10","A"));
+    CHECK(PKB::getInstance()->isUsesS("10","B"));
+    CHECK(PKB::getInstance()->isUsesS("12","A"));
+    CHECK(PKB::getInstance()->isUsesS("12","B"));
+    CHECK(PKB::getInstance()->isUsesS("13","A"));
+    CHECK(PKB::getInstance()->isUsesS("13","B"));
+    CHECK(PKB::getInstance()->isUsesS("13","C"));
+
+    CHECK(PKB::getInstance()->isUsesP("NestedWithOtherConditions","A"));
+    CHECK(PKB::getInstance()->isUsesP("genericProcedure","a"));
+
 
 }
 
