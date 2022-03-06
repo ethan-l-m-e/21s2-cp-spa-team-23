@@ -466,7 +466,7 @@ void PKB::setUsesP(string procedure, unordered_set<string> variables) {
         }
     }
 
-}S
+}
 
 // Getter Functions (Uses Relationship)
 
@@ -483,7 +483,7 @@ bool PKB::isUsesS(string statement, string variable) {
 
 bool PKB::isUsesP(string procedure, string variable) {
     if (procedureToVariablesUsedMap.find(procedure) != procedureToVariablesUsedMap.end()) {
-        return statementToVariablesUsedMap[procedure].find(variable) != statementToVariablesUsedMap[procedure].end();
+        return procedureToVariablesUsedMap[procedure].find(variable) != procedureToVariablesUsedMap[procedure].end();
     } else {
         return false;
     }
@@ -498,7 +498,7 @@ unordered_set<string> PKB::getVariablesUsedS(int statement) {
 }
 
 unordered_set<string> PKB::getVariablesUsedS(string statement) {
-    return getVariablesUsed(std::stoi(statement));
+    return getVariablesUsedS(std::stoi(statement));
 }
 
 unordered_set<string> PKB::getVariablesUsedP(string procedure) {
@@ -566,7 +566,7 @@ bool PKB::isModifiesS(string statement, string variable) {
 
 bool PKB::isModifiesP(string procedure, string variable) {
     if (procedureToVariablesModifiedMap.find(procedure) != procedureToVariablesModifiedMap.end()) {
-        return procedureToVariablesModifiedMap[procedure].find(variable) != statementToVariablesModifiedMap[procedure].end();
+        return procedureToVariablesModifiedMap[procedure].find(variable) != procedureToVariablesModifiedMap[procedure].end();
     } else {
         return false;
     }
@@ -579,7 +579,7 @@ unordered_set<string> PKB::getVariablesModifiedS(int statement) {
 }
 
 unordered_set<string> PKB::getVariablesModifiedS(string statement) {
-    return getVariablesModified(std::stoi(statement));
+    return getVariablesModifiedS(std::stoi(statement));
 }
 
 unordered_set<string> PKB::getVariablesModifiedP(string procedure) {
