@@ -1,0 +1,18 @@
+procedure Modifies {
+    modifiedVar1 = x;
+    read modifiedVar1;
+    while(1 == 1) {
+        modifiedVar1 = x;}
+    if(1 == 1) then {
+        modifiedVar1 = x;
+    } else {modifiedVar2 = 0;}
+    if(1 == 1) then {
+        modifiedVar2 = 0;
+    } else { modifiedVar1 = x;}
+    read modifiedVar2;
+    call ModifiesAgain;
+}
+
+procedure ModifiesAgain {
+    read modifiedVar3;
+}

@@ -1,0 +1,13 @@
+procedure Pattern {
+    X = a;
+    X1 = a1;
+    X = a + b;
+    X = a - b;
+    X = a * b;
+    X = a / b;
+    X = a % b;
+    X = (a + b);
+    X = (a + b)*(c - d) % (e * f)+(g / h);
+    X = 1;
+    X = (a + 1)*(c - d) % (e * f)+(g / h);
+}

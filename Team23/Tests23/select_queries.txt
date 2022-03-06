@@ -1,0 +1,110 @@
+../../../../Tests23/select_source.txt ../../../../Tests23/select_queries.txt ../../../tests/out.xml
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+5000
+3 - Read
+read r;
+Select r
+1, 5, 9, 12
+5000
+4 - Print
+print pr;
+Select pr
+2, 6, 10, 13
+5000
+5 - While
+while w;
+Select w
+4
+5000
+6 - If
+if ifs;
+Select ifs
+8
+5000
+7 - Assign
+assign a;
+Select a
+3, 7, 11, 14
+5000
+8 - Var
+variable v;
+Select v
+a, b, X, c, Y, d, e, f, g, h, i, j, k, l
+5000
+9 - Const
+constant c;
+Select c
+1
+5000
+10 - Procedure
+procedure proc;
+Select proc
+Procedure
+5000
+11 - Synonym named stmt
+stmt stmt;
+Select stmt
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+5000
+12 - Synonym named read
+read read;
+Select read
+1, 5, 9, 12
+5000
+13 - Synonym named print
+print print;
+Select print
+2, 6, 10, 13
+5000
+14 - Synonym named while
+while while;
+Select while
+4
+5000
+15 - Synonym named if
+if if;
+Select if
+8
+5000
+16 - Synonym named assign
+assign assign;
+Select assign
+3, 7, 11, 14
+5000
+17 - Synonym named variable
+variable variable;
+Select variable
+a, b, X, c, Y, d, e, f, g, h, i, j, k, l
+5000
+18 - Synonym named constant
+constant constant;
+Select constant
+1
+5000
+19 - Synonym named procedure
+procedure procedure;
+Select procedure
+Procedure
+5000
+20 - Synonym named Select
+procedure Select;
+Select Select
+Procedure
+5000
+21 - Invalid (query has semicolon)
+constant c;
+Select c;
+none
+5000
+22 - Invalid Synonym (synonym has special character)
+assign b@d;
+Select b@d
+none
+5000
+23 - Invalid Synonym (synonym starts with int)
+assign 1a;
+Select 1a
+none
+5000
