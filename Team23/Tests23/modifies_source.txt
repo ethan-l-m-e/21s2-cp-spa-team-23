@@ -10,4 +10,9 @@ procedure Modifies {
         modifiedVar2 = 0;
     } else { modifiedVar1 = x;}
     read modifiedVar2;
+    call ModifiesAgain;
+}
+
+procedure ModifiesAgain {
+    read modifiedVar3;
 }

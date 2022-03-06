@@ -108,7 +108,6 @@ CallNode *Parser::parseCall(string callLine) {
 
 ReadNode *Parser::parseRead(string readLine) {
     int stmtNo = getStatementNumber();
-//    PKB::getInstance()->addReadStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractRead(readLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -118,7 +117,6 @@ ReadNode *Parser::parseRead(string readLine) {
 
 PrintNode *Parser::parsePrint(string printLine) {
     int stmtNo = getStatementNumber();
-//    PKB::getInstance()->addPrintStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractPrint(printLine, tokens);
     VariableNode* newVar = parseVar(tokens[0]);
@@ -128,8 +126,6 @@ PrintNode *Parser::parsePrint(string printLine) {
 
 AssignNode* Parser::parseAssign(string assignLine) {
     int stmtNo = getStatementNumber();
-    //cout << "sending assign " << stmtNo << " to PKB\n";
-//    PKB::getInstance()->addAssignStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractAssign(std::move(assignLine), tokens);
     VariableNode* newVarNode = parseVar(tokens[0]);
@@ -139,8 +135,6 @@ AssignNode* Parser::parseAssign(string assignLine) {
 
 WhileNode *Parser::parseWhile(string code) {
     int stmtNo = getStatementNumber();
-    //cout << "sending while " << stmtNo << " to PKB\n";
-//    PKB::getInstance()->addWhileStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractWhile(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -151,8 +145,6 @@ WhileNode *Parser::parseWhile(string code) {
 
 IfNode *Parser::parseIf(string code) {
     int stmtNo = getStatementNumber();
-    //cout << "sending if " << stmtNo << " to PKB\n";
-//    PKB::getInstance()->addIfStatement(stmtNo);
     vector<string> tokens;
     SourceTokenizer::extractIfElseThen(code, tokens);
     CondExprNode* newCondExpr = parseCondExpr(tokens[0]);
@@ -175,9 +167,7 @@ CondExprNode *Parser::parseCondExpr(string condExprLine) {
     condExprLine = StringFormatter::removeTrailingSpace(StringFormatter::removeMatchingFrontBackBrackets(condExprLine));
     vector<string> tokens;
     SourceTokenizer::extractCondExpr(std::move(condExprLine), tokens);
-
     if (tokens[0].empty()) {
-
         RelExprNode* newRelExpr = parseRelExpr(tokens[2]);
         return new CondExprNode(newRelExpr);
     }
@@ -213,8 +203,6 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
         }
         case(WHILE): {
             vector<string> v = SourceTokenizer::partitionAccordingToCase(*stmt, WHILE);
-            //cout << "whileCode: "<< v[0] + "\n";
-            //cout << "remaining: " << v[1] + "\n";
             newNode = Parser::parseWhile(v[0]);
             *stmt = StringFormatter::removeTrailingSpace(v[1]);
             break;
@@ -252,15 +240,7 @@ StmtNode* Parser::parseStatementNode(string * stmt) {
 }
 
 ProcNameNode *Parser::parseProcName(string procedureName) {
-    //int check = Identifier::identifyFirstObject(procedureName);
-    //if(check == PROCEDURE_NAME) {
-        //cout << "sending proc " << procedureName << " to PKB\n";
-        //PKB::getInstance() ->addProcedure(procedureName);
-  
-        return new ProcNameNode(procedureName);
-    //} else {
-        throw "Invalid varname format: '" + procedureName + "'\n";
-    //}
+    return new ProcNameNode(procedureName);
 }
 
 ProcedureNode *Parser::parseProcedure(string * procedure) {
