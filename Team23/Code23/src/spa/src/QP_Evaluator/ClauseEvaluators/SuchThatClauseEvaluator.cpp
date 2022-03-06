@@ -216,7 +216,7 @@ bool SuchThatClauseEvaluator::isEntityType (const std::string& ident, DesignEnti
         case DesignEntity::PROCEDURE:
             return pkb->isProcedure(ident);
         case DesignEntity::CALL:
-            return pkb->isCall(ident);
+            return pkb->isCallStatement(ident);
         default:
             throw qp::QPEvaluatorException("Invalid design entity found.");
     }
