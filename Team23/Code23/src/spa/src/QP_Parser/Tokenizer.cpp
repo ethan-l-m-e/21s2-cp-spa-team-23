@@ -131,11 +131,21 @@ void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) 
 
 PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
     std::vector<std::string> patternClauseArgs = StringFormatter::tokenizeByRegex(patternClause, PATTERN_ARGUMENTS);
-    std::string synonym = StringFormatter::removeTrailingSpace(patternClauseArgs[0]);
+    int indexOfOpeningBracket = patternClauseArgs[0].find("(");
+    std::string synonym = StringFormatter::removeTrailingSpace(patternClauseArgs[0].substr(0, indexOfOpeningBracket));
+    std::string firstArgument = StringFormatter::removeTrailingSpace(patternClauseArgs[0].substr(indexOfOpeningBracket+1));
 
     PatternToken patternToken = PatternToken();
-    patternToken.synonym = StringFormatter::tokenizeByRegex(synonym, "[ |\t]+")[1];
-    patternToken.arguments = new std::vector<std::string>(patternClauseArgs.begin()+1, patternClauseArgs.end());
+    patternToken.synonym = synonym;
+    patternToken.arguments = new std::vector<std::string>({firstArgument});
+
+    for (int i = 1; i < patternClauseArgs.size(); i++) {
+        std::string argument = StringFormatter::removeTrailingSpace(patternClauseArgs[i]);
+        if (i == patternClauseArgs.size()-1) {
+            argument = argument.substr(0, argument.size()-1);
+        }
+        patternToken.arguments->push_back(argument);
+    }
     return patternToken;
 }
 
