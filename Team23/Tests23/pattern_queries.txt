@@ -40,7 +40,7 @@ Select a pattern a("X", "a")
 5000
 1.1.9 - [valid] select assign with lhs varname and single var with number pattern
 assign a;
-Select a pattern a("X", "a1")
+Select a pattern a("X1", "a1")
 2
 5000
 1.1.10 - [valid] select assign with lhs varname and single const pattern
@@ -55,7 +55,7 @@ Select a pattern a("X", _"a"_)
 5000
 1.1.12 - [valid] select assign with lhs varname and single var with number and wildcards pattern
 assign a;
-Select a pattern a("X", _"a1"_)
+Select a pattern a("X1", _"a1"_)
 2
 5000
 1.1.13 - [valid] select assign with lhs varname with const and wildcards pattern
@@ -146,12 +146,12 @@ Select a pattern a(_, _"a % b"_)
 1.2.11 - [valid] match ( c - d ) % ( e * f ) with wildcards
 assign a;
 Select a pattern a(_, _"(c - d) % (e * f)"_)
-9, 11
+none
 5000
 1.2.12 - [valid] match ( a + b ) * ( c - d ) with wildcards, no match found
 assign a;
 Select a pattern a(_, _"(a + b)*(c - d)"_)
-none
+9
 5000
 2.1 - [not valid] synonym type not assign (stmt) ==================================================[Invalid tests start]
 stmt s;
@@ -193,12 +193,12 @@ assign a;
 Select a pattern a(_, _a_)
 none
 5000
-2.10 - [not valid] missing factor
+2.10 - [not valid] absent factor
 assign a;
 Select a pattern a(_, _""_)
 none
 5000
-2.11 - [not valid] missing quotes
+2.11 - [not valid] absent quotes
 assign a;
 Select a pattern a(_, _x_)
 none
