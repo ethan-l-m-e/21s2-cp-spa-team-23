@@ -80,7 +80,7 @@ std::string const DECLARATION_REGEX = "([( |\n|\t)]*" + DECLARATION+ ")+";
 std::string const PQL_FORMAT = DECLARATION_REGEX + "[( |\n|\t)]*" + SELECT_CL + "[( |\t|\n)]*";
 
 // regex needed for semantic validation
-std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*)";
+std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*|Next|Next\\*)";
 std::string const NON_STMT_RS = "(Modifies|Uses)";
 std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|[0-9]+)";
 std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";

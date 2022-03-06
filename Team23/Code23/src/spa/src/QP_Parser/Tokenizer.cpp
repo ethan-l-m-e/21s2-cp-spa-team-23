@@ -21,7 +21,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 
     // Replace all newlines in the query
     query = std::regex_replace(query, regex("\n"), "");
-    query = std::regex_replace(query, regex("\\*"), "-");
+//    query = std::regex_replace(query, regex("\\*"), "-");
 
     // Gets all the different tokens
     getDeclarationTokens(query, queryToken);
@@ -46,8 +46,11 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
     std::vector<std::string> designEntities = std::vector<std::string>();
 
     for (std::string declaration : declarations) {
-        designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
-        synonymsString = declaration.substr(designEntity.length() + 1);
+        std::smatch sm;
+        std::regex_search(declaration, sm, std::regex(DESIGN_ENTITY));
+        designEntity = sm[0];
+//        designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
+        synonymsString = declaration.substr(designEntity.length());
         synonymsString = StringFormatter::removeTrailingSpace(synonymsString);
         std::vector<std::string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, SPLIT_DECLARATIONS);
 
@@ -80,21 +83,32 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
 }
 
 void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken) {
-    // Replace * with - in the query
-    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, SUCH_THAT_CLAUSE);
+    std::smatch sm;
+    std::vector<std::string> suchThatClauses = std::vector<std::string>();
 
-    bool noSuchThatClause = backClauses[0] == pql;
-    if (noSuchThatClause) {
-        return;
+    while (std::regex_search (pql, sm, std::regex(REL_REF))) {
+        std::string x = sm[0];
+        x = StringFormatter::removeTrailingSpace(x);
+        suchThatClauses.push_back(x);
+        pql = sm.suffix().str();
     }
 
-    std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(backClauses[0], SPLIT_SUCH_THAT_CLAUSE);
-    std::string relRef = std::regex_replace(suchThatClauses[0], regex("-"), "*");
+    std::vector<SuchThatClauseToken>* suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
+    for (std::string suchThatClause : suchThatClauses) {
+        SuchThatClauseToken suchThatClauseToken = convertStringToSuchThatClauseToken(suchThatClause);
+        suchThatClauseTokens->push_back(suchThatClauseToken);
+    }
+
+    queryToken.suchThatClauseTokens = suchThatClauseTokens;
+}
+
+SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string suchThatClause) {
+    std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(suchThatClause, SPLIT_SUCH_THAT_CLAUSE);
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    suchThatClauseToken.relRef = relRef;
+    suchThatClauseToken.relRef = suchThatClauses[0];
     suchThatClauseToken.arguments = new std::pair<std::string, std::string>(suchThatClauses[1], suchThatClauses[2]);
-    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>{suchThatClauseToken};
+    return suchThatClauseToken;
 }
 
 

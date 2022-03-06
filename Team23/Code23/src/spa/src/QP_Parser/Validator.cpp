@@ -37,6 +37,12 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
 }
 
 void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet, std::vector<std::string> selectClauseTokens) {
+    if (selectClauseTokens[0] == "BOOLEAN") {
+        return;
+    }
+
+    // TODO: checking attr references with .
+
     for (std::string selectClauseToken : selectClauseTokens) {
         if (declarationSet.find(selectClauseToken) == declarationSet.end()) {
             throw QPInvalidSemanticException("Invalid Select Clause");

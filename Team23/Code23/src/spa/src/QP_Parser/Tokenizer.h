@@ -47,6 +47,7 @@ namespace qp {
         void getSuchThatClauseTokens(std::string, QueryToken&);
         void getPatternClauseTokens(std::string, QueryToken&);
         void splitDeclarations(std::vector<std::string>&, QueryToken&);
+        SuchThatClauseToken convertStringToSuchThatClauseToken(std::string);
     };
 }
 
