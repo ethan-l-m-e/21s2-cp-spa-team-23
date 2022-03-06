@@ -7,6 +7,6 @@
 
 LoopCFG::LoopCFG(int statementNumber): NodeCFG(statementNumber) {}
 
-void LoopCFG::setNodeInLoop(NodeCFG *node) {this->nodeInLoop = nodeInLoop; }
+void LoopCFG::setNodeInLoop(NodeCFG *node) {this->nodeInLoop = node; }
 
 NodeCFG* LoopCFG::getNodeInLoop() {return this->nodeInLoop; }
