@@ -76,6 +76,12 @@ void PKB::clearPKB() {
 
     statementToVariablesModifiedMap.clear();
     variableModifiedToStatementMap.clear();
+
+    procedureToVariablesUsedMap.clear();
+    variableUsedToProcedureMap.clear();
+
+    procedureToVariablesModifiedMap.clear();
+    variableModifiedToProcedureMap.clear();
 }
 
 // Setter Functions (Assign Nodes)
