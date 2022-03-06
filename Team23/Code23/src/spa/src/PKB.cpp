@@ -44,12 +44,20 @@ void PKB::clearPKB() {
     constantsSet.clear();
 
     assignStatementsSet.clear();
-    printStatementsSet.clear();
     readStatementsSet.clear();
     printStatementsSet.clear();
     ifStatementsSet.clear();
     whileStatementsSet.clear();
+    callStatementsSet.clear();
+
     assignNodesSet.clear();
+
+    statementNodesSet.clear();
+    readNodesSet.clear();
+    printNodesSet.clear();
+    ifNodesSet.clear();
+    whileNodesSet.clear();
+    callNodesSet.clear();
 
     followeeToFollowerMap.clear();
     followerToFolloweeMap.clear();
@@ -68,6 +76,12 @@ void PKB::clearPKB() {
 
     statementToVariablesModifiedMap.clear();
     variableModifiedToStatementMap.clear();
+
+    procedureToVariablesUsedMap.clear();
+    variableUsedToProcedureMap.clear();
+
+    procedureToVariablesModifiedMap.clear();
+    variableModifiedToProcedureMap.clear();
 }
 
 // Setter Functions (Assign Nodes)
