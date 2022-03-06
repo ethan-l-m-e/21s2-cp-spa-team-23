@@ -33,3 +33,8 @@ assign a;
 Select a pattern a( "variable3"     ,  _"  (variable2/6 %variable1)-7*variable3 "_)
 none
 5000
+2.1 - [not valid] Parent cals with pattern ========================================================[Invalid tests start]
+stmt s; call c;
+Select s pattern s(_, _) such that Parent(c, _)
+none
+5000
