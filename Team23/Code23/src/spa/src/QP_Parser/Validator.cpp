@@ -35,6 +35,9 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
 
     // Check Such That clauses
     validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
+
+    // Check with clauses
+    validateWithClauses(*(queryToken.withClauses), *(queryToken.declarationTokens));
 }
 
 void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet, std::vector<std::string> selectClauseTokens) {
@@ -225,6 +228,29 @@ void Validator::validatePatternFirstArgument(std::map<std::string, std::string> 
 
     if (isSynonymArgumentNotADeclaredVariable) {
         throw QPInvalidSemanticException("Invalid Pattern First Argument");
+    }
+}
+
+void Validator::validateWithClauses(std::vector<std::pair<std::string, std::string>> withClauses, std::map<std::string, std::string> declarationTokens) {
+    for (std::pair<std::string, std::string> withClause : withClauses) {
+        validateWithArgument(withClause.first, declarationTokens);
+        validateWithArgument(withClause.second, declarationTokens);
+    }
+}
+
+void Validator::validateWithArgument(std::string argument, std::map<std::string, std::string> declarationTokens) {
+    if (std::regex_match(argument, std::regex(IDENT_INT_CHECK))) {
+        return;
+    }
+
+    std::vector<std::string> attrs = StringFormatter::tokenizeByRegex(argument, ".");
+    if (declarationTokens.find(attrs[0]) == declarationTokens.end()) {
+        throw QPInvalidSemanticException("Invalid With Clause");
+    }
+
+    std::set<std::string> expectedSynonymSet = attrNameAndSynonymMap.at(attrs[1]);
+    if (expectedSynonymSet.find(attrs[0]) == expectedSynonymSet.end()) {
+        throw QPInvalidSemanticException("Invalid With Clause");
     }
 }
 
