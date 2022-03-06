@@ -716,7 +716,7 @@ TEST_CASE("Merge synonyms") {
     Query query_4 = makeQuery(declarations, {"s1"}, {clause_s2_5, clause_s1_s2});
     Query query_5 = makeQuery(declarations, {"s1"}, {clause_s1_0, clause_s2_0, clause_s1_s2});
     Query query_6 = makeQuery(declarations, {"s1"}, {clause_s2_5, clause_s1_s3});
-    
+
     auto qe = QueryEvaluator(testPKB);
 
     /**

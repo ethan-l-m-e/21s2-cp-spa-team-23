@@ -119,697 +119,712 @@ using namespace qp;
 //    CHECK(query.getSelectedSynonym() == "pattern");
 //}
 
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
-        QueryParser parser = QueryParser();
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+//        QueryParser parser = QueryParser();
+//
+//        std::string pql = "stmt s; \nSelect s such that Follows(s,_)";
+//        Query query = parser.getQuery(pql);
+//        SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//        std::vector<Argument> argList = suchThatClause.argList;
+//
+//        CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
+//        CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//        CHECK(argList[0].argumentValue == "s");
+//
+//        CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//        CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; \nSelect s such that Follows(s,3)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[1].argumentValue == "3");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(s1, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s1");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(3, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
+//    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[0].argumentValue == "3");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(_, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
+//    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[0].argumentValue == "_");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; \nSelect s such that Follows*(s,_)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; \nSelect s such that Follows*(s,3)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[1].argumentValue == "3");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(s1, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s1");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(3, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
+//    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[0].argumentValue == "3");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(_, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
+//    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[0].argumentValue == "_");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; \nSelect s such that Parent(s,_)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; \nSelect s such that Parent(s,3)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[1].argumentValue == "3");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(s1, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s1");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(3, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT);
+//    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[0].argumentValue == "3");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(_, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT);
+//    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[0].argumentValue == "_");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; \nSelect s such that Parent*(s,_)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; \nSelect s such that Parent*(s,3)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[1].argumentValue == "3");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(s1, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s1");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(3, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
+//    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[0].argumentValue == "3");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(_, s2)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
+//    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[0].argumentValue == "_");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "s2");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; \nSelect v such that Uses(\"x\", _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_P);
+//    CHECK(argList[0].argumentType == ArgumentType::IDENT);
+//    CHECK(argList[0].argumentValue == "x");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - PRINT, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; print pn; \nSelect v such that Uses(pn, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "pn");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - IF, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; \nSelect v such that Uses(ifs, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "ifs");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - WHILE, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; while w; \nSelect v such that Uses(w, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "w");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - CALL, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; call c; stmt s; print pn; if ifs; while w; \nSelect v such that Uses(c, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "c");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, v)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "v");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, IDENT") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, \"x\")";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::USES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::IDENT);
+//    CHECK(argList[1].argumentValue == "x");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; \nSelect v such that Modifies(\"x\", _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_P);
+//    CHECK(argList[0].argumentType == ArgumentType::IDENT);
+//    CHECK(argList[0].argumentValue == "x");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - READ, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; read r; \nSelect v such that Modifies(r, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "r");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - IF, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; \nSelect v such that Modifies(ifs, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "ifs");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - WHILE, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; print pn; procedure p, q; if ifs; while w; \nSelect v such that Modifies(w, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "w");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - CALL, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; call c; stmt s; print pn; if ifs; while w; \nSelect v such that Modifies(c, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "c");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM, SYNONYM") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, v)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "v");
+//}
+//
+//TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM, IDENT") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, \"x\")";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::IDENT);
+//    CHECK(argList[1].argumentValue == "x");
+//}
+//
+//TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (\"x\", _)";
+//    Query query = parser.getQuery(pql);
+//    PatternClause patternClause = query.getPatternClauses()[0];
+//    std::vector<Argument> argList = patternClause.argList;
+//
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::IDENT);
+//    CHECK(argList[1].argumentValue == "x");
+//
+//    CHECK(argList[2].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[2].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (_, _)";
+//    Query query = parser.getQuery(pql);
+//    PatternClause patternClause = query.getPatternClauses()[0];
+//    std::vector<Argument> argList = patternClause.argList;
+//
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[1].argumentValue == "_");
+//
+//    CHECK(argList[2].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[2].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _)";
+//    Query query = parser.getQuery(pql);
+//    PatternClause patternClause = query.getPatternClauses()[0];
+//    std::vector<Argument> argList = patternClause.argList;
+//
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "v");
+//
+//    CHECK(argList[2].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(argList[2].argumentValue == "_");
+//}
+//
+//TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, IDENT") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, \"x\")";
+//    Query query = parser.getQuery(pql);
+//    PatternClause patternClause = query.getPatternClauses()[0];
+//    std::vector<Argument> argList = patternClause.argList;
+//
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "v");
+//
+//    CHECK(argList[2].argumentType == ArgumentType::IDENT);
+//    CHECK(argList[2].argumentValue == "x");
+//}
+//
+//TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTIAL WILDCARD") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _\"x\"_)";
+//    Query query = parser.getQuery(pql);
+//    PatternClause patternClause = query.getPatternClauses()[0];
+//    std::vector<Argument> argList = patternClause.argList;
+//
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "a");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[1].argumentValue == "v");
+//
+//    CHECK(argList[2].argumentType == ArgumentType::PARTIAL_UNDERSCORE);
+//    CHECK(argList[2].argumentValue == "_\"x\"_");
+//}
+//
+//TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
+//    QueryParser parser = QueryParser();
+//
+//    std::string pql = "stmt s; assign a; \nSelect s such that Parent*(s,3) pattern a (_, _)";
+//    Query query = parser.getQuery(pql);
+//    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+//    std::vector<Argument> argList = suchThatClause.argList;
+//
+//    PatternClause patternClause = query.getPatternClauses()[0];
+//    std::vector<Argument> patternArgList = patternClause.argList;
+//
+//    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
+//    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(argList[0].argumentValue == "s");
+//
+//    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
+//    CHECK(argList[1].argumentValue == "3");
+//
+//    CHECK(patternArgList[0].argumentType == ArgumentType::SYNONYM);
+//    CHECK(patternArgList[0].argumentValue == "a");
+//
+//    CHECK(patternArgList[1].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(patternArgList[1].argumentValue == "_");
+//
+//    CHECK(patternArgList[2].argumentType == ArgumentType::UNDERSCORE);
+//    CHECK(patternArgList[2].argumentValue == "_");
+//}
 
-        std::string pql = "stmt s; \nSelect s such that Follows(s,_)";
-        Query query = parser.getQuery(pql);
-        SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-        std::vector<Argument> argList = suchThatClause.argList;
 
-        CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
-        CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-        CHECK(argList[0].argumentValue == "s");
-
-        CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-        CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+TEST_CASE ("PARSER - WITH CHECK") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "stmt s; \nSelect s such that Follows(s,3)";
+    std::string pql = "stmt s; assign a; procedure p, q; \nSelect s with p.procName = q.procName and p.procName = \"Third\" with s.stmt#=10";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[1].argumentValue == "3");
 }
 
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+TEST_CASE ("PARSER - WITH CHECK 2") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(s1, s2)";
+    std::string pql = "assign a; variable v; Select a such that Modifies(s, v) pattern a(v, \"a\")";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s1");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(3, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
-    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[0].argumentValue == "3");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(_, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
-    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[0].argumentValue == "_");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s; \nSelect s such that Follows*(s,_)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s; \nSelect s such that Follows*(s,3)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[1].argumentValue == "3");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(s1, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s1");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(3, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
-    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[0].argumentValue == "3");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(_, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
-    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[0].argumentValue == "_");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s; \nSelect s such that Parent(s,_)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s; \nSelect s such that Parent(s,3)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[1].argumentValue == "3");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(s1, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s1");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(3, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT);
-    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[0].argumentValue == "3");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(_, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT);
-    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[0].argumentValue == "_");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s; \nSelect s such that Parent*(s,_)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s; \nSelect s such that Parent*(s,3)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[1].argumentValue == "3");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(s1, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s1");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(3, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
-    CHECK(argList[0].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[0].argumentValue == "3");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(_, s2)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
-    CHECK(argList[0].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[0].argumentValue == "_");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "s2");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; \nSelect v such that Uses(\"x\", _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_P);
-    CHECK(argList[0].argumentType == ArgumentType::IDENT);
-    CHECK(argList[0].argumentValue == "x");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - PRINT, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; print pn; \nSelect v such that Uses(pn, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "pn");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - IF, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; \nSelect v such that Uses(ifs, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "ifs");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - WHILE, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; while w; \nSelect v such that Uses(w, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "w");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - CALL, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; call c; stmt s; print pn; if ifs; while w; \nSelect v such that Uses(c, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "c");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, v)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "v");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, IDENT") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, \"x\")";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::USES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::IDENT);
-    CHECK(argList[1].argumentValue == "x");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; \nSelect v such that Modifies(\"x\", _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_P);
-    CHECK(argList[0].argumentType == ArgumentType::IDENT);
-    CHECK(argList[0].argumentValue == "x");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - READ, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; read r; \nSelect v such that Modifies(r, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "r");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - IF, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; \nSelect v such that Modifies(ifs, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "ifs");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - WHILE, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; while w; \nSelect v such that Modifies(w, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "w");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - CALL, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; call c; stmt s; print pn; if ifs; while w; \nSelect v such that Modifies(c, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "c");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM, SYNONYM") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, v)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "v");
-}
-
-TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM, IDENT") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, \"x\")";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::IDENT);
-    CHECK(argList[1].argumentValue == "x");
-}
-
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (\"x\", _)";
-    Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
-    std::vector<Argument> argList = patternClause.argList;
-
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::IDENT);
-    CHECK(argList[1].argumentValue == "x");
-
-    CHECK(argList[2].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[2].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (_, _)";
-    Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
-    std::vector<Argument> argList = patternClause.argList;
-
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[1].argumentValue == "_");
-
-    CHECK(argList[2].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[2].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _)";
-    Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
-    std::vector<Argument> argList = patternClause.argList;
-
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "v");
-
-    CHECK(argList[2].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(argList[2].argumentValue == "_");
-}
-
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, IDENT") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, \"x\")";
-    Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
-    std::vector<Argument> argList = patternClause.argList;
-
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "v");
-
-    CHECK(argList[2].argumentType == ArgumentType::IDENT);
-    CHECK(argList[2].argumentValue == "x");
-}
-
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTIAL WILDCARD") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _\"x\"_)";
-    Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
-    std::vector<Argument> argList = patternClause.argList;
-
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "a");
-
-    CHECK(argList[1].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[1].argumentValue == "v");
-
-    CHECK(argList[2].argumentType == ArgumentType::PARTIAL_UNDERSCORE);
-    CHECK(argList[2].argumentValue == "_\"x\"_");
-}
-
-TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
-    QueryParser parser = QueryParser();
-
-    std::string pql = "stmt s; assign a; \nSelect s such that Parent*(s,3) pattern a (_, _)";
-    Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
-    std::vector<Argument> argList = suchThatClause.argList;
-
-    PatternClause patternClause = query.getPatternClauses()[0];
-    std::vector<Argument> patternArgList = patternClause.argList;
-
-    CHECK(suchThatClause.relRef == RelRef::PARENT_T);
-    CHECK(argList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(argList[0].argumentValue == "s");
-
-    CHECK(argList[1].argumentType == ArgumentType::STMT_NO);
-    CHECK(argList[1].argumentValue == "3");
-
-    CHECK(patternArgList[0].argumentType == ArgumentType::SYNONYM);
-    CHECK(patternArgList[0].argumentValue == "a");
-
-    CHECK(patternArgList[1].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(patternArgList[1].argumentValue == "_");
-
-    CHECK(patternArgList[2].argumentType == ArgumentType::UNDERSCORE);
-    CHECK(patternArgList[2].argumentValue == "_");
 }
 
 
