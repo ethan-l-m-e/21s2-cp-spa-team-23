@@ -88,24 +88,6 @@ void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> pare
 
 //set all variables used by the node in the pkb
 vector<string>  RelationshipExtractor::extractUses (Node * node) {
-    /*
-    vector<string> varList = node->getListOfVarUsed();
-    if (!varList.empty()) {
-
-        std::unordered_set<string> set;
-        for (string &i: varList) {
-            set.insert(i);
-        }
-
-        PKB::getInstance()->setUses(node->getStmtNumber(),set);
-    }
-
-    if(node->hasStmtLst()) {
-        for (int i = 0; i < (node->getStmtLst().size()); i++) {
-            extractUses(node->getStmtLst().at(i));
-        }
-    }
-     */
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode*> v = value -> getProcLst();
         for(ProcedureNode* p: v)
@@ -119,6 +101,7 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
             e = extractUses(s);
             allUsedVariables.insert(allUsedVariables.end(), e.begin(), e.end());
         }
+        PKB::getInstance()->setUsesP(value->getProcName(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<WhileNode*>(node)) {
         //gather variables from cond_expr and stmtLst
@@ -130,7 +113,7 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
             vector<VarName> usedVariables = extractUses(stmt);
             allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
         }
-        PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+        PKB::getInstance()->setUsesS(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
         vector<VarName> condVariables = value->getCondExpr()->getAllVariables();
@@ -147,20 +130,20 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
             allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
         }
 
-        PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+        PKB::getInstance()->setUsesS(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
         return allUsedVariables;
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
-        PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+        PKB::getInstance()->setUsesS(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if(auto value = dynamic_cast<PrintNode*>(node)) {
         vector<VarName> variables = value->getListOfVarUsed();
-        PKB::getInstance()->setUses(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+        PKB::getInstance()->setUsesS(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if (auto value = dynamic_cast<CallNode*>(node)) {
         Node* procedureCalled = value->getProcedure();
         vector<VarName> variables = extractUses(procedureCalled);
-        PKB::getInstance()->setUses(value->getStmtNumber(),
+        PKB::getInstance()->setUsesS(value->getStmtNumber(),
                                         unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else {
@@ -178,20 +161,6 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
 
 //set all variables modified by the node in the pkb
 vector<string> RelationshipExtractor::extractModifies (Node * node) {
-    /*
-    vector<string> varList = node->getListOfVarModified();
-    if (!varList.empty()) {
-        std::unordered_set<string> set;
-        for (string &i: varList) {
-            set.insert(i);
-        }
-        PKB::getInstance()->setModifies(node->getStmtNumber(),set);
-    }
-    if(node->hasStmtLst()) {
-        for (int i = 0; i < (node->getStmtLst().size()); i++) {
-            extractModifies(node->getStmtLst().at(i));
-        }
-    }*/
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode*> v = value -> getProcLst();
         for(ProcedureNode* p: v)
@@ -205,6 +174,7 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
             e = extractModifies(s);
             allModifiedVariables.insert(allModifiedVariables.end(), e.begin(), e.end());
         }
+        PKB::getInstance()->setModifiesP(value->getProcName(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
         return allModifiedVariables;
     } else if(auto value = dynamic_cast<WhileNode*>(node)) {
         vector<Node*> stmtLst = value->getStmtLst();
@@ -213,7 +183,7 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
             vector<VarName> modifiedVariables = extractModifies(stmt);
             allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
         }
-        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+        PKB::getInstance()->setModifiesS(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
         return allModifiedVariables;
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
         vector<Node*> elseVector = value->getElseStmtLst();
@@ -227,21 +197,21 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
             vector<VarName> modifiedVariables = extractModifies(stmt);
             allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
         }
-        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+        PKB::getInstance()->setModifiesS(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
         return allModifiedVariables;
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getListOfVarModified();
-        PKB::getInstance()->setModifies(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+        PKB::getInstance()->setModifiesS(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if(auto value = dynamic_cast<ReadNode*>(node)) {
         vector<VarName> variables = value->getListOfVarModified();
-        PKB::getInstance()->setModifies(value->getStmtNumber(),
+        PKB::getInstance()->setModifiesS(value->getStmtNumber(),
                                         unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else if (auto value = dynamic_cast<CallNode*>(node)) {
         Node* procedureCalled = value->getProcedure();
         vector<VarName> variables = extractModifies(procedureCalled);
-        PKB::getInstance()->setModifies(value->getStmtNumber(),
+        PKB::getInstance()->setModifiesS(value->getStmtNumber(),
                                         unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else {
@@ -255,14 +225,12 @@ void extractAllEntities(Node *node) {
         vector<ProcedureNode*> v = value -> getProcLst();
         for(ProcedureNode* p: v)
             extractAllEntities(p);
-
     } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
         vector<Node*> v = value->getStmtLst();
         for(Node* s: v) {
             extractAllEntities(s);
         }
         PKB::getInstance()->addProcedure(value->getProcName());
-
     } else if(auto value = dynamic_cast<WhileNode*>(node)) {
         Node* condExprNode = value->getCondExpr();
         vector<VarName> variables = condExprNode->getAllVariables();
@@ -274,8 +242,7 @@ void extractAllEntities(Node *node) {
             PKB::getInstance()->addConstant(c);
         for(Node* s: stmtLst)
             extractAllEntities(s);
-        PKB::getInstance()->addWhileStatement(value->getStmtNumber());
-
+        PKB::getInstance()->addWhileStatement(value);
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
         Node* condExprNode = value->getCondExpr();
         vector<VarName> variables = condExprNode->getAllVariables();
@@ -290,7 +257,7 @@ void extractAllEntities(Node *node) {
             extractAllEntities(s);
         for(Node* s: thenVector)
             extractAllEntities(s);
-        PKB::getInstance()->addIfStatement(value->getStmtNumber());
+        PKB::getInstance()->addIfStatement(value);
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getAllVariables();
         vector<Constant> constants = value->getAllConstants();
@@ -301,7 +268,7 @@ void extractAllEntities(Node *node) {
             PKB::getInstance() ->addConstant(constant);
         }
         PKB::getInstance()->addAssignNode(value);
-        PKB::getInstance()->addAssignStatement(value->getStmtNumber());
+        PKB::getInstance()->addAssignStatement(value);
     } else if(auto value = dynamic_cast<CondExprNode*>(node)) {
         vector<VarName> variables = value->getAllVariables();
         vector<Constant> constants = value->getAllConstants();
@@ -312,11 +279,14 @@ void extractAllEntities(Node *node) {
             PKB::getInstance() ->addConstant(constant);
         }
     } else if(auto value = dynamic_cast<ReadNode*>(node)) {
-        PKB::getInstance()->addReadStatement(value->getStmtNumber());
+        PKB::getInstance()->addReadStatement(value);
         PKB::getInstance()->addVariable(value->getVarName());
     } else if(auto value = dynamic_cast<PrintNode*>(node)) {
-        PKB::getInstance()->addPrintStatement(value->getStmtNumber());
+        PKB::getInstance()->addPrintStatement(value);
         PKB::getInstance()->addVariable(value->getVarName());
+    } else if(auto value = dynamic_cast<CallNode*>(node)) {
+        PKB::getInstance()->addCallStatement(value);
+        PKB::getInstance()->addProcedure(value->getProcName());//Not sure if needed
     }
 }
 

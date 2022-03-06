@@ -164,7 +164,8 @@ void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
     std::vector<PatternClause> patternClauses = std::vector<PatternClause>();
 
     for (PatternToken patternToken : patternTokens) {
-        std::pair<std::string, std::string> argumentTokens = *(patternToken.arguments);
+        std::vector<std::string> arguments = *(patternToken.arguments);
+        std::pair<std::string, std::string> argumentTokens = std::make_pair(arguments[0], arguments[1]);
         std::vector<Argument> argList = getArgumentList(argumentTokens, *(queryToken.declarationTokens));
         Argument synAssign = getArgument(patternToken.synonym, *(queryToken.declarationTokens));
         argList.insert(argList.begin(), synAssign);

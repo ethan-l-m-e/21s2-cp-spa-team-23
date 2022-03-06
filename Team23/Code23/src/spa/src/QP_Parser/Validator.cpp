@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Tokenizer.h"
 #include "Exception.h"
+#include "StringFormatter.h"
 
 #include <string>
 #include <regex>
@@ -37,6 +38,18 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
 }
 
 void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet, std::vector<std::string> selectClauseTokens) {
+    if (selectClauseTokens[0] == "BOOLEAN") {
+        return;
+    }
+
+    if (std::regex_match(selectClauseTokens[0], std::regex(ATTR_REF))) {
+        std::string synonym = StringFormatter::tokenizeByRegex(selectClauseTokens[0], ".")[0];
+        if (declarationSet.find(synonym) == declarationSet.end()) {
+            throw QPInvalidSemanticException("Invalid Select Clause");
+        }
+        return;
+    }
+
     for (std::string selectClauseToken : selectClauseTokens) {
         if (declarationSet.find(selectClauseToken) == declarationSet.end()) {
             throw QPInvalidSemanticException("Invalid Select Clause");
@@ -155,7 +168,8 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
                                  std::vector<PatternToken> patternTokens) {
     for (PatternToken patternToken : patternTokens) {
         // Check that the pattern's syn-assign and first argument do not have the same synonym and synonym is declared
-        std::pair<std::string, std::string> arguments = std::make_pair(patternToken.synonym, patternToken.arguments->first);
+        std::vector<std::string> patternArguments = *patternToken.arguments;
+        std::pair<std::string, std::string> arguments = std::make_pair(patternToken.synonym, patternArguments[0]);
         checkArguments(arguments, declarationTokens);
 
         bool isSynonymNotAnAssignment = declarationTokens.at(patternToken.synonym) != "assign";
@@ -163,7 +177,7 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
             throw QPInvalidSemanticException("Invalid Pattern");
         }
 
-        validatePatternFirstArgument(declarationTokens, patternToken.arguments->first);
+        validatePatternFirstArgument(declarationTokens, patternArguments[0]);
     }
 }
 

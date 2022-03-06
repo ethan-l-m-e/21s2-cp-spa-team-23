@@ -98,9 +98,19 @@ call c;
 Select c such that Uses(c, _)
 16
 5000
-1.6.2 - [valid] proc uses
+1.6.1 - [valid] call uses with varname
+call c;
+Select c such that Uses(c, "Z")
+16
+5000
+1.6.3 - [valid] proc uses
 procedure p;
 Select p such that Uses(p, _)
+Uses, UsesAgain
+5000
+1.6.3 - [valid] proc uses with varname
+procedure p;
+Select p such that Uses(p, "Z")
 Uses, UsesAgain
 5000
 2.1 - [not valid] lhs not entRef or stmtRef (read) ================================================[Invalid tests start]

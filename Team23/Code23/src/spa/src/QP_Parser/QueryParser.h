@@ -31,12 +31,13 @@ namespace qp {
                                                                         {"Modifies_P", RelRef::MODIFIES_P},
                                                                 });
 
-    const std::set<std::string> argumentTypeRegex({INTEGER, "\"" + IDENT + "\"", "_", "_(.)*_"});
+    const std::set<std::string> argumentTypeRegex({INTEGER, "\"" + IDENT + "\"", "_", "_(.)*_", "\"(.*)\""});
     const std::map<std::string, ArgumentType> stringToArgumentType({
                                                                            {INTEGER, ArgumentType::STMT_NO},
                                                                            {("\"" + IDENT + "\""), ArgumentType::IDENT},
                                                                            {"_", ArgumentType::UNDERSCORE},
                                                                            {"_(.)*_", ArgumentType::PARTIAL_UNDERSCORE},
+                                                                           {"\"(.*)\"", ArgumentType::IDENT},
     });
 
     class QueryParser {

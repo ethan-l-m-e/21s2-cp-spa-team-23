@@ -1,12 +1,12 @@
-1 - (1 synonym)
+../../../../Tests23/nested_source.txt ../../../../Tests23/nested_queries.txt ../../../tests/out.xml
 stmt s; assign a;
 Select s such that Uses(s, _) pattern a(_, _)
-10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9
+10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9, 20
 5000
 2 - (1 synonym)
 stmt s; assign a;
 Select s pattern a(_, _) such that Uses(s, _)
-10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9,
+10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9, 20
 5000
 3 - (1 synonym)
 print p; assign a;
@@ -19,797 +19,847 @@ Select p pattern a(_, _) such that Uses(p, _)
 18
 5000
 5 - (1 synonym)
+call c; assign a;
+Select c such that Uses(c, _) pattern a(_, _)
+17
+5000
+6 - (1 synonym)
+call c; assign a;
+Select c pattern a(_, _) such that Uses(c, _)
+17
+5000
+7 - (1 synonym) *Cannot have wildcard for uses lhs
 variable v; assign a;
 Select v such that Uses(_, v) pattern a(_, _)
 none
 5000
-6 - (1 synonym)
+8 - (1 synonym) *Cannot have wildcard for uses lhs
 variable v; assign a;
 Select v such that Uses(_, v) pattern a(v, _)
 none
 5000
-7 - (1 synonym + varname)
+9 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Uses(s, "nestedAlternateIfAndWhile") pattern a(_, _)
 12, 13, 14, 2, 8
 5000
-8 - (1 synonym + varname)
+10 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Uses(s, "nestedAlternateIfAndWhile") pattern a("nestedAlternateIfAndWhile", _)
 12, 13, 14, 2, 8
 5000
-9 - (1 synonym + varname)
+11 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Uses(s, "nestedAlternateIfAndWhile") pattern a(_, _"1"_)
 12, 13, 14, 2, 8
 5000
-10 - (2 synonym)
+12 - (1 synonym + varname)
+call c; assign a;
+Select c such that Uses(c, "a") pattern a(_, _)
+17
+5000
+13 - (2 synonym)
 stmt s; assign a; variable v; print p;
 Select s such that Uses(s, v) pattern a(_, _)
-10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9
+10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9, 20
 5000
-11 - (2 synonym)
+14 - (2 synonym)
 stmt s; assign a; variable v; print p;
 Select s such that Uses(s, v) pattern a(v, _)
 12, 13, 14, 2, 8
 5000
-12 - (2 synonym)
+15 - (2 synonym)
 stmt s; assign a; variable v; print p;
 Select p such that Uses(p, v) pattern a(_, _)
 18
 5000
-14 - (2 synonym + varname)
+16 - (2 synonym)
+stmt s; assign a; variable v; call c;
+Select c such that Uses(c, v) pattern a(_, _)
+17
+5000
+17 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Uses(s, v) pattern a(_, _)
-10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9
+10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9, 20
 5000
-15 - (2 synonym + varname)
+18 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Uses(s, v) pattern a("X", _)
-10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9
+10, 12, 13, 14, 15, 17, 18, 2, 3, 4, 5, 6, 8, 9, 20
 5000
-16 - (2 synonym + varname)
+19 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Uses(s, v) pattern a(_, _"X"_)
 none
 5000
-17 - (2 synonym + varname)
+20 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Uses(s, "a") pattern a(_, _)
-12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8
+12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 20
 5000
-18 - (2 synonym + varname)
+21 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Uses(s, "a") pattern a(v, _)
-12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8
+12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 20
 5000
-19 - (2 synonym + varname)
+22 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Uses(s, "a") pattern a(v, _"a"_)
-12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8
+12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 20
 5000
-20 - (3 synonym)
+23 - (2 synonym + varname)
+call c; assign a; variable v;
+Select c such that Uses(c, "a") pattern a(v, _"a"_)
+17
+5000
+24 - (3 synonym)
 assign a; variable v1, v2;
 Select a such that Uses(a, v1) pattern a(v2, _)
-17, 3
+20, 3
 5000
-21 - (3 synonym + var name)
+25 - (3 synonym + var name)
 assign a; variable v1, v2;
 Select a such that Uses(a, v1) pattern a(v2, _"a"_)
-17, 3
+20, 3
 5000
-22 - (no relationship)
+26 - (no relationship)
 stmt s1, s2; assign a; variable v1, v2;
 Select s1 such that Uses(s2, v1) pattern a(v2, _"a"_)
-1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 3, 4, 5, 6, 7, 8, 9
+1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 3, 4, 5, 6, 7, 8, 9, 20
 5000
-23 - (cases where 1 clause has no result)
+27 - (cases where 1 clause has no result)
 stmt s1, s2; assign a; variable v1, v2;
 Select v2 such that Uses(s2, "x") pattern a(v2, _"a"_)
 none
 5000
-24 - (cases where 1 clause has no result)
+28 - (cases where 1 clause has no result)
 stmt s1, s2; assign a; variable v1, v2;
 Select s2 such that Uses(s2, "a") pattern a(v2, _"x"_)
 none
 5000
-25 - (1 synonym)
+29 - (1 synonym)
 stmt s; assign a;
 Select s such that Modifies(s, _) pattern a(_, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-26 - (1 synonym)
+30 - (1 synonym)
 stmt s; assign a;
 Select s pattern a(_, _) such that Modifies(s, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-27 - (1 synonym)
+31 - (1 synonym)
 read r; assign a;
 Select r such that Modifies(r, _) pattern a(_, _)
 none
 5000
-28 - (1 synonym)
+32 - (1 synonym)
 read r; assign a;
 Select r pattern a(_, _) such that Modifies(r, _)
 none
 5000
-29 - (1 synonym)
+33 - (1 synonym)
+call c; assign a;
+Select c such that Modifies(c, _) pattern a(_, _)
+17
+5000
+34 - (1 synonym)
+call c; assign a;
+Select c pattern a(_, _) such that Modifies(c, _)
+17
+5000
+35 - (1 synonym)
 variable v; assign a;
-Select v such that Uses(_, v) pattern a(_, _)
+Select v such that Modifies(_, v) pattern a(_, _)
 none
 5000
-30 - (1 synonym)
+36 - (1 synonym)
 variable v; assign a;
-Select v such that Uses(_, v) pattern a(v, _)
+Select v such that Modifies(_, v) pattern a(v, _)
 none
 5000
-31 - (1 synonym + varname)
+37 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a(_, _)
 12, 13, 14, 15, 16, 2, 8
 5000
-32 - (1 synonym + varname)
+38 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a("X", _)
 12, 13, 14, 15, 16, 2, 8
 5000
-33 - (1 synonym + varname)
+39 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a(_, _"a"_)
 12, 13, 14, 15, 16, 2, 8
 5000
-34 - (1 synonym + varname)
+40 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Modifies(s, _) pattern a(_, _)
 1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
 5000
-35 - (1 synonym + varname)
+41 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Modifies(s, _) pattern a("X", _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-36 - (1 synonym + varname)
+42 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Modifies(s, _) pattern a(_, _"a"_)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-37 - (2 synonym)
+43 - (1 synonym + varname)
+call c; assign a;
+Select c such that Modifies(c, _) pattern a(_, _"a"_)
+17
+5000
+44 - (2 synonym)
 stmt s; assign a; variable v; read r;
 Select s such that Modifies(s, v) pattern a(_, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-38 - (2 synonym)
+45 - (2 synonym)
 stmt s; assign a; variable v; read r;
 Select s such that Modifies(s, v) pattern a(v, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-39 - (2 synonym)
+46 - (2 synonym)
 stmt s; assign a; variable v; read r;
 Select r such that Modifies(r, v) pattern a(_, _)
 none
 5000
-40 - (2 synonym)
+47 - (2 synonym)
 stmt s; assign a; variable v; read r;
 Select r such that Modifies(r, v) pattern a(v, _)
 none
 5000
-41 - (2 synonym + varname)
+48 - (2 synonym)
+assign a; variable v; call c;
+Select c such that Modifies(c, v) pattern a(v, _)
+17
+5000
+49 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Modifies(s, v) pattern a(_, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-42 - (2 synonym + varname)
+50 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Modifies(s, v) pattern a("nestedAlternateIfAndWhile", _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
-43 - (2 synonym + varname)
+51 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Modifies(s, v) pattern a(_, _"nestedAlternateIfAndWhile"_)
 none
 5000
-44 - (2 synonym + varname)
+52 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a(_, _)
 12, 13, 14, 15, 16, 2, 8
 5000
-45 - (2 synonym + varname)
+53 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a(v, _)
 12, 13, 14, 15, 16, 2, 8
 5000
-46 - (2 synonym + varname)
+54 - (2 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a(v, _"a"_)
 12, 13, 14, 15, 16, 2, 8
 5000
-47 - (2 synonym + varname)
-print p; assign a; variable v;
-Select p such that Modifies(p, v) pattern a(v, "a")
-none
+55 - (2 synonym + varname)
+assign a; variable v;
+Select a such that Modifies(s, v) pattern a(v, "a")
+3
 5000
-48 - (2 synonym + varname)
-print p; assign a; variable v;
-Select p such that Modifies(p, v) pattern a(v, _"a"_)
-none
+56 - (2 synonym + varname)
+assign a; variable v;
+Select a such that Modifies(s, v) pattern a(v, _"a"_)
+3, 20
 5000
-50 - (1 synonym)
+57 - (2 synonym + varname)
+assign a; variable v; call c;
+Select c such that Modifies(c, v) pattern a(v, _"a"_)
+17
+5000
+58 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select s such that Parent(s, _) pattern a(_, _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-51 - (1 synonym)
+59 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select s such that Parent(_, s) pattern a(_, _)
 10, 12, 13, 14, 15, 17, 18, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
 5000
-52 - (1 synonym)
+60 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select w such that Parent(w, _) pattern a(_, _)
 10, 12, 14, 2, 4, 5, 6, 9
 5000
-53 - (1 synonym)
+61 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select w such that Parent(_, w) pattern a(_, _)
 10, 12, 14, 4, 5, 6, 9
 5000
-54 - (1 synonym)
+62 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select ifs such that Parent(ifs, _) pattern a(_, _)
 13, 15, 8
 5000
-55 - (1 synonym)
+63 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select ifs such that Parent(_, ifs) pattern a(_, _)
 13, 15, 8
 5000
-56 - (1 synonym + varname)
+64 - (1 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Parent(s, _) pattern a("nestedWhileInWhileInIf", _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-57 - (1 synonym + varname)
+65 - (1 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Parent(s, _) pattern a(_, _"a"_)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-58 - (1 synonym + varname)
+66 - (1 synonym + varname)
 stmt s; assign a; variable v;
 Select v such that Parent(_, _) pattern a(v, _"a"_)
 X, mainWhileLoop
 5000
-59 - (2 synonym)
+67 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent(s1, s2) pattern a(_, _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-60 - (2 synonym)
+68 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent(s1, _) pattern a(v, _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-61 - (2 synonym)
+69 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent(w1, w2) pattern a(_, _)
 2, 4, 5, 9
 5000
-62 - (2 synonym)
+70 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent(w1, _) pattern a(v, _)
 10, 12, 14, 2, 4, 5, 6, 9
 5000
-63 - (2 synonym)
+71 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent(ifs1, ifs2) pattern a(_, _)
 none
 5000
-64 - (2 synonym)
+72 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent(ifs1, _) pattern a(v, _)
 13, 15, 8
 5000
-65 - (2 synonym + varname)
+73 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent(s1, s2) pattern a("nestedWhileInWhileInIf", _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-66 - (2 synonym + varname)
+74 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent(s1, s2) pattern a(_, _"a"_)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-67 - (2 synonym + varname)
+75 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent(s1, _) pattern a(v, _"a"_)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-68 - (2 synonym + varname)
+76 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent(w1, w2) pattern a("nestedWhileInWhileInIf", _)
 2, 4, 5, 9
 5000
-69 - (2 synonym + varname)
+77 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent(w1, w2) pattern a(_, _"a"_)
 2, 4, 5, 9
 5000
-70 - (2 synonym + varname)
+78 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent(w1, _) pattern a(v, _"a"_)
 10, 12, 14, 2, 4, 5, 6, 9
 5000
-71 - (2 synonym + varname)
+79 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent(ifs1, ifs2) pattern a("nestedWhileInWhileInIf", _)
 none
 5000
-72 - (2 synonym + varname)
+80 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent(ifs1, ifs2) pattern a(_, _"a"_)
 none
 5000
-73 - (2 synonym + varname)
+81 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent(ifs1, _) pattern a(v, _"a"_)
 13, 15, 8
 5000
-74 - (3 synonym + var name)
+82 - (3 synonym + var name)
 stmt s; assign a; variable v;
 Select s such that Parent(s, a) pattern a(v, _"a"_)
-15, 2
+2
 5000
-75 - (no relation queries)
+83 - (no relation queries)
 stmt s, s1, s2; assign a; variable v;
 Select s such that Parent(s1, s2) pattern a(v, _"a"_)
-1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 3, 4, 5, 6, 7, 8, 9
+1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 3, 4, 5, 6, 7, 8, 9, 20
 5000
-76 - (1 synonym)
+84 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows(s, _) pattern a(_, _)
 1, 3, 4, 8
 5000
-77 - (1 synonym)
+85 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows(_, s) pattern a(_, _)
 19, 2, 4, 8
 5000
-78 - (1 synonym)
+86 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows(w, _) pattern a(_, _)
 4
 5000
-79 - (1 synonym)
+87 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows(_, w) pattern a(_, _)
 2, 4
 5000
-80 - (1 synonym)
+88 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select ifs such that Follows(ifs, _) pattern a(_, _)
 8
 5000
-81 - (1 synonym)
+89 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select ifs such that Follows(_, ifs) pattern a(_, _)
 8
 5000
-82 - (1 synonym)
+90 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select r such that Follows(r, _) pattern a(_, _)
 none
 5000
-83 - (1 synonym)
+91 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select r such that Follows(_, r) pattern a(_, _)
 none
 5000
-84 - (1 synonym)
+92 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select p such that Follows(p, _) pattern a(_, _)
 none
 5000
-85 - (1 synonym)
+93 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select p such that Follows(_, p) pattern a(_, _)
 none
 5000
-86 - (1 synonym + varname)
+94 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows(s, _) pattern a("nestedWhileInWhileInIf", _)
 1, 3, 4, 8
 5000
-87 - (1 synonym + varname)
+95 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows(s, _) pattern a(_, _"a"_)
 1, 3, 4, 8
 5000
-88 - (1 synonym + varname)
+96 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows(_, s) pattern a("nestedWhileInWhileInIf", _)
 19, 2, 4, 8
 5000
-89 - (1 synonym + varname)
+97 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows(_, s) pattern a(_, _"a"_)
 19, 2, 4, 8
 5000
-90 - (1 synonym + varname)
+98 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows(w, _) pattern a("nestedWhileInWhileInIf", _)
 4
 5000
-91 - (1 synonym + varname)
+99 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows(w, _) pattern a(_, _"a"_)
 4
 5000
-92 - (2 synonym)
+100 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows(s1, s2) pattern a(_, _)
 1, 3, 4, 8
 5000
-93 - (2 synonym)
+101 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows(s1, _) pattern a(v, _)
 1, 3, 4, 8
 5000
-94 - (2 synonym)
+102 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows(w1, w2) pattern a(_, _)
 none
 5000
-95 - (2 synonym)
+103 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows(w1, _) pattern a(v, _)
 4
 5000
-96 - (2 synonym)
+104 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows(ifs1, ifs2) pattern a(_, _)
 none
 5000
-97 - (2 synonym)
+105 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows(ifs1, _) pattern a(v, _)
 8
 5000
-98 - (2 synonym + varname)
+106 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows(s1, s2) pattern a("nestedWhileInWhileInIf", _)
 1, 3, 4, 8
 5000
-99 - (2 synonym + varname)
+107 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows(s1, s2) pattern a(_, _"a"_)
 1, 3, 4, 8
 5000
-100 - (2 synonym + varname)
+108 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows(s1, _) pattern a(v, _"a"_)
 1, 3, 4, 8
 5000
-101 - (2 synonym + varname)
+109 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows(w1, w2) pattern a("nestedWhileInWhileInIf", _)
 none
 5000
-102 - (2 synonym + varname)
+110 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows(w1, w2) pattern a(_, _"a"_)
 none
 5000
-103 - (2 synonym + varname)
+111 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows(w1, _) pattern a(v, _"a"_)
 4
 5000
-104 - (2 synonym + varname)
+112 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows(ifs1, ifs2) pattern a("nestedWhileInWhileInIf", _)
 none
 5000
-105 - (2 synonym + varname)
+113 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows(ifs1, ifs2) pattern a(_, _"a"_)
 none
 5000
-106 - (2 synonym + varname)
+114 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows(ifs1, _) pattern a(v, _"a"_)
 8
 5000
-108 - (no relation queries)
+115 - (no relation queries)
 stmt s, s1, s2; assign a; variable v;
 Select s such that Follows(s1, s2) pattern a(v, _"a"_)
-1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 3, 4, 5, 6, 7, 8, 9
+1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 3, 4, 5, 6, 7, 8, 9, 20
 5000
-109 - (1 synonym)
+116 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select s such that Parent*(s, _) pattern a(_, _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-110 - (1 synonym)
+117 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select s such that Parent*(_, s) pattern a(_, _)
 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 3, 4, 5, 6, 7, 8, 9
 5000
-111 - (1 synonym)
+118 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select w such that Parent*(w, _) pattern a(_, _)
 10, 12, 14, 2, 4, 5, 6, 9
 5000
-112 - (1 synonym)
+119 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select w such that Parent*(_, w) pattern a(_, _)
 10, 12, 14, 4, 5, 6, 9
 5000
-113 - (1 synonym)
+120 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select ifs such that Parent*(ifs, _) pattern a(_, _)
 13, 15, 8
 5000
-114 - (1 synonym)
+121 - (1 synonym)
 stmt s; assign a; while w; if ifs;
 Select ifs such that Parent*(_, ifs) pattern a(_, _)
 13, 15, 8
 5000
-115 - (1 synonym + varname)
+122 - (1 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Parent*(s, _) pattern a("nestedWhileInWhileInIf", _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-116 - (1 synonym + varname)
+123 - (1 synonym + varname)
 stmt s; assign a; variable v;
 Select s such that Parent*(s, _) pattern a(_, _"a"_)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-117 - (1 synonym + varname)
+124 - (1 synonym + varname)
 stmt s; assign a; variable v;
 Select v such that Parent*(_, _) pattern a(v, _"a"_)
 X, mainWhileLoop
 5000
-118 - (2 synonym)
+125 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent*(s1, s2) pattern a(_, _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-119 - (2 synonym)
+126 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent*(s1, _) pattern a(v, _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-120 - (2 synonym)
+127 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent*(w1, w2) pattern a(_, _)
 12, 2, 4, 5, 9
 5000
-121 - (2 synonym)
+128 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent*(w1, _) pattern a(v, _)
 10, 12, 14, 2, 4, 5, 6, 9
 5000
-122 - (2 synonym)
+129 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent*(ifs1, ifs2) pattern a(_, _)
 13, 8
 5000
-123 - (2 synonym)
+130 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent*(ifs1, _) pattern a(v, _)
 13, 15, 8
 5000
-124 - (2 synonym + varname)
+131 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent*(s1, s2) pattern a("nestedWhileInWhileInIf", _)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-125 - (2 synonym + varname)
+132 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent*(s1, s2) pattern a(_, _"a"_)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-126 - (2 synonym + varname)
+133 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Parent*(s1, _) pattern a(v, _"a"_)
 10, 12, 13, 14, 15, 2, 4, 5, 6, 8, 9
 5000
-127 - (2 synonym + varname)
+134 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent*(w1, w2) pattern a("nestedWhileInWhileInIf", _)
 12, 2, 4, 5, 9
 5000
-128 - (2 synonym + varname)
+135 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent*(w1, w2) pattern a(_, _"a"_)
 12, 2, 4, 5, 9
 5000
-129 - (2 synonym + varname)
+136 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Parent*(w1, _) pattern a(v, _"a"_)
 10, 12, 14, 2, 4, 5, 6, 9
 5000
-130 - (2 synonym + varname)
+137 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent*(ifs1, ifs2) pattern a("nestedWhileInWhileInIf", _)
 13, 8
 5000
-131 - (2 synonym + varname)
+138 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent*(ifs1, ifs2) pattern a(_, _"a"_)
 13, 8
 5000
-132 - (2 synonym + varname)
+139 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Parent*(ifs1, _) pattern a(v, _"a"_)
 13, 15, 8
 5000
-133 - (3 synonym + var name)
+140 - (3 synonym + const)
 stmt s; assign a; variable v;
-Select s such that Parent*(s, a) pattern a(v, _"a"_)
-12, 13, 14, 15, 2, 8
+Select s such that Parent*(s, a) pattern a(v, _"1"_)
+2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 15
 5000
-134 - (no relation queries)
+141 - (no relation queries)
 stmt s, s1, s2; assign a; variable v;
 Select s such that Parent*(s1, s2) pattern a(v, _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
 5000
-135 - (1 synonym)
+142 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows*(s, _) pattern a(_, _)
 1, 3, 4, 8
 5000
-136 - (1 synonym)
+143 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows*(_, s) pattern a(_, _)
 19, 2, 4, 8
 5000
-137 - (1 synonym)
+144 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows*(w, _) pattern a(_, _)
 4
 5000
-138 - (1 synonym)
+145 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows*(_, w) pattern a(_, _)
 2, 4
 5000
-139 - (1 synonym)
+146 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select ifs such that Follows*(ifs, _) pattern a(_, _)
 8
 5000
-140 - (1 synonym)
+147 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select ifs such that Follows*(_, ifs) pattern a(_, _)
 8
 5000
-141 - (1 synonym)
+148 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select r such that Follows*(r, _) pattern a(_, _)
 none
 5000
-142 - (1 synonym)
+149 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select r such that Follows*(_, r) pattern a(_, _)
 none
 5000
-143 - (1 synonym)
+150 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select p such that Follows*(p, _) pattern a(_, _)
 none
 5000
-144 - (1 synonym)
+151 - (1 synonym)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select p such that Follows*(_, p) pattern a(_, _)
 none
 5000
-145 - (1 synonym + varname)
+152 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows*(s, _) pattern a("nestedWhileInWhileInIf", _)
 1, 3, 4, 8
 5000
-146 - (1 synonym + varname)
+153 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows*(s, _) pattern a(_, _"a"_)
 1, 3, 4, 8
 5000
-147 - (1 synonym + varname)
+154 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows*(_, s) pattern a("nestedWhileInWhileInIf", _)
 19, 2, 4, 8
 5000
-148 - (1 synonym + varname)
+155 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select s such that Follows*(_, s) pattern a(_, _"a"_)
 19, 2, 4, 8
 5000
-149 - (1 synonym + varname)
+156 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows*(w, _) pattern a("nestedWhileInWhileInIf", _)
 4
 5000
-150 - (1 synonym + varname)
+157 - (1 synonym + varname)
 stmt s; assign a; while w; if ifs; read r; print p;
 Select w such that Follows*(w, _) pattern a(_, _"a"_)
 4
 5000
-151 - (2 synonym)
+158 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows*(s1, s2) pattern a(_, _)
 1, 3, 4, 8
 5000
-152 - (2 synonym)
+159 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows*(s1, _) pattern a(v, _)
 1, 3, 4, 8
 5000
-153 - (2 synonym)
+160 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows*(w1, w2) pattern a(_, _)
 none
 5000
-154 - (2 synonym)
+161 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows*(w1, _) pattern a(v, _)
 4
 5000
-155 - (2 synonym)
+162 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows*(ifs1, ifs2) pattern a(_, _)
 none
 5000
-156 - (2 synonym)
+163 - (2 synonym)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows*(ifs1, _) pattern a(v, _)
 8
 5000
-157 - (2 synonym + varname)
+164 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows*(s1, s2) pattern a("nestedWhileInWhileInIf", _)
 1, 3, 4, 8
 5000
-158 - (2 synonym + varname)
+165 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows*(s1, s2) pattern a(_, _"a"_)
 1, 3, 4, 8
 5000
-159 - (2 synonym + varname)
+166 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select s1 such that Follows*(s1, _) pattern a(v, _"a"_)
 1, 3, 4, 8
 5000
-160 - (2 synonym + varname)
+167 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows*(w1, w2) pattern a("nestedWhileInWhileInIf", _)
 none
 5000
-161 - (2 synonym + varname)
+168 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows*(w1, w2) pattern a(_, _"a"_)
 none
 5000
-162 - (2 synonym + varname)
+169 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select w1 such that Follows*(w1, _) pattern a(v, _"a"_)
 4
 5000
-163 - (2 synonym + varname)
+170 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows*(ifs1, ifs2) pattern a("nestedWhileInWhileInIf", _)
 none
 5000
-164 - (2 synonym + varname)
+171 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows*(ifs1, ifs2) pattern a(_, _"a"_)
 none
 5000
-165 - (2 synonym + varname)
+172 - (2 synonym + varname)
 stmt s1, s2; assign a; variable v; while w1, w2; if ifs1, ifs2;
 Select ifs1 such that Follows*(ifs1, _) pattern a(v, _"a"_)
 8
 5000
-167 - (no relation queries)
+173 - (no relation queries)
 stmt s, s1, s2; assign a; variable v;
 Select s such that Follows*(s1, s2) pattern a(v, _"a"_)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
 5000
