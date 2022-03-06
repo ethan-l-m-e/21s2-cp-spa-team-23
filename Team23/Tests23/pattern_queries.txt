@@ -93,6 +93,66 @@ assign a; variable v;
 Select a pattern a(v, _"1"_)
 10, 11
 5000
+1.2.1 - [valid] match a + b ===========================================================[expression matching tests start]
+assign a;
+Select a pattern a(_, "a + b")
+3, 8
+5000
+1.2.1 - [valid] match a + b with wildcards
+assign a;
+Select a pattern a(_, _"a + b"_)
+3, 8, 9
+5000
+1.2.1 - [valid] match a - b
+assign a;
+Select a pattern a(_, "a - b")
+4
+5000
+1.2.1 - [valid] match a - b with wildcards
+assign a;
+Select a pattern a(_, _"a - b"_)
+4
+5000
+1.2.1 - [valid] match a * b
+assign a;
+Select a pattern a(_, "a * b")
+5
+5000
+1.2.1 - [valid] match a * b with wildcards
+assign a;
+Select a pattern a(_, _"a * b"_)
+5
+5000
+1.2.1 - [valid] match a / b
+assign a;
+Select a pattern a(_, "a / b")
+6
+5000
+1.2.1 - [valid] match a / b with wildcards
+assign a;
+Select a pattern a(_, _"a / b"_)
+6
+5000
+1.2.1 - [valid] match a % b
+assign a;
+Select a pattern a(_, "a % b")
+7
+5000
+1.2.1 - [valid] match a % b with wildcards
+assign a;
+Select a pattern a(_, _"a % b"_)
+7
+5000
+1.2.1 - [valid] match ( c - d ) % ( e * f ) with wildcards
+assign a;
+Select a pattern a(_, _"(c - d) % (e * f)"_)
+9, 11
+5000
+1.2.1 - [valid] match ( a + b ) * ( c - d ) with wildcards, no match found
+assign a;
+Select a pattern a(_, _"(a + b)*(c - d)"_)
+none
+5000
 2.1 - [not valid] synonym type not assign (stmt) ==================================================[Invalid tests start]
 stmt s;
 Select s pattern s(_, _)
