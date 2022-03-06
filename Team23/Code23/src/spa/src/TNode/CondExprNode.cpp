@@ -75,7 +75,7 @@ vector<Constant> CondExprNode::getAllConstants() {
         return vector1;
     }
     // Case: '(' cond_expr ')' '&&' '(' cond_expr ')' |'(' cond_expr ')' '||' '(' cond_expr ')'
-    vector1 = this->leftNode->getAllVariables();
+    vector1 = this->leftNode->getAllConstants();
     vector<Constant> vector2 = this->rightNode->getAllConstants();
     vector1.insert(vector1.end(), vector2.begin(), vector2.end());
     return vector1;

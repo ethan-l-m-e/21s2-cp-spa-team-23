@@ -6,7 +6,7 @@ set(srcs ${srcs}
         src/QP_Parser/TestQueryParser.cpp
         src/TestStringFormatter.cpp
         src/QP_Evaluator/TestQueryEvaluator.cpp
-        src/QP_Evaluator/TestSynonymRelations.cpp
+        src/QP_Evaluator/TestResultTable.cpp
         src/QP_Evaluator/TestPatternClauseEvaluator.cpp
         src/TestCFG.cpp)
 

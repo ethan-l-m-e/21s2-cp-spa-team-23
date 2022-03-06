@@ -1,0 +1,16 @@
+procedure test
+
+
+
+
+{
+    while ( !    ( variable1 * ( 1 + 2 ) != variable2 * 3 / variable2 / 4 ) ) {
+        call test2              ;
+    }
+}procedure test2{               call test3;                      }
+
+
+
+procedure test3             {
+    variable3 = 5+ ( variable2 / 6 % variable1 ) - 7 * variable3    ;
+}

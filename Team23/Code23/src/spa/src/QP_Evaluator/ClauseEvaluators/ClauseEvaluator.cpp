@@ -32,14 +32,13 @@ unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity
         case DesignEntity::PROCEDURE:
             return pkb->getAllProcedures();
         case DesignEntity::CALL:
-            //TODO: To be updated in future iterations
-            //return pkb->getAllCalls();
+            return pkb->getAllCallStatements();
         default:
             throw qp::QPEvaluatorException("Invalid design entity found.");
     }
 }
 
 void ClauseEvaluator::mergeResult(ResultTable* resultTable) {
-    resultTable->mergeResultToSynonymsRelations(result);
+    resultTable->mergeResultToTable(result);
 }
 

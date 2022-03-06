@@ -1,12 +1,16 @@
-#include<stdio.h>
-#include <iostream>
 #include <string>
 #include <vector>
 
 using namespace std;
 
 #include "PKB.h"
-#include "TNode/Node.h"
+#include "TNode/StmtNode.h"
+#include "TNode/AssignNode.h"
+#include "TNode/ReadNode.h"
+#include "TNode/PrintNode.h"
+#include "TNode/IfNode.h"
+#include "TNode/WhileNode.h"
+#include "TNode/CallNode.h"
 
 
 //string PKB::setProcToAST(PROC p, TNode* r) {
@@ -96,8 +100,9 @@ unordered_set<string> convertSetIntegersToSetStrings(unordered_set<int> setInteg
 
 // Setter Functions (Variables, Procedures etc.)
 
-void PKB::addStatement(int statement) {
-    statementsSet.insert(statement);
+void PKB::addStatement(StmtNode *node) {
+    statementsSet.insert(node->getStmtNumber());
+    statementNodesSet.insert(node);
 }
 
 void PKB::addVariable(string variable) {
@@ -149,28 +154,38 @@ unordered_set<string> PKB::getAllConstants() {
 
 // Setter Functions (Statement Types)
 
-void PKB::addAssignStatement(int statement) {
-    addStatement(statement);
-    assignStatementsSet.insert(statement);
+void PKB::addAssignStatement(AssignNode *node) {
+    addStatement(node);
+    assignStatementsSet.insert(node->getStmtNumber());
+//    assignNodesSet.insert(node);
 }
 
-void PKB::addReadStatement(int statement) {
-    addStatement(statement);
-    readStatementsSet.insert(statement);
+void PKB::addReadStatement(ReadNode *node) {
+    addStatement(node);
+    readStatementsSet.insert(node->getStmtNumber());
+    readNodesSet.insert(node);
 }
-void PKB::addPrintStatement(int statement) {
-    addStatement(statement);
-    printStatementsSet.insert(statement);
+void PKB::addPrintStatement(PrintNode *node) {
+    addStatement(node);
+    printStatementsSet.insert(node->getStmtNumber());
+    printNodesSet.insert(node);
 }
-void PKB::addIfStatement(int statement) {
-    addStatement(statement);
-    ifStatementsSet.insert(statement);
+void PKB::addIfStatement(IfNode *node) {
+    addStatement(node);
+    ifStatementsSet.insert(node->getStmtNumber());
+    ifNodesSet.insert(node);
 }
-void PKB::addWhileStatement(int statement) {
-    addStatement(statement);
-    whileStatementsSet.insert(statement);
+void PKB::addWhileStatement(WhileNode *node) {
+    addStatement(node);
+    whileStatementsSet.insert(node->getStmtNumber());
+    whileNodesSet.insert(node);
 }
 
+void PKB::addCallStatement(CallNode *node) {
+    addStatement(node);
+    callStatementsSet.insert(node->getStmtNumber());
+    callNodesSet.insert(node);
+}
 
 // Getter Functions (Statement Types)
 
@@ -204,6 +219,12 @@ bool PKB::isWhileStatement(int statement) {
 bool PKB::isWhileStatement(string statement) {
     return isWhileStatement(std::stoi(statement));
 }
+bool PKB::isCallStatement(int statement) {
+    return callStatementsSet.find(statement) != callStatementsSet.end();
+}
+bool PKB::isCallStatement(string statement) {
+    return isCallStatement(std::stoi(statement));
+}
 
 
 
@@ -221,6 +242,9 @@ unordered_set<string> PKB::getAllIfStatements() {
 }
 unordered_set<string> PKB::getAllWhileStatements() {
     return convertSetIntegersToSetStrings(whileStatementsSet);
+}
+unordered_set<string> PKB::getAllCallStatements() {
+    return convertSetIntegersToSetStrings(callStatementsSet);
 }
 
 
@@ -421,7 +445,7 @@ unordered_set<string> PKB::getParentT(string child) {
 
 // Setter Functions (Uses Relationship)
 
-void PKB::setUses(int statement, unordered_set<string> variables) {
+void PKB::setUsesS(int statement, unordered_set<string> variables) {
     statementToVariablesUsedMap[statement] = variables;
 
     for (string v : variables) {
@@ -432,31 +456,58 @@ void PKB::setUses(int statement, unordered_set<string> variables) {
         }
     }
 
+}
+
+void PKB::setUsesP(string procedure, unordered_set<string> variables) {
+    procedureToVariablesUsedMap[procedure] = variables;
+
+    for (string v : variables) {
+        if (variableUsedToProcedureMap.find(v) == variableUsedToProcedureMap.end()) {
+            variableUsedToProcedureMap.emplace(v, unordered_set<string>{procedure});
+        } else {
+            variableUsedToProcedureMap[v].insert(procedure);
+        }
+    }
 
 }
 
 // Getter Functions (Uses Relationship)
 
-bool PKB::isUses(int statement, string variable) {
+bool PKB::isUsesS(int statement, string variable) {
     if (statementToVariablesUsedMap.find(statement) != statementToVariablesUsedMap.end()) {
         return statementToVariablesUsedMap[statement].find(variable) != statementToVariablesUsedMap[statement].end();
     } else {
         return false;
     }
 }
-bool PKB::isUses(string statement, string variable) {
-    return isUses(std::stoi(statement), variable);
+bool PKB::isUsesS(string statement, string variable) {
+    return isUsesS(std::stoi(statement), variable);
 }
 
-unordered_set<string> PKB::getVariablesUsed(int statement) {
+bool PKB::isUsesP(string procedure, string variable) {
+    if (procedureToVariablesUsedMap.find(procedure) != procedureToVariablesUsedMap.end()) {
+        return procedureToVariablesUsedMap[procedure].find(variable) != procedureToVariablesUsedMap[procedure].end();
+    } else {
+        return false;
+    }
+}
+
+
+unordered_set<string> PKB::getVariablesUsedS(int statement) {
 
     unordered_set<string> emptySet;
 
     return (statementToVariablesUsedMap.find(statement) != statementToVariablesUsedMap.end()) ? statementToVariablesUsedMap[statement] : emptySet;
 }
 
-unordered_set<string> PKB::getVariablesUsed(string statement) {
-    return getVariablesUsed(std::stoi(statement));
+unordered_set<string> PKB::getVariablesUsedS(string statement) {
+    return getVariablesUsedS(std::stoi(statement));
+}
+
+unordered_set<string> PKB::getVariablesUsedP(string procedure) {
+    unordered_set<string> emptySet;
+
+    return (procedureToVariablesUsedMap.find(procedure) != procedureToVariablesUsedMap.end()) ? procedureToVariablesUsedMap[procedure] : emptySet;
 }
 
 unordered_set<string> PKB::getUserStatements(string variable) {
@@ -467,9 +518,18 @@ unordered_set<string> PKB::getUserStatements(string variable) {
     return convertSetIntegersToSetStrings(statementsSet);
 }
 
+unordered_set<string> PKB::getUserProcedures(string variable) {
+
+    unordered_set<string> emptySet;
+    unordered_set<string> proceduresSet = (variableUsedToProcedureMap.find(variable) != variableUsedToProcedureMap.end()) ? variableUsedToProcedureMap[variable] : emptySet;
+
+    return proceduresSet;
+}
+
+
 // Setter Functions (Modifies Relationship)
 
-void PKB::setModifies(int statement, unordered_set<string> variables) {
+void PKB::setModifiesS(int statement, unordered_set<string> variables) {
     statementToVariablesModifiedMap[statement] = variables;
 
     for (string v : variables) {
@@ -481,9 +541,21 @@ void PKB::setModifies(int statement, unordered_set<string> variables) {
     }
 }
 
+void PKB::setModifiesP(string procedure, unordered_set<string> variables) {
+    procedureToVariablesModifiedMap[procedure] = variables;
+
+    for (string v : variables) {
+        if (variableModifiedToProcedureMap.find(v) == variableModifiedToProcedureMap.end()) {
+            variableModifiedToProcedureMap.emplace(v, unordered_set<string>{procedure});
+        } else {
+            variableModifiedToProcedureMap[v].insert(procedure);
+        }
+    }
+}
+
 // Getter Functions (Modifies Relationship)
 
-bool PKB::isModifies(int statement, string variable) {
+bool PKB::isModifiesS(int statement, string variable) {
     if (statementToVariablesModifiedMap.find(statement) != statementToVariablesModifiedMap.end()) {
         return statementToVariablesModifiedMap[statement].find(variable) != statementToVariablesModifiedMap[statement].end();
     } else {
@@ -491,18 +563,32 @@ bool PKB::isModifies(int statement, string variable) {
     }
 }
 
-bool PKB::isModifies(string statement, string variable) {
-    return isModifies(std::stoi(statement), variable);
+bool PKB::isModifiesS(string statement, string variable) {
+    return isModifiesS(std::stoi(statement), variable);
 }
 
-unordered_set<string> PKB::getVariablesModified(int statement) {
+bool PKB::isModifiesP(string procedure, string variable) {
+    if (procedureToVariablesModifiedMap.find(procedure) != procedureToVariablesModifiedMap.end()) {
+        return procedureToVariablesModifiedMap[procedure].find(variable) != procedureToVariablesModifiedMap[procedure].end();
+    } else {
+        return false;
+    }
+}
+
+unordered_set<string> PKB::getVariablesModifiedS(int statement) {
     unordered_set<string> emptySet;
 
     return (statementToVariablesModifiedMap.find(statement) != statementToVariablesModifiedMap.end()) ? statementToVariablesModifiedMap[statement] : emptySet;
 }
 
-unordered_set<string> PKB::getVariablesModified(string statement) {
-    return getVariablesModified(std::stoi(statement));
+unordered_set<string> PKB::getVariablesModifiedS(string statement) {
+    return getVariablesModifiedS(std::stoi(statement));
+}
+
+unordered_set<string> PKB::getVariablesModifiedP(string procedure) {
+    unordered_set<string> emptySet;
+
+    return (procedureToVariablesModifiedMap.find(procedure) != procedureToVariablesModifiedMap.end()) ? procedureToVariablesModifiedMap[procedure] : emptySet;
 }
 
 unordered_set<string> PKB::getModifierStatements(string variable) {
@@ -512,4 +598,10 @@ unordered_set<string> PKB::getModifierStatements(string variable) {
     return convertSetIntegersToSetStrings(statementsSet);
 }
 
+unordered_set<string> PKB::getModifierProcedures(string variable) {
+    unordered_set<string> emptySet;
+    unordered_set<string> proceduresSet = (variableModifiedToProcedureMap.find(variable) != variableModifiedToProcedureMap.end()) ? variableModifiedToProcedureMap[variable] : emptySet;
+
+    return proceduresSet;
+}
 

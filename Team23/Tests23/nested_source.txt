@@ -22,7 +22,7 @@ procedure NestedWithOtherConditions {
                         if (((A != 1) && (!(1 < 2))) || ((!(longVariableName > 123456789)) && (!(0 <= var123)))) then {
                             nestedAlternateIfAndWhile = 1;
                         } else {
-                            X = a%b;
+                            call NestedCall;
                         }
                     }
                 } else {
@@ -32,4 +32,8 @@ procedure NestedWithOtherConditions {
         }
         endOfMainWhileLoop = 1;
     }
+}
+
+procedure NestedCall {
+    X = a%b;
 }

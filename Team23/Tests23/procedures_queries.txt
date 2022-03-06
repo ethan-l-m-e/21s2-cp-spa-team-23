@@ -1,0 +1,100 @@
+../../../../Tests23/procedures_source.txt ../../../../Tests23/procedures_queries.txt ../../../tests/out.xml
+procedure p;
+Select p
+proc1, proc2, proc3, proc4
+5000
+1.0.2 - [valid] check calls
+call c;
+Select c
+1, 2, 3
+5000
+1.0.3 - [valid] check procedure modifies x
+stmt s;
+Select s such that Modifies("proc4", "x")
+1, 2, 3, 4, 5, 6
+5000
+1.0.4 - [valid] check procedure Uses x
+stmt s;
+Select s such that Uses("proc4", "x")
+1, 2, 3, 4, 5, 6
+5000
+1.1.1 - [valid] procedure modifies varName ===============================================[Select procedure tests start]
+procedure p;
+Select p such that Modifies(p, "x")
+proc1, proc2, proc3, proc4
+5000
+1.1.2 - [valid] procedure uses varName
+procedure p;
+Select p such that Uses(p, "x")
+proc1, proc2, proc3
+5000
+1.1.3 - [valid] procedure uses wildcard
+procedure p;
+Select p such that Modifies(p, _)
+proc1, proc2, proc3, proc4
+5000
+1.1.4 - [valid] procedure uses wildcard
+procedure p;
+Select p such that Uses(p, _)
+proc1, proc2, proc3
+5000
+1.1.3 - [valid] procedure uses variable
+procedure p; variable v;
+Select p such that Modifies(p, v)
+proc1, proc2, proc3, proc4
+5000
+1.1.4 - [valid] procedure uses variable
+procedure p; variable v;
+Select p such that Uses(p, v)
+proc1, proc2, proc3
+5000
+1.2.1 - [valid] call modifies varName =========================================================[Select call tests start]
+call c;
+Select c such that Modifies(c, "x")
+1, 2, 3
+5000
+1.2.2 - [valid] call uses varName
+call c;
+Select c such that Uses(c, "x")
+1, 3
+5000
+1.1.3 - [valid] call uses wildcard
+call c;
+Select c such that Modifies(c, _)
+1, 2, 3
+5000
+1.1.4 - [valid] call uses wildcard
+call c;
+Select c such that Uses(c, _)
+1, 3
+5000
+1.1.3 - [valid] call uses variable
+call c; variable v;
+Select c such that Modifies(c, v)
+1, 2, 3
+5000
+1.1.4 - [valid] call uses variable
+call c; variable v;
+Select c such that Uses(c, v)
+1, 3
+5000
+2.1 - [not valid] stmt modifies with call on rhs ==================================================[Invalid tests start]
+stmt s; call c;
+Select s such that Modifies(s, c)
+none
+5000
+2.2 - [not valid] read modifies with call on rhs
+read r; call c;
+Select r such that Modifies(r, c)
+none
+5000
+2.3 - [not valid] stmt uses with call on rhs
+stmt s; call c;
+Select s such that Uses(s, c)
+none
+5000
+2.4 - [not valid] stmt uses with call on rhs
+print p; call c;
+Select p such that Uses(p, c)
+none
+5000
