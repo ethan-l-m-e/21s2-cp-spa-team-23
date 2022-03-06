@@ -1,11 +1,11 @@
 ../../../../Tests23/procedures_source.txt ../../../../Tests23/procedures_queries.txt ../../../tests/out.xml
 procedure p;
-Select p;
+Select p
 proc1, proc2, proc3, proc4
 5000
 1.0.2 - [valid] check calls
 call c;
-Select c;
+Select c
 1, 2, 3
 5000
 1.0.3 - [valid] check procedure modifies x

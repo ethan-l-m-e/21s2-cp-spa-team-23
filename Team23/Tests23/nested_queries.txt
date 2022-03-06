@@ -216,12 +216,12 @@ Select c such that Modifies(c, _) pattern a(_, _"a"_)
 44 - (2 synonym)
 stmt s; assign a; variable v; read r;
 Select s such that Modifies(s, v) pattern a(_, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
 45 - (2 synonym)
 stmt s; assign a; variable v; read r;
 Select s such that Modifies(s, v) pattern a(v, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
 46 - (2 synonym)
 stmt s; assign a; variable v; read r;
