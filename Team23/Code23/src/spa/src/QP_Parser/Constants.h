@@ -96,6 +96,6 @@ std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 
 std::string const PATTERN_LINE = "(.*)[ ]+pattern[ ]+";
 std::string const REGEX_FOR_PATTERN_SYNONYM = "(.*)[ ]+pattern[ ]+" + SYNONYM + "[ ]*\\(";
-std::string const PATTERN_ARGUMENTS = "[ ]*[\\(\\),][ ]*";
+std::string const PATTERN_ARGUMENTS = "(,|pattern)";
 std::string const PATTERN_ARGUMENTS_MATCH = "[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*"
                                   + EXPRESSION_SPEC + "[( |\t)]*\\)";
