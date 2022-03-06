@@ -1,12 +1,12 @@
-1.1.1 - [valid] select stmt with wildcard ================================================[Select statement tests start]
+../../../../Tests23/modifies_source.txt ../../../../Tests23/modifies_queries.txt ../../../tests/out.xml
 stmt s;
 Select s such that Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
 1.1.2 - [valid] select stmt with var synonym
 stmt s; variable v;
 Select s such that Modifies(s, v)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
 1.1.3 - [valid] select stmt with var name
 stmt s;
@@ -31,17 +31,22 @@ Select a such that Modifies(a, "modifiedVar1")
 1.3.1 - [valid] select read with wildcard =====================================================[Select read tests start]
 read r;
 Select r such that Modifies(r, _)
-2, 11
+2, 11, 13
 5000
 1.3.2 - [valid] select read with var synonym
 read r; variable v;
 Select r such that Modifies(r, v)
-2, 11
+2, 11, 13
 5000
 1.3.3 - [valid] select read with var name
 read r;
 Select r such that Modifies(r, "modifiedVar1")
 2
+5000
+1.3.4 - [valid] select read with var name in other proc
+read r;
+Select r such that Modifies(r, "modifiedVar3")
+13
 5000
 1.4.1 - [valid] select while with wildcard ===================================================[Select while tests start]
 while w;
@@ -58,6 +63,11 @@ while w;
 Select w such that Modifies(w, "modifiedVar1")
 3
 5000
+1.4.4 - [valid] while with var name not modified
+while w;
+Select w such that Modifies(w, "modifiedVar3")
+none
+5000
 1.5.1 - [valid] select if with wildcard =========================================================[Select if tests start]
 if ifs;
 Select ifs such that Modifies(ifs, _)
@@ -73,15 +83,25 @@ if ifs;
 Select ifs such that Modifies(ifs, "modifiedVar1")
 5, 8
 5000
-1.6.2 - [valid] var with assign stmt number
+1.5.4 - [valid] while with var name not modified by if
+if ifs;
+Select ifs such that Modifies(ifs, "modifiedVar3")
+none
+5000
+1.6.1 - [valid] var with assign stmt number ====================================================[Select var tests start]
 variable v;
 Select v such that Modifies(1, v)
 modifiedVar1
 5000
-1.6.3 - [valid] var with read stmt number
+1.6.2 - [valid] var with read stmt number
 variable v;
 Select v such that Modifies(11, v)
 modifiedVar2
+5000
+1.6.3 - [valid] var with read stmt number
+variable v;
+Select v such that Modifies(13, v)
+modifiedVar3
 5000
 1.6.4 - [valid] var with while stmt number
 variable v;
@@ -92,6 +112,16 @@ modifiedVar1
 variable v;
 Select v such that Modifies(5, v)
 modifiedVar1, modifiedVar2
+5000
+1.7.1 - [valid] call modifies ==========================================================[call and procedure tests start]
+call c;
+Select c such that Modifies(c, _)
+12
+5000
+1.7.2 - [valid] proc modifies
+procedure p;
+Select p such that Modifies(p, _)
+Modifies, ModifiesAgain
 5000
 2.1 - [not valid] lhs not entRef or stmtRef (print) ===============================================[Invalid tests start]
 print p; variable v;
