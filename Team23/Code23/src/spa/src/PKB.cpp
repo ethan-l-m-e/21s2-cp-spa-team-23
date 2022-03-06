@@ -44,20 +44,20 @@ void PKB::clearPKB() {
     constantsSet.clear();
 
     assignStatementsSet.clear();
-    printStatementsSet.clear();
     readStatementsSet.clear();
     printStatementsSet.clear();
     ifStatementsSet.clear();
     whileStatementsSet.clear();
+    callStatementsSet.clear();
 
     assignNodesSet.clear();
 
     statementNodesSet.clear();
-    printNodesSet.clear();
     readNodesSet.clear();
     printNodesSet.clear();
     ifNodesSet.clear();
     whileNodesSet.clear();
+    callNodesSet.clear();
 
     followeeToFollowerMap.clear();
     followerToFolloweeMap.clear();
