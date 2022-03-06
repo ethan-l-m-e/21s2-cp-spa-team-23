@@ -20,12 +20,12 @@ Select a pattern a( "variable3"     ,  _"    variable2 / ( 6 % variable1  )   "_
 5000
 1.0.4 - pattern matching
 assign a;
-Select a pattern a( "variable3"     ,  _"   ( variable2 / 6 ) % variable1    "_)
+Select a pattern a( "variable3"     ,  _"   (variable2 / 6 ) % variable1    "_)
 none
 5000
 1.0.4 - pattern matching
 assign a;
-Select a pattern a( "variable3"     ,  _"  5+(variable2/6%variable1)-7*variable3 "_)
+Select a pattern a( "variable3"     ,  _"5+(variable2/6%variable1)-7*variable3"_)
 4
 5000
 1.0.4 - pattern matching
