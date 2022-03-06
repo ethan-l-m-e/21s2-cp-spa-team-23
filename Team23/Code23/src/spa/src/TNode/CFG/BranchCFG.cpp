@@ -7,7 +7,10 @@
 BranchCFG::BranchCFG(int statementNumber): NodeCFG(statementNumber) {
 }
 
-void BranchCFG::setLeftNode(NodeCFG *node) {this->leftNode = node; this->nextNode = this->leftNode;}
+void BranchCFG::setLeftNode(NodeCFG *node) {
+    this->leftNode = node;
+    this->nextNode = this->leftNode;
+}
 
 void BranchCFG::setRightNode(NodeCFG *node) {this->rightNode = node;}
 

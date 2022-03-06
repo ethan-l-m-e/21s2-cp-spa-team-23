@@ -4,9 +4,14 @@
 
 #include "NodeCFG.h"
 
-MergeCFG::MergeCFG(int statementNumber): NodeCFG(statementNumber) {}
+MergeCFG::MergeCFG(int statementNumber): NodeCFG(statementNumber) {
 
-void MergeCFG::setLeftPreviousNode(NodeCFG *node) {this->leftPreviousNode = node;}
+}
+
+void MergeCFG::setLeftPreviousNode(NodeCFG *node) {
+    this->leftPreviousNode = node;
+    this->previousNode = this->leftPreviousNode;
+}
 
 void MergeCFG::setRightPreviousNode(NodeCFG *node) {this->rightPreviousNode = node;}
 
