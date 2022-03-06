@@ -98,57 +98,57 @@ assign a;
 Select a pattern a(_, "a + b")
 3, 8
 5000
-1.2.1 - [valid] match a + b with wildcards
+1.2.2 - [valid] match a + b with wildcards
 assign a;
 Select a pattern a(_, _"a + b"_)
 3, 8, 9
 5000
-1.2.1 - [valid] match a - b
+1.2.3 - [valid] match a - b
 assign a;
 Select a pattern a(_, "a - b")
 4
 5000
-1.2.1 - [valid] match a - b with wildcards
+1.2.4 - [valid] match a - b with wildcards
 assign a;
 Select a pattern a(_, _"a - b"_)
 4
 5000
-1.2.1 - [valid] match a * b
+1.2.5 - [valid] match a * b
 assign a;
 Select a pattern a(_, "a * b")
 5
 5000
-1.2.1 - [valid] match a * b with wildcards
+1.2.6 - [valid] match a * b with wildcards
 assign a;
 Select a pattern a(_, _"a * b"_)
 5
 5000
-1.2.1 - [valid] match a / b
+1.2.7 - [valid] match a / b
 assign a;
 Select a pattern a(_, "a / b")
 6
 5000
-1.2.1 - [valid] match a / b with wildcards
+1.2.8 - [valid] match a / b with wildcards
 assign a;
 Select a pattern a(_, _"a / b"_)
 6
 5000
-1.2.1 - [valid] match a % b
+1.2.9 - [valid] match a % b
 assign a;
 Select a pattern a(_, "a % b")
 7
 5000
-1.2.1 - [valid] match a % b with wildcards
+1.2.10 - [valid] match a % b with wildcards
 assign a;
 Select a pattern a(_, _"a % b"_)
 7
 5000
-1.2.1 - [valid] match ( c - d ) % ( e * f ) with wildcards
+1.2.11 - [valid] match ( c - d ) % ( e * f ) with wildcards
 assign a;
 Select a pattern a(_, _"(c - d) % (e * f)"_)
 9, 11
 5000
-1.2.1 - [valid] match ( a + b ) * ( c - d ) with wildcards, no match found
+1.2.12 - [valid] match ( a + b ) * ( c - d ) with wildcards, no match found
 assign a;
 Select a pattern a(_, _"(a + b)*(c - d)"_)
 none

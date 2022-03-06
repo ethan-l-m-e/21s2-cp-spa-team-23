@@ -12,5 +12,5 @@ procedure test
 
 
 procedure test3             {
-    variable3 = 5;
+    variable3 = 5+ ( variable2 / 6 % variable1 ) - 7 * variable3    ;
 }
