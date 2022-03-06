@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Tokenizer.h"
 #include "Exception.h"
+#include "StringFormatter.h"
 
 #include <string>
 #include <regex>
@@ -41,7 +42,13 @@ void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet,
         return;
     }
 
-    // TODO: checking attr references with .
+    if (std::regex_match(selectClauseTokens[0], std::regex(ATTR_REF))) {
+        std::string synonym = StringFormatter::tokenizeByRegex(selectClauseTokens[0], ".")[0];
+        if (declarationSet.find(synonym) == declarationSet.end()) {
+            throw QPInvalidSemanticException("Invalid Select Clause");
+        }
+        return;
+    }
 
     for (std::string selectClauseToken : selectClauseTokens) {
         if (declarationSet.find(selectClauseToken) == declarationSet.end()) {
