@@ -9,7 +9,7 @@ bool ModifiesSClauseEvaluator::isRelation(std::string left, std::string right) {
 }
 
 unordered_set<std::string> ModifiesSClauseEvaluator::getLeftSynonymValue(std::string right) {
-    return pkb->getModifierStatements(right);
+    return pkb->getModifierProcedures(right);
 }
 
 unordered_set<std::string> ModifiesSClauseEvaluator::getRightSynonymValue(std::string left) {
