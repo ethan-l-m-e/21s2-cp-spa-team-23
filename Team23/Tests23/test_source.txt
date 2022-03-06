@@ -4,7 +4,7 @@ procedure test
 
 
 {
-    while ( !    ( variable1 * ( 1 + 2 ) != variable2 * variable2 ) ) {
+    while ( !    ( variable1 * ( 1 + 2 ) != variable2 * 3 / variable2 / 4 ) ) {
         call test2              ;
     }
 }procedure test2{               call test3;                      }
@@ -12,5 +12,5 @@ procedure test
 
 
 procedure test3             {
-    variable3 = 3;
+    variable3 = 5;
 }
