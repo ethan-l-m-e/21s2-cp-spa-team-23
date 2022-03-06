@@ -5,7 +5,7 @@
 #include "ModifiesSClauseEvaluator.h"
 
 bool ModifiesSClauseEvaluator::isRelation(std::string left, std::string right) {
-    return pkb->isModifies(left, right);
+    return pkb->isModifiesS(left, right);
 }
 
 unordered_set<std::string> ModifiesSClauseEvaluator::getLeftSynonymValue(std::string right) {
@@ -13,7 +13,7 @@ unordered_set<std::string> ModifiesSClauseEvaluator::getLeftSynonymValue(std::st
 }
 
 unordered_set<std::string> ModifiesSClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->getVariablesModified(left);
+    return pkb->getVariablesModifiedS(left);
 }
 
 pair<DesignEntity, DesignEntity> ModifiesSClauseEvaluator::getWildcardType () {

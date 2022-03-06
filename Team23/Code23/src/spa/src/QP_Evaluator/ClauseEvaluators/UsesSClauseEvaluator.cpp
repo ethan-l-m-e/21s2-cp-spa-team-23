@@ -5,7 +5,7 @@
 #include "UsesSClauseEvaluator.h"
 
 bool UsesSClauseEvaluator::isRelation(std::string left, std::string right) {
-    return pkb->isUses(left, right);
+    return pkb->isUsesS(left, right);
 }
 
 unordered_set<std::string> UsesSClauseEvaluator::getLeftSynonymValue(std::string right) {
@@ -13,7 +13,7 @@ unordered_set<std::string> UsesSClauseEvaluator::getLeftSynonymValue(std::string
 }
 
 unordered_set<std::string> UsesSClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->getVariablesUsed(left);
+    return pkb->getVariablesUsedS(left);
 }
 
 pair<DesignEntity, DesignEntity> UsesSClauseEvaluator::getWildcardType () {
