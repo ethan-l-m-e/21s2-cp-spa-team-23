@@ -78,16 +78,19 @@ void Validator::validateSuchThatClauses(std::map<std::string, std::string> decla
         checkArguments(*(suchThatClauseToken.arguments), declarationTokens);
         // Check for type of relationship
         bool isStatementRelationship = regex_match(suchThatClauseToken.relRef, std::regex(STMT_RS));
+        bool isVariableRelationship = regex_match(suchThatClauseToken.relRef, std::regex(VARIABLE_RS));
 
         if (isStatementRelationship) {
             handleSuchThatStatementClause(declarationTokens, *suchThatClauseToken.arguments);
-        } else {
+        } else if (isVariableRelationship) {
             // Get set of possible first argument types
             std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
 
             // Check arguments
             checkFirstArgForOtherClauses(suchThatClauseToken.arguments->first, argSet, declarationTokens);
             checkSecondArgForOtherClauses(suchThatClauseToken.arguments->second, declarationTokens);
+        } else {
+            checkProcAssignArguments(suchThatClauseToken, declarationTokens);
         }
     }
 }
@@ -164,6 +167,32 @@ void Validator::checkSecondArgForOtherClauses(std::string argument, std::map<std
     }
 }
 
+void Validator::checkProcAssignArguments(SuchThatClauseToken suchThatClauseToken, std::map<std::string, std::string> declarationTokens) {
+    if (std::regex_match(suchThatClauseToken.arguments->first, std::regex(SYNONYM))) {
+        if (std::regex_match(suchThatClauseToken.relRef, std::regex("(Calls|Calls\\*)"))) {
+            if (declarationTokens.at(suchThatClauseToken.arguments->first) != "procedure") {
+                throw QPInvalidSemanticException("Invalid First Argument");
+            }
+        } else {
+            if (declarationTokens.at(suchThatClauseToken.arguments->first) != "assign") {
+                throw QPInvalidSemanticException("Invalid First Argument");
+            }
+        }
+    }
+
+    if (std::regex_match(suchThatClauseToken.arguments->second, std::regex(SYNONYM))) {
+        if (std::regex_match(suchThatClauseToken.relRef, std::regex("(Calls|Calls\\*)"))) {
+            if (declarationTokens.at(suchThatClauseToken.arguments->second) != "procedure") {
+                throw QPInvalidSemanticException("Invalid Second Argument");
+            }
+        } else {
+            if (declarationTokens.at(suchThatClauseToken.arguments->second) != "assign") {
+                throw QPInvalidSemanticException("Invalid Second Argument");
+            }
+        }
+    }
+}
+
 void Validator::validatePatterns(std::map<std::string, std::string> declarationTokens,
                                  std::vector<PatternToken> patternTokens) {
     for (PatternToken patternToken : patternTokens) {
@@ -172,9 +201,16 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
         std::pair<std::string, std::string> arguments = std::make_pair(patternToken.synonym, patternArguments[0]);
         checkArguments(arguments, declarationTokens);
 
-        bool isSynonymNotAnAssignment = declarationTokens.at(patternToken.synonym) != "assign";
-        if (isSynonymNotAnAssignment) {
-            throw QPInvalidSemanticException("Invalid Pattern");
+        if (declarationTokens.at(patternToken.synonym) == "if") {
+            if (patternArguments[1] != "_" || patternArguments[2] != "_") {
+                throw QPInvalidSemanticException("Invalid Pattern Argument");
+            }
+        } else if (declarationTokens.at(patternToken.synonym) == "while") {
+            if (patternArguments[1] != "_") {
+                throw QPInvalidSemanticException("Invalid Pattern Argument");
+            }
+        } else if (declarationTokens.at(patternToken.synonym) != "assign") {
+            throw QPInvalidSemanticException("Invalid Pattern Synonym");
         }
 
         validatePatternFirstArgument(declarationTokens, patternArguments[0]);

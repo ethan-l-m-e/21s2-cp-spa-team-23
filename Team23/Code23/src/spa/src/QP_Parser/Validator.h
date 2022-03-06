@@ -34,6 +34,7 @@ namespace qp {
         void validatePatternFirstArgument(std::map<std::string, std::string>, std::string);
         void checkArguments(std::pair<std::string, std::string>, std::map<std::string, std::string>);
         void checkSynonymIsDeclared(std::string, std::map<std::string, std::string>);
+        void checkProcAssignArguments(SuchThatClauseToken, std::map<std::string, std::string>);
     };
 }
 
