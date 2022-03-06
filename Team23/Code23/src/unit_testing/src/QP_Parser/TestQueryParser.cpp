@@ -633,7 +633,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONYM - WHILE, WILDCARD") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; while w; \nSelect v such that Modifies(w, _)";
+    std::string pql = "variable v; assign a; stmt s; print pn; if ifs; while w; \nSelect v";
     Query query = parser.getQuery(pql);
     SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
     std::vector<Argument> argList = suchThatClause.argList;

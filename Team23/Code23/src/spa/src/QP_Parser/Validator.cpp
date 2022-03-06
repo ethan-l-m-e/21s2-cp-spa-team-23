@@ -159,18 +159,18 @@ void Validator::checkSecondArgForOtherClauses(std::string argument, std::map<std
 
 void Validator::validatePatterns(std::map<std::string, std::string> declarationTokens,
                                  std::vector<PatternToken> patternTokens) {
-    for (PatternToken patternToken : patternTokens) {
-        // Check that the pattern's syn-assign and first argument do not have the same synonym and synonym is declared
-        std::pair<std::string, std::string> arguments = std::make_pair(patternToken.synonym, patternToken.arguments->first);
-        checkArguments(arguments, declarationTokens);
-
-        bool isSynonymNotAnAssignment = declarationTokens.at(patternToken.synonym) != "assign";
-        if (isSynonymNotAnAssignment) {
-            throw QPInvalidSemanticException("Invalid Pattern");
-        }
-
-        validatePatternFirstArgument(declarationTokens, patternToken.arguments->first);
-    }
+//    for (PatternToken patternToken : patternTokens) {
+//        // Check that the pattern's syn-assign and first argument do not have the same synonym and synonym is declared
+//        std::pair<std::string, std::string> arguments = std::make_pair(patternToken.synonym, patternToken.arguments->first);
+//        checkArguments(arguments, declarationTokens);
+//
+//        bool isSynonymNotAnAssignment = declarationTokens.at(patternToken.synonym) != "assign";
+//        if (isSynonymNotAnAssignment) {
+//            throw QPInvalidSemanticException("Invalid Pattern");
+//        }
+//
+//        validatePatternFirstArgument(declarationTokens, patternToken.arguments->first);
+//    }
 }
 
 void Validator::validatePatternFirstArgument(std::map<std::string, std::string> declarationTokens, std::string argument) {

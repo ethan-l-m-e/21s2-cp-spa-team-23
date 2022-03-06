@@ -9,9 +9,17 @@ namespace qp {
     class PatternToken {
     public:
         std::string synonym;
-        std::pair<std::string, std::string>* arguments;
+        std::vector<std::string>* arguments;
 
         PatternToken() : synonym(""), arguments(nullptr) {};
+    };
+
+    class WithClauseToken {
+    public:
+        std::pair<std::string, std::string>* leftRef;
+        std::pair<std::string, std::string>* rightRef;
+
+        WithClauseToken() : leftRef(nullptr), rightRef(nullptr) {};
     };
 
     class SuchThatClauseToken {
@@ -46,8 +54,10 @@ namespace qp {
         void getSelectClauseTokens(std::string, QueryToken&);
         void getSuchThatClauseTokens(std::string, QueryToken&);
         void getPatternClauseTokens(std::string, QueryToken&);
+        void getWithClauseToken(std::string, QueryToken&);
         void splitDeclarations(std::vector<std::string>&, QueryToken&);
         SuchThatClauseToken convertStringToSuchThatClauseToken(std::string);
+        PatternToken convertStringToPatternToken(std::string);
     };
 }
 

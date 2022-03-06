@@ -164,16 +164,16 @@ void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
     std::vector<PatternClause> patternClauses = std::vector<PatternClause>();
 
     for (PatternToken patternToken : patternTokens) {
-        std::pair<std::string, std::string> argumentTokens = *(patternToken.arguments);
-        std::vector<Argument> argList = getArgumentList(argumentTokens, *(queryToken.declarationTokens));
-        Argument synAssign = getArgument(patternToken.synonym, *(queryToken.declarationTokens));
-        argList.insert(argList.begin(), synAssign);
-
-        // Create PatternClause Object
-        PatternClause patternClause = PatternClause();
-        patternClause.argList = argList;
-        patternClause.synonymType = SynonymType::ASSIGN;
-        patternClauses.push_back(patternClause);
+//        std::pair<std::string, std::string> argumentTokens = *(patternToken.arguments);
+//        std::vector<Argument> argList = getArgumentList(argumentTokens, *(queryToken.declarationTokens));
+//        Argument synAssign = getArgument(patternToken.synonym, *(queryToken.declarationTokens));
+//        argList.insert(argList.begin(), synAssign);
+//
+//        // Create PatternClause Object
+//        PatternClause patternClause = PatternClause();
+//        patternClause.argList = argList;
+//        patternClause.synonymType = SynonymType::ASSIGN;
+//        patternClauses.push_back(patternClause);
     }
 
     query.setPatternClauses(patternClauses);

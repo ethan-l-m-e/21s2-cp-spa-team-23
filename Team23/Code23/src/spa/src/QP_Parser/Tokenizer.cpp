@@ -49,7 +49,6 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
         std::smatch sm;
         std::regex_search(declaration, sm, std::regex(DESIGN_ENTITY));
         designEntity = sm[0];
-//        designEntity = StringFormatter::extractFrontStringByRegex(declaration, " ");
         synonymsString = declaration.substr(designEntity.length());
         synonymsString = StringFormatter::removeTrailingSpace(synonymsString);
         std::vector<std::string> synonyms = StringFormatter::tokenizeByRegex(synonymsString, SPLIT_DECLARATIONS);
@@ -103,32 +102,60 @@ void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken)
 }
 
 SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string suchThatClause) {
-    std::vector<std::string> suchThatClauses = StringFormatter::tokenizeByRegex(suchThatClause, SPLIT_SUCH_THAT_CLAUSE);
+    std::vector<std::string> suchThatClauseArgs = StringFormatter::tokenizeByRegex(suchThatClause, SPLIT_SUCH_THAT_CLAUSE);
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    suchThatClauseToken.relRef = suchThatClauses[0];
-    suchThatClauseToken.arguments = new std::pair<std::string, std::string>(suchThatClauses[1], suchThatClauses[2]);
+    suchThatClauseToken.relRef = suchThatClauseArgs[0];
+    suchThatClauseToken.arguments = new std::pair<std::string, std::string>(suchThatClauseArgs[1], suchThatClauseArgs[2]);
     return suchThatClauseToken;
 }
 
 
 void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
-    std::vector<std::string> backClauses = StringFormatter::tokenizeByRegex(pql, PATTERN_LINE);
-    bool noPattern = backClauses[0] == pql;
-    // When syn-assign is "pattern"
-    bool isSynAssignCalledPattern = std::regex_match(backClauses[0], std::regex(PATTERN_ARGUMENTS_MATCH));
+    std::smatch sm;
+    std::vector<std::string> patternClauses = std::vector<std::string>();
 
-    if (noPattern) {
-        return;
-    } else if (isSynAssignCalledPattern) {
-        backClauses[0] = "pattern " + backClauses[0];
+    while (std::regex_search (pql, sm, std::regex("pattern[ |\t]*" + PATTERN))) {
+        std::string x = sm[0];
+        x = StringFormatter::removeTrailingSpace(x);
+        patternClauses.push_back(x);
+        pql = sm.suffix().str();
     }
 
-    std::vector<std::string> patternClause = StringFormatter::tokenizeByRegex(backClauses[0], PATTERN_ARGUMENTS);
-    std::string synonym = StringFormatter::removeTrailingSpace(patternClause[0]);
+    std::vector<PatternToken>* patternTokens = new std::vector<PatternToken>();
+    for (std::string patternClause : patternClauses) {
+        PatternToken patternToken = convertStringToPatternToken(patternClause);
+        patternTokens->push_back(patternToken);
+    }
+
+    queryToken.patternTokens = patternTokens;
+}
+
+PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
+    std::vector<std::string> patternClauseArgs = StringFormatter::tokenizeByRegex(patternClause, PATTERN_ARGUMENTS);
+    std::string synonym = StringFormatter::removeTrailingSpace(patternClauseArgs[0]);
 
     PatternToken patternToken = PatternToken();
     patternToken.synonym = synonym;
-    patternToken.arguments = new std::pair<std::string, std::string>(patternClause[1], patternClause[2]);
-    queryToken.patternTokens = new std::vector<PatternToken>{patternToken};
+    patternToken.arguments = new std::vector<std::string>(patternClauseArgs.begin()+1, patternClauseArgs.end());
+    return patternToken;
+}
+
+void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
+    std::smatch sm;
+
+//    while (std::regex_search (pql, sm, std::regex("pattern[ |\t]*" + PATTERN))) {
+//        std::string x = sm[0];
+//        x = StringFormatter::removeTrailingSpace(x);
+//        patternClauses.push_back(x);
+//        pql = sm.suffix().str();
+//    }
+//
+//    std::vector<PatternToken>* patternTokens = new std::vector<PatternToken>();
+//    for (std::string patternClause : patternClauses) {
+//        PatternToken patternToken = convertStringToPatternToken(patternClause);
+//        patternTokens->push_back(patternToken);
+//    }
+//
+//    queryToken.patternTokens = patternTokens;
 }
