@@ -13,7 +13,13 @@ typedef short PROC;
 
 class TNode;
 
+
+class StmtNode;
 class AssignNode;
+class ReadNode;
+class PrintNode;
+class IfNode;
+class WhileNode;
 
 class VarTable;  // no need to #include "VarTable.h" as all I need is postringer
 
@@ -35,6 +41,12 @@ private:
     unordered_set<int> ifStatementsSet;
     unordered_set<int> whileStatementsSet;
 
+    unordered_set<StmtNode *> statementNodesSet;
+    unordered_set<ReadNode *> readNodesSet;
+    unordered_set<PrintNode *> printNodesSet;
+    unordered_set<IfNode *> ifNodesSet;
+    unordered_set<WhileNode *> whileNodesSet;
+
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
 
@@ -53,6 +65,12 @@ private:
 
     unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap;
     unordered_map<string, unordered_set<int>> variableModifiedToStatementMap;
+
+    unordered_map<string, unordered_set<string>> procedureToVariablesUsedMap;
+    unordered_map<string, unordered_set<string>> variableUsedToProcedureMap;
+
+    unordered_map<string, unordered_set<string>> procedureToVariablesModifiedMap;
+    unordered_map<string, unordered_set<string>> variableModifiedToProcedureMap;
 
     unordered_set<AssignNode *> assignNodesSet;
 
@@ -96,12 +114,13 @@ private:
 
     // Getter Functions (Uses Relationship)
 
-    bool isUses(int statement, string variable);
-    unordered_set<string> getVariablesUsed(int statement);
+    bool isUsesS(int statement, string variable);
+    unordered_set<string> getVariablesUsedS(int statement);
 
     // Getter Functions (Modifies Relationship)
 
-    bool isModifies(int statement, string variable);
+    bool isModifiesS(int statement, string variable);
+    unordered_set<string> getVariablesModifiedS(int statement);
 
 public:
 //	static VarTable* varTable;
@@ -122,20 +141,20 @@ public:
     vector<AssignNode *> getAllAssignNodes();
 
     // Setter Functions (Variables, Procedures etc.)
-    void addStatement(int statement);
+    void addStatement(StmtNode *statement);
     void addVariable(string variable);
     void addProcedure(string procedure);
     void addConstant(string constant);
 
     // Setter Functions (Statement Types)
 
-    void addAssignStatement(int statement);
+    void addAssignStatement(AssignNode *statement);
 
-    void addReadStatement(int statement);
-    void addPrintStatement(int statement);
+    void addReadStatement(ReadNode *statement);
+    void addPrintStatement(PrintNode *statement);
 
-    void addIfStatement(int statement);
-    void addWhileStatement(int statement);
+    void addIfStatement(IfNode *statement);
+    void addWhileStatement(WhileNode *statement);
 
     // Getter Functions (Variables, Procedures etc.)
 
@@ -182,12 +201,13 @@ public:
 
     // Setter Functions (Uses Relationship)
 
-    void setUses(int statement, unordered_set<string> variables);
+    void setUsesS(int statement, unordered_set<string> variables);
+    void setUsesP(string procedure, unordered_set<string> variables);
 
     // Setter Functions (Modifies Relationship)
 
-    void setModifies(int statement, unordered_set<string> variables);
-    unordered_set<string> getVariablesModified(int statement);
+    void setModifiesS(int statement, unordered_set<string> variables);
+    void setModifiesP(string procedure, unordered_set<string> variables);
 
 
     //----------------------------------------------------------------------------------RELATIONSHIP GETTER FUNCTIONS---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -221,16 +241,23 @@ public:
 
     // Getter Functions (Uses Relationship)
 
-    bool isUses(string statement, string variable);
-    unordered_set<string> getVariablesUsed(string statement);
+    bool isUsesS(string statement, string variable);
+    unordered_set<string> getVariablesUsedS(string statement);
     unordered_set<string> getUserStatements(string variable);
 
     // Getter Functions (Modifies Relationship)
 
-    bool isModifies(string statement, string variable);
-    unordered_set<string> getVariablesModified(string statement);
+    bool isModifiesS(string statement, string variable);
+    unordered_set<string> getVariablesModifiedS(string statement);
     unordered_set<string> getModifierStatements(string variable);
 
+    bool isUsesP(string procedure, string variable);
+    unordered_set<string> getVariablesUsedP(string procedure);
+    unordered_set<string> getUserProcedures(string variable);
+
+    bool isModifiesP(string procedure, string variable);
+    unordered_set<string> getVariablesModifiedP(string procedure);
+    unordered_set<string> getModifierProcedures(string variable);
 };
 
 
