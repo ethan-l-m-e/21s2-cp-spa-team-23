@@ -36,4 +36,9 @@ procedure NestedWithOtherConditions {
     genericAssignStatement = 1;
     read genericRead;
     print genericPrint;
+    call genericProcedure;
+}
+
+procedure genericProcedure{
+    insideGenricProcedure = 1;
 }

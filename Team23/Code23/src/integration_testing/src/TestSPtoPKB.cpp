@@ -11,7 +11,7 @@ void require(bool b) {
     REQUIRE(b);
 }
 
-TEST_CASE("statement type check from parser to pkb") {
+TEST_CASE("Integration testing - statement type check from parser to pkb") {
 //    auto programNode = dynamic_cast<ProgramNode*>(Parser::Parse(sourceCode));
 
     SourceProcessor::run("integration_source.txt");
@@ -35,6 +35,7 @@ TEST_CASE("statement type check from parser to pkb") {
     CHECK(PKB::getInstance()->isAssignStatement("17"));
     CHECK(PKB::getInstance()->isPrintStatement("18"));
     CHECK(PKB::getInstance()->isAssignStatement("19"));
+//    CHECK(PKB::getInstance()->isCallStatement("23"));
 
     //these 3 dont work because the test cases here all run at different timings, creating multiple overlaps in the pkb (not sure how to fix yet)
 //    CHECK(PKB::getInstance()->getAllAssignStatements().size()==8);
@@ -43,7 +44,7 @@ TEST_CASE("statement type check from parser to pkb") {
 
 }
 
-TEST_CASE("follows relationship type check from parser to pkb") {
+TEST_CASE("Integration testing - follows relationship type check from parser to pkb") {
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
@@ -58,7 +59,7 @@ TEST_CASE("follows relationship type check from parser to pkb") {
     CHECK(PKB::getInstance()->isFollows("3", "4"));
 
 }
-TEST_CASE("parent relationship type check from parser to pkb") {
+TEST_CASE("Integration testing - parent relationship type check from parser to pkb") {
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
@@ -72,7 +73,7 @@ TEST_CASE("parent relationship type check from parser to pkb") {
     CHECK(PKB::getInstance()->isParentT("2", "7"));
 
 }
-TEST_CASE("modifies relationship type check from parser to pkb") {
+TEST_CASE("Integration testing - modifies relationship type check from parser to pkb") {
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
@@ -88,7 +89,7 @@ TEST_CASE("modifies relationship type check from parser to pkb") {
     CHECK(PKB::getInstance()->isModifies("22", "genericPrint") == false);
 
 }
-TEST_CASE("uses relationship type check from parser to pkb") {
+TEST_CASE("Integration testing - uses relationship type check from parser to pkb") {
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
@@ -102,5 +103,26 @@ TEST_CASE("uses relationship type check from parser to pkb") {
     CHECK(PKB::getInstance()->isUses("2","a"));
     CHECK(PKB::getInstance()->isUses("21","genericRead")==false);
     CHECK(PKB::getInstance()->isUses("22","genericPrint"));
+
+    unordered_set<string> stmtTenUses = PKB::getInstance()->getVariablesUsed("10");
+    unordered_set<string> stmtTwelveUses = PKB::getInstance()->getVariablesUsed("12");
+    unordered_set<string> stmtThirteenUses = PKB::getInstance()->getVariablesUsed("13");
+    CHECK(stmtTenUses.count("A") == 1);
+    CHECK(stmtTenUses.count("B") == 1);
+    CHECK(stmtTwelveUses.count("A") == 1);
+    CHECK(stmtTwelveUses.count("B") == 1);
+    CHECK(stmtThirteenUses.count("A") == 1);
+    CHECK(stmtThirteenUses.count("B") == 1);
+    CHECK(stmtThirteenUses.count("C") == 1);
+
+}
+
+TEST_CASE("Integration testing - additional procedure") {
+    SourceProcessor::run("integration_source.txt");
+
+    CHECK(PKB::getInstance()->isAssignStatement("24"));
+    unordered_set<string> allProcedures = PKB::getInstance()->getAllProcedures();
+    CHECK(allProcedures.count("genericProcedure") == 1);
+    CHECK(allProcedures.count("NestedWithOtherConditions") == 1);
 
 }
