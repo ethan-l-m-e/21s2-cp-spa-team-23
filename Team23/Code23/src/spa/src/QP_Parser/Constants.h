@@ -19,9 +19,9 @@ std::string const REF = "(\"" + IDENT + "\"|" + INTEGER + "|" + ATTR_REF + ")";
 
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
-std::string const DECLARATION = "[( |\t)]*" + DESIGN_ENTITY + "[( |\t)]+" + SYNONYM + "(,[( |\t)]*" + SYNONYM + "[( |\t)]*)*[( |\t)]*;";
+std::string const DECLARATION = "( |\t)*" + DESIGN_ENTITY + "( |\t)+" + SYNONYM + "(,( |\t)*" + SYNONYM + "( |\t)*)*( |\t)*;";
 
-std::string const TUPLE = "([( |\t)]*" + ELEM + "|" + "[( |\t)]*<[( |\t)]*" + ELEM + "[( |\t)]*([( |\t)]*,[( |\t)]*" + ELEM + "[( |\t)]*)*>)";
+std::string const TUPLE = "(( |\t)*" + ELEM + "|" + "( |\t)*<( |\t)*" + ELEM + "( |\t)*(( |\t)*,( |\t)*" + ELEM + "( |\t)*)*>)";
 std::string const RESULT_CL = "(" + TUPLE + "|BOOLEAN)";
 
 // Relationships
@@ -29,7 +29,7 @@ std::string const RESULT_CL = "(" + TUPLE + "|BOOLEAN)";
 //std::string const RELATIONSHIP = REL_REF + "\\([( |\t)]*" + REF + "[( |\t)]*,[( |\t)]*" + REF + "[( |\t)]*\\)";
 
 
-std::string const FOLLOWS = "Follows[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)[( |\t)]*";
+std::string const FOLLOWS = "Follows( |\t)*\\(( |\t)*" + STMT_REF + "( |\t)*,( |\t)*" + STMT_REF + "( |\t)*\\)[( |\t)]*";
 std::string const FOLLOWS_T = "Follows\\*[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)[( |\t)]*";
 
 std::string const PARENT = "Parent[( |\t)]*\\([( |\t)]*" + STMT_REF + "[( |\t)]*,[( |\t)]*" + STMT_REF + "[( |\t)]*\\)[( |\t)]*";
@@ -71,7 +71,7 @@ std::string const PATTERN_CL = "pattern[( |\t)]+" + PATTERN_COND + "[( |\t)]*";
 // with regex
 std::string const ATTR_COMPARE = REF + "[( |\t)]*=[( |\t)]*" + REF;
 std::string const ATTR_COND = ATTR_COMPARE + "([( |\t)]+and[( |\t)]+" + ATTR_COMPARE + "[( |\t)]*)*";
-std::string const WITH_CL = "[( |\t)]+with[( |\t)]+" + ATTR_COND;
+std::string const WITH_CL = "( |\t)*with[( |\t)]+" + ATTR_COND;
 
 
 std::string const SELECT_CL = "[( |\n|\t)]*Select[( |\n|\t)]+" + RESULT_CL + "([( |\t)]+" + SUCH_THAT_CL + "|[( |\t)]+"

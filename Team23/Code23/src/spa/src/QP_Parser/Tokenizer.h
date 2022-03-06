@@ -14,14 +14,6 @@ namespace qp {
         PatternToken() : synonym(""), arguments(nullptr) {};
     };
 
-    class WithClauseToken {
-    public:
-        std::pair<std::string, std::string>* leftRef;
-        std::pair<std::string, std::string>* rightRef;
-
-        WithClauseToken() : leftRef(nullptr), rightRef(nullptr) {};
-    };
-
     class SuchThatClauseToken {
     public:
         std::string relRef;
@@ -39,10 +31,11 @@ namespace qp {
         std::vector<SuchThatClauseToken>* suchThatClauseTokens;
         std::vector<PatternToken>* patternTokens;
         std::pair<std::vector<std::string>, std::vector<std::string>>* declarations;
+        std::vector<std::pair<std::string, std::string>>* withClauses;
 
         QueryToken() : declarationTokens(nullptr), selectClauseTokens(nullptr),
         suchThatClauseTokens(new std::vector<SuchThatClauseToken>()),
-        patternTokens( new std::vector<PatternToken>()), declarations(nullptr) {};
+        patternTokens( new std::vector<PatternToken>()), declarations(nullptr), withClauses(nullptr) {};
 
     };
 
