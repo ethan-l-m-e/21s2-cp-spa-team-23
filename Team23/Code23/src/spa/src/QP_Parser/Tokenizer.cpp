@@ -134,7 +134,7 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
     std::string synonym = StringFormatter::removeTrailingSpace(patternClauseArgs[0]);
 
     PatternToken patternToken = PatternToken();
-    patternToken.synonym = synonym;
+    patternToken.synonym = StringFormatter::tokenizeByRegex(synonym, "[ |\t]+")[1];
     patternToken.arguments = new std::vector<std::string>(patternClauseArgs.begin()+1, patternClauseArgs.end());
     return patternToken;
 }
