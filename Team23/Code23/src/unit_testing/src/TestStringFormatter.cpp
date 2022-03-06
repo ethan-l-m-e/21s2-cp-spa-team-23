@@ -22,3 +22,9 @@ TEST_CASE("tokenize by regex") {
     vector<string> v = StringFormatter::tokenizeByRegex(arg, "_\"|\"_");
     CHECK(v[0] == "This is an item");
 }
+
+TEST_CASE("remove trailing space") {
+    string str = "     \n      thing    \t  ";
+    string output = StringFormatter::removeTrailingSpace(str);
+    CHECK(output == "thing");
+}
