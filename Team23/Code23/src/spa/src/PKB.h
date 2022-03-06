@@ -20,6 +20,7 @@ class ReadNode;
 class PrintNode;
 class IfNode;
 class WhileNode;
+class CallNode;
 
 class VarTable;  // no need to #include "VarTable.h" as all I need is postringer
 
@@ -40,12 +41,14 @@ private:
     unordered_set<int> printStatementsSet;
     unordered_set<int> ifStatementsSet;
     unordered_set<int> whileStatementsSet;
+    unordered_set<int> callStatementsSet;
 
     unordered_set<StmtNode *> statementNodesSet;
     unordered_set<ReadNode *> readNodesSet;
     unordered_set<PrintNode *> printNodesSet;
     unordered_set<IfNode *> ifNodesSet;
     unordered_set<WhileNode *> whileNodesSet;
+    unordered_set<CallNode *> callNodesSet;
 
     unordered_map<int, int> followeeToFollowerMap;
     unordered_map<int, int> followerToFolloweeMap;
@@ -141,20 +144,22 @@ public:
     vector<AssignNode *> getAllAssignNodes();
 
     // Setter Functions (Variables, Procedures etc.)
-    void addStatement(StmtNode *statement);
+    void addStatement(StmtNode *node);
     void addVariable(string variable);
     void addProcedure(string procedure);
     void addConstant(string constant);
 
     // Setter Functions (Statement Types)
 
-    void addAssignStatement(AssignNode *statement);
+    void addAssignStatement(AssignNode *node);
 
-    void addReadStatement(ReadNode *statement);
-    void addPrintStatement(PrintNode *statement);
+    void addReadStatement(ReadNode *node);
+    void addPrintStatement(PrintNode *node);
 
-    void addIfStatement(IfNode *statement);
-    void addWhileStatement(WhileNode *statement);
+    void addIfStatement(IfNode *node);
+    void addWhileStatement(WhileNode *node);
+
+    void addCallStatement(CallNode *node);
 
     // Getter Functions (Variables, Procedures etc.)
 
@@ -184,6 +189,7 @@ public:
     unordered_set<string> getAllPrintStatements();
     unordered_set<string> getAllIfStatements();
     unordered_set<string> getAllWhileStatements();
+    unordered_set<string> getAllCallStatements();
 
     //----------------------------------------------------------------------------------RELATIONSHIP SETTER FUNCTIONS---------------------------------------------------------------------------------------------------------------------------------------------------------------
 

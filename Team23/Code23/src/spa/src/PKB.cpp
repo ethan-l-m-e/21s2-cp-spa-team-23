@@ -7,6 +7,13 @@ using namespace std;
 
 #include "PKB.h"
 #include "TNode/Node.h"
+#include "TNode/StmtNode.h"
+#include "TNode/AssignNode.h"
+#include "TNode/ReadNode.h"
+#include "TNode/PrintNode.h"
+#include "TNode/IfNode.h"
+#include "TNode/WhileNode.h"
+#include "TNode/CallNode.h"
 
 
 //string PKB::setProcToAST(PROC p, TNode* r) {
@@ -177,6 +184,11 @@ void PKB::addWhileStatement(WhileNode *node) {
     whileNodesSet.insert(node);
 }
 
+void PKB::addCallStatement(CallNode *node) {
+    addStatement(node);
+    callStatementsSet.insert(node->getStmtNumber());
+    callNodesSet.insert(node);
+}
 
 // Getter Functions (Statement Types)
 
@@ -227,6 +239,9 @@ unordered_set<string> PKB::getAllIfStatements() {
 }
 unordered_set<string> PKB::getAllWhileStatements() {
     return convertSetIntegersToSetStrings(whileStatementsSet);
+}
+unordered_set<string> PKB::getAllCallStatements() {
+    return convertSetIntegersToSetStrings(callStatementsSet);
 }
 
 
