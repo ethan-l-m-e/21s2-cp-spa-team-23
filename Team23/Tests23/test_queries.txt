@@ -1,0 +1,10 @@
+../../../../Tests23/test_source.txt ../../../../Tests23/test_queries.txt ../../../tests/out.xml
+constant c;
+Select c
+1, 2, 3
+5000
+1.0.2 -  vars
+variable v;
+Select v
+variable1, variable2, variable3
+5000
