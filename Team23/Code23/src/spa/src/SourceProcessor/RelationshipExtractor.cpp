@@ -218,6 +218,33 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
         return {};
     }
 }
+void RelationshipExtractor::extractCalls(Node * node, vector<StmtLstNode*> procList, ProcedureNode currProcName) {
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode *> v = value->getProcLst();
+        for (ProcedureNode *p: v)
+            extractCalls(p,procList,*p);
+
+    }else if(node->hasStmtLst()) {
+        int numOfChildNodes = node->getStmtLst().size();
+        if(node->getStmtNumber()!=-1) {
+            procList.push_back((StmtLstNode *) node);
+            Node *parent = node;
+            for (int i = 0; i < (numOfChildNodes); i++) {
+                Node *child = node->getStmtLst().at(i);
+                PKB::getInstance()->setParent(parent->getStmtNumber(), child->getStmtNumber());
+                for (int j = 0; j < procList.size(); j++) {
+                    Node *parentT = procList.at(j);
+                    PKB::getInstance()->setParentT(parentT->getStmtNumber(), child->getStmtNumber());
+                }
+            }
+        }
+        for (int i = 0; i < (numOfChildNodes); i++) {
+            extractParent(node->getStmtLst().at(i), procList);
+        }
+    }else if (auto value = dynamic_cast<CallNode*>(node)){
+//        PKB::getInstance()->setCalls()
+    }
+}
 
 
 void extractAllEntities(Node *node) {

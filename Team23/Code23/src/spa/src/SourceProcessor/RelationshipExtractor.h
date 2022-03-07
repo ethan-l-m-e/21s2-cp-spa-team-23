@@ -7,6 +7,7 @@
 
 
 #include "TNode/Node.h"
+#include "TNode/ProcedureNode.h"
 #include "TNode/StmtLstNode.h"
 
 class RelationshipExtractor {
@@ -16,6 +17,8 @@ public:
     static vector<string> extractModifies(Node*);
     static vector<string> extractUses(Node*);
     static void extractRelationships(Node*);
+
+    static void extractCalls(Node *node, vector<StmtLstNode *> parentList, ProcedureNode currProcName);
 };
 
 
