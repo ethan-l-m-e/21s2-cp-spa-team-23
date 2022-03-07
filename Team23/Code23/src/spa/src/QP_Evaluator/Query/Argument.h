@@ -25,11 +25,11 @@ enum class AttrName {
     STMT_NO,
 };
 
-using AttrVal = std::variant<std::string, std::pair<std::string, AttrName>>;
+using ArgumentValue = std::variant<std::string, std::pair<std::string, AttrName>>;
 
 typedef struct Argument {
     ArgumentType argumentType;
-    AttrVal argumentValue;
+    ArgumentValue argumentValue;
 } Argument;
 
 #endif //SPA_ARGUMENT_H
