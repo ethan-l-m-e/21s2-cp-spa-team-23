@@ -1,0 +1,15 @@
+procedure Tuples {
+    A = a+b + c*d + e/f + g%h +i+j+k+l;
+    read B;
+    while (D == E) {
+        F = G;
+    }
+    if (H != I) then {
+        J = 0;
+    } else {
+        call TuplesAgain;
+    }
+}
+procedure TuplesAgain {
+    print C;
+}
