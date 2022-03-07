@@ -13,12 +13,23 @@ enum class ArgumentType {
     STMT_NO,
     UNDERSCORE,
     PARTIAL_UNDERSCORE,
-    EXPRESSION
+    EXPRESSION,
+    ATTR_REF,
+    BOOLEAN
 };
+
+enum class AttrName {
+    PROC_NAME,
+    VAR_NAME,
+    VALUE,
+    STMT_NO,
+};
+
+using AttrVal = std::variant<std::string, std::pair<std::string, AttrName>>;
 
 typedef struct Argument {
     ArgumentType argumentType;
-    std::string argumentValue;
+    AttrVal argumentValue;
 } Argument;
 
 #endif //SPA_ARGUMENT_H

@@ -29,17 +29,17 @@ protected:
     vector<SuchThatClause> suchThatClauses;
     vector<PatternClause> patternClauses;
     vector<WithClause> withClauses;
-    vector<string> selectedSynonyms;
+    vector<Argument> selectedSynonyms;
 public:
     bool hasSuchThatClause();
     bool hasPatternClause();
     vector<PatternClause> getPatternClauses();
     vector<SuchThatClause> getSuchThatClauses();
-    vector<string> getSelectedSynonyms();
+    vector<Argument> getSelectedSynonyms();
     DesignEntity getSynonymType(string synonym);
     DesignEntity findEntityType(const std::string&);
     void setDeclarations(unordered_map<string, DesignEntity>);
-    void setSynonyms(vector<std::string>);
+    void setSynonyms(std::vector<Argument>);
     void setSuchThatClauses(vector<SuchThatClause>);
     void setPatternClauses(vector<PatternClause>);
     void setWithClauses(vector<WithClause>);
