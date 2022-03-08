@@ -15,6 +15,7 @@ public:
     static void extractParent(Node*,vector<StmtLstNode*>);
     static vector<string> extractModifies(Node*);
     static vector<string> extractUses(Node*);
+    static void detectDuplicateProcedure(Node*);
     static void extractRelationships(Node*);
 };
 
