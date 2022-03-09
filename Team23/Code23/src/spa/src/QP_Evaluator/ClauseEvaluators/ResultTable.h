@@ -26,6 +26,10 @@ public:
     void clearTable();
     void mergeResultToTable(Result &result);
     void rearrangeSynonyms(std::vector<int>&);
+    void appendColumn(std::string, std::vector<std::string>);
+    std::string getBooleanResult();
+    void setBooleanResult(bool);
+
 private:
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
@@ -40,6 +44,8 @@ private:
 
     std::vector<std::string> tableHeader;
     String2DVector tableEntries;
+    bool isBooleanResult;
+    bool booleanResult;
 };
 
 #endif //SPA_RESULTTABLE_H

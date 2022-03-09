@@ -9,11 +9,13 @@
 ResultTable::ResultTable(){
     tableHeader = std::vector<std::string>{};
     tableEntries = String2DVector{};
+    isBooleanResult = false;
 }
 
 ResultTable::ResultTable(std::vector<std::string> header, String2DVector values){
     tableHeader = std::move(header);
     tableEntries = std::move(values);
+    isBooleanResult = false;
 }
 
 bool ResultTable::isEmpty(){
@@ -315,6 +317,24 @@ void ResultTable::rearrangeSynonyms(std::vector<int>& orders) {
     }
     tableHeader = newHeader;
     tableEntries = newEntries;
+}
+
+void ResultTable::appendColumn(std::string colName, std::vector<std::string> col) {
+    tableHeader.emplace_back(colName);
+    tableEntries.emplace_back(col);
+
+}
+
+std::string ResultTable::getBooleanResult() {
+    if(isBooleanResult) {
+        return booleanResult ? "TRUE" : "FALSE";
+    }
+    return "";
+}
+
+ void ResultTable::setBooleanResult(bool result) {
+    isBooleanResult = true;
+    booleanResult = result;
 }
 
 
