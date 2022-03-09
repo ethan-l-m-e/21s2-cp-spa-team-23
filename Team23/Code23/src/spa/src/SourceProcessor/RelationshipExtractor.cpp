@@ -304,11 +304,7 @@ void detectDuplicateProcedure(Node * node) {
 }
 
 void RelationshipExtractor::extractRelationships(Node * node){
-    try {
-        detectDuplicateProcedure(node);
-    } catch(char const* &e) {
-        cerr << e << "\n";
-    }
+    detectDuplicateProcedure(node);
 
     //extract relationship
     vector<StmtLstNode*> v;
