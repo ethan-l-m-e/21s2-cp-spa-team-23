@@ -357,35 +357,48 @@ bool detectCyclicCallsRec(ProcName name,
     return false;
 }
 void detectCyclicCalls(Node* node) {
-    auto programNode = dynamic_cast<ProgramNode*>(node);
-    vector<ProcedureNode*> v = programNode->getProcLst();
+    auto programNode = dynamic_cast<ProgramNode *>(node);
+    vector<ProcedureNode *> v = programNode->getProcLst();
 
-    unordered_map<ProcName, GraphNode*> graphNodes;
-    vector<ProcName> allProcName;
-    unordered_map<ProcName , bool> visited;
-    unordered_map<ProcName , bool> stack;
+    unordered_map<ProcName, GraphNode *> graphNodes;
+    vector < ProcName > allProcName;
+    unordered_map<ProcName, bool> visited;
+    unordered_map<ProcName, bool> stack;
 
-    for (ProcedureNode* p: v) {
+    for (ProcedureNode *p: v) {
         ProcName name = p->getProcName();
-        vector<ProcName> NodesFromP = getAllProcedureCall(p);
-        GraphNode* node = new GraphNode(name, NodesFromP);
-
+        vector < ProcName > NodesFromP = getAllProcedureCall(p);
+        GraphNode *node = new GraphNode(name, NodesFromP);
         graphNodes[name] = node;
         allProcName.push_back(name);
         visited[name], stack[name] = false;
     }
     // perform DFS to check for recursions
-    for(int i = 0; i < allProcName.size(); i++) {
+    for (int i = 0; i < allProcName.size(); i++) {
         ProcName name = allProcName[i];
-        if(!visited[name] && detectCyclicCallsRec(name, graphNodes, visited, stack)) {
+        if (!visited[name] && detectCyclicCallsRec(name, graphNodes, visited, stack)) {
             cout << "cyclic call statements detected\n";
             throw "cyclic calls detected\n";
         }
     }
 }
 
+void detectDuplicateProcedure(Node * node) {
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        unordered_set<ProcName> procNames;
+        ProcedureList procLst = value->getProcLst();
+        for(ProcedureNode* p: procLst) {
+            if(procNames.find(p->getProcName()) != procNames.end()) {
+                throw "Cannot have duplicate Procedure names";
+            }
+            procNames.insert(p->getProcName());
+        }
+    }
+}
+
 void RelationshipExtractor::extractRelationships(Node * node){
     // check for semantics error
+    detectDuplicateProcedure(node);
     detectCyclicCalls(node);
 
     //extract variables and constants etc
