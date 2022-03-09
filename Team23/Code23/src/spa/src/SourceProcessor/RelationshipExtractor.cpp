@@ -290,15 +290,15 @@ void extractAllEntities(Node *node) {
     }
 }
 
-void RelationshipExtractor::detectDuplicateProcedure(Node * node) {
+void detectDuplicateProcedure(Node * node) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
-        vector<ProcName> procNames;
+        unordered_set<ProcName> procNames;
         ProcedureList procLst = value->getProcLst();
         for(ProcedureNode* p: procLst) {
-            if(find(procNames.begin(), procNames.end(), p->getProcName()) != procNames.end()) {
+            if(procNames.find(p->getProcName()) != procNames.end()) {
                 throw "Cannot have duplicate Procedure names";
             }
-            procNames.push_back(p->getProcName());
+            procNames.insert(p->getProcName());
         }
     }
 }
