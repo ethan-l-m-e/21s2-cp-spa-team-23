@@ -15,6 +15,25 @@
 
 using std::begin, std::end;
 
+class GraphNode {
+    string name;
+    vector<ProcName> toOtherNodes;
+public:
+    GraphNode(string name, vector<ProcName> toOtherNodes) {
+        this-> name = name;
+        this->toOtherNodes = toOtherNodes;
+    }
+    vector<ProcName> getDirectedNodes() {
+        return this->toOtherNodes;
+    }
+    string getName() {
+        return this->name;
+    }
+    void changeName(string name) {
+        this->name = name;
+    }
+};
+
 void extractFollowsFromStatementList(StatementList statementList) {
     int numOfChildNodes = statementList.size();
     if (numOfChildNodes > 1) {
@@ -153,12 +172,6 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
 
 }
 
-
-
-
-
-
-
 //set all variables modified by the node in the pkb
 vector<string> RelationshipExtractor::extractModifies (Node * node) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
@@ -290,15 +303,99 @@ void extractAllEntities(Node *node) {
     }
 }
 
+vector<ProcName> getAllProcedureCall(Node* node) {
+    if(auto value = dynamic_cast<CallNode*>(node)) {
+        ProcName procName = value->getProcName();
+        return vector<ProcName>{procName};
+    } else if (auto value = dynamic_cast<IfNode*>(node)) {
+        vector<Node*> stmtLstNode = value->getStmtLst();
+        vector<ProcName> procNameList, e;
+        for(Node* s: stmtLstNode) {
+            e = getAllProcedureCall(s);
+            procNameList.insert(procNameList.end(), e.begin(), e.end());
+        }
+        return procNameList;
+    } else if (auto value = dynamic_cast<WhileNode*>(node)) {
+        vector<Node*> stmtLstNode = value->getStmtLst();
+        vector<ProcName> procNameList, e;
+        for(Node* s: stmtLstNode) {
+            e = getAllProcedureCall(s);
+            procNameList.insert(procNameList.end(), e.begin(), e.end());
+        }
+        return procNameList;
+    } else if (auto value = dynamic_cast<ProcedureNode*>(node)) {
+        vector<Node*> stmtLstNode = value->getStmtLst();
+        vector<ProcName> procNameList, e;
+        for(Node* s: stmtLstNode) {
+            e = getAllProcedureCall(s);
+            procNameList.insert(procNameList.end(), e.begin(), e.end());
+        }
+        return procNameList;
+    }  else {
+        return {};
+    };
+}
+
+bool detectCyclicCallsRec(ProcName name,
+                          unordered_map<ProcName, GraphNode*> graphNodes,
+                          unordered_map<ProcName, bool> visited,
+                          unordered_map<ProcName, bool> stack) {
+    if(visited[name] == false) {
+        visited[name] = true;
+        stack[name] = true;
+        GraphNode* currentNode = graphNodes[name];
+        vector<ProcName> nameList = currentNode->getDirectedNodes();
+        vector<ProcName>::iterator i;
+        for(i = nameList.begin(); i != nameList.end(); ++i) {
+            if(!visited[*i] &&
+                    detectCyclicCallsRec(*i, graphNodes, stack, visited))
+                return true;
+            else if (stack[*i] == true) return true;
+        }
+    }
+    stack[name] = false;
+    return false;
+}
+void detectCyclicCalls(Node* node) {
+    auto programNode = dynamic_cast<ProgramNode*>(node);
+    vector<ProcedureNode*> v = programNode->getProcLst();
+
+    unordered_map<ProcName, GraphNode*> graphNodes;
+    vector<ProcName> allProcName;
+    unordered_map<ProcName , bool> visited;
+    unordered_map<ProcName , bool> stack;
+
+    for (ProcedureNode* p: v) {
+        ProcName name = p->getProcName();
+        vector<ProcName> NodesFromP = getAllProcedureCall(p);
+        GraphNode* node = new GraphNode(name, NodesFromP);
+
+        graphNodes[name] = node;
+        allProcName.push_back(name);
+        visited[name], stack[name] = false;
+    }
+    // perform DFS to check for recursions
+    for(int i = 0; i < allProcName.size(); i++) {
+        ProcName name = allProcName[i];
+        if(!visited[name] && detectCyclicCallsRec(name, graphNodes, visited, stack)) {
+            cout << "cyclic call statements detected\n";
+            throw "cyclic calls detected\n";
+        }
+    }
+}
+
 void RelationshipExtractor::extractRelationships(Node * node){
+    // check for semantics error
+    detectCyclicCalls(node);
+
+    //extract variables and constants etc
+    extractAllEntities(node);
+
     //extract relationship
     vector<StmtLstNode*> v;
     extractFollows(node);
     extractParent(node,v);
     extractUses(node);
     extractModifies(node);
-
-    //extract variables and constants etc
-    extractAllEntities(node);
 }
 
