@@ -2,8 +2,8 @@
 // Created by Tianyi Wang on 7/2/22.
 //
 
-#include "SelectClauseEvaluator.h"
-bool SelectClauseEvaluator::evaluateClause(ResultTable* resultTable) {
+#include "ResultClauseEvaluator.h"
+bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     std::unordered_set<std::string> resultSet;
     auto header = resultTable->getHeader();
     vector<int> orders;
@@ -51,7 +51,7 @@ bool SelectClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     return true;
 }
 
-bool SelectClauseEvaluator::applyAttrRef(std::vector<std::string>* lst,
+bool ResultClauseEvaluator::applyAttrRef(std::vector<std::string>* lst,
                                          std::pair<string, AttrName> attrRef,
                                          std::vector<std::string>* newLst) {
     if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
@@ -67,7 +67,7 @@ bool SelectClauseEvaluator::applyAttrRef(std::vector<std::string>* lst,
     return false;
 }
 
-std::vector<std::string> SelectClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (*func) (std::string)) {
+std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (*func) (std::string)) {
     std::vector<std::string> mappings;
     for (const std::string& val: lst) {
         std::string mapped = func(val);

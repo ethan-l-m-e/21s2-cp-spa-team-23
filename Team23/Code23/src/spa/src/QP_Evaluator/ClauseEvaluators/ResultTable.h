@@ -19,16 +19,17 @@ class ResultTable {
 public:
     ResultTable();
     ResultTable(std::vector<std::string>, String2DVector);
+    void clearTable();
+    bool isBoolean();
     bool isEmpty();
+    std::string getBooleanResult();
     std::vector<std::string> *getHeader();
     String2DVector *getList();
     size_t getTableSize();
-    void clearTable();
+    void setBooleanResult(bool);
+    void appendColumn(std::string, std::vector<std::string>&);
     void mergeResultToTable(Result &result);
     void rearrangeSynonyms(std::vector<int>&);
-    void appendColumn(std::string, std::vector<std::string>);
-    std::string getBooleanResult();
-    void setBooleanResult(bool);
 
 private:
     void mergeStringResult(Result &result);

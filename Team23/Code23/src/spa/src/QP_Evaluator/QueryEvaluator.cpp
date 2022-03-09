@@ -7,7 +7,7 @@
 #include "QP_Evaluator/ClauseEvaluators/FollowsClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ParentClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/PatternClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/SelectClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/ResultClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/FollowsTClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ParentTClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ModifiesSClauseEvaluator.h"
@@ -43,10 +43,10 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     }
 
     // Evaluate select clause and output the result
-    auto* selectClauseEvaluator = new SelectClauseEvaluator(pkb, query);
-    bool selectResult = selectClauseEvaluator->evaluateClause(resultTable);
-    delete selectClauseEvaluator;
-    if (!selectResult) return {};
+    auto* resultClauseEvaluator = new ResultClauseEvaluator(pkb, query);
+    bool result = resultClauseEvaluator->evaluateClause(resultTable);
+    delete resultClauseEvaluator;
+    if (!result) return {};
     std::list<std::string> output = generateResultString(resultTable);
     delete resultTable;
     return output;
@@ -88,7 +88,9 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
  */
 std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
     std::list<std::string> stringList;
-    if (!resultTable->isEmpty()) {
+    if (resultTable->isBoolean()) {
+        stringList.emplace_back(resultTable->getBooleanResult());
+    } else if (!resultTable->isEmpty()) {
         for(int i = 0; i < resultTable->getTableSize(); i++) {
             std::string s;
             for (auto &col: *resultTable->getList()) {
