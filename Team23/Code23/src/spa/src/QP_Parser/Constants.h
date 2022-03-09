@@ -59,7 +59,7 @@ std::string const REL_COND = REL_REF + "([( |\t)]+and[( |\t)]+" + REL_REF + ")*"
 std::string const SUCH_THAT_CL = "such[( |\t)]+that[( |\t)]+" + REL_COND;
 
 // pattern regex
-std::string const EXPRESSION_SPEC = "(_|_\"(.)*\"_|\"(.)*\")";
+std::string const EXPRESSION_SPEC = "(_|_\"(.)+\"_|\"(.)+\")";
 std::string const ASSIGN = SYNONYM + "[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*" + EXPRESSION_SPEC
         + "[( |\t)]*\\)";
 std::string const WHILE = SYNONYM + "[( |\t)]*\\([( |\t)]*" + ENT_REF + "[( |\t)]*,[( |\t)]*_[( |\t)]*\\)";

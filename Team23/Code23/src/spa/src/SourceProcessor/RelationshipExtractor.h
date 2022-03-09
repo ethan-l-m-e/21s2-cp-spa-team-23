@@ -5,9 +5,14 @@
 #ifndef SPA_RELATIONSHIPEXTRACTOR_H
 #define SPA_RELATIONSHIPEXTRACTOR_H
 
+#include <string>
+#include <vector>
+#include <unordered_set>
 
 #include "TNode/Node.h"
 #include "TNode/StmtLstNode.h"
+
+using namespace std;
 
 class RelationshipExtractor {
 public:

@@ -196,7 +196,7 @@ Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a(_, _"a"_)
 40 - (1 synonym + varname)
 stmt s; assign a;
 Select s such that Modifies(s, _) pattern a(_, _)
-1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7
+1, 10, 12, 13, 14, 15, 17, 2, 3, 4, 5, 6, 8, 9, 11, 16, 19, 7, 20
 5000
 41 - (1 synonym + varname)
 stmt s; assign a;
@@ -269,12 +269,12 @@ Select s such that Modifies(s, "nestedAlternateIfAndWhile") pattern a(v, _"a"_)
 12, 13, 14, 15, 16, 2, 8
 5000
 55 - (2 synonym + varname)
-assign a; variable v;
+stmt s; assign a; variable v;
 Select a such that Modifies(s, v) pattern a(v, "a")
 3
 5000
 56 - (2 synonym + varname)
-assign a; variable v;
+stmt s; assign a; variable v;
 Select a such that Modifies(s, v) pattern a(v, _"a"_)
 3, 20
 5000

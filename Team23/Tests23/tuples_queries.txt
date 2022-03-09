@@ -1,0 +1,25 @@
+../../../../Tests23/tuples_source.txt ../../../../Tests23/tuples_queries.txt ../../../tests/out.xml
+assign a; read r;
+Select <a, r>
+1 2, 4 2, 6 2
+5000
+1 - [valid] select 3
+read r; print p; call c;
+Select <r, p, c>
+2 8 7
+5000
+2 - [valid] Select 5
+read r; print p; call c; while w; if ifs;
+Select <r, p, c, w, ifs>
+2 8 7 3 5
+5000
+3 - [valid] Select 2 + Uses
+assign a; print p;
+Select <a, p> such that Uses(p, "C")
+1 8, 4 8, 6 8
+5000
+4 - [valid] Select 2 + pattern
+assign a; procedure pr;
+Select <a, pr> pattern a(_, _"g%h"_)
+1 Tuples, 1 TuplesAgain
+5000
