@@ -11,7 +11,7 @@ NodeCFG::NodeCFG(int statementNumber) {
 }
 
 int NodeCFG::getStatementNumber() {
-    return this->getStatementNumber();
+    return this->statementNumber;
 }
 
 void NodeCFG::setNextNode(NodeCFG* node) {

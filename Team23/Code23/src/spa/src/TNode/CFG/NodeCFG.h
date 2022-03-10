@@ -67,7 +67,7 @@ public:
 };
 
 
-class LoopCFG: NodeCFG {
+class LoopCFG: public NodeCFG {
 protected:
     NodeCFG* nodeInLoop;
 public:
