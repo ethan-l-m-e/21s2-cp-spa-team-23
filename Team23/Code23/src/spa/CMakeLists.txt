@@ -25,7 +25,7 @@ set(headers ${headers}
         src/QP_Parser/Exception.h
         src/QP_Evaluator/QueryEvaluator.h
         src/SourceProcessor/SourceProcessor.h
-        src/TNode/TNode.h src/TNode/CFG/NodeCFG.cpp src/TNode/CFG/NodeCFG.h src/TNode/CFG/BranchCFG.cpp src/TNode/CFG/MergeCFG.cpp src/TNode/CFG/LoopCFG.cpp src/TNode/CallNode.cpp src/TNode/CallNode.h)
+        src/TNode/TNode.h src/TNode/CFG/NodeCFG.cpp src/TNode/CFG/NodeCFG.h src/TNode/CFG/BranchCFG.cpp src/TNode/CFG/MergeCFG.cpp src/TNode/CFG/LoopCFG.cpp src/TNode/CallNode.cpp src/TNode/CallNode.h src/QP_Evaluator/ClauseEvaluators/NextClauseEvaluator.cpp src/QP_Evaluator/ClauseEvaluators/NextClauseEvaluator.h)
 add_library(spa ${srcs} ${headers} src/SourceProcessor/Parser.cpp
         src/SourceProcessor/SourceProcessor.cpp src/SourceProcessor/SourceProcessor.h
         src/SourceProcessor/Parser.h
