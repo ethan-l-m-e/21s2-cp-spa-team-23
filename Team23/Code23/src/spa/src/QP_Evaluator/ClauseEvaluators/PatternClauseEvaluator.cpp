@@ -142,24 +142,6 @@ void addToStmtAndVariableList(AssignNode *assignNode, vector<ResultItem> *statem
 //      compare operator, like var & const
 //          if operator same, initiate another exact match with && instead of ||
 bool searchForMatchInExpr(Expression expressionNode, Expression arg) {
-    /*
-     if (auto binaryNode = std::get_if<BinaryOperatorNode*>(&expressionNode)) {
-        BinaryOperatorNode* operatorNode = *binaryNode;
-        bool leftResult = searchForMatchInExpr(operatorNode->getLeftExpr(), arg);
-        bool rightResult = searchForMatchInExpr(operatorNode->getRightExpr(), arg);
-        return leftResult || rightResult;
-    } else if (auto value = std::get_if<VariableNode*>(&expressionNode)) {
-        VariableNode* varNode = *value;
-        if (varNode->getVariableName() == arg)     return true;
-         else                                           return false;
-    } else if(auto value = std::get_if<ConstValueNode*>(&expressionNode)) {
-        ConstValueNode* constNode = *value;
-        if (constNode->getConstValue() == arg)     return true;
-        else                                            return false;
-    } else {
-        throw "cannot understand expression";
-    };
-     */
     /**
      * perform exact matching, if it fails, go down the different paths to see if correct or not
      */
@@ -217,16 +199,6 @@ bool matchVariableValue(VariableNode *varNode, Argument arg) {
 }
 
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg) {
-    // convert arg to variable (or secondExpression in the future)
-
-    /*
-    int first = arg.argumentValue.find("\"");
-    string rightArg = arg.argumentValue.substr(first + 1, arg.argumentValue.size() - 4);
-    //string rightArg = StringFormatter::tokenizeByRegex(arg.argumentValue, "_\"|\"_")[0];
-    Expression rightAsExpr = Parser::parseExpression(rightArg); //no usage yet for iteration 1
-    Expression RHSExpression = assignNode ->getRightNode();
-    return searchForMatchInExpr(RHSExpression, rightAsExpr);
-*/
     /**
      * check if the argument is exact or part wildcard
      * if exact, go straight to direct matching

@@ -1,6 +1,7 @@
 //
 // Created by Tin Hong Wen on 4/3/22.
 //
+#include <iostream>
 
 #include "TNode/CFG/NodeCFG.h"
 
@@ -65,7 +66,7 @@ TEST_CASE("Branch/Merge Nodes") {
     CHECK(node5->getStartNode() == node1);
 }
 
-TEST_CASE("Imaginary Merge Nodes") {
+TEST_CASE("Imaginary Merge Nodes; end of procedure") {
     NodeCFG* node1 = new NodeCFG(1);
     BranchCFG* node2 = new BranchCFG(2);
     node1->setNextNode(node2);
@@ -76,7 +77,7 @@ TEST_CASE("Imaginary Merge Nodes") {
     NodeCFG* node4 = new NodeCFG(4);
     node2->setRightNode(node4);
     node4->setPreviousNode(node2);
-    MergeCFG* node5 = new ImagineMergeCFG();
+    ImagineMergeCFG* node5 = new ImagineMergeCFG();
     node3->setNextNode(node5);
     node4->setNextNode(node5);
     node5->setLeftPreviousNode(node3);
@@ -86,6 +87,129 @@ TEST_CASE("Imaginary Merge Nodes") {
     CHECK(node2->getRightNode() == node4);
     CHECK(node5->getEndNode() == node4);
     CHECK(node1->getEndNode() == node4);
+}
+
+//Imaginary Merge can happen in these cases:
+//1) last statement in the procedure is an if statement
+//2) last statement in a while/if statement is an if statement
+TEST_CASE("Imaginary Merge Nodes; within if statement") {
+    // 1 -< 2, 5
+    // 2 -< 3, 4
+    // 5 -< 6, 7
+    // 8
+    /*
+     * if(x < y) then {
+     *      if(s , c) then {
+     *          dsds;
+     *       } else {sdasdasd;}} else {
+     *      if(s , c) then {
+     *          dsds;
+     *       } else {sdasdasd;     }}
+     * asdasdsad;
+     */
+    BranchCFG* node1 = new BranchCFG(1);
+
+    BranchCFG* node2 = new BranchCFG(2);
+    node2->setPreviousNode(node1);
+    node1->setLeftNode(node2);
+    NodeCFG* node3 = new NodeCFG(3);
+    node3->setPreviousNode(node2);
+    node2->setLeftNode(node3);
+    NodeCFG* node4 = new NodeCFG(4);
+    node4->setPreviousNode(node2);
+    node2->setRightNode(node4);
+
+    ImagineMergeCFG* imgA = new ImagineMergeCFG();
+    imgA->setLeftPreviousNode(node3);
+    imgA->setRightPreviousNode(node4);
+    node3->setNextNode(imgA);
+    node4->setNextNode(imgA);
+
+
+    BranchCFG* node5 = new BranchCFG(5);
+    node5->setPreviousNode(node1);
+    node1->setRightNode(node5);
+    NodeCFG* node6 = new NodeCFG(6);
+    node6->setPreviousNode(node5);
+    node5->setLeftNode(node6);
+    NodeCFG* node7 = new NodeCFG(7);
+    node7->setPreviousNode(node5);
+    node5->setRightNode(node7);
+
+    ImagineMergeCFG* imgB = new ImagineMergeCFG();
+    imgB->setLeftPreviousNode(node6);
+    imgB->setRightPreviousNode(node7);
+    node6->setNextNode(imgB);
+    node7->setNextNode(imgB);
+
+    MergeCFG* node8 = new MergeCFG(8);
+    node8->setLeftPreviousNode(imgA);
+    node8->setRightPreviousNode(imgB);
+    imgA->setNextNode(node8);
+    imgB->setNextNode(node8);
+
+    CHECK(node1->getEndNode() == node8);
+    CHECK(node8->getStartNode() == node1);
+}
+
+TEST_CASE("Imaginary Merge Nodes; both end imaginary") {
+    // 1 -< 2, 5
+    // 2 -< 3, 4
+    // 5 -< 6, 7
+    // 8
+    /*
+     * if(x < y) then {
+     *      if(s , c) then {
+     *          dsds;
+     *       } else {sdasdasd;}} else {
+     *      if(s , c) then {
+     *          dsds;
+     *       } else {sdasdasd;     }}
+     * asdasdsad;
+     */
+    BranchCFG* node1 = new BranchCFG(1);
+
+    BranchCFG* node2 = new BranchCFG(2);
+    node2->setPreviousNode(node1);
+    node1->setLeftNode(node2);
+    NodeCFG* node3 = new NodeCFG(3);
+    node3->setPreviousNode(node2);
+    node2->setLeftNode(node3);
+    NodeCFG* node4 = new NodeCFG(4);
+    node4->setPreviousNode(node2);
+    node2->setRightNode(node4);
+
+    ImagineMergeCFG* imgA = new ImagineMergeCFG();
+    imgA->setLeftPreviousNode(node3);
+    imgA->setRightPreviousNode(node4);
+    node3->setNextNode(imgA);
+    node4->setNextNode(imgA);
+
+
+    BranchCFG* node5 = new BranchCFG(5);
+    node5->setPreviousNode(node1);
+    node1->setRightNode(node5);
+    NodeCFG* node6 = new NodeCFG(6);
+    node6->setPreviousNode(node5);
+    node5->setLeftNode(node6);
+    NodeCFG* node7 = new NodeCFG(7);
+    node7->setPreviousNode(node5);
+    node5->setRightNode(node7);
+
+    ImagineMergeCFG* imgB = new ImagineMergeCFG();
+    imgB->setLeftPreviousNode(node6);
+    imgB->setRightPreviousNode(node7);
+    node6->setNextNode(imgB);
+    node7->setNextNode(imgB);
+
+    ImagineMergeCFG* imgC = new ImagineMergeCFG();
+    imgC->setLeftPreviousNode(imgA);
+    imgC->setRightPreviousNode(imgB);
+    imgA->setNextNode(imgC);
+    imgB->setNextNode(imgC);
+
+    CHECK(node1->getEndNode() == node7);
+    //CHECK(imgC->getStartNode() == node1);
 }
 
 TEST_CASE("Loop Nodes") {
