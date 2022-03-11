@@ -11,16 +11,16 @@ TEST_CASE("Test straight Nodes") {
     NodeCFG* node1 = new NodeCFG(1);
     NodeCFG* node2 = new NodeCFG(2);
     node1->setNextNode(node2);
-    node2->setPreviousNode(node1);
+    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setNextNode(node3);
-    node3->setPreviousNode(node2);
+    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node3->setNextNode(node4);
-    node4->setPreviousNode(node3);
+    node4->addPreviousNode(node3);
     NodeCFG* node5 = new NodeCFG(5);
     node4->setNextNode(node5);
-    node5->setPreviousNode(node4);
+    node5->addPreviousNode(node4);
 
     CHECK(node1->isStart());
     CHECK(!node2->isStart());
@@ -35,64 +35,61 @@ TEST_CASE("Test straight Nodes") {
     CHECK(1 == node3->getStartNode()->getStatementNumber());
     CHECK(1 == node5->getStartNode()->getStatementNumber());
 
-    CHECK(node2 -> getPreviousNode() == node1);
+    CHECK(node2->getAllPreviousNode()[1] == node1);
     CHECK(node2 -> getNextNode() == node3);
-    CHECK(node4 -> getPreviousNode() == node3);
+    CHECK(node4->getAllPreviousNode()[3] == node3);
     CHECK(node4 -> getNextNode() == node5);
 }
 
-TEST_CASE("Branch/Merge Nodes") {
+TEST_CASE("Branch Nodes") {
     NodeCFG* node1 = new NodeCFG(1);
     BranchCFG* node2 = new BranchCFG(2);
     node1->setNextNode(node2);
-    node2->setPreviousNode(node1);
+    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setLeftNode(node3);
-    node3->setPreviousNode(node2);
+    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node2->setRightNode(node4);
-    node4->setPreviousNode(node2);
-    MergeCFG* node5 = new MergeCFG(5);
+    node4->addPreviousNode(node2);
+    NodeCFG* node5 = new NodeCFG(5);
     node3->setNextNode(node5);
     node4->setNextNode(node5);
-    node5->setLeftPreviousNode(node3);
-    node5->setRightPreviousNode(node4);
+    node5->addPreviousNode(node3);
+    node5->addPreviousNode(node4);
 
     CHECK(node2->getLeftNode() == node3);
     CHECK(node2->getRightNode() == node4);
-    CHECK(node5->getLeftPreviousNode() == node3);
-    CHECK(node5->getRightPreviousNode() == node4);
+    CHECK(node5->getAllPreviousNode()[3] == node3);
+    CHECK(node5->getAllPreviousNode()[4] == node4);
     CHECK(node1->getEndNode() == node5);
     CHECK(node5->getStartNode() == node1);
 }
 
-TEST_CASE("Imaginary Merge Nodes; end of procedure") {
+TEST_CASE("node with imaginary end") {
+
     NodeCFG* node1 = new NodeCFG(1);
     BranchCFG* node2 = new BranchCFG(2);
     node1->setNextNode(node2);
-    node2->setPreviousNode(node1);
+    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setLeftNode(node3);
-    node3->setPreviousNode(node2);
+    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node2->setRightNode(node4);
-    node4->setPreviousNode(node2);
-    ImagineMergeCFG* node5 = new ImagineMergeCFG();
-    node3->setNextNode(node5);
-    node4->setNextNode(node5);
-    node5->setLeftPreviousNode(node3);
-    node5->setRightPreviousNode(node4);
+    node4->addPreviousNode(node2);
+
 
     CHECK(node2->getLeftNode() == node3);
     CHECK(node2->getRightNode() == node4);
-    CHECK(node5->getEndNode() == node4);
     CHECK(node1->getEndNode() == node4);
+
 }
 
 //Imaginary Merge can happen in these cases:
 //1) last statement in the procedure is an if statement
 //2) last statement in a while/if statement is an if statement
-TEST_CASE("Imaginary Merge Nodes; within if statement") {
+TEST_CASE("nested branches with real end") {
     // 1 -< 2, 5
     // 2 -< 3, 4
     // 5 -< 6, 7
@@ -107,52 +104,47 @@ TEST_CASE("Imaginary Merge Nodes; within if statement") {
      *       } else {sdasdasd;     }}
      * asdasdsad;
      */
+
     BranchCFG* node1 = new BranchCFG(1);
 
     BranchCFG* node2 = new BranchCFG(2);
-    node2->setPreviousNode(node1);
+    node2->addPreviousNode(node1);
     node1->setLeftNode(node2);
     NodeCFG* node3 = new NodeCFG(3);
-    node3->setPreviousNode(node2);
+    node3->addPreviousNode(node2);
     node2->setLeftNode(node3);
     NodeCFG* node4 = new NodeCFG(4);
-    node4->setPreviousNode(node2);
+    node4->addPreviousNode(node2);
     node2->setRightNode(node4);
-
-    ImagineMergeCFG* imgA = new ImagineMergeCFG();
-    imgA->setLeftPreviousNode(node3);
-    imgA->setRightPreviousNode(node4);
-    node3->setNextNode(imgA);
-    node4->setNextNode(imgA);
 
 
     BranchCFG* node5 = new BranchCFG(5);
-    node5->setPreviousNode(node1);
+    node5->addPreviousNode(node1);
     node1->setRightNode(node5);
     NodeCFG* node6 = new NodeCFG(6);
-    node6->setPreviousNode(node5);
+    node6->addPreviousNode(node5);
     node5->setLeftNode(node6);
     NodeCFG* node7 = new NodeCFG(7);
-    node7->setPreviousNode(node5);
+    node7->addPreviousNode(node5);
     node5->setRightNode(node7);
 
-    ImagineMergeCFG* imgB = new ImagineMergeCFG();
-    imgB->setLeftPreviousNode(node6);
-    imgB->setRightPreviousNode(node7);
-    node6->setNextNode(imgB);
-    node7->setNextNode(imgB);
 
-    MergeCFG* node8 = new MergeCFG(8);
-    node8->setLeftPreviousNode(imgA);
-    node8->setRightPreviousNode(imgB);
-    imgA->setNextNode(node8);
-    imgB->setNextNode(node8);
+    NodeCFG* node8 = new NodeCFG(8);
+    node8->addPreviousNode(node3);
+    node8->addPreviousNode(node4);
+    node8->addPreviousNode(node6);
+    node8->addPreviousNode(node7);
+    node3->setNextNode(node8);
+    node4->setNextNode(node8);
+    node6->setNextNode(node8);
+    node7->setNextNode(node8);
+
 
     CHECK(node1->getEndNode() == node8);
     CHECK(node8->getStartNode() == node1);
 }
 
-TEST_CASE("Imaginary Merge Nodes; both end imaginary") {
+TEST_CASE("nexted Branch; imaginary end") {
     // 1 -< 2, 5
     // 2 -< 3, 4
     // 5 -< 6, 7
@@ -167,65 +159,50 @@ TEST_CASE("Imaginary Merge Nodes; both end imaginary") {
      *       } else {sdasdasd;     }}
      * asdasdsad;
      */
+
     BranchCFG* node1 = new BranchCFG(1);
 
     BranchCFG* node2 = new BranchCFG(2);
-    node2->setPreviousNode(node1);
+    node2->addPreviousNode(node1);
     node1->setLeftNode(node2);
     NodeCFG* node3 = new NodeCFG(3);
-    node3->setPreviousNode(node2);
+    node3->addPreviousNode(node2);
     node2->setLeftNode(node3);
     NodeCFG* node4 = new NodeCFG(4);
-    node4->setPreviousNode(node2);
+    node4->addPreviousNode(node2);
     node2->setRightNode(node4);
 
-    ImagineMergeCFG* imgA = new ImagineMergeCFG();
-    imgA->setLeftPreviousNode(node3);
-    imgA->setRightPreviousNode(node4);
-    node3->setNextNode(imgA);
-    node4->setNextNode(imgA);
 
 
     BranchCFG* node5 = new BranchCFG(5);
-    node5->setPreviousNode(node1);
+    node5->addPreviousNode(node1);
     node1->setRightNode(node5);
     NodeCFG* node6 = new NodeCFG(6);
-    node6->setPreviousNode(node5);
+    node6->addPreviousNode(node5);
     node5->setLeftNode(node6);
     NodeCFG* node7 = new NodeCFG(7);
-    node7->setPreviousNode(node5);
+    node7->addPreviousNode(node5);
     node5->setRightNode(node7);
 
-    ImagineMergeCFG* imgB = new ImagineMergeCFG();
-    imgB->setLeftPreviousNode(node6);
-    imgB->setRightPreviousNode(node7);
-    node6->setNextNode(imgB);
-    node7->setNextNode(imgB);
 
-    ImagineMergeCFG* imgC = new ImagineMergeCFG();
-    imgC->setLeftPreviousNode(imgA);
-    imgC->setRightPreviousNode(imgB);
-    imgA->setNextNode(imgC);
-    imgB->setNextNode(imgC);
 
     CHECK(node1->getEndNode() == node7);
-    //CHECK(imgC->getStartNode() == node1);
 }
 
 TEST_CASE("Loop Nodes") {
     LoopCFG* node1 = new LoopCFG(1);
     NodeCFG* node2 = new NodeCFG(2);
     node1->setNodeInLoop(node2);
-    node2->setPreviousNode(node1);
+    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setNextNode(node3);
-    node3->setPreviousNode(node2);
+    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node3->setNextNode(node4);
-    node4->setPreviousNode(node3);
+    node4->addPreviousNode(node3);
     NodeCFG* node5 = new NodeCFG(5);
     node4->setNextNode(node5);
-    node5->setPreviousNode(node4);
+    node5->addPreviousNode(node4);
     node5->setNextNode(node1);
 
     CHECK(node1->isStart());
