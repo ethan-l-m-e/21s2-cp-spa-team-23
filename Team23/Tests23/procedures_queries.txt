@@ -132,6 +132,7 @@ proc2, proc3, proc4
 procedure p;
 Select p such that Calls*("proc1", "proc3")
 proc1, proc2, proc3, proc4
+5000
 27 - [valid] indirect calls with two procName but does not call
 procedure p;
 Select p such that Calls*( "proc3", "proc4")
