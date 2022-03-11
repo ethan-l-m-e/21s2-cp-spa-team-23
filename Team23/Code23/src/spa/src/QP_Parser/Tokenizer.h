@@ -17,11 +17,9 @@ namespace qp {
     class SuchThatClauseToken {
     public:
         std::string relRef;
-        std::pair<std::string, std::string>* arguments;
+        std::vector<std::string>* arguments;
 
         SuchThatClauseToken() : relRef(""), arguments(nullptr) {};
-        SuchThatClauseToken(std::string relRef, std::pair<std::string, std::string>* arguments) : relRef(relRef),
-        arguments(arguments) {};
     };
 
     class QueryToken {

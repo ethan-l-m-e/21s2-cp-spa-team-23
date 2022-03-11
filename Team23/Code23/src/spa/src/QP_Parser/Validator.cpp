@@ -88,28 +88,29 @@ void Validator::validateSuchThatClauses(std::map<std::string, std::string> decla
         } else if (isVariableRelationship) {
             // Get set of possible first argument types
             std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
+            std::vector<std::string> arguments = *(suchThatClauseToken.arguments);
 
             // Check arguments
-            checkFirstArgForOtherClauses(suchThatClauseToken.arguments->first, argSet, declarationTokens);
-            checkSecondArgForOtherClauses(suchThatClauseToken.arguments->second, declarationTokens);
+            checkFirstArgForOtherClauses(arguments[0], argSet, declarationTokens);
+            checkSecondArgForOtherClauses(arguments[1], declarationTokens);
         } else {
             checkProcAssignArguments(suchThatClauseToken, declarationTokens);
         }
     }
 }
 
-void Validator::checkArguments(std::pair<std::string, std::string> arguments,
+void Validator::checkArguments(std::vector<std::string> arguments,
                                            std::map<std::string, std::string> declarationTokens) {
     // Check if both arguments contain the same synonym
-    bool isArgumentsSameSynonym = (std::regex_match(arguments.first, std::regex (SYNONYM))
-            && arguments.first == arguments.second);
+    bool isArgumentsSameSynonym = (std::regex_match(arguments[0], std::regex (SYNONYM))
+            && arguments[0] == arguments[1]);
     if (isArgumentsSameSynonym) {
         throw QPInvalidSemanticException("Both arguments contain the same synonym");
     }
 
     // Check if the synonym is declared if the argument is a synonym
-    checkSynonymIsDeclared(arguments.first, declarationTokens);
-    checkSynonymIsDeclared(arguments.second, declarationTokens);
+    checkSynonymIsDeclared(arguments[0], declarationTokens);
+    checkSynonymIsDeclared(arguments[1], declarationTokens);
 
 }
 
@@ -124,9 +125,9 @@ void Validator::checkSynonymIsDeclared(std::string argument,
 }
 
 void Validator::handleSuchThatStatementClause(std::map<std::string, std::string>& declarationTokens,
-                                              std::pair<std::string, std::string>& arguments) {
-    checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.first);
-    checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments.second);
+                                              std::vector<std::string> arguments) {
+    checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments[0]);
+    checkArgumentForStatementClauses(declarationTokens, "(_|[0-9]+)", arguments[1]);
 }
 
 void Validator::checkArgumentForStatementClauses(std::map<std::string, std::string>& declarationTokens,
@@ -171,25 +172,26 @@ void Validator::checkSecondArgForOtherClauses(std::string argument, std::map<std
 }
 
 void Validator::checkProcAssignArguments(SuchThatClauseToken suchThatClauseToken, std::map<std::string, std::string> declarationTokens) {
-    if (std::regex_match(suchThatClauseToken.arguments->first, std::regex(SYNONYM))) {
+    std::vector<std::string> arguments = *suchThatClauseToken.arguments;
+    if (std::regex_match(arguments[0], std::regex(SYNONYM))) {
         if (std::regex_match(suchThatClauseToken.relRef, std::regex("(Calls|Calls\\*)"))) {
-            if (declarationTokens.at(suchThatClauseToken.arguments->first) != "procedure") {
+            if (declarationTokens.at(arguments[0]) != "procedure") {
                 throw QPInvalidSemanticException("Invalid First Argument");
             }
         } else {
-            if (declarationTokens.at(suchThatClauseToken.arguments->first) != "assign") {
+            if (declarationTokens.at(arguments[0]) != "assign") {
                 throw QPInvalidSemanticException("Invalid First Argument");
             }
         }
     }
 
-    if (std::regex_match(suchThatClauseToken.arguments->second, std::regex(SYNONYM))) {
+    if (std::regex_match(arguments[1], std::regex(SYNONYM))) {
         if (std::regex_match(suchThatClauseToken.relRef, std::regex("(Calls|Calls\\*)"))) {
-            if (declarationTokens.at(suchThatClauseToken.arguments->second) != "procedure") {
+            if (declarationTokens.at(arguments[1]) != "procedure") {
                 throw QPInvalidSemanticException("Invalid Second Argument");
             }
         } else {
-            if (declarationTokens.at(suchThatClauseToken.arguments->second) != "assign") {
+            if (declarationTokens.at(arguments[1]) != "assign") {
                 throw QPInvalidSemanticException("Invalid Second Argument");
             }
         }
@@ -201,7 +203,7 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
     for (PatternToken patternToken : patternTokens) {
         // Check that the pattern's syn-assign and first argument do not have the same synonym and synonym is declared
         std::vector<std::string> patternArguments = *patternToken.arguments;
-        std::pair<std::string, std::string> arguments = std::make_pair(patternToken.synonym, patternArguments[0]);
+        std::vector<std::string> arguments = std::vector<std::string>({patternToken.synonym, patternArguments[0]});
         checkArguments(arguments, declarationTokens);
 
         if (declarationTokens.at(patternToken.synonym) == "if") {
@@ -243,13 +245,13 @@ void Validator::validateWithArgument(std::string argument, std::map<std::string,
         return;
     }
 
-    std::vector<std::string> attrs = StringFormatter::tokenizeByRegex(argument, ".");
+    std::vector<std::string> attrs = StringFormatter::tokenizeByRegex(argument, "\\.");
     if (declarationTokens.find(attrs[0]) == declarationTokens.end()) {
         throw QPInvalidSemanticException("Invalid With Clause");
     }
 
     std::set<std::string> expectedSynonymSet = attrNameAndSynonymMap.at(attrs[1]);
-    if (expectedSynonymSet.find(attrs[0]) == expectedSynonymSet.end()) {
+    if (expectedSynonymSet.find(declarationTokens.at(attrs[0])) == expectedSynonymSet.end()) {
         throw QPInvalidSemanticException("Invalid With Clause");
     }
 }

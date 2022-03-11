@@ -104,7 +104,7 @@ SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string su
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     suchThatClauseToken.relRef = suchThatClauseArgs[0];
-    suchThatClauseToken.arguments = new std::pair<std::string, std::string>(suchThatClauseArgs[1], suchThatClauseArgs[2]);
+    suchThatClauseToken.arguments = new std::vector<std::string>(suchThatClauseArgs.begin()+1, suchThatClauseArgs.end());
     return suchThatClauseToken;
 }
 

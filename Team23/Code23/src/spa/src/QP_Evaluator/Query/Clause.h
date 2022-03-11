@@ -20,7 +20,13 @@ enum class RelRef{
     USES_S,
     USES_P,
     MODIFIES_S,
-    MODIFIES_P
+    MODIFIES_P,
+    CALLS,
+    CALLS_T,
+    NEXT,
+    NEXT_T,
+    AFFECTS,
+    AFFECTS_T
 };
 
 enum class SynonymType {

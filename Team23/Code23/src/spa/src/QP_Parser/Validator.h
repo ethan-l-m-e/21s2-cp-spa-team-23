@@ -37,12 +37,12 @@ namespace qp {
         std::set<std::string> convertVectorToSet(std::vector<std::string>);
         void validateSuchThatClauses(std::map<std::string, std::string>, std::vector<SuchThatClauseToken>);
         void validatePatterns(std::map<std::string, std::string>, std::vector<PatternToken>);
-        void handleSuchThatStatementClause(std::map<std::string, std::string>&, std::pair<std::string, std::string>&);
+        void handleSuchThatStatementClause(std::map<std::string, std::string>&, std::vector<std::string>);
         void checkArgumentForStatementClauses(std::map<std::string, std::string>&, std::string, std::string);
         void checkFirstArgForOtherClauses(std::string, std::set<std::string>&, std::map<std::string, std::string>&);
         void checkSecondArgForOtherClauses(std::string, std::map<std::string, std::string>&);
         void validatePatternFirstArgument(std::map<std::string, std::string>, std::string);
-        void checkArguments(std::pair<std::string, std::string>, std::map<std::string, std::string>);
+        void checkArguments(std::vector<std::string>, std::map<std::string, std::string>);
         void checkSynonymIsDeclared(std::string, std::map<std::string, std::string>);
         void checkProcAssignArguments(SuchThatClauseToken, std::map<std::string, std::string>);
         void validateWithArgument(std::string, std::map<std::string, std::string>);
