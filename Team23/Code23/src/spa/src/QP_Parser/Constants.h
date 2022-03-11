@@ -99,6 +99,8 @@ std::string const PQL_FORMAT = DECLARATION_REGEX + "( |\n|\t)*" + SELECT_CL + "(
 // regex needed for semantic validation
 std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*|Next|Next\\*)";
 std::string const VARIABLE_RS = "(Modifies|Uses)";
+std::string const CALLS_RS = "(Calls|Calls\\*)";
+std::string const PATTERN_SYNONYMS = "(if|while|assign)";
 std::string const SYN_ARG = "(\"" + IDENT + "\"|_)";
 std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|[0-9]+)";
 std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";
