@@ -22,7 +22,7 @@ vector<PatternClause> Query::getPatternClauses(){
     return patternClauses;
 }
 
-std::vector<string> Query::getSelectedSynonyms() {
+std::vector<Argument> Query::getSelectedSynonyms() {
     return selectedSynonyms;
 }
 
@@ -42,7 +42,7 @@ void Query::setDeclarations(unordered_map<string, DesignEntity> declarationsMap)
     this->declarations = std::move(declarationsMap);
 }
 
-void Query::setSynonyms(std::vector<std::string> synonyms) {
+void Query::setSynonyms(std::vector<Argument> synonyms) {
     this->selectedSynonyms = std::move(synonyms);
 }
 
@@ -57,15 +57,4 @@ void Query::setPatternClauses(vector<PatternClause> clauses) {
 void Query::setWithClauses(vector<WithClause> clauses) {
     this->withClauses = std::move(clauses);
 }
-
-
-/*
-optional<DesignEntity> findEntityType(std::string synonym) {
-    auto got = declarations.find (synonym);
-    if ( got == declarations.end() )
-        return std::nullopt;
-    else
-        return got->second;
-}
- */
 
