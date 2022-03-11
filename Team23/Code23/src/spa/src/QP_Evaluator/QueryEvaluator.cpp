@@ -87,9 +87,10 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
  * @return  a list of strings representing the result items
  */
 std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
-    std::list<std::string> stringList;
+    std::unordered_set<std::string> stringSet;
+
     if (resultTable->isBoolean()) {
-        stringList.emplace_back(resultTable->getBooleanResult());
+        stringSet.insert(resultTable->getBooleanResult());
     } else if (!resultTable->isEmpty()) {
         for(int i = 0; i < resultTable->getTableSize(); i++) {
             std::string s;
@@ -97,9 +98,9 @@ std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultT
                 if (!s.empty()) s += " ";
                 s += col[i];
             }
-            stringList.emplace_back(s);
+            stringSet.insert(s);
         }
     }
-    return stringList;
+    return std::list<std::string> {std::begin(stringSet), std::end(stringSet)};
 }
 
