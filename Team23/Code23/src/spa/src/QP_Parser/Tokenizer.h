@@ -6,7 +6,7 @@
 #define SPA_TOKENIZER_H
 
 namespace qp {
-    class PatternToken {
+    struct PatternToken {
     public:
         std::string synonym;
         std::vector<std::string>* arguments;
@@ -14,7 +14,7 @@ namespace qp {
         PatternToken() : synonym(""), arguments(nullptr) {};
     };
 
-    class SuchThatClauseToken {
+    struct SuchThatClauseToken {
     public:
         std::string relRef;
         std::vector<std::string>* arguments;
@@ -22,7 +22,7 @@ namespace qp {
         SuchThatClauseToken() : relRef(""), arguments(nullptr) {};
     };
 
-    class QueryToken {
+    struct QueryToken {
     public:
         std::map<std::string, std::string>* declarationTokens;
         std::vector<std::string>* selectClauseTokens;
@@ -40,6 +40,7 @@ namespace qp {
     class Tokenizer {
     public:
         QueryToken getQueryToken(std::string);
+        void cleanQueryToken(QueryToken&);
     private:
         void getDeclarationTokens(std::string, QueryToken&);
         void getSelectClauseTokens(std::string, QueryToken&);

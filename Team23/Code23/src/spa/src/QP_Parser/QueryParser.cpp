@@ -29,6 +29,9 @@ Query QueryParser::getQuery(std::string pql) {
     getPattern(queryToken, query);
     getWithClauses(queryToken, query);
 
+    // Clean up memory
+    tokenizer.cleanQueryToken(queryToken);
+
     return query;
 };
 

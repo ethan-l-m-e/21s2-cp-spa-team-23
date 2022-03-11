@@ -169,3 +169,22 @@ void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
 
     queryToken.withClauses = withClauses;
 }
+
+void Tokenizer::cleanQueryToken(QueryToken& queryToken) {
+    delete queryToken.declarationTokens;
+    delete queryToken.selectClauseTokens;
+
+    for (SuchThatClauseToken suchThatClauseToken : *(queryToken.suchThatClauseTokens)) {
+        delete suchThatClauseToken.arguments;
+    }
+
+    delete queryToken.suchThatClauseTokens;
+
+    for (PatternToken patternToken : *(queryToken.patternTokens)) {
+        delete patternToken.arguments;
+    }
+
+    delete queryToken.patternTokens;
+    delete queryToken.declarations;
+    delete queryToken.withClauses;
+}
