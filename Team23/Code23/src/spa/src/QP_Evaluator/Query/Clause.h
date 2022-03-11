@@ -1,8 +1,6 @@
 //
 // Created by リム・イーサン on 31/1/22.
 //
-// Created by Tianyi Wang on 5/2/22.
-//
 
 #ifndef SPA_CLAUSE_H
 #define SPA_CLAUSE_H
@@ -35,13 +33,6 @@ enum class SynonymType {
     IF
 };
 
-enum class AttrName {
-    PROC_NAME,
-    VAR_NAME,
-    VALUE,
-    STMT_NO
-};
-
 typedef struct Clause {
     std::vector<Argument> argList;
 } Clause;
@@ -55,8 +46,6 @@ typedef struct PatternClause : Clause {
 } PatternClause;
 
 typedef struct WithClause : Clause {
-    AttrName attrNameLeft;
-    AttrName attrNameRight;
 } WithClause;
 
 
