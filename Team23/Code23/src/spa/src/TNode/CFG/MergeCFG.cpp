@@ -19,4 +19,13 @@ NodeCFG* MergeCFG::getLeftPreviousNode() { return this->leftPreviousNode;}
 
 NodeCFG* MergeCFG::getRightPreviousNode() { return this->rightPreviousNode;}
 
-
+NodeCFG* ImagineMergeCFG::getEndNode() {
+    if(this->getLeftPreviousNode()->getStatementNumber() > this->getRightPreviousNode()->getStatementNumber())
+        return this->getLeftPreviousNode();
+    else if(this->getLeftPreviousNode()->getStatementNumber() < this->getRightPreviousNode()->getStatementNumber())
+        return this->getRightPreviousNode();
+    else
+        throw "both left and right previous nodes of imaginaryMergeNode cannot be the same node! leftNode: " +
+                to_string(this->getLeftPreviousNode()->getStatementNumber()) +
+                "rightNode: " + to_string(this->getRightPreviousNode()->getStatementNumber());
+}
