@@ -266,6 +266,16 @@ public:
     bool isModifiesP(string procedure, string variable);
     unordered_set<string> getVariablesModifiedP(string procedure);
     unordered_set<string> getModifierProcedures(string variable);
+
+
+    // Return a string representing the variable being read in a read statement.
+    string getVarRead(string stmtNo);
+
+    // Return a string representing the variable being printed in a print statement
+    string getVarPrinted(string stmtNo);
+
+    // Return a string representing the procedure name being called in a call statement.
+    string getProcByCall(string stmtNo);
 };
 
 

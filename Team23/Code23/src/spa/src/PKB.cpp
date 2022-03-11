@@ -619,3 +619,18 @@ unordered_set<string> PKB::getModifierProcedures(string variable) {
     return proceduresSet;
 }
 
+
+//TODO: Return a string representing the variable being read in a read statement.
+string PKB::getVarRead(string stmtNo) {
+    return "x";
+}
+
+//TODO: Return a string representing the variable being printed in a print statement
+string PKB::getVarPrinted(string stmtNo) {
+    return "y";
+}
+
+//TODO: Return a string representing the procedure name being called in a call statement.
+string PKB::getProcByCall(string stmtNo) {
+    return "proc1";
+}

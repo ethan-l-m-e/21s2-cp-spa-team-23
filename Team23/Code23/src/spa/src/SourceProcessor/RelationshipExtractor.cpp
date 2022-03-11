@@ -378,9 +378,11 @@ void detectCyclicCalls(Node* node) {
         ProcName name = allProcName[i];
         if (!visited[name] && detectCyclicCallsRec(name, graphNodes, visited, stack)) {
             cout << "cyclic call statements detected\n";
+            graphNodes.clear();
             throw "cyclic calls detected\n";
         }
     }
+    graphNodes.clear();
 }
 
 void detectDuplicateProcedure(Node * node) {
