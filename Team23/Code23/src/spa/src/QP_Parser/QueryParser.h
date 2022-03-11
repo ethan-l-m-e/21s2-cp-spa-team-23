@@ -39,10 +39,9 @@ namespace qp {
 
     const std::set<std::string> argumentTypeRegex({INTEGER, "BOOLEAN", ATTR_REF, "\"" + IDENT + "\"", "_", "_(.)*_", "\"(.*)\""});
     const std::map<std::string, ArgumentType> stringToArgumentType({
-        // TODO: edit boolean and attr references argument type
                                                                            {INTEGER, ArgumentType::STMT_NO},
-                                                                           {"BOOLEAN", ArgumentType::EXPRESSION},
-                                                                           {ATTR_REF, ArgumentType::EXPRESSION},
+                                                                           {"BOOLEAN", ArgumentType::BOOLEAN},
+                                                                           {ATTR_REF, ArgumentType::ATTR_REF},
                                                                            {("\"" + IDENT + "\""), ArgumentType::IDENT},
                                                                            {"_", ArgumentType::UNDERSCORE},
                                                                            {"_(.)*_", ArgumentType::PARTIAL_UNDERSCORE},

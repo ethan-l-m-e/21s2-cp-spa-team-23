@@ -32,7 +32,7 @@ namespace qp {
         void validateQueryStructure(std::string);
         void checkForSemantics(QueryToken& queryToken);
     private:
-        void validateSelectClauseTokens(std::set<std::string>, std::vector<std::string>);
+        void validateSelectClauseTokens(std::set<std::string>, std::vector<std::string>, std::map<std::string, std::string>);
         void validateDeclarations(std::set<std::string>, int, std::vector<std::string>);
         std::set<std::string> convertVectorToSet(std::vector<std::string>);
         void validateSuchThatClauses(std::map<std::string, std::string>, std::vector<SuchThatClauseToken>);
@@ -45,8 +45,9 @@ namespace qp {
         void checkArguments(std::vector<std::string>, std::map<std::string, std::string>);
         void checkSynonymIsDeclared(std::string, std::map<std::string, std::string>);
         void checkProcAssignArguments(SuchThatClauseToken, std::map<std::string, std::string>);
-        void validateWithArgument(std::string, std::map<std::string, std::string>);
+        void validateAttrRefArgument(std::string, std::map<std::string, std::string>);
         void validateWithClauses(std::vector<std::pair<std::string, std::string>>, std::map<std::string, std::string>);
+        void validateSynonym(std::string, std::set<std::string>, std::map<std::string, std::string>);
     };
 }
 

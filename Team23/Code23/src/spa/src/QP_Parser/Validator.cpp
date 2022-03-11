@@ -28,7 +28,7 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
     validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
 
     // Check if Select Clause synonyms are part of the declarations
-    validateSelectClauseTokens(declarationSet, *(queryToken.selectClauseTokens));
+    validateSelectClauseTokens(declarationSet, *(queryToken.selectClauseTokens), *(queryToken.declarationTokens));
 
     // Check pattern arguments
     validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
@@ -40,28 +40,37 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
     validateWithClauses(*(queryToken.withClauses), *(queryToken.declarationTokens));
 }
 
-void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet, std::vector<std::string> selectClauseTokens) {
+void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet,
+                                           std::vector<std::string> selectClauseTokens,
+                                           std::map<std::string, std::string> declarationTokens) {
+    // If select clause is a boolean, then it is valid
     if (selectClauseTokens[0] == "BOOLEAN") {
         return;
     }
 
-    if (std::regex_match(selectClauseTokens[0], std::regex(ATTR_REF))) {
-        std::string synonym = StringFormatter::tokenizeByRegex(selectClauseTokens[0], ".")[0];
-        if (declarationSet.find(synonym) == declarationSet.end()) {
-            throw QPInvalidSemanticException("Invalid Select Clause");
-        }
-        return;
+    // Otherwise, the select clause is a tuple of elements or single element
+    // Check the validity of each element
+    for (std::string selectClauseToken : selectClauseTokens) {
+        validateSynonym(selectClauseToken, declarationSet, declarationTokens);
+    }
+}
+
+void Validator::validateSynonym(std::string synonym, std::set<std::string> declarationSet,
+                                std::map<std::string, std::string> declarationTokens) {
+    // If synonym is an attribute reference, check that it's a valid reference
+    bool isAttrRef = std::regex_match(synonym, std::regex(ATTR_REF));
+    if (isAttrRef) {
+        validateAttrRefArgument(synonym, declarationTokens);
     }
 
-    for (std::string selectClauseToken : selectClauseTokens) {
-        if (declarationSet.find(selectClauseToken) == declarationSet.end()) {
-            throw QPInvalidSemanticException("Invalid Select Clause");
-        }
+    // Otherwise, check that the synonym has been declared
+    if (declarationSet.find(synonym) == declarationSet.end()) {
+        throw QPInvalidSemanticException("Invalid Select Clause");
     }
 }
 
 void Validator::validateDeclarations(std::set<std::string> declarationSet, int length, std::vector<std::string> designEntities) {
-    // check duplicate declaration names
+    // Check for duplicate declaration names
     bool isDeclarationNamesDuplicate = declarationSet.size() != length;
     if (isDeclarationNamesDuplicate) {
         throw QPInvalidSemanticException("Repeated declaration names");
@@ -235,12 +244,12 @@ void Validator::validatePatternFirstArgument(std::map<std::string, std::string> 
 
 void Validator::validateWithClauses(std::vector<std::pair<std::string, std::string>> withClauses, std::map<std::string, std::string> declarationTokens) {
     for (std::pair<std::string, std::string> withClause : withClauses) {
-        validateWithArgument(withClause.first, declarationTokens);
-        validateWithArgument(withClause.second, declarationTokens);
+        validateAttrRefArgument(withClause.first, declarationTokens);
+        validateAttrRefArgument(withClause.second, declarationTokens);
     }
 }
 
-void Validator::validateWithArgument(std::string argument, std::map<std::string, std::string> declarationTokens) {
+void Validator::validateAttrRefArgument(std::string argument, std::map<std::string, std::string> declarationTokens) {
     if (std::regex_match(argument, std::regex(IDENT_INT_CHECK))) {
         return;
     }

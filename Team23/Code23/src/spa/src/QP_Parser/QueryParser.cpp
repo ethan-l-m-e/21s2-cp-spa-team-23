@@ -65,8 +65,7 @@ void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
         Argument argument = getArgument(synonym, *(queryToken.declarationTokens));
         argList.push_back(argument);
     }
-    // TODO: Set synonyms in query object.
-//    query.setSynonyms(*(queryToken.selectClauseTokens));
+    query.setSynonyms(argList);
 }
 
 void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
@@ -115,7 +114,7 @@ std::string QueryParser::determineRelationshipBasedOnArg(Argument firstArgument,
     }
 
     // Check for arguments that are of synonym type
-    std::string designEntity = declarationsMap.at(firstArgument.argumentValue);
+    std::string designEntity = declarationsMap.at(std::get<std::string>(firstArgument.argumentValue));
     bool isStmtDesignEntity = std::regex_match(designEntity, std::regex(STMT_DESIGN_ENTITIES));
     if (isStmtDesignEntity) {
         return "_S";
@@ -144,11 +143,13 @@ Argument QueryParser::getArgument(std::string argumentString, std::map<std::stri
     if (argumentType == ArgumentType::IDENT) {
         // remove quotation marks from the string
         argument.argumentValue = argumentString.substr(1, argumentString.size()-2);
-    } else if (argumentType == ArgumentType:: EXPRESSION) {
-        // TODO: edit to include argument value for booleans and attr references
+    } else if (argumentType == ArgumentType::ATTR_REF) {
         std::pair<std::string, AttrName> argumentValue = getAttrName(argumentString);
+        argument.argumentValue = argumentValue;
+    } else if (argumentType == ArgumentType::BOOLEAN) {
+        argument.argumentValue = "";
     } else {
-        argument.argumentValue = argumentString;
+            argument.argumentValue = argumentString;
     }
     return argument;
 }
@@ -189,7 +190,7 @@ void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
         // Create PatternClause Object
         PatternClause patternClause = PatternClause();
         patternClause.argList = argList;
-        patternClause.synonymType = getPatternSynonymType(synAssign.argumentValue, *(queryToken.declarationTokens));
+        patternClause.synonymType = getPatternSynonymType(patternToken.synonym, *(queryToken.declarationTokens));
         patternClauses.push_back(patternClause);
     }
 
