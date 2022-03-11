@@ -14,7 +14,7 @@ public:
     bool evaluateClause(ResultTable* resultTable) override;
 private:
     bool applyAttrRef(std::vector<std::string>*, std::pair<string, AttrName>, std::vector<std::string>*);
-    std::vector<std::string> getMapping(std::vector<std::string>&, std::string (*func) (std::string))
+    std::vector<std::string> getMapping(std::vector<std::string>&, std::string (PKB::*func) (std::string));
 };
 
 

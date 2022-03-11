@@ -55,22 +55,22 @@ bool ResultClauseEvaluator::applyAttrRef(std::vector<std::string>* lst,
                                          std::pair<string, AttrName> attrRef,
                                          std::vector<std::string>* newLst) {
     if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
-        newLst = getMapping(lst, pkb->getVarRead);
+        *newLst = getMapping(*lst, (&PKB::getVarRead));
         return true;
     } else if (query->findEntityType(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
-        newLst = getMapping(lst, pkb->getVarPrinted);
+        *newLst = getMapping(*lst, (&PKB::getVarPrinted));
         return true;
     } else if (query->findEntityType(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
-        newLst = getMapping(lst, pkb->getProcByCall);
+        *newLst = getMapping(*lst, (&PKB::getProcByCall));
         return true;
     }
     return false;
 }
 
-std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (*func) (std::string)) {
+std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (PKB::*func) (std::string)) {
     std::vector<std::string> mappings;
     for (const std::string& val: lst) {
-        std::string mapped = func(val);
+        std::string mapped = (pkb->*func)(val);
         mappings.emplace_back(mapped);
     }
     return mappings;
