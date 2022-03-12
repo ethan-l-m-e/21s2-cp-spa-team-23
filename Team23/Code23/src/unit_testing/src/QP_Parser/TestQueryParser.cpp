@@ -823,7 +823,7 @@ TEST_CASE ("PARSER - WITH CHECK") {
 TEST_CASE ("PARSER - WITH CHECK 2") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "assign a; variable v; Select a such that Modifies(s, v) pattern a(v, \"a\")";
+    std::string pql = "assign a; variable v; stmt s; Select a such that Modifies(s, v) pattern a(v, \"a\")";
     Query query = parser.getQuery(pql);
 }
 

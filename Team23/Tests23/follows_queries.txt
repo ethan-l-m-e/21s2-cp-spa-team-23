@@ -1,4 +1,4 @@
-../../../../Tests23/follows_source.txt ../../../../Tests23/follows_queries.txt ../../../tests/out.xml
+../../../../Tests23/follows_source.txt ../../../../Tests23/follows_queries.txt ../../../tests/follows_out.xml
 stmt s;
 Select s such that Follows(_, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
