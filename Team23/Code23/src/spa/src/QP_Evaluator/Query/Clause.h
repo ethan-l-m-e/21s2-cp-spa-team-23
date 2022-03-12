@@ -19,6 +19,8 @@ enum class RelRef{
     USES_P,
     MODIFIES_S,
     MODIFIES_P,
+    CALLS,
+    CALLS_T,
     NEXT,
     NEXT_T,
     AFFECTS,

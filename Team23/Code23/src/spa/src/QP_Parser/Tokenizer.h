@@ -6,7 +6,7 @@
 #define SPA_TOKENIZER_H
 
 namespace qp {
-    class PatternToken {
+    struct PatternToken {
     public:
         std::string synonym;
         std::vector<std::string>* arguments;
@@ -14,17 +14,15 @@ namespace qp {
         PatternToken() : synonym(""), arguments(nullptr) {};
     };
 
-    class SuchThatClauseToken {
+    struct SuchThatClauseToken {
     public:
         std::string relRef;
-        std::pair<std::string, std::string>* arguments;
+        std::vector<std::string>* arguments;
 
         SuchThatClauseToken() : relRef(""), arguments(nullptr) {};
-        SuchThatClauseToken(std::string relRef, std::pair<std::string, std::string>* arguments) : relRef(relRef),
-        arguments(arguments) {};
     };
 
-    class QueryToken {
+    struct QueryToken {
     public:
         std::map<std::string, std::string>* declarationTokens;
         std::vector<std::string>* selectClauseTokens;
@@ -33,15 +31,15 @@ namespace qp {
         std::pair<std::vector<std::string>, std::vector<std::string>>* declarations;
         std::vector<std::pair<std::string, std::string>>* withClauses;
 
-        QueryToken() : declarationTokens(nullptr), selectClauseTokens(nullptr),
-        suchThatClauseTokens(new std::vector<SuchThatClauseToken>()),
-        patternTokens( new std::vector<PatternToken>()), declarations(nullptr), withClauses(nullptr) {};
+        QueryToken() : declarationTokens(nullptr), selectClauseTokens(nullptr), suchThatClauseTokens(nullptr),
+        patternTokens(nullptr), declarations(nullptr),  withClauses(nullptr) {};
 
     };
 
     class Tokenizer {
     public:
         QueryToken getQueryToken(std::string);
+        void cleanQueryToken(QueryToken&);
     private:
         void getDeclarationTokens(std::string, QueryToken&);
         void getSelectClauseTokens(std::string, QueryToken&);
