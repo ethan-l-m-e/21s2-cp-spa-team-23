@@ -121,3 +121,6 @@ std::string const PATTERN_ARGUMENTS = ",";
 
 std::string const SPLIT_WITH_CL = "[ |\\t]*(with|and)[ |\\t]*";
 std::string const SPLIT_EQUALS = "\"[ |\\\\t]*=[ |\\\\t]*\"";
+
+int const PATTERN_LENGTH = 7;
+int const SELECT_LENGTH = 6;

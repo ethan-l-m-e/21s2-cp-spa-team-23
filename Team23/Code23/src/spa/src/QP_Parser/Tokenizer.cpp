@@ -68,7 +68,7 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
     std::regex_search (pql, sm, std::regex(SPLIT_SELECT_SYNONYM + RESULT_CL));
     std::string synonym = sm[0];
     // Remove Select from Select clause
-    synonym = synonym.substr(6);
+    synonym = synonym.substr(SELECT_LENGTH);
 
     // Split Select Synonym string into a list of synonyms
     std::string synonyms = std::regex_replace(synonym, std::regex(SELECT_SPACE_ANGLE_BRACKETS), "");
@@ -136,7 +136,7 @@ void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) 
 
 PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
     // Remove 'pattern' in substring
-    patternClause = patternClause.substr(7);
+    patternClause = patternClause.substr(PATTERN_LENGTH);
     std::vector<std::string> patternClauseArgs = StringFormatter::tokenizeByRegex(patternClause, PATTERN_ARGUMENTS);
 
     // Split pattern synonym substring and first argument
@@ -161,17 +161,16 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
 
 void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
     std::smatch sm;
-    std::string withClauseString = "";
+    std::vector<std::string> withClauseStrings = std::vector<std::string>();
 
     // Get all with clauses substring and combine them all into one string
-    while (std::regex_search (pql, sm, std::regex(WITH_CL))) {
+    while (std::regex_search (pql, sm, std::regex(ATTR_COMPARE))) {
         cout << sm[0];
-        withClauseString += sm[0];
+        withClauseStrings.push_back(sm[0]);
         pql = sm.suffix().str();
     }
 
     // Split with clauses into each with clause substring
-    std::vector<std::string> withClauseStrings = StringFormatter::tokenizeByRegex(withClauseString, SPLIT_WITH_CL);
     std::vector<std::pair<std::string, std::string>>* withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     for (std::string withClause : withClauseStrings) {
