@@ -1920,7 +1920,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // read synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("r", "2");
+    arguments = std::vector<std::string>({"r", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1930,7 +1930,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // print synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("pn", "2");
+    arguments = std::vector<std::string>({"pn", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1940,7 +1940,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // assign synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "2");
+    arguments = std::vector<std::string>({"a", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1950,7 +1950,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // call synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("c", "2");
+    arguments = std::vector<std::string>({"c", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1960,7 +1960,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // while synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("w", "2");
+    arguments = std::vector<std::string>({"w", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1970,7 +1970,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // while synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("ifs", "2");
+    arguments = std::vector<std::string>({"ifs", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1980,7 +1980,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // variable synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("v", "2");
+    arguments = std::vector<std::string>({"v", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -1990,7 +1990,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // constant synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("con", "2");
+    arguments = std::vector<std::string>({"con", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2000,7 +2000,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // procedure synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("p", "2");
+    arguments = std::vector<std::string>({"p", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2010,7 +2010,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
 
     // ident as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("\"x\"", "2");
+    arguments = std::vector<std::string>({"\"x\"", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2039,11 +2039,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // Integer as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
+    std::vector<std::string> arguments = std::vector<std::string>({"3", "2"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2054,7 +2054,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // Wildcard as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "_");
+    arguments = std::vector<std::string>({"3", "_"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2064,7 +2064,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // stmt synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "s");
+    arguments = std::vector<std::string>({"3", "s"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2074,7 +2074,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // read synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "r");
+    arguments = std::vector<std::string>({"3", "r"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2084,7 +2084,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // print synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "pn");
+    arguments = std::vector<std::string>({"3", "pn"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2094,7 +2094,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // assign synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "a");
+    arguments = std::vector<std::string>({"3", "a"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2104,7 +2104,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // call synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "c");
+    arguments = std::vector<std::string>({"3", "c"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2114,7 +2114,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // while synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "w");
+    arguments = std::vector<std::string>({"3", "w"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2124,7 +2124,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // while synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "ifs");
+    arguments = std::vector<std::string>({"3", "ifs"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2134,7 +2134,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // variable synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "v");
+    arguments = std::vector<std::string>({"3", "v"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2144,7 +2144,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // constant synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "con");
+    arguments = std::vector<std::string>({"3", "con"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2154,7 +2154,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // procedure synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "p");
+    arguments = std::vector<std::string>({"3", "p"});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2164,7 +2164,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
 
     // ident as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "\"x\"");
+    arguments = std::vector<std::string>({"3", "\"x\""});
     suchThatClauseToken.relRef = "Parent";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2193,11 +2193,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // Integer as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
+    std::vector<std::string> arguments = std::vector<std::string>({"3", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2208,7 +2208,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // Wildcard as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("_", "2");
+    arguments = std::vector<std::string>({"_", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2218,7 +2218,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // stmt synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("s", "2");
+    arguments = std::vector<std::string>({"s", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2228,7 +2228,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // read synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("r", "2");
+    arguments = std::vector<std::string>({"r", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2238,7 +2238,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // print synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("pn", "2");
+    arguments = std::vector<std::string>({"pn", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2248,7 +2248,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // assign synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "2");
+    arguments = std::vector<std::string>({"a", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2258,7 +2258,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // call synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("c", "2");
+    arguments = std::vector<std::string>({"c", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2268,7 +2268,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // while synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("w", "2");
+    arguments = std::vector<std::string>({"w", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2278,7 +2278,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // while synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("ifs", "2");
+    arguments = std::vector<std::string>({"ifs", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2288,7 +2288,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // variable synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("v", "2");
+    arguments = std::vector<std::string>({"v", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2298,7 +2298,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // constant synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("con", "2");
+    arguments = std::vector<std::string>({"con", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2308,7 +2308,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // procedure synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("p", "2");
+    arguments = std::vector<std::string>({"p", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2318,7 +2318,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
 
     // ident as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("\"x\"", "2");
+    arguments = std::vector<std::string>({"\"x\"", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2347,11 +2347,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // Integer as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("3", "2");
+    std::vector<std::string> arguments = std::vector<std::string>({"3", "2"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2362,7 +2362,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // Wildcard as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "_");
+    arguments = std::vector<std::string>({"3", "_"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2372,7 +2372,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // stmt synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "s");
+    arguments = std::vector<std::string>({"3", "s"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2382,7 +2382,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // read synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "r");
+    arguments = std::vector<std::string>({"3", "r"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2392,7 +2392,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // print synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "pn");
+    arguments = std::vector<std::string>({"3", "pn"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2402,7 +2402,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // assign synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "a");
+    arguments = std::vector<std::string>({"3", "a"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2412,7 +2412,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // call synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "c");
+    arguments = std::vector<std::string>({"3", "c"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2422,7 +2422,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // while synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "w");
+    arguments = std::vector<std::string>({"3", "w"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2432,7 +2432,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // while synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "ifs");
+    arguments = std::vector<std::string>({"3", "ifs"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2442,7 +2442,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // variable synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "v");
+    arguments = std::vector<std::string>({"3", "v"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2452,7 +2452,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // constant synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "con");
+    arguments = std::vector<std::string>({"3", "con"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2462,7 +2462,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // procedure synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "p");
+    arguments = std::vector<std::string>({"3", "p"});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2472,7 +2472,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
 
     // ident as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("3", "\"x\"");
+    arguments = std::vector<std::string>({"3", "\"x\""});
     suchThatClauseToken.relRef = "Parent*";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2502,11 +2502,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // IDENT as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("\"x\"", "_");
+    std::vector<std::string> arguments = std::vector<std::string>({"\"x\"", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2515,7 +2515,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // assign synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "_");
+    arguments = std::vector<std::string>({"a", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2524,7 +2524,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // print synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("pn", "_");
+    arguments = std::vector<std::string>({"pn", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2533,7 +2533,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // if synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("ifs", "_");
+    arguments = std::vector<std::string>({"ifs", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2542,7 +2542,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // while synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("w", "_");
+    arguments = std::vector<std::string>({"w", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2551,7 +2551,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // procedure synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("p", "_");
+    arguments = std::vector<std::string>({"p", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2560,7 +2560,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // call synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("c", "_");
+    arguments = std::vector<std::string>({"c", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2569,7 +2569,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // stmt synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("s", "_");
+    arguments = std::vector<std::string>({"s", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2578,7 +2578,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // read synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("r", "_");
+    arguments = std::vector<std::string>({"r", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2587,7 +2587,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // variable synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("v", "_");
+    arguments = std::vector<std::string>({"v", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2596,7 +2596,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // constant synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("con", "_");
+    arguments = std::vector<std::string>({"con", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2605,7 +2605,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
 
     // wildcard as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("_", "_");
+    arguments = std::vector<std::string>({"_", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2634,11 +2634,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("a", "v");
+    std::vector<std::string> arguments = std::vector<std::string>({"a", "v"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2647,7 +2647,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // ident as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "\"x\"");
+    arguments = std::vector<std::string>({"a", "\"x\""});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2656,7 +2656,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // wildcard as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "_");
+    arguments = std::vector<std::string>({"a", "_"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2665,7 +2665,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // assign synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "a");
+    arguments = std::vector<std::string>({"a", "a"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2674,7 +2674,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // print synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "pn");
+    arguments = std::vector<std::string>({"a", "pn"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2683,7 +2683,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // if synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "ifs");
+    arguments = std::vector<std::string>({"a", "ifs"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2692,7 +2692,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // while synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "w");
+    arguments = std::vector<std::string>({"a", "w"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2701,7 +2701,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // procedure synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "p");
+    arguments = std::vector<std::string>({"a", "p"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2710,7 +2710,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // call synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "c");
+    arguments = std::vector<std::string>({"a", "c"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2719,7 +2719,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // stmt synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "s");
+    arguments = std::vector<std::string>({"a", "s"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2728,7 +2728,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // read synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "r");
+    arguments = std::vector<std::string>({"a", "r"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2737,7 +2737,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
 
     // constant synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "con");
+    arguments = std::vector<std::string>({"a", "con"});
     suchThatClauseToken.relRef = "Uses";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2766,11 +2766,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // IDENT as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("\"x\"", "_");
+    std::vector<std::string> arguments = std::vector<std::string>({"\"x\"", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2779,7 +2779,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // assign synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "_");
+    arguments = std::vector<std::string>({"a", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2788,7 +2788,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // read synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("r", "_");
+    arguments = std::vector<std::string>({"r", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2797,7 +2797,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // if synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("ifs", "_");
+    arguments = std::vector<std::string>({"ifs", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2806,7 +2806,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // while synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("w", "_");
+    arguments = std::vector<std::string>({"w", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2815,7 +2815,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // procedure synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("p", "_");
+    arguments = std::vector<std::string>({"p", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2824,7 +2824,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // call synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("c", "_");
+    arguments = std::vector<std::string>({"c", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2833,7 +2833,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // stmt synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("s", "_");
+    arguments = std::vector<std::string>({"s", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2842,7 +2842,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // print synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("pn", "_");
+    arguments = std::vector<std::string>({"pn", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2851,7 +2851,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // variable synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("v", "_");
+    arguments = std::vector<std::string>({"v", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2860,7 +2860,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // constant synonym as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("con", "_");
+    arguments = std::vector<std::string>({"con", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2869,7 +2869,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
 
     // wildcard as first argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("_", "_");
+    arguments = std::vector<std::string>({"_", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2898,11 +2898,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("a", "v");
+    std::vector<std::string> arguments = std::vector<std::string>({"a", "v"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2911,7 +2911,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // ident as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "\"x\"");
+    arguments = std::vector<std::string>({"a", "\"x\""});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2920,7 +2920,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // wildcard as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "_");
+    arguments = std::vector<std::string>({"a", "_"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2929,7 +2929,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // assign synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "a");
+    arguments = std::vector<std::string>({"a", "a"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2938,7 +2938,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // print synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "pn");
+    arguments = std::vector<std::string>({"a", "pn"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2947,7 +2947,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // if synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "ifs");
+    arguments = std::vector<std::string>({"a", "ifs"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2956,7 +2956,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // while synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "w");
+    arguments = std::vector<std::string>({"a", "w"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2965,7 +2965,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // procedure synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "p");
+    arguments = std::vector<std::string>({"a", "p"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2974,7 +2974,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // call synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "c");
+    arguments = std::vector<std::string>({"a", "c"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2983,7 +2983,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // stmt synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "s");
+    arguments = std::vector<std::string>({"a", "s"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -2992,7 +2992,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // read synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "r");
+    arguments = std::vector<std::string>({"a", "r"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -3001,7 +3001,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
 
     // constant synonym as second argument
     suchThatClauseToken = SuchThatClauseToken();
-    arguments = std::make_pair("a", "con");
+    arguments = std::vector<std::string>({"a", "con"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -3030,11 +3030,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK SYNONYM") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // valid synonym
     PatternToken patternToken = PatternToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("_", "_");
+    std::vector<std::string> arguments = std::vector<std::string>({"_", "_"});
     patternToken.synonym = "a";
     patternToken.arguments = &arguments;
     std::vector<PatternToken> patternTokens = std::vector<PatternToken>({patternToken});
@@ -3043,7 +3043,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK SYNONYM") {
 
     // invalid synonym that does not exit in declarations
     patternToken = PatternToken();
-    arguments = std::make_pair("_", "_");
+    arguments = std::vector<std::string>({"_", "_"});
     patternToken.synonym = "unknown";
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
@@ -3052,7 +3052,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK SYNONYM") {
 
     // synonym that is not an assign statement
     patternToken = PatternToken();
-    arguments = std::make_pair("_", "_");
+    arguments = std::vector<std::string>({"_", "_"});
     patternToken.synonym = "c";
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
@@ -3081,17 +3081,17 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MULTI-CLAUSE CHECK") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair<std::string, std::string> arguments = std::make_pair("a", "v");
+    std::vector<std::string> arguments = std::vector<std::string>({"a", "v"});
     suchThatClauseToken.relRef = "Modifies";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
     queryToken.suchThatClauseTokens = &suchThatClauseTokens;
 
     PatternToken patternToken = PatternToken();
-    std::pair<std::string, std::string> patternArguments = std::make_pair("_", "_");
+    std::vector<std::string> patternArguments = std::vector<std::string>({"_", "_"});
     patternToken.synonym = "a";
     patternToken.arguments = &patternArguments;
     std::vector<PatternToken> patternTokens = std::vector<PatternToken>({patternToken});
@@ -3110,11 +3110,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: SAME SYNONYM AS ARGUMENTS") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair < std::string, std::string > arguments = std::make_pair("s", "s");
+    std::vector<std::string> arguments = std::vector<std::string>({"s", "s"});
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
@@ -3132,11 +3132,11 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: SYNONYM IN ARGUMENT NOT DECLARED") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
-    queryToken.selectClauseToken = "s";
+    queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
-    std::pair < std::string, std::string > arguments = std::make_pair("s1", "s");
+    std::vector<std::string> arguments = std::vector<std::string>({"s1", "s"});
     suchThatClauseToken.relRef = "Follows";
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
