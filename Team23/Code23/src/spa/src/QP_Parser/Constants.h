@@ -102,7 +102,8 @@ std::string const VARIABLE_RS = "(Modifies|Uses)";
 std::string const CALLS_RS = "(Calls|Calls\\*)";
 std::string const PATTERN_SYNONYMS = "(if|while|assign)";
 std::string const SYN_ARG = "(\"" + IDENT + "\"|_)";
-std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|[0-9]+)";
+std::string const INT_WILDCARD = "(_|" + INTEGER + ")";
+std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|" + INTEGER + ")";
 std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";
 
 // regex strings for tokenizer
@@ -111,12 +112,12 @@ std::string const SPLIT_DESIGN_ENTITIES = SPACE_TAB + ";" + SPACE_TAB;
 std::string const SPACE_OR_COMMA = "(" + SINGLE_SPACE_TAB + "|,)";
 
 std::string const SPLIT_SELECT_SYNONYM = "Select" + SINGLE_SPACE_TAB;
-std::string const SELECT_SPACE_ANGLE_BRACKETS = "(Select|[ |\t]+|<|>)";
+std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t]+|<|>)";
 
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 
 std::string const FIND_PATTERN = "pattern[ |\t]*" + PATTERN;
-std::string const PATTERN_ARGUMENTS = "(,|pattern)";
+std::string const PATTERN_ARGUMENTS = ",";
 
 std::string const SPLIT_WITH_CL = "[ |\\t]*(with|and)[ |\\t]*";
 std::string const SPLIT_EQUALS = "\"[ |\\\\t]*=[ |\\\\t]*\"";

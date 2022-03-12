@@ -1191,6 +1191,9 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: NON-REPEATED DECLARATION NAMES AND DESIGN ENT
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"v"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     Validator validator = Validator();
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
@@ -1270,6 +1273,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -1424,6 +1429,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -1578,6 +1585,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -1732,6 +1741,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: FOLLOWS* CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -1886,6 +1897,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -2040,6 +2053,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -2194,6 +2209,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -2348,6 +2365,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PARENT* CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // Integer as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -2503,6 +2522,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // IDENT as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -2635,6 +2656,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: USES CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -2767,6 +2790,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK FIRST ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // IDENT as first argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -2899,6 +2924,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MODIFIES CLAUSE CHECK SECOND ARGUMENT") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -3031,6 +3058,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK SYNONYM") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // valid synonym
     PatternToken patternToken = PatternToken();
@@ -3082,6 +3111,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: MULTI-CLAUSE CHECK") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
     std::vector<std::string> arguments = std::vector<std::string>({"a", "v"});
@@ -3111,6 +3141,9 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: SAME SYNONYM AS ARGUMENTS") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -3133,6 +3166,8 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: SYNONYM IN ARGUMENT NOT DECLARED") {
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     // variable synonym as second argument
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();

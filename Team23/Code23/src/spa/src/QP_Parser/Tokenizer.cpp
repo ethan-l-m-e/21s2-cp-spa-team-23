@@ -67,6 +67,8 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
     std::smatch sm;
     std::regex_search (pql, sm, std::regex(SPLIT_SELECT_SYNONYM + RESULT_CL));
     std::string synonym = sm[0];
+    // Remove Select from Select clause
+    synonym = synonym.substr(6);
 
     // Split Select Synonym string into a list of synonyms
     std::string synonyms = std::regex_replace(synonym, std::regex(SELECT_SPACE_ANGLE_BRACKETS), "");
@@ -133,6 +135,8 @@ void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) 
 }
 
 PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
+    // Remove 'pattern' in substring
+    patternClause = patternClause.substr(7);
     std::vector<std::string> patternClauseArgs = StringFormatter::tokenizeByRegex(patternClause, PATTERN_ARGUMENTS);
 
     // Split pattern synonym substring and first argument

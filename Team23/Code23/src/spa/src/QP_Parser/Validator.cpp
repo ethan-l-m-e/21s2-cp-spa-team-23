@@ -147,7 +147,7 @@ void Validator::handleSuchThatStatementClause(std::map<std::string, std::string>
 
 void Validator::checkArgumentForStatementClauses(std::map<std::string, std::string>& declarationTokens, std::string argument) {
     // If argument is an ident or integer, then it's valid
-    if (regex_match(argument, std::regex((IDENT_INT_CHECK)))) {
+    if (regex_match(argument, std::regex((INT_WILDCARD)))) {
         return;
     }
     // Check that if the argument is a synonym, that it is a statement synonym and is declared
