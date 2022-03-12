@@ -13,16 +13,17 @@ void LoopCFG::setNodeInLoop(NodeCFG *node) {
 }
 
 bool LoopCFG::isStart() {
-    if(this->getAllPreviousNode().size() == 1) {
-        unordered_map<int, NodeCFG*>::iterator i;
-        i = this->getAllPreviousNode().begin();
-        if(i->first > this->getStatementNumber()) { // previous node stmtNo is more than current
+        if(this->getAllPreviousNode().size() == 1) {
             return true;
-        } else {
+        }
+        else {
+            unordered_map<int, NodeCFG*>::iterator i;
+            for(i = this->getAllPreviousNode().begin(); i != this->getAllPreviousNode().end(); ++i){
+                if(i->first < this->getStatementNumber()) {
+                    return true;
+                }
+            }
             return false;
         }
-    } else {
-        return false;
-    }
 }
 NodeCFG* LoopCFG::getNodeInLoop() {return this->nodeInLoop; }

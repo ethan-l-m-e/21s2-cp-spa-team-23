@@ -11,16 +11,12 @@ TEST_CASE("Test straight Nodes") {
     NodeCFG* node1 = new NodeCFG(1);
     NodeCFG* node2 = new NodeCFG(2);
     node1->setNextNode(node2);
-    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setNextNode(node3);
-    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node3->setNextNode(node4);
-    node4->addPreviousNode(node3);
     NodeCFG* node5 = new NodeCFG(5);
     node4->setNextNode(node5);
-    node5->addPreviousNode(node4);
 
     CHECK(node1->isStart());
     CHECK(!node2->isStart());
@@ -45,18 +41,13 @@ TEST_CASE("Branch Nodes") {
     NodeCFG* node1 = new NodeCFG(1);
     BranchCFG* node2 = new BranchCFG(2);
     node1->setNextNode(node2);
-    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setLeftNode(node3);
-    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node2->setRightNode(node4);
-    node4->addPreviousNode(node2);
     NodeCFG* node5 = new NodeCFG(5);
     node3->setNextNode(node5);
     node4->setNextNode(node5);
-    node5->addPreviousNode(node3);
-    node5->addPreviousNode(node4);
 
     CHECK(node2->getLeftNode() == node3);
     CHECK(node2->getRightNode() == node4);
@@ -71,13 +62,10 @@ TEST_CASE("node with imaginary end") {
     NodeCFG* node1 = new NodeCFG(1);
     BranchCFG* node2 = new BranchCFG(2);
     node1->setNextNode(node2);
-    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setLeftNode(node3);
-    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node2->setRightNode(node4);
-    node4->addPreviousNode(node2);
 
 
     CHECK(node2->getLeftNode() == node3);
@@ -108,32 +96,21 @@ TEST_CASE("nested branches with real end") {
     BranchCFG* node1 = new BranchCFG(1);
 
     BranchCFG* node2 = new BranchCFG(2);
-    node2->addPreviousNode(node1);
     node1->setLeftNode(node2);
     NodeCFG* node3 = new NodeCFG(3);
-    node3->addPreviousNode(node2);
     node2->setLeftNode(node3);
     NodeCFG* node4 = new NodeCFG(4);
-    node4->addPreviousNode(node2);
     node2->setRightNode(node4);
 
 
     BranchCFG* node5 = new BranchCFG(5);
-    node5->addPreviousNode(node1);
     node1->setRightNode(node5);
     NodeCFG* node6 = new NodeCFG(6);
-    node6->addPreviousNode(node5);
     node5->setLeftNode(node6);
     NodeCFG* node7 = new NodeCFG(7);
-    node7->addPreviousNode(node5);
     node5->setRightNode(node7);
 
-
     NodeCFG* node8 = new NodeCFG(8);
-    node8->addPreviousNode(node3);
-    node8->addPreviousNode(node4);
-    node8->addPreviousNode(node6);
-    node8->addPreviousNode(node7);
     node3->setNextNode(node8);
     node4->setNextNode(node8);
     node6->setNextNode(node8);
@@ -163,25 +140,19 @@ TEST_CASE("nexted Branch; imaginary end") {
     BranchCFG* node1 = new BranchCFG(1);
 
     BranchCFG* node2 = new BranchCFG(2);
-    node2->addPreviousNode(node1);
     node1->setLeftNode(node2);
     NodeCFG* node3 = new NodeCFG(3);
-    node3->addPreviousNode(node2);
     node2->setLeftNode(node3);
     NodeCFG* node4 = new NodeCFG(4);
-    node4->addPreviousNode(node2);
     node2->setRightNode(node4);
 
 
 
     BranchCFG* node5 = new BranchCFG(5);
-    node5->addPreviousNode(node1);
     node1->setRightNode(node5);
     NodeCFG* node6 = new NodeCFG(6);
-    node6->addPreviousNode(node5);
     node5->setLeftNode(node6);
     NodeCFG* node7 = new NodeCFG(7);
-    node7->addPreviousNode(node5);
     node5->setRightNode(node7);
 
 
@@ -193,16 +164,12 @@ TEST_CASE("Loop Nodes") {
     LoopCFG* node1 = new LoopCFG(1);
     NodeCFG* node2 = new NodeCFG(2);
     node1->setNodeInLoop(node2);
-    node2->addPreviousNode(node1);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setNextNode(node3);
-    node3->addPreviousNode(node2);
     NodeCFG* node4 = new NodeCFG(4);
     node3->setNextNode(node4);
-    node4->addPreviousNode(node3);
     NodeCFG* node5 = new NodeCFG(5);
     node4->setNextNode(node5);
-    node5->addPreviousNode(node4);
     node5->setNextNode(node1);
 
     CHECK(node1->isStart());
