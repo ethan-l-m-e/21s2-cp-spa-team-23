@@ -6,34 +6,37 @@
 
 NodeCFG::NodeCFG(int statementNumber) {
     this->statementNumber = statementNumber;
-    this->previousNode = nullptr;
+    this->mapOfPreviousNodes = unordered_map<int, NodeCFG*>{};
     this->nextNode = nullptr;
 }
 
 int NodeCFG::getStatementNumber() {
-    return this->getStatementNumber();
+    return this->statementNumber;
 }
 
 void NodeCFG::setNextNode(NodeCFG* node) {
     this->nextNode = node;
+    node->addPreviousNode(this);
 }
 
-void NodeCFG::setPreviousNode(NodeCFG* node) {
-    this->previousNode = node;
+void NodeCFG::addPreviousNode(NodeCFG* node) {
+    this->mapOfPreviousNodes[node->getStatementNumber()] = node;
 }
 
 NodeCFG* NodeCFG::getNextNode() {
     return this->nextNode;
 }
-NodeCFG* NodeCFG::getPreviousNode() {
-    return this->previousNode;
+unordered_map<int, NodeCFG*> NodeCFG::getAllPreviousNode() {
+    return this->mapOfPreviousNodes;
 }
 
 NodeCFG* NodeCFG::getStartNode() {
-    if(this->previousNode== nullptr) {
+    if(this->mapOfPreviousNodes.size() == 0) {
         return this;
     } else {
-        return this->previousNode->getStartNode();
+        for(auto x : this->mapOfPreviousNodes) {
+            return x.second->getStartNode();
+        }
     }
 }
 
@@ -46,7 +49,7 @@ NodeCFG* NodeCFG::getStartNode() {
 }
 
 bool NodeCFG::isStart() {
-    return this->previousNode == nullptr;
+    return this->mapOfPreviousNodes.size() == 0;
 }
 
 bool NodeCFG::isEnd() {
