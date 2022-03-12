@@ -1,4 +1,4 @@
-../../../../Tests23/uses_source.txt ../../../../Tests23/uses_queries.txt ../../../tests/out.xml
+../../../../Tests23/uses_source.txt ../../../../Tests23/uses_queries.txt ../../../tests/uses_out.xml
 stmt s;
 Select s such that Uses(s, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17

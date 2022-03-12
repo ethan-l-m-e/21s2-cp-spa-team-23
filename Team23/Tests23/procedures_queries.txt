@@ -1,4 +1,4 @@
-../../../../Tests23/procedures_source.txt ../../../../Tests23/procedures_queries.txt ../../../tests/out.xml
+../../../../Tests23/procedures_source.txt ../../../../Tests23/procedures_queries.txt ../../../tests/procedures_out.xml
 procedure p;
 Select p
 proc1, proc2, proc3, proc4
