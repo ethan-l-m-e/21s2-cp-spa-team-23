@@ -16,6 +16,7 @@ int NodeCFG::getStatementNumber() {
 
 void NodeCFG::setNextNode(NodeCFG* node) {
     this->nextNode = node;
+    node->addPreviousNode(this);
 }
 
 void NodeCFG::addPreviousNode(NodeCFG* node) {

@@ -28,7 +28,7 @@ public:
 
     NodeCFG* getStartNode();
     virtual NodeCFG* getEndNode();
-    bool isStart();
+    virtual bool isStart();
     bool isEnd();
 };
 
@@ -55,5 +55,6 @@ public:
     LoopCFG(int statementNumber);
     void setNodeInLoop(NodeCFG* node);
     NodeCFG* getNodeInLoop();
+    bool isStart() override;
 };
 #endif //SPA_NODECFG_H
