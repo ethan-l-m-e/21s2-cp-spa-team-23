@@ -31,9 +31,8 @@ namespace qp {
         std::pair<std::vector<std::string>, std::vector<std::string>>* declarations;
         std::vector<std::pair<std::string, std::string>>* withClauses;
 
-        QueryToken() : declarationTokens(nullptr), selectClauseTokens(nullptr),
-        suchThatClauseTokens(new std::vector<SuchThatClauseToken>()),
-        patternTokens( new std::vector<PatternToken>()), declarations(nullptr), withClauses(nullptr) {};
+        QueryToken() : declarationTokens(nullptr), selectClauseTokens(nullptr), suchThatClauseTokens(nullptr),
+        patternTokens(nullptr), declarations(nullptr),  withClauses(nullptr) {};
 
     };
 
