@@ -35,7 +35,7 @@ bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     Expression exprRight;
 
     if(!rightIsWildCard()) {
-        exprRight = validateAndParseExpression(argRight.argumentValue);
+        exprRight = validateAndParseExpression(std::get<std::string>(argRight.argumentValue));
     }
 
     /**
@@ -71,7 +71,7 @@ bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         } else if (leftIsWildCard() && rightIsWildCard()) {
             addToStmtList(currentNode, &stmtNumberList);
         } else {
-            throw "arguments in pattern clause mismatch " + arg1.argumentValue + " " + arg2.argumentValue;
+            throw "arguments in pattern clause mismatch " + std::get<std::string>(arg1.argumentValue) + " " + std::get<std::string>(arg2.argumentValue);
         }
     }
 
@@ -80,13 +80,13 @@ bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         // configure resultType, to have both variable names and assign
         result.resultType = ResultType::TUPLES;
         result.resultBoolean = !assignVarPairList.empty();
-        result.resultHeader = tuple<string, string>(syn.argumentValue, arg1.argumentValue);
+        result.resultHeader = tuple<string, string>(std::get<std::string>(syn.argumentValue), std::get<std::string>(arg1.argumentValue));
         result.resultItemList = assignVarPairList;
     } else {
         // configure resultType to have only a list of assign
         result.resultType = ResultType::STRING;
         result.resultBoolean = !stmtNumberList.empty();
-        result.resultHeader = syn.argumentValue;
+        result.resultHeader = std::get<std::string>(syn.argumentValue);
         result.resultItemList = stmtNumberList;
     }
 
@@ -190,7 +190,7 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg) {
 }
 
 bool matchVariableValue(VariableNode *varNode, Argument arg) {
-    string trimmed = StringFormatter::tokenizeByRegex(arg.argumentValue, "[ ]*\"[ ]*")[0];
+    string trimmed = StringFormatter::tokenizeByRegex(std::get<std::string>(arg.argumentValue), "[ ]*\"[ ]*")[0];
     if (varNode->getVariableName() == trimmed)
         return true;
     else
