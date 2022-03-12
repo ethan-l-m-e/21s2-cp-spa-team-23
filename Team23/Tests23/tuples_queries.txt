@@ -1,4 +1,4 @@
-../../../../Tests23/tuples_source.txt ../../../../Tests23/tuples_queries.txt ../../../tests/out.xml
+../../../../Tests23/tuples_source.txt ../../../../Tests23/tuples_queries.txt ../../../tests/tuples_out.xml
 assign a; read r;
 Select <a, r>
 1 2, 4 2, 6 2
