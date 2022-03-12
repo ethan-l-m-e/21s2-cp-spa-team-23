@@ -51,6 +51,11 @@ size_t ResultTable::getTableSize() {
     return tableEntries[0].size();
 }
 
+size_t ResultTable::getTableWidth() {
+    if(isEmpty()) return 0;
+    return tableEntries.size();
+}
+
 void ResultTable::setBooleanResult(bool result) {
     isBooleanResult = true;
     booleanResult = result;

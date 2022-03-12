@@ -2,119 +2,11 @@
 // Created by Tianyi Wang on 14/2/22.
 //
 
-#include "QP_Evaluator/QueryEvaluator.h"
-
+#include "TestUtilities.h"
 #include <utility>
 #include "catch.hpp"
-#include "SourceProcessor/Parser.h"
-#include <exception>
 
 using namespace std;
-using ArgList = std::vector<Argument>;
-using ResultSet = std::unordered_set<string>;
-
-PKB* generateSamplePKB() {
-    PKB *testPKB = PKB::getInstance();
-/**
- * Procedure p {
- * 01 read x;
- * 02 y = yeast + zealous + x;
- * 03 zealous = 3;
- * 04 print xylophone;
- * 05 while (z == 1) {
- * 06    x = 5 + x;
- *    };
- * }
- */
-    testPKB->clearPKB();
-    testPKB->addProcedure("p");
-    testPKB->addVariable("x");
-    testPKB->addVariable("y");
-    testPKB->addVariable("z");
-    testPKB->addVariable("xylophone");
-    testPKB->addVariable("yeast");
-    testPKB->addVariable("zealous");
-    testPKB->addConstant("1");
-    testPKB->addConstant("3");
-    testPKB->addConstant("5");
-
-
-    testPKB->addReadStatement(1);
-    testPKB->addAssignStatement(2);
-    testPKB->addAssignStatement(3);
-    testPKB->addPrintStatement(4);
-    testPKB->addWhileStatement(5);
-    testPKB->addAssignStatement(6);
-
-    testPKB->setFollows(1, 2);
-    testPKB->setFollows(2, 3);
-    testPKB->setFollows(3, 4);
-    testPKB->setFollows(4, 5);
-    testPKB->setParent(5, 6);
-
-    testPKB->setFollowsT(1,2);
-    testPKB->setFollowsT(1,3);
-    testPKB->setFollowsT(1,4);
-    testPKB->setFollowsT(1,5);
-    testPKB->setFollowsT(2,3);
-    testPKB->setFollowsT(2,4);
-    testPKB->setFollowsT(2,5);
-    testPKB->setFollowsT(3,4);
-    testPKB->setFollowsT(3,5);
-    testPKB->setFollowsT(4,5);
-    testPKB->setParentT(5,6);
-
-    testPKB->setModifies(1, {"x"});
-    testPKB->setModifies(2, {"y"});
-    testPKB->setModifies(3, {"zealous"});
-    testPKB->setModifies(6, {"x"});
-    testPKB->setModifies(5, {"x"});
-
-
-    testPKB->setUses(2, {"yeast", "zealous", "x"});
-    testPKB->setUses(4, {"xylophone"});
-    testPKB->setUses(5, {"z", "x"});
-    testPKB->setUses(6, {"x"});
-
-    return testPKB;
-}
-
-Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<std::string> synonyms) {
-    Query query;
-    query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
-    return query;
-}
-
-Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<std::string> synonyms, vector<SuchThatClause> suchThatClauses, vector<PatternClause> patternClauses) {
-    Query query;
-    query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
-    query.setSuchThatClauses(std::move(suchThatClauses));
-    query.setPatternClauses(std::move(patternClauses));
-    return query;
-}
-
-Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<std::string> synonyms, vector<SuchThatClause> suchThatClauses) {
-    Query query;
-    query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
-    query.setSuchThatClauses(std::move(suchThatClauses));
-    return query;
-}
-
-Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<std::string> synonyms, vector<PatternClause> patternClauses) {
-    Query query;
-    query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
-    query.setPatternClauses(std::move(patternClauses));
-    return query;
-}
-
-ResultSet generateResultSet (list<string> result) {
-    return {std::begin(result), std::end(result)};
-}
-
 
 TEST_CASE("Select query with no clauses") {
     PKB *testPKB = generateSamplePKB();
@@ -123,11 +15,10 @@ TEST_CASE("Select query with no clauses") {
                                                            {"pn", DesignEntity::PRINT},
                                                            {"s", DesignEntity::STMT}
                                                            };
-    Query query_1 = makeQuery(declarations, {"v"});
-    Query query_2 = makeQuery(declarations, {"s"});
-    Query query_3 = makeQuery(declarations, {"pn"});
-    Query query_4 = makeQuery(declarations, {"a"});
-    Query query_5 = makeQuery(declarations, {"x"});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VALUE)}});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -155,12 +46,6 @@ TEST_CASE("Select query with no clauses") {
      */
     REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"2", "3", "6"});
 
-    /*
-    list<string> qe.evaluate(&query_5) = qe.evaluate(&query_5);
-
-    REQUIRE(generateResultSet(qe.evaluate(&query_5)).empty());
-    */
-
 }
 
 TEST_CASE("Follows/Parent/Follows* clause: 0 or 1 synonym") {
@@ -185,16 +70,16 @@ TEST_CASE("Follows/Parent/Follows* clause: 0 or 1 synonym") {
     SuchThatClause clause9 = {ArgList{a0, a10},RelRef::FOLLOWS};
     SuchThatClause clause10 = {ArgList{a00, as},RelRef::PARENT};
 
-    Query query_1 = makeQuery(declarations, {"s"}, {clause1});
-    Query query_2 = makeQuery(declarations, {"s"}, {clause2});
-    Query query_3 = makeQuery(declarations, {"s"}, {clause3});
-    Query query_4 = makeQuery(declarations, {"s"}, {clause4});
-    Query query_5 = makeQuery(declarations, {"s"}, {clause5});
-    Query query_6 = makeQuery(declarations, {"s"}, {clause6});
-    Query query_7 = makeQuery(declarations, {"s"}, {clause7});
-    Query query_8 = makeQuery(declarations, {"s"}, {clause8});
-    Query query_9 = makeQuery(declarations, {"s"}, {clause9});
-    Query query_10 = makeQuery(declarations, {"s"}, {clause10});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause1});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause2});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause3});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause4});
+    Query query_5 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause5});
+    Query query_6 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause6});
+    Query query_7 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause7});
+    Query query_8 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause8});
+    Query query_9 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause9});
+    Query query_10 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause10});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -289,15 +174,15 @@ TEST_CASE("Follows/Parent/Follows* clause: 1 synonym with stmt type") {
     SuchThatClause clause_5_a = {ArgList{a5, aa},RelRef::PARENT};
     SuchThatClause clause_3_c = {ArgList{a3, ac},RelRef::FOLLOWS};
 
-    Query query_1 = makeQuery(declarations, {"a"}, {clause_0_a});
-    Query query_2 = makeQuery(declarations, {"a"}, {clause_1_a});
-    Query query_3 = makeQuery(declarations, {"a"}, {clause_a_2});
-    Query query_4 = makeQuery(declarations, {"pn"}, {clause_pn_0});
-    Query query_5 = makeQuery(declarations, {"pn"}, {clause_2_pn});
-    Query query_6 = makeQuery(declarations, {"r"}, {clause_r_2});
-    Query query_7 = makeQuery(declarations, {"r"}, {clause_5_r});
-    Query query_8 = makeQuery(declarations, {"a"}, {clause_5_a});
-    Query query_9 = makeQuery(declarations, {"a"}, {clause_3_c});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_0_a});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_1_a});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_a_2});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VALUE)}}, {clause_pn_0});
+    Query query_5 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VALUE)}}, {clause_2_pn});
+    Query query_6 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("r", AttrName::VALUE)}}, {clause_r_2});
+    Query query_7 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("r", AttrName::VALUE)}}, {clause_5_r});
+    Query query_8 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_5_a});
+    Query query_9 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_3_c});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -374,31 +259,12 @@ TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms") {
     SuchThatClause clause2 = {ArgList{as1, as2},RelRef::PARENT};
     SuchThatClause clause3 = {ArgList{as1, as2},RelRef::FOLLOWS_T};
 
-    Query query_1;
-    query_1.setDeclarations(declarations);
-    query_1.setSynonyms({"s"});
-    query_1.setSuchThatClauses(vector<SuchThatClause>{clause1});
 
-    Query query_2;
-    query_2.setDeclarations(declarations);
-    query_2.setSynonyms({"s2"});
-    query_2.setSuchThatClauses(vector<SuchThatClause>{clause1});
-
-    Query query_3;
-    query_3.setDeclarations(declarations);
-    query_3.setSynonyms({"s1"});
-    query_3.setSuchThatClauses(vector<SuchThatClause>{clause2});
-
-    Query query_4;
-    query_4.setDeclarations(declarations);
-    query_4.setSynonyms({"s2"});
-    query_4.setSuchThatClauses(vector<SuchThatClause>{clause2});
-
-    Query query_5;
-    query_5.setDeclarations(declarations);
-    query_5.setSynonyms({"s2"});
-    query_5.setSuchThatClauses(vector<SuchThatClause>{clause3});
-
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause1});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s2", AttrName::VALUE)}}, {clause1});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause2});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s2", AttrName::VALUE)}}, {clause2});
+    Query query_5 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s2", AttrName::VALUE)}}, {clause3});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -451,10 +317,10 @@ TEST_CASE("Follows/Parent/Follows* clause: 2 synonyms with type") {
     SuchThatClause clause_r_a = {ArgList{ar, aa},RelRef::FOLLOWS};
     SuchThatClause clause_w_a = {ArgList{aw, aa},RelRef::PARENT};
 
-    Query query_1 = makeQuery(declarations, {"s"}, {clauseT_s_pn});
-    Query query_2 = makeQuery(declarations, {"pn"}, {clause_s_pn});
-    Query query_3 = makeQuery(declarations, {"r"}, {clause_r_a});
-    Query query_4 = makeQuery(declarations, {"w"}, {clause_w_a});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clauseT_s_pn});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VALUE)}}, {clause_s_pn});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("r", AttrName::VALUE)}}, {clause_r_a});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("w", AttrName::VALUE)}}, {clause_w_a});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -521,16 +387,16 @@ TEST_CASE("Modifies/Uses clause: 1 synonym with stmt type") {
     SuchThatClause clause_s_x1 = {ArgList{as, ax1},RelRef::MODIFIES_S};
     SuchThatClause clause_7_v = {ArgList{a7, av},RelRef::USES_S};
 
-    Query query_1 = makeQuery(declarations, {"v"}, {clause_2_v});
-    Query query_2 = makeQuery(declarations, {"s"}, {clauseU_s_x});
-    Query query_3 = makeQuery(declarations, {"a"}, {clause_a_0});
-    Query query_4 = makeQuery(declarations, {"a"}, {clause_a_z});
-    Query query_5 = makeQuery(declarations, {"v"}, {clause_6_v});
-    Query query_6 = makeQuery(declarations, {"r"}, {clause_r_x});
-    Query query_7 = makeQuery(declarations, {"s"}, {clauseM_s_x});
-    Query query_8 = makeQuery(declarations, {"s"}, {clause_s_0});
-    Query query_9 = makeQuery(declarations, {"s"}, {clause_s_x1});
-    Query query_10 = makeQuery(declarations, {"v"}, {clause_7_v});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clause_2_v});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clauseU_s_x});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_a_0});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_a_z});
+    Query query_5 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clause_6_v});
+    Query query_6 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("r", AttrName::VALUE)}}, {clause_r_x});
+    Query query_7 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clauseM_s_x});
+    Query query_8 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause_s_0});
+    Query query_9 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clause_s_x1});
+    Query query_10 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clause_7_v});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -626,14 +492,14 @@ TEST_CASE("Modifies/Uses clause: 2 synonyms with stmt type") {
     SuchThatClause clauseM_s_v = {ArgList{as, av},RelRef::MODIFIES_S};
     SuchThatClause clause_w_v = {ArgList{aw, av},RelRef::MODIFIES_S};
 
-    Query query_1 = makeQuery(declarations, {"s"}, {clauseU_s_v});
-    Query query_2 = makeQuery(declarations, {"a"}, {clause_a_v});
-    Query query_3 = makeQuery(declarations, {"v"}, {clause_pn_v});
-    Query query_4 = makeQuery(declarations, {"v"}, {clause_r_v});
-    Query query_5 = makeQuery(declarations, {"v"}, {clauseM_s_v});
-    Query query_6 = makeQuery(declarations, {"v"}, {clause_w_v});
-    Query query_7 = makeQuery(declarations, {"s"}, {clauseM_s_v});
-    Query query_8 = makeQuery(declarations, {"c"}, {clauseM_s_v});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clauseU_s_v});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_a_v});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clause_pn_v});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clause_r_v});
+    Query query_5 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clauseM_s_v});
+    Query query_6 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clause_w_v});
+    Query query_7 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}}, {clauseM_s_v});
+    Query query_8 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("c", AttrName::VALUE)}}, {clauseM_s_v});
 
     auto qe = QueryEvaluator(testPKB);
     /**
@@ -709,13 +575,13 @@ TEST_CASE("Merge synonyms") {
     SuchThatClause clause_s2_0 = {ArgList{as2, a0},RelRef::FOLLOWS};
     SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS};
 
-    Query query_0 = makeQuery(declarations, {"s1"}, {clause_s1_s2, clause_4_5});
-    Query query_1 = makeQuery(declarations, {"s1"}, {clause_s1_s2, clause_s2_5});
-    Query query_2 = makeQuery(declarations, {"s1"}, {clause_s1_s3, clause_s2_5});
-    Query query_3 = makeQuery(declarations, {"s2"}, {clause_s1_s2, clause_s2_s3});
-    Query query_4 = makeQuery(declarations, {"s1"}, {clause_s2_5, clause_s1_s2});
-    Query query_5 = makeQuery(declarations, {"s1"}, {clause_s1_0, clause_s2_0, clause_s1_s2});
-    Query query_6 = makeQuery(declarations, {"s1"}, {clause_s2_5, clause_s1_s3});
+    Query query_0 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause_s1_s2, clause_4_5});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause_s1_s2, clause_s2_5});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause_s1_s3, clause_s2_5});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s2", AttrName::VALUE)}}, {clause_s1_s2, clause_s2_s3});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause_s2_5, clause_s1_s2});
+    Query query_5 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause_s1_0, clause_s2_0, clause_s1_s2});
+    Query query_6 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause_s2_5, clause_s1_s3});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -785,9 +651,16 @@ TEST_CASE("Select tuples") {
     SuchThatClause clause_s2_0 = {ArgList{as2, a0},RelRef::FOLLOWS};
     SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS};
 
-    Query query_0 = makeQuery(declarations, {"s1"}, {clause_s1_s2, clause_4_5});
-    Query query_1 = makeQuery(declarations, {"s1", "s2"}, {clause_s1_s2, clause_4_5});
-    Query query_2 = makeQuery(declarations, {"s1", "s2", "s3"}, {clause_s1_s2, clause_4_5});
+    Query query_0 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)}}, {clause_s1_s2, clause_4_5});
+    Query query_1 = makeQuery(declarations, {
+        Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)},
+        Argument{ArgumentType::ATTR_REF, make_pair("s2", AttrName::VALUE)}},
+                              {clause_s1_s2, clause_4_5});
+    Query query_2 = makeQuery(declarations, {
+        Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::VALUE)},
+        Argument{ArgumentType::ATTR_REF, make_pair("s2", AttrName::VALUE)},
+        Argument{ArgumentType::ATTR_REF, make_pair("s3", AttrName::VALUE)}},
+                              {clause_s1_s2, clause_4_5});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -810,74 +683,11 @@ TEST_CASE("Select tuples") {
                                                                    });
 }
 
-PKB* generateSamplePKBForPatternMatching() {
-    /**
-     * Original. DO NOT DELETE OR MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING.
-     *    x = y;        // test var
-     *    x = 1;        //test const
-     *    x = y + 1;    //test basic expression
-     *    y = (y + x + 2) + 1;  //test 1-nested expression
-     *    y = ((y + (3 - z)) * (x + 2)) + 1;    // test >2-nested expression
-     *    y = y + x * 1 + z;        // test AST structure
-     */
-    string a1 = "x = y;";
-    string a2 = "x = 1;";
-    string a3 = "x = y + 1;";
-    string a4 = "y = (y + x + 2) + 1;";
-    string a5 = "y = ((y + (3 - z)) * (x + 2)) + 1;";
-    string a6 = "y = y + x * 1 + z;";
-    string a7 = "x = (y + (3 - z)) + 1;";
-
-    PKB *testPKB = PKB::getInstance();
-    testPKB->clearPKB();
-    testPKB->addAssignNode(Parser::parseAssign(a1));
-    testPKB->addAssignNode(Parser::parseAssign(a2));
-    testPKB->addAssignNode(Parser::parseAssign(a3));
-    testPKB->addAssignNode(Parser::parseAssign(a4));
-    testPKB->addAssignNode(Parser::parseAssign(a5));
-    testPKB->addAssignNode(Parser::parseAssign(a6));
-    testPKB->addAssignNode(Parser::parseAssign(a7));
-
-    Parser::resetStatementNumber();
-    testPKB->addVariable("x");
-    testPKB->addVariable("y");
-    testPKB->addVariable("z");
-
-    testPKB->addAssignStatement(1);
-    testPKB->addAssignStatement(2);
-    testPKB->addAssignStatement(3);
-    testPKB->addAssignStatement(4);
-    testPKB->addAssignStatement(5);
-    testPKB->addAssignStatement(6);
-    testPKB->addAssignStatement(7);
-
-
-    testPKB->setFollows(1, 2);
-    testPKB->setFollows(2, 3);
-    testPKB->setFollows(3, 4);
-    testPKB->setFollows(4, 5);
-    testPKB->setFollows(5, 6);
-    testPKB->setFollows(6, 7);
-
-    testPKB->setUses(1, {"y"});
-    testPKB->setUses(3, {"y"});
-    testPKB->setUses(4, {"y", "x"});
-    testPKB->setUses(5, {"y", "x", "z"});
-    testPKB->setUses(6, {"y", "x", "z"});
-
-    return testPKB;
-}
-
-ResultSet evaluateAndCreateResultSet(QueryEvaluator qe, Query *query) {
-    list<string> resultList = qe.evaluate(query);
-    return ResultSet (std::begin(resultList), std::end(resultList));
-}
-
 TEST_CASE("Pattern clause: return stmt") {
     PKB *testPKB = generateSamplePKBForPatternMatching();
     Query query;
     auto qe = QueryEvaluator(testPKB);
-    unordered_map<string, DesignEntity> declarationsMap = {{"a1", DesignEntity::ASSIGN}};
+    unordered_map<string, DesignEntity> declarations = {{"a1", DesignEntity::ASSIGN}};
     Argument assignSyn = {ArgumentType::SYNONYM, "a1"};
     Argument leftIdent = {ArgumentType::IDENT, "\"x\""};
     Argument noResultLeft = {ArgumentType::IDENT, "noResult"};
@@ -897,34 +707,34 @@ TEST_CASE("Pattern clause: return stmt") {
     PatternClause none_wild = {ArgList {assignSyn, noResultLeft, wild}, SynonymType::ASSIGN};
     PatternClause wild_none = {ArgList {assignSyn, wild, noResultsRight}, SynonymType::ASSIGN};
 
-    query = makeQuery(declarationsMap, {"a1"}, {wild_wild});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {wild_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "2", "3", "4", "5", "6", "7"});
 
-    query = makeQuery(declarationsMap, {"a1"}, {ident_wild});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {ident_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "2", "3", "7"});
 
-    query = makeQuery(declarationsMap, {"a1"}, {none_wild});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {none_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
 
-    query = makeQuery(declarationsMap, {"a1"}, {ident_const});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {ident_const});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"7"});
 
-    query = makeQuery(declarationsMap, {"a1"}, {wild_const});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {wild_const});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5", "7"});
 
-    query = makeQuery(declarationsMap, {"a1"}, {wild_var});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {wild_var});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "4", "5", "6", "7"});
 
-    query = makeQuery(declarationsMap, {"a1"}, {ident_var});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {ident_var});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "7"});
 
-    query = makeQuery(declarationsMap, {"a1"}, {wild_none});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {wild_none});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
 
     //non-standardized spacing
     Argument spacingRightVar = {ArgumentType::PARTIAL_UNDERSCORE, "_\"   y  \"_"};
     PatternClause wild_weirdVar = {ArgList {assignSyn, wild, spacingRightVar}, SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {wild_weirdVar});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {wild_weirdVar});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "4", "5", "6", "7"});
 }
 
@@ -932,7 +742,7 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     PKB *testPKB = generateSamplePKBForPatternMatching();
     Query query;
     auto qe = QueryEvaluator(testPKB);
-    unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
+    unordered_map<string, DesignEntity> declarations = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
     Argument assignSyn = {ArgumentType::SYNONYM, "a"};
     Argument leftSynonym = {ArgumentType::SYNONYM, "v"};
     Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
@@ -941,16 +751,16 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     PatternClause synonym_wild = {ArgList {assignSyn, leftSynonym, wild}, SynonymType::ASSIGN};
     PatternClause synonym_var = {ArgList {assignSyn, leftSynonym, rightConst}, SynonymType::ASSIGN};
 
-    query = makeQuery(declarationsMap, {"a"}, {synonym_wild});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {synonym_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "2", "3", "4", "5", "6", "7"});
 
-    query = makeQuery(declarationsMap, {"a"}, {synonym_var});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {synonym_var});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet{"4", "5"});
 
-    query = makeQuery(declarationsMap, {"v"}, {synonym_wild});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {synonym_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet{"x", "y"});
 
-    query = makeQuery(declarationsMap, {"v"}, {synonym_var});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {synonym_var});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet{"y"});
 }
 
@@ -958,7 +768,7 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     PKB *testPKB = generateSamplePKBForPatternMatching();
     Query query;
     auto qe = QueryEvaluator(testPKB);
-    unordered_map<string, DesignEntity> declarationsMap = {{"a1", DesignEntity::ASSIGN}};
+    unordered_map<string, DesignEntity> declarations = {{"a1", DesignEntity::ASSIGN}};
     Argument assignSyn = {ArgumentType::SYNONYM, "a1"};
     Argument leftWild = {ArgumentType::UNDERSCORE, "_"};
 
@@ -966,42 +776,42 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     PatternClause clauseIdentEasy = {ArgList {assignSyn, leftWild,
                                           {ArgumentType::IDENT, "\"y + 1\""}},
                                  SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {clauseIdentEasy});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {clauseIdentEasy});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"3"});
 
      // exact matching difficult
     PatternClause clauseIdentHard = {ArgList {assignSyn, leftWild,
                                               {ArgumentType::IDENT, "\"((y + (3 - z)) * (x + 2)) + 1\""}},
                                      SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {clauseIdentHard});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {clauseIdentHard});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5"});
 
     // no exact match
     PatternClause clauseIdentNoResults = {ArgList {assignSyn, leftWild,
                                               {ArgumentType::IDENT, "\"((y + (3 - z)) * (x + 2))\""}},
                                      SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {clauseIdentNoResults});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {clauseIdentNoResults});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
 
     // wild easy match
     PatternClause clauseWildEasy = {ArgList {assignSyn, leftWild,
                                                    {ArgumentType::PARTIAL_UNDERSCORE, "_\"x * 1\"_"}},
                                           SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {clauseWildEasy});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {clauseWildEasy});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"6"});
 
     // wild medium match
     PatternClause clauseWildMedium = {ArgList {assignSyn, leftWild,
                                              {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + x\"_"}},
                                     SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {clauseWildMedium});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {clauseWildMedium});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"4"});
 
     // wild difficult match
     PatternClause clauseWildHard = {ArgList {assignSyn, leftWild,
                                                {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + (3 - z)\"_"}},
                                       SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {clauseWildHard});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {clauseWildHard});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5" , "7"});
 
 
@@ -1009,7 +819,7 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     PatternClause weirdSpacing = {ArgList {assignSyn, leftWild,
                                            {ArgumentType::PARTIAL_UNDERSCORE, "_\"  y  +   x   \"_"}},
                                   SynonymType::ASSIGN};
-    query = makeQuery(declarationsMap, {"a1"}, {weirdSpacing});
+    query = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a1", AttrName::VALUE)}}, {weirdSpacing});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"4"});
 
     //invalid query: wrong brackets
@@ -1021,7 +831,7 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
 
 TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
     PKB *testPKB = generateSamplePKBForPatternMatching();
-    unordered_map<string, DesignEntity> declarationsMap = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
+    unordered_map<string, DesignEntity> declarations = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
     Argument aa = {ArgumentType::SYNONYM, "a"};
     Argument av = {ArgumentType::SYNONYM, "v"};
     Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
@@ -1032,8 +842,8 @@ TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
     PatternClause synonym_var = {ArgList {aa, av, rightConst}, SynonymType::ASSIGN};
 
 
-    Query query_1 = makeQuery(declarationsMap, {"a"}, {clause_a_5}, {synonym_var});
-    Query query_2 = makeQuery(declarationsMap, {"v"}, {clause_5_v}, {synonym_var});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)}}, {clause_a_5}, {synonym_var});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}}, {clause_5_v}, {synonym_var});
 
     auto qe = QueryEvaluator(testPKB);
 
