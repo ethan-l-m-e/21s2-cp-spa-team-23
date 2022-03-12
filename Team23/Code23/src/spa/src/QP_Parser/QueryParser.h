@@ -53,6 +53,11 @@ namespace qp {
                                                                    {"value", AttrName::VALUE},
                                                                    {"stmt#", AttrName::STMT_NO},
                                                                    });
+    const std::map<std::string, SynonymType> synonymStringToSynonymType({
+                                                                                {"while", SynonymType::WHILE},
+                                                                                {"if", SynonymType::IF},
+                                                                                {"assign", SynonymType::ASSIGN},
+    });
 
     class QueryParser {
     public:
@@ -64,6 +69,7 @@ namespace qp {
         void getPattern(QueryToken&, Query&);
         void getWithClauses(QueryToken&, Query&);
         Argument getArgument(std::string, std::map<std::string, std::string>);
+        void getArgumentValue(std::string, ArgumentType, Argument&);
         ArgumentType getArgumentType(std::string, std::map<std::string, std::string>);
         DesignEntity getDesignEntity(std::string);
         std::vector<Argument> getArgumentList(std::vector<std::string>, std::map<std::string, std::string>);

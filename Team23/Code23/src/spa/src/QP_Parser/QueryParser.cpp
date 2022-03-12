@@ -54,13 +54,14 @@ DesignEntity QueryParser::getDesignEntity(std::string designEntityString) {
     try {
         DesignEntity designEntity = stringToDesignEntityMap.at(designEntityString);
         return designEntity;
-    } catch (...) {
+    } catch (std::out_of_range e) {
         throw QPParserException("design entity string cannot be found");
     }
 }
 
 void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
     vector<Argument> argList = vector<Argument>();
+    // Find Synonym type for each synonym substring
     for (string synonym : *(queryToken.selectClauseTokens)) {
         Argument argument = getArgument(synonym, *(queryToken.declarationTokens));
         argList.push_back(argument);
@@ -94,7 +95,7 @@ RelRef QueryParser::getRelRefFromString(std::string relationship, Argument first
     try {
         RelRef relRef = stringToRelRefMap.at(relationship);
         return relRef;
-    } catch (...) {
+    } catch (std::out_of_range e) {
         throw QPParserException("RelRef: " + relationship + " cannot be found!");
     }
 }
@@ -140,6 +141,12 @@ Argument QueryParser::getArgument(std::string argumentString, std::map<std::stri
     Argument argument = Argument();
     ArgumentType argumentType = getArgumentType(argumentString, declarations);
     argument.argumentType = argumentType;
+    getArgumentValue(argumentString, argumentType, argument);
+    return argument;
+}
+
+void QueryParser::getArgumentValue(std::string argumentString, ArgumentType argumentType, Argument& argument) {
+    // Get value of argument based on argument type
     if (argumentType == ArgumentType::IDENT) {
         // remove quotation marks from the string
         argument.argumentValue = argumentString.substr(1, argumentString.size()-2);
@@ -149,12 +156,12 @@ Argument QueryParser::getArgument(std::string argumentString, std::map<std::stri
     } else if (argumentType == ArgumentType::BOOLEAN) {
         argument.argumentValue = "";
     } else {
-            argument.argumentValue = argumentString;
+        argument.argumentValue = argumentString;
     }
-    return argument;
 }
 
 std::pair<std::string, AttrName> QueryParser::getAttrName(std::string argValue) {
+    // Get attribute name for attributte references
     vector<std::string> arguments = StringFormatter::tokenizeByRegex(argValue, "\\.");
     AttrName attrName = stringToAttrName.at(arguments[1]);
     return std::pair<std::string, AttrName>(arguments[0], attrName);
@@ -198,15 +205,12 @@ void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
 }
 
 SynonymType QueryParser::getPatternSynonymType(std::string argumentValue, std::map<std::string, std::string> declarations) {
-    if (declarations.at(argumentValue) == "assign") {
-        return SynonymType::ASSIGN;
-    } else if (declarations.at(argumentValue) == "if") {
-        return SynonymType::IF;
-    } else if (declarations.at(argumentValue) == "while") {
-        return SynonymType::WHILE;
+    try {
+        std::string synonymType = declarations.at(argumentValue);
+        return synonymStringToSynonymType.at(synonymType);
+    } catch (std::out_of_range e) {
+        throw QPParserException("Parser::getPatternSynonymType invalid synonym type");
     }
-
-    throw QPParserException("Parser::getPatternSynonymType invalid synonym type");
 }
 
 void QueryParser::getWithClauses(QueryToken& queryToken, Query& query) {
