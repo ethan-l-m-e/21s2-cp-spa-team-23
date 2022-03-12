@@ -224,7 +224,7 @@ TEST_CASE("test parents* - basic") {
 
 TEST_CASE("test uses - basic") {
     RelationshipExtractor::extractUses(&aNode);
-    REQUIRE(PKB::getInstance()->isUses("1","y"));
+    REQUIRE(PKB::getInstance()->isUsesS("1","y"));
 }
 
 TEST_CASE("test uses - container statement") {
@@ -239,7 +239,7 @@ TEST_CASE("test uses - container statement") {
 
     auto wNode = WhileNode(3, condPtr, defaultStmtLst3);
     RelationshipExtractor::extractUses(&wNode);
-    REQUIRE(PKB::getInstance()->isUses("3","a"));
+    REQUIRE(PKB::getInstance()->isUsesS("3","a"));
 }
 
 TEST_CASE("test uses - call statement") {
@@ -254,12 +254,12 @@ TEST_CASE("test uses - call statement") {
     procLst.push_back(&proc2);
     ProgramNode prog = ProgramNode(procLst);
     RelationshipExtractor::extractUses(&callNode);
-    REQUIRE(PKB::getInstance()->isUses("2","y"));
+    REQUIRE(PKB::getInstance()->isUsesS("2","y"));
 }
 
 TEST_CASE("test modifies - basic") {
     RelationshipExtractor::extractModifies(&aNode);
-    REQUIRE(PKB::getInstance()->isModifies("1","x"));
+    REQUIRE(PKB::getInstance()->isModifiesS("1","x"));
 }
 
 TEST_CASE("test Modifies - container statement") {
@@ -274,7 +274,7 @@ TEST_CASE("test Modifies - container statement") {
     auto wNode = WhileNode(3, condPtr, defaultStmtLst4);
     cout<<defaultStmtLst4.size();
     RelationshipExtractor::extractModifies(&wNode);
-    REQUIRE(PKB::getInstance()->isModifies("3","x"));
+    REQUIRE(PKB::getInstance()->isModifiesS("3","x"));
 }
 
 TEST_CASE("test Modifies - call statement") {
@@ -289,7 +289,7 @@ TEST_CASE("test Modifies - call statement") {
     procLst.push_back(&proc2);
     ProgramNode prog = ProgramNode(procLst);
     RelationshipExtractor::extractModifies(&callNode);
-    REQUIRE(PKB::getInstance()->isModifies("2","x"));
+    REQUIRE(PKB::getInstance()->isModifiesS("2","x"));
 }
 
 TEST_CASE("test") {
