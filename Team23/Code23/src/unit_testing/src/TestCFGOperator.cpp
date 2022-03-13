@@ -121,14 +121,15 @@ TEST_CASE("all possible right Nodes") {
     int size = nodeMap.size();
 
 
-    CHECK(unordered_set<int>{} == CFGOperator::gatherAllRightNodesNext(allNodes[17], size));
-    CHECK(unordered_set<int>{17} == CFGOperator::gatherAllRightNodesNext(allNodes[16], size));
-    CHECK(unordered_set<int>{16, 17} == CFGOperator::gatherAllRightNodesNext(allNodes[15], size));
-    CHECK(unordered_set<int>{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodesNext(allNodes[1], size));
-    CHECK(unordered_set<int>{3, 4, 5, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodesNext(allNodes[2], size));
-    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodesNext(allNodes[8], size));
-    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodesNext(allNodes[7], size));
-    CHECK(unordered_set<int>{10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodesNext(allNodes[14], size));
+    CHECK(unordered_set<int>{} == CFGOperator::gatherAllRightNodes(allNodes[17], size));
+    CHECK(unordered_set<int>{17} == CFGOperator::gatherAllRightNodes(allNodes[16], size));
+    CHECK(unordered_set<int>{16, 17} == CFGOperator::gatherAllRightNodes(allNodes[15], size));
+    CHECK(unordered_set<int>{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} ==
+                  CFGOperator::gatherAllRightNodes(allNodes[1], size));
+    CHECK(unordered_set<int>{3, 4, 5, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[2], size));
+    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[8], size));
+    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[7], size));
+    CHECK(unordered_set<int>{10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[14], size));
 
 }
 
@@ -137,10 +138,11 @@ TEST_CASE("all possible left Nodes") {
     unordered_map<int, NodeCFG *> allNodes = nodeMap[0];
     int size = nodeMap.size();
 
-    CHECK(unordered_set<int>{} == CFGOperator::gatherAllLeftNodesNext(allNodes[15], size));
-    CHECK(unordered_set<int>{15} == CFGOperator::gatherAllLeftNodesNext(allNodes[16], size));
-    CHECK(unordered_set<int>{15, 16} == CFGOperator::gatherAllLeftNodesNext(allNodes[17], size));
-    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllLeftNodesNext(allNodes[14], size));
-    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == CFGOperator::gatherAllLeftNodesNext(allNodes[9], size));
-    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == CFGOperator::gatherAllLeftNodesNext(allNodes[8], size));
+    CHECK(unordered_set<int>{} == CFGOperator::gatherAllLeftNodes(allNodes[15], size));
+    CHECK(unordered_set<int>{15} == CFGOperator::gatherAllLeftNodes(allNodes[16], size));
+    CHECK(unordered_set<int>{15, 16} == CFGOperator::gatherAllLeftNodes(allNodes[17], size));
+    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} ==
+                  CFGOperator::gatherAllLeftNodes(allNodes[14], size));
+    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == CFGOperator::gatherAllLeftNodes(allNodes[9], size));
+    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == CFGOperator::gatherAllLeftNodes(allNodes[8], size));
 }

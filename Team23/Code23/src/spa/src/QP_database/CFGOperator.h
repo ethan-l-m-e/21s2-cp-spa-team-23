@@ -20,8 +20,8 @@ private:
 
 public:
     static bool pathExistBetween(NodeCFG* left, NodeCFG* right, int CFGSize);
-    static unordered_set<int> gatherAllLeftNodesNext(NodeCFG* rightNode, int CFGSize);
-    static unordered_set<int> gatherAllRightNodesNext(NodeCFG* leftNode, int CFGSize);
+    static unordered_set<int> gatherAllLeftNodes(NodeCFG* rightNode, int CFGSize);
+    static unordered_set<int> gatherAllRightNodes(NodeCFG* leftNode, int CFGSize);
 
     static CFGOperator *getInstance();
 };

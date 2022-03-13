@@ -38,7 +38,7 @@ bool CFGOperator::pathExistBetween(NodeCFG* left, NodeCFG* right, int CFGSize) {
     }
 }
 
-unordered_set<int> CFGOperator::gatherAllRightNodesNext(NodeCFG* leftNode, int CFGSize) {
+unordered_set<int> CFGOperator::gatherAllRightNodes(NodeCFG* leftNode, int CFGSize) {
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
     unordered_set<NodeCFG*> adjNode = collateAllAdjacentNodes(leftNode);
     unordered_set<int> allNodesAfter;
@@ -49,7 +49,7 @@ unordered_set<int> CFGOperator::gatherAllRightNodesNext(NodeCFG* leftNode, int C
     return allNodesAfter;
 }
 
-unordered_set<int> CFGOperator::gatherAllLeftNodesNext(NodeCFG* rightNode, int CFGSize) {
+unordered_set<int> CFGOperator::gatherAllLeftNodes(NodeCFG* rightNode, int CFGSize) {
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
     unordered_set<NodeCFG*> adjNode = collateAllPreviousNodes(rightNode);
     unordered_set<int> allNodesBefore;

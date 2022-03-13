@@ -17,14 +17,14 @@ bool NextTClauseEvaluator::isRelation(string left, string right) {
 unordered_set<std::string> NextTClauseEvaluator::getLeftSynonymValue(std::string right) {
     //pkb->getCFGNode(right)
     // pkb->getCFGSize()
-    //CFGOperator::gatherAllLeftNodesNext(rightNode, size);
+    //CFGOperator::gatherAllLeftNodes(rightNode, size);
     return {};
 }
 
 unordered_set<std::string> NextTClauseEvaluator::getRightSynonymValue(std::string left) {
     // pkb->getCFGNode(left)
     // pkb->getCFGSize()
-    //CFGOperator::gatherAllRightNodesNext(leftNode, size);
+    //CFGOperator::gatherAllRightNodes(leftNode, size);
     return {};
 }
 
