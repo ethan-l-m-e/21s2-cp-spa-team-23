@@ -21,24 +21,32 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     auto* resultTable = new ResultTable();
 
     // Create ClauseEvaluators and evaluate each of the pattern clause
-    if(query->hasPatternClause()) {
+    if(query->hasPatternClause() && resultTable->getBooleanResult()) {
         for(const PatternClause& clause : query->getPatternClauses()) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!patternResult) return {};
+            if (!patternResult) {
+                resultTable->clearTable();
+                resultTable->setBooleanResult(false);
+                break;
+            }
         }
     }
 
     // Create ClauseEvaluators and evaluate each of the suchThat clause
-    if(query->hasSuchThatClause()) {
+    if(query->hasSuchThatClause() && resultTable->getBooleanResult()) {
         for(const SuchThatClause& clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!suchThatResult) return {};
+            if (!suchThatResult) {
+                resultTable->clearTable();
+                resultTable->setBooleanResult(false);
+                break;
+            }
         }
     }
 
@@ -90,7 +98,7 @@ std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultT
     std::unordered_set<std::string> stringSet;
 
     if (resultTable->isBoolean()) {
-        stringSet.insert(resultTable->getBooleanResult());
+        stringSet.insert(resultTable->getBooleanResultString());
     } else if (!resultTable->isEmpty()) {
         for(int i = 0; i < resultTable->getTableSize(); i++) {
             std::string s;

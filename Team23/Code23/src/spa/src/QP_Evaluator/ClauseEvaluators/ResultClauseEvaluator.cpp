@@ -9,11 +9,7 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     vector<int> orders;
     for(Argument synonym : query->getSelectedSynonyms()) {
         if(synonym.argumentType == ArgumentType::BOOLEAN) {
-            if(resultTable->isEmpty()) {
-                resultTable->setBooleanResult(false);
-            } else {
-                resultTable->setBooleanResult(true);
-            }
+            resultTable->enableBooleanResult();
             return true;
         }
 
