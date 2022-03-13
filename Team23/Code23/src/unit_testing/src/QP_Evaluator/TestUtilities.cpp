@@ -47,15 +47,17 @@ ResultSet evaluateAndCreateResultSet(QueryEvaluator qe, Query *query) {
 
 PKB* generateSamplePKB() {
 /**
- * Procedure p {
+ * Procedure prop {
  * 01 read x;
  * 02 y = yeast + zealous + x;
  * 03 zealous = 3;
  * 04 print xylophone;
  * 05 while (z > 1) {
  * 06    x = 5 + x;
- * 07    print z;
- *    };
+ * 07   if (z == 2) {
+ * 08    print z;
+ *     } else {
+ * 09   call prop1;}};
  * }
  */
 
@@ -65,7 +67,7 @@ PKB* generateSamplePKB() {
     string s4 = "print xylophone;";
     string s5 = "while (z == 1) {";
     string s6 = "x = 5 + x;";
-    string s7 = "print z;";
+    string s7 = "print z;}";
 
     PKB *testPKB = PKB::getInstance();
     testPKB->clearPKB();
@@ -116,8 +118,9 @@ PKB* generateSamplePKB() {
     testPKB->setModifiesS(1, {"x"});
     testPKB->setModifiesS(2, {"y"});
     testPKB->setModifiesS(3, {"zealous"});
-    testPKB->setModifiesS(6, {"x"});
     testPKB->setModifiesS(5, {"x"});
+    testPKB->setModifiesS(6, {"x"});
+
     testPKB->setUsesS(2, {"yeast", "zealous", "x"});
     testPKB->setUsesS(4, {"xylophone"});
     testPKB->setUsesS(5, {"z", "x"});
