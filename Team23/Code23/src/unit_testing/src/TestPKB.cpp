@@ -11,6 +11,10 @@ using namespace std;
 
 PKB *pkb = PKB::getInstance();
 
+VariableNode v = VariableNode("name");
+BinaryOperatorNode bn = BinaryOperatorNode(&v, &v, "+");
+RelExprNode rel = RelExprNode(&v, &v, "&&");
+CondExprNode cond = CondExprNode(&rel);
 
 TEST_CASE("Add statements") {
     pkb->clearPKB();
@@ -107,7 +111,7 @@ TEST_CASE("Add Assign Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        auto n = AssignNode(i, {}, {});
+        auto n = AssignNode(i, &v, &v);
         pkb->addAssignStatement(&n);
     }
 
@@ -132,7 +136,7 @@ TEST_CASE("Add Read Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        auto n = ReadNode(i, {});
+        auto n = ReadNode(i, &v);
         pkb->addReadStatement(&n);
     }
 
@@ -156,7 +160,7 @@ TEST_CASE("Add Print Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        auto n = PrintNode(i, {});
+        auto n = PrintNode(i, &v);
         pkb->addPrintStatement(&n);
     }
 
@@ -181,7 +185,7 @@ TEST_CASE("Add If Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        auto n = IfNode(i, {}, {}, {});
+        auto n = IfNode(i, &cond, {}, {});
         pkb->addIfStatement(&n);
     }
 
@@ -206,7 +210,7 @@ TEST_CASE("Add While Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        auto n = WhileNode(i, {}, {});
+        auto n = WhileNode(i, &cond, {});
         pkb->addWhileStatement(&n);
     }
 
