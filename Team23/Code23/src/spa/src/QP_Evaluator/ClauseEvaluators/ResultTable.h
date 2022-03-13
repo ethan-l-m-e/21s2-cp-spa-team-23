@@ -26,6 +26,7 @@ public:
     std::vector<std::string> *getHeader();
     String2DVector *getList();
     size_t getTableSize();
+    size_t getTableWidth();
     void setBooleanResult(bool);
     void appendColumn(std::string, std::vector<std::string>&);
     void mergeResultToTable(Result &result);

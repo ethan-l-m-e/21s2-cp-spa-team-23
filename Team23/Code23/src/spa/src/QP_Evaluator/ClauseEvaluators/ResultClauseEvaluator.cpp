@@ -26,7 +26,7 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
                 std::vector<std::string> newColumn;
                 if (applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn)) {
                     resultTable->appendColumn(attrRef.first + ".altName", newColumn);
-                    index = long(resultTable->getTableSize()) - 1;
+                    index = long(resultTable->getTableWidth()) - 1;
                 }
                 orders.emplace_back(index);
             } else {
