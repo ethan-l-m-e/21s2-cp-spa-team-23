@@ -23,6 +23,10 @@ void NodeCFG::addPreviousNode(NodeCFG* node) {
     this->mapOfPreviousNodes[node->getStatementNumber()] = node;
 }
 
+void NodeCFG::setAllPreviousNodes(unordered_map<int, NodeCFG*> allPrevNodesMap) {
+    this->mapOfPreviousNodes = allPrevNodesMap;
+}
+
 NodeCFG* NodeCFG::getNextNode() {
     return this->nextNode;
 }

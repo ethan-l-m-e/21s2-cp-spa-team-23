@@ -30,6 +30,8 @@ public:
     virtual NodeCFG* getEndNode();
     virtual bool isStart();
     bool isEnd();
+
+    void setAllPreviousNodes(unordered_map<int, NodeCFG *> allPrevNodesMap);
 };
 
 
@@ -53,7 +55,7 @@ protected:
     NodeCFG* nodeInLoop;
 public:
     LoopCFG(int statementNumber);
-    void setNodeInLoop(NodeCFG* node);
+    void setNodeInLoop(vector<NodeCFG *>* node);
     NodeCFG* getNodeInLoop();
     bool isStart() override;
 };
