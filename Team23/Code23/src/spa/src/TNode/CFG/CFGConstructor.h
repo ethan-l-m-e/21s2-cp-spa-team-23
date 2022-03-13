@@ -11,8 +11,8 @@
 class CFGConstructor {
 
 public:
-    void createCFG(ProcedureNode* p);
-    vector<NodeCFG*>* populateCFG(Node* currNode, vector<NodeCFG*>* prevNode);
+    static vector<NodeCFG*>* createCFG(ProcedureNode p);
+    static vector<NodeCFG*>* populateCFG(Node* currNode, vector<NodeCFG*>* prevNode);
 };
 
 

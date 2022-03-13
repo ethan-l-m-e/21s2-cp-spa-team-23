@@ -25,10 +25,16 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
     NodeCFG* node5 = new NodeCFG(5);
     LoopCFG* loop6 = new LoopCFG(6);
     LoopCFG* loop7 = new LoopCFG(7);
+    vector<NodeCFG*>* nodeSetFor7;
+    nodeSetFor7->push_back(loop7);
     NodeCFG* node8 = new NodeCFG(8);
+    vector<NodeCFG*>* nodeSetFor8;
+    nodeSetFor8->push_back(node8);
     NodeCFG* node9 = new NodeCFG(9);
     LoopCFG* loop10 = new LoopCFG(10);
     NodeCFG* node11 = new NodeCFG(11);
+    vector<NodeCFG*>* nodeSetFor11;
+    nodeSetFor11->push_back(node11);
     BranchCFG* branch12 = new BranchCFG(12);
     NodeCFG* node13 = new NodeCFG(13);
     NodeCFG* node14 = new NodeCFG(14);
@@ -39,15 +45,14 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
     node4->setNextNode(node5);
 
     branch1->setRightNode(loop6);
-    loop6->setNodeInLoop(loop7);
-    loop7->setNodeInLoop(node8);
+    loop6->setNodeInLoop(nodeSetFor7);
+    loop7->setNodeInLoop(nodeSetFor8);
     node8->setNextNode(loop7);
     loop7->setNextNode(loop6);
-
     node5->setNextNode(node9);
     loop6->setNextNode(node9);
     node9->setNextNode(loop10);
-    loop10->setNodeInLoop(node11);
+    loop10->setNodeInLoop(nodeSetFor11);
     node11->setNextNode(branch12);
     branch12->setLeftNode(node13);
     branch12->setRightNode(node14);

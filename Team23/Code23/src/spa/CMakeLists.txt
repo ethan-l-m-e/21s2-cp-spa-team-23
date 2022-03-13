@@ -35,7 +35,7 @@ add_library(spa ${srcs} ${headers}
         src/SourceProcessor/Identifier.cpp src/SourceProcessor/Identifier.h
         src/StringFormatter.cpp src/StringFormatter.h
         src/SourceProcessor/SourceTokenizer.cpp src/SourceProcessor/SourceTokenizer.h
-        #src/TNode.cpp src/TNode.h src/TNode.cpp
+        src/TNode/TNode.h
         )
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

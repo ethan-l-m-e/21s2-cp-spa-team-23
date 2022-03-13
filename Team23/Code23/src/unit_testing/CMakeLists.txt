@@ -10,7 +10,7 @@ set(srcs ${srcs}
         src/QP_Evaluator/TestResultClauseEvaluators.cpp
         src/QP_Evaluator/TestResultTable.cpp
         src/QP_Evaluator/TestPatternClauseEvaluator.cpp
-        src/TestCFG.cpp src/TestCFGOperator.cpp)
+        src/TestCFG.cpp src/TestCFGOperator.cpp src/TestCFGConstructor.cpp)
 
 add_executable(unit_testing ${srcs} src/TestAST.cpp
         src/TestIdentifier.cpp

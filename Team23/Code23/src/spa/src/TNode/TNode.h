@@ -22,5 +22,10 @@
 #include "StmtNode.h"
 #include "VariableNode.h"
 #include "WhileNode.h"
-
+#include "CFG/LoopCFG.cpp"
+#include "CFG/BranchCFG.cpp"
+#include "CFG/CFGConstructor.h"
+#include "CFG/CFGConstructor.cpp"
+#include "CFG/NodeCFG.h"
+#include "CFG/NodeCFG.cpp"
 #endif //SPA_TNODE_H

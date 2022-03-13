@@ -6,13 +6,21 @@
 #include "NodeCFG.h"
 #include "TNode/WhileNode.h"
 #include "TNode/IfNode.h"
-void CFGConstructor::createCFG(ProcedureNode* p) {
-    vector<Node*> stmtLst = p->getStmtLst();
+vector<NodeCFG*>* CFGConstructor::createCFG(ProcedureNode p) {
+    vector<Node*> stmtLst = p.getStmtLst();
     unordered_map<int, NodeCFG *> currMapOfPrevNodes;
     vector<NodeCFG*>* prevNode = nullptr;
+    vector<NodeCFG*>* firstSetOfNodes = nullptr;
+    bool isFirstLoop = true;
     for(Node* s: stmtLst) {
-        prevNode = populateCFG(s,prevNode);
+        if(isFirstLoop){
+            firstSetOfNodes = CFGConstructor::populateCFG(s,prevNode);
+            isFirstLoop = false;
+        }else {
+            prevNode = CFGConstructor::populateCFG(s, prevNode);
+        }
     }
+    return firstSetOfNodes;
 }
 
 /*
