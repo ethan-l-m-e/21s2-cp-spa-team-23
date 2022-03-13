@@ -8,12 +8,6 @@
 
 using namespace std;
 
-/*
-String2DVector generateValueSet(std::vector<std::vector<std::string>> values) {
-    return {std::begin(values),std::end(values)};
-}
-*/
-
 TEST_CASE("Add result to empty synonym relations") {
     auto* sr = new ResultTable();
     Result result1 = {
