@@ -25,3 +25,7 @@ NodeCFG* BranchCFG::getRightNode() { return this->rightNode;}
 NodeCFG* BranchCFG::getLastLeftNode() { return this->getLeftNode()->getEndNode();}
 
 NodeCFG* BranchCFG::getLastRightNode() { return this->getRightNode()->getEndNode();}
+
+bool BranchCFG::isEnd() {
+    return false;
+}
