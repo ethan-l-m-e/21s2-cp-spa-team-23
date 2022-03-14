@@ -1,0 +1,140 @@
+../../../../Tests23/next_source.txt ../../../../Tests23/next_queries.txt ../../../tests/next_out.xml
+stmt s;
+Select s such that Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+1 - [valid] select stmt with wildcard rhs =================================================[Select statement tests start]
+stmt s;
+Select s such that Next(s, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+2 - [valid] select stmt with wildcard lhs
+stmt s;
+Select s such that Next(_, s)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+3 - [valid] select stmt with stmt syn
+stmt s, s1;
+Select s such that Next(s, s1)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+4 - [valid] select stmt with stmt syn lhs
+stmt s, s1;
+Select s such that Next(s1, s)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+5 - [valid] select stmt with stmt no
+stmt s;
+Select s such that Next(s, 2)
+1
+5000
+6 - [valid] select stmt with stmt no lhs
+stmt s;
+Select s such that Next(1, s)
+2
+5000
+7 - [valid] select stmt with while stmt no
+stmt s;
+Select s such that Next(s, 4)
+3
+5000
+8 - [valid] select stmt with while stmt no lhs
+stmt s;
+Select s such that Next(3, s)
+4, 11
+5000
+9 - [valid] select stmt with if-then stmt no
+stmt s;
+Select s such that Next(s, 8)
+7
+5000
+10 - [valid] select stmt with if-else stmt no
+stmt s;
+Select s such that Next(s, 9)
+7
+5000
+11 - [valid] select stmt with if-cond stmt no lhs
+stmt s;
+Select s such that Next(7, s)
+8, 9
+5000
+12 - [valid] select stmt with stmt no in other procedure
+stmt s;
+Select s such that Next(s, 13)
+none
+5000
+13 - [valid] select stmt with stmt no in other procedure
+stmt s;
+Select s such that Next(13, s)
+none
+5000
+14 - [valid] select stmt with wildcards =============================================================[Next* tests start]
+stmt s;
+Select s such that Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+15 - [valid] select stmt with wildcard rhs
+stmt s;
+Select s such that Next*(s, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+16 - [valid] select stmt with wildcard lhs
+stmt s;
+Select s such that Next*(_, s)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+17 - [valid] select stmt with stmt syn
+stmt s, s1;
+Select s such that Next*(s, s1)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+18 - [valid] select stmt with stmt syn lhs
+stmt s, s1;
+Select s such that Next*(s1, s)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+19 - [valid] select stmt with stmt no
+stmt s;
+Select s such that Next*(s, 12)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+20 - [valid] select stmt with stmt no lhs
+stmt s;
+Select s such that Next*(1, s)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+21 - [valid] select stmt with while-cond stmt no
+stmt s;
+Select s such that Next*(s, 3)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+22 - [valid] select stmt with while-loop stmt no lhs
+stmt s;
+Select s such that Next*(4, s)
+3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+23 - [valid] select stmt with while-loop stmt no
+stmt s;
+Select s such that Next*(s, 10)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+24 - [valid] select stmt with while-loop stmt no lhs
+stmt s;
+Select s such that Next*(6, s)
+3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+25 - [valid] select stmt with if-then stmt no
+stmt s;
+Select s such that Next*(s, 8)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+26 - [valid] select stmt with if-else stmt no
+stmt s;
+Select s such that Next*(s, 9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+27 - [valid] select stmt in loop
+stmt s;
+Select s such that Next*(s, s)
+3, 4, 5, 6, 7, 8, 9, 10
+5000

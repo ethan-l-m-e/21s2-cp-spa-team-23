@@ -7,7 +7,7 @@
 #include "QP_Evaluator/ClauseEvaluators/FollowsClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ParentClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/PatternClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/SelectClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/ResultClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/FollowsTClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ParentTClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ModifiesSClauseEvaluator.h"
@@ -21,32 +21,40 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     auto* resultTable = new ResultTable();
 
     // Create ClauseEvaluators and evaluate each of the pattern clause
-    if(query->hasPatternClause()) {
+    if(query->hasPatternClause() && resultTable->getBooleanResult()) {
         for(const PatternClause& clause : query->getPatternClauses()) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!patternResult) return {};
+            if (!patternResult) {
+                resultTable->clearTable();
+                resultTable->setBooleanResult(false);
+                break;
+            }
         }
     }
 
     // Create ClauseEvaluators and evaluate each of the suchThat clause
-    if(query->hasSuchThatClause()) {
+    if(query->hasSuchThatClause() && resultTable->getBooleanResult()) {
         for(const SuchThatClause& clause : query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, query);
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!suchThatResult) return {};
+            if (!suchThatResult) {
+                resultTable->clearTable();
+                resultTable->setBooleanResult(false);
+                break;
+            }
         }
     }
 
     // Evaluate select clause and output the result
-    auto* selectClauseEvaluator = new SelectClauseEvaluator(pkb, query);
-    bool selectResult = selectClauseEvaluator->evaluateClause(resultTable);
-    delete selectClauseEvaluator;
-    if (!selectResult) return {};
+    auto* resultClauseEvaluator = new ResultClauseEvaluator(pkb, query);
+    bool result = resultClauseEvaluator->evaluateClause(resultTable);
+    delete resultClauseEvaluator;
+    if (!result) return {};
     std::list<std::string> output = generateResultString(resultTable);
     delete resultTable;
     return output;
@@ -87,17 +95,20 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
  * @return  a list of strings representing the result items
  */
 std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
-    std::list<std::string> stringList;
-    if (!resultTable->isEmpty()) {
+    std::unordered_set<std::string> stringSet;
+
+    if (resultTable->isBoolean()) {
+        stringSet.insert(resultTable->getBooleanResultString());
+    } else if (!resultTable->isEmpty()) {
         for(int i = 0; i < resultTable->getTableSize(); i++) {
             std::string s;
             for (auto &col: *resultTable->getList()) {
                 if (!s.empty()) s += " ";
                 s += col[i];
             }
-            stringList.emplace_back(s);
+            stringSet.insert(s);
         }
     }
-    return stringList;
+    return std::list<std::string> {std::begin(stringSet), std::end(stringSet)};
 }
 

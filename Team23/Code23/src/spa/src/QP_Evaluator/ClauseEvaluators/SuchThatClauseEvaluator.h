@@ -16,10 +16,10 @@ enum class ClauseSynonymType {
 };
 
 class SuchThatClauseEvaluator : public ClauseEvaluator {
-protected:
+public:
     SuchThatClauseEvaluator(std::vector<Argument> args, PKB* pkb, Query* query): ClauseEvaluator(std::move(args), pkb, query) {};
-
     bool evaluateClause(ResultTable* resultTable) override;
+protected:
     virtual bool isRelation(std::string left, std::string right) = 0;
     virtual unordered_set<std::string> getLeftSynonymValue(std::string right) = 0;
     virtual unordered_set<std::string> getRightSynonymValue(std::string left) = 0;

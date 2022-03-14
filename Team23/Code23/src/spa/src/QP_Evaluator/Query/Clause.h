@@ -1,8 +1,6 @@
 //
 // Created by リム・イーサン on 31/1/22.
 //
-// Created by Tianyi Wang on 5/2/22.
-//
 
 #ifndef SPA_CLAUSE_H
 #define SPA_CLAUSE_H
@@ -20,20 +18,19 @@ enum class RelRef{
     USES_S,
     USES_P,
     MODIFIES_S,
-    MODIFIES_P
+    MODIFIES_P,
+    CALLS,
+    CALLS_T,
+    NEXT,
+    NEXT_T,
+    AFFECTS,
+    AFFECTS_T
 };
 
 enum class SynonymType {
     ASSIGN,
     WHILE,
     IF
-};
-
-enum class AttrName {
-    PROC_NAME,
-    VAR_NAME,
-    VALUE,
-    STMT_NO
 };
 
 typedef struct Clause {
@@ -49,8 +46,6 @@ typedef struct PatternClause : Clause {
 } PatternClause;
 
 typedef struct WithClause : Clause {
-    AttrName attrNameLeft;
-    AttrName attrNameRight;
 } WithClause;
 
 

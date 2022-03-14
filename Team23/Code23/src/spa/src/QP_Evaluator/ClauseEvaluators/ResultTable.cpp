@@ -9,15 +9,39 @@
 ResultTable::ResultTable(){
     tableHeader = std::vector<std::string>{};
     tableEntries = String2DVector{};
+    isBooleanResult = false;
+    booleanResult = true;
 }
 
 ResultTable::ResultTable(std::vector<std::string> header, String2DVector values){
     tableHeader = std::move(header);
     tableEntries = std::move(values);
+    isBooleanResult = false;
+}
+
+void ResultTable::clearTable() {
+    tableHeader = std::vector<std::string>{};
+    tableEntries = String2DVector{};
+}
+
+void ResultTable::enableBooleanResult() {
+    isBooleanResult = true;
+}
+
+bool ResultTable::isBoolean(){
+    return isBooleanResult;
 }
 
 bool ResultTable::isEmpty(){
     return tableEntries.empty();
+}
+
+bool ResultTable::getBooleanResult() {
+    return booleanResult;
+}
+
+std::string ResultTable::getBooleanResultString() {
+    return booleanResult ? "TRUE" : "FALSE";
 }
 
 std::vector<std::string>* ResultTable::getHeader() {
@@ -33,11 +57,31 @@ size_t ResultTable::getTableSize() {
     return tableEntries[0].size();
 }
 
-void ResultTable::clearTable() {
-    tableHeader = std::vector<std::string>{};
-    tableEntries = String2DVector{};
+size_t ResultTable::getTableWidth() {
+    if(isEmpty()) return 0;
+    return tableEntries.size();
 }
 
+void ResultTable::setBooleanResult(bool result) {
+    booleanResult = result;
+}
+
+void ResultTable::appendColumn(std::string colName, std::vector<std::string>& col) {
+    tableHeader.emplace_back(colName);
+    tableEntries.emplace_back(col);
+}
+
+void ResultTable::rearrangeSynonyms(std::vector<int>& orders) {
+    std::vector<std::string> newHeader = {};
+    String2DVector newEntries = {};
+    for(auto order : orders) {
+        if(order < 0 || order >= tableHeader.size()) return;
+        newHeader.emplace_back(tableHeader[order]);
+        newEntries.emplace_back(tableEntries[order]);
+    }
+    tableHeader = newHeader;
+    tableEntries = newEntries;
+}
 
 /**
  * Merge a result to the table.
@@ -305,17 +349,6 @@ std::unordered_map<std::string, std::vector<std::string>> ResultTable::createSna
     return snapshot;
 }
 
-void ResultTable::rearrangeSynonyms(std::vector<int>& orders) {
-    std::vector<std::string> newHeader = {};
-    String2DVector newEntries = {};
-    for(auto order : orders) {
-        if(order < 0 || order >= tableHeader.size()) return;
-        newHeader.emplace_back(tableHeader[order]);
-        newEntries.emplace_back(tableEntries[order]);
-    }
-    tableHeader = newHeader;
-    tableEntries = newEntries;
-}
 
 
 

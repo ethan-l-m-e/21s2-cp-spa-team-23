@@ -19,13 +19,21 @@ class ResultTable {
 public:
     ResultTable();
     ResultTable(std::vector<std::string>, String2DVector);
+    void clearTable();
+    void enableBooleanResult();
+    bool isBoolean();
     bool isEmpty();
+    bool getBooleanResult();
+    std::string getBooleanResultString();
     std::vector<std::string> *getHeader();
     String2DVector *getList();
     size_t getTableSize();
-    void clearTable();
+    size_t getTableWidth();
+    void setBooleanResult(bool);
+    void appendColumn(std::string, std::vector<std::string>&);
     void mergeResultToTable(Result &result);
     void rearrangeSynonyms(std::vector<int>&);
+
 private:
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
@@ -40,6 +48,8 @@ private:
 
     std::vector<std::string> tableHeader;
     String2DVector tableEntries;
+    bool isBooleanResult;
+    bool booleanResult;
 };
 
 #endif //SPA_RESULTTABLE_H

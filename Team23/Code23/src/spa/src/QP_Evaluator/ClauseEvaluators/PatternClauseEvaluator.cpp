@@ -35,7 +35,7 @@ bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     Expression exprRight;
 
     if(!rightIsWildCard()) {
-        exprRight = validateAndParseExpression(argRight.argumentValue);
+        exprRight = validateAndParseExpression(std::get<std::string>(argRight.argumentValue));
     }
 
     /**
@@ -71,7 +71,7 @@ bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         } else if (leftIsWildCard() && rightIsWildCard()) {
             addToStmtList(currentNode, &stmtNumberList);
         } else {
-            throw "arguments in pattern clause mismatch " + arg1.argumentValue + " " + arg2.argumentValue;
+            throw "arguments in pattern clause mismatch " + std::get<std::string>(arg1.argumentValue) + " " + std::get<std::string>(arg2.argumentValue);
         }
     }
 
@@ -80,13 +80,13 @@ bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         // configure resultType, to have both variable names and assign
         result.resultType = ResultType::TUPLES;
         result.resultBoolean = !assignVarPairList.empty();
-        result.resultHeader = tuple<string, string>(syn.argumentValue, arg1.argumentValue);
+        result.resultHeader = tuple<string, string>(std::get<std::string>(syn.argumentValue), std::get<std::string>(arg1.argumentValue));
         result.resultItemList = assignVarPairList;
     } else {
         // configure resultType to have only a list of assign
         result.resultType = ResultType::STRING;
         result.resultBoolean = !stmtNumberList.empty();
-        result.resultHeader = syn.argumentValue;
+        result.resultHeader = std::get<std::string>(syn.argumentValue);
         result.resultItemList = stmtNumberList;
     }
 
@@ -142,24 +142,6 @@ void addToStmtAndVariableList(AssignNode *assignNode, vector<ResultItem> *statem
 //      compare operator, like var & const
 //          if operator same, initiate another exact match with && instead of ||
 bool searchForMatchInExpr(Expression expressionNode, Expression arg) {
-    /*
-     if (auto binaryNode = std::get_if<BinaryOperatorNode*>(&expressionNode)) {
-        BinaryOperatorNode* operatorNode = *binaryNode;
-        bool leftResult = searchForMatchInExpr(operatorNode->getLeftExpr(), arg);
-        bool rightResult = searchForMatchInExpr(operatorNode->getRightExpr(), arg);
-        return leftResult || rightResult;
-    } else if (auto value = std::get_if<VariableNode*>(&expressionNode)) {
-        VariableNode* varNode = *value;
-        if (varNode->getVariableName() == arg)     return true;
-         else                                           return false;
-    } else if(auto value = std::get_if<ConstValueNode*>(&expressionNode)) {
-        ConstValueNode* constNode = *value;
-        if (constNode->getConstValue() == arg)     return true;
-        else                                            return false;
-    } else {
-        throw "cannot understand expression";
-    };
-     */
     /**
      * perform exact matching, if it fails, go down the different paths to see if correct or not
      */
@@ -208,7 +190,7 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg) {
 }
 
 bool matchVariableValue(VariableNode *varNode, Argument arg) {
-    string trimmed = StringFormatter::tokenizeByRegex(arg.argumentValue, "[ ]*\"[ ]*")[0];
+    string trimmed = StringFormatter::tokenizeByRegex(std::get<std::string>(arg.argumentValue), "[ ]*\"[ ]*")[0];
     if (varNode->getVariableName() == trimmed)
         return true;
     else
@@ -217,16 +199,6 @@ bool matchVariableValue(VariableNode *varNode, Argument arg) {
 }
 
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg) {
-    // convert arg to variable (or secondExpression in the future)
-
-    /*
-    int first = arg.argumentValue.find("\"");
-    string rightArg = arg.argumentValue.substr(first + 1, arg.argumentValue.size() - 4);
-    //string rightArg = StringFormatter::tokenizeByRegex(arg.argumentValue, "_\"|\"_")[0];
-    Expression rightAsExpr = Parser::parseExpression(rightArg); //no usage yet for iteration 1
-    Expression RHSExpression = assignNode ->getRightNode();
-    return searchForMatchInExpr(RHSExpression, rightAsExpr);
-*/
     /**
      * check if the argument is exact or part wildcard
      * if exact, go straight to direct matching

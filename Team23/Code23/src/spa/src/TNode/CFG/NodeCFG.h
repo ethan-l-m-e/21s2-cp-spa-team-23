@@ -6,7 +6,7 @@
 #define SPA_NODECFG_H
 
 #include <string>
-
+#include <unordered_map>
 using namespace std;
 
 #define nullStmtNo 0
@@ -15,20 +15,23 @@ class NodeCFG {
 protected:
     int statementNumber;
     NodeCFG* nextNode;
-    NodeCFG* previousNode;
+    unordered_map<int, NodeCFG*> mapOfPreviousNodes;
 public:
     NodeCFG(int statementNumber);
     int getStatementNumber();
 
     void setNextNode(NodeCFG* node);
-    void setPreviousNode(NodeCFG* node);
+    void addPreviousNode(NodeCFG* node);
     NodeCFG* getNextNode();
-    NodeCFG* getPreviousNode();
+    unordered_map<int, NodeCFG*> getAllPreviousNode();
 
     NodeCFG* getStartNode();
     virtual NodeCFG* getEndNode();
-    bool isStart();
-    bool isEnd();
+    virtual bool isStart();
+
+    virtual bool isEnd();
+
+    void setAllPreviousNodes(unordered_map<int, NodeCFG *> allPrevNodesMap);
 };
 
 
@@ -45,34 +48,17 @@ public:
 
     NodeCFG* getLastLeftNode();
     NodeCFG* getLastRightNode();
+
+    bool isEnd();
 };
 
-class MergeCFG: public NodeCFG {
-protected:
-    NodeCFG* leftPreviousNode;
-    NodeCFG* rightPreviousNode;
-
-public:
-    MergeCFG(int statementNumber);
-    void setLeftPreviousNode(NodeCFG* node);
-    void setRightPreviousNode(NodeCFG* node);
-    NodeCFG* getLeftPreviousNode();
-    NodeCFG* getRightPreviousNode();
-};
-
-class ImagineMergeCFG: public MergeCFG {
-public:
-    ImagineMergeCFG(): MergeCFG(nullStmtNo) {}
-    NodeCFG* getEndNode() override;
-};
-
-
-class LoopCFG: NodeCFG {
+class LoopCFG: public NodeCFG {
 protected:
     NodeCFG* nodeInLoop;
 public:
     LoopCFG(int statementNumber);
     void setNodeInLoop(NodeCFG* node);
     NodeCFG* getNodeInLoop();
+    bool isStart() override;
 };
 #endif //SPA_NODECFG_H
