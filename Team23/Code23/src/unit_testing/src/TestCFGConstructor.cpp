@@ -104,3 +104,35 @@ TEST_CASE("test - basic if") {
     CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes.at(0)->getNextNode())->getRightNode()->getNextNode()->isEnd());
 
 }
+
+//TEST_CASE("test - nested while") {
+//    ProcNameNode p1 = ProcNameNode("test");
+//    StatementList defaultStmtLst;
+//    StatementList defaultStmtLst2;
+//
+//    defaultStmtLst.push_back(&aNode1);
+//    defaultStmtLst.push_back(&bNode1);
+//    defaultStmtLst.push_back(&cNode1);
+//    defaultStmtLst2.push_back(&dNode1);
+//    defaultStmtLst2.push_back(&eNode1);
+//
+//    auto wNode = WhileNode(4, condPtr1, defaultStmtLst2);
+//    defaultStmtLst.push_back(&wNode);
+//
+//    ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
+//
+//    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
+//    cout<<"control3";
+//    CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
+//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
+//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getStatementNumber() == 3);
+//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->getStatementNumber()==4);
+//    CHECK(firstSetOfNodes.at(0)->isStart());
+//    //check how isEnd() should work with while loop
+////    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->isEnd());
+//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()));
+//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getStatementNumber() == 5);
+//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getStatementNumber() == 6);
+//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getNextNode()->getStatementNumber() == 4);
+//
+//}
