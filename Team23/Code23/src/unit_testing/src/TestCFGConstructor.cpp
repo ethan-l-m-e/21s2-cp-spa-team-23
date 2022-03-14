@@ -58,7 +58,6 @@ TEST_CASE("test - basic while") {
     ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
 
     vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
-cout<<"control3";
     CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
     CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
     CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getStatementNumber() == 3);
@@ -129,7 +128,7 @@ TEST_CASE("test - basic if") {
 //    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->getStatementNumber()==4);
 //    CHECK(firstSetOfNodes.at(0)->isStart());
 //    //check how isEnd() should work with while loop
-////    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->isEnd());
+//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->isEnd());
 //    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()));
 //    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getStatementNumber() == 5);
 //    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getStatementNumber() == 6);
