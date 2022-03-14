@@ -11,6 +11,10 @@ using namespace std;
 
 PKB *pkb = PKB::getInstance();
 
+VariableNode v = VariableNode("name");
+BinaryOperatorNode bn = BinaryOperatorNode(&v, &v, "+");
+RelExprNode rel = RelExprNode(&v, &v, "&&");
+CondExprNode cond = CondExprNode(&rel);
 
 TEST_CASE("Add statements") {
     pkb->clearPKB();
@@ -18,7 +22,8 @@ TEST_CASE("Add statements") {
     REQUIRE(pkb->getAllStatements().empty());
 
     for (int i = 1; i <= 10; i++) {
-        pkb->addStatement(i);
+        auto n = StmtNode(i);
+        pkb->addStatement(&n);
     }
 
     unordered_set<string> statementsSet = pkb->getAllStatements();
@@ -106,7 +111,8 @@ TEST_CASE("Add Assign Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        pkb->addAssignStatement(i);
+        auto n = AssignNode(i, &v, &v);
+        pkb->addAssignStatement(&n);
     }
 
     unordered_set<string> assignStatementsSet = pkb->getAllAssignStatements();
@@ -130,7 +136,8 @@ TEST_CASE("Add Read Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        pkb->addReadStatement(i);
+        auto n = ReadNode(i, &v);
+        pkb->addReadStatement(&n);
     }
 
     unordered_set<string> readStatementsSet = pkb->getAllReadStatements();
@@ -153,7 +160,8 @@ TEST_CASE("Add Print Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        pkb->addPrintStatement(i);
+        auto n = PrintNode(i, &v);
+        pkb->addPrintStatement(&n);
     }
 
     unordered_set<string> printStatementsSet = pkb->getAllPrintStatements();
@@ -177,7 +185,8 @@ TEST_CASE("Add If Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        pkb->addIfStatement(i);
+        auto n = IfNode(i, &cond, {}, {});
+        pkb->addIfStatement(&n);
     }
 
     unordered_set<string> ifStatementsSet = pkb->getAllIfStatements();
@@ -201,7 +210,8 @@ TEST_CASE("Add While Statements") {
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
-        pkb->addWhileStatement(i);
+        auto n = WhileNode(i, &cond, {});
+        pkb->addWhileStatement(&n);
     }
 
     unordered_set<string> whileStatementsSet = pkb->getAllWhileStatements();
@@ -432,13 +442,13 @@ TEST_CASE("Add Uses") {
         int statement = iter.first;
         unordered_set<string> variablesUsed = iter.second;
 
-        pkb->setUses(statement, variablesUsed);
+        pkb->setUsesS(statement, variablesUsed);
 
     }
 
-    REQUIRE(pkb->isUses("2", "a") == false);
+    REQUIRE(pkb->isUsesS("2", "a") == false);
     REQUIRE(pkb->getUserStatements("unusedVariable") == unordered_set<string>{});
-    REQUIRE(pkb->getVariablesUsed("3") == unordered_set<string>{});
+    REQUIRE(pkb->getVariablesUsedS("3") == unordered_set<string>{});
 
 
     for (auto& iter : statementToVariablesUsedMap) {
@@ -447,13 +457,13 @@ TEST_CASE("Add Uses") {
         unordered_set<string> variablesUsed = iter.second;
 
         for (string v : variablesUsed) {
-            REQUIRE(pkb->isUses(statement, v));
+            REQUIRE(pkb->isUsesS(statement, v));
 
             unordered_set<string> userStatements = pkb->getUserStatements(v);
             REQUIRE(userStatements.find(statement) != userStatements.end());
         }
 
-        REQUIRE(pkb->getVariablesUsed(statement) == variablesUsed);
+        REQUIRE(pkb->getVariablesUsedS(statement) == variablesUsed);
 
     }
 
@@ -477,14 +487,14 @@ TEST_CASE("Add Modifies") {
         int statement = iter.first;
         unordered_set<string> variablesUsed = iter.second;
 
-        pkb->setModifies(statement, variablesUsed);
+        pkb->setModifiesS(statement, variablesUsed);
 
     }
 
 
-    REQUIRE(pkb->isModifies("2", "a") == false);
+    REQUIRE(pkb->isModifiesS("2", "a") == false);
     REQUIRE(pkb->getModifierStatements("unmodifiedVariable") == unordered_set<string>{});
-    REQUIRE(pkb->getVariablesModified("3") == unordered_set<string>{});
+    REQUIRE(pkb->getVariablesModifiedS("3") == unordered_set<string>{});
 
 
     for (auto& iter : statementToVariablesModifiedMap) {
@@ -493,13 +503,13 @@ TEST_CASE("Add Modifies") {
         unordered_set<string> variablesModified = iter.second;
 
         for (string v : variablesModified) {
-            REQUIRE(pkb->isModifies(statement, v));
+            REQUIRE(pkb->isModifiesS(statement, v));
 
             unordered_set<string> modifierStatements = pkb->getModifierStatements(v);
             REQUIRE(modifierStatements.find(statement) != modifierStatements.end());
         }
 
-        REQUIRE(pkb->getVariablesModified(statement) == variablesModified);
+        REQUIRE(pkb->getVariablesModifiedS(statement) == variablesModified);
 
     }
 
