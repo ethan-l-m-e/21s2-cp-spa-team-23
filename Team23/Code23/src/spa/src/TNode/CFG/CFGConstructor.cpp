@@ -55,7 +55,7 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         for (Node *s: stmtLst) {
             newSetOfNodes = populateCFG(s,newSetOfNodes );
             if(isFirstLoop){
-                newCFGNode->setNodeInLoop(&newSetOfNodes);
+                newCFGNode->setNodeInLoop(newSetOfNodes.at(0));
                 isFirstLoop = false;
             }
         }

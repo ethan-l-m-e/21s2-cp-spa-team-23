@@ -162,10 +162,8 @@ TEST_CASE("nexted Branch; imaginary end") {
 
 TEST_CASE("Loop Nodes") {
     LoopCFG* node1 = new LoopCFG(1);
-    vector<NodeCFG*>* nodeSet;
     NodeCFG* node2 = new NodeCFG(2);
-    nodeSet->push_back(node2);
-    node1->setNodeInLoop(nodeSet);
+    node1->setNodeInLoop(node2);
     NodeCFG* node3 = new NodeCFG(3);
     node2->setNextNode(node3);
     NodeCFG* node4 = new NodeCFG(4);
@@ -178,5 +176,6 @@ TEST_CASE("Loop Nodes") {
     CHECK(node1->isEnd());
     CHECK(node1->getNodeInLoop() == node2);
 }
+
 
 

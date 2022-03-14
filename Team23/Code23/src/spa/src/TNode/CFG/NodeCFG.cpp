@@ -24,7 +24,9 @@ void NodeCFG::addPreviousNode(NodeCFG* node) {
 }
 
 void NodeCFG::setAllPreviousNodes(unordered_map<int, NodeCFG*> allPrevNodesMap) {
-    this->mapOfPreviousNodes = allPrevNodesMap;
+    for (pair<const int, NodeCFG *> s: allPrevNodesMap) {
+        this->mapOfPreviousNodes.insert(s);
+    }
 }
 
 NodeCFG* NodeCFG::getNextNode() {

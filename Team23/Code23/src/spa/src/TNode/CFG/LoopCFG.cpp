@@ -7,12 +7,10 @@
 
 LoopCFG::LoopCFG(int statementNumber): NodeCFG(statementNumber) {}
 
-void LoopCFG::setNodeInLoop(vector<NodeCFG *>*nodes) {
-    for (NodeCFG *s: *nodes) {
+void LoopCFG::setNodeInLoop(NodeCFG *node) {
 
-        this->nodeInLoop = s;
-        s->addPreviousNode(this);
-    }
+        this->nodeInLoop = node;
+        node->addPreviousNode(this);
 }
 
 bool LoopCFG::isStart() {

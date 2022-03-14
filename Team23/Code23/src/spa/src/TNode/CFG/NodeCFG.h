@@ -57,7 +57,7 @@ protected:
     NodeCFG* nodeInLoop;
 public:
     LoopCFG(int statementNumber);
-    void setNodeInLoop(vector<NodeCFG *>* node);
+    void setNodeInLoop(NodeCFG* node);
     NodeCFG* getNodeInLoop();
     bool isStart() override;
 };
