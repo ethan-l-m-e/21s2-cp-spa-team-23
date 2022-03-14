@@ -20,9 +20,11 @@ public:
     ResultTable();
     ResultTable(std::vector<std::string>, String2DVector);
     void clearTable();
+    void enableBooleanResult();
     bool isBoolean();
     bool isEmpty();
-    std::string getBooleanResult();
+    bool getBooleanResult();
+    std::string getBooleanResultString();
     std::vector<std::string> *getHeader();
     String2DVector *getList();
     size_t getTableSize();
