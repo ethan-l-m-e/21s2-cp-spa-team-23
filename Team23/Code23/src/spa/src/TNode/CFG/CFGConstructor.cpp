@@ -16,27 +16,19 @@ vector<NodeCFG*> CFGConstructor::createCFG(ProcedureNode p) {
     bool isFirstLoop = true;
     for(Node* s: stmtLst) {
         if(isFirstLoop){
-//            cout<<"\ntest size: ";
-//            cout<<CFGConstructor::populateCFG(s,prevNode)->size();
             firstSetOfNodes = CFGConstructor::populateCFG(s,prevNode);
             prevNode = firstSetOfNodes;
-//            cout<<"\nfirstsetofnodes size: ";
-//            cout<<firstSetOfNodes.size();
-//            cout<<"\n:";
 
             isFirstLoop = false;
         }else {
             prevNode = CFGConstructor::populateCFG(s, prevNode);
         }
     }
-//    cout<<"\nfirstsetofnodes stmt num:";
-//    cout<<firstSetOfNodes.at(0)->getNextNode()->getStatementNumber();
-//    cout<<"\n";
     return firstSetOfNodes;
 }
 
 /*
- * returns new CFGNode created
+ * returns new CFGNode(s) created in a vector
  */
 vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> prevSetOfNodes) {
     vector<NodeCFG*> newSetOfNodes;
@@ -107,7 +99,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
             for (NodeCFG *s: prevSetOfNodes) {
                 newCFGNode->setAllPreviousNodes(s->getAllPreviousNode());
                 s->setNextNode(newCFGNode);
-//                cout<<"did this even run\n";
             }
         }
         newSetOfNodes.push_back(newCFGNode);
