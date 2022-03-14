@@ -4,15 +4,14 @@
 
 #ifndef SPA_CFGCONSTRUCTOR_H
 #define SPA_CFGCONSTRUCTOR_H
-#include "TNode/ProcedureNode.h"
-#include "PKB.h"
 #include "NodeCFG.h"
+#include "TNode/ProcedureNode.h"
 
 class CFGConstructor {
 
 public:
-    static vector<NodeCFG*>* createCFG(ProcedureNode p);
-    static vector<NodeCFG*>* populateCFG(Node* currNode, vector<NodeCFG*>* prevNode);
+    static vector<NodeCFG*> createCFG(ProcedureNode p);
+    static vector<NodeCFG*> populateCFG(Node* currNode, vector<NodeCFG*> prevNode);
 };
 
 

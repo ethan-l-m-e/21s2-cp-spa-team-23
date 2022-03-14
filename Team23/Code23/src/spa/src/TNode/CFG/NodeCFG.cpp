@@ -42,6 +42,7 @@ NodeCFG* NodeCFG::getStartNode() {
             return x.second->getStartNode();
         }
     }
+    return nullptr;
 }
 
  NodeCFG* NodeCFG::getEndNode() {
