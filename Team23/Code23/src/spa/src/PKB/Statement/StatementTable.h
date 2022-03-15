@@ -14,21 +14,21 @@ using namespace std;
 //class N;
 
 template<class Node>
-class GenericStatement {
+class StatementTable {
 
 
 private:
 
     unordered_set<int> statementNumbersSet;
-    unordered_set<Node *> statementNodesSet;
+    unordered_set<Node> statementNodesSet;
 
 public:
 
-    GenericStatement() {
+    StatementTable() {
 
     }
 
-    void addStatement(Node *node) {
+    void addStatement(Node node) {
 
         statementNumbersSet.insert(node->getStmtNumber());
         statementNodesSet.insert(node);

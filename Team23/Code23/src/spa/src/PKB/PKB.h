@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 #include "TNode/TNode.h"
+//#include "TNode/CFG/NodeCFG.h"
 
 #include "PKB/Statement/Statement.h"
 #include "PKB/Entity/Entity.h"
@@ -41,39 +42,33 @@ public:
     Entity entity;
 
     struct Statement {
-        GenericStatement<StmtNode> statementClass;
-        GenericSpecificStatement<AssignNode> assignStatementClass;
-        GenericSpecificStatement<ReadNode> readStatementClass;
-        GenericSpecificStatement<PrintNode> printStatementClass;
-        GenericSpecificStatement<IfNode> ifStatementClass;
-        GenericSpecificStatement<WhileNode> whileStatementClass;
+        StatementTable<StmtNode *> statementClass;
+        StatementTable<StmtNode *> assignStatementClass;
+        StatementTable<ReadNode *> readStatementClass;
+        StatementTable<PrintNode *> printStatementClass;
+        StatementTable<IfNode *> ifStatementClass;
+        StatementTable<WhileNode *> whileStatementClass;
+        StatementTable<CallNode *> callStatementClass;
     };
 
     Statement statement;
 
     struct Relationship {
 
-        GenericRelationship<int, int> followsRelationshipClass;
+        OneToOneRelationship<int, int> followsRelationshipClass;
 
-        GenericTransitiveRelationship<int, int> tFollowsRelationshipClass;
+        ManyToManyRelationship<int, int> tFollowsRelationshipClass;
 
-        GenericRelationship<int, int> parentRelationshipClass;
+        OneToManyRelationship<int, int> parentRelationshipClass;
 
-        GenericTransitiveRelationship<int, int> tParentRelationshipClass;
+        ManyToManyRelationship<int, int> tParentRelationshipClass;
 
-        GenericRelationship<int, string> usesSRelationshipClass;
-        GenericRelationship<string, string> usesPRelationshipClass;
+        ManyToManyRelationship<int, string> usesSRelationshipClass;
+        ManyToManyRelationship<string, string> usesPRelationshipClass;
 
-        GenericTransitiveRelationship<int, string> tUsesSRelationshipClass;
+        ManyToManyRelationship<int, string> modifiesSRelationshipClass;
+        ManyToManyRelationship<string, string> modifiesPRelationshipClass;
 
-        GenericTransitiveRelationship<int, string> tUsesPRelationshipClass;
-
-        GenericRelationship<int, string> modifiesSRelationshipClass;
-        GenericRelationship<string, string> modifiesPRelationshipClass;
-
-        GenericTransitiveRelationship<int, string> tModifiesSRelationshipClass;
-
-        GenericTransitiveRelationship<int, string> tModifiesPRelationshipClass;
 
     };
 

@@ -13,7 +13,7 @@
 using namespace std;
 
 template<class LHS, class RHS>
-class GenericTransitiveRelationship {
+class ManyToManyRelationship {
 
     unordered_map<LHS, unordered_set<RHS>> lhsToSetRhsMap;
 
@@ -42,6 +42,9 @@ class GenericTransitiveRelationship {
     }
 
 
+    LHS convertToLHS(string s, LHS&);
+    RHS convertToRHS(string s, RHS&);
+
 public:
     void setRelationship(LHS lhs, RHS rhs) {
         if (lhsToSetRhsMap.find(lhs) == lhsToSetRhsMap.end()) {
@@ -58,15 +61,19 @@ public:
     }
 
     bool isRelationship(string lhs, string rhs) {
-        return isRelationshipNormal(std::stoi(lhs), std::stoi(rhs));
+        LHS l;
+        RHS r;
+        return isRelationshipNormal(convertToLHS(lhs, l), convertToRHS(rhs, r));
     }
 
     unordered_set<string> getSetRHS(string lhs) {
-        return convertSetGenericsToSetStrings(getSetRhsNormal(std::stoi(lhs)));
+        LHS l;
+        return convertSetGenericsToSetStrings(getSetRhsNormal(convertToLHS(lhs, l)));
     }
 
     unordered_set<string> getSetLHS(string rhs) {
-        return convertSetGenericsToSetStrings(getSetLhsNormal(std::stoi(rhs)));
+        RHS r;
+        return convertSetGenericsToSetStrings(getSetLhsNormal(convertToRHS(rhs, r)));
     }
 
 
@@ -81,3 +88,39 @@ public:
 
 };
 
+
+
+template<>
+string ManyToManyRelationship<string, string>::convertToLHS(string s, string&) {
+    return s;
+}
+template<>
+string ManyToManyRelationship<string, int>::convertToLHS(string s, string&) {
+    return s;
+}
+template<>
+int ManyToManyRelationship<int, string>::convertToLHS(string s, int&) {
+    return std::stoi(s);
+}
+template<>
+int ManyToManyRelationship<int, int>::convertToLHS(string s, int&) {
+    return std::stoi(s);
+}
+
+
+template<>
+string ManyToManyRelationship<string, string>::convertToRHS(string s, string&) {
+    return s;
+}
+template<>
+string ManyToManyRelationship<int, string>::convertToRHS(string s, string&) {
+    return s;
+}
+template<>
+int ManyToManyRelationship<string , int>::convertToRHS(string s, int&) {
+    return std::stoi(s);
+}
+template<>
+int ManyToManyRelationship<int, int>::convertToRHS(string s, int&) {
+    return std::stoi(s);
+}

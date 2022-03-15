@@ -3,7 +3,7 @@
 #include<stdio.h>
 #include <unordered_set>
 
-#include "PKB/PKBHelper.h"
+//#include "PKB/PKBHelper.h"
 
 using namespace std;
 
@@ -14,6 +14,10 @@ class GenericEntity {
 
 private:
     unordered_set<T> set;
+
+    bool isEntityNormal(T element) {
+        return set.find(element) != set.end();
+    }
 
 public:
 
@@ -35,12 +39,16 @@ public:
         return set;
     }
 
-    bool isEntityNormal(T element) {
-        return set.find(element) != set.end();
-    }
+
     bool isEntity(string element) {
-        return isEntityNormal(static_cast<T>(element));
+        T t;
+        return isEntityNormal(convert(element, t));
     }
+
+    T convert(string s, T&);
+
+
+
 
 
     void clear() {
@@ -50,10 +58,14 @@ public:
 
 };
 
-//template<class T>
-//GenericEntity<T>::GenericEntity() {
-//
-//}
 
+template<>
+string GenericEntity<string>::convert(string s, string&) {
+    return s;
+}
 
+template<>
+int GenericEntity<int>::convert(string s, int&) {
+    return std::stoi(s);
+}
 

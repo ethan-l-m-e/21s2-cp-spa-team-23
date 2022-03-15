@@ -1,2 +1,1 @@
-#include "GenericStatement.h"
-#include "GenericSpecificStatement.h"
+#include "StatementTable.h"

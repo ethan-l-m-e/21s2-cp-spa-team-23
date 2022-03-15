@@ -1,0 +1,132 @@
+#pragma once
+
+#include<stdio.h>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include <unordered_set>
+#include <unordered_map>
+
+#include "PKB/PKBHelper.h"
+
+using namespace std;
+
+template<class LHS, class RHS>
+class OneToManyRelationship {
+
+    unordered_map<LHS, unordered_set<RHS>> lhsToRhsMap;
+
+    unordered_map<RHS, LHS> rhsToLhs;
+
+
+    bool isRelationshipNormal(LHS lhs, RHS rhs) {
+        if (rhsToLhs.find(rhs) != rhsToLhs.end()) {
+            return rhsToLhs[rhs] == lhs;
+        } else {
+            return false;
+        }
+    }
+
+    unordered_set<RHS> getSetRHSNormal(LHS lhs) {
+
+        unordered_set<RHS> emptySet;
+
+        return (lhsToRhsMap.find(lhs) != lhsToRhsMap.end()) ? lhsToRhsMap[lhs] : emptySet;
+    }
+
+    unordered_set<LHS> getLHSNormal(RHS rhs) {
+
+        unordered_set<LHS> emptySet;
+
+        return (rhsToLhs.find(rhs) != rhsToLhs.end()) ? unordered_set<LHS>{rhsToLhs[rhs]} : emptySet;
+    }
+
+
+    LHS convertToLHS(string s, LHS&);
+    RHS convertToRHS(string s, RHS&);
+
+
+public:
+    void setRelationship(LHS lhs, RHS rhs) {
+
+        rhsToLhs.emplace(rhs, lhs);
+
+        if (lhsToRhsMap.find(lhs) == lhsToRhsMap.end()) {
+            lhsToRhsMap.emplace(lhs, unordered_set<int>{rhs});
+        } else {
+            lhsToRhsMap[lhs].insert(rhs);
+        }
+
+    }
+
+    bool isRelationship(string lhs, string rhs) {
+        LHS l;
+        RHS r;
+        return isRelationshipNormal(convertToLHS(lhs, l), convertToRHS(rhs, r));
+    }
+
+
+
+    unordered_set<string> getSetRHS(string lhs) {
+        LHS l;
+        return convertSetGenericsToSetStrings(getSetRHSNormal(convertToLHS(lhs, l)));
+    }
+
+
+    unordered_set<string> getLHS(string rhs) {
+        RHS r;
+        return convertSetGenericsToSetStrings(getLHSNormal(convertToRHS(rhs, r)));
+    }
+
+
+
+
+    void clear() {
+        lhsToRhsMap.clear();
+        rhsToLhs.clear();
+    }
+
+
+
+
+};
+
+
+
+
+template<>
+string OneToManyRelationship<string, string>::convertToLHS(string s, string&) {
+    return s;
+}
+template<>
+string OneToManyRelationship<string, int>::convertToLHS(string s, string&) {
+    return s;
+}
+template<>
+int OneToManyRelationship<int, string>::convertToLHS(string s, int&) {
+    return std::stoi(s);
+}
+template<>
+int OneToManyRelationship<int, int>::convertToLHS(string s, int&) {
+    return std::stoi(s);
+}
+
+
+template<>
+string OneToManyRelationship<string, string>::convertToRHS(string s, string&) {
+    return s;
+}
+template<>
+string OneToManyRelationship<int, string>::convertToRHS(string s, string&) {
+    return s;
+}
+template<>
+int OneToManyRelationship<string , int>::convertToRHS(string s, int&) {
+    return std::stoi(s);
+}
+template<>
+int OneToManyRelationship<int, int>::convertToRHS(string s, int&) {
+    return std::stoi(s);
+}
+

@@ -5,7 +5,7 @@ using namespace std;
 
 #include "PKB/PKB.h"
 
-#include "PKB/Statement/Statement.h"
+//#include "PKB/Statement/Statement.h"
 
 //#include "Statement-Old/AbstractStatement.h"
 
@@ -13,16 +13,13 @@ using namespace std;
 PKB *PKB::singleton = nullptr;
 
 PKB::PKB() {
-    assignStatementClass = new AssignStatement(statementClass);
-    readStatementClass = new ReadStatement(statementClass);
-    ifStatementClass = new IfStatement(statementClass);
 
 }
 
 PKB* PKB::getInstance() {
 
     if (PKB::singleton == nullptr) {
-        PKB::singleton = new PKB(stat);
+        PKB::singleton = new PKB();
     }
 
     return PKB::singleton;
@@ -40,7 +37,11 @@ void PKB::clearPKB() {
     statement.statementClass.clear();
     statement.assignStatementClass.clear();
     statement.readStatementClass.clear();
+    statement.printStatementClass.clear();
     statement.ifStatementClass.clear();
+    statement.whileStatementClass.clear();
+    statement.callStatementClass.clear();
+
 
     relationship.followsRelationshipClass.clear();
     relationship.tFollowsRelationshipClass.clear();
@@ -51,14 +52,7 @@ void PKB::clearPKB() {
     relationship.usesSRelationshipClass.clear();
     relationship.usesPRelationshipClass.clear();
 
-    relationship.tUsesSRelationshipClass.clear();
-    relationship.tUsesPRelationshipClass.clear();
-
     relationship.modifiesSRelationshipClass.clear();
     relationship.modifiesPRelationshipClass.clear();
-
-    relationship.tModifiesSRelationshipClass.clear();
-    relationship.tModifiesPRelationshipClass.clear();
-
 
 }
