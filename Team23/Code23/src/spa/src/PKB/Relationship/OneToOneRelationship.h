@@ -82,37 +82,29 @@ public:
 };
 
 
-template<>
-string OneToOneRelationship<string, string>::convertToLHS(string s, string&) {
+template<> inline string OneToOneRelationship<string, string>::convertToLHS(string s, string&) {
     return s;
 }
-template<>
-string OneToOneRelationship<string, int>::convertToLHS(string s, string&) {
+template<> inline string OneToOneRelationship<string, int>::convertToLHS(string s, string&) {
     return s;
 }
-template<>
-int OneToOneRelationship<int, string>::convertToLHS(string s, int&) {
+template<> inline int OneToOneRelationship<int, string>::convertToLHS(string s, int&) {
     return std::stoi(s);
 }
-template<>
-int OneToOneRelationship<int, int>::convertToLHS(string s, int&) {
+template<> inline int OneToOneRelationship<int, int>::convertToLHS(string s, int&) {
     return std::stoi(s);
 }
 
 
-template<>
-string OneToOneRelationship<string, string>::convertToRHS(string s, string&) {
+template<> inline string OneToOneRelationship<string, string>::convertToRHS(string s, string&) {
     return s;
 }
-template<>
-string OneToOneRelationship<int, string>::convertToRHS(string s, string&) {
+template<> inline string OneToOneRelationship<int, string>::convertToRHS(string s, string&) {
     return s;
 }
-template<>
-int OneToOneRelationship<string , int>::convertToRHS(string s, int&) {
+template<> inline int OneToOneRelationship<string , int>::convertToRHS(string s, int&) {
     return std::stoi(s);
 }
-template<>
-int OneToOneRelationship<int, int>::convertToRHS(string s, int&) {
+template<> inline int OneToOneRelationship<int, int>::convertToRHS(string s, int&) {
     return std::stoi(s);
 }

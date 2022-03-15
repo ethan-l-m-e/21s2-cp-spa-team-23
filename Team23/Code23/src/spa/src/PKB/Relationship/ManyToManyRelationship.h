@@ -90,37 +90,31 @@ public:
 
 
 
-template<>
-string ManyToManyRelationship<string, string>::convertToLHS(string s, string&) {
+
+
+template<> inline string ManyToManyRelationship<string, string>::convertToLHS(string s, string&) {
     return s;
 }
-template<>
-string ManyToManyRelationship<string, int>::convertToLHS(string s, string&) {
+template<> inline string ManyToManyRelationship<string, int>::convertToLHS(string s, string&) {
     return s;
 }
-template<>
-int ManyToManyRelationship<int, string>::convertToLHS(string s, int&) {
+template<> inline int ManyToManyRelationship<int, string>::convertToLHS(string s, int&) {
     return std::stoi(s);
 }
-template<>
-int ManyToManyRelationship<int, int>::convertToLHS(string s, int&) {
+template<> inline int ManyToManyRelationship<int, int>::convertToLHS(string s, int&) {
     return std::stoi(s);
 }
 
 
-template<>
-string ManyToManyRelationship<string, string>::convertToRHS(string s, string&) {
+template<> inline string ManyToManyRelationship<string, string>::convertToRHS(string s, string&) {
     return s;
 }
-template<>
-string ManyToManyRelationship<int, string>::convertToRHS(string s, string&) {
+template<> inline string ManyToManyRelationship<int, string>::convertToRHS(string s, string&) {
     return s;
 }
-template<>
-int ManyToManyRelationship<string , int>::convertToRHS(string s, int&) {
+template<> inline int ManyToManyRelationship<string , int>::convertToRHS(string s, int&) {
     return std::stoi(s);
 }
-template<>
-int ManyToManyRelationship<int, int>::convertToRHS(string s, int&) {
+template<> inline int ManyToManyRelationship<int, int>::convertToRHS(string s, int&) {
     return std::stoi(s);
 }

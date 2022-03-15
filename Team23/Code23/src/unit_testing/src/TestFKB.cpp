@@ -108,128 +108,128 @@ TEST_CASE("Add constants") {
 
 }
 
-//
-//TEST_CASE("Add Assign Statements") {
-//    fkb->clearFKB();
-//
-//    REQUIRE(fkb->statement.assignStatementClass.getAllStatementNumbers().empty());
-//
-//    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
-//
-//    for (int i : statements) {
-//        auto n = AssignNode(i, &v, &v);
-//        fkb->statement.assignStatementClass.addStatement(&n);
-//    }
-//
-//    unordered_set<string> assignStatementsSet = fkb->statement.assignStatementClass.getAllStatementNumbers();
-//
-//    for (int i: statements) {
-//        string s = std::to_string(i);
-//
-//        REQUIRE(fkb->statement.assignStatementClass.isStatementNumber(s));
-//
-//        REQUIRE(assignStatementsSet.find(s) != assignStatementsSet.end());
-//    }
-//
-//}
-//
-//
-//TEST_CASE("Add Read Statements") {
-//    fkb->clearFKB();
-//
-//    REQUIRE(fkb->statement.readStatementClass.getAllStatementNumbers().empty());
-//
-//    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
-//
-//    for (int i : statements) {
-//        auto n = ReadNode(i, &v);
-//        fkb->statement.readStatementClass.addStatement(&n);
-//    }
-//
-//    unordered_set<string> readStatementsSet = fkb->statement.readStatementClass.getAllStatementNumbers();
-//
-//    for (int i: statements) {
-//        string s = std::to_string(i);
-//
-//        REQUIRE(fkb->statement.readStatementClass.isStatementNumber(s));
-//
-//        REQUIRE(readStatementsSet.find(s) != readStatementsSet.end());
-//    }
-//
-//}
-//
-//TEST_CASE("Add Print Statements") {
-//    fkb->clearFKB();
-//
-//    REQUIRE(fkb->statement.printStatementClass.getAllStatementNumbers().empty());
-//
-//    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
-//
-//    for (int i : statements) {
-//        auto n = PrintNode(i, &v);
-//        fkb->statement.printStatementClass.addStatement(&n);
-//    }
-//
-//    unordered_set<string> printStatementsSet = fkb->statement.printStatementClass.getAllStatementNumbers();
-//
-//    for (int i: statements) {
-//        string s = std::to_string(i);
-//
-//        REQUIRE(fkb->statement.printStatementClass.isStatementNumber(s));
-//
-//        REQUIRE(printStatementsSet.find(s) != printStatementsSet.end());
-//    }
-//
-//}
-//
-//
-//TEST_CASE("Add If Statements") {
-//    fkb->clearFKB();
-//
-//    REQUIRE(fkb->statement.ifStatementClass.getAllStatementNumbers().empty());
-//
-//    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
-//
-//    for (int i : statements) {
-//        auto n = IfNode(i, &cond, {}, {});
-//        fkb->statement.ifStatementClass.addStatement(&n);
-//    }
-//
-//    unordered_set<string> ifStatementsSet = fkb->statement.ifStatementClass.getAllStatementNumbers();
-//
-//    for (int i: statements) {
-//        string s = std::to_string(i);
-//
-//        REQUIRE(fkb->statement.ifStatementClass.isStatementNumber(s));
-//
-//        REQUIRE(ifStatementsSet.find(s) != ifStatementsSet.end());
-//    }
-//}
-//
-//
-//
-//TEST_CASE("Add While Statements") {
-//    fkb->clearFKB();
-//
-//    REQUIRE(fkb->statement.whileStatementClass.getAllStatementNumbers().empty());
-//
-//    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
-//
-//    for (int i : statements) {
-//        auto n = WhileNode(i, &cond, {});
-//        fkb->statement.whileStatementClass.addStatement(&n);
-//    }
-//
-//    unordered_set<string> whileStatementsSet = fkb->statement.whileStatementClass.getAllStatementNumbers();
-//
-//    for (int i: statements) {
-//        string s = std::to_string(i);
-//
-//        REQUIRE(fkb->statement.whileStatementClass.isStatementNumber(s));
-//
-//        REQUIRE(whileStatementsSet.find(s) != whileStatementsSet.end());
-//    }
-//}
+
+TEST_CASE("Add Assign Statements") {
+    fkb->clearFKB();
+
+    REQUIRE(fkb->statement.assignStatementClass.getAllStatementNumbers().empty());
+
+    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
+
+    for (int i : statements) {
+        auto n = AssignNode(i, &v, &v);
+        fkb->statement.assignStatementClass.addStatement(&n);
+    }
+
+    unordered_set<string> assignStatementsSet = fkb->statement.assignStatementClass.getAllStatementNumbers();
+
+    for (int i: statements) {
+        string s = std::to_string(i);
+
+        REQUIRE(fkb->statement.assignStatementClass.isStatementNumber(s));
+
+        REQUIRE(assignStatementsSet.find(s) != assignStatementsSet.end());
+    }
+
+}
+
+
+TEST_CASE("Add Read Statements") {
+    fkb->clearFKB();
+
+    REQUIRE(fkb->statement.readStatementClass.getAllStatementNumbers().empty());
+
+    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
+
+    for (int i : statements) {
+        auto n = ReadNode(i, &v);
+        fkb->statement.readStatementClass.addStatement(&n);
+    }
+
+    unordered_set<string> readStatementsSet = fkb->statement.readStatementClass.getAllStatementNumbers();
+
+    for (int i: statements) {
+        string s = std::to_string(i);
+
+        REQUIRE(fkb->statement.readStatementClass.isStatementNumber(s));
+
+        REQUIRE(readStatementsSet.find(s) != readStatementsSet.end());
+    }
+
+}
+
+TEST_CASE("Add Print Statements") {
+    fkb->clearFKB();
+
+    REQUIRE(fkb->statement.printStatementClass.getAllStatementNumbers().empty());
+
+    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
+
+    for (int i : statements) {
+        auto n = PrintNode(i, &v);
+        fkb->statement.printStatementClass.addStatement(&n);
+    }
+
+    unordered_set<string> printStatementsSet = fkb->statement.printStatementClass.getAllStatementNumbers();
+
+    for (int i: statements) {
+        string s = std::to_string(i);
+
+        REQUIRE(fkb->statement.printStatementClass.isStatementNumber(s));
+
+        REQUIRE(printStatementsSet.find(s) != printStatementsSet.end());
+    }
+
+}
+
+
+TEST_CASE("Add If Statements") {
+    fkb->clearFKB();
+
+    REQUIRE(fkb->statement.ifStatementClass.getAllStatementNumbers().empty());
+
+    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
+
+    for (int i : statements) {
+        auto n = IfNode(i, &cond, {}, {});
+        fkb->statement.ifStatementClass.addStatement(&n);
+    }
+
+    unordered_set<string> ifStatementsSet = fkb->statement.ifStatementClass.getAllStatementNumbers();
+
+    for (int i: statements) {
+        string s = std::to_string(i);
+
+        REQUIRE(fkb->statement.ifStatementClass.isStatementNumber(s));
+
+        REQUIRE(ifStatementsSet.find(s) != ifStatementsSet.end());
+    }
+}
+
+
+
+TEST_CASE("Add While Statements") {
+    fkb->clearFKB();
+
+    REQUIRE(fkb->statement.whileStatementClass.getAllStatementNumbers().empty());
+
+    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
+
+    for (int i : statements) {
+        auto n = WhileNode(i, &cond, {});
+        fkb->statement.whileStatementClass.addStatement(&n);
+    }
+
+    unordered_set<string> whileStatementsSet = fkb->statement.whileStatementClass.getAllStatementNumbers();
+
+    for (int i: statements) {
+        string s = std::to_string(i);
+
+        REQUIRE(fkb->statement.whileStatementClass.isStatementNumber(s));
+
+        REQUIRE(whileStatementsSet.find(s) != whileStatementsSet.end());
+    }
+}
 
 
 TEST_CASE("Add Follows") {
@@ -432,95 +432,101 @@ TEST_CASE("Add ParentT") {
 
 }
 
-//
-//TEST_CASE("Add Uses") {
-//    fkb->clearFKB();
-//
-//    unordered_map<int, unordered_set<string>> statementToVariablesUsedMap = {
-//            {1, {"a"}},
-//            {4, {"obama", "biden", "trump"}},
-//            {34, {"red", "green", "yellow", "blue", "white", "black"}},
-//            {56, {"a", "b", "c", "d", "e", "f"}},
-//            {345, {"x", "y", "z"}},
-//    };
-//
-//    for (auto& iter : statementToVariablesUsedMap) {
-//        int statement = iter.first;
-//        unordered_set<string> variablesUsed = iter.second;
-//
-//        fkb->relationship.usesSRelationshipClass.setRelationship(statement, variablesUsed);
-//
-//    }
-//
-//    REQUIRE(fkb->relationship.usesSRelationshipClass.isRelationship("2", "a") == false);
-//    REQUIRE(fkb->relationship.usesSRelationshipClass.getLHS("unusedVariable") == unordered_set<string>{});
-//    REQUIRE(fkb->relationship.usesSRelationshipClass.getRHS("3") == unordered_set<string>{});
-//
-//
-//    for (auto& iter : statementToVariablesUsedMap) {
-//
-//        string statement = std::to_string(iter.first);
-//        unordered_set<string> variablesUsed = iter.second;
-//
-//        for (string v : variablesUsed) {
-//            REQUIRE(fkb->relationship.usesSRelationshipClass.isRelationship(statement, v));
-//
-//            unordered_set<string> userStatements = fkb->relationship.usesSRelationshipClass.getLHS(v);
-//            REQUIRE(userStatements.find(statement) != userStatements.end());
-//        }
-//
-//        REQUIRE(fkb->relationship.usesSRelationshipClass.getRHS(statement) == variablesUsed);
-//
-//    }
-//
-//
-//}
-//
-//
-//
-//TEST_CASE("Add Modifies") {
-//    fkb->clearFKB();
-//
-//    unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap = {
-//            {1, {"a"}},
-//            {4, {"obama", "biden", "trump"}},
-//            {34, {"red", "green", "yellow", "blue", "white", "black"}},
-//            {56, {"a", "b", "c", "d", "e", "f"}},
-//            {345, {"x", "y", "z"}},
-//    };
-//
-//    for (auto& iter : statementToVariablesModifiedMap) {
-//        int statement = iter.first;
-//        unordered_set<string> variablesUsed = iter.second;
-//
-//        fkb->relationship.modifiesSRelationshipClass.setRelationship(statement, variablesUsed);
-//
-//    }
-//
-//
-//    REQUIRE(fkb->relationship.modifiesSRelationshipClass.isRelationship("2", "a") == false);
-//    REQUIRE(fkb->relationship.modifiesSRelationshipClass.getLHS("unmodifiedVariable") == unordered_set<string>{});
-//    REQUIRE(fkb->relationship.modifiesSRelationshipClass.getRHS("3") == unordered_set<string>{});
-//
-//
-//    for (auto& iter : statementToVariablesModifiedMap) {
-//
-//        string statement = std::to_string(iter.first);
-//        unordered_set<string> variablesModified = iter.second;
-//
-//        for (string v : variablesModified) {
-//            REQUIRE(fkb->relationship.modifiesSRelationshipClass.isRelationship(statement, v));
-//
-//            unordered_set<string> modifierStatements = fkb->relationship.modifiesSRelationshipClass.getLHS(v);
-//            REQUIRE(modifierStatements.find(statement) != modifierStatements.end());
-//        }
-//
-//        REQUIRE(fkb->relationship.modifiesSRelationshipClass.getRHS(statement) == variablesModified);
-//
-//    }
-//
-//
-//}
+
+TEST_CASE("Add Uses") {
+    fkb->clearFKB();
+
+    unordered_map<int, unordered_set<string>> statementToVariablesUsedMap = {
+            {1, {"a"}},
+            {4, {"obama", "biden", "trump"}},
+            {34, {"red", "green", "yellow", "blue", "white", "black"}},
+            {56, {"a", "b", "c", "d", "e", "f"}},
+            {345, {"x", "y", "z"}},
+    };
+
+    for (auto& iter : statementToVariablesUsedMap) {
+        int statement = iter.first;
+        unordered_set<string> variablesUsed = iter.second;
+
+        for (string variable : variablesUsed) {
+            fkb->relationship.usesSRelationshipClass.setRelationship(statement, variable);
+        }
+
+
+    }
+
+    REQUIRE(fkb->relationship.usesSRelationshipClass.isRelationship("2", "a") == false);
+    REQUIRE(fkb->relationship.usesSRelationshipClass.getSetLHS("unusedVariable") == unordered_set<string>{});
+    REQUIRE(fkb->relationship.usesSRelationshipClass.getSetRHS("3") == unordered_set<string>{});
+
+
+    for (auto& iter : statementToVariablesUsedMap) {
+
+        string statement = std::to_string(iter.first);
+        unordered_set<string> variablesUsed = iter.second;
+
+        for (string v : variablesUsed) {
+            REQUIRE(fkb->relationship.usesSRelationshipClass.isRelationship(statement, v));
+
+            unordered_set<string> userStatements = fkb->relationship.usesSRelationshipClass.getSetLHS(v);
+            REQUIRE(userStatements.find(statement) != userStatements.end());
+        }
+
+        REQUIRE(fkb->relationship.usesSRelationshipClass.getSetRHS(statement) == variablesUsed);
+
+    }
+
+
+}
+
+
+
+TEST_CASE("Add Modifies") {
+    fkb->clearFKB();
+
+    unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap = {
+            {1, {"a"}},
+            {4, {"obama", "biden", "trump"}},
+            {34, {"red", "green", "yellow", "blue", "white", "black"}},
+            {56, {"a", "b", "c", "d", "e", "f"}},
+            {345, {"x", "y", "z"}},
+    };
+
+    for (auto& iter : statementToVariablesModifiedMap) {
+        int statement = iter.first;
+        unordered_set<string> variablesUsed = iter.second;
+
+        for (string variable : variablesUsed) {
+            fkb->relationship.modifiesSRelationshipClass.setRelationship(statement, variable);
+        }
+
+
+    }
+
+
+    REQUIRE(fkb->relationship.modifiesSRelationshipClass.isRelationship("2", "a") == false);
+    REQUIRE(fkb->relationship.modifiesSRelationshipClass.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
+    REQUIRE(fkb->relationship.modifiesSRelationshipClass.getSetRHS("3") == unordered_set<string>{});
+
+
+    for (auto& iter : statementToVariablesModifiedMap) {
+
+        string statement = std::to_string(iter.first);
+        unordered_set<string> variablesModified = iter.second;
+
+        for (string v : variablesModified) {
+            REQUIRE(fkb->relationship.modifiesSRelationshipClass.isRelationship(statement, v));
+
+            unordered_set<string> modifierStatements = fkb->relationship.modifiesSRelationshipClass.getSetLHS(v);
+            REQUIRE(modifierStatements.find(statement) != modifierStatements.end());
+        }
+
+        REQUIRE(fkb->relationship.modifiesSRelationshipClass.getSetRHS(statement) == variablesModified);
+
+    }
+
+
+}
 
 
 

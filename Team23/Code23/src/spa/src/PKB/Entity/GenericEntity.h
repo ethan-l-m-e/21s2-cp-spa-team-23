@@ -32,7 +32,7 @@ public:
     }
 
     unordered_set<string> getAll() {
-        return convertSetGenericToSetStrings(set);
+        return convertSetGenericsToSetStrings(set);
     }
 
     unordered_set<T> getAllNormal() {
@@ -59,13 +59,11 @@ public:
 };
 
 
-template<>
-string GenericEntity<string>::convert(string s, string&) {
+template<> inline string GenericEntity<string>::convert(string s, string&) {
     return s;
 }
 
-template<>
-int GenericEntity<int>::convert(string s, int&) {
+template<> inline int GenericEntity<int>::convert(string s, int&) {
     return std::stoi(s);
 }
 
