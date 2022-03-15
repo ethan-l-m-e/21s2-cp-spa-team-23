@@ -433,7 +433,7 @@ TEST_CASE("Add ParentT") {
 }
 
 
-TEST_CASE("Add Uses") {
+TEST_CASE("Add UsesS") {
     fkb->clearFKB();
 
     unordered_map<int, unordered_set<string>> statementToVariablesUsedMap = {
@@ -480,8 +480,55 @@ TEST_CASE("Add Uses") {
 }
 
 
+TEST_CASE("Add UsesP") {
+    fkb->clearFKB();
 
-TEST_CASE("Add Modifies") {
+    unordered_map<string, unordered_set<string>> procedureToVariablesUsedMap = {
+            {"apple", {"a"}},
+            {"orange", {"obama", "biden", "trump"}},
+            {"watermelon", {"red", "green", "yellow", "blue", "white", "black"}},
+            {"mango", {"a", "b", "c", "d", "e", "f"}},
+            {"lychee", {"x", "y", "z"}},
+    };
+
+    for (auto& iter : procedureToVariablesUsedMap) {
+        string procedure = iter.first;
+        unordered_set<string> variablesUsed = iter.second;
+
+        for (string variable : variablesUsed) {
+            fkb->relationship.usesP.setRelationship(procedure, variable);
+        }
+
+
+    }
+
+    REQUIRE(fkb->relationship.usesP.isRelationship("banana", "a") == false);
+    REQUIRE(fkb->relationship.usesP.getSetLHS("unusedVariable") == unordered_set<string>{});
+    REQUIRE(fkb->relationship.usesP.getSetRHS("dragonfruit") == unordered_set<string>{});
+
+
+    for (auto& iter : procedureToVariablesUsedMap) {
+
+        string procedure = iter.first;
+        unordered_set<string> variablesUsed = iter.second;
+
+        for (string v : variablesUsed) {
+            REQUIRE(fkb->relationship.usesP.isRelationship(procedure, v));
+
+            unordered_set<string> userStatements = fkb->relationship.usesP.getSetLHS(v);
+            REQUIRE(userStatements.find(procedure) != userStatements.end());
+        }
+
+        REQUIRE(fkb->relationship.usesP.getSetRHS(procedure) == variablesUsed);
+
+    }
+
+
+}
+
+
+
+TEST_CASE("Add ModifiesS") {
     fkb->clearFKB();
 
     unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap = {
@@ -522,6 +569,55 @@ TEST_CASE("Add Modifies") {
         }
 
         REQUIRE(fkb->relationship.modifiesS.getSetRHS(statement) == variablesModified);
+
+    }
+
+
+}
+
+
+
+TEST_CASE("Add ModifiesP") {
+    fkb->clearFKB();
+
+    unordered_map<string, unordered_set<string>> procedureToVariablesModifiedMap = {
+            {"apple", {"a"}},
+            {"orange", {"obama", "biden", "trump"}},
+            {"watermelon", {"red", "green", "yellow", "blue", "white", "black"}},
+            {"mango", {"a", "b", "c", "d", "e", "f"}},
+            {"lychee", {"x", "y", "z"}},
+    };
+
+    for (auto& iter : procedureToVariablesModifiedMap) {
+        string procedure = iter.first;
+        unordered_set<string> variablesUsed = iter.second;
+
+        for (string variable : variablesUsed) {
+            fkb->relationship.modifiesP.setRelationship(procedure, variable);
+        }
+
+
+    }
+
+
+    REQUIRE(fkb->relationship.modifiesP.isRelationship("banana", "a") == false);
+    REQUIRE(fkb->relationship.modifiesP.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
+    REQUIRE(fkb->relationship.modifiesP.getSetRHS("dragonfruit") == unordered_set<string>{});
+
+
+    for (auto& iter : procedureToVariablesModifiedMap) {
+
+        string procedure = iter.first;
+        unordered_set<string> variablesModified = iter.second;
+
+        for (string v : variablesModified) {
+            REQUIRE(fkb->relationship.modifiesP.isRelationship(procedure, v));
+
+            unordered_set<string> modifierStatements = fkb->relationship.modifiesP.getSetLHS(v);
+            REQUIRE(modifierStatements.find(procedure) != modifierStatements.end());
+        }
+
+        REQUIRE(fkb->relationship.modifiesP.getSetRHS(procedure) == variablesModified);
 
     }
 
