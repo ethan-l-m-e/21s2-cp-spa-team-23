@@ -3,13 +3,13 @@
 #include<stdio.h>
 #include <unordered_set>
 
-//#include "PKB/PKBHelper.h"
+#include "PKB/PKBHelper.h"
 
 using namespace std;
 
 
 template<class T>
-class GenericEntity {
+class EntityTable {
 
 
 private:
@@ -21,7 +21,7 @@ private:
 
 public:
 
-    GenericEntity() {
+    EntityTable() {
 
     }
 
@@ -34,11 +34,6 @@ public:
     unordered_set<string> getAll() {
         return convertSetGenericsToSetStrings(set);
     }
-
-    unordered_set<T> getAllNormal() {
-        return set;
-    }
-
 
     bool isEntity(string element) {
         T t;
@@ -59,11 +54,11 @@ public:
 };
 
 
-template<> inline string GenericEntity<string>::convert(string s, string&) {
+template<> inline string EntityTable<string>::convert(string s, string&) {
     return s;
 }
 
-template<> inline int GenericEntity<int>::convert(string s, int&) {
+template<> inline int EntityTable<int>::convert(string s, int&) {
     return std::stoi(s);
 }
 

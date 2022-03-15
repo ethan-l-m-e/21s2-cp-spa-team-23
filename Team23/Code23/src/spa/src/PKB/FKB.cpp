@@ -35,25 +35,25 @@ void FKB::clearFKB() {
     entity.constants.clear();
 
 
-    statement.statementClass.clear();
-    statement.assignStatementClass.clear();
-    statement.readStatementClass.clear();
-    statement.printStatementClass.clear();
-    statement.ifStatementClass.clear();
-    statement.whileStatementClass.clear();
-    statement.callStatementClass.clear();
+    statement.statements.clear();
+    statement.assignStatements.clear();
+    statement.readStatements.clear();
+    statement.printStatements.clear();
+    statement.ifStatements.clear();
+    statement.whileStatements.clear();
+    statement.callStatements.clear();
 
 
-    relationship.followsRelationshipClass.clear();
-    relationship.tFollowsRelationshipClass.clear();
+    relationship.follows.clear();
+    relationship.followsT.clear();
 
-    relationship.parentRelationshipClass.clear();
-    relationship.tParentRelationshipClass.clear();
+    relationship.parent.clear();
+    relationship.parentT.clear();
 
-    relationship.usesSRelationshipClass.clear();
-    relationship.usesPRelationshipClass.clear();
+    relationship.usesS.clear();
+    relationship.usesP.clear();
 
-    relationship.modifiesSRelationshipClass.clear();
-    relationship.modifiesPRelationshipClass.clear();
+    relationship.modifiesS.clear();
+    relationship.modifiesP.clear();
 
 }

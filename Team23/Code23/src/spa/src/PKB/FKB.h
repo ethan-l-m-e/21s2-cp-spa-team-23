@@ -34,40 +34,40 @@ public:
     void clearFKB();
 
     struct Entity {
-        GenericEntity<string> variables;
-        GenericEntity<string> procedures;
-        GenericEntity<string> constants;
+        EntityTable<string> variables;
+        EntityTable<string> procedures;
+        EntityTable<string> constants;
     };
 
     Entity entity;
 
     struct Statement {
-        StatementTable<StmtNode *> statementClass;
-        StatementTable<AssignNode *> assignStatementClass;
-        StatementTable<ReadNode *> readStatementClass;
-        StatementTable<PrintNode *> printStatementClass;
-        StatementTable<IfNode *> ifStatementClass;
-        StatementTable<WhileNode *> whileStatementClass;
-        StatementTable<CallNode *> callStatementClass;
+        StatementTable<StmtNode *> statements;
+        StatementTable<AssignNode *> assignStatements;
+        StatementTable<ReadNode *> readStatements;
+        StatementTable<PrintNode *> printStatements;
+        StatementTable<IfNode *> ifStatements;
+        StatementTable<WhileNode *> whileStatements;
+        StatementTable<CallNode *> callStatements;
     };
 
     Statement statement;
 
     struct Relationship {
 
-        OneToOneRelationship<int, int> followsRelationshipClass;
+        OneToOneRelationship<int, int> follows;
 
-        ManyToManyRelationship<int, int> tFollowsRelationshipClass;
+        ManyToManyRelationship<int, int> followsT;
 
-        OneToManyRelationship<int, int> parentRelationshipClass;
+        OneToManyRelationship<int, int> parent;
 
-        ManyToManyRelationship<int, int> tParentRelationshipClass;
+        ManyToManyRelationship<int, int> parentT;
 
-        ManyToManyRelationship<int, string> usesSRelationshipClass;
-        ManyToManyRelationship<string, string> usesPRelationshipClass;
+        ManyToManyRelationship<int, string> usesS;
+        ManyToManyRelationship<string, string> usesP;
 
-        ManyToManyRelationship<int, string> modifiesSRelationshipClass;
-        ManyToManyRelationship<string, string> modifiesPRelationshipClass;
+        ManyToManyRelationship<int, string> modifiesS;
+        ManyToManyRelationship<string, string> modifiesP;
 
 
     };

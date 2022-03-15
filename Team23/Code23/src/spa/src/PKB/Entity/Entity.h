@@ -1,1 +1,1 @@
-#include "GenericEntity.h"
+#include "EntityTable.h"
