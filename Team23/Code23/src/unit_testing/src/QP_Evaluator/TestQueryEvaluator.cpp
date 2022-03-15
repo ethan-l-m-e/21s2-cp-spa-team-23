@@ -48,9 +48,6 @@ TEST_CASE("Select query with no clauses") {
 
 }
 
-TEST_CASE("Follows/Parent/Follows* clause: 0 or 1 synonym") {
-}
-
 TEST_CASE("Merge synonyms") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
