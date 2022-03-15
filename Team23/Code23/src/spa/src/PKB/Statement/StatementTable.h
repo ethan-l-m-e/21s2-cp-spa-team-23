@@ -24,9 +24,6 @@ private:
 
 public:
 
-    StatementTable() {
-
-    }
 
     void addStatement(Node node) {
 

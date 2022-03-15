@@ -3,31 +3,32 @@
 
 using namespace std;
 
-#include "PKB/PKB.h"
+//#include "PKB/FKB.h"
+#include "FKB.h"
 
 //#include "PKB/Statement/Statement.h"
 
 //#include "Statement-Old/AbstractStatement.h"
 
 
-PKB *PKB::singleton = nullptr;
+FKB *FKB::singleton = nullptr;
 
-PKB::PKB() {
+FKB::FKB() {
 
 }
 
-PKB* PKB::getInstance() {
+FKB* FKB::getInstance() {
 
-    if (PKB::singleton == nullptr) {
-        PKB::singleton = new PKB();
+    if (FKB::singleton == nullptr) {
+        FKB::singleton = new FKB();
     }
 
-    return PKB::singleton;
+    return FKB::singleton;
 
 }
 
 
-void PKB::clearPKB() {
+void FKB::clearFKB() {
 
     entity.variables.clear();
     entity.procedures.clear();

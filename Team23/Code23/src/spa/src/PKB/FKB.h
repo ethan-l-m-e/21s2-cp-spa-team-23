@@ -19,19 +19,19 @@ using namespace std;
 typedef short PROC;
 
 
-class PKB {
+class FKB {
 
 private:
-    PKB();
+    FKB();
 
-    static PKB *singleton;
+    static FKB *singleton;
 
 
 public:
 
-    static PKB *getInstance();
+    static FKB *getInstance();
 
-    void clearPKB();
+    void clearFKB();
 
     struct Entity {
         GenericEntity<string> variables;
@@ -43,7 +43,7 @@ public:
 
     struct Statement {
         StatementTable<StmtNode *> statementClass;
-        StatementTable<StmtNode *> assignStatementClass;
+        StatementTable<AssignNode *> assignStatementClass;
         StatementTable<ReadNode *> readStatementClass;
         StatementTable<PrintNode *> printStatementClass;
         StatementTable<IfNode *> ifStatementClass;
