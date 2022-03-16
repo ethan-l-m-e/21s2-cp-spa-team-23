@@ -40,12 +40,12 @@ namespace qp {
         void handleSuchThatStatementClause(std::map<std::string, std::string>&, std::vector<std::string>);
         void handleVariableRelationshipClause(std::map<std::string, std::string>, SuchThatClauseToken);
         void checkArgumentForStatementClauses(std::map<std::string, std::string>&, std::string);
-        void checkFirstArgForVariableClauses(std::string, std::set<std::string>&, std::map<std::string, std::string>&);
+        void checkFirstArgForVariableClauses(std::string, std::set<std::string>&);
         void checkSecondArgForVariableClauses(std::string, std::map<std::string, std::string>&);
         void validatePatternFirstArgument(std::map<std::string, std::string>, std::string);
         void checkArguments(std::vector<std::string>, std::map<std::string, std::string>);
         void checkSynonymIsDeclared(std::string, std::map<std::string, std::string>);
-        void checkProcAssignArguments(SuchThatClauseToken, std::map<std::string, std::string>);
+        void handleCallsAffectsClauses(SuchThatClauseToken, std::map<std::string, std::string>);
         void checkProcAssignArgument(std::string, std::string, std::map<std::string, std::string>);
         void validateAttrRefArgument(std::string, std::map<std::string, std::string>);
         void validateWithClauses(std::vector<std::pair<std::string, std::string>>, std::map<std::string, std::string>);

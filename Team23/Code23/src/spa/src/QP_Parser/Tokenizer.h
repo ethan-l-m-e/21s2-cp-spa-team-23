@@ -49,6 +49,7 @@ namespace qp {
         void splitDeclarations(std::vector<std::string>&, QueryToken&);
         SuchThatClauseToken convertStringToSuchThatClauseToken(std::string);
         PatternToken convertStringToPatternToken(std::string);
+        std::vector<std::string> getSplitPatternStrings(std::string);
     };
 }
 

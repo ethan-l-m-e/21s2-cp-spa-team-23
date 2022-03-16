@@ -116,7 +116,7 @@ std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t]+|<|>)";
 
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 
-std::string const FIND_PATTERN = "pattern[ |\t]*" + PATTERN;
+//std::string const FIND_PATTERN = "pattern[ |\t]*" + PATTERN;
 std::string const PATTERN_ARGUMENTS = ",";
 
 std::string const SPLIT_WITH_CL = "[ |\\t]*(with|and)[ |\\t]*";

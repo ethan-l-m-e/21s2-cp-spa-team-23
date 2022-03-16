@@ -7,7 +7,6 @@
 #include <vector>
 #include <map>
 #include <regex>
-#include <sstream>
 #include <iostream>
 
 using namespace qp;
@@ -114,24 +113,43 @@ SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string su
 
 void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
     std::smatch sm;
+    std::vector<std::string> patternStrings = getSplitPatternStrings(pql);
+
+    // Convert each pattern clause substring to PatternToken
+    std::vector<PatternToken>* patternTokens = new std::vector<PatternToken>();
+    for (std::string patternString : patternStrings) {
+        PatternToken patternToken = convertStringToPatternToken(patternString);
+        patternTokens->push_back(patternToken);
+    }
+
+    queryToken.patternTokens = patternTokens;
+}
+
+std::vector<std::string> Tokenizer::getSplitPatternStrings(std::string pql) {
+    std::smatch sm;
     std::vector<std::string> patternClauses = std::vector<std::string>();
 
-    // Get each pattern substring from pql query
-    while (std::regex_search (pql, sm, std::regex(FIND_PATTERN))) {
+    // Get pattern clause substrings from pql query
+    while (std::regex_search (pql, sm, std::regex(PATTERN_CL))) {
         std::string x = sm[0];
         x = StringFormatter::removeTrailingSpace(x);
         patternClauses.push_back(x);
         pql = sm.suffix().str();
     }
 
-    // Convert each pattern clause substring to PatternToken
-    std::vector<PatternToken>* patternTokens = new std::vector<PatternToken>();
+    std::vector<std::string> patternStrings = std::vector<std::string>();
+
+    // Separate pattern clauses to individual patterns
     for (std::string patternClause : patternClauses) {
-        PatternToken patternToken = convertStringToPatternToken(patternClause);
-        patternTokens->push_back(patternToken);
+        while (std::regex_search (patternClause, sm, std::regex(PATTERN))) {
+            std::string x = sm[0];
+            x = StringFormatter::removeTrailingSpace(x);
+            patternStrings.push_back(x);
+            patternClause = sm.suffix().str();
+        }
     }
 
-    queryToken.patternTokens = patternTokens;
+    return patternStrings;
 }
 
 PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
