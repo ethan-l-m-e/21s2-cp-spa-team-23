@@ -10,14 +10,8 @@
 
 using namespace std;
 
-string printPath(vector<int> path);
-unordered_set<NodeCFG*> collateAllAdjacentNodes(NodeCFG* node);
-unordered_set<NodeCFG*> collateAllPreviousNodes(NodeCFG* node);
-unordered_map<int, bool> constructVisitMap(int size);
-bool IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode, unordered_map<int, bool> &visited, vector<int> &path);
-unordered_set<int> searchNodesAlongPathAfter(NodeCFG* leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 
-unordered_set<int> searchNodesAlongPathBefore(NodeCFG* rightNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
+
 CFGOperator *CFGOperator::singleton = nullptr;
 
 CFGOperator::CFGOperator() {}
@@ -37,6 +31,11 @@ bool CFGOperator::pathExistBetween(NodeCFG* left, NodeCFG* right, int CFGSize) {
         return false;
     }
 }
+
+unordered_set<int> gatherHelperFunction(NodeCFG* leftNode, int CFGSize) {
+
+}
+
 
 unordered_set<int> CFGOperator::gatherAllRightNodes(NodeCFG* leftNode, int CFGSize) {
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
@@ -63,7 +62,7 @@ unordered_set<int> CFGOperator::gatherAllLeftNodes(NodeCFG* rightNode, int CFGSi
 
 
 
-bool IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode,
+bool CFGOperator::IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode,
                         unordered_map<int, bool> &visited,
                         vector<int> &path) {
     int srcVal = srcNode->getStatementNumber();
@@ -91,7 +90,7 @@ bool IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode,
 }
 
 
-unordered_set<int> searchNodesAlongPathAfter(NodeCFG* leftNode,
+unordered_set<int> CFGOperator::searchNodesAlongPathAfter(NodeCFG* leftNode,
                                              unordered_map<int, bool> &visited,
                                              unordered_set<int> nextSet) {
     int currVal = leftNode->getStatementNumber();
@@ -109,7 +108,7 @@ unordered_set<int> searchNodesAlongPathAfter(NodeCFG* leftNode,
     return nextSet;
 }
 
-unordered_set<int> searchNodesAlongPathBefore(NodeCFG* rightNode,
+unordered_set<int> CFGOperator::searchNodesAlongPathBefore(NodeCFG* rightNode,
                                               unordered_map<int, bool> &visited,
                                               unordered_set<int> nextSet) {
     int currVal = rightNode->getStatementNumber();
@@ -128,7 +127,7 @@ unordered_set<int> searchNodesAlongPathBefore(NodeCFG* rightNode,
 }
 
 
-unordered_set<NodeCFG*> collateAllPreviousNodes(NodeCFG* node) {
+unordered_set<NodeCFG*> CFGOperator::collateAllPreviousNodes(NodeCFG* node) {
     unordered_map<int, NodeCFG*> nodeMap = node->getAllPreviousNode();
     unordered_map<int, NodeCFG*>::iterator i;
     unordered_set<NodeCFG*> outputSet;
@@ -139,7 +138,7 @@ unordered_set<NodeCFG*> collateAllPreviousNodes(NodeCFG* node) {
     return outputSet;
 }
 
-unordered_set<NodeCFG*> collateAllAdjacentNodes(NodeCFG* node) {
+unordered_set<NodeCFG*> CFGOperator::collateAllAdjacentNodes(NodeCFG* node) {
     unordered_set<NodeCFG*> adjNodes;
     if(auto branch = dynamic_cast<BranchCFG*>(node)) {
         adjNodes.insert(branch->getLeftNode());
@@ -155,7 +154,7 @@ unordered_set<NodeCFG*> collateAllAdjacentNodes(NodeCFG* node) {
 }
 
 
-unordered_map<int, bool> constructVisitMap(int size) {
+unordered_map<int, bool> CFGOperator::constructVisitMap(int size) {
     unordered_map<int, bool> v;
     for(int i = 1; i <= size; i++) {
         v[i] = false;
@@ -163,7 +162,7 @@ unordered_map<int, bool> constructVisitMap(int size) {
     return v;
 }
 
-string printPath(vector<int> path) {
+string CFGOperator::printPath(vector<int> path) {
     vector<int>::iterator i;
     string output = "";
     for(int i: path) {
