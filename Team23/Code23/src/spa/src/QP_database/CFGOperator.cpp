@@ -32,6 +32,16 @@ bool CFGOperator::pathExistBetween(NodeCFG* left, NodeCFG* right, int CFGSize) {
     }
 }
 
+/*
+ * planning for affects:
+ * same thing as nextTClauseEvaluator
+ *
+ *
+ *
+ *
+ */
+
+
 unordered_set<int> CFGOperator::gatherAllRightNodes(NodeCFG* leftNode, int CFGSize) {
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
     unordered_set<NodeCFG*> adjNode = collateAllAdjacentNodes(leftNode);
@@ -54,9 +64,6 @@ unordered_set<int> CFGOperator::gatherAllLeftNodes(NodeCFG* rightNode, int CFGSi
     return allNodesBefore;
 }
 
-
-
-
 bool CFGOperator::IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode,
                         unordered_map<int, bool> &visited,
                         vector<int> &path) {
@@ -71,10 +78,8 @@ bool CFGOperator::IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode,
     }
     unordered_set<NodeCFG*> adjNodes = collateAllAdjacentNodes(srcNode);
     unordered_set<NodeCFG*>::iterator adj;
-    //TODO: optimisation - convert unordered set into a sorted set so can jump straight to the optimal node
     for(adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
         NodeCFG* adjacentNode =  *adj;
-
         if (!visited[adjacentNode->getStatementNumber()]) {
             if (IsReachableForward(adjacentNode, destNode, visited, path))
                 return true;
