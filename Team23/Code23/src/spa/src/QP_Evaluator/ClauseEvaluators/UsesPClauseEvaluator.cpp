@@ -5,15 +5,15 @@
 #include "UsesPClauseEvaluator.h"
 
 bool UsesPClauseEvaluator::isRelation(std::string left, std::string right) {
-    return pkb->isUsesP(left, right);
+    return pkb->relationship.usesP.isRelationship(left, right);
 }
 
 unordered_set<std::string> UsesPClauseEvaluator::getLeftSynonymValue(std::string right) {
-    return pkb->getUserProcedures(right);
+    return pkb->relationship.usesP.getSetLHS(right);
 }
 
 unordered_set<std::string> UsesPClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->getVariablesUsedP(left);
+    return pkb->relationship.usesP.getSetRHS(left);
 }
 
 pair<DesignEntity, DesignEntity> UsesPClauseEvaluator::getWildcardType () {
