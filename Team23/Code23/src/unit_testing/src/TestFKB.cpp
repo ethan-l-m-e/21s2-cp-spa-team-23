@@ -446,9 +446,8 @@ TEST_CASE("Add UsesS") {
         int statement = iter.first;
         unordered_set<string> variablesUsed = iter.second;
 
-        for (string variable : variablesUsed) {
-            pkb->relationship.usesS.setRelationship(statement, variable);
-        }
+        pkb->relationship.usesS.setRelationship(statement, variablesUsed);
+
 
 
     }
@@ -493,9 +492,7 @@ TEST_CASE("Add UsesP") {
         string procedure = iter.first;
         unordered_set<string> variablesUsed = iter.second;
 
-        for (string variable : variablesUsed) {
-            pkb->relationship.usesP.setRelationship(procedure, variable);
-        }
+        pkb->relationship.usesP.setRelationship(procedure, variablesUsed);
 
 
     }
@@ -539,11 +536,9 @@ TEST_CASE("Add ModifiesS") {
 
     for (auto& iter : statementToVariablesModifiedMap) {
         int statement = iter.first;
-        unordered_set<string> variablesUsed = iter.second;
+        unordered_set<string> variablesModified = iter.second;
 
-        for (string variable : variablesUsed) {
-            pkb->relationship.modifiesS.setRelationship(statement, variable);
-        }
+        pkb->relationship.modifiesS.setRelationship(statement, variablesModified);
 
 
     }
@@ -588,11 +583,9 @@ TEST_CASE("Add ModifiesP") {
 
     for (auto& iter : procedureToVariablesModifiedMap) {
         string procedure = iter.first;
-        unordered_set<string> variablesUsed = iter.second;
+        unordered_set<string> variablesModified = iter.second;
 
-        for (string variable : variablesUsed) {
-            pkb->relationship.modifiesP.setRelationship(procedure, variable);
-        }
+        pkb->relationship.modifiesP.setRelationship(procedure, variablesModified);
 
 
     }
