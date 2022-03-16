@@ -32,11 +32,6 @@ bool CFGOperator::pathExistBetween(NodeCFG* left, NodeCFG* right, int CFGSize) {
     }
 }
 
-unordered_set<int> gatherHelperFunction(NodeCFG* leftNode, int CFGSize) {
-
-}
-
-
 unordered_set<int> CFGOperator::gatherAllRightNodes(NodeCFG* leftNode, int CFGSize) {
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
     unordered_set<NodeCFG*> adjNode = collateAllAdjacentNodes(leftNode);

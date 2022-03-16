@@ -5,6 +5,7 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/ClauseEvaluators/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SourceProcessor/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/TNode/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/TNode/CFG/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_database/*.cpp"
         )
 file(GLOB headers
@@ -14,6 +15,7 @@ file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/ClauseEvaluators/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SourceProcessor/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/TNode/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/TNode/CFG/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_database/*.h"
         )
 set(srcs ${srcs}
