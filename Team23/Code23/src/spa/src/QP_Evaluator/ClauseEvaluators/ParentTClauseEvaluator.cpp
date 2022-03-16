@@ -5,15 +5,15 @@
 #include "ParentTClauseEvaluator.h"
 
 bool ParentTClauseEvaluator::isRelation(std::string left, std::string right) {
-    return pkb->isParentT(left, right);
+    return pkb->relationship.parentT.isRelationship(left, right);
 }
 
 unordered_set<std::string> ParentTClauseEvaluator::getLeftSynonymValue(std::string right) {
-    return pkb->getParentT(right);
+    return pkb->relationship.parentT.getSetLHS(right);
 }
 
 unordered_set<std::string> ParentTClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->getChildrenT(left);
+    return pkb->relationship.parentT.getSetRHS(left);
 }
 
 pair<DesignEntity, DesignEntity> ParentTClauseEvaluator::getWildcardType () {

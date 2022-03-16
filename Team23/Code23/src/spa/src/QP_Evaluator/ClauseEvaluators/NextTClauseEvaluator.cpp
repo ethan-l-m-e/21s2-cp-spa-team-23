@@ -7,24 +7,24 @@
 #include "QP_database/CFGOperator.h"
 
 bool NextTClauseEvaluator::isRelation(string left, string right) {
-    //pkb->getCFGNode(left)
-    //pkb->getCFGNode(right)
-    // pkb->getCFGSize()
-    //CFGOperator::pathExistBetween(leftNode, rightNode, size);
+    NodeCFG* leftNode = pkb->relationship.next.getCFGNode(stoi(left));
+    NodeCFG* rightNode = pkb->relationship.next.getCFGNode(stoi(right));
+    int size = pkb->relationship.next.getCFGSize();
+    CFGOperator::pathExistBetween(leftNode, rightNode, size);
     return false;
 }
 
 unordered_set<std::string> NextTClauseEvaluator::getLeftSynonymValue(std::string right) {
-    //pkb->getCFGNode(right)
-    // pkb->getCFGSize()
-    //CFGOperator::gatherAllLeftNodes(rightNode, size);
+    NodeCFG* rightNode = pkb->relationship.next.getCFGNode(stoi(right));
+    int size = pkb->relationship.next.getCFGSize();
+    CFGOperator::gatherAllLeftNodes(rightNode, size);
     return {};
 }
 
 unordered_set<std::string> NextTClauseEvaluator::getRightSynonymValue(std::string left) {
-    // pkb->getCFGNode(left)
-    // pkb->getCFGSize()
-    //CFGOperator::gatherAllRightNodes(leftNode, size);
+    NodeCFG* leftNode = pkb->relationship.next.getCFGNode(stoi(left));
+    int size = pkb->relationship.next.getCFGSize();
+    CFGOperator::gatherAllRightNodes(leftNode, size);
     return {};
 }
 

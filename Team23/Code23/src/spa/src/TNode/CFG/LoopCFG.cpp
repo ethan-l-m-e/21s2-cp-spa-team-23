@@ -8,8 +8,9 @@
 LoopCFG::LoopCFG(int statementNumber): NodeCFG(statementNumber) {}
 
 void LoopCFG::setNodeInLoop(NodeCFG *node) {
-    this->nodeInLoop = node;
-    node->addPreviousNode(this);
+
+        this->nodeInLoop = node;
+        node->addPreviousNode(this);
 }
 
 bool LoopCFG::isStart() {

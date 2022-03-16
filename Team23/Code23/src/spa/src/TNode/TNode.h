@@ -22,5 +22,4 @@
 #include "StmtNode.h"
 #include "VariableNode.h"
 #include "WhileNode.h"
-
 #endif //SPA_TNODE_H

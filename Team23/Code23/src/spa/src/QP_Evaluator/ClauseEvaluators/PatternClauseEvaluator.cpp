@@ -3,7 +3,7 @@
 //
 #include <regex>
 
-#include "PKB.h"
+#include "PKB/PKB.h"
 #include "PatternClauseEvaluator.h"
 #include "TNode/Node.h"
 #include "StringFormatter.h"
@@ -52,7 +52,7 @@ bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
     }
 
 
-    //vector<WhileNode*> listOfWhileNodes = PKB::getInstance()->getAllWhileNodes();
+    unordered_set<WhileNode*> whileNodeList = PKB::getInstance()->statement.whileStatements.getAllStatementNodes();
     vector<ResultItem> WhileVarPairList;
     vector<ResultItem> stmtNumberList;
 
@@ -68,6 +68,7 @@ bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
 }
 
 bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
+    unordered_set<IfNode*> ifNodeList = PKB::getInstance()->statement.ifStatements.getAllStatementNodes();
 
     return true;
 }
@@ -86,13 +87,14 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     }
 
     // setup parsing and results
-    vector<AssignNode*> listOfAssignNodes = PKB::getInstance()->getAllAssignNodes();
+    unordered_set<AssignNode*> listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
     vector<ResultItem> assignVarPairList;
     vector<ResultItem> stmtNumberList;
 
+    unordered_set<AssignNode*>::iterator i;
     // process results
-    for (int i = 0; i < listOfAssignNodes.size(); i++) {
-        AssignNode * currentNode = listOfAssignNodes[i];
+    for ( i = listOfAssignNodes.begin(); i != listOfAssignNodes.end(); ++i) {
+        AssignNode * currentNode = *i;
         VariableNode* LHSVariable = currentNode->getLeftNode();
         Expression RHSExpression = currentNode ->getRightNode();
         // right is wild card, can be collated into helper function

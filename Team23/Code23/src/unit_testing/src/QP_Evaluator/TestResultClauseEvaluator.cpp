@@ -11,7 +11,7 @@ using namespace std;
 
 ResultTable* getSampleResultTable() {
     return new ResultTable({"v", "s", "a", "pn"},
-                           {{"x", "y", "zealous"},{"1", "2", "3"}, {"2", "2", "3"}, {"4", "7", "4"}});
+                           {{"x", "y", "z"},{"1", "2", "3"}, {"2", "2", "3"}, {"4", "11", "4"}});
 }
 
 TEST_CASE("Test result clause evaluator") {
@@ -47,7 +47,7 @@ TEST_CASE("Test result clause evaluator") {
         auto *resultClauseEvaluator = new ResultClauseEvaluator(testPKB, &query_1);
         resultClauseEvaluator->evaluateClause(resultTable);
         delete resultClauseEvaluator;
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"x", "y", "zealous"});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"x", "y", "z"});
 
         resultTable = getSampleResultTable();
         resultClauseEvaluator = new ResultClauseEvaluator(testPKB, &query_2);
@@ -70,14 +70,14 @@ TEST_CASE("Test result clause evaluator") {
         resultClauseEvaluator->evaluateClause(resultTable);
         delete resultClauseEvaluator;
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) ==
-                ResultSet{"1 xylophone", "2 z", "3 xylophone"});
+                ResultSet{"1 y", "2 x", "3 y"});
 
         resultTable = getSampleResultTable();
         resultClauseEvaluator = new ResultClauseEvaluator(testPKB, &query_5);
         resultClauseEvaluator->evaluateClause(resultTable);
         delete resultClauseEvaluator;
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) ==
-                ResultSet{"4 xylophone", "7 z"});
+                ResultSet{"4 y", "11 x"});
     }
 
     SECTION("select boolean") {
@@ -88,6 +88,7 @@ TEST_CASE("Test result clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"TRUE"});
 
         resultTable = new ResultTable();
+        resultTable->setBooleanResult(false);
         resultClauseEvaluator = new ResultClauseEvaluator(testPKB, &query_6);
         resultClauseEvaluator->evaluateClause(resultTable);
         delete resultClauseEvaluator;
