@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 #include "TNode/TNode.h"
-//#include "TNode/CFG/NodeCFG.h"
+#include "TNode/CFG/NodeCFG.h"
 
 #include "PKB/Statement/Statement.h"
 #include "PKB/Entity/Entity.h"
@@ -69,10 +69,12 @@ public:
         ManyToManyRelationship<int, string> modifiesS;
         ManyToManyRelationship<string, string> modifiesP;
 
-
     };
 
     Relationship relationship;
+
+
+    OneToOneRelationship<int, NodeCFG *> stmtNumberToNodeCFGMap;
 
 
 

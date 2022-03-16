@@ -28,17 +28,6 @@ class OneToOneRelationship {
         }
     }
 
-    unordered_set<RHS> getRHSNormal(LHS lhs) {
-        unordered_set<RHS> emptySet;
-
-        return (lhsToRhsMap.find(lhs) != lhsToRhsMap.end()) ? unordered_set<LHS>{lhsToRhsMap[lhs]} : emptySet;
-    }
-
-    unordered_set<LHS> getLHSNormal(RHS rhs) {
-        unordered_set<LHS> emptySet;
-
-        return (rhsToLhsMap.find(rhs) != rhsToLhsMap.end()) ? unordered_set<LHS>{rhsToLhsMap[rhs]} : emptySet;
-    }
 
 
     LHS convertToLHS(string s, LHS&);
@@ -57,6 +46,17 @@ public:
         return isRelationshipNormal(convertToLHS(lhs, l), convertToRHS(rhs, r));
     }
 
+    unordered_set<RHS> getRHSNormal(LHS lhs) {
+        unordered_set<RHS> emptySet;
+
+        return (lhsToRhsMap.find(lhs) != lhsToRhsMap.end()) ? unordered_set<RHS>{lhsToRhsMap[lhs]} : emptySet;
+    }
+
+    unordered_set<LHS> getLHSNormal(RHS rhs) {
+        unordered_set<LHS> emptySet;
+
+        return (rhsToLhsMap.find(rhs) != rhsToLhsMap.end()) ? unordered_set<LHS>{rhsToLhsMap[rhs]} : emptySet;
+    }
 
 
     unordered_set<string> getRHS(string lhs) {
