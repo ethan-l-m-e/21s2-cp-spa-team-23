@@ -2,18 +2,16 @@
 // Created by Karan Dev Sapra on 17/2/22.
 //
 
-//#include "FKB.h"
-#include "PKB/FKB.h"
+//#include "PKB.h"
+#include "PKB/PKB.h"
 
 #include "TNode/TNode.h"
 
 #include "catch.hpp"
 
-//#include "FKB/FKB.h"
-
 using namespace std;
 
-FKB *fkb = FKB::getInstance();
+PKB *pkb = PKB::getInstance();
 
 VariableNode v = VariableNode("name");
 BinaryOperatorNode bn = BinaryOperatorNode(&v, &v, "+");
@@ -23,21 +21,21 @@ CondExprNode cond = CondExprNode(&rel);
 
 
 TEST_CASE("Add statements") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->statement.statements.getAllStatementNumbers().empty());
+    REQUIRE(pkb->statement.statements.getAllStatementNumbers().empty());
 
     for (int i = 1; i <= 10; i++) {
         auto n = StmtNode(i);
-        fkb->statement.statements.addStatement(&n);
+        pkb->statement.statements.addStatement(&n);
     }
 
-    unordered_set<string> statementsSet = fkb->statement.statements.getAllStatementNumbers();
+    unordered_set<string> statementsSet = pkb->statement.statements.getAllStatementNumbers();
 
     for (int i = 1; i <= 10; i++) {
         string s = std::to_string(i);
 
-        REQUIRE(fkb->statement.statements.isStatementNumber(s));
+        REQUIRE(pkb->statement.statements.isStatementNumber(s));
 
         REQUIRE(statementsSet.find(s) != statementsSet.end());
     }
@@ -45,20 +43,20 @@ TEST_CASE("Add statements") {
 }
 
 TEST_CASE("Add variables") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->entity.variables.getAll().empty());
+    REQUIRE(pkb->entity.variables.getAll().empty());
 
     unordered_set<string> variables = {"a", "b", "c", "obama", "trump", "biden"};
 
     for (string v: variables) {
-        fkb->entity.variables.add(v);
+        pkb->entity.variables.add(v);
     }
 
-    unordered_set<string> variablesSet = fkb->entity.variables.getAll();
+    unordered_set<string> variablesSet = pkb->entity.variables.getAll();
 
     for (string v: variables) {
-        REQUIRE(fkb->entity.variables.isEntity(v));
+        REQUIRE(pkb->entity.variables.isEntity(v));
 
         REQUIRE(variablesSet.find(v) != variablesSet.end());
     }
@@ -67,20 +65,20 @@ TEST_CASE("Add variables") {
 
 
 TEST_CASE("Add procedures") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->entity.procedures.getAll().empty());
+    REQUIRE(pkb->entity.procedures.getAll().empty());
 
     unordered_set<string> procedures = {"a", "b", "c", "obama", "trump", "biden"};
 
     for (string p: procedures) {
-        fkb->entity.procedures.add(p);
+        pkb->entity.procedures.add(p);
     }
 
-    unordered_set<string> proceduresSet = fkb->entity.procedures.getAll();
+    unordered_set<string> proceduresSet = pkb->entity.procedures.getAll();
 
     for (string p: procedures) {
-        REQUIRE(fkb->entity.procedures.isEntity(p));
+        REQUIRE(pkb->entity.procedures.isEntity(p));
 
         REQUIRE(proceduresSet.find(p) != proceduresSet.end());
     }
@@ -88,20 +86,20 @@ TEST_CASE("Add procedures") {
 }
 
 TEST_CASE("Add constants") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->entity.constants.getAll().empty());
+    REQUIRE(pkb->entity.constants.getAll().empty());
 
     unordered_set<string> constants = {"1", "2", "3", "1111111111111111111111111111", "123456789012345678901234567890", "99999999999999999999999999999999999999999999999999999"};
 
     for (string c: constants) {
-        fkb->entity.constants.add(c);
+        pkb->entity.constants.add(c);
     }
 
-    unordered_set<string> constantsSet = fkb->entity.constants.getAll();
+    unordered_set<string> constantsSet = pkb->entity.constants.getAll();
 
     for (string c: constants) {
-        REQUIRE(fkb->entity.constants.isEntity(c));
+        REQUIRE(pkb->entity.constants.isEntity(c));
 
         REQUIRE(constantsSet.find(c) != constantsSet.end());
     }
@@ -110,23 +108,23 @@ TEST_CASE("Add constants") {
 
 
 TEST_CASE("Add Assign Statements") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->statement.assignStatements.getAllStatementNumbers().empty());
+    REQUIRE(pkb->statement.assignStatements.getAllStatementNumbers().empty());
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
         auto n = AssignNode(i, &v, &v);
-        fkb->statement.assignStatements.addStatement(&n);
+        pkb->statement.assignStatements.addStatement(&n);
     }
 
-    unordered_set<string> assignStatementsSet = fkb->statement.assignStatements.getAllStatementNumbers();
+    unordered_set<string> assignStatementsSet = pkb->statement.assignStatements.getAllStatementNumbers();
 
     for (int i: statements) {
         string s = std::to_string(i);
 
-        REQUIRE(fkb->statement.assignStatements.isStatementNumber(s));
+        REQUIRE(pkb->statement.assignStatements.isStatementNumber(s));
 
         REQUIRE(assignStatementsSet.find(s) != assignStatementsSet.end());
     }
@@ -135,23 +133,23 @@ TEST_CASE("Add Assign Statements") {
 
 
 TEST_CASE("Add Read Statements") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->statement.readStatements.getAllStatementNumbers().empty());
+    REQUIRE(pkb->statement.readStatements.getAllStatementNumbers().empty());
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
         auto n = ReadNode(i, &v);
-        fkb->statement.readStatements.addStatement(&n);
+        pkb->statement.readStatements.addStatement(&n);
     }
 
-    unordered_set<string> readStatementsSet = fkb->statement.readStatements.getAllStatementNumbers();
+    unordered_set<string> readStatementsSet = pkb->statement.readStatements.getAllStatementNumbers();
 
     for (int i: statements) {
         string s = std::to_string(i);
 
-        REQUIRE(fkb->statement.readStatements.isStatementNumber(s));
+        REQUIRE(pkb->statement.readStatements.isStatementNumber(s));
 
         REQUIRE(readStatementsSet.find(s) != readStatementsSet.end());
     }
@@ -159,23 +157,23 @@ TEST_CASE("Add Read Statements") {
 }
 
 TEST_CASE("Add Print Statements") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->statement.printStatements.getAllStatementNumbers().empty());
+    REQUIRE(pkb->statement.printStatements.getAllStatementNumbers().empty());
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
         auto n = PrintNode(i, &v);
-        fkb->statement.printStatements.addStatement(&n);
+        pkb->statement.printStatements.addStatement(&n);
     }
 
-    unordered_set<string> printStatementsSet = fkb->statement.printStatements.getAllStatementNumbers();
+    unordered_set<string> printStatementsSet = pkb->statement.printStatements.getAllStatementNumbers();
 
     for (int i: statements) {
         string s = std::to_string(i);
 
-        REQUIRE(fkb->statement.printStatements.isStatementNumber(s));
+        REQUIRE(pkb->statement.printStatements.isStatementNumber(s));
 
         REQUIRE(printStatementsSet.find(s) != printStatementsSet.end());
     }
@@ -184,23 +182,23 @@ TEST_CASE("Add Print Statements") {
 
 
 TEST_CASE("Add If Statements") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->statement.ifStatements.getAllStatementNumbers().empty());
+    REQUIRE(pkb->statement.ifStatements.getAllStatementNumbers().empty());
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
         auto n = IfNode(i, &cond, {}, {});
-        fkb->statement.ifStatements.addStatement(&n);
+        pkb->statement.ifStatements.addStatement(&n);
     }
 
-    unordered_set<string> ifStatementsSet = fkb->statement.ifStatements.getAllStatementNumbers();
+    unordered_set<string> ifStatementsSet = pkb->statement.ifStatements.getAllStatementNumbers();
 
     for (int i: statements) {
         string s = std::to_string(i);
 
-        REQUIRE(fkb->statement.ifStatements.isStatementNumber(s));
+        REQUIRE(pkb->statement.ifStatements.isStatementNumber(s));
 
         REQUIRE(ifStatementsSet.find(s) != ifStatementsSet.end());
     }
@@ -209,23 +207,23 @@ TEST_CASE("Add If Statements") {
 
 
 TEST_CASE("Add While Statements") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->statement.whileStatements.getAllStatementNumbers().empty());
+    REQUIRE(pkb->statement.whileStatements.getAllStatementNumbers().empty());
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
     for (int i : statements) {
         auto n = WhileNode(i, &cond, {});
-        fkb->statement.whileStatements.addStatement(&n);
+        pkb->statement.whileStatements.addStatement(&n);
     }
 
-    unordered_set<string> whileStatementsSet = fkb->statement.whileStatements.getAllStatementNumbers();
+    unordered_set<string> whileStatementsSet = pkb->statement.whileStatements.getAllStatementNumbers();
 
     for (int i: statements) {
         string s = std::to_string(i);
 
-        REQUIRE(fkb->statement.whileStatements.isStatementNumber(s));
+        REQUIRE(pkb->statement.whileStatements.isStatementNumber(s));
 
         REQUIRE(whileStatementsSet.find(s) != whileStatementsSet.end());
     }
@@ -233,10 +231,10 @@ TEST_CASE("Add While Statements") {
 
 
 TEST_CASE("Add Follows") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->relationship.follows.getLHS("2").empty());
-    REQUIRE(fkb->relationship.follows.getRHS("1").empty());
+    REQUIRE(pkb->relationship.follows.getLHS("2").empty());
+    REQUIRE(pkb->relationship.follows.getRHS("1").empty());
 
     unordered_map<int, int> followeeToFollowerMap = {
             {1, 5},
@@ -251,21 +249,21 @@ TEST_CASE("Add Follows") {
         int followee = iter.first;
         int follower = iter.second;
 
-        fkb->relationship.follows.setRelationship(followee, follower);
+        pkb->relationship.follows.setRelationship(followee, follower);
     }
 
 
-    REQUIRE(fkb->relationship.follows.isRelationship("1", "2") == false);
-    REQUIRE(fkb->relationship.follows.getRHS("2") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.follows.getLHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.follows.isRelationship("1", "2") == false);
+    REQUIRE(pkb->relationship.follows.getRHS("2") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.follows.getLHS("3") == unordered_set<string>{});
 
     for (auto& iter : followeeToFollowerMap) {
         string followee = std::to_string(iter.first);
         string follower = std::to_string(iter.second);
 
-        REQUIRE(fkb->relationship.follows.isRelationship(followee, follower));
-        REQUIRE(fkb->relationship.follows.getRHS(followee) == unordered_set<string>{follower});
-        REQUIRE(fkb->relationship.follows.getLHS(follower) == unordered_set<string>{followee});
+        REQUIRE(pkb->relationship.follows.isRelationship(followee, follower));
+        REQUIRE(pkb->relationship.follows.getRHS(followee) == unordered_set<string>{follower});
+        REQUIRE(pkb->relationship.follows.getLHS(follower) == unordered_set<string>{followee});
     }
 
 
@@ -273,10 +271,10 @@ TEST_CASE("Add Follows") {
 
 
 TEST_CASE("Add FollowsT") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->relationship.followsT.getSetLHS("2").empty());
-    REQUIRE(fkb->relationship.followsT.getSetRHS("1").empty());
+    REQUIRE(pkb->relationship.followsT.getSetLHS("2").empty());
+    REQUIRE(pkb->relationship.followsT.getSetRHS("1").empty());
 
 
     unordered_map<int, unordered_set<int>> tFolloweeToFollowersMap = {
@@ -293,15 +291,15 @@ TEST_CASE("Add FollowsT") {
         unordered_set<int> followers = iter.second;
 
         for (int follower : followers) {
-            fkb->relationship.followsT.setRelationship(followee, follower);
+            pkb->relationship.followsT.setRelationship(followee, follower);
         }
 
     }
 
 
-    REQUIRE(fkb->relationship.followsT.isRelationship("1", "3") == false);
-    REQUIRE(fkb->relationship.followsT.getSetRHS("2") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.followsT.getSetLHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.followsT.isRelationship("1", "3") == false);
+    REQUIRE(pkb->relationship.followsT.getSetRHS("2") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.followsT.getSetLHS("3") == unordered_set<string>{});
 
 
     for (auto& iter : tFolloweeToFollowersMap) {
@@ -313,13 +311,13 @@ TEST_CASE("Add FollowsT") {
         }
 
         for (string follower : followers) {
-            REQUIRE(fkb->relationship.followsT.isRelationship(followee, follower));
+            REQUIRE(pkb->relationship.followsT.isRelationship(followee, follower));
 
-            unordered_set<string> followeesSet = fkb->relationship.followsT.getSetLHS(follower);
+            unordered_set<string> followeesSet = pkb->relationship.followsT.getSetLHS(follower);
             REQUIRE(followeesSet.find(followee) != followeesSet.end());
         }
 
-        REQUIRE(fkb->relationship.followsT.getSetRHS(followee) == followers);
+        REQUIRE(pkb->relationship.followsT.getSetRHS(followee) == followers);
     }
 
 
@@ -327,10 +325,10 @@ TEST_CASE("Add FollowsT") {
 
 
 TEST_CASE("Add Parent") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->relationship.parent.getLHS("2").empty());
-    REQUIRE(fkb->relationship.parent.getSetRHS("1").empty());
+    REQUIRE(pkb->relationship.parent.getLHS("2").empty());
+    REQUIRE(pkb->relationship.parent.getSetRHS("1").empty());
 
     unordered_map<int, unordered_set<int>> parentToChildrenMap = {
             {1, {2}},
@@ -346,14 +344,14 @@ TEST_CASE("Add Parent") {
         unordered_set<int> children = iter.second;
 
         for (int child : children) {
-            fkb->relationship.parent.setRelationship(parent, child);
+            pkb->relationship.parent.setRelationship(parent, child);
         }
     }
 
 
-    REQUIRE(fkb->relationship.parent.isRelationship("1", "3") == false);
-    REQUIRE(fkb->relationship.parent.getLHS("3") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.parent.getSetRHS("2") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.parent.isRelationship("1", "3") == false);
+    REQUIRE(pkb->relationship.parent.getLHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.parent.getSetRHS("2") == unordered_set<string>{});
 
 
     for (auto& iter : parentToChildrenMap) {
@@ -368,11 +366,11 @@ TEST_CASE("Add Parent") {
 
 
         for (string child : children) {
-            REQUIRE(fkb->relationship.parent.isRelationship(parent, child));
-            REQUIRE(fkb->relationship.parent.getLHS(child) == unordered_set<string>{parent});
+            REQUIRE(pkb->relationship.parent.isRelationship(parent, child));
+            REQUIRE(pkb->relationship.parent.getLHS(child) == unordered_set<string>{parent});
         }
 
-        REQUIRE(fkb->relationship.parent.getSetRHS(parent) == children);
+        REQUIRE(pkb->relationship.parent.getSetRHS(parent) == children);
 
     }
 
@@ -381,10 +379,10 @@ TEST_CASE("Add Parent") {
 
 
 TEST_CASE("Add ParentT") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
-    REQUIRE(fkb->relationship.parentT.getSetLHS("2").empty());
-    REQUIRE(fkb->relationship.parentT.getSetRHS("1").empty());
+    REQUIRE(pkb->relationship.parentT.getSetLHS("2").empty());
+    REQUIRE(pkb->relationship.parentT.getSetRHS("1").empty());
 
 
     unordered_map<int, unordered_set<int>> tParentToChildrenMap = {
@@ -401,14 +399,14 @@ TEST_CASE("Add ParentT") {
         unordered_set<int> children = iter.second;
 
         for (int child : children) {
-            fkb->relationship.parentT.setRelationship(parent, child);
+            pkb->relationship.parentT.setRelationship(parent, child);
         }
 
     }
 
-    REQUIRE(fkb->relationship.parentT.isRelationship("1", "3") == false);
-    REQUIRE(fkb->relationship.parentT.getSetLHS("3") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.parentT.getSetRHS("2") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.parentT.isRelationship("1", "3") == false);
+    REQUIRE(pkb->relationship.parentT.getSetLHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.parentT.getSetRHS("2") == unordered_set<string>{});
 
 
     for (auto& iter : tParentToChildrenMap) {
@@ -420,13 +418,13 @@ TEST_CASE("Add ParentT") {
         }
 
         for (string child : children) {
-            REQUIRE(fkb->relationship.parentT.isRelationship(parent, child));
+            REQUIRE(pkb->relationship.parentT.isRelationship(parent, child));
 
-            unordered_set<string> parentsSet = fkb->relationship.parentT.getSetLHS(child);
+            unordered_set<string> parentsSet = pkb->relationship.parentT.getSetLHS(child);
             REQUIRE(parentsSet.find(parent) != parentsSet.end());
         }
 
-        REQUIRE(fkb->relationship.parentT.getSetRHS(parent) == children);
+        REQUIRE(pkb->relationship.parentT.getSetRHS(parent) == children);
     }
 
 
@@ -434,7 +432,7 @@ TEST_CASE("Add ParentT") {
 
 
 TEST_CASE("Add UsesS") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
     unordered_map<int, unordered_set<string>> statementToVariablesUsedMap = {
             {1, {"a"}},
@@ -449,15 +447,15 @@ TEST_CASE("Add UsesS") {
         unordered_set<string> variablesUsed = iter.second;
 
         for (string variable : variablesUsed) {
-            fkb->relationship.usesS.setRelationship(statement, variable);
+            pkb->relationship.usesS.setRelationship(statement, variable);
         }
 
 
     }
 
-    REQUIRE(fkb->relationship.usesS.isRelationship("2", "a") == false);
-    REQUIRE(fkb->relationship.usesS.getSetLHS("unusedVariable") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.usesS.getSetRHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesS.isRelationship("2", "a") == false);
+    REQUIRE(pkb->relationship.usesS.getSetLHS("unusedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesS.getSetRHS("3") == unordered_set<string>{});
 
 
     for (auto& iter : statementToVariablesUsedMap) {
@@ -466,13 +464,13 @@ TEST_CASE("Add UsesS") {
         unordered_set<string> variablesUsed = iter.second;
 
         for (string v : variablesUsed) {
-            REQUIRE(fkb->relationship.usesS.isRelationship(statement, v));
+            REQUIRE(pkb->relationship.usesS.isRelationship(statement, v));
 
-            unordered_set<string> userStatements = fkb->relationship.usesS.getSetLHS(v);
+            unordered_set<string> userStatements = pkb->relationship.usesS.getSetLHS(v);
             REQUIRE(userStatements.find(statement) != userStatements.end());
         }
 
-        REQUIRE(fkb->relationship.usesS.getSetRHS(statement) == variablesUsed);
+        REQUIRE(pkb->relationship.usesS.getSetRHS(statement) == variablesUsed);
 
     }
 
@@ -481,7 +479,7 @@ TEST_CASE("Add UsesS") {
 
 
 TEST_CASE("Add UsesP") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
     unordered_map<string, unordered_set<string>> procedureToVariablesUsedMap = {
             {"apple", {"a"}},
@@ -496,15 +494,15 @@ TEST_CASE("Add UsesP") {
         unordered_set<string> variablesUsed = iter.second;
 
         for (string variable : variablesUsed) {
-            fkb->relationship.usesP.setRelationship(procedure, variable);
+            pkb->relationship.usesP.setRelationship(procedure, variable);
         }
 
 
     }
 
-    REQUIRE(fkb->relationship.usesP.isRelationship("banana", "a") == false);
-    REQUIRE(fkb->relationship.usesP.getSetLHS("unusedVariable") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.usesP.getSetRHS("dragonfruit") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesP.isRelationship("banana", "a") == false);
+    REQUIRE(pkb->relationship.usesP.getSetLHS("unusedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesP.getSetRHS("dragonfruit") == unordered_set<string>{});
 
 
     for (auto& iter : procedureToVariablesUsedMap) {
@@ -513,13 +511,13 @@ TEST_CASE("Add UsesP") {
         unordered_set<string> variablesUsed = iter.second;
 
         for (string v : variablesUsed) {
-            REQUIRE(fkb->relationship.usesP.isRelationship(procedure, v));
+            REQUIRE(pkb->relationship.usesP.isRelationship(procedure, v));
 
-            unordered_set<string> userStatements = fkb->relationship.usesP.getSetLHS(v);
+            unordered_set<string> userStatements = pkb->relationship.usesP.getSetLHS(v);
             REQUIRE(userStatements.find(procedure) != userStatements.end());
         }
 
-        REQUIRE(fkb->relationship.usesP.getSetRHS(procedure) == variablesUsed);
+        REQUIRE(pkb->relationship.usesP.getSetRHS(procedure) == variablesUsed);
 
     }
 
@@ -529,7 +527,7 @@ TEST_CASE("Add UsesP") {
 
 
 TEST_CASE("Add ModifiesS") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
     unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap = {
             {1, {"a"}},
@@ -544,16 +542,16 @@ TEST_CASE("Add ModifiesS") {
         unordered_set<string> variablesUsed = iter.second;
 
         for (string variable : variablesUsed) {
-            fkb->relationship.modifiesS.setRelationship(statement, variable);
+            pkb->relationship.modifiesS.setRelationship(statement, variable);
         }
 
 
     }
 
 
-    REQUIRE(fkb->relationship.modifiesS.isRelationship("2", "a") == false);
-    REQUIRE(fkb->relationship.modifiesS.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.modifiesS.getSetRHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesS.isRelationship("2", "a") == false);
+    REQUIRE(pkb->relationship.modifiesS.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesS.getSetRHS("3") == unordered_set<string>{});
 
 
     for (auto& iter : statementToVariablesModifiedMap) {
@@ -562,13 +560,13 @@ TEST_CASE("Add ModifiesS") {
         unordered_set<string> variablesModified = iter.second;
 
         for (string v : variablesModified) {
-            REQUIRE(fkb->relationship.modifiesS.isRelationship(statement, v));
+            REQUIRE(pkb->relationship.modifiesS.isRelationship(statement, v));
 
-            unordered_set<string> modifierStatements = fkb->relationship.modifiesS.getSetLHS(v);
+            unordered_set<string> modifierStatements = pkb->relationship.modifiesS.getSetLHS(v);
             REQUIRE(modifierStatements.find(statement) != modifierStatements.end());
         }
 
-        REQUIRE(fkb->relationship.modifiesS.getSetRHS(statement) == variablesModified);
+        REQUIRE(pkb->relationship.modifiesS.getSetRHS(statement) == variablesModified);
 
     }
 
@@ -578,7 +576,7 @@ TEST_CASE("Add ModifiesS") {
 
 
 TEST_CASE("Add ModifiesP") {
-    fkb->clearFKB();
+    pkb->clearPKB();
 
     unordered_map<string, unordered_set<string>> procedureToVariablesModifiedMap = {
             {"apple", {"a"}},
@@ -593,16 +591,16 @@ TEST_CASE("Add ModifiesP") {
         unordered_set<string> variablesUsed = iter.second;
 
         for (string variable : variablesUsed) {
-            fkb->relationship.modifiesP.setRelationship(procedure, variable);
+            pkb->relationship.modifiesP.setRelationship(procedure, variable);
         }
 
 
     }
 
 
-    REQUIRE(fkb->relationship.modifiesP.isRelationship("banana", "a") == false);
-    REQUIRE(fkb->relationship.modifiesP.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
-    REQUIRE(fkb->relationship.modifiesP.getSetRHS("dragonfruit") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesP.isRelationship("banana", "a") == false);
+    REQUIRE(pkb->relationship.modifiesP.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesP.getSetRHS("dragonfruit") == unordered_set<string>{});
 
 
     for (auto& iter : procedureToVariablesModifiedMap) {
@@ -611,13 +609,13 @@ TEST_CASE("Add ModifiesP") {
         unordered_set<string> variablesModified = iter.second;
 
         for (string v : variablesModified) {
-            REQUIRE(fkb->relationship.modifiesP.isRelationship(procedure, v));
+            REQUIRE(pkb->relationship.modifiesP.isRelationship(procedure, v));
 
-            unordered_set<string> modifierStatements = fkb->relationship.modifiesP.getSetLHS(v);
+            unordered_set<string> modifierStatements = pkb->relationship.modifiesP.getSetLHS(v);
             REQUIRE(modifierStatements.find(procedure) != modifierStatements.end());
         }
 
-        REQUIRE(fkb->relationship.modifiesP.getSetRHS(procedure) == variablesModified);
+        REQUIRE(pkb->relationship.modifiesP.getSetRHS(procedure) == variablesModified);
 
     }
 
@@ -627,7 +625,7 @@ TEST_CASE("Add ModifiesP") {
 
 
 //TEST_CASE("Add Assign Node") {
-//    fkb->clearFKB();
+//    pkb->clearPKB();
 //
 //    unordered_set<AssignNode *> assignNodesSet;
 //
@@ -640,10 +638,10 @@ TEST_CASE("Add ModifiesP") {
 //    }
 //
 //    for (AssignNode *assignNode : assignNodesSet) {
-//        fkb->addAssignNode(assignNode);
+//        pkb->addAssignNode(assignNode);
 //    }
 //
-//    vector<AssignNode *> resultsVector = fkb->getAllAssignNodes();
+//    vector<AssignNode *> resultsVector = pkb->getAllAssignNodes();
 //    unordered_set<AssignNode *> resultsSet(resultsVector.begin(), resultsVector.end());
 //
 //    REQUIRE(assignNodesSet == resultsSet);
