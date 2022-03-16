@@ -69,12 +69,13 @@ public:
         ManyToManyRelationship<int, string> modifiesS;
         ManyToManyRelationship<string, string> modifiesP;
 
+        NextRelationship next;
+
     };
 
     Relationship relationship;
 
 
-    OneToOneRelationship<int, NodeCFG *> stmtNumberToNodeCFGMap;
 
 
 

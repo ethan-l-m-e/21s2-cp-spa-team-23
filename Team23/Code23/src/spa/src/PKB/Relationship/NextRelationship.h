@@ -15,6 +15,14 @@ class NextRelationship : OneToOneRelationship<int, NodeCFG *> {
 
     NodeCFG* getNextNodeOf(int previous);
 
+    // Functions below are used to calculate Next*
+
+    NodeCFG* getCFGNode(int statementNumber);
+
+    int getCFGSize();
+
+
+
 };
 
 
