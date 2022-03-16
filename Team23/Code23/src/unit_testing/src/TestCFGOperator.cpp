@@ -97,20 +97,21 @@ TEST_CASE("if path exist between 2 nodes") {
     // branch-> after merge
 
     //different procedure
-    CHECK(!CFGOperator::pathExistBetween(allNodes[4], allNodes[16], size));
+    CFGOperator* cfgHandler = CFGOperator::getInstance();
+    CHECK(!cfgHandler->pathExistBetween(allNodes[4], allNodes[16], size));
     // direct
-    CHECK(CFGOperator::pathExistBetween(allNodes[1], allNodes[2], size));
-    CHECK(CFGOperator::pathExistBetween(allNodes[2], allNodes[3], size));
-    CHECK(CFGOperator::pathExistBetween(allNodes[1], allNodes[5], size));
+    CHECK(cfgHandler->pathExistBetween(allNodes[1], allNodes[2], size));
+    CHECK(cfgHandler->pathExistBetween(allNodes[2], allNodes[3], size));
+    CHECK(cfgHandler->pathExistBetween(allNodes[1], allNodes[5], size));
 
     //loop
-    CHECK(!CFGOperator::pathExistBetween(allNodes[3], allNodes[8], size));
-    CHECK(CFGOperator::pathExistBetween(allNodes[8], allNodes[7], size));
-    CHECK(CFGOperator::pathExistBetween(allNodes[8], allNodes[6], size));
+    CHECK(!cfgHandler->pathExistBetween(allNodes[3], allNodes[8], size));
+    CHECK(cfgHandler->pathExistBetween(allNodes[8], allNodes[7], size));
+    CHECK(cfgHandler->pathExistBetween(allNodes[8], allNodes[6], size));
 
     //branch
-    CHECK(!CFGOperator::pathExistBetween(allNodes[4], allNodes[8], size));
-    CHECK(CFGOperator::pathExistBetween(allNodes[4], allNodes[13], size));
+    CHECK(!cfgHandler->pathExistBetween(allNodes[4], allNodes[8], size));
+    CHECK(cfgHandler->pathExistBetween(allNodes[4], allNodes[13], size));
 
 }
 
@@ -119,17 +120,16 @@ TEST_CASE("all possible right Nodes") {
     vector<unordered_map<int, NodeCFG*>> nodeMap = constructCFGForTesting();
     unordered_map<int, NodeCFG*> allNodes = nodeMap[0];
     int size = nodeMap.size();
-
-
-    CHECK(unordered_set<int>{} == CFGOperator::gatherAllRightNodes(allNodes[17], size));
-    CHECK(unordered_set<int>{17} == CFGOperator::gatherAllRightNodes(allNodes[16], size));
-    CHECK(unordered_set<int>{16, 17} == CFGOperator::gatherAllRightNodes(allNodes[15], size));
+    CFGOperator* cfgHandler = CFGOperator::getInstance();
+    CHECK(unordered_set<int>{} == cfgHandler->gatherAllRightNodes(allNodes[17], size));
+    CHECK(unordered_set<int>{17} == cfgHandler->gatherAllRightNodes(allNodes[16], size));
+    CHECK(unordered_set<int>{16, 17} == cfgHandler->gatherAllRightNodes(allNodes[15], size));
     CHECK(unordered_set<int>{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} ==
-                  CFGOperator::gatherAllRightNodes(allNodes[1], size));
-    CHECK(unordered_set<int>{3, 4, 5, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[2], size));
-    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[8], size));
-    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[7], size));
-    CHECK(unordered_set<int>{10, 11, 12, 13, 14} == CFGOperator::gatherAllRightNodes(allNodes[14], size));
+                  cfgHandler->gatherAllRightNodes(allNodes[1], size));
+    CHECK(unordered_set<int>{3, 4, 5, 9, 10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[2], size));
+    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[8], size));
+    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[7], size));
+    CHECK(unordered_set<int>{10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[14], size));
 
 }
 
@@ -137,12 +137,18 @@ TEST_CASE("all possible left Nodes") {
     vector<unordered_map<int, NodeCFG *>> nodeMap = constructCFGForTesting();
     unordered_map<int, NodeCFG *> allNodes = nodeMap[0];
     int size = nodeMap.size();
-
-    CHECK(unordered_set<int>{} == CFGOperator::gatherAllLeftNodes(allNodes[15], size));
-    CHECK(unordered_set<int>{15} == CFGOperator::gatherAllLeftNodes(allNodes[16], size));
-    CHECK(unordered_set<int>{15, 16} == CFGOperator::gatherAllLeftNodes(allNodes[17], size));
+    CFGOperator* cfgHandler = CFGOperator::getInstance();
+    CHECK(unordered_set<int>{} == cfgHandler->gatherAllLeftNodes(allNodes[15], size));
+    CHECK(unordered_set<int>{15} == cfgHandler->gatherAllLeftNodes(allNodes[16], size));
+    CHECK(unordered_set<int>{15, 16} == cfgHandler->gatherAllLeftNodes(allNodes[17], size));
     CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} ==
-                  CFGOperator::gatherAllLeftNodes(allNodes[14], size));
-    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == CFGOperator::gatherAllLeftNodes(allNodes[9], size));
-    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == CFGOperator::gatherAllLeftNodes(allNodes[8], size));
+                  cfgHandler->gatherAllLeftNodes(allNodes[14], size));
+    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == cfgHandler->gatherAllLeftNodes(allNodes[9], size));
+    CHECK(unordered_set<int>{1, 6, 7, 8} == cfgHandler->gatherAllLeftNodes(allNodes[8], size));
+}
+
+TEST_CASE("test lambda") {
+    int arg = 3;
+    //bool (*function1)(int) = [](int x) { return CFGOperator::boolFoo(x); };
+    //CFGOperator::testFoo(function1);
 }
