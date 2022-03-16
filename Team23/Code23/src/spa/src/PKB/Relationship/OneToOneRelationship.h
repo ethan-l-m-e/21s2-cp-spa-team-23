@@ -29,9 +29,13 @@ class OneToOneRelationship {
     }
 
 
-
     LHS convertToLHS(string s, LHS&);
     RHS convertToRHS(string s, RHS&);
+
+protected:
+    int getSize() {
+        return lhsToRhsMap.size();
+    }
 
 public:
     void setRelationship(LHS lhs, RHS rhs) {

@@ -69,7 +69,7 @@ public:
         ManyToManyRelationship<int, string> modifiesS;
         ManyToManyRelationship<string, string> modifiesP;
 
-        OneToOneRelationship<int, NodeCFG *> next;
+        NextRelationship next;
 
     };
 

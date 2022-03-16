@@ -48,3 +48,21 @@ NodeCFG* NextRelationship::getNextNodeOf(int previous) {
         return previousNode->getNextNode();
     }
 }
+
+
+// Functions below are used to calculate Next*
+
+
+NodeCFG* NextRelationship::getCFGNode(int statementNumber) {
+    unordered_set<NodeCFG *> setRHS = getRHSNormal(statementNumber);
+
+    if (setRHS.empty()) {
+       return nullptr;
+    } else {
+        return *setRHS.begin();
+    }
+}
+
+int NextRelationship::getCFGSize() {
+    return getSize();
+}

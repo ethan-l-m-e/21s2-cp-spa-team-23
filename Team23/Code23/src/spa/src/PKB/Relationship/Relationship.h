@@ -8,5 +8,6 @@
 #include "OneToOneRelationship.h"
 #include "OneToManyRelationship.h"
 #include "ManyToManyRelationship.h"
+#include "NextRelationship.h"
 
 #endif //SPA_TNODE_H
