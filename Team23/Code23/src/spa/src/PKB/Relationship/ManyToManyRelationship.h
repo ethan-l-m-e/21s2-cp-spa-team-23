@@ -60,6 +60,18 @@ public:
         }
     }
 
+    void setRelationship(LHS lhs, unordered_set<RHS> setRhs) {
+        lhsToSetRhsMap[lhs] = setRhs;
+
+        for (RHS rhs : setRhs) {
+            if (rhsToSetLhsMap.find(rhs) == rhsToSetLhsMap.end()) {
+                rhsToSetLhsMap.emplace(rhs, unordered_set<int>{lhs});
+            } else {
+                rhsToSetLhsMap[rhs].insert(lhs);
+            }
+        }
+    }
+
     bool isRelationship(string lhs, string rhs) {
         LHS l;
         RHS r;
