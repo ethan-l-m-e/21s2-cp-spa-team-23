@@ -43,37 +43,6 @@ void SourceTokenizer::extractAssign(string sourceCode, vector<string> &v) {
     v.push_back(expr);
 }
 void SourceTokenizer::extractIfElseThen(string sourceCode, vector<string> &v) {
-    /*
-    int then = sourceCode.find("then");
-    int firstIf = sourceCode.find("if");
-    string cond = sourceCode.substr(firstIf+2, then-firstIf-2); //extracts the condition with brackets and whitespaces
-    cond = StringFormatter::removeTrailingSpace(cond);
-    cond = StringFormatter::removeFrontBackBrackets(cond); //removes the brackets
-    v.push_back(cond);
-    sourceCode = sourceCode.substr(then+4,sourceCode.length()-then-4);
-    int elseCheckCounter = 1;
-    int posOfElse = 0;
-    string temp = sourceCode;
-    //while loop to check for if-else nesting
-    while(elseCheckCounter != 0) {
-        int nextElse = temp.find("else") + 4;
-        int nextIf = temp.find("if");
-        if (nextIf == string::npos) {
-            elseCheckCounter--;
-        } else if (nextIf > nextElse) {
-            elseCheckCounter--;
-        }
-        posOfElse += nextElse;
-        temp = temp.substr(nextElse, temp.length() - nextElse); //removes the first instance of nested if else pair
-//        cout<< temp;
-//        cout<<"||";
-    }
-
-    string ifBlock = sourceCode.substr(0,posOfElse-4);
-    ifBlock = StringFormatter::removeFrontBackBrackets(ifBlock);
-    string elseBlock = sourceCode.substr(posOfElse,sourceCode.length()-posOfElse);
-    elseBlock = StringFormatter::removeFrontBackBrackets(elseBlock);
-    */
     string condBlock = StringFormatter::tokenizeByRegex(sourceCode, "[ ]*if[ ]*\\(|\\)[ ]*then[ ]*\\{")[0];
     v.push_back(condBlock);
 
