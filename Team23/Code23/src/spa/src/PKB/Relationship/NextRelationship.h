@@ -9,6 +9,7 @@
 #import "TNode/CFG/NodeCFG.h"
 
 class NextRelationship : OneToOneRelationship<int, NodeCFG *> {
+public:
     bool isNext(int previous, int next);
 
     unordered_map<int, NodeCFG *> getPreviousNodeOf(int next);
