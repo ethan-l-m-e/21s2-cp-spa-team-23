@@ -6,11 +6,15 @@
 bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     std::unordered_set<std::string> resultSet;
     auto header = resultTable->getHeader();
+    if((query->getSelectedSynonyms())[0].argumentType == ArgumentType::BOOLEAN) {
+        resultTable->enableBooleanResult();
+        return true;
+    }
     vector<int> orders;
     for(Argument synonym : query->getSelectedSynonyms()) {
-        if(synonym.argumentType == ArgumentType::BOOLEAN) {
-            resultTable->enableBooleanResult();
-            return true;
+        if(!resultTable->getBooleanResult()) {
+            orders = {};
+            break;
         } else {
             std::pair<string, AttrName> attrRef;
             std::string synonymValue;
