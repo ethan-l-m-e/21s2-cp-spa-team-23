@@ -21,20 +21,20 @@ TEST_CASE("Test result clause evaluator") {
                                                         {"pn", DesignEntity::PRINT},
                                                         {"s", DesignEntity::STMT}
     };
-    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VALUE)}});
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "v"}});
     Query query_2 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)}});
     Query query_3 = makeQuery(declarations, {
-        Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)},
-        Argument{ArgumentType::ATTR_REF, make_pair("a", AttrName::VALUE)},
+        Argument{ArgumentType::SYNONYM, "s"},
+        Argument{ArgumentType::SYNONYM, "a"},
         });
 
     Query query_4 = makeQuery(declarations, {
-            Argument{ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)},
+            Argument{ArgumentType::SYNONYM, "s"},
             Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VAR_NAME)},
     });
 
     Query query_5 = makeQuery(declarations, {
-            Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VALUE)},
+            Argument{ArgumentType::SYNONYM, "pn"},
             Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VAR_NAME)},
     });
 
@@ -70,14 +70,14 @@ TEST_CASE("Test result clause evaluator") {
         resultClauseEvaluator->evaluateClause(resultTable);
         delete resultClauseEvaluator;
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) ==
-                ResultSet{"1 y", "2 x", "3 y"});
+                ResultSet{"1 z", "2 x", "3 z"});
 
         resultTable = getSampleResultTable();
         resultClauseEvaluator = new ResultClauseEvaluator(testPKB, &query_5);
         resultClauseEvaluator->evaluateClause(resultTable);
         delete resultClauseEvaluator;
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) ==
-                ResultSet{"4 y", "11 x"});
+                ResultSet{"4 z", "11 x"});
     }
 
     SECTION("select boolean") {
