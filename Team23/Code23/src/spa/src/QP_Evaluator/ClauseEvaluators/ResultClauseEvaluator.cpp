@@ -11,16 +11,22 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         if(synonym.argumentType == ArgumentType::BOOLEAN) {
             resultTable->enableBooleanResult();
             return true;
-        }
+        } else {
+            std::pair<string, AttrName> attrRef;
+            std::string synonymValue;
+            if (synonym.argumentType == ArgumentType::ATTR_REF) {
+                attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
+                synonymValue = attrRef.first;
+            } else {
+                synonymValue = std::get<std::string>(synonym.argumentValue);
+            }
 
-        if(synonym.argumentType == ArgumentType::ATTR_REF) {
-            std::pair<string, AttrName> attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
-            std::string synonymValue = attrRef.first;
             auto it = std::find(header->begin(), header->end(), synonymValue);
             if (it != header->end()) {
                 auto index = std::distance(header->begin(), it);
-                std::vector<std::string> newColumn;
-                if (applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn)) {
+                if (!attrRef.first.empty()) {
+                    std::vector<std::string> newColumn;
+                    applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn);
                     resultTable->appendColumn(attrRef.first + ".altName", newColumn);
                     index = long(resultTable->getTableWidth()) - 1;
                 }
@@ -31,7 +37,10 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
                 std::vector<std::string> newColumn;
                 std::vector<std::string> resultList;
                 resultList = std::vector<std::string>(set.begin(), set.end());
-                if (applyAttrRef(&resultList, attrRef, &newColumn)) resultList = newColumn;
+                if (!attrRef.first.empty()) {
+                    applyAttrRef(&resultList, attrRef, &newColumn);
+                    resultList = newColumn;
+                }
                 Result result = {
                         .resultType = ResultType::STRING,
                         .resultBoolean =true,
