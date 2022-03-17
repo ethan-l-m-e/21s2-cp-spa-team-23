@@ -78,9 +78,7 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
     allNodes[15] = node15;
     allNodes[16] = node16;
     allNodes[17] = node17;
-
     unordered_map<int, NodeCFG*> rootNodes;
-
     return vector<unordered_map<int, NodeCFG*>>{allNodes, rootNodes};
 }
 
