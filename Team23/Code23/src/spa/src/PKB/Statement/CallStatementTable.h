@@ -7,7 +7,7 @@
 #include "TNode/TNode.h"
 
 class CallStatementTable : public StatementTable<CallNode *> {
-
+public:
     string getProcedureName(string statementNumber);
 };
 

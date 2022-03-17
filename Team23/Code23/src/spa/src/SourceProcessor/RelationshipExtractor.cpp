@@ -2,7 +2,7 @@
 // Created by Tin Hong Wen on 4/2/22.
 //
 #include "RelationshipExtractor.h"
-#include "PKB.h"
+#include "PKB/PKB.h"
 #include "TNode/Node.h"
 #include "TNode/ProgramNode.h"
 #include "TNode/AssignNode.h"

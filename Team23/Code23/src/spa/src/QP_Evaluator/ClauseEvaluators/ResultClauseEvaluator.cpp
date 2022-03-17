@@ -51,23 +51,34 @@ bool ResultClauseEvaluator::applyAttrRef(std::vector<std::string>* lst,
                                          std::pair<string, AttrName> attrRef,
                                          std::vector<std::string>* newLst) {
     if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
-        *newLst = getMapping(*lst, (&PKB::getVarRead));
+        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getVarRead));
         return true;
     } else if (query->findEntityType(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
-        *newLst = getMapping(*lst, (&PKB::getVarPrinted));
+        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getVarPrinted));
         return true;
     } else if (query->findEntityType(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
-        *newLst = getMapping(*lst, (&PKB::getProcByCall));
+        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getProcByCall));
         return true;
     }
     return false;
 }
 
-std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (PKB::*func) (std::string)) {
+std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (ResultClauseEvaluator::*func) (std::string)) {
     std::vector<std::string> mappings;
     for (const std::string& val: lst) {
-        std::string mapped = (pkb->*func)(val);
+        std::string mapped = (this->*func)(val);
         mappings.emplace_back(mapped);
     }
     return mappings;
+}
+
+
+string ResultClauseEvaluator::getVarRead(string stmtNumber) {
+    return pkb->statement.readStatements.getVariableName(stmtNumber);
+}
+string ResultClauseEvaluator::getVarPrinted(string stmtNumber) {
+    return pkb->statement.printStatements.getVariableName(stmtNumber);
+}
+string ResultClauseEvaluator::getProcByCall(string stmtNumber) {
+    return pkb->statement.callStatements.getProcedureName(stmtNumber);
 }
