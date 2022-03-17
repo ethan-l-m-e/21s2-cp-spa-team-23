@@ -8,6 +8,12 @@
 
 class ReadStatementTable : public StatementTable<ReadNode *> {
 
+private:
+    unordered_map<int, string> statementNumberToVariableNameMap;
+
+public:
+    void addStatement(ReadNode *node);
+
     string getVariableName(string statementNumber);
 };
 

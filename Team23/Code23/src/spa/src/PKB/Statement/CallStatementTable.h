@@ -8,6 +8,12 @@
 
 class CallStatementTable : public StatementTable<CallNode *> {
 
+private:
+    unordered_map<int, string> statementNumberToProcedureNameMap;
+
+public:
+    void addStatement(CallNode *node);
+
     string getProcedureName(string statementNumber);
 };
 

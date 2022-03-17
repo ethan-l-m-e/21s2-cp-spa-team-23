@@ -5,6 +5,10 @@
 #include "NextRelationship.h"
 
 
+void NextRelationship::setRelationship(int lhs, NodeCFG *rhs) {
+    OneToOneRelationship<int, NodeCFG *>::setRelationship(lhs, rhs);
+}
+
 bool NextRelationship::isNext(int previous, int next) {
     unordered_set<NodeCFG *> setPreviousNode = getRHSNormal(previous);
     unordered_set<NodeCFG *> setNextNode = getRHSNormal(next);
@@ -27,26 +31,19 @@ bool NextRelationship::isNext(int previous, int next) {
 unordered_map<int, NodeCFG*> NextRelationship::getPreviousNodeOf(int next) {
     unordered_set<NodeCFG *> setNextNode = getRHSNormal(next);
 
-    if (setNextNode.empty() || setNextNode.size() != 1) {
-        unordered_map<int, NodeCFG *> emptyMap;
-        return emptyMap;
-    } else {
-        NodeCFG *nextNode = *setNextNode.begin();
+    NodeCFG *nextNode = *setNextNode.begin();
 
-        return nextNode->getAllPreviousNode();
-    }
+    return nextNode->getAllPreviousNode();
+
 }
 
 NodeCFG* NextRelationship::getNextNodeOf(int previous) {
     unordered_set<NodeCFG *> setPreviousNode = getRHSNormal(previous);
 
-    if (setPreviousNode.empty() || setPreviousNode.size() != 1) {
-        return nullptr;
-    } else {
-        NodeCFG *previousNode = *setPreviousNode.begin();
+    NodeCFG *previousNode = *setPreviousNode.begin();
 
-        return previousNode->getNextNode();
-    }
+    return previousNode->getNextNode();
+
 }
 
 
@@ -56,11 +53,8 @@ NodeCFG* NextRelationship::getNextNodeOf(int previous) {
 NodeCFG* NextRelationship::getCFGNode(int statementNumber) {
     unordered_set<NodeCFG *> setRHS = getRHSNormal(statementNumber);
 
-    if (setRHS.empty()) {
-       return nullptr;
-    } else {
-        return *setRHS.begin();
-    }
+    return *setRHS.begin();
+
 }
 
 int NextRelationship::getCFGSize() {

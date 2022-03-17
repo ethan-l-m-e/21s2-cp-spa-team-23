@@ -5,7 +5,7 @@
 #include <iostream>
 #include <list>
 #include "SourceProcessor/SourceProcessor.h"
-#include "PKB.h"
+#include "PKB/PKB.h"
 #include "QP_Parser/QueryParser.h"
 #include "QP_Evaluator/QueryEvaluator.h"
 

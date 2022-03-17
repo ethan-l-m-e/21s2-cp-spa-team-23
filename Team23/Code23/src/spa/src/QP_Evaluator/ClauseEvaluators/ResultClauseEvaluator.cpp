@@ -11,18 +11,25 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         if(synonym.argumentType == ArgumentType::BOOLEAN) {
             resultTable->enableBooleanResult();
             return true;
-        }
+        } else {
+            std::pair<string, AttrName> attrRef;
+            std::string synonymValue;
+            if (synonym.argumentType == ArgumentType::ATTR_REF) {
+                attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
+                synonymValue = attrRef.first;
+            } else {
+                synonymValue = std::get<std::string>(synonym.argumentValue);
+            }
 
-        if(synonym.argumentType == ArgumentType::ATTR_REF) {
-            std::pair<string, AttrName> attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
-            std::string synonymValue = attrRef.first;
             auto it = std::find(header->begin(), header->end(), synonymValue);
             if (it != header->end()) {
                 auto index = std::distance(header->begin(), it);
-                std::vector<std::string> newColumn;
-                if (applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn)) {
-                    resultTable->appendColumn(attrRef.first + ".altName", newColumn);
-                    index = long(resultTable->getTableWidth()) - 1;
+                if (!attrRef.first.empty()) {
+                    std::vector<std::string> newColumn;
+                    if (applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn)) {
+                        resultTable->appendColumn(attrRef.first + ".altName", newColumn);
+                        index = long(resultTable->getTableWidth()) - 1;
+                    }
                 }
                 orders.emplace_back(index);
             } else {
@@ -31,7 +38,9 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
                 std::vector<std::string> newColumn;
                 std::vector<std::string> resultList;
                 resultList = std::vector<std::string>(set.begin(), set.end());
-                if (applyAttrRef(&resultList, attrRef, &newColumn)) resultList = newColumn;
+                if (!attrRef.first.empty()) {
+                    if(applyAttrRef(&resultList, attrRef, &newColumn)) resultList = newColumn;
+                }
                 Result result = {
                         .resultType = ResultType::STRING,
                         .resultBoolean =true,
@@ -51,23 +60,34 @@ bool ResultClauseEvaluator::applyAttrRef(std::vector<std::string>* lst,
                                          std::pair<string, AttrName> attrRef,
                                          std::vector<std::string>* newLst) {
     if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
-        *newLst = getMapping(*lst, (&PKB::getVarRead));
+        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getVarRead));
         return true;
     } else if (query->findEntityType(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
-        *newLst = getMapping(*lst, (&PKB::getVarPrinted));
+        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getVarPrinted));
         return true;
     } else if (query->findEntityType(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
-        *newLst = getMapping(*lst, (&PKB::getProcByCall));
+        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getProcByCall));
         return true;
     }
     return false;
 }
 
-std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (PKB::*func) (std::string)) {
+std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (ResultClauseEvaluator::*func) (std::string)) {
     std::vector<std::string> mappings;
     for (const std::string& val: lst) {
-        std::string mapped = (pkb->*func)(val);
+        std::string mapped = (this->*func)(val);
         mappings.emplace_back(mapped);
     }
     return mappings;
+}
+
+
+string ResultClauseEvaluator::getVarRead(string stmtNumber) {
+    return pkb->statement.readStatements.getVariableName(stmtNumber);
+}
+string ResultClauseEvaluator::getVarPrinted(string stmtNumber) {
+    return pkb->statement.printStatements.getVariableName(stmtNumber);
+}
+string ResultClauseEvaluator::getProcByCall(string stmtNumber) {
+    return pkb->statement.callStatements.getProcedureName(stmtNumber);
 }

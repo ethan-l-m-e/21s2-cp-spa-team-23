@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 #include <cassert>
-#include "PKB.h"
+#include "PKB/PKB.h"
 #include "Result.h"
 #include "ResultTable.h"
 #include "QP_Evaluator/Query/Argument.h"

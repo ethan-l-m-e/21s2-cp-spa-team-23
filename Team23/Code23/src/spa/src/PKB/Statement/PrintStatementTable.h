@@ -8,6 +8,12 @@
 
 class PrintStatementTable : public StatementTable<PrintNode *> {
 
+private:
+    unordered_map<int, string> statementNumberToVariableNameMap;
+
+public:
+
+    void addStatement(PrintNode *node);
+
     string getVariableName(string statementNumber);
 };
-

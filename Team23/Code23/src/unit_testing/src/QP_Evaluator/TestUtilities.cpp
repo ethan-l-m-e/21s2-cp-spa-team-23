@@ -79,95 +79,124 @@ PKB* generateSamplePKB() {
     PKB *testPKB = PKB::getInstance();
     testPKB->clearPKB();
     Parser::resetStatementNumber();
-    testPKB->addReadStatement(Parser::parseRead(s1));
-    testPKB->addAssignStatement(Parser::parseAssign(s2));
-    testPKB->addAssignStatement(Parser::parseAssign(s3));
-    testPKB->addPrintStatement(Parser::parsePrint(s4));
-    testPKB->addWhileStatement(Parser::parseWhile(s5));
-    testPKB->addCallStatement(Parser::parseCall(s6));
-    IfNode* ifNode = Parser::parseIf(s7);
-    AssignNode* assignNode1 = dynamic_cast<AssignNode*>(((*ifNode).getThenStmtLst())[0]);
-    AssignNode* assignNode2 = dynamic_cast<AssignNode*>(((*ifNode).getElseStmtLst())[0]);
-    testPKB->addIfStatement(ifNode);
-    testPKB->addAssignStatement(assignNode1);
-    testPKB->addAssignStatement(assignNode2);
-    testPKB->addAssignStatement(Parser::parseAssign(s10));
-    testPKB->addPrintStatement(Parser::parsePrint(s11));
+    ReadNode* n1 = Parser::parseRead(s1);
+    testPKB->statement.statements.addStatement(n1);
+    testPKB->statement.readStatements.addStatement(n1);
+
+    AssignNode* n2 = Parser::parseAssign(s2);
+    testPKB->statement.statements.addStatement(n2);
+    testPKB->statement.assignStatements.addStatement(n2);
+
+    AssignNode* n3 = Parser::parseAssign(s3);
+    testPKB->statement.statements.addStatement(n3);
+    testPKB->statement.assignStatements.addStatement(n3);
+
+    PrintNode* n4 = Parser::parsePrint(s4);
+    testPKB->statement.statements.addStatement(n4);
+    testPKB->statement.printStatements.addStatement(n4);
+
+    WhileNode* n5 = Parser::parseWhile(s5);
+    testPKB->statement.statements.addStatement(n5);
+    testPKB->statement.whileStatements.addStatement(n5);
+
+    CallNode* n6 = Parser::parseCall(s6);
+    testPKB->statement.statements.addStatement(n6);
+    testPKB->statement.callStatements.addStatement(n6);
+
+    IfNode* n7 = Parser::parseIf(s7);
+    testPKB->statement.statements.addStatement(n7);
+    testPKB->statement.ifStatements.addStatement(n7);
+
+    AssignNode* n8 = dynamic_cast<AssignNode*>(((*n7).getThenStmtLst())[0]);
+    testPKB->statement.statements.addStatement(n8);
+    testPKB->statement.assignStatements.addStatement(n8);
+
+    AssignNode* n9 = dynamic_cast<AssignNode*>(((*n7).getElseStmtLst())[0]);
+    testPKB->statement.statements.addStatement(n9);
+    testPKB->statement.assignStatements.addStatement(n9);
+
+    AssignNode* n10 = Parser::parseAssign(s10);
+    testPKB->statement.statements.addStatement(n10);
+    testPKB->statement.assignStatements.addStatement(n10);
+
+    PrintNode* n11 = Parser::parsePrint(s11);
+    testPKB->statement.statements.addStatement(n11);
+    testPKB->statement.printStatements.addStatement(n11);
 
     Parser::resetStatementNumber();
-    testPKB->addVariable("x");
-    testPKB->addVariable("y");
-    testPKB->addVariable("z");
-    testPKB->addConstant("1");
-    testPKB->addConstant("3");
-    testPKB->addConstant("5");
-    testPKB->addProcedure("prop");
-    testPKB->addProcedure("pr");
+    testPKB->entity.variables.add("x");
+    testPKB->entity.variables.add("y");
+    testPKB->entity.variables.add("z");
+    testPKB->entity.constants.add("1");
+    testPKB->entity.constants.add("3");
+    testPKB->entity.constants.add("5");
+    testPKB->entity.procedures.add("prop");
+    testPKB->entity.procedures.add("pr");
 
-    testPKB->setFollows(1, 2);
-    testPKB->setFollows(2, 3);
-    testPKB->setFollows(3, 4);
-    testPKB->setFollows(4, 5);
-    testPKB->setFollows(5, 11);
-    testPKB->setFollows(6, 7);
-    testPKB->setFollows(7, 10);
+    testPKB->relationship.follows.setRelationship(1, 2);
+    testPKB->relationship.follows.setRelationship(2, 3);
+    testPKB->relationship.follows.setRelationship(3, 4);
+    testPKB->relationship.follows.setRelationship(4, 5);
+    testPKB->relationship.follows.setRelationship(5, 11);
+    testPKB->relationship.follows.setRelationship(6, 7);
+    testPKB->relationship.follows.setRelationship(7, 10);
 
-    testPKB->setFollowsT(1,2);
-    testPKB->setFollowsT(1,3);
-    testPKB->setFollowsT(1,4);
-    testPKB->setFollowsT(1,5);
-    testPKB->setFollowsT(1,11);
-    testPKB->setFollowsT(2,3);
-    testPKB->setFollowsT(2,4);
-    testPKB->setFollowsT(2,5);
-    testPKB->setFollowsT(2,11);
-    testPKB->setFollowsT(3,4);
-    testPKB->setFollowsT(3,5);
-    testPKB->setFollowsT(3,11);
-    testPKB->setFollowsT(4,5);
-    testPKB->setFollowsT(4,11);
-    testPKB->setFollowsT(5,11);
-    testPKB->setFollowsT(6, 7);
-    testPKB->setFollowsT(6, 10);
-    testPKB->setFollowsT(7, 10);
+    testPKB->relationship.followsT.setRelationship(1,2);
+    testPKB->relationship.followsT.setRelationship(1,3);
+    testPKB->relationship.followsT.setRelationship(1,4);
+    testPKB->relationship.followsT.setRelationship(1,5);
+    testPKB->relationship.followsT.setRelationship(1,11);
+    testPKB->relationship.followsT.setRelationship(2,3);
+    testPKB->relationship.followsT.setRelationship(2,4);
+    testPKB->relationship.followsT.setRelationship(2,5);
+    testPKB->relationship.followsT.setRelationship(2,11);
+    testPKB->relationship.followsT.setRelationship(3,4);
+    testPKB->relationship.followsT.setRelationship(3,5);
+    testPKB->relationship.followsT.setRelationship(3,11);
+    testPKB->relationship.followsT.setRelationship(4,5);
+    testPKB->relationship.followsT.setRelationship(4,11);
+    testPKB->relationship.followsT.setRelationship(5,11);
+    testPKB->relationship.followsT.setRelationship(6, 7);
+    testPKB->relationship.followsT.setRelationship(6, 10);
+    testPKB->relationship.followsT.setRelationship(7, 10);
 
-    testPKB->setParent(5, 6);
-    testPKB->setParent(5, 7);
-    testPKB->setParent(5, 10);
-    testPKB->setParent(7, 8);
-    testPKB->setParent(7, 9);
+    testPKB->relationship.parent.setRelationship(5, 6);
+    testPKB->relationship.parent.setRelationship(5, 7);
+    testPKB->relationship.parent.setRelationship(5, 10);
+    testPKB->relationship.parent.setRelationship(7, 8);
+    testPKB->relationship.parent.setRelationship(7, 9);
 
-    testPKB->setParentT(5,6);
-    testPKB->setParentT(5,7);
-    testPKB->setParentT(5,8);
-    testPKB->setParentT(5,9);
-    testPKB->setParentT(5,10);
-    testPKB->setParentT(7, 8);
-    testPKB->setParentT(7, 9);
+    testPKB->relationship.parentT.setRelationship(5,6);
+    testPKB->relationship.parentT.setRelationship(5,7);
+    testPKB->relationship.parentT.setRelationship(5,8);
+    testPKB->relationship.parentT.setRelationship(5,9);
+    testPKB->relationship.parentT.setRelationship(5,10);
+    testPKB->relationship.parentT.setRelationship(7, 8);
+    testPKB->relationship.parentT.setRelationship(7, 9);
 
-    testPKB->setModifiesS(1, {"x"});
-    testPKB->setModifiesS(2, {"y"});
-    testPKB->setModifiesS(3, {"z"});
-    testPKB->setModifiesS(5, {"x", "y", "z"});
-    testPKB->setModifiesS(6, {"x"});
-    testPKB->setModifiesS(8, {"y"});
-    testPKB->setModifiesS(9, {"x"});
-    testPKB->setModifiesS(10, {"z"});
-    testPKB->setModifiesP("prop", {"x", "y", "z"});
-    testPKB->setModifiesP("pr", {"x"});
+    testPKB->relationship.modifiesS.setRelationship(1, unordered_set<string>{"x"});
+    testPKB->relationship.modifiesS.setRelationship(2, unordered_set<string>{"y"});
+    testPKB->relationship.modifiesS.setRelationship(3, unordered_set<string>{"z"});
+    testPKB->relationship.modifiesS.setRelationship(5, unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.modifiesS.setRelationship(6, unordered_set<string>{"x"});
+    testPKB->relationship.modifiesS.setRelationship(8, unordered_set<string>{"y"});
+    testPKB->relationship.modifiesS.setRelationship(9, unordered_set<string>{"x"});
+    testPKB->relationship.modifiesS.setRelationship(10, unordered_set<string>{"z"});
+    testPKB->relationship.modifiesP.setRelationship("prop", unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.modifiesP.setRelationship("pr", unordered_set<string>{"x"});
 
-    testPKB->setUsesS(2, {"x", "y"});
-    testPKB->setUsesS(3, {"y"});
-    testPKB->setUsesS(4, {"z"});
-    testPKB->setUsesS(5, {"x", "y", "z"});
-    testPKB->setUsesS(6, {"y"});
-    testPKB->setUsesS(7, {"x", "y", "z"});
-    testPKB->setUsesS(8, {"x", "z"});
-    testPKB->setUsesS(9, {"y", "z"});
-    testPKB->setUsesS(10, {"z"});
-    testPKB->setUsesS(11, {"x"});
-    testPKB->setUsesP("prop", {"x", "y", "z"});
-    testPKB->setUsesP("pr", {"y"});
+    testPKB->relationship.usesS.setRelationship(2, unordered_set<string>{"x", "y"});
+    testPKB->relationship.usesS.setRelationship(3, unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"z"});
+    testPKB->relationship.usesS.setRelationship(5, unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.usesS.setRelationship(6, unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship(7, unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.usesS.setRelationship(8, unordered_set<string>{"x", "z"});
+    testPKB->relationship.usesS.setRelationship(9, unordered_set<string>{"y", "z"});
+    testPKB->relationship.usesS.setRelationship(10, unordered_set<string>{"z"});
+    testPKB->relationship.usesS.setRelationship(11, unordered_set<string>{"x"});
+    testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.usesP.setRelationship("pr", unordered_set<string>{"y"});
 
     return testPKB;
 }
@@ -192,40 +221,52 @@ PKB* generateSamplePKBForPatternMatching() {
 
     PKB *testPKB = PKB::getInstance();
     testPKB->clearPKB();
-    testPKB->addAssignNode(Parser::parseAssign(a1));
-    testPKB->addAssignNode(Parser::parseAssign(a2));
-    testPKB->addAssignNode(Parser::parseAssign(a3));
-    testPKB->addAssignNode(Parser::parseAssign(a4));
-    testPKB->addAssignNode(Parser::parseAssign(a5));
-    testPKB->addAssignNode(Parser::parseAssign(a6));
-    testPKB->addAssignNode(Parser::parseAssign(a7));
 
     Parser::resetStatementNumber();
-    testPKB->addVariable("x");
-    testPKB->addVariable("y");
-    testPKB->addVariable("z");
+    testPKB->entity.variables.add("x");
+    testPKB->entity.variables.add("y");
+    testPKB->entity.variables.add("z");
 
-    testPKB->addAssignStatement(Parser::parseAssign(a1));
-    testPKB->addAssignStatement(Parser::parseAssign(a2));
-    testPKB->addAssignStatement(Parser::parseAssign(a3));
-    testPKB->addAssignStatement(Parser::parseAssign(a4));
-    testPKB->addAssignStatement(Parser::parseAssign(a5));
-    testPKB->addAssignStatement(Parser::parseAssign(a6));
-    testPKB->addAssignStatement(Parser::parseAssign(a7));
+    AssignNode* n1 = Parser::parseAssign(a1);
+    testPKB->statement.statements.addStatement(n1);
+    testPKB->statement.assignStatements.addStatement(n1);
 
+    AssignNode* n2 = Parser::parseAssign(a2);
+    testPKB->statement.statements.addStatement(n2);
+    testPKB->statement.assignStatements.addStatement(n2);
 
-    testPKB->setFollows(1, 2);
-    testPKB->setFollows(2, 3);
-    testPKB->setFollows(3, 4);
-    testPKB->setFollows(4, 5);
-    testPKB->setFollows(5, 6);
-    testPKB->setFollows(6, 7);
+    AssignNode* n3 = Parser::parseAssign(a3);
+    testPKB->statement.statements.addStatement(n3);
+    testPKB->statement.assignStatements.addStatement(n3);
 
-    testPKB->setUsesS(1, {"y"});
-    testPKB->setUsesS(3, {"y"});
-    testPKB->setUsesS(4, {"y", "x"});
-    testPKB->setUsesS(5, {"y", "x", "z"});
-    testPKB->setUsesS(6, {"y", "x", "z"});
+    AssignNode* n4 = Parser::parseAssign(a4);
+    testPKB->statement.statements.addStatement(n4);
+    testPKB->statement.assignStatements.addStatement(n4);
+
+    AssignNode* n5 = Parser::parseAssign(a5);
+    testPKB->statement.statements.addStatement(n5);
+    testPKB->statement.assignStatements.addStatement(n5);
+
+    AssignNode* n6 = Parser::parseAssign(a6);
+    testPKB->statement.statements.addStatement(n6);
+    testPKB->statement.assignStatements.addStatement(n6);
+
+    AssignNode* n7 = Parser::parseAssign(a7);
+    testPKB->statement.statements.addStatement(n7);
+    testPKB->statement.assignStatements.addStatement(n7);
+
+    testPKB->relationship.follows.setRelationship(1, 2);
+    testPKB->relationship.follows.setRelationship(2, 3);
+    testPKB->relationship.follows.setRelationship(3, 4);
+    testPKB->relationship.follows.setRelationship(4, 5);
+    testPKB->relationship.follows.setRelationship(5, 6);
+    testPKB->relationship.follows.setRelationship(6, 7);
+
+    testPKB->relationship.usesS.setRelationship(1, unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship(3, unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"y", "x"});
+    testPKB->relationship.usesS.setRelationship(5, unordered_set<string>{"y", "x", "z"});
+    testPKB->relationship.usesS.setRelationship(6, unordered_set<string>{"y", "x", "z"});
 
     return testPKB;
 }
