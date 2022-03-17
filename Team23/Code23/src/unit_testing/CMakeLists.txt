@@ -1,22 +1,15 @@
-file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
-set(srcs ${srcs}
-        src/QP_Parser/TestValidator.cpp
-        src/QP_Parser/TestQueryTokenizer.cpp
-        src/QP_Parser/TestQueryParser.cpp
-        src/TestStringFormatter.cpp
-        src/QP_Evaluator/TestQueryEvaluator.cpp
-        src/QP_Evaluator/TestResultTable.cpp
-        src/QP_Evaluator/TestPatternClauseEvaluator.cpp
-        src/TestCFG.cpp)
+file(GLOB srcs
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Parser/*.cpp"
+        )
+file(GLOB headers
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Evaluator/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QP_Parser/*.h"
+        )
 
-add_executable(unit_testing ${srcs} src/TestAST.cpp
-        src/TestIdentifier.cpp
-        src/TestIdentifier.cpp
-        src/TestRelationshipExtractor.cpp
-        src/TestSourceTokenizer.cpp
-        src/TestTNode.cpp
-        src/TestParser.cpp)
+add_executable(unit_testing ${srcs} ${headers})
 
 target_link_libraries(unit_testing spa)
 

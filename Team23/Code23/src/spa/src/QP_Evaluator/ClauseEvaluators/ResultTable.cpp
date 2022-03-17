@@ -10,17 +10,23 @@ ResultTable::ResultTable(){
     tableHeader = std::vector<std::string>{};
     tableEntries = String2DVector{};
     isBooleanResult = false;
+    booleanResult = true;
 }
 
 ResultTable::ResultTable(std::vector<std::string> header, String2DVector values){
     tableHeader = std::move(header);
     tableEntries = std::move(values);
     isBooleanResult = false;
+    booleanResult = true;
 }
 
 void ResultTable::clearTable() {
     tableHeader = std::vector<std::string>{};
     tableEntries = String2DVector{};
+}
+
+void ResultTable::enableBooleanResult() {
+    isBooleanResult = true;
 }
 
 bool ResultTable::isBoolean(){
@@ -31,11 +37,12 @@ bool ResultTable::isEmpty(){
     return tableEntries.empty();
 }
 
-std::string ResultTable::getBooleanResult() {
-    if(isBooleanResult) {
-        return booleanResult ? "TRUE" : "FALSE";
-    }
-    return "";
+bool ResultTable::getBooleanResult() {
+    return booleanResult;
+}
+
+std::string ResultTable::getBooleanResultString() {
+    return booleanResult ? "TRUE" : "FALSE";
 }
 
 std::vector<std::string>* ResultTable::getHeader() {
@@ -51,8 +58,12 @@ size_t ResultTable::getTableSize() {
     return tableEntries[0].size();
 }
 
+size_t ResultTable::getTableWidth() {
+    if(isEmpty()) return 0;
+    return tableEntries.size();
+}
+
 void ResultTable::setBooleanResult(bool result) {
-    isBooleanResult = true;
     booleanResult = result;
 }
 

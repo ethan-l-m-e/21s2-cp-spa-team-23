@@ -1,4 +1,4 @@
-../../../../Tests23/test_source.txt ../../../../Tests23/test_queries.txt ../../../tests/out.xml
+../../../../Tests23/test_source.txt ../../../../Tests23/test_queries.txt ../../../tests/test_out.xml
 constant c;
 Select c
 1, 2, 3, 4, 5, 6, 7

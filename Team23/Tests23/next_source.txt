@@ -1,0 +1,21 @@
+procedure Next {
+    firstStatement = 1;
+    secondStatement = 2;
+    while(cond == true) {
+        loopStatement = a+b*c;
+        print loopStatement;
+        read loopStatement;
+        if(cond > false) then {
+            leftStatement = 3;
+        } else {
+            rightStatement = 4;
+        }
+        mergeStatement = 5;
+    }
+    afterLoopStatement = 6;
+    call DifferentProcedure;
+}
+
+procedure DifferentProcedure {
+    diffProcedureStatement = 7;
+}

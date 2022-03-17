@@ -198,25 +198,25 @@ void SuchThatClauseEvaluator::filterByType (unordered_set<std::string>& set, Des
 bool SuchThatClauseEvaluator::isEntityType (const std::string& ident, DesignEntity entityType) {
     switch (entityType) {
         case DesignEntity::STMT:
-            return pkb->isStatement(ident);
+            return pkb->statement.statements.isStatementNumber(ident);
         case DesignEntity::VARIABLE:
-            return pkb->isVariable(ident);
+            return pkb->entity.variables.isEntity(ident);
         case DesignEntity::CONSTANT:
-            return pkb->isConstant(ident);
+            return pkb->entity.constants.isEntity(ident);
         case DesignEntity::ASSIGN:
-            return pkb->isAssignStatement(ident);
+            return pkb->statement.assignStatements.isStatementNumber(ident);
         case DesignEntity::PRINT:
-            return pkb->isPrintStatement(ident);
+            return pkb->statement.printStatements.isStatementNumber(ident);
         case DesignEntity::READ:
-            return pkb->isReadStatement(ident);
+            return pkb->statement.readStatements.isStatementNumber(ident);
         case DesignEntity::WHILE:
-            return pkb->isWhileStatement(ident);
+            return pkb->statement.whileStatements.isStatementNumber(ident);
         case DesignEntity::IF:
-            return pkb->isIfStatement(ident);
+            return pkb->statement.ifStatements.isStatementNumber(ident);
         case DesignEntity::PROCEDURE:
-            return pkb->isProcedure(ident);
+            return pkb->entity.procedures.isEntity(ident);
         case DesignEntity::CALL:
-            return pkb->isCallStatement(ident);
+            return pkb->statement.callStatements.isStatementNumber(ident);
         default:
             throw qp::QPEvaluatorException("Invalid design entity found.");
     }
