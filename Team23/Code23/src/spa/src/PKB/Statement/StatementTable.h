@@ -39,7 +39,7 @@ public:
         if (statementNumberToStatementNodeMap.find(statementNumber) != statementNumberToStatementNodeMap.end()) {
             return statementNumberToStatementNodeMap[statementNumber];
         } else {
-            throw std::exception("Statement Number Does Not Exist!");
+            throw std::exception();
         }
     }
 
