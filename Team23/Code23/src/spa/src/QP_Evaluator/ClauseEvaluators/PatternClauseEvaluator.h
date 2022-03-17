@@ -17,26 +17,21 @@ public:
     }
     bool evaluateClause(ResultTable* resultTable) override;
 protected:
-
-    bool leftIsSynonym();
-    bool leftIsIdent();
-    bool leftIsWildCard();
-    bool rightIsWildCard();
-    bool rightIsPartWildCard();
-    bool rightIsIdent();
     SynonymType synType;
-
     Argument syn = argList[0];
     Argument arg1 = argList[1];
     Argument arg2 = argList[2];
-    Argument arg3;
+    Argument arg3 = argList[3];
     // get argument 3 if is if-node
     bool evaluateAssign(ResultTable *resultTable);
     bool evaluateWhile(ResultTable *resultTable);
     bool evaluateIf(ResultTable *resultTable);
 
-    void constructResults(vector<ResultItem> tuplesResults, vector<ResultItem> stmtNumResults);
+    void constructResults(vector<ResultItem> results, bool hasTuples);
 
+    bool evaluateWithFunc_Pointers(ResultTable *resultTable,
+                                   void (*validateAndParse)(Argument, Argument, Argument, Expression, Expression),
+                                   vector<ResultItem> (*collectResults)(Argument, Argument, Expression, Expression));
 };
 
 
