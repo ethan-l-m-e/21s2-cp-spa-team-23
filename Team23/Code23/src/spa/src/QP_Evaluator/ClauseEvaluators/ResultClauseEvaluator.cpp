@@ -5,75 +5,75 @@
 #include "ResultClauseEvaluator.h"
 bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     std::unordered_set<std::string> resultSet;
-    auto header = resultTable->getHeader();
-    if((query->getSelectedSynonyms())[0].argumentType == ArgumentType::BOOLEAN) {
+
+    if ((query->getSelectedSynonyms())[0].argumentType == ArgumentType::BOOLEAN) {
         resultTable->enableBooleanResult();
         return true;
     }
-    vector<int> orders;
-    for(Argument synonym : query->getSelectedSynonyms()) {
-        if(!resultTable->getBooleanResult()) {
-            orders = {};
-            break;
-        } else {
-            std::pair<string, AttrName> attrRef;
-            std::string synonymValue;
-            if (synonym.argumentType == ArgumentType::ATTR_REF) {
-                attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
-                synonymValue = attrRef.first;
-            } else {
-                synonymValue = std::get<std::string>(synonym.argumentValue);
-            }
 
-            auto it = std::find(header->begin(), header->end(), synonymValue);
-            if (it != header->end()) {
-                auto index = std::distance(header->begin(), it);
-                if (!attrRef.first.empty()) {
-                    std::vector<std::string> newColumn;
-                    if (applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn)) {
-                        resultTable->appendColumn(attrRef.first + ".altName", newColumn);
-                        index = long(resultTable->getTableWidth()) - 1;
-                    }
-                }
-                orders.emplace_back(index);
-            } else {
-                auto index = std::distance(header->begin(), it);
-                unordered_set<std::string> set = getAllType(query->getSynonymType(synonymValue));
-                std::vector<std::string> newColumn;
-                std::vector<std::string> resultList;
-                resultList = std::vector<std::string>(set.begin(), set.end());
-                if (!attrRef.first.empty()) {
-                    if(applyAttrRef(&resultList, attrRef, &newColumn)) resultList = newColumn;
-                }
-                Result result = {
-                        .resultType = ResultType::STRING,
-                        .resultBoolean =true,
-                        .resultHeader = synonymValue,
-                        .resultItemList = std::vector<ResultItem>(set.begin(), set.end())
-                };
-                resultTable->mergeResultToTable(result);
-                orders.emplace_back(index);
-            }
-        }
-    }
-    resultTable->rearrangeSynonyms(orders);
+    vector<int> projections;
+    if (resultTable->getBooleanResult()) evaluateSelectedSynonyms(&projections, resultTable);
+    resultTable->rearrangeSynonyms(projections);
     return true;
+
 }
 
-bool ResultClauseEvaluator::applyAttrRef(std::vector<std::string>* lst,
-                                         std::pair<string, AttrName> attrRef,
-                                         std::vector<std::string>* newLst) {
-    if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
-        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getVarRead));
-        return true;
-    } else if (query->findEntityType(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
-        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getVarPrinted));
-        return true;
-    } else if (query->findEntityType(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
-        *newLst = getMapping(*lst, (&ResultClauseEvaluator::getProcByCall));
-        return true;
+void ResultClauseEvaluator::evaluateSelectedSynonyms(vector<int>* projections, ResultTable* resultTable) {
+    auto header = resultTable->getHeader();
+    for (Argument synonym: query->getSelectedSynonyms()) {
+        std::pair<string, AttrName> attrRef;
+        std::string synonymValue;
+        if (synonym.argumentType == ArgumentType::ATTR_REF) {
+            attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
+            synonymValue = attrRef.first;
+        } else {
+            synonymValue = std::get<std::string>(synonym.argumentValue);
+        }
+        auto it = std::find(header->begin(), header->end(), synonymValue);
+        auto index = std::distance(header->begin(), it);
+        if (it == header->end()) appendNewSynonym(synonymValue, resultTable);
+        if (!attrRef.first.empty()) {
+            std::string(ResultClauseEvaluator::*func) (std::string) = nullptr;
+            std::string name;
+            if (applyAttrRef(attrRef, &func, &name)) {
+                auto it1 = std::find(header->begin(), header->end(), name);
+                long newIndex = std::distance(header->begin(), it1);
+                if (it1 == header->end()) {
+                    std::vector<std::string> newColumn = getMapping((*resultTable->getList())[index], func);
+                    resultTable->appendColumn(name, newColumn);
+                }
+                index = newIndex;
+            }
+        }
+        projections->emplace_back(index);
     }
-    return false;
+}
+
+void ResultClauseEvaluator::appendNewSynonym(string synonymValue, ResultTable* resultTable){
+    unordered_set<std::string> set = getAllType(query->getSynonymType(synonymValue));
+    Result result = {
+            .resultType = ResultType::STRING,
+            .resultBoolean =true,
+            .resultHeader = synonymValue,
+            .resultItemList = std::vector<ResultItem>(set.begin(), set.end())
+    };
+    resultTable->mergeResultToTable(result);
+}
+
+bool ResultClauseEvaluator::applyAttrRef(std::pair<string, AttrName>& attrRef, std::string (ResultClauseEvaluator::**func)(std::string), std::string *name) {
+    if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
+        *name = attrRef.first + ".varName";
+        *func = &ResultClauseEvaluator::getVarRead;
+    } else if (query->findEntityType(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
+        *name = attrRef.first + ".varName";
+        *func = &ResultClauseEvaluator::getVarPrinted;
+    } else if (query->findEntityType(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
+        *name = attrRef.first + ".procName";
+        *func = &ResultClauseEvaluator::getProcByCall;
+    } else {
+        return false;
+    }
+    return true;
 }
 
 std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (ResultClauseEvaluator::*func) (std::string)) {

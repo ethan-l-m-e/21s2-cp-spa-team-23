@@ -17,34 +17,32 @@ TEST_CASE("Query with no clauses") {
                                                            };
     Query query_1 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "v"}});
     Query query_2 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s"}});
-    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "pn"}});
-    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::BOOLEAN, ""}});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VAR_NAME)}});
 
     auto qe = QueryEvaluator(testPKB);
 
     /**
      * Select v
-     * Type: select all variables
+     * Type: select variables
      */
     REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"x", "y", "z"});
 
     /**
      * Select s
-     * Type: select all statements
+     * Type: select statements
      */
-    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1", "2", "3", "4", "5", "6", });
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"});
 
     /**
-     * Select pn
-     * Type: select all print
+     * Select BOOLEAN
      */
-    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"TRUE"});
 
     /**
-     * Select a
-     * Type: select all assign
+     * Select pn.varName
      */
-    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"2", "3", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"z", "x"});
 
 }
 
