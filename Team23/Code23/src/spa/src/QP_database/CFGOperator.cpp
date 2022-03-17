@@ -8,7 +8,7 @@ using namespace std;
 
 
 CFGOperator *CFGOperator::singleton = nullptr;
-
+CFGOperator::CFGOperator() {}
 CFGOperator* CFGOperator::getInstance() {
     if (CFGOperator::singleton == nullptr) {
         CFGOperator::singleton = new CFGOperator();
