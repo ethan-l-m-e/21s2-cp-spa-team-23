@@ -26,9 +26,10 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
                 auto index = std::distance(header->begin(), it);
                 if (!attrRef.first.empty()) {
                     std::vector<std::string> newColumn;
-                    applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn);
-                    resultTable->appendColumn(attrRef.first + ".altName", newColumn);
-                    index = long(resultTable->getTableWidth()) - 1;
+                    if (applyAttrRef(&(*resultTable->getList())[index], attrRef, &newColumn)) {
+                        resultTable->appendColumn(attrRef.first + ".altName", newColumn);
+                        index = long(resultTable->getTableWidth()) - 1;
+                    }
                 }
                 orders.emplace_back(index);
             } else {
@@ -38,8 +39,7 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
                 std::vector<std::string> resultList;
                 resultList = std::vector<std::string>(set.begin(), set.end());
                 if (!attrRef.first.empty()) {
-                    applyAttrRef(&resultList, attrRef, &newColumn);
-                    resultList = newColumn;
+                    if(applyAttrRef(&resultList, attrRef, &newColumn)) resultList = newColumn;
                 }
                 Result result = {
                         .resultType = ResultType::STRING,
