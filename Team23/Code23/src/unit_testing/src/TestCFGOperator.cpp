@@ -4,7 +4,6 @@
 
 #include "QP_database/CFGOperator.h"
 #include "catch.hpp"
-#include "Constants/Constants.h"
 
 using namespace std;
 
@@ -91,12 +90,6 @@ TEST_CASE("if path exist between 2 nodes") {
     int size = nodeMap.size();
 
     //different procedure
-    // direct path
-    // loop path (backwards)
-    // branch
-    // branch-> after merge
-
-    //different procedure
     CFGOperator* cfgHandler = CFGOperator::getInstance();
     CHECK(!cfgHandler->pathExistBetween(allNodes[4], allNodes[16], size));
     // direct
@@ -121,15 +114,15 @@ TEST_CASE("all possible right Nodes") {
     unordered_map<int, NodeCFG*> allNodes = nodeMap[0];
     int size = nodeMap.size();
     CFGOperator* cfgHandler = CFGOperator::getInstance();
-    CHECK(unordered_set<int>{} == cfgHandler->gatherAllRightNodes(allNodes[17], size));
-    CHECK(unordered_set<int>{17} == cfgHandler->gatherAllRightNodes(allNodes[16], size));
-    CHECK(unordered_set<int>{16, 17} == cfgHandler->gatherAllRightNodes(allNodes[15], size));
-    CHECK(unordered_set<int>{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} ==
+    CHECK(unordered_set<string>{} == cfgHandler->gatherAllRightNodes(allNodes[17], size));
+    CHECK(unordered_set<string>{"17"} == cfgHandler->gatherAllRightNodes(allNodes[16], size));
+    CHECK(unordered_set<string>{"16", "17"} == cfgHandler->gatherAllRightNodes(allNodes[15], size));
+    CHECK(unordered_set<string>{"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"} ==
                   cfgHandler->gatherAllRightNodes(allNodes[1], size));
-    CHECK(unordered_set<int>{3, 4, 5, 9, 10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[2], size));
-    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[8], size));
-    CHECK(unordered_set<int>{6, 7, 8, 9, 10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[7], size));
-    CHECK(unordered_set<int>{10, 11, 12, 13, 14} == cfgHandler->gatherAllRightNodes(allNodes[14], size));
+    CHECK(unordered_set<string>{"3", "4", "5", "9", "10", "11", "12", "13", "14"} == cfgHandler->gatherAllRightNodes(allNodes[2], size));
+    CHECK(unordered_set<string>{"6", "7", "8", "9", "10", "11", "12", "13", "14"} == cfgHandler->gatherAllRightNodes(allNodes[8], size));
+    CHECK(unordered_set<string>{"6", "7", "8", "9", "10", "11", "12", "13", "14"} == cfgHandler->gatherAllRightNodes(allNodes[7], size));
+    CHECK(unordered_set<string>{"10", "11", "12", "13", "14"} == cfgHandler->gatherAllRightNodes(allNodes[14], size));
 
 }
 
@@ -138,14 +131,15 @@ TEST_CASE("all possible left Nodes") {
     unordered_map<int, NodeCFG *> allNodes = nodeMap[0];
     int size = nodeMap.size();
     CFGOperator* cfgHandler = CFGOperator::getInstance();
-    CHECK(unordered_set<int>{} == cfgHandler->gatherAllLeftNodes(allNodes[15], size));
-    CHECK(unordered_set<int>{15} == cfgHandler->gatherAllLeftNodes(allNodes[16], size));
-    CHECK(unordered_set<int>{15, 16} == cfgHandler->gatherAllLeftNodes(allNodes[17], size));
-    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} ==
+    CHECK(unordered_set<string>{} == cfgHandler->gatherAllLeftNodes(allNodes[15], size));
+    CHECK(unordered_set<string>{"15"} == cfgHandler->gatherAllLeftNodes(allNodes[16], size));
+    CHECK(unordered_set<string>{"15", "16"} == cfgHandler->gatherAllLeftNodes(allNodes[17], size));
+    CHECK(unordered_set<string>{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"} ==
                   cfgHandler->gatherAllLeftNodes(allNodes[14], size));
-    CHECK(unordered_set<int>{1, 2, 3, 4, 5, 6, 7, 8} == cfgHandler->gatherAllLeftNodes(allNodes[9], size));
-    CHECK(unordered_set<int>{1, 6, 7, 8} == cfgHandler->gatherAllLeftNodes(allNodes[8], size));
+    CHECK(unordered_set<string>{"1", "2", "3", "4", "5", "6", "7", "8"} == cfgHandler->gatherAllLeftNodes(allNodes[9], size));
+    CHECK(unordered_set<string>{"1", "6", "7", "8"} == cfgHandler->gatherAllLeftNodes(allNodes[8], size));
 }
+
 
 TEST_CASE("test lambda") {
     int arg = 3;
