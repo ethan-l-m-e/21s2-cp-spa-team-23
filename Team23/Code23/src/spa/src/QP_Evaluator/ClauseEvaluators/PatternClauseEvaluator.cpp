@@ -3,7 +3,7 @@
 //
 #include <regex>
 
-#include "PKB.h"
+#include "PKB/PKB.h"
 #include "PatternClauseEvaluator.h"
 #include "TNode/Node.h"
 #include "StringFormatter.h"
@@ -11,10 +11,12 @@
 #include "SourceProcessor/Identifier.h"
 
 
+
 void addToStmtList(AssignNode* assignNode, vector<ResultItem> *stmtNumberList);
 void addToStmtAndVariableList(AssignNode* assignNode, vector<ResultItem> *statementAndVarList);
+Expression validateAndParseEntRef(string arg);
 Expression validateAndParseExpression(string arg);
-bool matchVariableValue(VariableNode* assignNode, Argument arg);
+bool matchVariableValue(VariableNode* assignNode, Expression arg);
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg);
 bool searchForMatchInExpr(Expression expressionNode, Expression arg);
 bool performExactMatchExpr(Expression expressionNode, Expression arg);
@@ -22,77 +24,129 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg);
 string retrieveLHSVar(AssignNode* assignNode);
 string retrieveStmtNo(AssignNode* assignNode);
 
-bool PatternClauseEvaluator::evaluateClause(ResultTable* resultTable) {
-    //first, figure out the synonymType
-    // then perform accordingly
-    vector<AssignNode*> listOfAssignNodes = PKB::getInstance()->getAllAssignNodes();
-    vector<ResultItem> assignVarPairList;
-    vector<ResultItem> stmtNumberList;
 
-    //check validity of arg and then convert them into expression
-    Argument argLeft = arg1;
-    Argument argRight = arg2;
-    Expression exprRight;
-
-    if(!rightIsWildCard()) {
-        exprRight = validateAndParseExpression(std::get<std::string>(argRight.argumentValue));
-    }
-
-    /**
+/**
      * Chart for pattern clause:
      * LHS/RHS      exact                   _something_              _
      * synonym       filtered assign        filtered assign & var   all assign & var
      * fixed        filtered assign         filtered assign         filtered assign
      * _            filtered assign         filtered assign         all assign
      */
-    for (int i = 0; i < listOfAssignNodes.size(); i++) {
-        AssignNode * currentNode = listOfAssignNodes[i];
+
+
+bool PatternClauseEvaluator::evaluateClause(ResultTable *resultTable) {
+    if(synType == SynonymType::ASSIGN) {
+        return evaluateAssign(resultTable);
+    }
+}
+
+bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
+    Argument argLeft = arg1;
+
+    Expression entRef;
+    if(leftIsIdent()) {
+        entRef = validateAndParseExpression(std::get<std::string>(arg1.argumentValue));
+    }
+    if(!rightIsWildCard()) {
+        throw "the 2nd argument in pattern while-syn(entRef, _) has to be wildcard";
+    }
+
+
+    unordered_set<WhileNode*> whileNodeList = PKB::getInstance()->statement.whileStatements.getAllStatementNodes();
+    vector<ResultItem> WhileVarPairList;
+    vector<ResultItem> stmtNumberList;
+
+    if(leftIsSynonym()) {
+
+    } else if (leftIsWildCard()) {
+
+    } else if (leftIsIdent()) {
+
+    }
+
+    return true;
+}
+
+bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
+    unordered_set<IfNode*> ifNodeList = PKB::getInstance()->statement.ifStatements.getAllStatementNodes();
+
+    return true;
+}
+
+bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
+    //validation and LHS/RHS parsing
+    Argument argLeft = arg1;
+    Argument argRight = arg2;
+    Expression varLeft;
+    Expression exprRight;
+    if(leftIsIdent()) {
+        varLeft = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
+    }
+    if(!rightIsWildCard()) {
+        exprRight = validateAndParseExpression(std::get<std::string>(argRight.argumentValue));
+    }
+
+    // setup parsing and results
+    unordered_set<AssignNode*> listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
+    vector<ResultItem> assignVarPairList;
+    vector<ResultItem> stmtNumberList;
+
+    unordered_set<AssignNode*>::iterator i;
+    // process results
+    for ( i = listOfAssignNodes.begin(); i != listOfAssignNodes.end(); ++i) {
+        AssignNode * currentNode = *i;
         VariableNode* LHSVariable = currentNode->getLeftNode();
         Expression RHSExpression = currentNode ->getRightNode();
+        // right is wild card, can be collated into helper function
         if (leftIsSynonym() && rightIsWildCard()) {
             addToStmtAndVariableList(currentNode, &assignVarPairList);
-        } else if (leftIsSynonym() && (rightIsPartWildCard() || rightIsIdent())) {
+        } else if (leftIsIdent() && rightIsWildCard()) {
+            if(matchVariableValue(LHSVariable, varLeft)) {
+                addToStmtList(currentNode, &stmtNumberList);
+            }
+        }  else if (leftIsWildCard() && rightIsWildCard()) {
+            addToStmtList(currentNode, &stmtNumberList);
+        }
+        // right is not wildcard
+        else if (leftIsSynonym() && (rightIsPartWildCard() || rightIsIdent())) {
             if(matchExpressionValue(RHSExpression, exprRight, argRight)) {
                 addToStmtAndVariableList(currentNode, &assignVarPairList);
             }
-        } else if (leftIsIdent() && rightIsWildCard()) {
-            if(matchVariableValue(LHSVariable, argLeft)) {
-                addToStmtList(currentNode, &stmtNumberList);
-            }
         } else if (leftIsIdent() && (rightIsPartWildCard() || rightIsIdent())) {
-            if(matchVariableValue(LHSVariable, argLeft) && matchExpressionValue(RHSExpression, exprRight, argRight)) {
+            if(matchVariableValue(LHSVariable, varLeft) && matchExpressionValue(RHSExpression, exprRight, argRight)) {
                 addToStmtList(currentNode, &stmtNumberList);
             }
         } else if (leftIsWildCard() && (rightIsPartWildCard() || rightIsIdent())) {
-
             if(matchExpressionValue(RHSExpression, exprRight, argRight)) {
                 addToStmtList(currentNode, &stmtNumberList);
             }
-        } else if (leftIsWildCard() && rightIsWildCard()) {
-            addToStmtList(currentNode, &stmtNumberList);
         } else {
             throw "arguments in pattern clause mismatch " + std::get<std::string>(arg1.argumentValue) + " " + std::get<std::string>(arg2.argumentValue);
         }
     }
 
     // result construction
-    if (leftIsSynonym()) {
-        // configure resultType, to have both variable names and assign
-        result.resultType = ResultType::TUPLES;
-        result.resultBoolean = !assignVarPairList.empty();
-        result.resultHeader = tuple<string, string>(std::get<std::string>(syn.argumentValue), std::get<std::string>(arg1.argumentValue));
-        result.resultItemList = assignVarPairList;
-    } else {
-        // configure resultType to have only a list of assign
-        result.resultType = ResultType::STRING;
-        result.resultBoolean = !stmtNumberList.empty();
-        result.resultHeader = std::get<std::string>(syn.argumentValue);
-        result.resultItemList = stmtNumberList;
-    }
+    constructResults(assignVarPairList, stmtNumberList);
 
     if(!result.resultBoolean) return false;
     mergeResult(resultTable);
     return true;
+}
+
+void PatternClauseEvaluator::constructResults(vector<ResultItem> tuplesResults, vector<ResultItem> stmtNumResults) {
+    if (leftIsSynonym()) {
+        // configure resultType, to have both variable names and assign
+        result.resultType = ResultType::TUPLES;
+        result.resultBoolean = !tuplesResults.empty();
+        result.resultHeader = tuple<string, string>(std::get<std::string>(syn.argumentValue), std::get<std::string>(arg1.argumentValue));
+        result.resultItemList = tuplesResults;
+    } else {
+        // configure resultType to have only a list of assign
+        result.resultType = ResultType::STRING;
+        result.resultBoolean = !stmtNumResults.empty();
+        result.resultHeader = std::get<std::string>(syn.argumentValue);
+        result.resultItemList = stmtNumResults;
+    }
 }
 
 bool PatternClauseEvaluator::leftIsSynonym() {
@@ -116,9 +170,21 @@ bool PatternClauseEvaluator::rightIsWildCard() {
 
 }
 
+Expression validateAndParseEntRef(string arg) {
+    vector<string> exprTokenList = StringFormatter::tokenizeByRegex(arg, "[ ]*\"[ ]*");
+    if(exprTokenList.size() <= 0) throw arg + "is invalid entSpec";
+    string trimmedArg = exprTokenList[0];
+    Expression varNode = Parser::parseExpression(trimmedArg);
+    if(auto value = get_if<VariableNode*>(&varNode)) {
+        return varNode;
+    } else {
+        throw "validateAndParseEntRef( " + arg + ") is not a variable";
+    }
+}
+
 Expression validateAndParseExpression(string arg) {
     vector<string> exprTokenList = StringFormatter::tokenizeByRegex(arg, "[_]?\"[ ]*|[ ]*\"[_]?");
-    if(exprTokenList.size() <= 0) throw arg + "is invalid";
+    if(exprTokenList.size() <= 0) throw arg + "is invalid expression spec";
     string trimmedArg = exprTokenList[0];
     if(!Identifier::checkParenthesesCorrectness(trimmedArg, "()")) throw trimmedArg + "is an invalid expression";
     return Parser::parseExpression(trimmedArg);
@@ -134,13 +200,6 @@ void addToStmtAndVariableList(AssignNode *assignNode, vector<ResultItem> *statem
     statementAndVarList->push_back(assignVarPair);
 }
 
-
-// TODO: convert string argument to an expression one. for future iteration requirements
-// ideas:
-// auto value arg as well.
-// If same expression variant,
-//      compare operator, like var & const
-//          if operator same, initiate another exact match with && instead of ||
 bool searchForMatchInExpr(Expression expressionNode, Expression arg) {
     /**
      * perform exact matching, if it fails, go down the different paths to see if correct or not
@@ -189,13 +248,35 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg) {
     }
 }
 
-bool matchVariableValue(VariableNode *varNode, Argument arg) {
-    string trimmed = StringFormatter::tokenizeByRegex(std::get<std::string>(arg.argumentValue), "[ ]*\"[ ]*")[0];
-    if (varNode->getVariableName() == trimmed)
-        return true;
-    else
+bool matchVariableValue(VariableNode *varNode, Expression arg) {
+    if(auto var = get_if<VariableNode*>(&arg)) {
+        VariableNode* v = *var;
+        if (v->getVariableName() == varNode->getVariableName()) return true;
+        else return false;
+    } else {
+        cout << "provided expression is not a variable\n";
         return false;
+    }
+}
 
+bool matchVariableValueInConditionalExpression(CondExprNode* condExpr, Expression arg) {
+    if(condExpr->getRelExpr() != nullptr) {
+        RelExprNode* relExprNode = condExpr->getRelExpr();
+        Expression leftNode = relExprNode->getLeftFactor();
+        Expression rightNode = relExprNode->getRightFactor();
+        return searchForMatchInExpr(leftNode, arg) || searchForMatchInExpr(rightNode, arg);
+        // perform search
+    } else if (condExpr->getCondOperator() != "") {
+        CondExprNode* innerCondExpr = condExpr->getRightNode();
+        return matchVariableValueInConditionalExpression(innerCondExpr, arg);
+    } else if (condExpr->getLeftNode() != nullptr && condExpr->getRightNode() != nullptr) {
+        CondExprNode* leftCondExpr = condExpr->getLeftNode();
+        CondExprNode* rightCondExpr = condExpr->getRightNode();
+        return matchVariableValueInConditionalExpression(leftCondExpr, arg) ||
+                matchVariableValueInConditionalExpression(rightCondExpr, arg);
+    } else {
+        throw "there is something wrong with your conditional node. cond Node can only have 1) relExpr 2) relExpr && || relExpr or 3) another cond Op";
+    }
 }
 
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg) {

@@ -7,7 +7,6 @@
 #include "TNode/TNode.h"
 
 class PrintStatementTable : public StatementTable<PrintNode *> {
-
+public:
     string getVariableName(string statementNumber);
 };
-

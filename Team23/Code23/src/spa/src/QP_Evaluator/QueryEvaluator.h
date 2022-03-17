@@ -6,7 +6,7 @@
 #define SPA_QUERYEVALUATOR_H
 
 
-#include "PKB.h"
+#include "PKB/PKB.h"
 #include "QP_Evaluator/Query/Query.h"
 #include "QP_Evaluator/ClauseEvaluators/Result.h"
 #include "QP_Evaluator/ClauseEvaluators/ClauseEvaluator.h"
