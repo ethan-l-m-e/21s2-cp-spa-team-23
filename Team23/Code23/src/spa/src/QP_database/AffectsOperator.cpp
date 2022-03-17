@@ -27,7 +27,7 @@ bool AffectsOperator::pathExistBetween(NodeCFG *left, NodeCFG *right, int CFGSiz
     PKB::getInstance()->relationship.usesS.isRelationship(rightVal, modifiedVar);
 
     // unmodified control flow path
-
+    return false;
 }
 
 bool AffectsOperator::IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode, string variable,
