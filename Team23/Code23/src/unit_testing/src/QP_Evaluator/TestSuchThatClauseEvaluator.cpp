@@ -52,7 +52,7 @@ TEST_CASE("Test Follow clause evaluator") {
 
 
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_0_0});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_0_3});
@@ -208,7 +208,7 @@ TEST_CASE("Test Follows* clause evaluator") {
     SuchThatClause clause_0_10 = {ArgList{a0, a10},RelRef::FOLLOWS_T};
     SuchThatClause clause_s1_pn = {ArgList{as1, apn},RelRef::FOLLOWS_T};
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_0_0});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_0_3});
@@ -350,7 +350,7 @@ TEST_CASE("Test Parent clause evaluator") {
     SuchThatClause clause_w_a = {ArgList{aw, aa},RelRef::PARENT};
 
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause0});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause1});
@@ -497,7 +497,7 @@ TEST_CASE("Test Parent* clause evaluator") {
     SuchThatClause clause_0_10 = {ArgList{a0, a10},RelRef::PARENT_T};
 
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause0});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause1});
@@ -619,7 +619,7 @@ TEST_CASE("Test ModifiesS clause evaluator") {
     SuchThatClause clause_s1_v = {ArgList{as1, av},RelRef::MODIFIES_S};
     SuchThatClause clause_w_v = {ArgList{aw, av},RelRef::MODIFIES_S};
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_6_v});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_r_x});
@@ -762,7 +762,7 @@ TEST_CASE("Test UsesS clause evaluator") {
     SuchThatClause clause_pn_v = {ArgList{apn, av},RelRef::USES_S};
     SuchThatClause clause_r_v = {ArgList{ar, av},RelRef::USES_S};
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_2_v});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_s1_x});
@@ -889,7 +889,7 @@ TEST_CASE("Test ModifiesP clause evaluator") {
     SuchThatClause clause_p_v = {ArgList{ap, av},RelRef::MODIFIES_P};
     SuchThatClause clause_p_x1 = {ArgList{ap, ax1},RelRef::MODIFIES_P};
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_prop_v});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_p_x});
@@ -969,7 +969,7 @@ TEST_CASE("Test UsesP clause evaluator") {
     SuchThatClause clause_p_v = {ArgList{ap, av},RelRef::USES_P};
     SuchThatClause clause_p_x1 = {ArgList{ap, ax1},RelRef::USES_P};
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_prop_v});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_p_x});
@@ -1058,7 +1058,7 @@ TEST_CASE("Test Next clause evaluator") {
     SuchThatClause clause_ifs_s1 = {ArgList{aifs, as1},RelRef::NEXT};
     SuchThatClause clause_s1_w = {ArgList{as1, aw},RelRef::NEXT};
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_0_0});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_10_5});
@@ -1197,7 +1197,7 @@ TEST_CASE("Test NextT clause evaluator") {
     SuchThatClause clause_s1_w = {ArgList{as1, aw},RelRef::NEXT_T};
     SuchThatClause clause_r_pn = {ArgList{ar, apn},RelRef::NEXT_T};
 
-    Argument dummySelect = {ArgumentType::ATTR_REF, make_pair("s", AttrName::VALUE)};
+    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_0_0});
     Query query_1 = makeQuery(declarations, {dummySelect}, {clause_6_6});

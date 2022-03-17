@@ -256,6 +256,7 @@ void extractAllEntities(Node *node) {
             PKB::getInstance()->entity.constants.add(c);
         for(Node* s: stmtLst)
             extractAllEntities(s);
+        PKB::getInstance()->statement.statements.addStatement(value);
         PKB::getInstance()->statement.whileStatements.addStatement(value);
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
         Node* condExprNode = value->getCondExpr();
@@ -271,6 +272,7 @@ void extractAllEntities(Node *node) {
             extractAllEntities(s);
         for(Node* s: thenVector)
             extractAllEntities(s);
+        PKB::getInstance()->statement.statements.addStatement(value);
         PKB::getInstance()->statement.ifStatements.addStatement(value);
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
         vector<VarName> variables = value->getAllVariables();
@@ -281,6 +283,7 @@ void extractAllEntities(Node *node) {
         for(Constant constant: constants) {
             PKB::getInstance() ->entity.constants.add(constant);
         }
+        PKB::getInstance()->statement.statements.addStatement(value);
         PKB::getInstance()->statement.assignStatements.addStatement(value);
     } else if(auto value = dynamic_cast<CondExprNode*>(node)) {
         vector<VarName> variables = value->getAllVariables();
@@ -292,12 +295,15 @@ void extractAllEntities(Node *node) {
             PKB::getInstance() ->entity.constants.add(constant);
         }
     } else if(auto value = dynamic_cast<ReadNode*>(node)) {
+        PKB::getInstance()->statement.statements.addStatement(value);
         PKB::getInstance()->statement.readStatements.addStatement(value);
         PKB::getInstance()->entity.variables.add(value->getVarName());
     } else if(auto value = dynamic_cast<PrintNode*>(node)) {
+        PKB::getInstance()->statement.statements.addStatement(value);
         PKB::getInstance()->statement.printStatements.addStatement(value);
         PKB::getInstance()->entity.variables.add(value->getVarName());
     } else if(auto value = dynamic_cast<CallNode*>(node)) {
+        PKB::getInstance()->statement.statements.addStatement(value);
         PKB::getInstance()->statement.callStatements.addStatement(value);
         PKB::getInstance()->entity.procedures.add(value->getProcName());//Not sure if needed
     }
