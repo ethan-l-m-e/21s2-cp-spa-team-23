@@ -79,20 +79,49 @@ PKB* generateSamplePKB() {
     PKB *testPKB = PKB::getInstance();
     testPKB->clearPKB();
     Parser::resetStatementNumber();
-    testPKB->statement.readStatements.addStatement(Parser::parseRead(s1));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(s2));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(s3));
-    testPKB->statement.printStatements.addStatement(Parser::parsePrint(s4));
-    testPKB->statement.whileStatements.addStatement(Parser::parseWhile(s5));
-    testPKB->statement.callStatements.addStatement(Parser::parseCall(s6));
-    IfNode* ifNode = Parser::parseIf(s7);
-    AssignNode* assignNode1 = dynamic_cast<AssignNode*>(((*ifNode).getThenStmtLst())[0]);
-    AssignNode* assignNode2 = dynamic_cast<AssignNode*>(((*ifNode).getElseStmtLst())[0]);
-    testPKB->statement.ifStatements.addStatement(ifNode);
-    testPKB->statement.assignStatements.addStatement(assignNode1);
-    testPKB->statement.assignStatements.addStatement(assignNode2);
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(s10));
-    testPKB->statement.printStatements.addStatement(Parser::parsePrint(s11));
+    ReadNode* n1 = Parser::parseRead(s1);
+    testPKB->statement.statements.addStatement(n1);
+    testPKB->statement.readStatements.addStatement(n1);
+
+    AssignNode* n2 = Parser::parseAssign(s2);
+    testPKB->statement.statements.addStatement(n2);
+    testPKB->statement.assignStatements.addStatement(n2);
+
+    AssignNode* n3 = Parser::parseAssign(s3);
+    testPKB->statement.statements.addStatement(n3);
+    testPKB->statement.assignStatements.addStatement(n3);
+
+    PrintNode* n4 = Parser::parsePrint(s4);
+    testPKB->statement.statements.addStatement(n4);
+    testPKB->statement.printStatements.addStatement(n4);
+
+    WhileNode* n5 = Parser::parseWhile(s5);
+    testPKB->statement.statements.addStatement(n5);
+    testPKB->statement.whileStatements.addStatement(n5);
+
+    CallNode* n6 = Parser::parseCall(s6);
+    testPKB->statement.statements.addStatement(n6);
+    testPKB->statement.callStatements.addStatement(n6);
+
+    IfNode* n7 = Parser::parseIf(s7);
+    testPKB->statement.statements.addStatement(n7);
+    testPKB->statement.ifStatements.addStatement(n7);
+
+    AssignNode* n8 = dynamic_cast<AssignNode*>(((*n7).getThenStmtLst())[0]);
+    testPKB->statement.statements.addStatement(n8);
+    testPKB->statement.assignStatements.addStatement(n8);
+
+    AssignNode* n9 = dynamic_cast<AssignNode*>(((*n7).getElseStmtLst())[0]);
+    testPKB->statement.statements.addStatement(n9);
+    testPKB->statement.assignStatements.addStatement(n9);
+
+    AssignNode* n10 = Parser::parseAssign(s10);
+    testPKB->statement.statements.addStatement(n10);
+    testPKB->statement.assignStatements.addStatement(n10);
+
+    PrintNode* n11 = Parser::parsePrint(s11);
+    testPKB->statement.statements.addStatement(n11);
+    testPKB->statement.printStatements.addStatement(n11);
 
     Parser::resetStatementNumber();
     testPKB->entity.variables.add("x");
@@ -198,14 +227,33 @@ PKB* generateSamplePKBForPatternMatching() {
     testPKB->entity.variables.add("y");
     testPKB->entity.variables.add("z");
 
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(a1));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(a2));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(a3));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(a4));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(a5));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(a6));
-    testPKB->statement.assignStatements.addStatement(Parser::parseAssign(a7));
+    AssignNode* n1 = Parser::parseAssign(a1);
+    testPKB->statement.statements.addStatement(n1);
+    testPKB->statement.assignStatements.addStatement(n1);
 
+    AssignNode* n2 = Parser::parseAssign(a2);
+    testPKB->statement.statements.addStatement(n2);
+    testPKB->statement.assignStatements.addStatement(n2);
+
+    AssignNode* n3 = Parser::parseAssign(a3);
+    testPKB->statement.statements.addStatement(n3);
+    testPKB->statement.assignStatements.addStatement(n3);
+
+    AssignNode* n4 = Parser::parseAssign(a4);
+    testPKB->statement.statements.addStatement(n4);
+    testPKB->statement.assignStatements.addStatement(n4);
+
+    AssignNode* n5 = Parser::parseAssign(a5);
+    testPKB->statement.statements.addStatement(n5);
+    testPKB->statement.assignStatements.addStatement(n5);
+
+    AssignNode* n6 = Parser::parseAssign(a6);
+    testPKB->statement.statements.addStatement(n6);
+    testPKB->statement.assignStatements.addStatement(n6);
+
+    AssignNode* n7 = Parser::parseAssign(a7);
+    testPKB->statement.statements.addStatement(n7);
+    testPKB->statement.assignStatements.addStatement(n7);
 
     testPKB->relationship.follows.setRelationship(1, 2);
     testPKB->relationship.follows.setRelationship(2, 3);
