@@ -7,7 +7,6 @@
 
 #include <string>
 #include <unordered_map>
-
 using namespace std;
 
 #define nullStmtNo 0
@@ -29,7 +28,10 @@ public:
     NodeCFG* getStartNode();
     virtual NodeCFG* getEndNode();
     virtual bool isStart();
-    bool isEnd();
+
+    virtual bool isEnd();
+
+    void setAllPreviousNodes(unordered_map<int, NodeCFG *> allPrevNodesMap);
 };
 
 
@@ -46,6 +48,8 @@ public:
 
     NodeCFG* getLastLeftNode();
     NodeCFG* getLastRightNode();
+
+    bool isEnd();
 };
 
 class LoopCFG: public NodeCFG {

@@ -17,6 +17,7 @@ ResultTable::ResultTable(std::vector<std::string> header, String2DVector values)
     tableHeader = std::move(header);
     tableEntries = std::move(values);
     isBooleanResult = false;
+    booleanResult = true;
 }
 
 void ResultTable::clearTable() {
