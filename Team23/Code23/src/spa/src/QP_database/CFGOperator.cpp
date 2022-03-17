@@ -1,25 +1,13 @@
 //
 // Created by Tin Hong Wen on 10/3/22.
 //
-#include <unordered_set>
-#include <unordered_map>
-#include <vector>
-#include <iostream>
 
 #include "CFGOperator.h"
 
 using namespace std;
 
-string printPath(vector<int> path);
-unordered_set<NodeCFG*> collateAllAdjacentNodes(NodeCFG* node);
-unordered_set<NodeCFG*> collateAllPreviousNodes(NodeCFG* node);
-unordered_map<int, bool> constructVisitMap(int size);
-bool IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode, unordered_map<int, bool> &visited, vector<int> &path);
-unordered_set<int> searchNodesAlongPathAfter(NodeCFG* leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 
-unordered_set<int> searchNodesAlongPathBefore(NodeCFG* rightNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 CFGOperator *CFGOperator::singleton = nullptr;
-
 CFGOperator::CFGOperator() {}
 CFGOperator* CFGOperator::getInstance() {
     if (CFGOperator::singleton == nullptr) {
@@ -29,106 +17,110 @@ CFGOperator* CFGOperator::getInstance() {
 }
 
 bool CFGOperator::pathExistBetween(NodeCFG* left, NodeCFG* right, int CFGSize) {
+    return DFSBoolean_func(left, right, CFGSize, IsReachableForward);
+}
+
+unordered_set<string> CFGOperator::gatherAllRightNodes(NodeCFG* leftNode, int CFGSize) {
+    unordered_set<int> resultSet =  DFSResultSet_func(leftNode, CFGSize,collateAllAdjacentNodes,
+                             searchNodesAlongPathAfter);
+    return convertIntToString(resultSet);
+}
+
+unordered_set<string> CFGOperator::gatherAllLeftNodes(NodeCFG* rightNode, int CFGSize) {
+    unordered_set<int> resultSet =   DFSResultSet_func(rightNode, CFGSize,collateAllPreviousNodes,
+                             searchNodesAlongPathBefore);
+    return convertIntToString(resultSet);
+}
+
+
+bool CFGOperator::IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode,
+                        unordered_map<int, bool> &visited,
+                        vector<int> &path) {
+    int srcVal = srcNode->getStatementNumber();
+    int destVal = destNode->getStatementNumber();
+
+    if(srcVal == destVal) {
+        return true;
+    }
+    visited[srcVal] = true;
+    path.push_back(srcVal);
+
+    unordered_set<NodeCFG*> adjNodes = collateAllAdjacentNodes(srcNode);
+    unordered_set<NodeCFG*>::iterator adj;
+    for(adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
+        NodeCFG* adjacentNode =  *adj;
+        if (!visited[adjacentNode->getStatementNumber()]) {
+            if (IsReachableForward(adjacentNode, destNode, visited, path))
+                return true;
+        }
+    }
+
+    path.pop_back();
+    return false;
+}
+
+
+bool CFGOperator::DFSBoolean_func(NodeCFG* left, NodeCFG* right, int CFGSize,
+                                  bool(*dfsRecursionFoo)(NodeCFG* srcNode, NodeCFG* destNode,
+                                                         unordered_map<int, bool> &visited,
+                                                         vector<int> &path)){
     vector<int> path;
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
-    if (IsReachableForward(left, right, visited, path)) {
+    if (dfsRecursionFoo(left, right, visited, path)) {
         return true;
     } else {
         return false;
     }
 }
 
-unordered_set<int> CFGOperator::gatherAllRightNodesNext(NodeCFG* leftNode, int CFGSize) {
+unordered_set<int> CFGOperator::DFSResultSet_func(NodeCFG* currentNode, int CFGSize,
+                                                  unordered_set<NodeCFG*>(*getAdjFoo)(NodeCFG*),
+                                                  unordered_set<int>(*dfsRecursionFoo)(NodeCFG*, unordered_map<int, bool>&, unordered_set<int>)) {
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
-    unordered_set<NodeCFG*> adjNode = collateAllAdjacentNodes(leftNode);
-    unordered_set<int> allNodesAfter;
-    for(NodeCFG* node: adjNode) {
-        unordered_set<int> newSet = searchNodesAlongPathAfter(node, visited, allNodesAfter);
-        allNodesAfter.insert(newSet.begin(), newSet.end());
+    unordered_set<NodeCFG *> adjNode = getAdjFoo(currentNode);
+    unordered_set<int> resultNodes;
+    for (NodeCFG *node: adjNode) {
+        unordered_set<int> newSet = dfsRecursionFoo(node, visited, resultNodes);
+        resultNodes.insert(newSet.begin(), newSet.end());
     }
-    return allNodesAfter;
-}
-
-unordered_set<int> CFGOperator::gatherAllLeftNodesNext(NodeCFG* rightNode, int CFGSize) {
-    unordered_map<int, bool> visited = constructVisitMap(CFGSize);
-    unordered_set<NodeCFG*> adjNode = collateAllPreviousNodes(rightNode);
-    unordered_set<int> allNodesBefore;
-    for(NodeCFG* node: adjNode) {
-        unordered_set<int> newSet = searchNodesAlongPathBefore(node, visited, allNodesBefore);
-        allNodesBefore.insert(newSet.begin(), newSet.end());
-    }
-    return allNodesBefore;
+    return resultNodes;
 }
 
 
-
-
-bool IsReachableForward(NodeCFG* srcNode, NodeCFG* destNode,
-                        unordered_map<int, bool> &visited,
-                        vector<int> &path) {
-    int srcVal = srcNode->getStatementNumber();
-    int destVal = destNode->getStatementNumber();
-
-    visited[srcVal] = true;
-    path.push_back(srcVal);
-
-    if(srcVal == destVal) {
-        return true;
-    }
-    unordered_set<NodeCFG*> adjNodes = collateAllAdjacentNodes(srcNode);
-    unordered_set<NodeCFG*>::iterator adj;
-    //TODO: optimisation - convert unordered set into a sorted set so can jump straight to the optimal node
-    for(adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
+unordered_set<int> CFGOperator::DFSResultSetRecursion_func(NodeCFG* currentNode,
+                                                           unordered_map<int, bool> &visited,
+                                                           unordered_set<int> resultSet,
+                                                           unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *)) {
+    int currVal = currentNode->getStatementNumber();
+    visited[currVal] = true;
+    resultSet.insert(currVal);
+    unordered_set<NodeCFG *> adjNodes = getAdjFoo(currentNode);
+    unordered_set<NodeCFG *>::iterator adj;
+    for (adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
         NodeCFG* adjacentNode =  *adj;
-
         if (!visited[adjacentNode->getStatementNumber()]) {
-            if (IsReachableForward(adjacentNode, destNode, visited, path))
-                return true;
+            unordered_set<int> resultSetInAdjacentNode = DFSResultSetRecursion_func(adjacentNode, visited, resultSet,
+                                                                                    getAdjFoo);
+            resultSet.insert(resultSetInAdjacentNode.begin(), resultSetInAdjacentNode.end());
         }
     }
-    path.pop_back();
-    return false;
+    return resultSet;
 }
 
-
-unordered_set<int> searchNodesAlongPathAfter(NodeCFG* leftNode,
+unordered_set<int> CFGOperator::searchNodesAlongPathAfter(NodeCFG* leftNode,
                                              unordered_map<int, bool> &visited,
                                              unordered_set<int> nextSet) {
-    int currVal = leftNode->getStatementNumber();
-    visited[currVal] = true;
-    nextSet.insert(currVal);
-    unordered_set<NodeCFG*> adjNodes = collateAllAdjacentNodes(leftNode);
-    unordered_set<NodeCFG*>::iterator adj;
-    for(adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
-        NodeCFG* adjacentNode =  *adj;
-        if (!visited[adjacentNode->getStatementNumber()]) {
-            unordered_set<int> nextSetInAdj = searchNodesAlongPathAfter(adjacentNode, visited, nextSet);
-            nextSet.insert(nextSetInAdj.begin(), nextSetInAdj.end());
-        }
-    }
-    return nextSet;
+    return DFSResultSetRecursion_func(leftNode, visited, nextSet, collateAllAdjacentNodes);
 }
 
-unordered_set<int> searchNodesAlongPathBefore(NodeCFG* rightNode,
+unordered_set<int> CFGOperator::searchNodesAlongPathBefore(NodeCFG* rightNode,
                                               unordered_map<int, bool> &visited,
                                               unordered_set<int> nextSet) {
-    int currVal = rightNode->getStatementNumber();
-    visited[currVal] = true;
-    nextSet.insert(currVal);
-    unordered_set<NodeCFG*> adjNodes = collateAllPreviousNodes(rightNode);
-    unordered_set<NodeCFG*>::iterator adj;
-    for(adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
-        NodeCFG* adjacentNode =  *adj;
-        if (!visited[adjacentNode->getStatementNumber()]) {
-            unordered_set<int> nextSetInAdj = searchNodesAlongPathBefore(adjacentNode, visited, nextSet);
-            nextSet.insert(nextSetInAdj.begin(), nextSetInAdj.end());
-        }
-    }
-    return nextSet;
+    return DFSResultSetRecursion_func(rightNode, visited, nextSet, collateAllPreviousNodes);
 }
 
 
-unordered_set<NodeCFG*> collateAllPreviousNodes(NodeCFG* node) {
+unordered_set<NodeCFG*> CFGOperator::collateAllPreviousNodes(NodeCFG* node) {
     unordered_map<int, NodeCFG*> nodeMap = node->getAllPreviousNode();
     unordered_map<int, NodeCFG*>::iterator i;
     unordered_set<NodeCFG*> outputSet;
@@ -139,7 +131,7 @@ unordered_set<NodeCFG*> collateAllPreviousNodes(NodeCFG* node) {
     return outputSet;
 }
 
-unordered_set<NodeCFG*> collateAllAdjacentNodes(NodeCFG* node) {
+unordered_set<NodeCFG*> CFGOperator::collateAllAdjacentNodes(NodeCFG* node) {
     unordered_set<NodeCFG*> adjNodes;
     if(auto branch = dynamic_cast<BranchCFG*>(node)) {
         adjNodes.insert(branch->getLeftNode());
@@ -154,8 +146,7 @@ unordered_set<NodeCFG*> collateAllAdjacentNodes(NodeCFG* node) {
     return adjNodes;
 }
 
-
-unordered_map<int, bool> constructVisitMap(int size) {
+unordered_map<int, bool> CFGOperator::constructVisitMap(int size) {
     unordered_map<int, bool> v;
     for(int i = 1; i <= size; i++) {
         v[i] = false;
@@ -163,11 +154,20 @@ unordered_map<int, bool> constructVisitMap(int size) {
     return v;
 }
 
-string printPath(vector<int> path) {
+string CFGOperator::printPath(vector<int> path) {
     vector<int>::iterator i;
     string output = "";
     for(int i: path) {
         output = output + " " + to_string(i);
     }
     return output;
+}
+
+unordered_set<string> CFGOperator::convertIntToString(unordered_set<int> intSet) {
+    unordered_set<string> stringSet = {};
+    unordered_set<int>::iterator i;
+    for(i = intSet.begin(); i!= intSet.end(); ++i) {
+        stringSet.insert(to_string(*i));
+    }
+    return stringSet;
 }

@@ -14,25 +14,25 @@ unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity
 
     switch (designEntity) {
         case DesignEntity::STMT:
-            return pkb->getAllStatements();
+            return pkb->statement.statements.getAllStatementNumbers();
         case DesignEntity::ASSIGN:
-            return pkb->getAllAssignStatements();
+            return pkb->statement.assignStatements.getAllStatementNumbers();
         case DesignEntity::READ:
-            return pkb->getAllReadStatements();
+            return pkb->statement.readStatements.getAllStatementNumbers();
         case DesignEntity::PRINT:
-            return pkb->getAllPrintStatements();
+            return pkb->statement.printStatements.getAllStatementNumbers();
         case DesignEntity::WHILE:
-            return pkb->getAllWhileStatements();
+            return pkb->statement.whileStatements.getAllStatementNumbers();
         case DesignEntity::IF:
-            return pkb->getAllIfStatements();
+            return pkb->statement.ifStatements.getAllStatementNumbers();
         case DesignEntity::VARIABLE:
-            return pkb->getAllVariables();
+            return pkb->entity.variables.getAll();
         case DesignEntity::CONSTANT:
-            return pkb->getAllConstants();
+            return pkb->entity.constants.getAll();
         case DesignEntity::PROCEDURE:
-            return pkb->getAllProcedures();
+            return pkb->entity.procedures.getAll();
         case DesignEntity::CALL:
-            return pkb->getAllCallStatements();
+            return pkb->statement.callStatements.getAllStatementNumbers();
         default:
             throw qp::QPEvaluatorException("Invalid design entity found.");
     }

@@ -5,15 +5,15 @@
 #include "ModifiesSClauseEvaluator.h"
 
 bool ModifiesSClauseEvaluator::isRelation(std::string left, std::string right) {
-    return pkb->isModifiesS(left, right);
+    return pkb->relationship.modifiesS.isRelationship(left, right);
 }
 
 unordered_set<std::string> ModifiesSClauseEvaluator::getLeftSynonymValue(std::string right) {
-    return pkb->getModifierStatements(right);
+    return pkb->relationship.modifiesS.getSetLHS(right);
 }
 
 unordered_set<std::string> ModifiesSClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->getVariablesModifiedS(left);
+    return pkb->relationship.modifiesS.getSetRHS(left);
 }
 
 pair<DesignEntity, DesignEntity> ModifiesSClauseEvaluator::getWildcardType () {
