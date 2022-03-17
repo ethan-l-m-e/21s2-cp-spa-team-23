@@ -5,6 +5,10 @@
 #include "NextRelationship.h"
 
 
+void NextRelationship::clear() {
+    OneToOneRelationship<int, NodeCFG *>::clear();
+}
+
 void NextRelationship::setRelationship(int lhs, NodeCFG *rhs) {
     OneToOneRelationship<int, NodeCFG *>::setRelationship(lhs, rhs);
 }
@@ -60,3 +64,5 @@ NodeCFG* NextRelationship::getCFGNode(int statementNumber) {
 int NextRelationship::getCFGSize() {
     return getSize();
 }
+
+

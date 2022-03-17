@@ -729,14 +729,11 @@ TEST_CASE("Add Next") {
 
     unordered_map<int, NodeCFG *> statementNumberToNodeCFGMap;
 
-
     for (int statementNumber : {1, 2, 34, 56, 57, 345}) {
-
         NodeCFG node = NodeCFG(statementNumber);
 
         statementNumberToNodeCFGMap.emplace(statementNumber, &node);
     }
-
 
     for (auto& iter : statementNumberToNodeCFGMap) {
         int statementNumber = iter.first;
@@ -744,8 +741,6 @@ TEST_CASE("Add Next") {
 
         pkb->relationship.next.setRelationship(statementNumber, node);
     }
-
-
 
     REQUIRE(pkb->relationship.next.getCFGSize() == statementNumberToNodeCFGMap.size());
 
@@ -757,6 +752,4 @@ TEST_CASE("Add Next") {
         REQUIRE(pkb->relationship.next.getCFGNode(statementNumber) == node);
 
     }
-
-
 }
