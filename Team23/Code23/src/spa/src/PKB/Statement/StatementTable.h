@@ -22,6 +22,8 @@ private:
     unordered_set<int> statementNumbersSet;
     unordered_set<Node> statementNodesSet;
 
+    unordered_map<int, Node> statementNumberToStatementNodeMap;
+
 public:
 
 
@@ -29,6 +31,16 @@ public:
 
         statementNumbersSet.insert(node->getStmtNumber());
         statementNodesSet.insert(node);
+
+        statementNumberToStatementNodeMap.emplace(node->getStmtNumber(), node);
+    }
+
+    Node getNode(int statementNumber) {
+        if (statementNumberToStatementNodeMap.find(statementNumber) != statementNumberToStatementNodeMap.end()) {
+            return statementNumberToStatementNodeMap[statementNumber];
+        } else {
+            throw std::exception("Statement Number Does Not Exist!");
+        }
     }
 
     bool isStatementNumber(int statementNumber) {
