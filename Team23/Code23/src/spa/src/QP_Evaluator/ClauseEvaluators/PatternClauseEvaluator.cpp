@@ -47,14 +47,6 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
     return true;
 }
 
-/*
- * General algorithm:
- *      foo(resultTable):
- *      Validate the clause
- *      pull data from PKB
- *
- * evaluateFunction
- */
 bool PatternClauseEvaluator::evaluateWithFunc_Pointers(ResultTable* resultTable,
                                                        void(*validateAndParse)(Argument, Argument, Argument,
                                                                Expression, Expression),
@@ -201,11 +193,11 @@ void addToStmtAndVariableList(Node *node, vector<ResultItem> *statementAndVarLis
     }
 }
 
+vector<string> collectControlVarInCondExpr(CondExprNode* condExpr) {
+    return condExpr->getListOfVarUsed();
+}
 
 bool searchForMatchInExpr(Expression expressionNode, Expression arg) {
-    /**
-     * perform exact matching, if it fails, go down the different paths to see if correct or not
-     */
     bool hasMatch = performExactMatchExpr(expressionNode, arg);
     if(hasMatch) {
         return true;
@@ -250,10 +242,6 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg) {
     }
 }
 
-vector<string> collectControlVarInCondExpr(CondExprNode* condExpr) {
-    return condExpr->getListOfVarUsed();
-}
-
 bool matchControlVarInCondExpr(CondExprNode* condExpr, Expression arg) {
     if(condExpr->getRelExpr() != nullptr) {
         RelExprNode* relExprNode = condExpr->getRelExpr();
@@ -293,38 +281,11 @@ bool matchExpressionValue(Expression firstExpression, Expression secondExpressio
 }
 
 
-bool isSynonym(Argument arg) {
-    return arg.argumentType == ArgumentType::SYNONYM;
-}
+bool isSynonym(Argument arg) {return arg.argumentType == ArgumentType::SYNONYM;}
 
-bool isIdent(Argument arg) {
-    return arg.argumentType == ArgumentType::IDENT;
-}
+bool isIdent(Argument arg) {return arg.argumentType == ArgumentType::IDENT;}
 
-bool isWildCard(Argument arg) {
-    return arg.argumentType == ArgumentType::UNDERSCORE;
-}
+bool isWildCard(Argument arg) {return arg.argumentType == ArgumentType::UNDERSCORE;}
 
-bool isPartWildCard(Argument arg) {
-    return arg.argumentType == ArgumentType::PARTIAL_UNDERSCORE;
-}
-/*
-bool PatternClauseEvaluator::leftIsSynonym() {
-    return arg1.argumentType == ArgumentType::SYNONYM;
-}
-bool PatternClauseEvaluator::leftIsIdent() {
-    return arg1.argumentType == ArgumentType::IDENT;
-}
-bool PatternClauseEvaluator::leftIsWildCard() {
-    return arg1.argumentType == ArgumentType::UNDERSCORE;
-}
-bool PatternClauseEvaluator::rightIsPartWildCard() {
-    return arg2.argumentType == ArgumentType::PARTIAL_UNDERSCORE;
-}
-bool PatternClauseEvaluator::rightIsIdent() {
-    return arg2.argumentType == ArgumentType::IDENT;
-}
-bool PatternClauseEvaluator::rightIsWildCard() {
-    return arg2.argumentType == ArgumentType::UNDERSCORE;
-}
- */
+bool isPartWildCard(Argument arg) {return arg.argumentType == ArgumentType::PARTIAL_UNDERSCORE;}
+
