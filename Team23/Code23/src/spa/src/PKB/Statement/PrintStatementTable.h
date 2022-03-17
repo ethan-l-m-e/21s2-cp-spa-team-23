@@ -3,7 +3,7 @@
 //
 
 
-#include "Statement.h"
+#include "StatementTable.h"
 #include "TNode/TNode.h"
 
 class PrintStatementTable : public StatementTable<PrintNode *> {
