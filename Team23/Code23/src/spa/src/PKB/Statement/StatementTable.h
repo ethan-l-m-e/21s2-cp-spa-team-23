@@ -6,6 +6,7 @@
 
 #include<stdio.h>
 #include <unordered_set>
+#include <unordered_map>
 
 #include "PKB/PKBHelper.h"
 
@@ -22,6 +23,8 @@ private:
     unordered_set<int> statementNumbersSet;
     unordered_set<Node> statementNodesSet;
 
+    unordered_map<int, Node> statementNumberToStatementNodeMap;
+
 public:
 
 
@@ -29,6 +32,16 @@ public:
 
         statementNumbersSet.insert(node->getStmtNumber());
         statementNodesSet.insert(node);
+
+        statementNumberToStatementNodeMap.emplace(node->getStmtNumber(), node);
+    }
+
+    Node getNode(int statementNumber) {
+        if (statementNumberToStatementNodeMap.find(statementNumber) != statementNumberToStatementNodeMap.end()) {
+            return statementNumberToStatementNodeMap[statementNumber];
+        } else {
+            throw std::exception();
+        }
     }
 
     bool isStatementNumber(int statementNumber) {
