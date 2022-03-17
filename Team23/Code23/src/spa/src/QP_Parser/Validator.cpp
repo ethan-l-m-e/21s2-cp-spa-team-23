@@ -154,14 +154,23 @@ void Validator::handleVariableRelationshipClause(std::map<std::string, std::stri
     std::vector<std::string> arguments = *(suchThatClauseToken.arguments);
 
     // Check arguments
-    checkFirstArgForVariableClauses(arguments[0], argSet);
+    checkFirstArgForVariableClauses(arguments[0], argSet, declarationTokens);
     checkSecondArgForVariableClauses(arguments[1], declarationTokens);
 }
 
-void Validator::checkFirstArgForVariableClauses(std::string argument, std::set<std::string>& argSet) {
+void Validator::checkFirstArgForVariableClauses(std::string argument, std::set<std::string>& argSet,
+                                                std::map<std::string, std::string>& declarationTokens) {
     // If argument is wildcard, throw semantic exception
     bool isWildcard = argument == "_";
     if (isWildcard) {
+        throw QPInvalidSemanticException("Invalid First Argument");
+    }
+
+    // If argument is a synonym but is not declared, throw semantic exception
+    bool isArgumentIdent = regex_match(argument, std::regex(IDENT_INT_CHECK));
+    bool isSynonymArgumentNotInDeclarations = !isArgumentIdent &&
+                                              argSet.find(declarationTokens.at(argument)) == argSet.end();
+    if (isSynonymArgumentNotInDeclarations) {
         throw QPInvalidSemanticException("Invalid First Argument");
     }
 }

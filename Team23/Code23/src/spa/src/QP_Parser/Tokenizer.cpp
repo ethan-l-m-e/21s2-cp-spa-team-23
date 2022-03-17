@@ -154,7 +154,6 @@ std::vector<std::string> Tokenizer::getSplitPatternStrings(std::string pql) {
 
 PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
     // Remove 'pattern' in substring
-    patternClause = patternClause.substr(PATTERN_LENGTH);
     std::vector<std::string> patternClauseArgs = StringFormatter::tokenizeByRegex(patternClause, PATTERN_ARGUMENTS);
 
     // Split pattern synonym substring and first argument

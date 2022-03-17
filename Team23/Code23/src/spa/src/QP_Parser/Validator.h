@@ -40,7 +40,7 @@ namespace qp {
         void handleSuchThatStatementClause(std::map<std::string, std::string>&, std::vector<std::string>);
         void handleVariableRelationshipClause(std::map<std::string, std::string>, SuchThatClauseToken);
         void checkArgumentForStatementClauses(std::map<std::string, std::string>&, std::string);
-        void checkFirstArgForVariableClauses(std::string, std::set<std::string>&);
+        void checkFirstArgForVariableClauses(std::string, std::set<std::string>&, std::map<std::string, std::string>&);
         void checkSecondArgForVariableClauses(std::string, std::map<std::string, std::string>&);
         void validatePatternFirstArgument(std::map<std::string, std::string>, std::string);
         void checkArguments(std::vector<std::string>, std::map<std::string, std::string>);
