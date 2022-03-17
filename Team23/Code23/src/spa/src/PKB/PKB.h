@@ -44,11 +44,11 @@ public:
     struct Statement {
         StatementTable<StmtNode *> statements;
         StatementTable<AssignNode *> assignStatements;
-        StatementTable<ReadNode *> readStatements;
-        StatementTable<PrintNode *> printStatements;
+        ReadStatementTable readStatements;
+        PrintStatementTable printStatements;
         StatementTable<IfNode *> ifStatements;
         StatementTable<WhileNode *> whileStatements;
-        StatementTable<CallNode *> callStatements;
+        CallStatementTable callStatements;
     };
 
     Statement statement;
