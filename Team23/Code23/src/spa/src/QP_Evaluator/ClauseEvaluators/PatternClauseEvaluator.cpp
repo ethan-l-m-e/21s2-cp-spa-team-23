@@ -37,6 +37,8 @@ string retrieveStmtNo(AssignNode* assignNode);
 bool PatternClauseEvaluator::evaluateClause(ResultTable *resultTable) {
     if(synType == SynonymType::ASSIGN) {
         return evaluateAssign(resultTable);
+    } else {
+        return false;
     }
 }
 
