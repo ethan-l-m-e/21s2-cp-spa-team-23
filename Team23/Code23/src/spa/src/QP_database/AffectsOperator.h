@@ -17,7 +17,7 @@ public:
     bool pathExistBetween(NodeCFG* left, NodeCFG* right, int CFGSize) override;
     //unordered_set<int> gatherAllLeftNodes(NodeCFG* rightNode, int CFGSize) override;
     //unordered_set<int> gatherAllRightNodes(NodeCFG* leftNode, int CFGSize) override;
-    AffectsOperator *getInstance();
+    static AffectsOperator *getInstance();
 
     bool IsReachableForward(NodeCFG *srcNode, NodeCFG *destNode, string variable, unordered_map<int, bool> &visited, vector<int> &path);
 };
