@@ -65,7 +65,7 @@ public:
 
         for (RHS rhs : setRhs) {
             if (rhsToSetLhsMap.find(rhs) == rhsToSetLhsMap.end()) {
-                rhsToSetLhsMap.emplace(rhs, unordered_set<int>{lhs});
+                rhsToSetLhsMap.emplace(rhs, unordered_set<LHS>{lhs});
             } else {
                 rhsToSetLhsMap[rhs].insert(lhs);
             }
