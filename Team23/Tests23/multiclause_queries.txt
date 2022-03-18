@@ -1,137 +1,137 @@
 ../../../../Tests23/multiclause_source.txt ../../../../Tests23/multiclause_queries.txt ../../../tests/multiclause_out.xml
 stmt s;
 Select s such that Uses(s, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 2 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+3, 4, 5, 6, 7, 8, 9, 12
 5000
 3 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Follows(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 4 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Follows*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 5 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Parent(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 6 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Parent*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 7 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Calls(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 8 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Calls*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 9 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Next(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 10 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Next*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 11 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Affects(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 12 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Affects*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 13 - (2 such that)
 stmt s;
 Select s such that Uses(s, _) and Affects*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 14 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+3, 4, 5, 6, 7, 8, 9, 12
 5000
 15 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 16 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Follows(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 17 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Follows*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 18 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Parent(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 19 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Parent*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 20 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Calls(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 21 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Calls*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 22 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Next(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 23 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Next*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 24 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Affects(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 25 - (2 such that)
 stmt s;
 Select s such that Modifies(s, _) and Affects*(_, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 26 - (2 such that)
 stmt s;
 Select s such that Follows(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 26 - (2 such that)
 stmt s;
 Select s such that Follows(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 27 - (2 such that)
 stmt s;
@@ -186,12 +186,12 @@ Select s such that Follows(_, _) and Affects*(_, _)
 37 - (2 such that)
 stmt s;
 Select s such that Follows*(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 38 - (2 such that)
 stmt s;
 Select s such that Follows*(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 39 - (2 such that)
 stmt s;
@@ -246,12 +246,12 @@ Select s such that Follows*(_, _) and Affects*(_, _)
 49 - (2 such that)
 stmt s;
 Select s such that Parent(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 50 - (2 such that)
 stmt s;
 Select s such that Parent(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 51 - (2 such that)
 stmt s;
@@ -366,12 +366,12 @@ Select s such that Parent*(_, _) and Affects*(_, _)
 73 - (2 such that)
 stmt s;
 Select s such that Calls(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 74 - (2 such that)
 stmt s;
 Select s such that Calls(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 75 - (2 such that)
 stmt s;
@@ -426,12 +426,12 @@ Select s such that Calls(_, _) and Affects*(_, _)
 85 - (2 such that)
 stmt s;
 Select s such that Calls*(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 86 - (2 such that)
 stmt s;
 Select s such that Calls*(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 87 - (2 such that)
 stmt s;
@@ -486,12 +486,12 @@ Select s such that Calls*(_, _) and Affects*(_, _)
 97 - (2 such that)
 stmt s;
 Select s such that Next(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 98 - (2 such that)
 stmt s;
 Select s such that Next(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 99 - (2 such that)
 stmt s;
@@ -546,12 +546,12 @@ Select s such that Next(_, _) and Affects*(_, _)
 109 - (2 such that)
 stmt s;
 Select s such that Next*(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 110 - (2 such that)
 stmt s;
 Select s such that Next*(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 111 - (2 such that)
 stmt s;
@@ -606,12 +606,12 @@ Select s such that Next*(_, _) and Affects*(_, _)
 121 - (2 such that)
 stmt s;
 Select s such that Affects(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 122 - (2 such that)
 stmt s;
 Select s such that Affects(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 123 - (2 such that)
 stmt s;
@@ -666,12 +666,12 @@ Select s such that Affects(_, _) and Affects*(_, _)
 133 - (2 such that)
 stmt s;
 Select s such that Affects*(_, _) and Uses(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
 5000
 134 - (2 such that)
 stmt s;
 Select s such that Affects*(_, _) and Modifies(s, _)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
 5000
 135 - (2 such that)
 stmt s;
