@@ -218,7 +218,10 @@ void RelationshipExtractor::extractCFG (Node * node) {
     auto value = dynamic_cast<ProgramNode *>(node);
     vector<ProcedureNode *> v = value->getProcLst();
     for (ProcedureNode *p: v) {
-        CFGConstructor::createCFG(p);
+        vector<NodeCFG*> allCFGNodes = CFGConstructor::createCFG(p);
+        for(NodeCFG* n : allCFGNodes){
+            PKB::getInstance()->relationship.next.addCFGNode(n);
+        }
     }
 
 }

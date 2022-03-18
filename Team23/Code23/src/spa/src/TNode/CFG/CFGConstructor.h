@@ -10,8 +10,8 @@
 class CFGConstructor {
 
 public:
-    static NodeCFG* createCFG(ProcedureNode* p);
-    static vector<NodeCFG*> populateCFG(Node* currNode, vector<NodeCFG*> prevNode);
+    static vector<NodeCFG*> createCFG(ProcedureNode* p);
+    static vector<NodeCFG*> populateCFG(Node*, vector<NodeCFG*>, vector<NodeCFG*>*);
 };
 
 
