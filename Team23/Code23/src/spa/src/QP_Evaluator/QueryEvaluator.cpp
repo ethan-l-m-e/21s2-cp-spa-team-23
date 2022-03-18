@@ -14,6 +14,8 @@
 #include "QP_Evaluator/ClauseEvaluators/UsesSClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ModifiesPClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/UsesPClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/NextClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/NextTClauseEvaluator.h"
 
 std::list<std::string> QueryEvaluator::evaluate(Query* query) {
 
@@ -84,7 +86,11 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
             return new UsesPClauseEvaluator(clause.argList, pkb, query);
         case RelRef::MODIFIES_P:
             return new ModifiesPClauseEvaluator(clause.argList, pkb, query);
-        default:
+        case RelRef::NEXT:
+            return new NextClauseEvaluator(clause.argList, pkb, query);
+        case RelRef::NEXT_T:
+            return new NextTClauseEvaluator(clause.argList, pkb, query);
+       default:
             throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
 }
