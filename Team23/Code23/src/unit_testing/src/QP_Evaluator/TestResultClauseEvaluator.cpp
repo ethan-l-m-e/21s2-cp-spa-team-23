@@ -53,6 +53,7 @@ TEST_CASE("Test single") {
         REQUIRE(evaluateResultClause(resultTable, &query_0, testPKB) == ResultSet{"FALSE"});
     }
     delete resultTable;
+    delete testPKB;
 }
 
 TEST_CASE("Test tuple results") {
@@ -202,4 +203,5 @@ TEST_CASE("Test tuple results") {
         });
     }
     delete resultTable;
+    delete testPKB;
 }

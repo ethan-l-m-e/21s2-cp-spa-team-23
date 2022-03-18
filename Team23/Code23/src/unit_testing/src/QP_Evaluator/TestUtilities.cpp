@@ -40,9 +40,9 @@ ResultSet generateResultSet (list<string> result) {
     return {std::begin(result), std::end(result)};
 }
 
-ResultSet evaluateAndCreateResultSet(QueryEvaluator qe, Query *query) {
-    list<string> resultList = qe.evaluate(query);
-    return ResultSet (std::begin(resultList), std::end(resultList));
+ResultSet evaluateAndCreateResultSet(QueryEvaluator *qe, Query *query) {
+    list<string> resultList = qe->evaluate(query);
+    return {std::begin(resultList), std::end(resultList)};
 }
 
 PKB* generateSamplePKB() {
@@ -197,11 +197,6 @@ PKB* generateSamplePKB() {
     testPKB->relationship.usesS.setRelationship(11, unordered_set<string>{"x"});
     testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z"});
     testPKB->relationship.usesP.setRelationship("pr", unordered_set<string>{"y"});
-
-    NodeCFG c2 = NodeCFG(2);
-    testPKB->relationship.next.setRelationship(1, &c2);
-
-
     return testPKB;
 }
 
