@@ -293,8 +293,14 @@ TEST_CASE("test Modifies - call statement") {
     REQUIRE(PKB::getInstance()->relationship.modifiesS.isRelationship("2","x"));
 }
 
-TEST_CASE("test") {
-
-    PKB::getInstance()->relationship.parent.setRelationship(5,6);
-    REQUIRE(PKB::getInstance()->relationship.parent.isRelationship("5","6"));
+TEST_CASE("test next - basic") {
+    ProcedureList procLst;
+    StatementList s1;
+    s1.push_back(&aNode);
+    s1.push_back(&bNode);
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    procLst.push_back(&proc1);
+    ProgramNode prog = ProgramNode(procLst);
+    RelationshipExtractor::extractCFG(&prog);
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("1","2"));
 }

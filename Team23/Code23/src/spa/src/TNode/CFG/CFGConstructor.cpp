@@ -7,30 +7,24 @@
 #include "TNode/WhileNode.h"
 #include "TNode/IfNode.h"
 #include "iostream"
-
-vector<NodeCFG*> CFGConstructor::createCFG(ProcedureNode p) {
-    vector<Node*> stmtLst = p.getStmtLst();
+#include "PKB/PKB.h"
+vector<NodeCFG*> CFGConstructor::createCFG(ProcedureNode* p) {
+    vector<Node*> stmtLst = p->getStmtLst();
     unordered_map<int, NodeCFG *> currMapOfPrevNodes;
     vector<NodeCFG*> prevNode;
-    vector<NodeCFG*> firstSetOfNodes;
+    vector<NodeCFG*> setOfAllNodes;
+    NodeCFG* firstNode;
     bool isFirstLoop = true;
     for(Node* s: stmtLst) {
-        if(isFirstLoop){
-            firstSetOfNodes = CFGConstructor::populateCFG(s,prevNode);
-            prevNode = firstSetOfNodes;
-
-            isFirstLoop = false;
-        }else {
-            prevNode = CFGConstructor::populateCFG(s, prevNode);
-        }
+        prevNode = CFGConstructor::populateCFG(s, prevNode,&setOfAllNodes);
     }
-    return firstSetOfNodes;
+    return setOfAllNodes;
 }
 
 /*
  * returns new CFGNode(s) created in a vector
  */
-vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> prevSetOfNodes) {
+vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> prevSetOfNodes,vector<NodeCFG*>* setOfAllNodes) {
     vector<NodeCFG*> newSetOfNodes;
     if(auto value = dynamic_cast<WhileNode*>(currNode)) {
         auto* newCFGNode = new LoopCFG(currNode->getStmtNumber());
@@ -45,7 +39,7 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         newSetOfNodes.push_back(newCFGNode);
         bool isFirstLoop = true;
         for (Node *s: stmtLst) {
-            newSetOfNodes = populateCFG(s,newSetOfNodes );
+            newSetOfNodes = populateCFG(s,newSetOfNodes,setOfAllNodes );
             if(isFirstLoop){
                 newCFGNode->setNodeInLoop(newSetOfNodes.at(0));
                 isFirstLoop = false;
@@ -53,8 +47,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         }
         //last node in while loop to point towards initial LoopCFG
         newSetOfNodes.at(0)->setNextNode(newCFGNode);
-
-        return newSetOfNodes;
     }else if(auto value = dynamic_cast<IfNode*>(currNode)) {
         auto* newCFGNode = new BranchCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
@@ -70,7 +62,7 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
 
         bool isThenBranchFirstLoop = true;
         for (Node *s: thenBranch) {
-            newSetOfNodes = populateCFG(s,newSetOfNodes );
+            newSetOfNodes = populateCFG(s,newSetOfNodes,setOfAllNodes );
             if(isThenBranchFirstLoop){
                 for (NodeCFG *t: newSetOfNodes) {
 
@@ -81,7 +73,7 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         }
         bool isElseBranchFirstLoop = true;
         for (Node *s: elseBranch) {
-            newSetOfNodes = populateCFG(s,newSetOfNodes );
+            newSetOfNodes = populateCFG(s,newSetOfNodes,setOfAllNodes );
             if(isElseBranchFirstLoop){
                 for (NodeCFG *t: newSetOfNodes) {
 
@@ -90,9 +82,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
                 isElseBranchFirstLoop = false;
             }
         }
-
-        return newSetOfNodes;
-
     }else{
         auto* newCFGNode = new NodeCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
@@ -102,8 +91,10 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
             }
         }
         newSetOfNodes.push_back(newCFGNode);
-
-    return newSetOfNodes;
     }
+    for(NodeCFG* n : newSetOfNodes) {
+        setOfAllNodes->push_back(n);
+    }
+    return newSetOfNodes;
 }
 
