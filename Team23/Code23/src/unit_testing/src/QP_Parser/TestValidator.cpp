@@ -768,8 +768,7 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID PATTERN CLAUSE QUERIES") {
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
-// Invalid queries for pattern
-TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH INTEGER FOR FIRST ARGUMENT") {
+TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID PATTERN QUERIES") {
     Validator validator = Validator();
 
     // Pattern with integer as first argument
@@ -810,12 +809,99 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: PATTERN WITH INTEGER FOR FIRST ARGUMENT") {
 
     // Pattern and invalid pattern
     query = "assign a; stmt s; Select a pattern a(_, _) and pattern a(_, _)";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // 4 arguments for pattern
     query = "assign a; stmt s; Select a pattern a(_, _, _, _)";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern and with clause
     query = "assign a; stmt s; Select a pattern a(_, _, _) and p.procName=\"x\"";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID WITH CLAUSE QUERIES") {
+    Validator validator = Validator();
+
+    // With clause with procName attribute
+    std::string query = "assign a; procedure p1, p2; Select a with p1.procName=p2.procName";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with varName attribute
+    query = "assign a; procedure p1, p2; Select a with p1.varName=p2.varName";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with value attribute
+    query = "assign a; procedure p1, p2; Select a with p1.value=p2.value";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with stmt# attribute
+    query = "assign a; procedure p1, p2; Select a with p1.stmt#=p2.stmt#";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with ident as first argument
+    query = "assign a; procedure p1, p2; Select a with \"x\"=p2.procName";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with integer as first argument
+    query = "assign a; procedure p1, p2; Select a with 3=p2.stmt#";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with ident as second argument
+    query = "assign a; procedure p1, p2; Select a with p1.procName=\"x\"";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with integer as second argument
+    query = "assign a; procedure p1, p2; Select a with p2.stmt#=3";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause and with clause and with clause
+    query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 and p1.procName=\"x\" and p1.value=4";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Multiple with clauses
+    query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 with p1.procName=\"x\" with p1.value=4";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Multiple with clauses with 'and'
+    query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 with p1.procName=\"x\" and p1.value=4";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with synonym called 'with'
+    query = "assign a; procedure p1, p2; Select a with with.stmt#=3";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // With clause with synonym called 'procName'
+    query = "assign a; procedure p1, p2; Select a with procName.stmt#=3";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID WITH CLAUSE QUERIES") {
+    Validator validator = Validator();
+
+    // With clause with synonym as first argument
+    std::string query = "assign a; procedure p1, p2; Select a with p1=p2.procName";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+
+    // With clause with synonym as second argument
+    query = "assign a; procedure p1, p2; Select a with p1.procName=p2";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+
+    // With clause with invalid synonym
+    query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+
+    // With clause and pattern
+    query = "assign a; procedure p1, p2; Select a with p1.procName=p2.procName and a (_, _)";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+
+    // With clause and Follows
+    query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName and Follows (_, _)";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+
+    // With clause and pattern
+    query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName and pattern a (_, _)";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
 // Check valid queries for multi-clauses
