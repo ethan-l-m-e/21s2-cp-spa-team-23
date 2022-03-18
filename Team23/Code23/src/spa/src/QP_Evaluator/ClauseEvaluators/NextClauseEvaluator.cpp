@@ -18,7 +18,7 @@ unordered_set<std::string> NextClauseEvaluator::getLeftSynonymValue(std::string 
 
 unordered_set<std::string> NextClauseEvaluator::getRightSynonymValue(std::string left) {
     int nextNode= pkb->getInstance()->
-            relationship.next.getNextNodeOf(stoi(left))->getStatementNumber();
+            relationship.next.getNextNodeOf(stoi(left));
     return unordered_set<std::string>{to_string(nextNode)};
 }
 

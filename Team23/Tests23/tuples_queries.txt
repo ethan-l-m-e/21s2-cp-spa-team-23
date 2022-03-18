@@ -3,23 +3,138 @@ assign a; read r;
 Select <a, r>
 1 2, 4 2, 6 2
 5000
-1 - [valid] select 3
-read r; print p; call c;
-Select <r, p, c>
-2 8 7
-5000
-2 - [valid] Select 5
-read r; print p; call c; while w; if ifs;
-Select <r, p, c, w, ifs>
-2 8 7 3 5
-5000
-3 - [valid] Select 2 + Uses
-assign a; print p;
-Select <a, p> such that Uses(p, "C")
+1 - [valid] select 2
+assign a; print pr;
+Select <a, pr>
 1 8, 4 8, 6 8
 5000
-4 - [valid] Select 2 + pattern
+2 - [valid] select 2
+assign a; print pr;
+Select <pr, a>
+8 1, 8 4, 8 6
+5000
+3 - [valid] select 2
+assign a; call cl;
+Select <a, cl>
+1 7, 4 7, 6 7
+5000
+4 - [valid] select 2
+assign a;
+Select <a, a>
+1 1, 4 4, 6 6
+5000
+5 - [valid] select 2
+assign a; procedure p;
+Select <a, p>
+1 Tuples, 1 TuplesAgain, 4 Tuples, 4 TuplesAgain, 6 Tuples, 6 TuplesAgain
+5000
+6 - [valid] Select 2 + Uses
+assign a; print pr;
+Select <a, pr> such that Uses(pr, "C")
+1 8, 4 8, 6 8
+5000
+7 - [valid] Select 2 + Modifies
+assign a; read r; variable v;
+Select <a, r> such that Modifies(r, v)
+1 2, 4 2, 6 2
+5000
+8 - [valid] Select 2 + Follows
+assign a; read r;
+Select <a, r> such that Follows(a, r)
+1 2
+5000
+9 - [valid] Select 2 + Follows*
+assign a; while w;
+Select <a, w> such that Follows*(a, w)
+1 3
+5000
+10 - [valid] Select 2 + Parent
+assign a; while w;
+Select <w, a> such that Parent(w, a)
+3 4
+5000
+11 - [valid] Select 2 + Parent*
+assign a; while w;
+Select <w, a> such that Parent*(w, a)
+3 4
+5000
+3 - [valid] Select 2 + Next
+assign a; if ifs;
+Select <ifs, a> such that Next(ifs, a)
+5 6
+5000
+12 - [valid] Select 2 + Next*
+assign a; procedure p;
+Select <a, p> such that Next*(a, a)
+4 Tuples, 4 TuplesAgain
+5000
+13 - [valid] Select 2 + Calls
+procedure p, p1;
+Select <p, p1> such that Calls(p, p1)
+Tuples TuplesAgain
+5000
+14 - [valid] Select 2 + Calls*
+procedure p, p1;
+Select <p, p1> such that Calls*(p, p1)
+Tuples TuplesAgain
+5000
+15 - [valid] Select 2 + pattern
 assign a; procedure pr;
 Select <a, pr> pattern a(_, _"g%h"_)
 1 Tuples, 1 TuplesAgain
+5000
+16 - [valid] select 3
+read r; print pr; call c;
+Select <r, pr, c>
+2 8 7
+5000
+17 - [valid] Select 5
+read r; print pr; call cl; while w; if ifs;
+Select <r, pr, cl, w, ifs>
+2 8 7 3 5
+5000
+18 - [valid] select 1 syn 1 attr =====================================================================[attr tests start]
+assign a;
+Select <a, a.stmt#>
+1 1, 4 4, 6 6
+5000
+19 - [valid] select 1 syn 1 attr
+assign a;
+Select <a.stmt#, a>
+1 1, 4 4, 6 6
+5000
+20 - [valid] select 3 attr
+read r; print pr; call cl;
+Select <r.varName, pr.varName, cl.procName>
+B, C, TuplesAgain
+5000
+21 - [valid] Select 4 syn 1 attr
+read r; print pr; call cl; while w; if ifs;
+Select <r.varName, pr, cl, w, ifs>
+B 8 7 3 5
+5000
+22 - [valid] Select 4 syn 1 attr
+read r; print pr; call cl; while w; if ifs;
+Select <r, pr.varName, cl, w, ifs>
+2 C 7 3 5
+5000
+23 - [valid] Select 2 syn 3 attr
+read r; print pr; call cl; while w; if ifs;
+Select <r.varName, pr, cl.procName, w, ifs.stmt#>
+B 8 TuplesAgain 3 5
+5000
+24 - [valid] Select 7 same syn
+call cl;
+Select <cl, cl, cl, cl, cl, cl, cl>
+7 7 7 7 7 7 7
+5000
+25 - Select 1 syn 1 attr with Uses
+assign a; variable v;
+Select <a, v.varName> such that Uses(a, v)
+1 a, 1 b, 1 c, 1 d, 1 e, 1 f, 1 g, 1 h, 1 i, 1 j, 1 k, 1 l, 4 G
+5000
+26 - Select 2 attr with Parent and Uses
+stmt s; variable v;
+Select <s.stmt#, v.varName> such that Parent(s, _) and Uses(s, v)
+3 D, 3 E, 3 G, 5 H, 5 I
 5000

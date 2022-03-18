@@ -8,7 +8,7 @@
 
 using namespace std;
 
-TEST_CASE("Select query with no clauses") {
+TEST_CASE("Query with no clauses") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {{"v", DesignEntity::VARIABLE},
                                                            {"a", DesignEntity::ASSIGN},
@@ -17,38 +17,90 @@ TEST_CASE("Select query with no clauses") {
                                                            };
     Query query_1 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "v"}});
     Query query_2 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s"}});
-    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "pn"}});
-    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::BOOLEAN, ""}});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::ATTR_REF, make_pair("pn", AttrName::VAR_NAME)}});
 
     auto qe = QueryEvaluator(testPKB);
 
     /**
      * Select v
-     * Type: select all variables
+     * Type: select variables
      */
     REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"x", "y", "z"});
 
     /**
      * Select s
-     * Type: select all statements
+     * Type: select statements
      */
-    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1", "2", "3", "4", "5", "6", });
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"});
 
     /**
-     * Select pn
-     * Type: select all print
+     * Select BOOLEAN
      */
-    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"4"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)) == ResultSet {"TRUE"});
 
     /**
-     * Select a
-     * Type: select all assign
+     * Select pn.varName
      */
-    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"2", "3", "6"});
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)) == ResultSet {"z", "x"});
 
 }
 
-TEST_CASE("Merge synonyms") {
+TEST_CASE("Query with false clauses") {
+    PKB *testPKB = generateSamplePKB();
+    unordered_map<string, DesignEntity> declarations = {{"a", DesignEntity::ASSIGN}};
+    Argument a4 = {ArgumentType::STMT_NO, "4"};
+    Argument a5 = {ArgumentType::STMT_NO, "5"};
+    Argument a6 = {ArgumentType::STMT_NO, "6"};
+    Argument aa = {ArgumentType::SYNONYM, "a"};
+    Argument aw = {ArgumentType::IDENT, "w"};
+    Argument wild = {ArgumentType::UNDERSCORE, "_"};
+
+
+    SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS}; //true
+    SuchThatClause clause_5_6 = {ArgList{a5, a6},RelRef::FOLLOWS}; //false
+    SuchThatClause clause_6_5 = {ArgList{a6, a5},RelRef::NEXT}; //false
+    PatternClause clause_a_0_0 = {ArgList{aa, wild, wild}, SynonymType::ASSIGN}; //true
+    PatternClause clause_a_0_w = {ArgList{aa, wild, aw}, SynonymType::ASSIGN}; //false
+
+
+    Query query_1 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}}, {clause_5_6});
+    Query query_2 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}}, {clause_5_6, clause_4_5});
+    Query query_3 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}}, {clause_6_5, clause_4_5}, {clause_a_0_0});
+    Query query_4 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}}, {clause_4_5, clause_4_5}, {clause_a_0_0, clause_a_0_w});
+    Query query_5 = makeQuery(declarations, {Argument{ArgumentType::BOOLEAN, ""}}, {clause_4_5, clause_4_5, clause_6_5}, {clause_a_0_0});
+
+
+    auto qe = QueryEvaluator(testPKB);
+
+    /**
+     * Type: false such that clause
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_1)).empty());
+
+    /**
+     * Type: false such that clause + true such that clause
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_2)).empty());
+
+    /**
+     * Type: false such that clause + true such that clause + true pattern clause
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_3)).empty());
+
+    /**
+     * Type: true such that clause + true such that clause + true pattern clause + false pattern clause
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_4)).empty());
+
+    /**
+     * Type: boolean
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_5)) == ResultSet{"FALSE"});
+
+}
+
+TEST_CASE("Multi clauses") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"s1", DesignEntity::STMT},
@@ -78,6 +130,7 @@ TEST_CASE("Merge synonyms") {
     Query query_4 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s1"}}, {clause_s2_5, clause_s1_s2});
     Query query_5 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s1"}}, {clause_s1_0, clause_s2_0, clause_s1_s2});
     Query query_6 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s1"}}, {clause_s2_5, clause_s1_s3});
+    Query query_7 = makeQuery(declarations, {Argument{ArgumentType::BOOLEAN, ""}}, {clause_s2_5, clause_s1_s3});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -122,9 +175,16 @@ TEST_CASE("Merge synonyms") {
      * Type: join tuples, both value don't exist
      */
     REQUIRE(generateResultSet(qe.evaluate(&query_6)) == ResultSet {"1","2","3","4","5","6","7"});
+
+    /**
+     * Select BOOLEAN such that Follows(s2, 5) such that Follows(s1, s3)
+     * Type: join tuples, boolean
+     */
+    REQUIRE(generateResultSet(qe.evaluate(&query_7)) == ResultSet {"TRUE"});
+
 }
 
-TEST_CASE("Select tuples") {
+TEST_CASE("Multi clauses with tuples") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"s1", DesignEntity::STMT},
@@ -146,17 +206,23 @@ TEST_CASE("Select tuples") {
     SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::FOLLOWS};
     SuchThatClause clause_s2_0 = {ArgList{as2, a0},RelRef::FOLLOWS};
     SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS};
+    SuchThatClause clause_5_s3 = {ArgList{a5, as3},RelRef::PARENT};
 
-    Query query_0 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s1"}}, {clause_s1_s2, clause_4_5});
+    Query query_0 = makeQuery(declarations, {
+        Argument{ArgumentType::SYNONYM, "s1"}
+        },
+                              {clause_s1_s2, clause_4_5});
     Query query_1 = makeQuery(declarations, {
         Argument{ArgumentType::SYNONYM, "s1"},
-        Argument{ArgumentType::SYNONYM, "s2"}},
+        Argument{ArgumentType::SYNONYM, "s2"}
+        },
                               {clause_s1_s2, clause_4_5});
     Query query_2 = makeQuery(declarations, {
         Argument{ArgumentType::SYNONYM, "s1"},
         Argument{ArgumentType::SYNONYM, "s2"},
-        Argument{ArgumentType::SYNONYM, "s3"}},
-                              {clause_s1_s2, clause_4_5});
+        Argument{ArgumentType::SYNONYM, "s3"}
+        },
+                              {clause_s1_s2, clause_4_5, clause_5_s3});
 
     auto qe = QueryEvaluator(testPKB);
 
@@ -167,24 +233,14 @@ TEST_CASE("Select tuples") {
     REQUIRE(generateResultSet(qe.evaluate(&query_1)) == ResultSet {"1 2","2 3","3 4","4 5","5 11","6 7","7 10"});
 
     /**
-     * Select s1 s2 s3 such that Follows(s1, s2) such that Follows(4, 5)
+     * Select s1 s2 s3 such that Follows(s1, s2) such that Follows(4, 5) such that Parent(5, s3)
      * Type: boolean clause, no merge needed
      */
     REQUIRE(generateResultSet(qe.evaluate(&query_2)) == ResultSet {
-            "3 4 8", "4 5 9", "7 10 5", "2 3 11", "6 7 6", "2 3 4",
-            "6 7 11", "3 4 11", "2 3 5", "5 11 9", "4 5 11", "7 10 9",
-            "1 2 8", "2 3 9", "3 4 6", "7 10 7", "7 10 6", "1 2 9",
-            "6 7 7", "5 11 6", "3 4 5", "4 5 6", "1 2 11", "5 11 5",
-            "6 7 9", "2 3 6", "3 4 9", "3 4 10", "2 3 1", "3 4 7",
-            "2 3 7", "1 2 7", "1 2 5", "6 7 10", "5 11 4", "7 10 10",
-            "6 7 8", "6 7 3", "5 11 7", "5 11 10", "5 11 11", "2 3 10",
-            "7 10 11", "7 10 8", "4 5 7", "6 7 5", "5 11 8", "5 11 3",
-            "2 3 8", "6 7 2", "4 5 3", "4 5 8", "3 4 3", "1 2 6",
-            "6 7 4", "2 3 2", "7 10 4", "4 5 4", "1 2 4", "7 10 3",
-            "3 4 4", "1 2 3", "1 2 2", "3 4 1", "5 11 1", "1 2 1",
-            "7 10 2", "4 5 10", "4 5 2", "6 7 1", "4 5 5", "4 5 1",
-            "1 2 10", "5 11 2", "3 4 2", "7 10 1", "2 3 3"
-       });
+            "1 2 6", "2 3 6", "3 4 6", "4 5 6", "5 11 6", "6 7 6", "7 10 6",
+            "1 2 7", "2 3 7", "3 4 7", "4 5 7", "5 11 7", "6 7 7", "7 10 7",
+            "1 2 10", "2 3 10", "3 4 10", "4 5 10", "5 11 10", "6 7 10", "7 10 10",
+    });
 }
 
 TEST_CASE("Pattern clause: return stmt") {
