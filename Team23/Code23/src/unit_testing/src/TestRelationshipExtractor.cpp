@@ -159,7 +159,7 @@ TEST_CASE("test parents - basic while") {
         cout<<"\n";
     }
     REQUIRE(PKB::getInstance()->relationship.parent.isRelationship("0","2"));
-    REQUIRE(PKB::getInstance()->relationship.parent.isRelationship("1","1"));
+    REQUIRE(PKB::getInstance()->relationship.parent.isRelationship("1","1")==false);
 }
 TEST_CASE("test parents - basic if") {
     StatementList defaultStmtLst;

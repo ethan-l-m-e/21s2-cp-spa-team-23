@@ -5,9 +5,15 @@
 #include "CallStatementTable.h"
 
 
+
+void CallStatementTable::addStatement(CallNode *node) {
+    StatementTable<CallNode *>::addStatement(node);
+
+    statementNumberToProcedureNameMap.emplace(node->getStmtNumber(), node->getProcName());
+
+}
+
 string CallStatementTable::getProcedureName(string statementNumber) {
 
-    CallNode *callNode = this->getNode(std::stoi(statementNumber));
-
-    return callNode->getProcName();
+    return statementNumberToProcedureNameMap[std::stoi(statementNumber)];
 }
