@@ -8,256 +8,87 @@
 using namespace qp;
 
 // Check if validator works for declarations
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SINGLE CHAR DECLARATION") {
+TEST_CASE ("QP SYNTACTIC VALIDATOR: CHECK DECLARATIONS") {
+    Validator validator = Validator();
+
+    // Single Char declaration
     std::string query = "variable v1; Select v";
-    Validator validator = Validator();
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
+    // Double char declaration
+    query = "variable va; \n Select va";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Char + Int declaration
+    query = "variable v1; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // All possible declarations
+    query = "stmt s; read r; print pn; call c; while w; if ifs; assign a; constant con; procedure p; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Double declarations
+    query = "variable v; stmt s; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Triple Declarations
+    query = "variable v; stmt s; procedure p; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Multiple declaration sof same design entity
+    query = "variable v1, v2, v3; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Multiple declarations of same design entities
+    query = "variable v1, v2, v3; procedure p1, p2; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Synonym name same as design entities
+    query = "stmt stmt; read read; print print; call call; while while; if if; assign assign; variable variable; constant constant; procedure procedure \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Synonym name same as design entity - stmt read
+    query = "stmt read; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Synonym name is Select
+    query = "stmt Select; \n Select v1";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Synonym name is pattern
+    query = "stmt pattern; \n Select v1";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: DOUBLE CHAR DECLARATION") {
-    std::string query = "variable va; \n Select va";
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID DECLARATIONS") {
     Validator validator = Validator();
 
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: CHAT+INT DECLARATION") {
-    std::string query = "variable v1; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: STMT DECLARATION") {
-    std::string query = "stmt s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: READ DECLARATION") {
-    std::string query = "read s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: PRINT DECLARATION") {
-    std::string query = "print s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: CALL DECLARATION") {
-    std::string query = "call s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: WHILE DECLARATION") {
-    std::string query = "while s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: IF DECLARATION") {
-    std::string query = "if s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: ASSIGN DECLARATION") {
-    std::string query = "assign s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: CONSTANT DECLARATION") {
-    std::string query = "constant s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: PROCEDURE DECLARATION") {
-    std::string query = "procedure s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: DOUBLE DECLARATIONS") {
-    std::string query = "variable v; stmt s; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: TRIPLE DECLARATIONS") {
-    std::string query = "variable v; stmt s; procedure p; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: MULTIPLE DECLARATIONS OF SAME DESIGN ENTITY") {
-    std::string query = "variable v1, v2, v3; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: MULTIPLE DECLARATIONS OF SAME DESIGN ENTITIES") {
-    std::string query = "variable v1, v2, v3; procedure p1, p2; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - STMT") {
-    std::string query = "stmt stmt; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - READ") {
-    std::string query = "read read; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - PRINT") {
-    std::string query = "print print; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - CALL") {
-    std::string query = "call call; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - WHILE") {
-    std::string query = "while while; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - IF") {
-    std::string query = "if if; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - ASSIGN") {
-    std::string query = "assign assign; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - VARIABLE") {
-    std::string query = "variable variable; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - CONSTANT") {
-    std::string query = "constant constant; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - PROCEDURE") {
-    std::string query = "procedure procedure; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME SAME AS DESIGN ENTITY - STMT READ") {
-    std::string query = "stmt read; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME IS SELECT") {
-    std::string query = "stmt Select; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SYNONYM NAME IS PATTERN") {
-    std::string query = "stmt pattern; \n Select v1";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-// Invalid declarations
-TEST_CASE ("QP SYNTACTIC VALIDATOR: INT DECLARATION") {
+    // integer as declaration synonym
     std::string query = "variable 1; \n Select v1";
-    Validator validator = Validator();
-
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: INT-CHAR DECLARATION") {
-    std::string query = "variable 1v; \n Select v1";
-    Validator validator = Validator();
-
+    // int-char as declaration name
+    query = "variable 1v; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT DESIGN ENTITY") {
-    std::string query = "unknown v; \n Select v1";
-    Validator validator = Validator();
-
+    // Invalid design entity
+    query = "unknown v; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: MISSPELLED DESIGN ENTITY") {
-    std::string query = "varible v; \n Select v1";
-    Validator validator = Validator();
-
+    // Misspelt design entity
+    query = "varible v; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SHORTENED VERSION OF DESIGN ENTITY") {
-    std::string query = "var v; \n Select v1";
-    Validator validator = Validator();
-
+    // shortened version of design entity
+    query = "var v; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: WRONG CAPS DESIGN ENTITY") {
-    std::string query = "Variable v; \n Select v1";
-    Validator validator = Validator();
-
+    // Wrong caps design entity
+    query = "Variable v; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT SEMICOLON USAGE") {
-    std::string query = "variable v1; v2; \n Select v1";
-    Validator validator = Validator();
-
+    // Incorrect semicolon usage
+    query = "variable v1; v2; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
@@ -304,6 +135,90 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH SELECT AS SYNONYM") {
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'WITH' AS SYNONYM") {
+    std::string query = "variable with; \n Select with";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'AND' AS SYNONYM") {
+    std::string query = "variable and; \n Select and";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'FOLLOWS' AS SYNONYM") {
+    std::string query = "variable Follows; \n Select Follows";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'BOOLEAN' AS SYNONYM") {
+    std::string query = "variable Follows; \n Select BOOLEAN";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: SINGLE ELEMENT") {
+    std::string query = "variable example; \n Select <example>";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: SELECT AS SYNONYM NAME") {
+    std::string query = "variable Select; \n Select <Select>";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: SELECT AND WITH AS SYNONYM NAMES") {
+    std::string query = "variable Select, with; \n Select <Select, with>";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: ATTR REFERENCES") {
+    std::string query = "variable Select, with; \n Select <p.procName, s.stmt#, v.varName, c.value>";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - PROCNAME") {
+    std::string query = "procedure p; \n Select p.procName";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - VARNAME") {
+    std::string query = "procedure p; \n Select p.varName";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - VALUE") {
+    std::string query = "procedure p; \n Select p.value";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - STMT#") {
+    std::string query = "procedure p; \n Select p.stmt#";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
 // Invalid queries for select clause
 TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH INT AS SYNONYM") {
     std::string query = "variable v; \n Select 123";
@@ -328,6 +243,48 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: MISSPELLED SELECT CLAUSE") {
 
 TEST_CASE ("QP SYNTACTIC VALIDATOR: NO SELECT CLAUSE") {
     std::string query = "variable v;";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE TUPLE: INVALID BRACKET") {
+    std::string query = "variable v; Select <example)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE TUPLE: INVALID BRACKETS") {
+    std::string query = "variable v; Select (example)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE TUPLE: INVALID SEMICOLON") {
+    std::string query = "procedure p1, p2; Select <p1; p2>";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE: INVALID SEMICOLON AFTER SYNONYM") {
+    std::string query = "procedure p1, p2; Select p1;";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE: MISSING SELECT SYNONYM") {
+    std::string query = "procedure p1, p2; Select such that Follows(s1, s2)";
+    Validator validator = Validator();
+
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE SYNONYM: INVALID SYNONYM") {
+    std::string query = "procedure p1, p2; Select stmt#";
     Validator validator = Validator();
 
     REQUIRE_THROWS(validator.validateQueryStructure(query));
@@ -595,6 +552,90 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH WILDCARD SECOND ARGUMEN
 
 TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE WITH IDENT SECOND ARGUMENT") {
     std::string query = "stmt s; variable v; Select s such that Modifies(v, \"x\")";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next(_, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next(5, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next(3, s)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next(s, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT CLAUSE WITH INTEGER SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT* CLAUSE WITH SYNONYM FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next*(s, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT* CLAUSE WITH WILDCARD FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next*(_, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT* CLAUSE WITH INTEGER FIRST ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next*(5, 3)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT* CLAUSE WITH SYNONYM SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next*(3, s)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT* CLAUSE WITH WILDCARD SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next*(s, _)";
+    Validator validator = Validator();
+
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+}
+
+TEST_CASE ("QP SYNTACTIC VALIDATOR: NEXT* CLAUSE WITH INTEGER SECOND ARGUMENT") {
+    std::string query = "stmt s; Select s such that Next*(s, 3)";
     Validator validator = Validator();
 
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
