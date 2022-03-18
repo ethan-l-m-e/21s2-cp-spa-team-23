@@ -1058,7 +1058,7 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTIAL WILD
 TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "stmt s; assign a; \nSelect s such that Parent*(s,3) pattern a (_, _)";
+    std::string pql = "stmt s; assign a; \nSelect s such that Parent*(s,3) pattern a (_, _, _)";
     Query query = parser.getQuery(pql);
     SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
     std::vector<Argument> argList = suchThatClause.argList;
@@ -1072,8 +1072,8 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     expectedFirstArgument.argumentValue = "s";
     expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
     Argument expectedSecondArgument = Argument();
-    expectedFirstArgument.argumentValue = "3";
-    expectedFirstArgument.argumentType = ArgumentType::STMT_NO;
+    expectedSecondArgument.argumentValue = "3";
+    expectedSecondArgument.argumentType = ArgumentType::STMT_NO;
 
     CHECK(argList[0] == expectedFirstArgument);
     CHECK(argList[1] == expectedSecondArgument);
@@ -1088,9 +1088,9 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     expectedPatternThirdArgument.argumentValue = "_";
     expectedPatternThirdArgument.argumentType = ArgumentType::UNDERSCORE;
 
-    CHECK(argList[0] == expectedPatternFirstArgument);
-    CHECK(argList[1] == expectedPatternSecondArgument);
-    CHECK(argList[2] == expectedPatternThirdArgument);
+    CHECK(patternArgList[0] == expectedPatternFirstArgument);
+    CHECK(patternArgList[1] == expectedPatternSecondArgument);
+    CHECK(patternArgList[2] == expectedPatternThirdArgument);
 }
 
 

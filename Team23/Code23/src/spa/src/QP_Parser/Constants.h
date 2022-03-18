@@ -16,7 +16,7 @@ std::string const ENT_REF = "(" + SYNONYM + "|_|" + '"' + IDENT + '"' + ")";
 
 std::string const ATTR_NAME = "(procName|varName|value|stmt#)";
 std::string const ATTR_REF = SYNONYM + SPACE_TAB + "\\." + SPACE_TAB + ATTR_NAME;
-std::string const ELEM = "(" + SYNONYM + "|" + ATTR_REF + ")";
+std::string const ELEM = "(" + ATTR_REF + "|" + SYNONYM + ")";
 std::string const REF = "(\"" + IDENT + "\"|" + INTEGER + "|" + ATTR_REF + ")";
 
 // Grammar Rules
@@ -30,39 +30,39 @@ std::string const RESULT_CL = "(" + TUPLE + "|BOOLEAN)";
 
 // Relationships
 std::string const FOLLOWS = "Follows" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-        + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + STMT_REF + SPACE_TAB + "\\)";
 std::string const FOLLOWS_T = "Follows\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-        + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + STMT_REF + SPACE_TAB + "\\)";
 
 std::string const PARENT = "Parent" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
         + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
 std::string const PARENT_T = "Parent\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-        + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + STMT_REF + SPACE_TAB + "\\)";
 
 std::string const USES_S = "Uses" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB + ENT_REF
-        + SPACE_TAB + "\\)" + SPACE_TAB;
+        + SPACE_TAB + "\\)";
 std::string const USES_P = "Uses" + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE_TAB + "," + SPACE_TAB + ENT_REF
-        + SPACE_TAB + "\\)" + SPACE_TAB;
+        + SPACE_TAB + "\\)";
 
 std::string const MODIFIES_S = "Modifies" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-        + ENT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + ENT_REF + SPACE_TAB + "\\)";
 std::string const MODIFIES_P = "Modifies" + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE_TAB + "," + SPACE_TAB
-        + ENT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + ENT_REF + SPACE_TAB + "\\)";
 
 std::string const CALLS = "Calls" + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE_TAB + "," + SPACE_TAB + ENT_REF
-        + SPACE_TAB + "\\)" + SPACE_TAB;
+        + SPACE_TAB + "\\)";
 std::string const CALLS_T = "Calls\\*" + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE_TAB + "," + SPACE_TAB
-        + ENT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + ENT_REF + SPACE_TAB + "\\)";
 
 std::string const NEXT = "Next" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB + STMT_REF
-        + SPACE_TAB + "\\)" + SPACE_TAB;
+        + SPACE_TAB + "\\)";
 std::string const NEXT_T = "Next\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB + STMT_REF
-                           + SPACE_TAB + "\\)" + SPACE_TAB;
+                           + SPACE_TAB + "\\)";
 
 std::string const AFFECTS = "Affects" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-        + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + STMT_REF + SPACE_TAB + "\\)";
 std::string const AFFECTS_T = "Affects\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-                              + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+                              + STMT_REF + SPACE_TAB + "\\)";
 
 std::string const REL_REF = "(" + FOLLOWS + "|" + FOLLOWS_T + "|" + PARENT + "|" + PARENT_T + "|" + USES_S + "|"
         + USES_P + "|" + MODIFIES_S + "|" + MODIFIES_P + "|" + CALLS + "|" + CALLS_T + "|" + NEXT + "|" + NEXT_T
@@ -81,7 +81,7 @@ std::string const WHILE = SYNONYM + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SP
 std::string const IF = SYNONYM + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE_TAB + "," + SPACE_TAB + "_"
         + SPACE_TAB + "," + SPACE_TAB + "_" + SPACE_TAB + "\\)";
 std::string const PATTERN = "(" + ASSIGN + "|" + WHILE + "|" + IF + ")";
-std::string const PATTERN_COND = PATTERN + SPACE_TAB + "(and" + SINGLE_SPACE_TAB + PATTERN + SPACE_TAB + ")*";
+std::string const PATTERN_COND = PATTERN + "(" + SINGLE_SPACE_TAB + "and" + SINGLE_SPACE_TAB + PATTERN + ")*";
 std::string const PATTERN_CL = "pattern" + SINGLE_SPACE_TAB + PATTERN_COND + SPACE_TAB;
 
 // with regex
@@ -115,12 +115,10 @@ std::string const SPLIT_SELECT_SYNONYM = "Select" + SINGLE_SPACE_TAB;
 std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t]+|<|>)";
 
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
-
-//std::string const FIND_PATTERN = "pattern[ |\t]*" + PATTERN;
 std::string const PATTERN_ARGUMENTS = ",";
 
 std::string const SPLIT_WITH_CL = "[ |\\t]*(with|and)[ |\\t]*";
-std::string const SPLIT_EQUALS = "\"[ |\\\\t]*=[ |\\\\t]*\"";
+std::string const SPLIT_EQUALS = "[ |\\t]*=[ |\\t]*";
 
 int const PATTERN_LENGTH = 7;
 int const SELECT_LENGTH = 6;
