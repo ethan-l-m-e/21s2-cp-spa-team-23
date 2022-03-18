@@ -50,8 +50,6 @@ TEST_CASE("Test Follow clause evaluator") {
     SuchThatClause clause_s1_pn = {ArgList{as1, apn},RelRef::FOLLOWS};
     SuchThatClause clause_r_a = {ArgList{ar, aa},RelRef::FOLLOWS};
 
-
-
     Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
     Query query_0 = makeQuery(declarations, {dummySelect}, {clause_0_0});
@@ -348,7 +346,6 @@ TEST_CASE("Test Parent clause evaluator") {
     SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::PARENT};
     SuchThatClause clause_0_10 = {ArgList{a00, as1},RelRef::PARENT};
     SuchThatClause clause_w_a = {ArgList{aw, aa},RelRef::PARENT};
-
 
     Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 

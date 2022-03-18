@@ -16,9 +16,8 @@ TEST_CASE("Add result to empty synonym relations") {
     };
     sr->mergeResultToTable(result1);
     REQUIRE(sr->isEmpty() == true);
-    delete sr;
 
-    sr = new ResultTable();
+    sr->clearTable();
     Result result2 = {
             ResultType::STRING,
             true,
@@ -29,9 +28,8 @@ TEST_CASE("Add result to empty synonym relations") {
     
     REQUIRE(*(sr->getHeader()) == std::vector<std::string>{"a"});
     REQUIRE(*(sr->getList()) == String2DVector{{"1", "2", "3", "4", "5"}});
-    delete sr;
 
-    sr = new ResultTable();
+    sr->clearTable();
     Result result3 = {
             ResultType::TUPLES,
             true,
@@ -52,9 +50,8 @@ TEST_CASE("Add result to empty synonym relations") {
 }
 
 TEST_CASE("Add result to existing synonym relations") {
-    auto* sr = new ResultTable(
-            {"x"},
-            {{"1", "2", "3", "4"}});
+    auto* sr = new ResultTable();
+    sr->setResultTable({"x"},{{"1", "2", "3", "4"}});
     Result result1 = {
             ResultType::BOOLEAN,
             true,
@@ -63,11 +60,8 @@ TEST_CASE("Add result to existing synonym relations") {
 
     REQUIRE(*(sr->getHeader()) == std::vector<std::string>{"x"});
     REQUIRE(*(sr->getList()) == String2DVector{{"1", "2", "3", "4"}});
-    delete sr;
 
-    sr = new ResultTable(
-            {"x"},
-            {{"1", "2", "3", "4"}});
+    sr->setResultTable({"x"}, {{"1", "2", "3", "4"}});
 
     Result result2 = {
             ResultType::STRING,
@@ -82,11 +76,8 @@ TEST_CASE("Add result to existing synonym relations") {
         {"1", "2", "3", "4", "1", "2", "3", "4"},
         {"1", "1", "1", "1", "2", "2", "2", "2"}
         });
-    delete sr;
 
-    sr = new ResultTable(
-            {"x"},
-            {{"1", "2", "3", "4"}});
+    sr->setResultTable({"x"},{{"1", "2", "3", "4"}});
 
     Result result3 = {
             ResultType::TUPLES,
@@ -113,7 +104,8 @@ TEST_CASE("Add result to existing synonym relations") {
 TEST_CASE("Add result to existing synonym relations, join required") {
 
     // merge string into sr
-    auto* sr = new ResultTable({"a", "c"},{{"1", "2", "3", "4"},{"w", "w", "w", "r"}});
+    auto* sr = new ResultTable();
+    sr->setResultTable({"a", "c"},{{"1", "2", "3", "4"},{"w", "w", "w", "r"}});
 
     Result result1 = {
             ResultType::STRING,
@@ -125,10 +117,9 @@ TEST_CASE("Add result to existing synonym relations, join required") {
 
     REQUIRE(*(sr->getHeader()) == std::vector<std::string>{"a", "c"});
     REQUIRE(*(sr->getList()) == String2DVector {{"1", "2"},{"w", "w"}});
-    delete sr;
 
     // merge tuple into sr, one common s
-    sr = new ResultTable({"a", "c"},{{"1", "1", "2", "3", "4"},{"w", "r", "w", "w", "r"}});
+    sr->setResultTable({"a", "c"},{{"1", "1", "2", "3", "4"},{"w", "r", "w", "w", "r"}});
 
     Result result3 = {
             ResultType::TUPLES,
@@ -150,10 +141,9 @@ TEST_CASE("Add result to existing synonym relations, join required") {
             {"w", "w", "w", "r", "r", "r", "w", "w"},
             {"x", "y", "z", "x", "y", "z", "x", "y"}
         });
-    delete sr;
 
     // merge tuple into sr, two common s
-    sr = new ResultTable({"a", "c"},{
+    sr->setResultTable({"a", "c"},{
         {"1", "1", "2", "3", "4"},
         {"w", "r", "w", "w", "r"}}
         );

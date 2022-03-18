@@ -198,6 +198,10 @@ PKB* generateSamplePKB() {
     testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z"});
     testPKB->relationship.usesP.setRelationship("pr", unordered_set<string>{"y"});
 
+    NodeCFG c2 = NodeCFG(2);
+    testPKB->relationship.next.setRelationship(1, &c2);
+
+
     return testPKB;
 }
 
