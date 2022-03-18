@@ -7,8 +7,8 @@
 #include "QP_database/AffectsOperator.h"
 
 bool AffectsClauseEvaluator::isRelation(string left, string right) {
-    NodeCFG* leftNode = pkb->relationship.next.getCFGNode(stoi(left));
-    NodeCFG* rightNode = pkb->relationship.next.getCFGNode(stoi(right));
+    NodeCFG* leftNode = pkb->relationship.next.getCFGNode(left);
+    NodeCFG* rightNode = pkb->relationship.next.getCFGNode(right);
     int size = pkb->relationship.next.getCFGSize();
 
     AffectsOperator::getInstance()->pathExistBetween(leftNode, rightNode, size);
