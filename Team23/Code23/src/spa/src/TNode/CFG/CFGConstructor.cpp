@@ -7,7 +7,7 @@
 #include "TNode/WhileNode.h"
 #include "TNode/IfNode.h"
 #include "iostream"
-
+#include "PKB/PKB.h"
 NodeCFG* CFGConstructor::createCFG(ProcedureNode p) {
     vector<Node*> stmtLst = p.getStmtLst();
     unordered_map<int, NodeCFG *> currMapOfPrevNodes;
@@ -19,11 +19,15 @@ NodeCFG* CFGConstructor::createCFG(ProcedureNode p) {
         if(isFirstLoop){
             firstSetOfNodes = CFGConstructor::populateCFG(s,prevNode);
             firstNode = firstSetOfNodes.at(0);
+
             prevNode = firstSetOfNodes;
 
             isFirstLoop = false;
         }else {
             prevNode = CFGConstructor::populateCFG(s, prevNode);
+        }
+        for(NodeCFG* n : prevNode) {
+            PKB::getInstance()->relationship.next.addCFGNode(n);
         }
     }
     return firstNode;
