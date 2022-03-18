@@ -3,20 +3,12 @@
 //
 
 #include "QP_database/CFGOperator.h"
+#include "QP_Evaluator/TestUtilities.h"
 #include "catch.hpp"
 
 using namespace std;
-
+/*
 vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
-    /*
-     * branch1 -> 2, 6
-     * node2, 3, 4, 5
-     * loop6( loop7 (8))
-     *
-     * node9
-     *
-     * loop10 (11, branch12 -> 13, 14)
-     */
     BranchCFG* branch1 = new BranchCFG(1);
     NodeCFG* node2 = new NodeCFG(2);
     NodeCFG* node3 = new NodeCFG(3);
@@ -81,7 +73,7 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
     unordered_map<int, NodeCFG*> rootNodes;
     return vector<unordered_map<int, NodeCFG*>>{allNodes, rootNodes};
 }
-
+*/
 TEST_CASE("if path exist between 2 nodes") {
     vector<unordered_map<int, NodeCFG*>> nodeMap = constructCFGForTesting();
     unordered_map<int, NodeCFG*> allNodes = nodeMap[0];
