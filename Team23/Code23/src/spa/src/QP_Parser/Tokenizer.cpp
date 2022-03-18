@@ -97,7 +97,7 @@ std::vector<std::string> Tokenizer::getSplitSuchThatStrings(std::string pql) {
     std::smatch sm;
     std::vector<std::string> suchThatClauses = std::vector<std::string>();
 
-    // Get pattern clause substrings from pql query
+    // Get such that clause substrings from pql query
     while (std::regex_search (pql, sm, std::regex(SUCH_THAT_CL))) {
         std::string x = sm[0];
         x = StringFormatter::removeTrailingSpace(x);
@@ -107,7 +107,7 @@ std::vector<std::string> Tokenizer::getSplitSuchThatStrings(std::string pql) {
 
     std::vector<std::string> suchThatStrings = std::vector<std::string>();
 
-    // Separate pattern clauses to individual patterns
+    // Separate such that clauses to individual patterns
     for (std::string suchThatClause : suchThatClauses) {
         while (std::regex_search (suchThatClause, sm, std::regex(REL_REF))) {
             std::string x = sm[0];
