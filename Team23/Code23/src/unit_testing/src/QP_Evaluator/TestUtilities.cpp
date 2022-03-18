@@ -345,3 +345,4 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
     unordered_map<int, NodeCFG*> rootNodes;
     return vector<unordered_map<int, NodeCFG*>>{allNodes, rootNodes};
 }
+

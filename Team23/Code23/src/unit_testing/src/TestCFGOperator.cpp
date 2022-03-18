@@ -133,6 +133,7 @@ TEST_CASE("all possible left Nodes") {
 
 TEST_CASE("test lambda") {
     int arg = 3;
+    PKB::getInstance()->relationship.next.setRelationship(1, new NodeCFG(1));
     //bool (*function1)(int) = [](int x) { return CFGOperator::boolFoo(x); };
     //CFGOperator::testFoo(function1);
 }
