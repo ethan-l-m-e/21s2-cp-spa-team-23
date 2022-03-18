@@ -70,21 +70,6 @@ void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet,
     }
 }
 
-void Validator::validateSynonym(std::string synonym, std::set<std::string> declarationSet,
-                                std::map<std::string, std::string> declarationTokens) {
-    // If synonym is an attribute reference, check that it's a valid reference
-    bool isAttrRef = std::regex_match(synonym, std::regex(ATTR_REF));
-    if (isAttrRef) {
-        validateAttrRefArgument(synonym, declarationTokens);
-        return;
-    }
-
-    // Otherwise, check that the synonym has been declared
-    if (declarationSet.find(synonym) == declarationSet.end()) {
-        throw QPInvalidSemanticException("Invalid Select Clause");
-    }
-}
-
 void Validator::validateSuchThatClauses(std::map<std::string, std::string> declarationTokens,
                                         std::vector<SuchThatClauseToken> suchThatClauseTokens) {
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
@@ -101,6 +86,57 @@ void Validator::validateSuchThatClauses(std::map<std::string, std::string> decla
         } else {
             handleCallsAffectsClauses(suchThatClauseToken, declarationTokens);
         }
+    }
+}
+
+void Validator::validatePatterns(std::map<std::string, std::string> declarationTokens,
+                                 std::vector<PatternToken> patternTokens) {
+    for (PatternToken patternToken : patternTokens) {
+        // Check that the pattern's syn-assign and first argument do not have the same synonym and synonym is declared
+        std::vector<std::string> patternArguments = *patternToken.arguments;
+        std::vector<std::string> arguments = std::vector<std::string>({patternToken.synonym, patternArguments[0]});
+        checkArguments(arguments, declarationTokens);
+
+        // Check that pattern synonym is valid
+        std::string patternSynonym = declarationTokens.at(patternToken.synonym);
+        bool isValidPatternSynonym = std::regex_match(patternSynonym, std::regex(PATTERN_SYNONYMS));
+
+        if (!isValidPatternSynonym) {
+            throw QPInvalidSemanticException("Invalid Pattern Synonym");
+        }
+
+        // Check that if pattern synonym is of while design entity, that the second argument is valid
+        bool isInvalidWhilePatternArgument = (patternSynonym == "while") && (patternArguments[1] != "_");
+
+        if (isInvalidWhilePatternArgument) {
+            throw QPInvalidSemanticException("Invalid Pattern Argument");
+        }
+
+        validatePatternFirstArgument(declarationTokens, patternArguments[0]);
+    }
+}
+
+void Validator::validateWithClauses(std::vector<std::pair<std::string, std::string>> withClauses,
+                                    std::map<std::string, std::string> declarationTokens) {
+    // Check arguments of each with clause
+    for (std::pair<std::string, std::string> withClause : withClauses) {
+        validateAttrRefArgument(withClause.first, declarationTokens);
+        validateAttrRefArgument(withClause.second, declarationTokens);
+    }
+}
+
+void Validator::validateSynonym(std::string synonym, std::set<std::string> declarationSet,
+                                std::map<std::string, std::string> declarationTokens) {
+    // If synonym is an attribute reference, check that it's a valid reference
+    bool isAttrRef = std::regex_match(synonym, std::regex(ATTR_REF));
+    if (isAttrRef) {
+        validateAttrRefArgument(synonym, declarationTokens);
+        return;
+    }
+
+    // Otherwise, check that the synonym has been declared
+    if (declarationSet.find(synonym) == declarationSet.end()) {
+        throw QPInvalidSemanticException("Invalid Select Clause");
     }
 }
 
@@ -135,6 +171,23 @@ void Validator::handleSuchThatStatementClause(std::map<std::string, std::string>
     checkArgumentForStatementClauses(declarationTokens, arguments[1]);
 }
 
+void Validator::handleVariableRelationshipClause(std::map<std::string, std::string> declarationTokens,
+                                                 SuchThatClauseToken suchThatClauseToken) {
+    // Get set of possible first argument types
+    std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
+    std::vector<std::string> arguments = *(suchThatClauseToken.arguments);
+
+    // Check arguments
+    checkFirstArgForVariableClauses(arguments[0], argSet, declarationTokens);
+    checkSecondArgForVariableClauses(arguments[1], declarationTokens);
+}
+
+void Validator::handleCallsAffectsClauses(SuchThatClauseToken suchThatClauseToken, std::map<std::string, std::string> declarationTokens) {
+    std::vector<std::string> arguments = *suchThatClauseToken.arguments;
+    checkProcAssignArgument(arguments[0], suchThatClauseToken.relRef, declarationTokens);
+    checkProcAssignArgument(arguments[1], suchThatClauseToken.relRef, declarationTokens);
+}
+
 void Validator::checkArgumentForStatementClauses(std::map<std::string, std::string>& declarationTokens, std::string argument) {
     // If argument is an ident or integer, then it's valid
     if (regex_match(argument, std::regex((INT_WILDCARD)))) {
@@ -145,17 +198,6 @@ void Validator::checkArgumentForStatementClauses(std::map<std::string, std::stri
     if (isArgumentDeclaredWithIncorrectSynonym) {
         throw QPInvalidSemanticException("Invalid Argument");
     }
-}
-
-void Validator::handleVariableRelationshipClause(std::map<std::string, std::string> declarationTokens,
-                                                 SuchThatClauseToken suchThatClauseToken) {
-    // Get set of possible first argument types
-    std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
-    std::vector<std::string> arguments = *(suchThatClauseToken.arguments);
-
-    // Check arguments
-    checkFirstArgForVariableClauses(arguments[0], argSet, declarationTokens);
-    checkSecondArgForVariableClauses(arguments[1], declarationTokens);
 }
 
 void Validator::checkFirstArgForVariableClauses(std::string argument, std::set<std::string>& argSet,
@@ -185,12 +227,6 @@ void Validator::checkSecondArgForVariableClauses(std::string argument, std::map<
     }
 }
 
-void Validator::handleCallsAffectsClauses(SuchThatClauseToken suchThatClauseToken, std::map<std::string, std::string> declarationTokens) {
-    std::vector<std::string> arguments = *suchThatClauseToken.arguments;
-    checkProcAssignArgument(arguments[0], suchThatClauseToken.relRef, declarationTokens);
-    checkProcAssignArgument(arguments[1], suchThatClauseToken.relRef, declarationTokens);
-}
-
 void Validator::checkProcAssignArgument(std::string argument, std::string relRef,
                                          std::map<std::string, std::string> declarationTokens) {
     bool isSynonym = std::regex_match(argument, std::regex(SYNONYM));
@@ -214,33 +250,6 @@ void Validator::checkProcAssignArgument(std::string argument, std::string relRef
     }
 }
 
-void Validator::validatePatterns(std::map<std::string, std::string> declarationTokens,
-                                 std::vector<PatternToken> patternTokens) {
-    for (PatternToken patternToken : patternTokens) {
-        // Check that the pattern's syn-assign and first argument do not have the same synonym and synonym is declared
-        std::vector<std::string> patternArguments = *patternToken.arguments;
-        std::vector<std::string> arguments = std::vector<std::string>({patternToken.synonym, patternArguments[0]});
-        checkArguments(arguments, declarationTokens);
-
-        // Check that pattern synonym is valid
-        std::string patternSynonym = declarationTokens.at(patternToken.synonym);
-        bool isValidPatternSynonym = std::regex_match(patternSynonym, std::regex(PATTERN_SYNONYMS));
-
-        if (!isValidPatternSynonym) {
-            throw QPInvalidSemanticException("Invalid Pattern Synonym");
-        }
-
-        // Check that if pattern synonym is of while design entity, that the second argument is valid
-        bool isInvalidWhilePatternArgument = (patternSynonym == "while") && (patternArguments[1] != "_");
-
-        if (isInvalidWhilePatternArgument) {
-            throw QPInvalidSemanticException("Invalid Pattern Argument");
-        }
-
-        validatePatternFirstArgument(declarationTokens, patternArguments[0]);
-    }
-}
-
 void Validator::validatePatternFirstArgument(std::map<std::string, std::string> declarationTokens, std::string argument) {
     // Check that the pattern's first argument is a declared variable if it's a synonym
     bool isArgumentSynonym = std::regex_match(argument, std::regex(SYNONYM));
@@ -248,15 +257,6 @@ void Validator::validatePatternFirstArgument(std::map<std::string, std::string> 
 
     if (isSynonymArgumentNotVariable) {
         throw QPInvalidSemanticException("Invalid Pattern First Argument");
-    }
-}
-
-void Validator::validateWithClauses(std::vector<std::pair<std::string, std::string>> withClauses,
-                                    std::map<std::string, std::string> declarationTokens) {
-    // Check arguments of each with clause
-    for (std::pair<std::string, std::string> withClause : withClauses) {
-        validateAttrRefArgument(withClause.first, declarationTokens);
-        validateAttrRefArgument(withClause.second, declarationTokens);
     }
 }
 
