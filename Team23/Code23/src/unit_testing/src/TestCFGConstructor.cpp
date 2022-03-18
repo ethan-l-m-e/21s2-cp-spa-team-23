@@ -33,12 +33,12 @@ TEST_CASE("test - basic CFG") {
 
     ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
 
-    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
-    CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getStatementNumber() == 3);
-    CHECK(firstSetOfNodes.at(0)->isStart());
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->isEnd());
+    NodeCFG* firstSetOfNodes = CFGConstructor::createCFG(&pNode1);
+    CHECK(firstSetOfNodes->getStatementNumber() == 1);
+    CHECK(firstSetOfNodes->getNextNode()->getStatementNumber() == 2);
+    CHECK(firstSetOfNodes->getNextNode()->getNextNode()->getStatementNumber() == 3);
+    CHECK(firstSetOfNodes->isStart());
+    CHECK(firstSetOfNodes->getNextNode()->getNextNode()->isEnd());
 }
 
 TEST_CASE("test - basic while") {
@@ -57,18 +57,18 @@ TEST_CASE("test - basic while") {
 
     ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
 
-    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
-    CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getStatementNumber() == 3);
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->getStatementNumber()==4);
-    CHECK(firstSetOfNodes.at(0)->isStart());
+    NodeCFG* firstSetOfNodes = CFGConstructor::createCFG(&pNode1);
+    CHECK(firstSetOfNodes->getStatementNumber() == 1);
+    CHECK(firstSetOfNodes->getNextNode()->getStatementNumber() == 2);
+    CHECK(firstSetOfNodes->getNextNode()->getNextNode()->getStatementNumber() == 3);
+    CHECK(firstSetOfNodes->getNextNode()->getNextNode()->getNextNode()->getStatementNumber()==4);
+    CHECK(firstSetOfNodes->isStart());
     //check how isEnd() should work with while loop
 //    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->isEnd());
-    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()));
-    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getStatementNumber() == 5);
-    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getStatementNumber() == 6);
-    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getNextNode()->getStatementNumber() == 4);
+    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes->getNextNode()->getNextNode()->getNextNode()));
+    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getStatementNumber() == 5);
+    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getStatementNumber() == 6);
+    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getNextNode()->getStatementNumber() == 4);
 
 }
 TEST_CASE("test - basic if") {
@@ -89,18 +89,18 @@ TEST_CASE("test - basic if") {
     defaultStmtLst.push_back(&iNode);
 
     ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
-    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
-    CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
-    CHECK(firstSetOfNodes.at(0)->isStart());
-    CHECK(firstSetOfNodes.at(0)->getNextNode()->isEnd()==false);
-    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes.at(0)->getNextNode()));
-    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes.at(0)->getNextNode())->getLeftNode()->getStatementNumber()==3);
+    NodeCFG* firstSetOfNodes = CFGConstructor::createCFG(&pNode1);
+    CHECK(firstSetOfNodes->getStatementNumber() == 1);
+    CHECK(firstSetOfNodes->getNextNode()->getStatementNumber() == 2);
+    CHECK(firstSetOfNodes->isStart());
+    CHECK(firstSetOfNodes->getNextNode()->isEnd()==false);
+    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes->getNextNode()));
+    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes->getNextNode())->getLeftNode()->getStatementNumber()==3);
     //check how isEnd() should work with if branch
 //    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes.at(0)->getNextNode())->getLeftNode()->isEnd());
-    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes.at(0)->getNextNode())->getRightNode()->getStatementNumber()==5);
-    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes.at(0)->getNextNode())->getRightNode()->getNextNode()->getStatementNumber()==6);
-    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes.at(0)->getNextNode())->getRightNode()->getNextNode()->isEnd());
+    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes->getNextNode())->getRightNode()->getStatementNumber()==5);
+    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes->getNextNode())->getRightNode()->getNextNode()->getStatementNumber()==6);
+    CHECK(dynamic_cast<BranchCFG*>(firstSetOfNodes->getNextNode())->getRightNode()->getNextNode()->isEnd());
 
 }
 

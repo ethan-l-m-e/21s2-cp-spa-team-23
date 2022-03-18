@@ -8,8 +8,8 @@
 #include "TNode/IfNode.h"
 #include "iostream"
 #include "PKB/PKB.h"
-NodeCFG* CFGConstructor::createCFG(ProcedureNode p) {
-    vector<Node*> stmtLst = p.getStmtLst();
+NodeCFG* CFGConstructor::createCFG(ProcedureNode* p) {
+    vector<Node*> stmtLst = p->getStmtLst();
     unordered_map<int, NodeCFG *> currMapOfPrevNodes;
     vector<NodeCFG*> prevNode;
     vector<NodeCFG*> firstSetOfNodes;

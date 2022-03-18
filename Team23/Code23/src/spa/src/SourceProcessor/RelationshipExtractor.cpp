@@ -11,6 +11,7 @@
 #include "TNode/ReadNode.h"
 #include "TNode/PrintNode.h"
 #include "TNode/CallNode.h"
+#include "TNode/CFG/CFGConstructor.h"
 #include <unordered_set>
 
 using std::begin, std::end;
@@ -213,12 +214,20 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
         return {};
     }
 }
+void RelationshipExtractor::extractNext (Node * node) {
+    auto value = dynamic_cast<ProgramNode *>(node));
+    vector<ProcedureNode *> v = value->getProcLst();
+    for (ProcedureNode *p: v)
+        CFGConstructor::createCFG(p);
 
+
+}
 void RelationshipExtractor::extractRelationships(Node * node){
     vector<StmtLstNode*> v;
     extractFollows(node);
     extractParent(node,v);
     extractUses(node);
     extractModifies(node);
+    extractNext(node);
 }
 

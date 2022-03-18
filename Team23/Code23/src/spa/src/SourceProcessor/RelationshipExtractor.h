@@ -21,6 +21,7 @@ public:
     static vector<string> extractModifies(Node*);
     static vector<string> extractUses(Node*);
     static void extractRelationships(Node*);
+    static void extractNext(Node *node);
 };
 
 
