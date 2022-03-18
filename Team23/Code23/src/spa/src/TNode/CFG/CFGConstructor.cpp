@@ -8,15 +8,17 @@
 #include "TNode/IfNode.h"
 #include "iostream"
 
-vector<NodeCFG*> CFGConstructor::createCFG(ProcedureNode p) {
+NodeCFG* CFGConstructor::createCFG(ProcedureNode p) {
     vector<Node*> stmtLst = p.getStmtLst();
     unordered_map<int, NodeCFG *> currMapOfPrevNodes;
     vector<NodeCFG*> prevNode;
     vector<NodeCFG*> firstSetOfNodes;
+    NodeCFG* firstNode;
     bool isFirstLoop = true;
     for(Node* s: stmtLst) {
         if(isFirstLoop){
             firstSetOfNodes = CFGConstructor::populateCFG(s,prevNode);
+            firstNode = firstSetOfNodes.at(0);
             prevNode = firstSetOfNodes;
 
             isFirstLoop = false;
@@ -24,7 +26,7 @@ vector<NodeCFG*> CFGConstructor::createCFG(ProcedureNode p) {
             prevNode = CFGConstructor::populateCFG(s, prevNode);
         }
     }
-    return firstSetOfNodes;
+    return firstNode;
 }
 
 /*
