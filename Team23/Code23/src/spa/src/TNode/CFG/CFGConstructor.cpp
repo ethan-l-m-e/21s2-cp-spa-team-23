@@ -26,9 +26,6 @@ NodeCFG* CFGConstructor::createCFG(ProcedureNode* p) {
         }else {
             prevNode = CFGConstructor::populateCFG(s, prevNode);
         }
-        for(NodeCFG* n : prevNode) {
-            PKB::getInstance()->relationship.next.addCFGNode(n);
-        }
     }
     return firstNode;
 }
@@ -59,8 +56,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         }
         //last node in while loop to point towards initial LoopCFG
         newSetOfNodes.at(0)->setNextNode(newCFGNode);
-
-        return newSetOfNodes;
     }else if(auto value = dynamic_cast<IfNode*>(currNode)) {
         auto* newCFGNode = new BranchCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
@@ -96,9 +91,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
                 isElseBranchFirstLoop = false;
             }
         }
-
-        return newSetOfNodes;
-
     }else{
         auto* newCFGNode = new NodeCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
@@ -108,8 +100,10 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
             }
         }
         newSetOfNodes.push_back(newCFGNode);
-
-    return newSetOfNodes;
     }
+    for(NodeCFG* n : newSetOfNodes) {
+        PKB::getInstance()->relationship.next.addCFGNode(n);
+    }
+    return newSetOfNodes;
 }
 
