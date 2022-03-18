@@ -223,7 +223,7 @@ void RelationshipExtractor::extractCFG(Node * node) {
         vector<NodeCFG*> CFG = CFGConstructor::createCFG(*procedure);
         vector<NodeCFG*>::iterator i;
         for(i = CFG.begin(); i != CFG.end(); i++) {
-
+            PKB::getInstance()->relationship.next.addCFGNode(*i);
         }
     }
 }

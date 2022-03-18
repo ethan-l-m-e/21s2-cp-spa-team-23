@@ -60,6 +60,7 @@ bool PatternClauseEvaluator::evaluateWithFunc_Pointers(ResultTable* resultTable,
     validateAndParse(arg1, arg2, arg3, varLeft, exprRight);
     vector<ResultItem> results = collectResults(arg1, arg2, varLeft, exprRight);
     constructResults(results, isSynonym(argLeft));
+    return false;
 }
 
 bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
