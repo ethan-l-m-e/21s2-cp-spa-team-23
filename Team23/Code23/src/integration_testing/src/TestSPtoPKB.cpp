@@ -12,9 +12,8 @@ void require(bool b) {
 }
 
 TEST_CASE("Integration testing - statement type check from parser to pkb") {
-//    auto programNode = dynamic_cast<ProgramNode*>(Parser::Parse(sourceCode));
-
-    SourceProcessor::run("integration_source.txt");
+    std::string filename = "integration_source.txt";
+    SourceProcessor::run(filename);
 
     CHECK(PKB::getInstance()->statement.assignStatements.isStatementNumber("1"));
     CHECK(PKB::getInstance()->statement.whileStatements.isStatementNumber("2"));
