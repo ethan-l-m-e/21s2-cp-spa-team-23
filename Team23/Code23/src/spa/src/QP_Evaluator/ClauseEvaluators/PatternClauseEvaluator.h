@@ -22,7 +22,7 @@ protected:
     Argument patternSynonym = argList[0];
     Argument arg1 = argList[1];
     Argument arg2 = argList[2];
-    //Argument arg3 = argList[3];
+    //the last argument will be processed if pattern-syn is if
 
     // get argument 3 if is if-node
     bool evaluateAssign(ResultTable *resultTable);
