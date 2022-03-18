@@ -199,7 +199,9 @@ TEST_CASE("Test tuple results") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateResultClause(resultTable, &query_10, testPKB) == ResultSet{
-                "9 x", "2 x", "3 y", "10 x", "9 y", "9 z", "8 x", "3 z", "3 x", "10 y", "8 z", "10 z", "2 y", "8 y", "2 z"
+                "9 x", "2 x", "3 y", "2 b", "10 y", "2 y", "10 z", "8 x", "8 a", "3 x",
+                "9 y", "9 b", "8 z", "9 z", "2 z", "9 a", "3 z", "10 a", "8 b", "2 a",
+                "3 a", "10 x", "8 y", "10 b", "3 b"
         });
     }
     delete resultTable;

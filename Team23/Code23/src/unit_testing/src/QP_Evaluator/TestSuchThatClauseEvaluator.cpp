@@ -728,7 +728,7 @@ TEST_CASE("Test UsesS clause evaluator") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateUsesSClause(resultTable, &query_0, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"x", "y"});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"x", "y", "a", "b"});
 
         /**
          * Select s such that Uses(s1, "x")
@@ -762,7 +762,10 @@ TEST_CASE("Test UsesS clause evaluator") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateUsesSClause(resultTable, &query_4, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{"6 y", "11 x", "7 z", "8 x", "5 z", "9 z", "7 y", "9 y", "7 x", "8 z", "5 x", "4 z", "10 z", "5 y", "2 x", "3 y", "2 y"}});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{
+            "6 y", "11 x", "7 z", "8 x", "5 z", "9 z", "7 y",
+            "9 y", "7 x", "8 z", "5 x", "4 z", "10 z", "5 y",
+            "2 x", "3 y", "2 y", "2 a", "2 b"}});
 
         /**
          * Select a such that Uses(a, v)
@@ -770,7 +773,9 @@ TEST_CASE("Test UsesS clause evaluator") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateUsesSClause(resultTable, &query_5, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"9 z", "3 y", "2 x", "9 y", "10 z", "8 x", "8 z", "2 y"});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{
+            "9 z", "3 y", "2 x", "9 y", "10 z", "8 x",
+            "8 z", "2 y", "2 a", "2 b"});
 
         /**
          * Select v such that Uses(pn, v)
@@ -894,7 +899,7 @@ TEST_CASE("Test UsesP clause evaluator") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateUsesPClause(resultTable, &query_0, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"x", "z", "y"});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"x", "z", "y", "a", "b"});
 
         /**
          * Uses(p, "x")
@@ -911,7 +916,7 @@ TEST_CASE("Test UsesP clause evaluator") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateUsesPClause(resultTable, &query_2, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{"prop x", "prop y", "prop z", "pr y"}});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"prop x", "prop a", "prop b", "prop y", "prop z", "pr y"});
     }
 
     SECTION("invalid query") {
@@ -998,14 +1003,14 @@ TEST_CASE("Test Next clause evaluator") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateNextClause(resultTable, &query_4, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{"6", "11"}});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"6", "11"});
 
         /**
          * Next(ifs, 9)
          */
         resultTable->clearTable();
         REQUIRE(evaluateNextClause(resultTable, &query_5, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{"7"}});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"7"});
 
         /**
          * Next(a, 9)
@@ -1021,14 +1026,14 @@ TEST_CASE("Test Next clause evaluator") {
          */
         resultTable->clearTable();
         REQUIRE(evaluateNextClause(resultTable, &query_7, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{"7 8", "7 9"}});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"7 8", "7 9"});
 
         /**
          * Next(s1, w)
          */
         resultTable->clearTable();
         REQUIRE(evaluateNextClause(resultTable, &query_8, testPKB) == true);
-        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{"10 5", "4 5"}});
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"10 5", "4 5"});
     }
     delete resultTable;
     
@@ -1158,7 +1163,7 @@ TEST_CASE("Test NextT clause evaluator") {
         resultTable->clearTable();
         REQUIRE(evaluateNextTClause(resultTable, &query_9, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) ==
-                ResultSet{{"1 4", "1 11"}}
+                ResultSet{"1 4", "1 11"}
         );
     }
     delete resultTable;

@@ -26,7 +26,7 @@ TEST_CASE("Query with no clauses") {
      * Select v
      * Type: select variables
      */
-    REQUIRE(generateResultSet(qe->evaluate(&query_1)) == ResultSet {"x", "y", "z"});
+    REQUIRE(generateResultSet(qe->evaluate(&query_1)) == ResultSet {"x", "y", "z", "a", "b"});
 
     /**
      * Select s
@@ -201,6 +201,7 @@ TEST_CASE("Multi clauses with tuples") {
     Argument as1 = {ArgumentType::SYNONYM, "s1"};
     Argument as2 = {ArgumentType::SYNONYM, "s2"};
     Argument as3 = {ArgumentType::SYNONYM, "s3"};
+    Argument av = {ArgumentType::SYNONYM, "v"};
     Argument a0 = {ArgumentType::UNDERSCORE, "_"};
     Argument a4 = {ArgumentType::STMT_NO, "4"};
     Argument a5 = {ArgumentType::STMT_NO, "5"};
@@ -213,6 +214,7 @@ TEST_CASE("Multi clauses with tuples") {
     SuchThatClause clause_s2_0 = {ArgList{as2, a0},RelRef::FOLLOWS};
     SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS};
     SuchThatClause clause_5_s3 = {ArgList{a5, as3},RelRef::PARENT};
+
 
     Query query_0 = makeQuery(declarations, {
         Argument{ArgumentType::SYNONYM, "s1"}
@@ -229,6 +231,7 @@ TEST_CASE("Multi clauses with tuples") {
         Argument{ArgumentType::SYNONYM, "s3"}
         },
                               {clause_s1_s2, clause_4_5, clause_5_s3});
+
 
     auto qe = new QueryEvaluator(testPKB);
 
@@ -250,6 +253,37 @@ TEST_CASE("Multi clauses with tuples") {
 
     delete qe;
     
+}
+
+TEST_CASE("Multi clauses with ref") {
+    PKB *testPKB = generateSamplePKB();
+    unordered_map<string, DesignEntity> declarations = {
+            {"s1", DesignEntity::STMT},
+            {"v", DesignEntity::VARIABLE},
+    };
+
+    Argument as1 = {ArgumentType::SYNONYM, "s1"};
+    Argument av = {ArgumentType::SYNONYM, "v"};
+    Argument a0 = {ArgumentType::UNDERSCORE, "_"};
+
+    SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::PARENT};
+    SuchThatClause clause_s1_v = {ArgList{as1, av},RelRef::USES_S};
+
+    Query query_1 = makeQuery(declarations, {
+                                      Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::STMT_NO)},
+                                      Argument{ArgumentType::ATTR_REF, make_pair("v", AttrName::VAR_NAME)},
+                              },
+                              {clause_s1_0, clause_s1_v});
+
+    auto qe = new QueryEvaluator(testPKB);
+    /**
+    * Select s1 v such that Parent(s1, _) such that Uses(s1, v)
+    * Type: boolean clause, no merge needed
+    */
+    REQUIRE(generateResultSet(qe->evaluate(&query_1)) == ResultSet {
+            "7 x", "7 y", "5 x", "5 z", "7 z", "5 y"
+    });
+    delete qe;
 }
 
 TEST_CASE("Pattern clause: return stmt") {

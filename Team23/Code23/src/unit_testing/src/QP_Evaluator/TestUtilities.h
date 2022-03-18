@@ -19,3 +19,4 @@ ResultSet evaluateAndCreateResultSet(QueryEvaluator *qe, Query *query);
 PKB* generateSamplePKB();
 PKB* generateSamplePKBForPatternMatching();
 vector<unordered_map<int, NodeCFG*>> constructCFGForTesting();
+vector<unordered_map<int, NodeCFG*>> constructCFGForSamplePKB();
