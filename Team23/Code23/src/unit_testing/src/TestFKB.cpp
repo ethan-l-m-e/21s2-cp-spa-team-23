@@ -729,13 +729,11 @@ TEST_CASE("Add ModifiesP") {
 TEST_CASE("Add Next") {
     pkb->clearPKB();
 
-    unordered_map<int, NodeCFG *> statementNumberToNodeCFGMap;
 
-    for (int statementNumber : {1, 2, 34, 56, 57, 345}) {
-        NodeCFG node = NodeCFG(statementNumber);
+    vector<unordered_map<int, NodeCFG*>> v = constructCFGForTesting();
 
-        statementNumberToNodeCFGMap.emplace(statementNumber, &node);
-    }
+    unordered_map<int, NodeCFG *> statementNumberToNodeCFGMap = v[0];
+
 
     for (auto& iter : statementNumberToNodeCFGMap) {
         int statementNumber = iter.first;
@@ -750,8 +748,38 @@ TEST_CASE("Add Next") {
     for (auto& iter : statementNumberToNodeCFGMap) {
         int statementNumber = iter.first;
         NodeCFG *node = iter.second;
-
         REQUIRE(pkb->relationship.next.getCFGNode(statementNumber) == node);
 
     }
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf(2) == 3);
+    REQUIRE(pkb->relationship.next.getNextNodeOf(3) == 4);
+    REQUIRE(pkb->relationship.next.getNextNodeOf(4) == 5);
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf(3) == unordered_map<int, NodeCFG *>{{2, statementNumberToNodeCFGMap[2]}});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf(4) == unordered_map<int, NodeCFG *>{{3, statementNumberToNodeCFGMap[3]}});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf(5) == unordered_map<int, NodeCFG *>{{4, statementNumberToNodeCFGMap[4]}});
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf(15) == 16);
+    REQUIRE(pkb->relationship.next.getNextNodeOf(16) == 17);
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf(16) == unordered_map<int, NodeCFG *>{{15, statementNumberToNodeCFGMap[15]}});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf(17) == unordered_map<int, NodeCFG *>{{16, statementNumberToNodeCFGMap[16]}});
+
+
+
+    unordered_map<int, int> startToEndMap = {{2,5}, {6, 8}, {15, 17}};
+
+    for (auto& iter : startToEndMap) {
+        int start = iter.first;
+        int end = iter.second;
+
+        for (int previous = start; previous <= end - 1; previous++) {
+            int next = previous + 1;
+            REQUIRE(pkb->relationship.next.isNext(previous, next));
+        }
+
+    }
+
+
 }
