@@ -90,147 +90,93 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID DECLARATIONS") {
     // Incorrect semicolon usage
     query = "variable v1; v2; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT COMMA USAGE") {
-    std::string query = "variable v1, stmt s; \n Select v1";
-    Validator validator = Validator();
+    // Incorrect comma usage
+    query = "variable v1, stmt s; \n Select v1";
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 
+    // Incorrect comma usage - 2
+    query = "variable v1; stmt, s; \n Select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT COMMA USAGE - 2") {
-    std::string query = "variable v1; stmt, s; \n Select v1";
+TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID SELECT CLAUSE TESTS") {
     Validator validator = Validator();
 
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
-
-// Valid Syntactic Queries for Select Clause
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE") {
+    // Normal Select clause
     std::string query = "variable v; \n Select v";
-    Validator validator = Validator();
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
+    // Select clause with synonym having an int
+    query = "variable v; \n Select v2";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with multi char synonym
+    query = "variable v; \n Select var";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with Select as synonym
+    query = "variable v; \n Select Select";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with 'with' as synonym
+    query = "variable with; \n Select with";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with 'and' as synonym
+    query = "variable and; \n Select and";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with 'Follows' as synonym
+    query = "variable Follows; \n Select Follows";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with 'BOOLEAN' as synonym
+    query = "variable Follows; \n Select BOOLEAN";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with tuple: single element
+    query = "variable example; \n Select <example>";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with tuple: Select as synonym name
+    query = "variable Select; \n Select <Select>";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with tuple: Select and with as synonym names
+    query = "variable Select, with; \n Select <Select, with>";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with tuple: Attribute References
+    query = "variable Select, with; \n Select <p.procName, s.stmt#, v.varName, c.value>";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with AttrRef - procName
+    query = "procedure p; \n Select p.procName";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with AttrRef - varName
+    query = "procedure p; \n Select p.varName";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with AttrRef - value
+    query = "procedure p; \n Select p.value";
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
+
+    // Select clause with AttrRef - stmt#
+    query = "procedure p; \n Select p.stmt#";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH SYNONYM HAVING AN INT") {
-    std::string query = "variable v; \n Select v2";
+TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID SELECT CLAUSE QUERIES") {
     Validator validator = Validator();
 
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH MULTI CHAR SYNONYM") {
-    std::string query = "variable v; \n Select var";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH SELECT AS SYNONYM") {
-    std::string query = "variable v; \n Select Select";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'WITH' AS SYNONYM") {
-    std::string query = "variable with; \n Select with";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'AND' AS SYNONYM") {
-    std::string query = "variable and; \n Select and";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'FOLLOWS' AS SYNONYM") {
-    std::string query = "variable Follows; \n Select Follows";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH 'BOOLEAN' AS SYNONYM") {
-    std::string query = "variable Follows; \n Select BOOLEAN";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: SINGLE ELEMENT") {
-    std::string query = "variable example; \n Select <example>";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: SELECT AS SYNONYM NAME") {
-    std::string query = "variable Select; \n Select <Select>";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: SELECT AND WITH AS SYNONYM NAMES") {
-    std::string query = "variable Select, with; \n Select <Select, with>";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH TUPLE: ATTR REFERENCES") {
-    std::string query = "variable Select, with; \n Select <p.procName, s.stmt#, v.varName, c.value>";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - PROCNAME") {
-    std::string query = "procedure p; \n Select p.procName";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - VARNAME") {
-    std::string query = "procedure p; \n Select p.varName";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - VALUE") {
-    std::string query = "procedure p; \n Select p.value";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH ATTRREF - STMT#") {
-    std::string query = "procedure p; \n Select p.stmt#";
-    Validator validator = Validator();
-
-    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
-}
-
-// Invalid queries for select clause
-TEST_CASE ("QP SYNTACTIC VALIDATOR: SELECT CLAUSE WITH INT AS SYNONYM") {
+    // Select clause with int as synonym
     std::string query = "variable v; \n Select 123";
-    Validator validator = Validator();
-
     REQUIRE_THROWS(validator.validateQueryStructure(query));
-}
 
-TEST_CASE ("QP SYNTACTIC VALIDATOR: LOWER CASE SELECT CLAUSE") {
-    std::string query = "variable v; \n select v1";
-    Validator validator = Validator();
-
+    // Lower case select clause
+    query = "variable v; \n select v1";
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
