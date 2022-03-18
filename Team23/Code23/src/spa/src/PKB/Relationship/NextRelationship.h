@@ -10,19 +10,21 @@
 
 class NextRelationship : OneToOneRelationship<int, NodeCFG *> {
 public:
-    void setRelationship(int lhs, NodeCFG *rhs);
+
+    void addCFGNode(NodeCFG *node);
+
 
     void clear();
 
-    bool isNext(int previous, int next);
+    bool isNext(string previousStatementNumber, string nextStatementNumber);
 
-    unordered_map<int, NodeCFG *> getPreviousNodeOf(int next);
+    unordered_set<string> getPreviousNodeOf(string nextStatementNumber);
 
-    int getNextNodeOf(int previous);
+    unordered_set<string> getNextNodeOf(string previousStatementNumber);
 
     // Functions below are used to calculate Next*
 
-    NodeCFG* getCFGNode(int statementNumber);
+    NodeCFG* getCFGNode(string statementNumber);
 
     int getCFGSize();
 

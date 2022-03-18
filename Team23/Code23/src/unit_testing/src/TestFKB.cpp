@@ -729,57 +729,98 @@ TEST_CASE("Add ModifiesP") {
 TEST_CASE("Add Next") {
     pkb->clearPKB();
 
-
     vector<unordered_map<int, NodeCFG*>> v = constructCFGForTesting();
 
     unordered_map<int, NodeCFG *> statementNumberToNodeCFGMap = v[0];
 
-
     for (auto& iter : statementNumberToNodeCFGMap) {
         int statementNumber = iter.first;
         NodeCFG *node = iter.second;
 
-        pkb->relationship.next.setRelationship(statementNumber, node);
+        REQUIRE(statementNumber == node->getStatementNumber());
+
+        pkb->relationship.next.addCFGNode(node);
     }
+
+    // getCFGSize() Test
 
     REQUIRE(pkb->relationship.next.getCFGSize() == statementNumberToNodeCFGMap.size());
 
 
+    // getCFGNode() Test
+
     for (auto& iter : statementNumberToNodeCFGMap) {
         int statementNumber = iter.first;
         NodeCFG *node = iter.second;
-        REQUIRE(pkb->relationship.next.getCFGNode(statementNumber) == node);
-
+        REQUIRE(pkb->relationship.next.getCFGNode(std::to_string(statementNumber)) == node);
     }
 
-    REQUIRE(pkb->relationship.next.getNextNodeOf(2) == 3);
-    REQUIRE(pkb->relationship.next.getNextNodeOf(3) == 4);
-    REQUIRE(pkb->relationship.next.getNextNodeOf(4) == 5);
 
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf(3) == unordered_map<int, NodeCFG *>{{2, statementNumberToNodeCFGMap[2]}});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf(4) == unordered_map<int, NodeCFG *>{{3, statementNumberToNodeCFGMap[3]}});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf(5) == unordered_map<int, NodeCFG *>{{4, statementNumberToNodeCFGMap[4]}});
+    // getNextNodeOf() Test
 
-    REQUIRE(pkb->relationship.next.getNextNodeOf(15) == 16);
-    REQUIRE(pkb->relationship.next.getNextNodeOf(16) == 17);
+    REQUIRE(pkb->relationship.next.getNextNodeOf("1") == unordered_set<string>{"2", "6"});
 
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf(16) == unordered_map<int, NodeCFG *>{{15, statementNumberToNodeCFGMap[15]}});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf(17) == unordered_map<int, NodeCFG *>{{16, statementNumberToNodeCFGMap[16]}});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("2") == unordered_set<string>{"3"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("3") == unordered_set<string>{"4"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("4") == unordered_set<string>{"5"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("5") == unordered_set<string>{"9"});
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf("6") == unordered_set<string>{"9", "7"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("7") == unordered_set<string>{"6", "8"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("8") == unordered_set<string>{"6"});
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf("9") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("10") == unordered_set<string>{"11"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("11") == unordered_set<string>{"12"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("12") == unordered_set<string>{"13", "14"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("13") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("14") == unordered_set<string>{"10"});
+
+
+    // getPreviousNodeOf() Test
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("1") == unordered_set<string>{});
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("2") == unordered_set<string>{"1"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("3") == unordered_set<string>{"2"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("4") == unordered_set<string>{"3"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("5") == unordered_set<string>{"4"});
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("6") == unordered_set<string>{"1", "7"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("7") == unordered_set<string>{"6", "8"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("8") == unordered_set<string>{"7"});
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("9") == unordered_set<string>{"5", "6"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("10") == unordered_set<string>{"9", "13", "14"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("11") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("12") == unordered_set<string>{"11"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("13") == unordered_set<string>{"12"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("14") == unordered_set<string>{"12"});
 
 
 
-    unordered_map<int, int> startToEndMap = {{2,5}, {6, 8}, {15, 17}};
+    // isNext() Test
 
-    for (auto& iter : startToEndMap) {
-        int start = iter.first;
-        int end = iter.second;
+    pkb->relationship.next.isNext("1", "2");
+    pkb->relationship.next.isNext("1", "6");
+    pkb->relationship.next.isNext("2", "3");
+    pkb->relationship.next.isNext("3", "5");
+    pkb->relationship.next.isNext("4", "5");
+    pkb->relationship.next.isNext("5", "9");
 
-        for (int previous = start; previous <= end - 1; previous++) {
-            int next = previous + 1;
-            REQUIRE(pkb->relationship.next.isNext(previous, next));
-        }
+    pkb->relationship.next.isNext("6", "7");
+    pkb->relationship.next.isNext("6", "9");
+    pkb->relationship.next.isNext("7", "8");
+    pkb->relationship.next.isNext("7", "6");
+    pkb->relationship.next.isNext("8", "7");
 
-    }
+    pkb->relationship.next.isNext("9", "10");
+    pkb->relationship.next.isNext("10", "11");
+    pkb->relationship.next.isNext("11", "12");
+    pkb->relationship.next.isNext("12", "13");
+    pkb->relationship.next.isNext("12", "14");
+    pkb->relationship.next.isNext("13", "10");
+    pkb->relationship.next.isNext("13", "10");
 
 
 }

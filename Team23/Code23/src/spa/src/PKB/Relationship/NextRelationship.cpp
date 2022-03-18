@@ -8,45 +8,68 @@
 void NextRelationship::clear() {
     OneToOneRelationship<int, NodeCFG *>::clear();
 }
+void NextRelationship::addCFGNode(NodeCFG *node) {
+    int statementNumber = node->getStatementNumber();
 
-void NextRelationship::setRelationship(int lhs, NodeCFG *rhs) {
-    OneToOneRelationship<int, NodeCFG *>::setRelationship(lhs, rhs);
+    OneToOneRelationship<int, NodeCFG *>::setRelationship(statementNumber, node);
 }
 
-bool NextRelationship::isNext(int previous, int next) {
-    unordered_set<NodeCFG *> setPreviousNode = getRHSNormal(previous);
-    unordered_set<NodeCFG *> setNextNode = getRHSNormal(next);
+bool NextRelationship::isNext(string previousStatementNumber, string nextStatementNumber) {
 
-    if (setPreviousNode.size() != 1 || setNextNode.size() != 1) {
-        return false;
+    unordered_set<string> setPreviousStatementNumbers = getPreviousNodeOf(nextStatementNumber);
+
+    return setPreviousStatementNumbers.find(previousStatementNumber) != setPreviousStatementNumbers.end();
+}
+
+
+unordered_set<string> NextRelationship::getPreviousNodeOf(string nextStatementNumber) {
+    NodeCFG *node = *getRHSNormal(std::stoi(nextStatementNumber)).begin();
+
+    unordered_set<string> statementNumbers;
+
+    unordered_map<int, NodeCFG*> statementNumberToNodeMap = node->getAllPreviousNode();
+
+    for (auto& iter : statementNumberToNodeMap) {
+        statementNumbers.insert(std::to_string(iter.first));
+    }
+
+    return statementNumbers;
+
+
+}
+
+unordered_set<string> NextRelationship::getNextNodeOf(string previousStatementNumber) {
+    NodeCFG *node = *getRHSNormal(std::stoi(previousStatementNumber)).begin();
+
+    unordered_set<string> setNextStatementNumbers;
+
+    if (auto branchNode = dynamic_cast<BranchCFG *>(node)) {
+        NodeCFG *leftNode = branchNode->getLeftNode();
+        NodeCFG *rightNode = branchNode->getRightNode();
+
+        setNextStatementNumbers.insert(std::to_string(leftNode->getStatementNumber()));
+        setNextStatementNumbers.insert(std::to_string(rightNode->getStatementNumber()));
+
+    } else if (auto loopNode = dynamic_cast<LoopCFG *>(node)) {
+        NodeCFG *nextNodeInLoop = loopNode->getNodeInLoop();
+        NodeCFG *nextNode = loopNode->getNextNode();
+
+        setNextStatementNumbers.insert(std::to_string(nextNodeInLoop->getStatementNumber()));
+
+        if (nextNode != NULL) {
+            setNextStatementNumbers.insert(std::to_string(nextNode->getStatementNumber()));
+        }
+
+
     } else {
-        NodeCFG *leftNode = *setPreviousNode.begin();
-        NodeCFG *rightNode = *setNextNode.begin();
+        NodeCFG *nextNode = node->getNextNode();
 
-        if (rightNode->getStatementNumber() - leftNode->getStatementNumber() == 1) {
-            return true;
-        } else {
-            return false;
+        if (nextNode != NULL) {
+            setNextStatementNumbers.insert(std::to_string(nextNode->getStatementNumber()));
         }
     }
-}
 
-
-unordered_map<int, NodeCFG*> NextRelationship::getPreviousNodeOf(int next) {
-    unordered_set<NodeCFG *> setNextNode = getRHSNormal(next);
-
-    NodeCFG *nextNode = *setNextNode.begin();
-
-    return nextNode->getAllPreviousNode();
-
-}
-
-int NextRelationship::getNextNodeOf(int previous) {
-    unordered_set<NodeCFG *> setPreviousNode = getRHSNormal(previous);
-
-    NodeCFG *previousNode = *setPreviousNode.begin();
-
-    return previousNode->getNextNode()->getStatementNumber();
+    return setNextStatementNumbers;
 
 }
 
@@ -54,8 +77,8 @@ int NextRelationship::getNextNodeOf(int previous) {
 // Functions below are used to calculate Next*
 
 
-NodeCFG* NextRelationship::getCFGNode(int statementNumber) {
-    unordered_set<NodeCFG *> setRHS = getRHSNormal(statementNumber);
+NodeCFG* NextRelationship::getCFGNode(string statementNumber) {
+    unordered_set<NodeCFG *> setRHS = getRHSNormal(std::stoi(statementNumber));
 
     return *setRHS.begin();
 
