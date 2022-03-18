@@ -1,0 +1,23 @@
+procedure MultiClause {
+    print a;
+    read a;
+    call MultiClause1;
+    while (cond == 1) {
+        while (cond == 1) {
+            while (cond == 1) {
+                a = a;
+            }
+        }
+    }
+}
+procedure MultiClause1 {
+    call MultiClause2;
+    if (cond == 1) then {
+        print a;
+    } else {
+        read a;
+    }
+}
+procedure MultiClause2 {
+    a = a;
+}
