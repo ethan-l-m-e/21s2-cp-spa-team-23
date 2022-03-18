@@ -726,7 +726,7 @@ Select s such that Affects*(_, _) and Affects*(_, _)
 145 - (2 such that) ==================================================================================[Unnumbered tests]
 stmt s;
 Select s such that Uses(s, "a") and Modifies(s, "a")
-4, 5, 6, 7, 12
+3, 4, 5, 6, 7, 8, 9, 12
 5000
 147 - (2 such that)
 procedure p;
