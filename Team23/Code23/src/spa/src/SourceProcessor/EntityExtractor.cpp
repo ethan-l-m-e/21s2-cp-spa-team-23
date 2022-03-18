@@ -5,7 +5,7 @@
 #include "EntityExtractor.h"
 #include "PKB/PKB.h"
 
-void extractAllEntities(Node *node) {
+void EntityExtractor::extractAllEntities(Node *node) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode*> v = value -> getProcLst();
         for(ProcedureNode* p: v)
