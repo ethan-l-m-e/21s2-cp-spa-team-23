@@ -9,6 +9,7 @@ autotest multiclause_source.txt multiclause_queries.txt ${OUT_PATH}multiclause_o
 autotest nested_source.txt nested_queries.txt ${OUT_PATH}nested_out.xml
 autotest next_source.txt next_queries.txt ${OUT_PATH}next_out.xml
 autotest parent_source.txt parent_queries.txt ${OUT_PATH}parent_out.xml
+autotest pattern_source.txt pattern_queries.txt ${OUT_PATH}pattern_out.xml
 autotest procedures_source.txt procedures_queries.txt ${OUT_PATH}procedures_out.xml
 autotest select_source.txt select_queries.txt ${OUT_PATH}select_out.xml
 autotest test_source.txt test_queries.txt ${OUT_PATH}test_out.xml
