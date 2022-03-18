@@ -218,7 +218,7 @@ TEST_CASE("Test Follow clause evaluator") {
     }
 
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test Follows* clause evaluator") {
@@ -334,7 +334,7 @@ TEST_CASE("Test Follows* clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"3 4", "2 4", "1 4", "1 11", "2 11", "3 11", "4 11", "5 11"});
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test Parent clause evaluator") {
@@ -378,8 +378,8 @@ TEST_CASE("Test Parent clause evaluator") {
     Query query_4 = makeQuery(declarations, {dummySelect}, {clause_w_7});
     Query query_5 = makeQuery(declarations, {dummySelect}, {clause_s1_0});
     Query query_6 = makeQuery(declarations, {dummySelect}, {clause_s1_s2});
-    Query query_7 = makeQuery(declarations, {dummySelect}, {clause_0_10});
-    Query query_8 = makeQuery(declarations, {dummySelect}, {clause_w_a});
+    Query query_7 = makeQuery(declarations, {dummySelect}, {clause_w_a});
+    Query query_8 = makeQuery(declarations, {dummySelect}, {clause_0_10});
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -461,7 +461,7 @@ TEST_CASE("Test Parent clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test Parent* clause evaluator") {
@@ -560,7 +560,7 @@ TEST_CASE("Test Parent* clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"5 6", "5 7", "5 8", "5 9", "5 10", "7 8", "7 9"});
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test ModifiesS clause evaluator") {
@@ -671,7 +671,7 @@ TEST_CASE("Test ModifiesS clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test UsesS clause evaluator") {
@@ -789,7 +789,7 @@ TEST_CASE("Test UsesS clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test ModifiesP clause evaluator") {
@@ -857,7 +857,7 @@ TEST_CASE("Test ModifiesP clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test UsesP clause evaluator") {
@@ -923,7 +923,7 @@ TEST_CASE("Test UsesP clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test Next clause evaluator") {
@@ -1031,7 +1031,7 @@ TEST_CASE("Test Next clause evaluator") {
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{{"10 5", "4 5"}});
     }
     delete resultTable;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Test NextT clause evaluator") {
@@ -1162,5 +1162,5 @@ TEST_CASE("Test NextT clause evaluator") {
         );
     }
     delete resultTable;
-    delete testPKB;
+    
 }

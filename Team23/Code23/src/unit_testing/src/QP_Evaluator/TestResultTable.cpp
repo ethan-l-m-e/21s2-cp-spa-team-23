@@ -167,7 +167,6 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     delete rt;
 }
 
-
 TEST_CASE("Multi-steps") {
     // merge string into rt
     auto* rt = new ResultTable();

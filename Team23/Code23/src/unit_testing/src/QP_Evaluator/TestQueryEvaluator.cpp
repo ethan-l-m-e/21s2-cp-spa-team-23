@@ -45,7 +45,7 @@ TEST_CASE("Query with no clauses") {
     REQUIRE(generateResultSet(qe->evaluate(&query_4)) == ResultSet {"z", "x"});
 
     delete qe;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Query with false clauses") {
@@ -101,7 +101,7 @@ TEST_CASE("Query with false clauses") {
     REQUIRE(generateResultSet(qe->evaluate(&query_5)) == ResultSet{"FALSE"});
 
     delete qe;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Multi clauses") {
@@ -187,7 +187,7 @@ TEST_CASE("Multi clauses") {
     REQUIRE(generateResultSet(qe->evaluate(&query_7)) == ResultSet {"TRUE"});
 
     delete qe;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Multi clauses with tuples") {
@@ -249,7 +249,7 @@ TEST_CASE("Multi clauses with tuples") {
     });
 
     delete qe;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Pattern clause: return stmt") {
@@ -305,7 +305,7 @@ TEST_CASE("Pattern clause: return stmt") {
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {wild_weirdVar});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "4", "5", "6", "7"});
     delete qe;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Pattern clause: return var + Stmt") {
@@ -333,7 +333,7 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "v"}}, {synonym_var});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet{"y"});
     delete qe;
-    delete testPKB;
+    
 }
 
 TEST_CASE("Pattern clause: full expression and exact matching") {
@@ -397,7 +397,7 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     //invalid query: wrong brackets
     //invalid query: wrong var/const
     delete qe;
-    delete testPKB;
+    
 
 }
 
@@ -431,5 +431,5 @@ TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
     REQUIRE(generateResultSet(qe->evaluate(&query_2)) == ResultSet {"y"});
 
     delete qe;
-    delete testPKB;
+    
 }
