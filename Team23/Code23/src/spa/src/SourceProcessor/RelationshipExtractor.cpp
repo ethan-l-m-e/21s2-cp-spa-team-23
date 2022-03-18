@@ -223,7 +223,6 @@ void RelationshipExtractor::extractCFG (Node * node) {
             PKB::getInstance()->relationship.next.addCFGNode(n);
         }
     }
-
 }
 void RelationshipExtractor::extractRelationships(Node * node){
     vector<StmtLstNode*> v;
