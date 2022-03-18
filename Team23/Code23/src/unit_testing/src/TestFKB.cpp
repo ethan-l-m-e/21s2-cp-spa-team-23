@@ -2,10 +2,12 @@
 // Created by Karan Dev Sapra on 17/2/22.
 //
 
-//#include "PKB.h"
+
 #include "PKB/PKB.h"
 
 #include "TNode/TNode.h"
+
+#include "QP_Evaluator/TestUtilities.h"
 
 #include "catch.hpp"
 
@@ -25,10 +27,15 @@ TEST_CASE("Add statements") {
 
     REQUIRE(pkb->statement.statements.getAllStatementNumbers().empty());
 
+    unordered_set<StmtNode *> statementNodes;
+
     for (int i = 1; i <= 10; i++) {
         auto n = StmtNode(i);
+        statementNodes.insert(&n);
         pkb->statement.statements.addStatement(&n);
     }
+
+    REQUIRE(pkb->statement.statements.getAllStatementNodes() == statementNodes);
 
     unordered_set<string> statementsSet = pkb->statement.statements.getAllStatementNumbers();
 
@@ -114,10 +121,16 @@ TEST_CASE("Add Assign Statements") {
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
+    unordered_set<AssignNode *> statementNodes;
+
     for (int i : statements) {
         auto n = AssignNode(i, &v, &v);
+        statementNodes.insert(&n);
         pkb->statement.assignStatements.addStatement(&n);
     }
+
+
+    REQUIRE(pkb->statement.assignStatements.getAllStatementNodes() == statementNodes);
 
     unordered_set<string> assignStatementsSet = pkb->statement.assignStatements.getAllStatementNumbers();
 
@@ -137,21 +150,41 @@ TEST_CASE("Add Read Statements") {
 
     REQUIRE(pkb->statement.readStatements.getAllStatementNumbers().empty());
 
-    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
+    unordered_map<int, string> statementToVariableMap = {{1, "apple"},
+                                                         {7, "orange"},
+                                                         {45, "guava"},
+                                                         {898, "mango"},
+                                                         {124214123, "banana"},
+                                                         {989988999, "grapes"}};
 
-    for (int i : statements) {
+    unordered_set<ReadNode *> statementNodes;
+
+    for (auto& iter : statementToVariableMap) {
+        int i = iter.first;
+        string name = iter.second;
+
+        VariableNode v = VariableNode(name);
         auto n = ReadNode(i, &v);
+        statementNodes.insert(&n);
         pkb->statement.readStatements.addStatement(&n);
     }
 
+
+    REQUIRE(pkb->statement.readStatements.getAllStatementNodes() == statementNodes);
+
     unordered_set<string> readStatementsSet = pkb->statement.readStatements.getAllStatementNumbers();
 
-    for (int i: statements) {
+    for (auto& iter : statementToVariableMap) {
+
+        int i = iter.first;
+        string name = iter.second;
+
         string s = std::to_string(i);
 
         REQUIRE(pkb->statement.readStatements.isStatementNumber(s));
-
         REQUIRE(readStatementsSet.find(s) != readStatementsSet.end());
+
+        REQUIRE(pkb->statement.readStatements.getVariableName(s) == name);
     }
 
 }
@@ -161,21 +194,42 @@ TEST_CASE("Add Print Statements") {
 
     REQUIRE(pkb->statement.printStatements.getAllStatementNumbers().empty());
 
-    unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
+    unordered_map<int, string> statementToVariableMap = {{1, "apple"},
+                                                         {7, "orange"},
+                                                         {45, "guava"},
+                                                         {898, "mango"},
+                                                         {124214123, "banana"},
+                                                         {989988999, "grapes"}};
 
-    for (int i : statements) {
-        auto n = PrintNode(i, &v);
+
+    unordered_set<PrintNode *> statementNodes;
+
+    for (auto& iter : statementToVariableMap) {
+        int i = iter.first;
+        string name = iter.second;
+
+        VariableNode f = VariableNode(name);
+
+        auto n = PrintNode(i, &f);
+        statementNodes.insert(&n);
         pkb->statement.printStatements.addStatement(&n);
     }
 
+    REQUIRE(pkb->statement.printStatements.getAllStatementNodes() == statementNodes);
+
     unordered_set<string> printStatementsSet = pkb->statement.printStatements.getAllStatementNumbers();
 
-    for (int i: statements) {
+    for (auto& iter : statementToVariableMap) {
+        int i = iter.first;
+        string name = iter.second;
+
         string s = std::to_string(i);
 
         REQUIRE(pkb->statement.printStatements.isStatementNumber(s));
 
         REQUIRE(printStatementsSet.find(s) != printStatementsSet.end());
+
+        REQUIRE(pkb->statement.printStatements.getVariableName(s) == name);
     }
 
 }
@@ -188,10 +242,15 @@ TEST_CASE("Add If Statements") {
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
+    unordered_set<IfNode *> statementNodes;
+
     for (int i : statements) {
         auto n = IfNode(i, &cond, {}, {});
+        statementNodes.insert(&n);
         pkb->statement.ifStatements.addStatement(&n);
     }
+
+    REQUIRE(pkb->statement.ifStatements.getAllStatementNodes() == statementNodes);
 
     unordered_set<string> ifStatementsSet = pkb->statement.ifStatements.getAllStatementNumbers();
 
@@ -213,10 +272,15 @@ TEST_CASE("Add While Statements") {
 
     unordered_set<int> statements = {1, 7, 45, 898, 124214123, 989988999};
 
+    unordered_set<WhileNode *> statementNodes;
+
     for (int i : statements) {
         auto n = WhileNode(i, &cond, {});
+        statementNodes.insert(&n);
         pkb->statement.whileStatements.addStatement(&n);
     }
+
+    REQUIRE(pkb->statement.whileStatements.getAllStatementNodes() == statementNodes);
 
     unordered_set<string> whileStatementsSet = pkb->statement.whileStatements.getAllStatementNumbers();
 
@@ -226,6 +290,51 @@ TEST_CASE("Add While Statements") {
         REQUIRE(pkb->statement.whileStatements.isStatementNumber(s));
 
         REQUIRE(whileStatementsSet.find(s) != whileStatementsSet.end());
+    }
+}
+
+
+TEST_CASE("Add Call Statements") {
+    pkb->clearPKB();
+
+    REQUIRE(pkb->statement.callStatements.getAllStatementNumbers().empty());
+
+    unordered_map<int, string> statementToVariableMap = {{1, "apple"},
+                                                         {7, "orange"},
+                                                         {45, "guava"},
+                                                         {898, "mango"},
+                                                         {124214123, "banana"},
+                                                         {989988999, "grapes"}};
+
+
+    unordered_set<CallNode *> statementNodes;
+
+    for (auto& iter : statementToVariableMap) {
+        int i = iter.first;
+        string name = iter.second;
+
+        ProcNameNode procedureName = ProcNameNode(name);
+        auto n = CallNode(i, &procedureName);
+        statementNodes.insert(&n);
+        pkb->statement.callStatements.addStatement(&n);
+    }
+
+
+    REQUIRE(pkb->statement.callStatements.getAllStatementNodes() == statementNodes);
+
+    unordered_set<string> callStatementsSet = pkb->statement.callStatements.getAllStatementNumbers();
+
+    for (auto& iter : statementToVariableMap) {
+        int i = iter.first;
+        string name = iter.second;
+
+        string s = std::to_string(i);
+
+        REQUIRE(pkb->statement.callStatements.isStatementNumber(s));
+
+        REQUIRE(callStatementsSet.find(s) != callStatementsSet.end());
+
+        REQUIRE(pkb->statement.callStatements.getProcedureName(s) == name);
     }
 }
 
@@ -617,26 +726,101 @@ TEST_CASE("Add ModifiesP") {
 
 
 
-//TEST_CASE("Add Assign Node") {
-//    pkb->clearPKB();
-//
-//    unordered_set<AssignNode *> assignNodesSet;
-//
-//    for (int stmtNo = 1; stmtNo <= 10; stmtNo++) {
-//        VariableNode* leftNode = new VariableNode("leftVar");
-//        VariableNode* rightNode = new VariableNode("rightVar");
-//        AssignNode* newNode = new AssignNode(stmtNo, leftNode, rightNode);
-//
-//        assignNodesSet.insert(newNode);
-//    }
-//
-//    for (AssignNode *assignNode : assignNodesSet) {
-//        pkb->addAssignNode(assignNode);
-//    }
-//
-//    vector<AssignNode *> resultsVector = pkb->getAllAssignNodes();
-//    unordered_set<AssignNode *> resultsSet(resultsVector.begin(), resultsVector.end());
-//
-//    REQUIRE(assignNodesSet == resultsSet);
-//
-//}
+TEST_CASE("Add Next") {
+    pkb->clearPKB();
+
+    vector<unordered_map<int, NodeCFG*>> v = constructCFGForTesting();
+
+    unordered_map<int, NodeCFG *> statementNumberToNodeCFGMap = v[0];
+
+    for (auto& iter : statementNumberToNodeCFGMap) {
+        int statementNumber = iter.first;
+        NodeCFG *node = iter.second;
+
+        REQUIRE(statementNumber == node->getStatementNumber());
+
+        pkb->relationship.next.addCFGNode(node);
+    }
+
+    // getCFGSize() Test
+
+    REQUIRE(pkb->relationship.next.getCFGSize() == statementNumberToNodeCFGMap.size());
+
+
+    // getCFGNode() Test
+
+    for (auto& iter : statementNumberToNodeCFGMap) {
+        int statementNumber = iter.first;
+        NodeCFG *node = iter.second;
+        REQUIRE(pkb->relationship.next.getCFGNode(std::to_string(statementNumber)) == node);
+    }
+
+
+    // getNextNodeOf() Test
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf("1") == unordered_set<string>{"2", "6"});
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf("2") == unordered_set<string>{"3"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("3") == unordered_set<string>{"4"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("4") == unordered_set<string>{"5"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("5") == unordered_set<string>{"9"});
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf("6") == unordered_set<string>{"9", "7"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("7") == unordered_set<string>{"6", "8"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("8") == unordered_set<string>{"6"});
+
+    REQUIRE(pkb->relationship.next.getNextNodeOf("9") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("10") == unordered_set<string>{"11"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("11") == unordered_set<string>{"12"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("12") == unordered_set<string>{"13", "14"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("13") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("14") == unordered_set<string>{"10"});
+
+
+    // getPreviousNodeOf() Test
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("1") == unordered_set<string>{});
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("2") == unordered_set<string>{"1"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("3") == unordered_set<string>{"2"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("4") == unordered_set<string>{"3"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("5") == unordered_set<string>{"4"});
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("6") == unordered_set<string>{"1", "7"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("7") == unordered_set<string>{"6", "8"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("8") == unordered_set<string>{"7"});
+
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("9") == unordered_set<string>{"5", "6"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("10") == unordered_set<string>{"9", "13", "14"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("11") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("12") == unordered_set<string>{"11"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("13") == unordered_set<string>{"12"});
+    REQUIRE(pkb->relationship.next.getPreviousNodeOf("14") == unordered_set<string>{"12"});
+
+
+
+    // isNext() Test
+
+    pkb->relationship.next.isNext("1", "2");
+    pkb->relationship.next.isNext("1", "6");
+    pkb->relationship.next.isNext("2", "3");
+    pkb->relationship.next.isNext("3", "5");
+    pkb->relationship.next.isNext("4", "5");
+    pkb->relationship.next.isNext("5", "9");
+
+    pkb->relationship.next.isNext("6", "7");
+    pkb->relationship.next.isNext("6", "9");
+    pkb->relationship.next.isNext("7", "8");
+    pkb->relationship.next.isNext("7", "6");
+    pkb->relationship.next.isNext("8", "7");
+
+    pkb->relationship.next.isNext("9", "10");
+    pkb->relationship.next.isNext("10", "11");
+    pkb->relationship.next.isNext("11", "12");
+    pkb->relationship.next.isNext("12", "13");
+    pkb->relationship.next.isNext("12", "14");
+    pkb->relationship.next.isNext("13", "10");
+    pkb->relationship.next.isNext("13", "10");
+
+
+}

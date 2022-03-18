@@ -51,4 +51,6 @@ void PKB::clearPKB() {
     relationship.modifiesS.clear();
     relationship.modifiesP.clear();
 
+    relationship.next.clear();
+
 }

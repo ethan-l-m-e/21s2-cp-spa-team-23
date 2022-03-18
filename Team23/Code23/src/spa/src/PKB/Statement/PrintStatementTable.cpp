@@ -5,9 +5,14 @@
 #include "PrintStatementTable.h"
 
 
+void PrintStatementTable::addStatement(PrintNode *node) {
+    StatementTable<PrintNode *>::addStatement(node);
+
+    statementNumberToVariableNameMap.emplace(node->getStmtNumber(), node->getVarName());
+
+}
+
 string PrintStatementTable::getVariableName(string statementNumber) {
 
-    PrintNode *printNode = this->getNode(std::stoi(statementNumber));
-
-    return printNode->getVarName();
+    return statementNumberToVariableNameMap[std::stoi(statementNumber)];
 }
