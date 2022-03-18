@@ -33,7 +33,7 @@ TEST_CASE("test - basic CFG") {
 
     ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
 
-    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
+    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(&pNode1);
     CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
     CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
     CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getStatementNumber() == 3);
@@ -57,7 +57,7 @@ TEST_CASE("test - basic while") {
 
     ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
 
-    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
+    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(&pNode1);
     CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
     CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
     CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getStatementNumber() == 3);
@@ -89,7 +89,7 @@ TEST_CASE("test - basic if") {
     defaultStmtLst.push_back(&iNode);
 
     ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
-    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
+    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(&pNode1);
     CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
     CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
     CHECK(firstSetOfNodes.at(0)->isStart());

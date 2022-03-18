@@ -1,0 +1,65 @@
+../../../../Tests23/boolean_source.txt ../../../../Tests23/boolean_queries.txt ../../../tests/boolean_out.xml
+stmt s;
+Select BOOLEAN
+TRUE
+5000
+1 - uses ========================================================================================[such that tests start]
+print p;
+Select BOOLEAN such that Uses(p, _)
+TRUE
+5000
+2 - does not use
+stmt s;
+Select BOOLEAN such that Uses(s, "nextStar")
+FALSE
+5000
+3 - modifies
+stmt s; variable v;
+Select BOOLEAN such that Modifies("Boolean", v)
+TRUE
+5000
+4 - does not modify
+procedure p;
+Select BOOLEAN such that Modifies("Called", _)
+FALSE
+5000
+5 - follows
+stmt s;
+Select BOOLEAN such that Follows(1, 2)
+TRUE
+5000
+6 - does not follow
+call c;
+Select BOOLEAN such that Follows(c, _)
+FALSE
+5000
+7 - follows*
+call c; assign a;
+Select BOOLEAN such that Follows*(a, c)
+TRUE
+5000
+8 - does not follow*
+stmt s;
+Select BOOLEAN such that Follows*(4, 5)
+FALSE
+5000
+9 - parent
+read r; while w;
+Select BOOLEAN such that Parent(w, r)
+TRUE
+5000
+10 - not a parent
+read r; while w;
+Select BOOLEAN such that Parent(r, w)
+FALSE
+5000
+11 - parent*
+read r; while w;
+Select BOOLEAN such that Parent*(w, r)
+TRUE
+5000
+12 - not a parent*
+read r; while w;
+Select BOOLEAN such that Parent*(r, w)
+FALSE
+5000

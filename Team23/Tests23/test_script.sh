@@ -3,6 +3,7 @@ function autotest() {
 }
 OUT_PATH=../Code23/tests/
 autotest attributes_source.txt attributes_queries.txt ${OUT_PATH}attributes_out.xml
+autotest boolean_source.txt boolean_queries.txt ${OUT_PATH}boolean_out.xml
 autotest follows_source.txt follows_queries.txt ${OUT_PATH}follows_out.xml
 autotest modifies_source.txt modifies_queries.txt ${OUT_PATH}modifies_out.xml
 autotest multiclause_source.txt multiclause_queries.txt ${OUT_PATH}multiclause_out.xml
