@@ -2,10 +2,12 @@
 // Created by Karan Dev Sapra on 17/2/22.
 //
 
-//#include "PKB.h"
+
 #include "PKB/PKB.h"
 
 #include "TNode/TNode.h"
+
+#include "QP_Evaluator/TestUtilities.h"
 
 #include "catch.hpp"
 

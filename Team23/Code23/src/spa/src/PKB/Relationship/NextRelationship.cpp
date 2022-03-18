@@ -41,12 +41,12 @@ unordered_map<int, NodeCFG*> NextRelationship::getPreviousNodeOf(int next) {
 
 }
 
-NodeCFG* NextRelationship::getNextNodeOf(int previous) {
+int NextRelationship::getNextNodeOf(int previous) {
     unordered_set<NodeCFG *> setPreviousNode = getRHSNormal(previous);
 
     NodeCFG *previousNode = *setPreviousNode.begin();
 
-    return previousNode->getNextNode();
+    return previousNode->getNextNode()->getStatementNumber();
 
 }
 

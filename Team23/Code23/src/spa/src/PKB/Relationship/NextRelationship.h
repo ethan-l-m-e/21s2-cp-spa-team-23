@@ -18,7 +18,7 @@ public:
 
     unordered_map<int, NodeCFG *> getPreviousNodeOf(int next);
 
-    NodeCFG* getNextNodeOf(int previous);
+    int getNextNodeOf(int previous);
 
     // Functions below are used to calculate Next*
 
