@@ -767,7 +767,7 @@ TEST_CASE("Add Next") {
 
     REQUIRE(pkb->relationship.next.getNextNodeOf("6") == unordered_set<string>{"9", "7"});
     REQUIRE(pkb->relationship.next.getNextNodeOf("7") == unordered_set<string>{"6", "8"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("8") == unordered_set<string>{"6"});
+    REQUIRE(pkb->relationship.next.getNextNodeOf("8") == unordered_set<string>{"7"});
 
     REQUIRE(pkb->relationship.next.getNextNodeOf("9") == unordered_set<string>{"10"});
     REQUIRE(pkb->relationship.next.getNextNodeOf("10") == unordered_set<string>{"11"});
