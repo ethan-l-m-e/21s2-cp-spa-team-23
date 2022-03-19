@@ -926,19 +926,19 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID MULTI CLAUSES QUERIES") {
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With Clause then Follows
-    query = "assign a; stmt s; Select with p.procName=p2.procName such that Follows(2, 3)";
+    query = "assign a; stmt s; Select a with p.procName=p2.procName such that Follows(2, 3)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause then pattern
-    query = "assign a; stmt s; Select with p.procName=p2.procName pattern a (_, _)";
+    query = "assign a; stmt s; Select a with p.procName=p2.procName pattern a (_, _)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause, pattern then such that clause
-    query = "assign a; stmt s; Select with p.procName=p2.procName pattern a (_, _) such that Follows(2, 3)";
+    query = "assign a; stmt s; Select a with p.procName=p2.procName pattern a (_, _) such that Follows(2, 3)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause, pattern then such that clause with ands
-    query = "assign a; stmt s; Select with p.procName=p2.procName and c.value = 3 pattern a (_, _) and a(v, _) such that Follows(2, 3) and Next*(_, _)";
+    query = "assign a; stmt s; Select a with p.procName=p2.procName and c.value = 3 pattern a (_, _) and a(v, _) such that Follows(2, 3) and Next*(_, _)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 

@@ -537,7 +537,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: WITH CLAUSES CHECK") {
         std::pair<std::string, std::string>("s.stmt#", "r.stmt#"),
         std::pair<std::string, std::string>("pn.stmt#", "c.stmt#"),
         std::pair<std::string, std::string>("w.stmt#", "ifs.stmt#"),
-        std::pair<std::string, std::string>("4", "assign.stmt#"),
+        std::pair<std::string, std::string>("4", "a.stmt#"),
     });
 
     queryToken.withClauses = &withClauses;

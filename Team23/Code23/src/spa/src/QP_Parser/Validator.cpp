@@ -12,8 +12,7 @@
 using namespace qp;
 
 void Validator::validateQueryStructure(std::string pql) {
-    std::string formatRegex = PQL_FORMAT;
-    std::regex reg(formatRegex);
+    std::regex reg(PQL_FORMAT);
     bool isValid = regex_match(pql, reg);
 
     if (!isValid) {
