@@ -13,7 +13,7 @@ ResultTable::ResultTable(){
     booleanResult = true;
 }
 
-ResultTable::ResultTable(std::vector<std::string> header, String2DVector values){
+void ResultTable::setResultTable(std::vector<std::string> header, String2DVector values){
     tableHeader = std::move(header);
     tableEntries = std::move(values);
     isBooleanResult = false;
