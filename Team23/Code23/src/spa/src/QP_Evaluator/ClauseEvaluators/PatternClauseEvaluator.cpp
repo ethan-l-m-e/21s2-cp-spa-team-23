@@ -2,6 +2,7 @@
 // Created by Tin Hong Wen on 10/2/22.
 //
 #include <regex>
+#include<iostream>
 
 #include "PKB/PKB.h"
 #include "PatternClauseEvaluator.h"
@@ -36,7 +37,13 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg);
 
 
 bool PatternClauseEvaluator::evaluateClause(ResultTable *resultTable) {
-    return evaluateAssign(resultTable);
+    if(patternSynonymType == SynonymType::ASSIGN) {
+        return evaluateAssign(resultTable);
+    } else {
+        cout << "pattern not ready for if and while synonyms\n";
+        return true;
+    }
+
 }
 
 bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
@@ -47,6 +54,8 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
     return true;
 }
 
+// function not ready yet
+/*
 bool PatternClauseEvaluator::evaluateWithFunc_Pointers(ResultTable* resultTable,
                                                        void(*validateAndParse)(Argument, Argument, Argument,
                                                                Expression, Expression),
@@ -62,6 +71,7 @@ bool PatternClauseEvaluator::evaluateWithFunc_Pointers(ResultTable* resultTable,
     constructResults(results, isSynonym(argLeft));
     return false;
 }
+*/
 
 bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     //validation and LHS/RHS parsing
@@ -70,7 +80,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     Expression varLeft;
     Expression exprRight;
     if(isIdent(argLeft)) {
-        varLeft = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
+        varLeft  = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
     }
     if(!isWildCard(argRight)) {
         exprRight = validateAndParseExpression(std::get<std::string>(argRight.argumentValue));
@@ -135,14 +145,15 @@ void PatternClauseEvaluator::constructResults(vector<ResultItem> results, bool h
         // configure resultType, to have both variable names and assign
         result.resultType = ResultType::TUPLES;
         result.resultBoolean = !results.empty();
-        result.resultHeader = tuple<string, string>(std::get<std::string>(syn.argumentValue), std::get<std::string>(arg1.argumentValue));
+        result.resultHeader = tuple<string, string>(std::get<std::string>(patternSynonym.argumentValue),
+                std::get<std::string>(arg1.argumentValue));
         result.resultItemList = results;
 
     } else {
         // configure resultType to have only a list of assign
         result.resultType = ResultType::STRING;
         result.resultBoolean = !results.empty();
-        result.resultHeader = std::get<std::string>(syn.argumentValue);
+        result.resultHeader = std::get<std::string>(patternSynonym.argumentValue);
         result.resultItemList = results;
 
     }

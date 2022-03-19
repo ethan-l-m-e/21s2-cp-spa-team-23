@@ -68,73 +68,103 @@ stmt s;
 Select s such that Next(13, s)
 none
 5000
-14 - [valid] select stmt with wildcards =============================================================[Next* tests start]
+14 - [valid] select two stmt no
+stmt s;
+Select s such that Next(1, 2)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+15 - [valid] select two stmt no but not immediately after
+stmt s;
+Select s such that Next(1, 3)
+none
+5000
+16 - [valid] select two stmt no but different procedure
+stmt s;
+Select s such that Next(12, 13)
+none
+5000
+17 - [valid] select stmt with wildcards =============================================================[Next* tests start]
 stmt s;
 Select s such that Next*(_, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
-15 - [valid] select stmt with wildcard rhs
+18 - [valid] select stmt with wildcard rhs
 stmt s;
 Select s such that Next*(s, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
-16 - [valid] select stmt with wildcard lhs
+19 - [valid] select stmt with wildcard lhs
 stmt s;
 Select s such that Next*(_, s)
 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-17 - [valid] select stmt with stmt syn
+20 - [valid] select stmt with stmt syn
 stmt s, s1;
 Select s such that Next*(s, s1)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
-18 - [valid] select stmt with stmt syn lhs
+21 - [valid] select stmt with stmt syn lhs
 stmt s, s1;
 Select s such that Next*(s1, s)
 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-19 - [valid] select stmt with stmt no
+22 - [valid] select stmt with stmt no
 stmt s;
 Select s such that Next*(s, 12)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
-20 - [valid] select stmt with stmt no lhs
+23 - [valid] select stmt with stmt no lhs
 stmt s;
 Select s such that Next*(1, s)
 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-21 - [valid] select stmt with while-cond stmt no
+24 - [valid] select stmt with while-cond stmt no
 stmt s;
 Select s such that Next*(s, 3)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-22 - [valid] select stmt with while-loop stmt no lhs
+25 - [valid] select stmt with while-loop stmt no lhs
 stmt s;
 Select s such that Next*(4, s)
 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-23 - [valid] select stmt with while-loop stmt no
+26 - [valid] select stmt with while-loop stmt no
 stmt s;
 Select s such that Next*(s, 10)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-24 - [valid] select stmt with while-loop stmt no lhs
+27 - [valid] select stmt with while-loop stmt no lhs
 stmt s;
 Select s such that Next*(6, s)
 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-25 - [valid] select stmt with if-then stmt no
+28 - [valid] select stmt with if-then stmt no
 stmt s;
 Select s such that Next*(s, 8)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-26 - [valid] select stmt with if-else stmt no
+29 - [valid] select stmt with if-else stmt no
 stmt s;
 Select s such that Next*(s, 9)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-27 - [valid] select stmt in loop
+30 - [valid] select stmt in loop
 stmt s;
 Select s such that Next*(s, s)
 3, 4, 5, 6, 7, 8, 9, 10
+5000
+31 - [valid] select two stmt no
+stmt s;
+Select s such that Next*(1, 2)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+32 - [valid] select two stmt no but not immediately after
+stmt s;
+Select s such that Next*(1, 11)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+33 - [valid] select two stmt no but different procedure
+stmt s;
+Select s such that Next*(1, 13)
+none
 5000

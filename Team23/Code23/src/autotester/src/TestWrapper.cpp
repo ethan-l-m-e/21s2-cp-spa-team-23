@@ -39,9 +39,9 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
       Query processedQuery = preProcessor->getQuery(query);
       results = queryEvaluator->evaluate(&processedQuery);
   } catch (qp::QPInvalidSyntacticException e) {
-      // TODO: Add results
+      std::cout << "Invalid Syntax: " << e.what();
   } catch (qp::QPInvalidSemanticException e) {
-      // TODO Add results
+      std::cout << "Invalid Semantics: " << e.what();
   }
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
