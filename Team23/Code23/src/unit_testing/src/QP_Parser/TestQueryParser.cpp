@@ -1955,4 +1955,12 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     CHECK(argList[1] == expectedSecondArgument);
 }
 
+TEST_CASE ("PARSER - INCORRECT CHECK") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s; assign a; constant c; variable v; \nSelect <s.stmt#, v.varName> such that Parent(s, _) and Uses(s, v)";
+    Query query = parser.getQuery(pql);
+
+}
+
 

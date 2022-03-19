@@ -35,7 +35,7 @@ std::string const FOLLOWS_T = "Follows\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STM
         + STMT_REF + SPACE_TAB + "\\)";
 
 std::string const PARENT = "Parent" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-        + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + STMT_REF + SPACE_TAB + "\\)";
 std::string const PARENT_T = "Parent\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
         + STMT_REF + SPACE_TAB + "\\)";
 

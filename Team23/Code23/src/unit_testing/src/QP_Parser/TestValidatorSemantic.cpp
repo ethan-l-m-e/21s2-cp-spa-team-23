@@ -608,7 +608,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: SAME SYNONYM AS ARGUMENTS") {
     suchThatClauseToken.arguments = &arguments;
     std::vector<SuchThatClauseToken> suchThatClauseTokens = std::vector<SuchThatClauseToken>({suchThatClauseToken});
     queryToken.suchThatClauseTokens = &suchThatClauseTokens;
-    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
+    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 }
 
 TEST_CASE ("QP SEMANTIC VALIDATOR: SYNONYM IN ARGUMENT NOT DECLARED") {
