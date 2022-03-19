@@ -48,6 +48,10 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         }
         //last node in while loop to point towards initial LoopCFG
         nextSetOfNodes.at(0)->setNextNode(newCFGNode);
+        for(NodeCFG* n : newSetOfNodes) {
+            setOfAllNodes->push_back(n);
+        }
+
     }else if(auto value = dynamic_cast<IfNode*>(currNode)) {
         auto* newCFGNode = new BranchCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
@@ -104,10 +108,10 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
             }
         }
         newSetOfNodes.push_back(newCFGNode);
+        for(NodeCFG* n : newSetOfNodes) {
+            setOfAllNodes->push_back(n);
+        }
 
-    }
-    for(NodeCFG* n : newSetOfNodes) {
-        setOfAllNodes->push_back(n);
     }
     return newSetOfNodes;
 }
