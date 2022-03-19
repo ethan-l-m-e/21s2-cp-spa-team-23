@@ -24,6 +24,7 @@ auto bNode= AssignNode(2,&v3,&v4);
 auto cNode= AssignNode(3,&v1,&v4);
 auto dNode= AssignNode(5,&v2,&v3);
 auto eNode= AssignNode(6,&v4,&v1);
+auto fNode= AssignNode(7,&v3,&v2);
 
 ProcNameNode p = ProcNameNode("test");
 ProcNameNode p1 = ProcNameNode("name1");
@@ -346,6 +347,7 @@ TEST_CASE("test next - basic if") {
     IfNode iNode = IfNode(4,condPtr,defaultStmtLst1,defaultStmtLst2);
 
     defaultStmtLst.push_back(&iNode);
+    defaultStmtLst.push_back(&fNode);
 
     ProcedureNode proc1 = ProcedureNode(&p1, defaultStmtLst);
     procLst.push_back(&proc1);
@@ -356,4 +358,63 @@ TEST_CASE("test next - basic if") {
     REQUIRE(PKB::getInstance()->relationship.next.isNext("4","2"));
     REQUIRE(PKB::getInstance()->relationship.next.isNext("2","3"));
     REQUIRE(PKB::getInstance()->relationship.next.isNext("5","6"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("6","7"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("3","7"));
+}
+TEST_CASE("test next - nested while-if") {
+    ProcedureList procLst;
+    StatementList defaultStmtLst;
+    StatementList defaultStmtLst1;
+    StatementList defaultStmtLst2;
+    StatementList defaultStmtLst3;
+
+    defaultStmtLst.push_back(&aNode);
+    defaultStmtLst1.push_back(&bNode);
+    defaultStmtLst2.push_back(&cNode);
+    defaultStmtLst3.push_back(&dNode);
+
+    IfNode iNode = IfNode(4,condPtr,defaultStmtLst2,defaultStmtLst3);
+
+    defaultStmtLst1.push_back(&iNode);
+    defaultStmtLst1.push_back(&fNode);
+    auto wNode = WhileNode(8, condPtr, defaultStmtLst1);
+    defaultStmtLst.push_back(&wNode);
+    defaultStmtLst.push_back(&eNode);
+
+    ProcedureNode proc1 = ProcedureNode(&p1, defaultStmtLst);
+    procLst.push_back(&proc1);
+    ProgramNode prog = ProgramNode(procLst);
+    RelationshipExtractor::extractCFG(&prog);
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("1","8"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("8","2"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("2","4"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("4","3"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("4","5"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("3","7"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("5","7"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("7","8"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("8","6"));
+}
+
+TEST_CASE("test next - 2 procedures") {
+    ProcedureList procLst;
+    StatementList s1, s2;
+    auto callNode = CallNode(3, &p1);
+    s1.push_back(&aNode);
+    s1.push_back(&dNode);
+    s2.push_back(&bNode);
+    s2.push_back(&callNode);
+
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    ProcedureNode proc2 = ProcedureNode(&p2, s2);
+    procLst.push_back(&proc1);
+    procLst.push_back(&proc2);
+    ProgramNode prog = ProgramNode(procLst);
+
+    RelationshipExtractor::extractCFG(&prog);
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("2","3"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("1","5"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("3","1")==false);
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("1","2")==false);
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("2","1")==false);
 }

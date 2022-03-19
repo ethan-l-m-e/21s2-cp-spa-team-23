@@ -12,8 +12,6 @@ vector<NodeCFG*> CFGConstructor::createCFG(ProcedureNode* p) {
     unordered_map<int, NodeCFG *> currMapOfPrevNodes;
     vector<NodeCFG*> prevNode;
     vector<NodeCFG*> setOfAllNodes;
-    NodeCFG* firstNode;
-    bool isFirstLoop = true;
     for(Node* s: stmtLst) {
         prevNode = CFGConstructor::populateCFG(s, prevNode,&setOfAllNodes);
     }
@@ -61,14 +59,15 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
 
         vector<Node *> thenBranch = value->getThenStmtLst();
         vector<Node *> elseBranch = value->getElseStmtLst();
-        newSetOfNodes.push_back(newCFGNode);
+        vector<NodeCFG*> currSetOfNodes;
+        currSetOfNodes.push_back(newCFGNode);
         vector<NodeCFG*> nextSetOfNodes1;
 
         bool isThenBranchFirstLoop = true;
         for (Node *s: thenBranch) {
             if(isThenBranchFirstLoop){
-                nextSetOfNodes1 = populateCFG(s,newSetOfNodes,setOfAllNodes );
-                for (NodeCFG *t: newSetOfNodes) {
+                nextSetOfNodes1 = populateCFG(s,currSetOfNodes,setOfAllNodes );
+                for (NodeCFG *t: nextSetOfNodes1) {
                     newCFGNode->setLeftNode(t);
                 }
                 isThenBranchFirstLoop = false;
@@ -80,9 +79,8 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         bool isElseBranchFirstLoop = true;
         for (Node *s: elseBranch) {
             if(isElseBranchFirstLoop){
-                nextSetOfNodes2 = populateCFG(s,newSetOfNodes,setOfAllNodes );
-                for (NodeCFG *t: newSetOfNodes) {
-
+                nextSetOfNodes2 = populateCFG(s,currSetOfNodes,setOfAllNodes );
+                for (NodeCFG *t: nextSetOfNodes2) {
                     newCFGNode->setRightNode(t);
                 }
                 isElseBranchFirstLoop = false;
@@ -90,6 +88,13 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
                 nextSetOfNodes2 = populateCFG(s,nextSetOfNodes2,setOfAllNodes );
             }
         }
+        for (NodeCFG *t: nextSetOfNodes1) {
+            newSetOfNodes.push_back(t);
+        }
+        for (NodeCFG *t: nextSetOfNodes2) {
+            newSetOfNodes.push_back(t);
+        }
+        setOfAllNodes->push_back(newCFGNode);
     }else{
         auto* newCFGNode = new NodeCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
@@ -99,6 +104,7 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
             }
         }
         newSetOfNodes.push_back(newCFGNode);
+
     }
     for(NodeCFG* n : newSetOfNodes) {
         setOfAllNodes->push_back(n);

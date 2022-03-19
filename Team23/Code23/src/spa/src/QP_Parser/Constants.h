@@ -35,7 +35,7 @@ std::string const FOLLOWS_T = "Follows\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STM
         + STMT_REF + SPACE_TAB + "\\)";
 
 std::string const PARENT = "Parent" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
-        + STMT_REF + SPACE_TAB + "\\)" + SPACE_TAB;
+        + STMT_REF + SPACE_TAB + "\\)";
 std::string const PARENT_T = "Parent\\*" + SPACE_TAB + "\\(" + SPACE_TAB + STMT_REF + SPACE_TAB + "," + SPACE_TAB
         + STMT_REF + SPACE_TAB + "\\)";
 
@@ -82,17 +82,17 @@ std::string const IF = SYNONYM + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE
         + SPACE_TAB + "," + SPACE_TAB + "_" + SPACE_TAB + "\\)";
 std::string const PATTERN = "(" + ASSIGN + "|" + WHILE + "|" + IF + ")";
 std::string const PATTERN_COND = PATTERN + "(" + SINGLE_SPACE_TAB + "and" + SINGLE_SPACE_TAB + PATTERN + ")*";
-std::string const PATTERN_CL = "pattern" + SINGLE_SPACE_TAB + PATTERN_COND + SPACE_TAB;
+std::string const PATTERN_CL = "pattern" + SINGLE_SPACE_TAB + PATTERN_COND;
 
 // with regex
 std::string const ATTR_COMPARE = REF + SPACE_TAB + "=" + SPACE_TAB + REF;
 std::string const ATTR_COND = ATTR_COMPARE + "(" + SINGLE_SPACE_TAB + "and" + SINGLE_SPACE_TAB + ATTR_COMPARE
-        + SPACE_TAB + ")*";
+        +  ")*";
 std::string const WITH_CL = SPACE_TAB + "with" + SINGLE_SPACE_TAB + ATTR_COND;
 
 
 std::string const SELECT_CL = "( |\n|\t)*Select( |\n|\t)+" + RESULT_CL + "(" + SINGLE_SPACE_TAB + SUCH_THAT_CL
-        + "|" + SINGLE_SPACE_TAB + PATTERN_CL + "|" + SINGLE_SPACE_TAB + WITH_CL + SPACE_TAB + ")*";
+        + "|" + SINGLE_SPACE_TAB + PATTERN_CL + "|" + SINGLE_SPACE_TAB + WITH_CL + ")*" + SPACE_TAB;
 std::string const DECLARATION_REGEX = "(( |\n|\t)*" + DECLARATION+ ")+";
 std::string const PQL_FORMAT = DECLARATION_REGEX + "( |\n|\t)*" + SELECT_CL + "( |\t|\n)*";
 
@@ -117,8 +117,6 @@ std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t]+|<|>)";
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 std::string const PATTERN_ARGUMENTS = ",";
 
-std::string const SPLIT_WITH_CL = "[ |\\t]*(with|and)[ |\\t]*";
 std::string const SPLIT_EQUALS = "[ |\\t]*=[ |\\t]*";
 
-int const PATTERN_LENGTH = 7;
 int const SELECT_LENGTH = 6;
