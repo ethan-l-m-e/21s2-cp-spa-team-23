@@ -509,8 +509,8 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID FFECTS QUERIES") {
     query = "stmt s; variable v; Select s such that Affects(_, v)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // Ident first argument
-    query = "stmt s; variable v; Select s such that Affects(\"x\", v)";
+    // Integer first argument
+    query = "stmt s; variable v; Select s such that Affects(3, v)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
@@ -521,8 +521,8 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID FFECTS QUERIES") {
     query = "stmt s; variable v; Select s such that Affects(v, _)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // Ident second argument
-    query = "stmt s; variable v; Select s such that Affects(v, \"x\")";
+    // Integer second argument
+    query = "stmt s; variable v; Select s such that Affects(v, 3)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -537,8 +537,8 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID AFFECTS* QUERIES") {
     query = "stmt s; variable v; Select s such that Affects*(_, v)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // Ident first argument
-    query = "stmt s; variable v; Select s such that Affects*(\"x\", v)";
+    // Integer first argument
+    query = "stmt s; variable v; Select s such that Affects*(3, v)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
@@ -549,8 +549,8 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID AFFECTS* QUERIES") {
     query = "stmt s; variable v; Select s such that Affects*(v, _)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // Ident second argument
-    query = "stmt s; variable v; Select s such that Affects*(v, \"x\")";
+    // Integer second argument
+    query = "stmt s; variable v; Select s such that Affects*(v, 3)";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 

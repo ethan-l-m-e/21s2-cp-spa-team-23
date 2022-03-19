@@ -112,6 +112,14 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
             throw QPInvalidSemanticException("Invalid Pattern Argument");
         }
 
+        // Check that is there are 3 arguments, that it is a if pattern
+        bool isInvalidPatternType = (patternArguments.size() == 3) && (patternSynonym != "if");
+        bool isInvalidIfPattern = (patternSynonym == "if") && (patternArguments.size() == 3)
+                && (patternArguments[1] != "_");
+        if (isInvalidPatternType || isInvalidIfPattern) {
+            throw QPInvalidSemanticException("Invalid If Pattern");
+        }
+
         validatePatternFirstArgument(declarationTokens, patternArguments[0]);
     }
 }
@@ -239,13 +247,13 @@ void Validator::checkProcAssignArgument(std::string argument, std::string relRef
 
     // Checking validity of Calls argument
     bool isSynonymProcedure = synonymType == "procedure";
-    bool isValidCallsArgument = (isCallsRelationship && isSynonymProcedure);
+    bool isValidCallsArgument = (isCallsRelationship && !isSynonymProcedure);
 
     // Checking validity of Affects argument
     bool isSynonymAssign = synonymType == "assign";
-    bool isValidAffectsArgument = (!isCallsRelationship && isSynonymAssign);
+    bool isValidAffectsArgument = (!isCallsRelationship && !isSynonymAssign);
 
-    if (!isValidCallsArgument || !isValidAffectsArgument) {
+    if (isValidCallsArgument || isValidAffectsArgument) {
         throw QPInvalidSemanticException("Invalid Argument");
     }
 }
@@ -274,7 +282,7 @@ void Validator::validateAttrRefArgument(std::string argument, std::map<std::stri
     bool isInvalidSynonymForRef = !isValidSynonym || expectedSynonymSet.find(declarationTokens.at(attrs[0])) == expectedSynonymSet.end();
 
     if (isInvalidSynonymForRef) {
-        throw QPInvalidSemanticException("Invalid With Clause");
+        throw QPInvalidSemanticException("Invalid ATTR REF");
     }
 }
 

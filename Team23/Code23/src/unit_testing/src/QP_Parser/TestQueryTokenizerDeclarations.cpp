@@ -589,88 +589,8 @@ TEST_CASE ("QP TOKENIZER: DECLARATION NAMED FOLLOWS") {
 }
 
 // Check random usages of spaces and tabs for declarations
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES BEFORE DECLARATION NAME") {
-    std::string firstQuery = "assign      a; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"}});
-    std::vector<std::string> expectedDeclarationNames({"a"});
-    std::vector<std::string> expectedDesignEntities({"assign"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH TABS BEFORE DECLARATION NAME") {
-    std::string firstQuery = "assign\t\t\t\ta; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"}});
-    std::vector<std::string> expectedDeclarationNames({"a"});
-    std::vector<std::string> expectedDesignEntities({"assign"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
 TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES AND TABS BEFORE DECLARATION NAME") {
     std::string firstQuery = "assign\t\t\t\t   a; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"}});
-    std::vector<std::string> expectedDeclarationNames({"a"});
-    std::vector<std::string> expectedDesignEntities({"assign"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES AFTER DECLARATION NAME") {
-    std::string firstQuery = "assign a   ; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"}});
-    std::vector<std::string> expectedDeclarationNames({"a"});
-    std::vector<std::string> expectedDesignEntities({"assign"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH TABS AFTER DECLARATION NAME") {
-    std::string firstQuery = "assign a\t\t\t\t; Select a";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -709,48 +629,6 @@ TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES AND TABS AFTER DECLARATION NAM
     CHECK(designEntities == expectedDesignEntities);
 }
 
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES BEFORE NEXT DECLARATION NAME") {
-    std::string firstQuery = "assign a,    a2; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"},
-                                                                  {"a2", "assign"}});
-    std::vector<std::string> expectedDeclarationNames({"a", "a2"});
-    std::vector<std::string> expectedDesignEntities({"assign"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH TABS BEFORE NEXT DECLARATION NAME") {
-    std::string firstQuery = "assign a,\t\t\t\ta2; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"},
-                                                                  {"a2", "assign"}});
-    std::vector<std::string> expectedDeclarationNames({"a", "a2"});
-    std::vector<std::string> expectedDesignEntities({"assign"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
 TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES AND TABS BEFORE NEXT DECLARATION NAME") {
     std::string firstQuery = "assign a,\t\t   \t\t  a2; Select a";
     Tokenizer tokenizer = Tokenizer();
@@ -761,48 +639,6 @@ TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES AND TABS BEFORE NEXT DECLARATI
                                                                   {"a2", "assign"}});
     std::vector<std::string> expectedDeclarationNames({"a", "a2"});
     std::vector<std::string> expectedDesignEntities({"assign"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH SPACES BEFORE NEXT DESIGN ENTITY") {
-    std::string firstQuery = "assign a;    procedure p1; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"},
-                                                                  {"p1", "procedure"}});
-    std::vector<std::string> expectedDeclarationNames({"a", "p1"});
-    std::vector<std::string> expectedDesignEntities({"assign", "procedure"});
-
-    auto declarationTokens = *(queryToken.declarationTokens);
-    auto declarations = *(queryToken.declarations);
-    auto declarationNames = declarations.first;
-    auto designEntities = declarations.second;
-
-    CHECK(declarationTokens == expectedDeclarationTokens);
-    CHECK(declarationNames == expectedDeclarationNames);
-    CHECK(designEntities == expectedDesignEntities);
-}
-
-TEST_CASE ("QP TOKENIZER: DECLARATION WITH TABS BEFORE NEXT DESIGN ENTITY") {
-    std::string firstQuery = "assign a;\t\t\t\tprocedure p1; Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check declarations
-    std::map<std::string, std::string> expectedDeclarationTokens({{"a", "assign"},
-                                                                  {"p1", "procedure"}});
-    std::vector<std::string> expectedDeclarationNames({"a", "p1"});
-    std::vector<std::string> expectedDesignEntities({"assign", "procedure"});
 
     auto declarationTokens = *(queryToken.declarationTokens);
     auto declarations = *(queryToken.declarations);
@@ -855,8 +691,6 @@ TEST_CASE ("QP TOKENIZER: DECLARATION WITH NO SPACES AND TABS BEFORE NEXT DESIGN
     CHECK(declarationNames == expectedDeclarationNames);
     CHECK(designEntities == expectedDesignEntities);
 }
-
-// TODO: Check newlines for Declarations
 
 // Check Select clause token
 TEST_CASE ("QP TOKENIZER: SELECT CLAUSE WITH BOOLEAN AS SYNONYM") {
@@ -976,48 +810,8 @@ TEST_CASE ("QP TOKENIZER: SELECT CLAUSE WITH TUPLE: PROCNAME, VARNAME, VALUE") {
 }
 
 // Check random usage of spaces and tabs for select clause
-TEST_CASE ("QP TOKENIZER: SPACES BEFORE SELECT CLAUSE") {
-    std::string firstQuery = "assign a, a2;     Select a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "a");
-}
-
-TEST_CASE ("QP TOKENIZER: TABS BEFORE SELECT CLAUSE") {
-    std::string firstQuery = "assign a, a2;\t\t\t\tSelect a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "a");
-}
-
 TEST_CASE ("QP TOKENIZER: SPACES AND TABS BEFORE SELECT CLAUSE") {
     std::string firstQuery = "assign a, a2;  \t\t   \t\tSelect a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "a");
-}
-
-TEST_CASE ("QP TOKENIZER: SPACES BEFORE SELECT CLAUSE SYNONYM") {
-    std::string firstQuery = "assign a, a2; Select     a";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "a");
-}
-
-TEST_CASE ("QP TOKENIZER: TABS BEFORE SELECT CLAUSE SYNONYM") {
-    std::string firstQuery = "assign a, a2; Select\t\t\t\ta";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1036,26 +830,6 @@ TEST_CASE ("QP TOKENIZER: SPACES AND TABS BEFORE SELECT CLAUSE SYNONYM") {
     CHECK(synonyms[0] == "a");
 }
 
-TEST_CASE ("QP TOKENIZER: SPACES BEFORE SELECT CLAUSE SYNONYM - BOOLEAN") {
-    std::string firstQuery = "assign a, a2; Select    BOOLEAN";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "BOOLEAN");
-}
-
-TEST_CASE ("QP TOKENIZER: TABS BEFORE SELECT CLAUSE SYNONYM - BOOLEAN") {
-    std::string firstQuery = "assign a, a2; Select\t\t\t\tBOOLEAN";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "BOOLEAN");
-}
-
 TEST_CASE ("QP TOKENIZER: SPACES AND TABS BEFORE SELECT CLAUSE SYNONYM - BOOLEAN") {
     std::string firstQuery = "assign a, a2; Select\t  \t\t  \tBOOLEAN";
     Tokenizer tokenizer = Tokenizer();
@@ -1066,48 +840,8 @@ TEST_CASE ("QP TOKENIZER: SPACES AND TABS BEFORE SELECT CLAUSE SYNONYM - BOOLEAN
     CHECK(synonyms[0] == "BOOLEAN");
 }
 
-TEST_CASE ("QP TOKENIZER: SPACES BEFORE '.' in SELECT CLAUSE SYNONYM - ATTRREF") {
-    std::string firstQuery = "procedure p; Select p     .procName";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p.procName");
-}
-
-TEST_CASE ("QP TOKENIZER: TABS BEFORE '.' in SELECT CLAUSE SYNONYM - ATTRREF") {
-    std::string firstQuery = "procedure p; Select p\t\t\t\t\t.procName";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p.procName");
-}
-
 TEST_CASE ("QP TOKENIZER: SPACES AND TABS BEFORE '.' in SELECT CLAUSE SYNONYM - ATTRREF") {
     std::string firstQuery = "procedure p; Select p   \t  \t\t\t\t.procName";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p.procName");
-}
-
-TEST_CASE ("QP TOKENIZER: SPACES AFTER '.' in SELECT CLAUSE SYNONYM - ATTRREF") {
-    std::string firstQuery = "procedure p; Select p.      procName";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p.procName");
-}
-
-TEST_CASE ("QP TOKENIZER: TABS AFTER '.' in SELECT CLAUSE SYNONYM - ATTRREF") {
-    std::string firstQuery = "procedure p; Select p.\t\t\t\tprocName";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1126,48 +860,8 @@ TEST_CASE ("QP TOKENIZER: SPACES AND TABS AFTER '.' in SELECT CLAUSE SYNONYM - A
     CHECK(synonyms[0] == "p.procName");
 }
 
-TEST_CASE ("QP TOKENIZER: SPACES AFTER '<' in SELECT CLAUSE TUPLE") {
-    std::string firstQuery = "procedure p1, p2; Select <    p1>";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p1");
-}
-
-TEST_CASE ("QP TOKENIZER: TABS AFTER '<' in SELECT CLAUSE TUPLE") {
-    std::string firstQuery = "procedure p1, p2; Select <\t\t\t\t\tp1>";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p1");
-}
-
 TEST_CASE ("QP TOKENIZER: SPACES AND TABS AFTER '<' in SELECT CLAUSE TUPLE") {
     std::string firstQuery = "procedure p1, p2; Select <\t  \t \t\t  \tp1>";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p1");
-}
-
-TEST_CASE ("QP TOKENIZER: SPACES BEFORE '>' in SELECT CLAUSE TUPLE") {
-    std::string firstQuery = "procedure p1, p2; Select <p1   >";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    auto synonyms = *queryToken.selectClauseTokens;
-
-    CHECK(synonyms[0] == "p1");
-}
-
-TEST_CASE ("QP TOKENIZER: TABS BEFORE '>' in SELECT CLAUSE TUPLE") {
-    std::string firstQuery = "procedure p1, p2; Select <p1\t\t\t\t\t>";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 

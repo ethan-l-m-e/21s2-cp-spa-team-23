@@ -101,7 +101,10 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: CHECK VALIDITY OF ATTRIBUTE REFERENCES IN SEL
     queryToken.selectClauseTokens = new std::vector<std::string>({"p.procName", "c.procName", "v.varName",
                                                                   "r.varName", "pn.varName", "con.value",
                                                                   "s.stmt#", "r.stmt#", "pn.stmt#", "c.stmt#",
-                                                                  "w.stmt#", "ifs.stmt#", "a.stmt#", "BOOLEAN"});
+                                                                  "w.stmt#", "ifs.stmt#", "a.stmt#"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
+    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
 
     Validator validator = Validator();
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
@@ -129,9 +132,6 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: CHECK VALIDITY OF ATTRIBUTE REFERENCES IN SEL
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     queryToken.selectClauseTokens = new std::vector<std::string>({"con.procName"});
-    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
-
-    queryToken.selectClauseTokens = new std::vector<std::string>({"p.procName"});
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // Invalid attribute references - varName
@@ -459,23 +459,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK") {
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
     queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // assign pattern: invalid second argument: integer
-    arguments = std::vector<std::string>({"_", "3"});
-    patternToken.synonym = "a";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // assign pattern: invalid second argument: synonym
-    arguments = std::vector<std::string>({"_", "v"});
-    patternToken.synonym = "a";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // while pattern: invalid second argument: ident
     arguments = std::vector<std::string>({"_", "\"x\""});
@@ -483,15 +467,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK") {
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
     queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // while pattern: invalid second argument: integer
-    arguments = std::vector<std::string>({"_", "3"});
-    patternToken.synonym = "w";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // while pattern: invalid second argument: partial wildcard
     arguments = std::vector<std::string>({"_", "_\"x\"_"});
@@ -499,15 +475,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK") {
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
     queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // while pattern: invalid second argument: synonym
-    arguments = std::vector<std::string>({"_", "a"});
-    patternToken.synonym = "w";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // if pattern: invalid second argument: ident
     arguments = std::vector<std::string>({"_", "\"x\"", "_"});
@@ -515,7 +483,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK") {
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
     queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // if pattern: invalid second argument: integer
     arguments = std::vector<std::string>({"_", "3", "_"});
@@ -523,7 +491,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK") {
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
     queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 
     // if pattern: invalid second argument: partial wildcard
     arguments = std::vector<std::string>({"_", "_\"x\"_", "_"});
@@ -531,47 +499,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: PATTERN CHECK") {
     patternToken.arguments = &arguments;
     patternTokens = std::vector<PatternToken>({patternToken});
     queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // if pattern: invalid second argument: synonym
-    arguments = std::vector<std::string>({"_", "a", "_"});
-    patternToken.synonym = "ifs";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // if pattern: invalid third argument: ident
-    arguments = std::vector<std::string>({"_", "_", "\"x\""});
-    patternToken.synonym = "ifs";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // if pattern: invalid third argument: integer
-    arguments = std::vector<std::string>({"_", "_", "3"});
-    patternToken.synonym = "ifs";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // if pattern: invalid third argument: partial wildcard
-    arguments = std::vector<std::string>({"_", "_", "_\"x\"_"});
-    patternToken.synonym = "ifs";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
-
-    // if pattern: invalid third argument: synonym
-    arguments = std::vector<std::string>({"_", "_", "a"});
-    patternToken.synonym = "ifs";
-    patternToken.arguments = &arguments;
-    patternTokens = std::vector<PatternToken>({patternToken});
-    queryToken.patternTokens = &patternTokens;
-    REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
+    REQUIRE_THROWS(validator.checkForSemantics(queryToken));
 }
 
 TEST_CASE ("QP SEMANTIC VALIDATOR: WITH CLAUSES CHECK") {
@@ -595,6 +523,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: WITH CLAUSES CHECK") {
     QueryToken queryToken = QueryToken();
     queryToken.declarations = &declarations;
     queryToken.declarationTokens = declarationTokens;
+    queryToken.patternTokens = new std::vector<PatternToken>();
     queryToken.selectClauseTokens = new std::vector<std::string>({"s"});
     queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
     queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
@@ -603,7 +532,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: WITH CLAUSES CHECK") {
     auto withClauses = std::vector<std::pair<std::string, std::string>>({
         std::pair<std::string, std::string>("p.procName", "c.procName"),
         std::pair<std::string, std::string>("v.varName", "r.varName"),
-        std::pair<std::string, std::string>("p.varName", "\"x\""),
+        std::pair<std::string, std::string>("pn.varName", "\"x\""),
         std::pair<std::string, std::string>("con.value", "3"),
         std::pair<std::string, std::string>("s.stmt#", "r.stmt#"),
         std::pair<std::string, std::string>("pn.stmt#", "c.stmt#"),
@@ -612,6 +541,7 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: WITH CLAUSES CHECK") {
     });
 
     queryToken.withClauses = &withClauses;
+    validator.checkForSemantics(queryToken);
     REQUIRE_NOTHROW(validator.checkForSemantics(queryToken));
 }
 

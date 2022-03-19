@@ -183,6 +183,77 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument.argumentType = ArgumentType::SYNONYM;
 
     CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+
+    // synonym named with
+    pql = "assign with; \nSelect with pattern with(_, _)";
+    query = parser.getQuery(pql);
+
+    expectedArgument = Argument();
+    expectedArgument.argumentValue = "with";
+    expectedArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+
+    // synonym named and
+    pql = "assign a, and; \nSelect and pattern a(_, _) and and(_, _)";
+    query = parser.getQuery(pql);
+
+    expectedArgument = Argument();
+    expectedArgument.argumentValue = "and";
+    expectedArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(query.getPatternClauses().size() == 2);
+
+    // tuple: one element
+    pql = "assign a; \nSelect <a>";
+    query = parser.getQuery(pql);
+
+    expectedArgument = Argument();
+    expectedArgument.argumentValue = "a";
+    expectedArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+
+    // tuple: multiple elements
+    pql = "assign a1, a2; procedure p \nSelect <a1, a2, p.procName>";
+    query = parser.getQuery(pql);
+
+    Argument firstArgument = Argument();
+    firstArgument.argumentValue = "a1";
+    firstArgument.argumentType = ArgumentType::SYNONYM;
+
+    Argument secondArgument = Argument();
+    secondArgument.argumentValue = "a2";
+    secondArgument.argumentType = ArgumentType::SYNONYM;
+
+    Argument thirdArgument = Argument();
+    thirdArgument.argumentValue = std::pair<std::string, AttrName>("p", AttrName::PROC_NAME);
+    thirdArgument.argumentType = ArgumentType::SYNONYM;
+
+    std::vector<Argument> synonymList = std::vector<Argument>({firstArgument, secondArgument, thirdArgument});
+
+    CHECK(query.getSelectedSynonyms() == synonymList);
+
+    // synonym is an attr ref
+    pql = "stmt s; \nSelect s.stmt#";
+    query = parser.getQuery(pql);
+
+    expectedArgument = Argument();
+    expectedArgument.argumentValue = std::pair<std::string, AttrName>("s", AttrName::STMT_NO);
+    expectedArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+
+    // synonym is boolean
+    pql = "stmt s; \nSelect BOOLEAN";
+    query = parser.getQuery(pql);
+
+    expectedArgument = Argument();
+    expectedArgument.argumentValue = "";
+    expectedArgument.argumentType = ArgumentType::BOOLEAN;
+
+    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
 }
 
 TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
@@ -940,7 +1011,590 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
     CHECK(argList[1] == expectedSecondArgument);
 }
 
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s; \nSelect s such that Next(s,_)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "s";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s; \nSelect s such that Next(s,3)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "s";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "3";
+    expectedSecondArgument.argumentType = ArgumentType::STMT_NO;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s1, s2; \nSelect s1 such that Next(s1, s2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "s1";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "s2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s1, s2; \nSelect s1 such that Next(3, s2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "3";
+    expectedFirstArgument.argumentType = ArgumentType::STMT_NO;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "s2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s1, s2; \nSelect s1 such that Next(_, s2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "_";
+    expectedFirstArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "s2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s; \nSelect s such that Next*(s,_)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "s";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s; \nSelect s such that Next*(s,3)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "s";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "3";
+    expectedSecondArgument.argumentType = ArgumentType::STMT_NO;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s1, s2; \nSelect s1 such that Next*(s1, s2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "s1";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "s2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s1, s2; \nSelect s1 such that Next*(3, s2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "3";
+    expectedFirstArgument.argumentType = ArgumentType::STMT_NO;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "s2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "stmt s1, s2; \nSelect s1 such that Next*(_, s2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::NEXT_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "_";
+    expectedFirstArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "s2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a; \nSelect a such that Affects(a,_)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "a";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a; \nSelect a such that Affects(a,3)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "a";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "3";
+    expectedSecondArgument.argumentType = ArgumentType::STMT_NO;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a1, a2; \nSelect a1 such that Affects(a1, a2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "a1";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "a2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a1, a2; \nSelect a1 such that Affects(3, a2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "3";
+    expectedFirstArgument.argumentType = ArgumentType::STMT_NO;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "a2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a1, a2; \nSelect a1 such that Affects(_, a2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "_";
+    expectedFirstArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "a2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a; \nSelect a such that Affects*(a,_)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "a";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: SYNONYM, INTEGER") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a; \nSelect a such that Affects*(a,3)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "a";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "3";
+    expectedSecondArgument.argumentType = ArgumentType::STMT_NO;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: SYNONYM, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a1, a2; \nSelect a1 such that Affects*(a1, a2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "a1";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "a2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: INTEGER, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a1, a2; \nSelect a1 such that Affects*(3, a2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "3";
+    expectedFirstArgument.argumentType = ArgumentType::STMT_NO;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "a2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "assign a1, a2; \nSelect a1 such that Affects*(_, a2)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "_";
+    expectedFirstArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "a2";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "procedure p; \nSelect v such that Calls(\"x\", _)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "x";
+    expectedFirstArgument.argumentType = ArgumentType::IDENT;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS CHECK WITH ARGUMENTS: SYNONYM, IDENT") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "procedure p; \nSelect v such that Calls(p, _)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "p";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "x";
+    expectedSecondArgument.argumentType = ArgumentType::IDENT;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "procedure p; \nSelect v such that Calls(_, p)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "_";
+    expectedFirstArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "p";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS* CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "procedure p; \nSelect v such that Calls*(\"x\", _)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "x";
+    expectedFirstArgument.argumentType = ArgumentType::IDENT;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS* CHECK WITH ARGUMENTS: SYNONYM, IDENT") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "procedure p; \nSelect v such that Calls*(p, _)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "p";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "x";
+    expectedSecondArgument.argumentType = ArgumentType::IDENT;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS* CHECK WITH ARGUMENTS: WILDCARD, SYNONYM") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "procedure p; \nSelect v such that Calls*(_, p)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "_";
+    expectedFirstArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "p";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - MULTIPLE SUCH THAT CLAUSES: CALLS* AND FOLLOWS") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "procedure p; \nSelect v such that Calls*(_, p) and Follows(2, 3)";
+    Query query = parser.getQuery(pql);
+    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    std::vector<Argument> argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS_T);
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "_";
+    expectedFirstArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "p";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+
+    // Check second such that clause
+    suchThatClause = query.getSuchThatClauses()[1];
+    argList = suchThatClause.argList;
+
+    CHECK(suchThatClause.relRef == RelRef::CALLS_T);
+
+    expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "2";
+    expectedFirstArgument.argumentType = ArgumentType::STMT_NO;
+    expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "3";
+    expectedSecondArgument.argumentType = ArgumentType::STMT_NO;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
+TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
     QueryParser parser = QueryParser();
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (\"x\", _)";
@@ -958,12 +1612,13 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
     expectedThirdArgument.argumentValue = "_";
     expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
 
+    CHECK(patternClause.synonymType == SynonymType::ASSIGN);
     CHECK(argList[0] == expectedFirstArgument);
     CHECK(argList[1] == expectedSecondArgument);
     CHECK(argList[2] == expectedThirdArgument);
 }
 
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD") {
+TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD") {
     QueryParser parser = QueryParser();
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (_, _)";
@@ -981,12 +1636,13 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD") {
     expectedThirdArgument.argumentValue = "_";
     expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
 
+    CHECK(patternClause.synonymType == SynonymType::ASSIGN);
     CHECK(argList[0] == expectedFirstArgument);
     CHECK(argList[1] == expectedSecondArgument);
     CHECK(argList[2] == expectedThirdArgument);
 }
 
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD") {
+TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD") {
     QueryParser parser = QueryParser();
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _)";
@@ -1004,12 +1660,13 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD") {
     expectedThirdArgument.argumentValue = "_";
     expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
 
+    CHECK(patternClause.synonymType == SynonymType::ASSIGN);
     CHECK(argList[0] == expectedFirstArgument);
     CHECK(argList[1] == expectedSecondArgument);
     CHECK(argList[2] == expectedThirdArgument);
 }
 
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, IDENT") {
+TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, IDENT") {
     QueryParser parser = QueryParser();
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, \"x\")";
@@ -1027,12 +1684,13 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, IDENT") {
     expectedThirdArgument.argumentValue = "x";
     expectedThirdArgument.argumentType = ArgumentType::IDENT;
 
+    CHECK(patternClause.synonymType == SynonymType::ASSIGN);
     CHECK(argList[0] == expectedFirstArgument);
     CHECK(argList[1] == expectedSecondArgument);
     CHECK(argList[2] == expectedThirdArgument);
 }
 
-TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTIAL WILDCARD") {
+TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTIAL WILDCARD") {
     QueryParser parser = QueryParser();
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _\"x\"_)";
@@ -1050,15 +1708,202 @@ TEST_CASE ("PARSER - PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTIAL WILD
     expectedThirdArgument.argumentValue = "_\"x\"_";
     expectedThirdArgument.argumentType = ArgumentType::PARTIAL_UNDERSCORE;
 
+    CHECK(patternClause.synonymType == SynonymType::ASSIGN);
     CHECK(argList[0] == expectedFirstArgument);
     CHECK(argList[1] == expectedSecondArgument);
     CHECK(argList[2] == expectedThirdArgument);
 }
 
+TEST_CASE ("PARSER - WHILE PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "while w; variable v; \nSelect v pattern w (\"x\", _)";
+    Query query = parser.getQuery(pql);
+    PatternClause patternClause = query.getPatternClauses()[0];
+    std::vector<Argument> argList = patternClause.argList;
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "w";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "x";
+    expectedSecondArgument.argumentType = ArgumentType::IDENT;
+    Argument expectedThirdArgument = Argument();
+    expectedThirdArgument.argumentValue = "_";
+    expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(patternClause.synonymType == SynonymType::WHILE);
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+    CHECK(argList[2] == expectedThirdArgument);
+}
+
+TEST_CASE ("PARSER - WHILE PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "while w; variable v; \nSelect v pattern w (_, _)";
+    Query query = parser.getQuery(pql);
+    PatternClause patternClause = query.getPatternClauses()[0];
+    std::vector<Argument> argList = patternClause.argList;
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "w";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedThirdArgument = Argument();
+    expectedThirdArgument.argumentValue = "_";
+    expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(patternClause.synonymType == SynonymType::WHILE);
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+    CHECK(argList[2] == expectedThirdArgument);
+}
+
+TEST_CASE ("PARSER - WHILE PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "while w; variable v; \nSelect v pattern w (v, _)";
+    Query query = parser.getQuery(pql);
+    PatternClause patternClause = query.getPatternClauses()[0];
+    std::vector<Argument> argList = patternClause.argList;
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "w";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "v";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedThirdArgument = Argument();
+    expectedThirdArgument.argumentValue = "_";
+    expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(patternClause.synonymType == SynonymType::WHILE);
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+    CHECK(argList[2] == expectedThirdArgument);
+}
+
+TEST_CASE ("PARSER - IF PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "variable v; if ifs; \nSelect v pattern ifs (\"x\", _, _)";
+    Query query = parser.getQuery(pql);
+    PatternClause patternClause = query.getPatternClauses()[0];
+    std::vector<Argument> argList = patternClause.argList;
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "ifs";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "x";
+    expectedSecondArgument.argumentType = ArgumentType::IDENT;
+    Argument expectedThirdArgument = Argument();
+    expectedThirdArgument.argumentValue = "_";
+    expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(patternClause.synonymType == SynonymType::IF);
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+    CHECK(argList[2] == expectedThirdArgument);
+}
+
+TEST_CASE ("PARSER - IF PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "variable v;  if ifs; \nSelect v pattern ifs (_, _)";
+    Query query = parser.getQuery(pql);
+    PatternClause patternClause = query.getPatternClauses()[0];
+    std::vector<Argument> argList = patternClause.argList;
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "ifs";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "_";
+    expectedSecondArgument.argumentType = ArgumentType::UNDERSCORE;
+    Argument expectedThirdArgument = Argument();
+    expectedThirdArgument.argumentValue = "_";
+    expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(patternClause.synonymType == SynonymType::IF);
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+    CHECK(argList[2] == expectedThirdArgument);
+}
+
+TEST_CASE ("PARSER - IF PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "variable v;  if ifs; \nSelect v pattern ifs (v, _)";
+    Query query = parser.getQuery(pql);
+    PatternClause patternClause = query.getPatternClauses()[0];
+    std::vector<Argument> argList = patternClause.argList;
+
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = "ifs";
+    expectedFirstArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "v";
+    expectedSecondArgument.argumentType = ArgumentType::SYNONYM;
+    Argument expectedThirdArgument = Argument();
+    expectedThirdArgument.argumentValue = "_";
+    expectedThirdArgument.argumentType = ArgumentType::UNDERSCORE;
+
+    CHECK(patternClause.synonymType == SynonymType::IF);
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+    CHECK(argList[2] == expectedThirdArgument);
+}
+
+TEST_CASE ("PARSER - WITH CLAUSES") {
+    QueryParser parser = QueryParser();
+
+    std::string pql = "constant c; procedure p; stmt s; variable v; \nSelect s with s.stmt#=5 and c.value = v.varName with p.procName = \"x\"";
+    Query query = parser.getQuery(pql);
+    WithClause withClause = query.getWithClauses()[0];
+    std::vector<Argument> argList = withClause.argList;
+
+    // First with clause
+    Argument expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = std::pair<std::string, AttrName>("s", AttrName::STMT_NO);
+    expectedFirstArgument.argumentType = ArgumentType::ATTR_REF;
+    Argument expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "5";
+    expectedSecondArgument.argumentType = ArgumentType::ATTR_REF;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+
+    // Second with clause
+    expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = std::pair<std::string, AttrName>("c", AttrName::VALUE);
+    expectedFirstArgument.argumentType = ArgumentType::ATTR_REF;
+    expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = std::pair<std::string, AttrName>("v", AttrName::VAR_NAME);
+    expectedSecondArgument.argumentType = ArgumentType::ATTR_REF;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+
+    // Third with clause
+    expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = std::pair<std::string, AttrName>("p", AttrName::PROC_NAME);
+    expectedFirstArgument.argumentType = ArgumentType::ATTR_REF;
+    expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = "x";
+    expectedSecondArgument.argumentType = ArgumentType::IDENT;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
+}
+
 TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "stmt s; assign a; \nSelect s such that Parent*(s,3) pattern a (_, _, _)";
+    std::string pql = "stmt s; assign a; \nSelect s such that Parent*(s,3) pattern a (_, _) with c.value=v.varName";
     Query query = parser.getQuery(pql);
     SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
     std::vector<Argument> argList = suchThatClause.argList;
@@ -1091,6 +1936,16 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     CHECK(patternArgList[0] == expectedPatternFirstArgument);
     CHECK(patternArgList[1] == expectedPatternSecondArgument);
     CHECK(patternArgList[2] == expectedPatternThirdArgument);
+
+    expectedFirstArgument = Argument();
+    expectedFirstArgument.argumentValue = std::pair<std::string, AttrName>("c", AttrName::VALUE);
+    expectedFirstArgument.argumentType = ArgumentType::ATTR_REF;
+    expectedSecondArgument = Argument();
+    expectedSecondArgument.argumentValue = std::pair<std::string, AttrName>("v", AttrName::VAR_NAME);
+    expectedSecondArgument.argumentType = ArgumentType::ATTR_REF;
+
+    CHECK(argList[0] == expectedFirstArgument);
+    CHECK(argList[1] == expectedSecondArgument);
 }
 
 
