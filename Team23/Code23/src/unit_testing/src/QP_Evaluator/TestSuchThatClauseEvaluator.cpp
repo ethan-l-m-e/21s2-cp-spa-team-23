@@ -116,6 +116,7 @@ TEST_CASE("Test Follow clause evaluator") {
     SuchThatClause clause_r_3 = {ArgList{ar, a3},RelRef::FOLLOWS};
     SuchThatClause clause_0_s1 = {ArgList{a0, as1},RelRef::FOLLOWS};
     SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::FOLLOWS};
+    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::FOLLOWS};
     SuchThatClause clause_0_12 = {ArgList{a0, a12},RelRef::FOLLOWS};
     SuchThatClause clause_s1_pn = {ArgList{as1, apn},RelRef::FOLLOWS};
     SuchThatClause clause_r_a = {ArgList{ar, aa},RelRef::FOLLOWS};
@@ -131,7 +132,8 @@ TEST_CASE("Test Follow clause evaluator") {
     Query query_6 = makeQuery(declarations, {dummySelect}, {clause_s1_s2});
     Query query_7 = makeQuery(declarations, {dummySelect}, {clause_s1_pn});
     Query query_8 = makeQuery(declarations, {dummySelect}, {clause_r_a});
-    Query query_9 = makeQuery(declarations, {dummySelect}, {clause_0_12});
+    Query query_9 = makeQuery(declarations, {dummySelect}, {clause_s1_s1});
+    Query query_10 = makeQuery(declarations, {dummySelect}, {clause_0_12});
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -205,6 +207,13 @@ TEST_CASE("Test Follow clause evaluator") {
         resultTable->clearTable();
         REQUIRE(evaluateFollowsClause(resultTable, &query_8, testPKB)  == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"1 2"});
+
+        /**
+         * Follows(s1, s1)
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateFollowsClause(resultTable, &query_9, testPKB)  == false);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
 
     SECTION("invalid query") {
@@ -213,7 +222,7 @@ TEST_CASE("Test Follow clause evaluator") {
          * Type: Follows, boolean, semantic error
          */
         resultTable->clearTable();
-        REQUIRE(evaluateFollowsClause(resultTable, &query_9, testPKB)  == false);
+        REQUIRE(evaluateFollowsClause(resultTable, &query_10, testPKB)  == false);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
 
@@ -247,6 +256,7 @@ TEST_CASE("Test Follows* clause evaluator") {
     SuchThatClause clause_r_3 = {ArgList{ar, a3},RelRef::FOLLOWS_T};
     SuchThatClause clause_0_s1 = {ArgList{a0, as1},RelRef::FOLLOWS_T};
     SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::FOLLOWS_T};
+    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::FOLLOWS_T};
     SuchThatClause clause_0_10 = {ArgList{a0, a10},RelRef::FOLLOWS_T};
     SuchThatClause clause_s1_pn = {ArgList{as1, apn},RelRef::FOLLOWS_T};
 
@@ -259,7 +269,8 @@ TEST_CASE("Test Follows* clause evaluator") {
     Query query_4 = makeQuery(declarations, {dummySelect}, {clause_r_3});
     Query query_5 = makeQuery(declarations, {dummySelect}, {clause_0_s1});
     Query query_6 = makeQuery(declarations, {dummySelect}, {clause_s1_s2});
-    Query query_7 = makeQuery(declarations, {dummySelect}, {clause_s1_pn});
+    Query query_7 = makeQuery(declarations, {dummySelect}, {clause_s1_s1});
+    Query query_8 = makeQuery(declarations, {dummySelect}, {clause_s1_pn});
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -326,11 +337,19 @@ TEST_CASE("Test Follows* clause evaluator") {
                                                                                                   "4 5", "4 11", "5 11", "6 7", "6 10", "7 10"});
 
         /**
+         * Select s such that Follows*(s1, s1)
+         * Type: follows*, select first arg
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateFollowsTClause(resultTable, &query_7, testPKB) == false);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
+
+        /**
          * Select s such that Follows*(s1, pn)
          * Type: follows*, select first arg
          */
         resultTable->clearTable();
-        REQUIRE(evaluateFollowsTClause(resultTable, &query_7, testPKB) == true);
+        REQUIRE(evaluateFollowsTClause(resultTable, &query_8, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"3 4", "2 4", "1 4", "1 11", "2 11", "3 11", "4 11", "5 11"});
     }
     delete resultTable;
@@ -357,14 +376,13 @@ TEST_CASE("Test Parent clause evaluator") {
     Argument a10 = {ArgumentType::STMT_NO, "10"};
     Argument a00 = {ArgumentType::STMT_NO, "0"};
 
-
-
     SuchThatClause clause0 = {ArgList{a0, a0},RelRef::PARENT};
     SuchThatClause clause1 = {ArgList{a0, a3},RelRef::PARENT};
     SuchThatClause clause_3_5 = {ArgList{a3, a5},RelRef::PARENT};
     SuchThatClause clause_5_s1 = {ArgList{a5, as1},RelRef::PARENT};
     SuchThatClause clause_w_7 = {ArgList{aw, a7},RelRef::PARENT};
     SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::PARENT};
+    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::PARENT};
     SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::PARENT};
     SuchThatClause clause_0_10 = {ArgList{a00, as1},RelRef::PARENT};
     SuchThatClause clause_w_a = {ArgList{aw, aa},RelRef::PARENT};
@@ -379,7 +397,8 @@ TEST_CASE("Test Parent clause evaluator") {
     Query query_5 = makeQuery(declarations, {dummySelect}, {clause_s1_0});
     Query query_6 = makeQuery(declarations, {dummySelect}, {clause_s1_s2});
     Query query_7 = makeQuery(declarations, {dummySelect}, {clause_w_a});
-    Query query_8 = makeQuery(declarations, {dummySelect}, {clause_0_10});
+    Query query_8 = makeQuery(declarations, {dummySelect}, {clause_s1_s1});
+    Query query_9 = makeQuery(declarations, {dummySelect}, {clause_0_10});
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -449,6 +468,13 @@ TEST_CASE("Test Parent clause evaluator") {
         REQUIRE(evaluateParentClause(resultTable, &query_7, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"5 10"});
 
+        /**
+         * Parent(s1, s1)
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateParentClause(resultTable, &query_8, testPKB) == false);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
+
     }
 
     SECTION("invalid query") {
@@ -488,6 +514,7 @@ TEST_CASE("Test Parent* clause evaluator") {
     SuchThatClause clause_i_7 = {ArgList{ai, a7},RelRef::PARENT_T};
     SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::PARENT_T};
     SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::PARENT_T};
+    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::PARENT_T};
     SuchThatClause clause_0_10 = {ArgList{a0, a10},RelRef::PARENT_T};
 
 
@@ -500,6 +527,7 @@ TEST_CASE("Test Parent* clause evaluator") {
     Query query_4 = makeQuery(declarations, {dummySelect}, {clause_i_7});
     Query query_5 = makeQuery(declarations, {dummySelect}, {clause_s1_0});
     Query query_6 = makeQuery(declarations, {dummySelect}, {clause_s1_s2});
+    Query query_7 = makeQuery(declarations, {dummySelect}, {clause_s1_s1});
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -558,6 +586,14 @@ TEST_CASE("Test Parent* clause evaluator") {
         resultTable->clearTable();
         REQUIRE(evaluateParentTClause(resultTable, &query_6, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"5 6", "5 7", "5 8", "5 9", "5 10", "7 8", "7 9"});
+
+        /**
+         * Parent*(s1, s1)
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateParentTClause(resultTable, &query_7, testPKB) == false);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
+
     }
     delete resultTable;
     
@@ -593,6 +629,8 @@ TEST_CASE("Test ModifiesS clause evaluator") {
     SuchThatClause clause_s1_x = {ArgList{as1, ax},RelRef::MODIFIES_S};
     SuchThatClause clause_s1_v = {ArgList{as1, av},RelRef::MODIFIES_S};
     SuchThatClause clause_w_v = {ArgList{aw, av},RelRef::MODIFIES_S};
+    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::MODIFIES_S};
+
 
     Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
@@ -664,9 +702,6 @@ TEST_CASE("Test ModifiesS clause evaluator") {
          * Type: Modifies, select first arg, assign
          */
         resultTable->clearTable();
-        auto *suchThatClauseEvaluator = new ModifiesSClauseEvaluator(clause_s1_x1.argList, testPKB, &query_6);
-        bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
-        delete suchThatClauseEvaluator;
         REQUIRE(evaluateModifiesSClause(resultTable, &query_6, testPKB) == false);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
@@ -960,6 +995,7 @@ TEST_CASE("Test Next clause evaluator") {
     SuchThatClause clause_a_9 = {ArgList{aa, a9},RelRef::NEXT};
     SuchThatClause clause_ifs_s1 = {ArgList{aifs, as1},RelRef::NEXT};
     SuchThatClause clause_s1_w = {ArgList{as1, aw},RelRef::NEXT};
+    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::NEXT};
 
     Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
@@ -972,6 +1008,7 @@ TEST_CASE("Test Next clause evaluator") {
     Query query_6 = makeQuery(declarations, {dummySelect}, {clause_a_9});
     Query query_7 = makeQuery(declarations, {dummySelect}, {clause_ifs_s1});
     Query query_8 = makeQuery(declarations, {dummySelect}, {clause_s1_w});
+    Query query_9 = makeQuery(declarations, {dummySelect}, {clause_s1_s1});
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -1034,6 +1071,13 @@ TEST_CASE("Test Next clause evaluator") {
         resultTable->clearTable();
         REQUIRE(evaluateNextClause(resultTable, &query_8, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"10 5", "4 5"});
+
+        /**
+         * Next(s1, s1)
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateNextClause(resultTable, &query_9, testPKB) == false);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
     }
     delete resultTable;
     
@@ -1075,6 +1119,7 @@ TEST_CASE("Test NextT clause evaluator") {
     SuchThatClause clause_ifs_s1 = {ArgList{aifs, as1},RelRef::NEXT_T};
     SuchThatClause clause_s1_w = {ArgList{as1, aw},RelRef::NEXT_T};
     SuchThatClause clause_r_pn = {ArgList{ar, apn},RelRef::NEXT_T};
+    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::NEXT_T};
 
     Argument dummySelect = {ArgumentType::SYNONYM, "s"};
 
@@ -1088,6 +1133,7 @@ TEST_CASE("Test NextT clause evaluator") {
     Query query_7 = makeQuery(declarations, {dummySelect}, {clause_ifs_s1});
     Query query_8 = makeQuery(declarations, {dummySelect}, {clause_s1_w});
     Query query_9 = makeQuery(declarations, {dummySelect}, {clause_r_pn});
+    Query query_10 = makeQuery(declarations, {dummySelect}, {clause_s1_s1});
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -1164,6 +1210,15 @@ TEST_CASE("Test NextT clause evaluator") {
         REQUIRE(evaluateNextTClause(resultTable, &query_9, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) ==
                 ResultSet{"1 4", "1 11"}
+        );
+
+        /**
+         * Next*(s1, s1)
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateNextTClause(resultTable, &query_10, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) ==
+                ResultSet{"9 9", "6 6", "7 7", "10 10", "5 5", "8 8"}
         );
     }
     delete resultTable;
