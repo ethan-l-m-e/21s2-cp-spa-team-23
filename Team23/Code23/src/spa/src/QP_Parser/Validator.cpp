@@ -12,8 +12,7 @@
 using namespace qp;
 
 void Validator::validateQueryStructure(std::string pql) {
-    std::string formatRegex = PQL_FORMAT;
-    std::regex reg(formatRegex);
+    std::regex reg(PQL_FORMAT);
     bool isValid = regex_match(pql, reg);
 
     if (!isValid) {
@@ -100,15 +99,17 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
         // Check that pattern synonym is valid
         std::string patternSynonym = declarationTokens.at(patternToken.synonym);
         bool isValidPatternSynonym = std::regex_match(patternSynonym, std::regex(PATTERN_SYNONYMS));
+        bool isInvalidPatternType = (patternArguments.size() == 3) && (patternSynonym != "if");
 
-        if (!isValidPatternSynonym) {
+        if (!isValidPatternSynonym || isInvalidPatternType) {
             throw QPInvalidSemanticException("Invalid Pattern Synonym");
         }
 
-        // Check that if pattern synonym is of while design entity, that the second argument is valid
+        // Check validity of if and while patterns
         bool isInvalidWhilePatternArgument = (patternSynonym == "while") && (patternArguments[1] != "_");
+        bool isInvalidIfPattern = (patternSynonym == "if") && (patternArguments[1] != "_");
 
-        if (isInvalidWhilePatternArgument) {
+        if (isInvalidWhilePatternArgument || isInvalidIfPattern) {
             throw QPInvalidSemanticException("Invalid Pattern Argument");
         }
 
@@ -142,13 +143,6 @@ void Validator::validateSynonym(std::string synonym, std::set<std::string> decla
 
 void Validator::checkArguments(std::vector<std::string> arguments,
                                std::map<std::string, std::string> declarationTokens) {
-    // Check if both arguments contain the same synonym
-    bool isArgumentsSameSynonym = (std::regex_match(arguments[0], std::regex (SYNONYM))
-                                   && arguments[0] == arguments[1]);
-    if (isArgumentsSameSynonym) {
-        throw QPInvalidSemanticException("Both arguments contain the same synonym");
-    }
-
     // Check if the synonym is declared if the argument is a synonym
     checkSynonymIsDeclared(arguments[0], declarationTokens);
     checkSynonymIsDeclared(arguments[1], declarationTokens);
@@ -239,13 +233,13 @@ void Validator::checkProcAssignArgument(std::string argument, std::string relRef
 
     // Checking validity of Calls argument
     bool isSynonymProcedure = synonymType == "procedure";
-    bool isValidCallsArgument = (isCallsRelationship && isSynonymProcedure);
+    bool isValidCallsArgument = (isCallsRelationship && !isSynonymProcedure);
 
     // Checking validity of Affects argument
     bool isSynonymAssign = synonymType == "assign";
-    bool isValidAffectsArgument = (!isCallsRelationship && isSynonymAssign);
+    bool isValidAffectsArgument = (!isCallsRelationship && !isSynonymAssign);
 
-    if (!isValidCallsArgument || !isValidAffectsArgument) {
+    if (isValidCallsArgument || isValidAffectsArgument) {
         throw QPInvalidSemanticException("Invalid Argument");
     }
 }
@@ -274,7 +268,7 @@ void Validator::validateAttrRefArgument(std::string argument, std::map<std::stri
     bool isInvalidSynonymForRef = !isValidSynonym || expectedSynonymSet.find(declarationTokens.at(attrs[0])) == expectedSynonymSet.end();
 
     if (isInvalidSynonymForRef) {
-        throw QPInvalidSemanticException("Invalid With Clause");
+        throw QPInvalidSemanticException("Invalid ATTR REF");
     }
 }
 

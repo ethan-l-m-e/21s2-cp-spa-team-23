@@ -8,9 +8,11 @@
 using namespace qp;
 
 // Check tokenizing for Such That Clauses
-TEST_CASE ("QP TOKENIZER: FOLLOWS SUCH THAT CLAUSE") {
-    std::string firstQuery = "stmt s; \n Select s such that Follows(3, 2)";
+TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
     Tokenizer tokenizer = Tokenizer();
+
+    // FOLLOWS SUCH THAT CLAUSE
+    std::string firstQuery = "stmt s; \n Select s such that Follows(3, 2)";
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check declarations
@@ -34,215 +36,185 @@ TEST_CASE ("QP TOKENIZER: FOLLOWS SUCH THAT CLAUSE") {
 
     CHECK(suchThatClauseToken.relRef == "Follows");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: FOLLOWS* SUCH THAT CLAUSE") {
-    std::string firstQuery = "stmt Select; \n Select s such that Follows*(3, 2)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // FOLLOWS* SUCH THAT CLAUSE
+    firstQuery = "stmt Select; \n Select s such that Follows*(3, 2)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
     auto selectClauseTokens = *(queryToken.selectClauseTokens);
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"3", "2"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"3", "2"});
 
     CHECK(suchThatClauseToken.relRef == "Follows*");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
     CHECK(selectClauseTokens[0] == "s");
-}
 
-TEST_CASE ("QP TOKENIZER: PARENT SUCH THAT CLAUSE") {
-    std::string firstQuery = "stmt Select; \n Select s such that Parent(3, 2)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // PARENT SUCH THAT CLAUSE
+    firstQuery = "stmt Select; \n Select s such that Parent(3, 2)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"3", "2"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"3", "2"});
 
     CHECK(suchThatClauseToken.relRef == "Parent");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: PARENT* SUCH THAT CLAUSE") {
-    std::string firstQuery = "stmt Select; \n Select s such that Parent*(3, 2)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // PARENT* SUCH THAT CLAUSE
+    firstQuery = "stmt Select; \n Select s such that Parent*(3, 2)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"3", "2"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"3", "2"});
 
     CHECK(suchThatClauseToken.relRef == "Parent*");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: USES SUCH THAT CLAUSE") {
-    std::string firstQuery = "variable v; \n Select v such that Uses(v, \"eg\")";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // USES SUCH THAT CLAUSE
+    firstQuery = "variable v; \n Select v such that Uses(v, \"eg\")";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "\"eg\""});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"v", "\"eg\""});
 
     CHECK(suchThatClauseToken.relRef == "Uses");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: NEXT SUCH THAT CLAUSE") {
-    std::string firstQuery = "stmt s; \n Select v such that Next(_, s)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // NEXT SUCH THAT CLAUSE
+    firstQuery = "stmt s; \n Select v such that Next(_, s)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"_", "s"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"_", "s"});
 
     CHECK(suchThatClauseToken.relRef == "Next");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: NEXT* SUCH THAT CLAUSE") {
-    std::string firstQuery = "stmt s; \n Select v such that Next*(_, s)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // NEXT* SUCH THAT CLAUSE
+    firstQuery = "stmt s; \n Select v such that Next*(_, s)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"_", "s"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"_", "s"});
 
     CHECK(suchThatClauseToken.relRef == "Next*");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: CALLS SUCH THAT CLAUSE") {
-    std::string firstQuery = "procedure p; \n Select v such that Calls(_, p)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // CALLS SUCH THAT CLAUSE
+    firstQuery = "procedure p; \n Select v such that Calls(_, p)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"_", "p"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"_", "p"});
 
     CHECK(suchThatClauseToken.relRef == "Calls");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: CALLS* SUCH THAT CLAUSE") {
-    std::string firstQuery = "procedure p; \n Select v such that Calls*(_, p)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // CALLS* SUCH THAT CLAUSE
+    firstQuery = "procedure p; \n Select v such that Calls*(_, p)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"_", "p"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"_", "p"});
 
     CHECK(suchThatClauseToken.relRef == "Calls*");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: Affects SUCH THAT CLAUSE") {
-    std::string firstQuery = "assign a; \n Select v such that Affects(_, a)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // AFFECTS SUCH THAT CLAUSE
+    firstQuery = "assign a; \n Select v such that Affects(_, a)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"_", "a"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"_", "a"});
 
     CHECK(suchThatClauseToken.relRef == "Affects");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: Affects* SUCH THAT CLAUSE") {
-    std::string firstQuery = "assign a; \n Select v such that Affects*(_, a)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // AFFECTS* SUCH THAT CLAUSE
+    firstQuery = "assign a; \n Select v such that Affects*(_, a)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"_", "a"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"_", "a"});
 
     CHECK(suchThatClauseToken.relRef == "Affects*");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE") {
-    std::string firstQuery = "variable v; \n Select v such that Modifies(v, \"eg\")";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // MODIFIES SUCH THAT CLAUSE
+    firstQuery = "variable v; \n Select v such that Modifies(v, \"eg\")";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "\"eg\""});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"v", "\"eg\""});
 
     CHECK(suchThatClauseToken.relRef == "Modifies");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH 2 IDENTS AS ARGUMENTS") {
-    std::string firstQuery = "variable v; \n Select v such that Modifies(\"entref\", \"eg\")";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // MODIFIES SUCH THAT CLAUSE WITH 2 IDENTS AS ARGUMENTS
+    firstQuery = "variable v; \n Select v such that Modifies(\"entref\", \"eg\")";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"\"entref\"", "\"eg\""});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"\"entref\"", "\"eg\""});
 
     CHECK(suchThatClauseToken.relRef == "Modifies");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM AND WILDCARD AS ARGUMENTS") {
-    std::string firstQuery = "variable v1, v2; \n Select v1 such that Modifies(v1, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // MODIFIES SUCH THAT CLAUSE WITH SYNONYM AND WILDCARD AS ARGUMENTS
+    firstQuery = "variable v1, v2; \n Select v1 such that Modifies(v1, _)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v1", "_"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"v1", "_"});
 
     CHECK(suchThatClauseToken.relRef == "Modifies");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME PROCNAME") {
-    std::string firstQuery = "variable procName; \n Select v1 such that Modifies(procName, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME PROCNAME
+    firstQuery = "variable procName; \n Select v1 such that Modifies(procName, _)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"procName", "_"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"procName", "_"});
 
     CHECK(suchThatClauseToken.relRef == "Modifies");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME VARNAME") {
-    std::string firstQuery = "variable varName; \n Select v1 such that Modifies(varName, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME VARNAME
+    firstQuery = "variable varName; \n Select v1 such that Modifies(varName, _)";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"varName", "_"});
+    suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
+    suchThatClauseToken = suchThatClauseTokens[0];
+    expectedArguments = std::vector<std::string>({"varName", "_"});
 
     CHECK(suchThatClauseToken.relRef == "Modifies");
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
@@ -430,62 +402,6 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
 }
 
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH TABS BETWEEN 'SUCH' AND 'THAT'") {
-    std::string firstQuery = "variable v; \n Select v1 such\tthat Modifies(v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES BETWEEN 'SUCH' AND 'THAT'") {
-    std::string firstQuery = "variable v; \n Select v1 such     that Modifies(v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES BETWEEN 'THAT' AND RELATIONSHIP") {
-    std::string firstQuery = "variable v; \n Select v such that    Modifies(v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH TABS BETWEEN 'THAT' AND RELATIONSHIP") {
-    std::string firstQuery = "variable v; \n Select v such that\t\t\t\tModifies(v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN 'THAT' AND RELATIONSHIP") {
     std::string firstQuery = "variable v; \n Select v such that\t\t  \t\t  Modifies(v, _)";
     Tokenizer tokenizer = Tokenizer();
@@ -500,64 +416,8 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
     CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
 }
 
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES BETWEEN RELREF AND '('") {
-    std::string firstQuery = "variable v; \n Select v such that Modifies     (v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH TABS BETWEEN RELREF AND '('") {
-    std::string firstQuery = "variable v; \n Select v such that Modifies\t\t\t(v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACE AND TABS BETWEEN RELREF AND '('") {
     std::string firstQuery = "variable v; \n Select v such that Modifies\t  \t  \t(v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES BETWEEN '(' AND FIRST ARGUMENT") {
-    std::string firstQuery = "variable v; \n Select v such that Modifies(   v, _)";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
-
-    // Check SuchThatClause Token
-    auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
-    auto suchThatClauseToken = suchThatClauseTokens[0];
-    std::vector<std::string> expectedArguments = std::vector<std::string>({"v", "_"});
-
-    CHECK(suchThatClauseToken.relRef == "Modifies");
-    CHECK(*(suchThatClauseToken.arguments) == expectedArguments);
-}
-
-TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH TABS BETWEEN '(' AND FIRST ARGUMENT") {
-    std::string firstQuery = "variable v; \n Select v such that Modifies(\t\t\tv, _)";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1128,9 +988,11 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN AND AND SYNONY
 }
 
 // Check With Clauses
-TEST_CASE ("QP TOKENIZER: WITH CLAUSE - PROCNAME AND PROCNAME") {
-    std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.procName";
+TEST_CASE ("QP TOKENIZER: WITH CLAUSES") {
     Tokenizer tokenizer = Tokenizer();
+
+    // PROCNAME AND PROCNAME
+    std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.procName";
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
@@ -1138,76 +1000,65 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - PROCNAME AND PROCNAME") {
     auto withClauses = *(queryToken.withClauses);
 
     CHECK(withClauses[0] == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: WITH CLAUSE - PROCNAME AND VARNAME") {
-    std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.varName";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // PROCNAME AND VARNAME
+    firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.varName";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
-    std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "p2.varName");
-    auto withClauses = *(queryToken.withClauses);
+    expectedArguments = std::pair<std::string, std::string>("p1.procName", "p2.varName");
+    withClauses = *(queryToken.withClauses);
 
     CHECK(withClauses[0] == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: WITH CLAUSE - PROCNAME AND VALUE") {
-    std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.value";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // PROCNAME AND VALUE
+    firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.value";
+    tokenizer = Tokenizer();
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
-    std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "p2.value");
-    auto withClauses = *(queryToken.withClauses);
+    expectedArguments = std::pair<std::string, std::string>("p1.procName", "p2.value");
+    withClauses = *(queryToken.withClauses);
 
     CHECK(withClauses[0] == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: WITH CLAUSE - PROCNAME AND STMT#") {
-    std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.stmt#";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // PROCNAME AND STMT#
+    firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.stmt#";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
-    std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "p2.stmt#");
-    auto withClauses = *(queryToken.withClauses);
+    expectedArguments = std::pair<std::string, std::string>("p1.procName", "p2.stmt#");
+    withClauses = *(queryToken.withClauses);
 
     CHECK(withClauses[0] == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: WITH CLAUSE - PROCNAME AND INT") {
-    std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = 3";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // PROCNAME AND INT
+    firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = 3";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
-    std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "3");
-    auto withClauses = *(queryToken.withClauses);
+    expectedArguments = std::pair<std::string, std::string>("p1.procName", "3");
+    withClauses = *(queryToken.withClauses);
 
     CHECK(withClauses[0] == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: WITH CLAUSE - PROCNAME AND IDENT") {
-    std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = \"x\"";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // PROCNAME AND IDENT
+    firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = \"x\"";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
-    std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "\"x\"");
-    auto withClauses = *(queryToken.withClauses);
+    expectedArguments = std::pair<std::string, std::string>("p1.procName", "\"x\"");
+    withClauses = *(queryToken.withClauses);
 
     CHECK(withClauses[0] == expectedArguments);
-}
 
-TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME PROCNAME") {
-    std::string firstQuery = "procedure procName; \nSelect procName with procName.procName = \"x\"";
-    Tokenizer tokenizer = Tokenizer();
-    QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
+    // SYNONYM NAME PROCNAME
+    firstQuery = "procedure procName; \nSelect procName with procName.procName = \"x\"";
+    queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
-    std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("procName.procName", "\"x\"");
-    auto withClauses = *(queryToken.withClauses);
+    expectedArguments = std::pair<std::string, std::string>("procName.procName", "\"x\"");
+    withClauses = *(queryToken.withClauses);
 
     CHECK(withClauses[0] == expectedArguments);
 }
@@ -1376,17 +1227,14 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES AND") {
     // Check first With Clause
     std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "\"x\"");
     auto withClauses = *(queryToken.withClauses);
-
     CHECK(withClauses[0] == expectedArguments);
 
     // Check second With Clause
     expectedArguments = std::pair<std::string, std::string>("p2.procName", "p1.procName");
-
     CHECK(withClauses[1] == expectedArguments);
 
     // Check third With Clause
     expectedArguments = std::pair<std::string, std::string>("p2.stmt#", "3");
-
     CHECK(withClauses[2] == expectedArguments);
 }
 
@@ -1398,17 +1246,14 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES WITHOUT AND") {
     // Check first With Clause
     std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "\"x\"");
     auto withClauses = *(queryToken.withClauses);
-
     CHECK(withClauses[0] == expectedArguments);
 
     // Check second With Clause
     expectedArguments = std::pair<std::string, std::string>("p2.procName", "p1.procName");
-
     CHECK(withClauses[1] == expectedArguments);
 
     // Check third With Clause
     expectedArguments = std::pair<std::string, std::string>("p2.stmt#", "3");
-
     CHECK(withClauses[2] == expectedArguments);
 }
 
@@ -1420,17 +1265,14 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES AND AND") {
     // Check first With Clause
     std::pair<std::string, std::string> expectedArguments = std::pair<std::string, std::string>("p1.procName", "\"x\"");
     auto withClauses = *(queryToken.withClauses);
-
     CHECK(withClauses[0] == expectedArguments);
 
     // Check second With Clause
     expectedArguments = std::pair<std::string, std::string>("p2.procName", "p1.procName");
-
     CHECK(withClauses[1] == expectedArguments);
 
     // Check third With Clause
     expectedArguments = std::pair<std::string, std::string>("p2.stmt#", "3");
-
     CHECK(withClauses[2] == expectedArguments);
 }
 

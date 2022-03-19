@@ -22,6 +22,10 @@ vector<PatternClause> Query::getPatternClauses(){
     return patternClauses;
 }
 
+std::vector<WithClause> Query::getWithClauses(){
+    return withClauses;
+}
+
 std::vector<Argument> Query::getSelectedSynonyms() {
     return selectedSynonyms;
 }
