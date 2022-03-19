@@ -87,7 +87,7 @@ std::string const PATTERN_CL = "pattern" + SINGLE_SPACE_TAB + PATTERN_COND + SPA
 // with regex
 std::string const ATTR_COMPARE = REF + SPACE_TAB + "=" + SPACE_TAB + REF;
 std::string const ATTR_COND = ATTR_COMPARE + "(" + SINGLE_SPACE_TAB + "and" + SINGLE_SPACE_TAB + ATTR_COMPARE
-        + SPACE_TAB + ")*";
+        +  ")*";
 std::string const WITH_CL = SPACE_TAB + "with" + SINGLE_SPACE_TAB + ATTR_COND;
 
 

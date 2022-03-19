@@ -99,24 +99,18 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
         // Check that pattern synonym is valid
         std::string patternSynonym = declarationTokens.at(patternToken.synonym);
         bool isValidPatternSynonym = std::regex_match(patternSynonym, std::regex(PATTERN_SYNONYMS));
+        bool isInvalidPatternType = (patternArguments.size() == 3) && (patternSynonym != "if");
 
-        if (!isValidPatternSynonym) {
+        if (!isValidPatternSynonym || isInvalidPatternType) {
             throw QPInvalidSemanticException("Invalid Pattern Synonym");
         }
 
         // Check that if pattern synonym is of while design entity, that the second argument is valid
         bool isInvalidWhilePatternArgument = (patternSynonym == "while") && (patternArguments[1] != "_");
+        bool isInvalidIfPattern = (patternSynonym == "if") && (patternArguments[1] != "_");
 
-        if (isInvalidWhilePatternArgument) {
+        if (isInvalidWhilePatternArgument || isInvalidIfPattern) {
             throw QPInvalidSemanticException("Invalid Pattern Argument");
-        }
-
-        // Check that is there are 3 arguments, that it is a if pattern
-        bool isInvalidPatternType = (patternArguments.size() == 3) && (patternSynonym != "if");
-        bool isInvalidIfPattern = (patternSynonym == "if") && (patternArguments.size() == 3)
-                && (patternArguments[1] != "_");
-        if (isInvalidPatternType || isInvalidIfPattern) {
-            throw QPInvalidSemanticException("Invalid If Pattern");
         }
 
         validatePatternFirstArgument(declarationTokens, patternArguments[0]);
