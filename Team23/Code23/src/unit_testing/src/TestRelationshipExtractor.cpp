@@ -325,6 +325,9 @@ TEST_CASE("test next - basic while") {
     RelationshipExtractor::extractCFG(&prog);
     REQUIRE(PKB::getInstance()->relationship.next.isNext("1","2"));
     REQUIRE(PKB::getInstance()->relationship.next.isNext("2","3"));
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("1","3")==false);
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("2","4")==false);
+    REQUIRE(PKB::getInstance()->relationship.next.isNext("1","4")==false);
     REQUIRE(PKB::getInstance()->relationship.next.isNext("3","4"));
     REQUIRE(PKB::getInstance()->relationship.next.isNext("4","5"));
     REQUIRE(PKB::getInstance()->relationship.next.isNext("5","6"));
