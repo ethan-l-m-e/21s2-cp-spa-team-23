@@ -105,7 +105,7 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
             throw QPInvalidSemanticException("Invalid Pattern Synonym");
         }
 
-        // Check that if pattern synonym is of while design entity, that the second argument is valid
+        // Check validity of if and while patterns
         bool isInvalidWhilePatternArgument = (patternSynonym == "while") && (patternArguments[1] != "_");
         bool isInvalidIfPattern = (patternSynonym == "if") && (patternArguments[1] != "_");
 
