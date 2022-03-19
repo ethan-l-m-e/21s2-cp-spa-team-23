@@ -220,8 +220,6 @@ void RelationshipExtractor::extractCFG (Node * node) {
     for (ProcedureNode *p: v) {
         vector<NodeCFG*> allCFGNodes = CFGConstructor::createCFG(p);
         for(NodeCFG* n : allCFGNodes){
-            cout<<n->getStatementNumber();
-            cout<<"\n";
             PKB::getInstance()->relationship.next.addCFGNode(n);
         }
     }

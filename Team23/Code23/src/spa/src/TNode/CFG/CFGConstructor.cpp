@@ -27,7 +27,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         auto* newCFGNode = new LoopCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
             for (NodeCFG *s: prevSetOfNodes) {
-                newCFGNode->setAllPreviousNodes(s->getAllPreviousNode());
                 s->setNextNode(newCFGNode);
             }
         }
@@ -56,7 +55,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         auto* newCFGNode = new BranchCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
             for (NodeCFG *s: prevSetOfNodes) {
-                newCFGNode->setAllPreviousNodes(s->getAllPreviousNode());
                 s->setNextNode(newCFGNode);
             }
         }
@@ -103,7 +101,6 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
         auto* newCFGNode = new NodeCFG(currNode->getStmtNumber());
         if (!prevSetOfNodes.empty()) {
             for (NodeCFG *s: prevSetOfNodes) {
-                newCFGNode->setAllPreviousNodes(s->getAllPreviousNode());
                 s->setNextNode(newCFGNode);
             }
         }
