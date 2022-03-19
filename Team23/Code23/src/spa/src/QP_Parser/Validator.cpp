@@ -149,13 +149,6 @@ void Validator::validateSynonym(std::string synonym, std::set<std::string> decla
 
 void Validator::checkArguments(std::vector<std::string> arguments,
                                std::map<std::string, std::string> declarationTokens) {
-    // Check if both arguments contain the same synonym
-    bool isArgumentsSameSynonym = (std::regex_match(arguments[0], std::regex (SYNONYM))
-                                   && arguments[0] == arguments[1]);
-    if (isArgumentsSameSynonym) {
-        throw QPInvalidSemanticException("Both arguments contain the same synonym");
-    }
-
     // Check if the synonym is declared if the argument is a synonym
     checkSynonymIsDeclared(arguments[0], declarationTokens);
     checkSynonymIsDeclared(arguments[1], declarationTokens);
