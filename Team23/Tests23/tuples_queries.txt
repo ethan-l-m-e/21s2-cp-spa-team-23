@@ -126,5 +126,5 @@ Select <a, v.varName> such that Uses(a, v)
 26 - Select 2 attr with Parent and Uses
 stmt s; variable v;
 Select <s.stmt#, v.varName> such that Parent(s, _) and Uses(s, v)
-3 D, 3 E, 3 G, 5 H, 5 I
+3 D, 3 E, 3 G, 5 H, 5 I, 5 C
 5000
