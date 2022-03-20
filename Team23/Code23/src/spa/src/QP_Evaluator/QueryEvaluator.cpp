@@ -52,7 +52,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
-    // Evaluate select clause and output the result
+    // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(pkb, query);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
@@ -96,8 +96,8 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
 }
 
 /**
- * Generate result list from a result object.
- * @param result  an Result object from a select clause evaluator
+ * Generate result list from a result table.
+ * @param result  an ResultTable containing the final result
  * @return  a list of strings representing the result items
  */
 std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {

@@ -66,11 +66,13 @@ void SuchThatClauseEvaluator::evaluateNoSynonym() {
  * Evaluate a clause with two synonym in its arguments.
  */
 void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
-    DesignEntity entityLeft = query->findEntityType(std::get<std::string>(argLeft.argumentValue));
-    DesignEntity entityRight = query->findEntityType(std::get<std::string>(argRight.argumentValue));
+    string leftSynonym = std::get<std::string>(argLeft.argumentValue);
+    string rightSynonym = std::get<std::string>(argRight.argumentValue);
+    DesignEntity entityLeft = query->findEntityType(leftSynonym);
+    DesignEntity entityRight = query->findEntityType(rightSynonym);
     unordered_set<std::string> leftSet = getAllType(entityLeft);
     unordered_set<std::string> rightSet = getAllType(entityRight);
-    vector<ResultItem> resultItemList = generateTuples(leftSet, rightSet);
+    vector<ResultItem> resultItemList = generateTuples(leftSet, rightSet, leftSynonym == rightSynonym);
     result = {
             .resultType = ResultType::TUPLES,
             .resultBoolean = !resultItemList.empty(),
@@ -113,15 +115,17 @@ void SuchThatClauseEvaluator::evaluateRightSynonym() {
  * Generate a vector of the result item tuples for a 2-synonym clause.
  * @param leftSet  the set of possible values for the left synonym
  * @param rightSet  the set of possible values for the right synonym
+ * @param isSameSynonym  boolean indicating whether the two synonyms are the same
  * @return  a vector of ResultItem of the type tuples
  */
-std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
+std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet, bool isSameSynonym) {
     std::vector<ResultItem> tuples = std::vector<ResultItem>{};
     for (const auto & left : leftSet) {
         unordered_set<std::string> resultSet = getRightSynonymValue(left);
-        for (const auto & result : resultSet) {
-            if (rightSet.find(result) != rightSet.end()) {
-                tuples.emplace_back(std::tuple<string, string>(left, result));
+        for (const auto &right: resultSet) {
+            if (isSameSynonym && right != left) continue;
+            if (rightSet.find(right) != rightSet.end()) {
+                tuples.emplace_back(std::tuple<string, string>(left, right));
             }
         }
     }

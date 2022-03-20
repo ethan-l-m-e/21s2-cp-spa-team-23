@@ -1,0 +1,11 @@
+procedure Boolean {
+    follower = 1;
+    followed = 2;
+    while(used < often) {
+        read nextStar;
+    }
+    call Called;
+}
+procedure Called {
+    print unFollowed;
+}
