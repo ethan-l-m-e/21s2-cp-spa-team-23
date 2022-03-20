@@ -66,11 +66,11 @@ bool CFGOperator::DFSBoolean_func(NodeCFG* left, NodeCFG* right, int CFGSize,
                                                          vector<int> &path)){
     vector<int> path;
     unordered_map<int, bool> visited = constructVisitMap(CFGSize);
-    if (dfsRecursionFoo(left, right, visited, path)) {
-        return true;
-    } else {
-        return false;
+    unordered_set<NodeCFG*> adjNodes = collateAllAdjacentNodes(left);
+    for(auto node : adjNodes) {
+        if (dfsRecursionFoo(node, right, visited, path)) return true;
     }
+    return false;
 }
 
 unordered_set<int> CFGOperator::DFSResultSet_func(NodeCFG* currentNode, int CFGSize,
