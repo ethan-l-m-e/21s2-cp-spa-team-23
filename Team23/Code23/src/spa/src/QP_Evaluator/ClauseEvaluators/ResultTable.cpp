@@ -197,19 +197,6 @@ void ResultTable::crossJoinStrings(std::vector<ResultItem>& synonymValues) {
  * @param synonymValues  reference to the list of ResultItem of the type tuple
  */
 void ResultTable::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
-    String2DVector updatedTuples;
-
-    for(auto resultItem : synonymValues) {
-        auto curr = std::get<std::tuple<std::string,std::string>>(resultItem);
-
-        for (const auto &value: tableEntries) {
-            //deep copy values
-            std::vector<std::string> currentValues = value;
-            currentValues.emplace_back(std::get<0>(curr));
-            currentValues.emplace_back(std::get<1>(curr));
-            updatedTuples.emplace_back(currentValues);
-        }
-    }
     if(tableEntries.empty()) {
         tableEntries.insert(tableEntries.end(), 2, std::vector<std::string>());
         for(auto resultItem : synonymValues) {
@@ -226,11 +213,11 @@ void ResultTable::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
                 long index = std::distance(tableEntries.begin(), it);
                 std::vector<std::string> values;
                 if(it == tableEntries.end() - 2) {
-                    values.insert(values.end(),length,
-                                  std::get<0>(std::get<std::tuple<std::string,std::string>>(*resultItem)));
+                    std::string r1 = std::get<0>(std::get<std::tuple<std::string,std::string>>(*resultItem));
+                    values.insert(values.end(),length,r1);
                 } else if (it == tableEntries.end() - 1) {
-                    values.insert(values.end(), length,
-                                  std::get<1>(std::get<std::tuple<std::string,std::string>>(*resultItem)));
+                    std::string r2 = std::get<1>(std::get<std::tuple<std::string,std::string>>(*resultItem));
+                    values.insert(values.end(), length,r2);
                 } else {
                     if(resultItem == synonymValues.begin()) {
                         values = {};
