@@ -11,9 +11,7 @@
 
 #include "SourceProcessor.h"
 #include "Parser.h"
-#include "RelationshipExtractor.h"
-#include "EntityExtractor.h"
-#include "SemanticsVerifier.h"
+#include "DesignExtractor.h"
 
 void SourceProcessor::run(string filename) {
     // load file
@@ -27,11 +25,5 @@ void SourceProcessor::run(string filename) {
     file.close();
 
     Node* programNode = Parser::Parse(sourceCode);
-    // check for semantics error
-    SemanticsVerifier::detectDuplicateProcedure(programNode);
-    SemanticsVerifier::detectCyclicCalls(programNode);
-    //extract variables and constants etc
-    EntityExtractor::extractAllEntities(programNode);
-    //extract relationships
-    RelationshipExtractor::extractRelationships(programNode);
+    DesignExtractor::Extract(programNode);
 }
