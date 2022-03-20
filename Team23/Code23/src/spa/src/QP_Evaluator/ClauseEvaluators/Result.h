@@ -17,16 +17,14 @@ enum class ResultType {
 };
 using ResultHeader = std::variant<
         std::string,
-        std::tuple<std::string, std::string>>;
-using ResultItem = std::variant<
-        std::string,
-        std::tuple<std::string, std::string>>;
+        std::pair<std::string, std::string>>;
+using ResultItems = std::variant<std::unordered_set<std::string>, std::unordered_set<std::pair<std::string, std::string>>>;
 
 typedef struct Result {
     ResultType resultType = ResultType::EMPTY;
     bool resultBoolean;
     ResultHeader resultHeader;
-    std::vector<ResultItem> resultItemList;
+    ResultItems resultSet;
 } Result;
 
 #endif //SPA_RESULT_H

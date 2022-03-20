@@ -63,7 +63,8 @@ void SuchThatClauseEvaluator::evaluateNoSynonym() {
 
     result = {
             .resultType = ResultType::BOOLEAN,
-            .resultBoolean = validateRelation(leftSet, rightSet)};
+            .resultBoolean = validateRelation(leftSet, rightSet)
+    };
 }
 
 /**
@@ -76,12 +77,11 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
     DesignEntity entityRight = query->findEntityType(rightSynonym);
     unordered_set<std::string> leftSet = getAllType(entityLeft);
     unordered_set<std::string> rightSet = getAllType(entityRight);
-    vector<ResultItem> resultItemList = generateTuples(leftSet, rightSet, leftSynonym == rightSynonym);
-    result = {
-            .resultType = ResultType::TUPLES,
-            .resultBoolean = !resultItemList.empty(),
-            .resultHeader = tuple<string, string> { std::get<std::string>(argLeft.argumentValue), std::get<std::string>(argRight.argumentValue)},
-            .resultItemList = resultItemList
+    unordered_set<pair<string,string>> resultPairs = generateTuples(leftSet, rightSet, leftSynonym == rightSynonym);
+    result = {.resultType = ResultType::TUPLES,
+              .resultBoolean = !resultPairs.empty(),
+              .resultHeader = tuple<string, string> { std::get<std::string>(argLeft.argumentValue), std::get<std::string>(argRight.argumentValue)},
+              .resultSet = resultPairs,
     };
 }
 
@@ -91,13 +91,12 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
 void SuchThatClauseEvaluator::evaluateLeftSynonym() {
     DesignEntity entityLeft = query->findEntityType(std::get<std::string>(argLeft.argumentValue));
     unordered_set<std::string> rightSet = generateValueSet(argRight, std::get<1>(getWildcardType()));
-    unordered_set<std::string> resultSet = generateLeftSet(rightSet);
-    filterByType(resultSet, entityLeft);
-    bool isEmpty = resultSet.empty();
+    unordered_set<std::string> results = generateLeftSet(rightSet);
+    filterByType(results, entityLeft);
     result = {.resultType = ResultType::STRING,
-            .resultBoolean = !isEmpty,
+            .resultBoolean = !results.empty(),
             .resultHeader = std::get<std::string>(argLeft.argumentValue),
-            .resultItemList = convertSetToVector(resultSet)};
+            .resultSet = results};
 }
 
 /**
@@ -106,13 +105,12 @@ void SuchThatClauseEvaluator::evaluateLeftSynonym() {
 void SuchThatClauseEvaluator::evaluateRightSynonym() {
     DesignEntity entityRight = query->findEntityType(std::get<std::string>(argRight.argumentValue));
     unordered_set<std::string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
-    unordered_set<std::string> resultSet = generateRightSet(leftSet);
-    filterByType(resultSet, entityRight);
-    bool isEmpty = resultSet.empty();
+    unordered_set<std::string> results = generateRightSet(leftSet);
+    filterByType(results, entityRight);
     result = {.resultType = ResultType::STRING,
-              .resultBoolean = !isEmpty,
+              .resultBoolean = !results.empty(),
               .resultHeader = std::get<std::string>(argRight.argumentValue),
-              .resultItemList = convertSetToVector(resultSet)};
+              .resultSet = results};
 }
 
 /**
@@ -122,13 +120,13 @@ void SuchThatClauseEvaluator::evaluateRightSynonym() {
  * @param isSameSynonym  boolean indicating whether the two synonyms are the same
  * @return  a vector of ResultItem of the type tuples
  */
-std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet, bool isSameSynonym) {
-    std::vector<ResultItem> tuples = std::vector<ResultItem>{};
+std::unordered_set<std::pair<std::string, std::string>> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet, bool isSameSynonym) {
+    std::unordered_set<std::pair<std::string, std::string>> tuples;
     for (const auto & left : leftSet) {
         for (const auto &right: rightSet) {
             if (isSameSynonym && right != left) continue;
             if (isRelation(left, right)) {
-                tuples.emplace_back(std::tuple<string, string>(left, right));
+                tuples.insert(std::pair<string, string>(left, right));
             }
         }
     }
@@ -243,20 +241,6 @@ unordered_set<string> SuchThatClauseEvaluator::generateValueSet(Argument& argume
         assert(argument.argumentType != ArgumentType::SYNONYM);
         return {std::get<std::string>(argument.argumentValue)};
     }
-}
-
-/**
- * Utility function for converting an unordered set to a vector.
- * @param set  the set to be converted
- * @return  a vector object containing the items of the original set
- */
-std::vector<ResultItem> SuchThatClauseEvaluator::convertSetToVector (unordered_set<std::string> set) {
-    std::vector<ResultItem> vector {};
-    vector.reserve(set.size());
-    for (auto it = set.begin(); it != set.end(); ) {
-        vector.emplace_back(std::move(set.extract(it++).value()));
-    }
-    return vector;
 }
 
 

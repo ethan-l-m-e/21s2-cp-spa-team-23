@@ -29,11 +29,11 @@ protected:
     bool evaluateWhile(ResultTable *resultTable);
     bool evaluateIf(ResultTable *resultTable);
 
-    void constructResults(vector<ResultItem> results, bool hasTuples);
+    void constructResults(ResultItems results, bool hasTuples);
 
     bool evaluateWithFunc_Pointers(ResultTable *resultTable,
                                    void (*validateAndParse)(Argument, Argument, Argument, Expression, Expression),
-                                   vector<ResultItem> (*collectResults)(Argument, Argument, Expression, Expression));
+                                   ResultItems (*collectResults)(Argument, Argument, Expression, Expression));
 };
 
 

@@ -5,6 +5,7 @@
 #include "ResultTable.h"
 
 #include <utility>
+#include <unordered_set>
 
 ResultTable::ResultTable(){
     tableHeader = std::vector<std::string>{};
@@ -109,14 +110,16 @@ void ResultTable::mergeResultToTable(Result& result) {
  * @param result  reference to the result object to be merged
  */
 void ResultTable::mergeStringResult(Result& result) {
-    auto it = std::find(tableHeader.begin(), tableHeader.end(), std::get<std::string>(result.resultHeader));
+    auto stringSet = std::get<std::unordered_set<std::string>>(result.resultSet);
+    auto header = std::get<std::string>(result.resultHeader);
+    auto it = std::find(tableHeader.begin(), tableHeader.end(), header);
     if (it == tableHeader.end()) {
         // compute cross product if the synonym is not in the header
         appendHeader({std::get<std::string>(result.resultHeader)});
-        crossJoinStrings(result.resultItemList);
+        crossJoinStrings(stringSet);
     } else {
         // otherwise, do an inner join
-        innerJoin(std::distance(tableHeader.begin(), it), result.resultItemList);
+        innerJoin(std::distance(tableHeader.begin(), it), result.resultSet);
     }
 }
 
@@ -125,25 +128,26 @@ void ResultTable::mergeStringResult(Result& result) {
  * @param result  reference to the result object to be merged
  */
 void ResultTable::mergeTuplesResult(Result& result) {
-    auto headerTuple = std::get<std::tuple<std::string, std::string>>(result.resultHeader);
-    auto it1 = std::find(tableHeader.begin(), tableHeader.end(), std::get<0>(headerTuple));
-    auto it2 = std::find(tableHeader.begin(), tableHeader.end(), std::get<1>(headerTuple));
+    auto tupleSet = std::get<std::unordered_set<std::pair<std::string, std::string>>>(result.resultSet);
+    auto headerTuple = std::get<std::pair<std::string, std::string>>(result.resultHeader);
+    auto it1 = std::find(tableHeader.begin(), tableHeader.end(), headerTuple.first);
+    auto it2 = std::find(tableHeader.begin(), tableHeader.end(), headerTuple.second);
 
     if (it1 == tableHeader.end() && it2 == tableHeader.end()) {
         // compute cross product if both the synonyms are not in the header
-        appendHeader({std::get<0>(headerTuple), std::get<1>(headerTuple)});
-        crossJoinTuples(result.resultItemList);
+        appendHeader({headerTuple.first, headerTuple.second});
+        crossJoinTuples(tupleSet);
     } else if (it1 != tableHeader.end() && it2 != tableHeader.end()) {
         innerJoin(std::make_pair(std::distance(tableHeader.begin(), it1), std::distance(tableHeader.begin(), it2)),
-                  result.resultItemList);
+                  tupleSet);
     } else if (it1 != tableHeader.end()) {
         innerJoin(std::distance(tableHeader.begin(), it1),
-                  convertVectorToMap(result.resultItemList, false));
-        appendHeader({std::get<1>(headerTuple)});
+                  convertToMap(tupleSet, false));
+        appendHeader({headerTuple.second});
     } else{
         innerJoin(std::distance(tableHeader.begin(), it2),
-                  convertVectorToMap(result.resultItemList, true));
-        appendHeader({std::get<0>(headerTuple)});
+                  convertToMap(tupleSet, true));
+        appendHeader({headerTuple.first});
     }
 }
 
@@ -159,13 +163,13 @@ void ResultTable::appendHeader(const std::vector<std::string>& synonymList) {
 
 /**
  * Compute cross product of the table and a string result and assign the updated values to the table.
- * @param synonymValues  reference to the list of ResultItem of the type string
+ * @param synonymValues  reference to the ResultSet of the type string
  */
-void ResultTable::crossJoinStrings(std::vector<ResultItem>& synonymValues) {
+void ResultTable::crossJoinStrings(std::unordered_set<std::string>& synonymValues) {
     if(tableEntries.empty()) {
         tableEntries.emplace_back(std::vector<std::string>());
-        for(auto resultItem : synonymValues) {
-            auto curr = std::get<std::string>(resultItem);
+        for(const auto& resultItem : synonymValues) {
+            auto curr = resultItem;
             tableEntries[0].emplace_back(curr);
         }
     } else {
@@ -178,7 +182,7 @@ void ResultTable::crossJoinStrings(std::vector<ResultItem>& synonymValues) {
                 long index = std::distance(tableEntries.begin(), it);
                 std::vector<std::string> values;
                 if(it == tableEntries.end() - 1) {
-                    values.insert(values.end(), length, std::get<std::string>(*resultItem));
+                    values.insert(values.end(), length, *resultItem);
                 } else {
                     if(resultItem == synonymValues.begin()) {
                         values = {};
@@ -196,13 +200,13 @@ void ResultTable::crossJoinStrings(std::vector<ResultItem>& synonymValues) {
  * Compute cross product of the table and a tuple result and assign the updated values to the table.
  * @param synonymValues  reference to the list of ResultItem of the type tuple
  */
-void ResultTable::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
+void ResultTable::crossJoinTuples(std::unordered_set<std::pair<std::string, std::string>>& synonymValues) {
     if(tableEntries.empty()) {
         tableEntries.insert(tableEntries.end(), 2, std::vector<std::string>());
-        for(auto resultItem : synonymValues) {
-            auto curr = std::get<std::tuple<std::string,std::string>>(resultItem);
-            tableEntries[0].emplace_back(std::get<0>(curr));
-            tableEntries[1].emplace_back(std::get<1>(curr));
+        for(const auto& resultItem : synonymValues) {
+            auto curr = resultItem;
+            tableEntries[0].emplace_back(curr.first);
+            tableEntries[1].emplace_back(curr.second);
         }
     } else {
         size_t length = tableEntries[0].size();
@@ -213,11 +217,9 @@ void ResultTable::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
                 long index = std::distance(tableEntries.begin(), it);
                 std::vector<std::string> values;
                 if(it == tableEntries.end() - 2) {
-                    std::string r1 = std::get<0>(std::get<std::tuple<std::string,std::string>>(*resultItem));
-                    values.insert(values.end(),length,r1);
+                    values.insert(values.end(),length,resultItem->first);
                 } else if (it == tableEntries.end() - 1) {
-                    std::string r2 = std::get<1>(std::get<std::tuple<std::string,std::string>>(*resultItem));
-                    values.insert(values.end(), length,r2);
+                    values.insert(values.end(), length,resultItem->second);
                 } else {
                     if(resultItem == synonymValues.begin()) {
                         values = {};
@@ -236,9 +238,9 @@ void ResultTable::crossJoinTuples(std::vector<ResultItem>& synonymValues) {
  * @param index  the index of the common synonym in the table header
  * @param resultItemList  a list of ResultItem of the type string
  */
-void ResultTable::innerJoin(size_t index, std::vector<ResultItem>& resultItemList) {
+void ResultTable::innerJoin(size_t index, std::unordered_set<std::string>& resultItemList) {
     for (int i= 0; i< tableEntries[index].size();) {
-        if (!std::count(resultItemList.begin(), resultItemList.end(), (ResultItem) (tableEntries[index][i]))) {
+        if (!resultItemList.count(tableEntries[index][i])) {
             for(auto & tableEntry : tableEntries)
                 tableEntry.erase(tableEntry.begin() + i);
         } else {
@@ -252,12 +254,12 @@ void ResultTable::innerJoin(size_t index, std::vector<ResultItem>& resultItemLis
  * @param indices  pair of indices representing the position of the two synonyms in the table header
  * @param resultItemList  a list of ResultItem of the type tuple
  */
-void ResultTable::innerJoin(std::pair<size_t, size_t> indices, std::vector<ResultItem>& resultItemList) {
+void ResultTable::innerJoin(std::pair<size_t, size_t> indices, std::unordered_set<std::pair<std::string, std::string>>& resultItemList) {
     for (int i= 0; i< tableEntries[indices.first].size();) {
         std::string left = tableEntries[indices.first][i];
         std::string right = tableEntries[indices.second][i];
-        std::tuple<std::string, std::string> curr = make_tuple(left, right);
-        if (!std::count(resultItemList.begin(), resultItemList.end(), (ResultItem) curr)) {
+        std::pair<std::string, std::string> curr = std::make_pair(left, right);
+        if (!resultItemList.count(curr)) {
             for(auto & tableEntry : tableEntries)
                 tableEntry.erase(tableEntry.begin() + i);
         } else {
@@ -299,27 +301,27 @@ void ResultTable::innerJoin(size_t index, std::unordered_map<std::string,std::ve
 }
 
 /**
- * Convert a vector of ResultItem to an unordered map with the left value in the tuple as the key. (right value if flipped)
- * @param resultItemList  reference to the list of ResultItem of the type tuple
- * @param flipped  a boolean to indicate whether to generate the map with the right value as the key
+ * Convert a result set of pairs to an unordered map with the first value in the pair as the key. (right value if flipped)
+ * @param resultItemList  reference to the result set of pairs
+ * @param flipped  a boolean to indicate whether to generate the map with the second value as the key
  * @return  an unordered map representation of the original tuples vector
  */
-std::unordered_map<std::string, std::vector<std::string>> ResultTable::convertVectorToMap (std::vector<ResultItem>& resultItemList, bool flipped) {
+std::unordered_map<std::string, std::vector<std::string>> ResultTable::convertToMap (std::unordered_set<std::pair<std::string, std::string>>& resultItemList, bool flipped) {
     std::unordered_map<std::string, std::vector<std::string>> map;
-    for(auto resultItem : resultItemList) {
-        auto curr = std::get<std::tuple<std::string,std::string>>(resultItem);
+    for(const auto& resultItem : resultItemList) {
+        std::pair<std::string,std::string> curr = resultItem;
         if (flipped) {
-            std::string s1 = std::get<0>(curr);
-            std::string s2 = std::get<1>(curr);
-            curr = std::tuple<std::string,std::string>{s2, s1};
+            std::string s1 = resultItem.first;
+            std::string s2 = resultItem.second;
+            curr = std::pair<std::string,std::string>{s2, s1};
         }
-        auto it = map.find(std::get<0>(curr));
+        auto it = map.find(curr.first);
         if(it != map.end()) {
             std::vector<std::string> value = it->second;
-            value.emplace_back(std::get<1>(curr));
+            value.emplace_back(curr.second);
             it->second = value;
         } else {
-            map.insert({std::get<0>(curr), {std::get<1>(curr)}});
+            map.insert({curr.first, {curr.second}});
         }
     }
 

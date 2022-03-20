@@ -58,12 +58,11 @@ void ResultClauseEvaluator::projectSelectedSynonyms(vector<int>* projections, Re
  * @param resultTable  pointer to the result table used
  */
 void ResultClauseEvaluator::appendNewSynonym(string synonymValue, ResultTable* resultTable){
-    unordered_set<std::string> set = getAllType(query->getSynonymType(synonymValue));
     Result result = {
             .resultType = ResultType::STRING,
             .resultBoolean =true,
             .resultHeader = synonymValue,
-            .resultItemList = std::vector<ResultItem>(set.begin(), set.end())
+            .resultSet = getAllType(query->getSynonymType(synonymValue))
     };
     resultTable->mergeResultToTable(result);
 }

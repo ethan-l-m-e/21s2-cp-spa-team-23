@@ -26,14 +26,13 @@ protected:
     virtual pair<DesignEntity, DesignEntity> getWildcardType() = 0;
     virtual RelRef getRelRef() = 0;
 
-    vector<ResultItem> generateTuples(unordered_set<std::string>&, unordered_set<std::string>&, bool);
+    std::unordered_set<std::pair<std::string, std::string>> generateTuples(unordered_set<std::string>&, unordered_set<std::string>&, bool);
     bool validateRelation(unordered_set<std::string>&, unordered_set<std::string>&);
     unordered_set<std::string> generateLeftSet (unordered_set<std::string>&);
     unordered_set<std::string> generateRightSet (unordered_set<std::string>&);
     void filterByType (unordered_set<std::string>&, DesignEntity);
     bool isEntityType (const std::string&, DesignEntity);
     unordered_set<string> generateValueSet(Argument&, DesignEntity);
-    static vector<ResultItem> convertSetToVector(unordered_set<std::string>);
 
     [[nodiscard]] ClauseSynonymType getClauseSynonymType() const;
     void evaluateNoSynonym();

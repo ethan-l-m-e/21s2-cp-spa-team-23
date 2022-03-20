@@ -2,7 +2,7 @@
 // Created by Tin Hong Wen on 10/2/22.
 //
 #include <regex>
-#include<iostream>
+#include <iostream>
 
 #include "PKB/PKB.h"
 #include "PatternClauseEvaluator.h"
@@ -19,8 +19,8 @@ bool isPartWildCard(Argument arg);
 bool matchVariableValue(VariableNode* assignNode, Expression arg);
 vector<string> collectControlVarInCondExpr(CondExprNode* condExpr);
 
-void addToStmtList(Node* node, vector<ResultItem> *stmtNumberList);
-void addToStmtAndVariableList(Node *node, vector<ResultItem> *statementAndVarList);
+void addToStmtList(Node* node, unordered_set<string> *stmtNumberList);
+void addToStmtAndVariableList(Node *node, unordered_set<pair<string, string>> *statementAndVarList);
 Expression validateAndParseEntRef(string arg);
 Expression validateAndParseExpression(string arg);
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg);
@@ -59,7 +59,7 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
 bool PatternClauseEvaluator::evaluateWithFunc_Pointers(ResultTable* resultTable,
                                                        void(*validateAndParse)(Argument, Argument, Argument,
                                                                Expression, Expression),
-                                                               vector<ResultItem> (*collectResults)(Argument, Argument, Expression, Expression)){
+                                                               ResultItems (*collectResults)(Argument, Argument, Expression, Expression)){
     Argument argLeft = arg1;
     Argument argRight = arg2;
     Argument argLast = arg3;
@@ -67,7 +67,7 @@ bool PatternClauseEvaluator::evaluateWithFunc_Pointers(ResultTable* resultTable,
     Expression exprRight;
     //validation and parsing algorithm
     validateAndParse(arg1, arg2, arg3, varLeft, exprRight);
-    vector<ResultItem> results = collectResults(arg1, arg2, varLeft, exprRight);
+    ResultItems results = collectResults(arg1, arg2, varLeft, exprRight);
     constructResults(results, isSynonym(argLeft));
     return false;
 }
@@ -87,8 +87,8 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     }
     // setup parsing and results
     unordered_set<AssignNode*> listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
-    vector<ResultItem> assignVarPairList;
-    vector<ResultItem> stmtNumberList;
+    unordered_set<pair<string, string>> assignVarPairList;
+    unordered_set<string> stmtNumberList;
 
     unordered_set<AssignNode*>::iterator i;
     // process results
@@ -144,21 +144,22 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     return true;
 }
 
-void PatternClauseEvaluator::constructResults(vector<ResultItem> results, bool hasTuples) {
+void PatternClauseEvaluator::constructResults(ResultItems results, bool hasTuples) {
+
     if (hasTuples) {
         // configure resultType, to have both variable names and assign
         result.resultType = ResultType::TUPLES;
-        result.resultBoolean = !results.empty();
-        result.resultHeader = tuple<string, string>(std::get<std::string>(patternSynonym.argumentValue),
+        result.resultBoolean = !(get<unordered_set<pair<string, string>>>(results)).empty();
+        result.resultHeader = pair<string, string>(std::get<std::string>(patternSynonym.argumentValue),
                 std::get<std::string>(arg1.argumentValue));
-        result.resultItemList = results;
+        result.resultSet = results;
 
     } else {
         // configure resultType to have only a list of assign
         result.resultType = ResultType::STRING;
-        result.resultBoolean = !results.empty();
+        result.resultBoolean = !(get<unordered_set<string>>(results)).empty();
         result.resultHeader = std::get<std::string>(patternSynonym.argumentValue);
-        result.resultItemList = results;
+        result.resultSet = results;
 
     }
 }
@@ -183,28 +184,28 @@ Expression validateAndParseExpression(string arg) {
     return Parser::parseExpression(trimmedArg);
 }
 
-void addToStmtList(Node *node, vector<ResultItem> *stmtNumberList) {
+void addToStmtList(Node *node, unordered_set<string> *stmtNumberList) {
     string stmtNo = to_string(node->getStmtNumber());
-    stmtNumberList->push_back(stmtNo);
+    stmtNumberList->insert(stmtNo);
 }
 
-void addToStmtAndVariableList(Node *node, vector<ResultItem> *statementAndVarList) {
+void addToStmtAndVariableList(Node *node, unordered_set<pair<string, string>> *statementAndVarList) {
     if(auto assignNode = dynamic_cast<AssignNode*>(node)) {
-        ResultItem assignVarPair = tuple<string, string>(to_string(assignNode->getStmtNumber()), assignNode->getLeftNode()->getVariableName());
-        statementAndVarList->push_back(assignVarPair);
+        auto assignVarPair = pair<string, string>(to_string(assignNode->getStmtNumber()), assignNode->getLeftNode()->getVariableName());
+        statementAndVarList->insert(assignVarPair);
     } else if (auto whileNode = dynamic_cast<WhileNode*>(node)) {
         string stmtNo = to_string(whileNode->getStmtNumber());
         vector<VarName> controlVariables = collectControlVarInCondExpr(whileNode->getCondExpr());
         for(VarName controlVar: controlVariables) {
-            ResultItem stmtVarPair = tuple<string, string>(stmtNo, controlVar);
-            statementAndVarList->push_back(stmtVarPair);
+            auto stmtVarPair = pair<string, string>(stmtNo, controlVar);
+            statementAndVarList->insert(stmtVarPair);
         }
     } else if (auto ifNode = dynamic_cast<IfNode*>(node)) {
         string stmtNo = to_string(ifNode->getStmtNumber());
         vector<VarName> controlVariables = collectControlVarInCondExpr(ifNode->getCondExpr());
         for(VarName controlVar: controlVariables) {
-            ResultItem stmtVarPair = tuple<string, string>(stmtNo, controlVar);
-            statementAndVarList->push_back(stmtVarPair);
+            auto stmtVarPair = pair<string, string>(stmtNo, controlVar);
+            statementAndVarList->insert(stmtVarPair);
         }
     }
 }
