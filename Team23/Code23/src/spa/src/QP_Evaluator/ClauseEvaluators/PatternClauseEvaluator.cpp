@@ -87,8 +87,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     }
     // setup parsing and results
     unordered_set<AssignNode*> listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
-    vector<ResultItem> assignVarPairList;
-    vector<ResultItem> stmtNumberList;
+    vector<ResultItem> resultList;
 
     unordered_set<AssignNode*>::iterator i;
     // process results
@@ -97,30 +96,30 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
         VariableNode* LHSVariable = currentNode->getLeftNode();
         Expression RHSExpression = currentNode ->getRightNode();
         if (isSynonym(argLeft) && isWildCard(argRight)) {
-            addToStmtAndVariableList(currentNode, &assignVarPairList);
+            addToStmtAndVariableList(currentNode, &resultList);
         }
         else if (isIdent(argLeft) && isWildCard(argRight)) {
             if(matchExpressionValue(LHSVariable, varLeft, argLeft)) {
-                addToStmtList(currentNode, &stmtNumberList);
+                addToStmtList(currentNode, &resultList);
             }
         }
         else if (isWildCard(argLeft) && isWildCard(argRight)) {
-            addToStmtList(currentNode, &stmtNumberList);
+            addToStmtList(currentNode, &resultList);
         }
         else if (isSynonym(argLeft) && (isPartWildCard(argRight) || isIdent(argRight))) {
             if(matchExpressionValue(RHSExpression, exprRight, argRight)) {
-                addToStmtAndVariableList(currentNode, &assignVarPairList);
+                addToStmtAndVariableList(currentNode, &resultList);
             }
         }
         else if (isIdent(argLeft) && (isPartWildCard(argRight) || isIdent(argRight))) {
             if(matchExpressionValue(LHSVariable, varLeft, argLeft) &&
             matchExpressionValue(RHSExpression, exprRight, argRight)) {
-                addToStmtList(currentNode, &stmtNumberList);
+                addToStmtList(currentNode, &resultList);
             }
         }
         else if (isWildCard(argLeft) && (isPartWildCard(argRight) || isIdent(argRight))) {
             if(matchExpressionValue(RHSExpression, exprRight, argRight)) {
-                addToStmtList(currentNode, &stmtNumberList);
+                addToStmtList(currentNode, &resultList);
             }
         }
         else {
@@ -129,12 +128,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     }
 
     // result construction
-    if(isSynonym(argLeft)) {
-        constructResults(assignVarPairList, isSynonym(argLeft));
-    } else {
-        constructResults(stmtNumberList, isSynonym(argRight));
-    }
-
+    constructResults(resultList, isSynonym(argLeft));
     if(!result.resultBoolean) {
         resultTable->clearTable();
         resultTable->setBooleanResult(false);

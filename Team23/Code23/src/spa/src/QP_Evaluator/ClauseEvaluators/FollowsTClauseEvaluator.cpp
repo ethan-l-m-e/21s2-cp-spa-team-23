@@ -9,11 +9,11 @@ bool FollowsTClauseEvaluator::isRelation(std::string left, std::string right) {
 }
 
 unordered_set<std::string> FollowsTClauseEvaluator::getLeftSynonymValue(std::string right) {
-    return pkb->relationship.followsT.getSetLHS(right);
+    return pkb->relationship.followsT.getLHS(right);
 }
 
 unordered_set<std::string> FollowsTClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->relationship.followsT.getSetRHS(left);
+    return pkb->relationship.followsT.getRHS(left);
 }
 
 pair<DesignEntity, DesignEntity> FollowsTClauseEvaluator::getWildcardType () {

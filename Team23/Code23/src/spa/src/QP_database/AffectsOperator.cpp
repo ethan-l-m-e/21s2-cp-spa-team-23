@@ -22,7 +22,7 @@ bool AffectsOperator::pathExistBetween(NodeCFG *left, NodeCFG *right, int CFGSiz
 
     // left modifies v, right uses the same v
     string leftVal = to_string(left->getStatementNumber());
-    string modifiedVar = *PKB::getInstance()->relationship.modifiesS.getSetRHS(leftVal).begin();
+    string modifiedVar = *PKB::getInstance()->relationship.modifiesS.getRHS(leftVal).begin();
     string rightVal = to_string(right->getStatementNumber());
     PKB::getInstance()->relationship.usesS.isRelationship(rightVal, modifiedVar);
 
