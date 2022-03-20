@@ -799,28 +799,28 @@ TEST_CASE("Add Next") {
 
 
 
-    // isNext() Test
+    // isRelationship() Test
 
-    pkb->relationship.next.isNext("1", "2");
-    pkb->relationship.next.isNext("1", "6");
-    pkb->relationship.next.isNext("2", "3");
-    pkb->relationship.next.isNext("3", "5");
-    pkb->relationship.next.isNext("4", "5");
-    pkb->relationship.next.isNext("5", "9");
+    pkb->relationship.next.isRelationship("1", "2");
+    pkb->relationship.next.isRelationship("1", "6");
+    pkb->relationship.next.isRelationship("2", "3");
+    pkb->relationship.next.isRelationship("3", "5");
+    pkb->relationship.next.isRelationship("4", "5");
+    pkb->relationship.next.isRelationship("5", "9");
 
-    pkb->relationship.next.isNext("6", "7");
-    pkb->relationship.next.isNext("6", "9");
-    pkb->relationship.next.isNext("7", "8");
-    pkb->relationship.next.isNext("7", "6");
-    pkb->relationship.next.isNext("8", "7");
+    pkb->relationship.next.isRelationship("6", "7");
+    pkb->relationship.next.isRelationship("6", "9");
+    pkb->relationship.next.isRelationship("7", "8");
+    pkb->relationship.next.isRelationship("7", "6");
+    pkb->relationship.next.isRelationship("8", "7");
 
-    pkb->relationship.next.isNext("9", "10");
-    pkb->relationship.next.isNext("10", "11");
-    pkb->relationship.next.isNext("11", "12");
-    pkb->relationship.next.isNext("12", "13");
-    pkb->relationship.next.isNext("12", "14");
-    pkb->relationship.next.isNext("13", "10");
-    pkb->relationship.next.isNext("13", "10");
+    pkb->relationship.next.isRelationship("9", "10");
+    pkb->relationship.next.isRelationship("10", "11");
+    pkb->relationship.next.isRelationship("11", "12");
+    pkb->relationship.next.isRelationship("12", "13");
+    pkb->relationship.next.isRelationship("12", "14");
+    pkb->relationship.next.isRelationship("13", "10");
+    pkb->relationship.next.isRelationship("13", "10");
 
 
 }

@@ -16,7 +16,7 @@ public:
 
     void clear();
 
-    bool isNext(string previousStatementNumber, string nextStatementNumber);
+    bool isRelationship(string previousStatementNumber, string nextStatementNumber);
 
     unordered_set<string> getPreviousNodeOf(string nextStatementNumber);
 

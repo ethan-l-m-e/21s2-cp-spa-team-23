@@ -14,7 +14,7 @@ void NextRelationship::addCFGNode(NodeCFG *node) {
     OneToOneRelationship<int, NodeCFG *>::setRelationship(statementNumber, node);
 }
 
-bool NextRelationship::isNext(string previousStatementNumber, string nextStatementNumber) {
+bool NextRelationship::isRelationship(string previousStatementNumber, string nextStatementNumber) {
 
     unordered_set<string> setPreviousStatementNumbers = getPreviousNodeOf(nextStatementNumber);
 
