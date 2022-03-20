@@ -68,16 +68,6 @@ assign a; procedure p;
 Select <a, p> such that Next*(a, a)
 4 Tuples, 4 TuplesAgain
 5000
-13 - [valid] Select 2 + Calls
-procedure p, p1;
-Select <p, p1> such that Calls(p, p1)
-Tuples TuplesAgain
-5000
-14 - [valid] Select 2 + Calls*
-procedure p, p1;
-Select <p, p1> such that Calls*(p, p1)
-Tuples TuplesAgain
-5000
 15 - [valid] Select 2 + pattern
 assign a; procedure pr;
 Select <a, pr> pattern a(_, _"g%h"_)
@@ -106,7 +96,7 @@ Select <a.stmt#, a>
 20 - [valid] select 3 attr
 read r; print pr; call cl;
 Select <r.varName, pr.varName, cl.procName>
-B, C, TuplesAgain
+B C TuplesAgain
 5000
 21 - [valid] Select 4 syn 1 attr
 read r; print pr; call cl; while w; if ifs;
@@ -136,5 +126,5 @@ Select <a, v.varName> such that Uses(a, v)
 26 - Select 2 attr with Parent and Uses
 stmt s; variable v;
 Select <s.stmt#, v.varName> such that Parent(s, _) and Uses(s, v)
-3 D, 3 E, 3 G, 5 H, 5 I
+3 D, 3 E, 3 G, 5 H, 5 I, 5 C
 5000
