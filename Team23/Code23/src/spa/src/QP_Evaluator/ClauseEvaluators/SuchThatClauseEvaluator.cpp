@@ -26,7 +26,11 @@ bool SuchThatClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         default:
             break;
     }
-    if(!result.resultBoolean) return false;
+    if(!result.resultBoolean) {
+        resultTable->clearTable();
+        resultTable->setBooleanResult(false);
+        return false;
+    }
     mergeResult(resultTable);
     return true;
 }
@@ -121,10 +125,9 @@ void SuchThatClauseEvaluator::evaluateRightSynonym() {
 std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet, bool isSameSynonym) {
     std::vector<ResultItem> tuples = std::vector<ResultItem>{};
     for (const auto & left : leftSet) {
-        unordered_set<std::string> resultSet = getRightSynonymValue(left);
-        for (const auto &right: resultSet) {
+        for (const auto &right: rightSet) {
             if (isSameSynonym && right != left) continue;
-            if (rightSet.find(right) != rightSet.end()) {
+            if (isRelation(left, right)) {
                 tuples.emplace_back(std::tuple<string, string>(left, right));
             }
         }
@@ -140,9 +143,8 @@ std::vector<ResultItem> SuchThatClauseEvaluator::generateTuples(unordered_set<st
  */
 bool SuchThatClauseEvaluator::validateRelation(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet) {
     for (const auto & left : leftSet) {
-        std::unordered_set<std:: string> resultSet = getRightSynonymValue(left);
-        for (const auto & result : resultSet) {
-            if (rightSet.find(result) != rightSet.end()) return true;
+        for (const auto & right : rightSet) {
+            if (isRelation(left, right)) return true;
         }
     }
     return false;

@@ -135,7 +135,11 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
         constructResults(stmtNumberList, isSynonym(argRight));
     }
 
-    if(!result.resultBoolean) return false;
+    if(!result.resultBoolean) {
+        resultTable->clearTable();
+        resultTable->setBooleanResult(false);
+        return false;
+    }
     mergeResult(resultTable);
     return true;
 }
