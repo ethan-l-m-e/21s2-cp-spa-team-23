@@ -16,13 +16,13 @@ void NextRelationship::addCFGNode(NodeCFG *node) {
 
 bool NextRelationship::isRelationship(string previousStatementNumber, string nextStatementNumber) {
 
-    unordered_set<string> setPreviousStatementNumbers = getPreviousNodeOf(nextStatementNumber);
+    unordered_set<string> setPreviousStatementNumbers = getLHS(nextStatementNumber);
 
     return setPreviousStatementNumbers.find(previousStatementNumber) != setPreviousStatementNumbers.end();
 }
 
 
-unordered_set<string> NextRelationship::getPreviousNodeOf(string nextStatementNumber) {
+unordered_set<string> NextRelationship::getLHS(string nextStatementNumber) {
     NodeCFG *node = *getRHSNormal(std::stoi(nextStatementNumber)).begin();
 
     unordered_set<string> statementNumbers;
@@ -38,7 +38,7 @@ unordered_set<string> NextRelationship::getPreviousNodeOf(string nextStatementNu
 
 }
 
-unordered_set<string> NextRelationship::getNextNodeOf(string previousStatementNumber) {
+unordered_set<string> NextRelationship::getRHS(string previousStatementNumber) {
     NodeCFG *node = *getRHSNormal(std::stoi(previousStatementNumber)).begin();
 
     unordered_set<string> setNextStatementNumbers;

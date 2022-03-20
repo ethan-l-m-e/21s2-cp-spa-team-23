@@ -18,9 +18,9 @@ public:
 
     bool isRelationship(string previousStatementNumber, string nextStatementNumber);
 
-    unordered_set<string> getPreviousNodeOf(string nextStatementNumber);
+    unordered_set<string> getLHS(string nextStatementNumber);
 
-    unordered_set<string> getNextNodeOf(string previousStatementNumber);
+    unordered_set<string> getRHS(string previousStatementNumber);
 
     // Functions below are used to calculate Next*
 
