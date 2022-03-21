@@ -28,12 +28,8 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
-            // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!patternResult) {
-                resultTable->clearTable();
-                resultTable->setBooleanResult(false);
-                break;
-            }
+            // if the clause evaluates to false, terminate evaluation early.
+            if (!patternResult) break;
         }
     }
 
@@ -44,11 +40,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!suchThatResult) {
-                resultTable->clearTable();
-                resultTable->setBooleanResult(false);
-                break;
-            }
+            if (!suchThatResult) break;
         }
     }
 

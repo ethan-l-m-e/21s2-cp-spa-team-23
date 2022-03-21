@@ -3,14 +3,18 @@
 //
 
 #include "ResultClauseEvaluator.h"
-bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
-    std::unordered_set<std::string> resultSet;
+#include "QP_Parser/Exception.h"
 
+bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
+    if (query->getSelectedSynonyms().empty()) throw qp::QPEvaluatorException("No argument was selected");
+
+    // handle select boolean
     if ((query->getSelectedSynonyms())[0].argumentType == ArgumentType::BOOLEAN) {
         resultTable->enableBooleanResult();
         return true;
     }
 
+    // handle select synonym / attribute references
     vector<int> projections;
     if (resultTable->getBooleanResult()) projectSelectedSynonyms(&projections, resultTable);
     resultTable->rearrangeSynonyms(projections);
@@ -112,8 +116,10 @@ void ResultClauseEvaluator::unpackSynonym(Argument &synonym, std::pair<string, A
     if (synonym.argumentType == ArgumentType::ATTR_REF) {
         *attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
         *synonymValue = attrRef->first;
-    } else {
+    } else if (synonym.argumentType == ArgumentType::SYNONYM) {
         *synonymValue = std::get<std::string>(synonym.argumentValue);
+    } else {
+        throw qp::QPEvaluatorException("Invalid selected argument type");
     }
 }
 
