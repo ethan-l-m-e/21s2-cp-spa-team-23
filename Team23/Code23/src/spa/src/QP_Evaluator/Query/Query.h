@@ -35,6 +35,7 @@ public:
     bool hasPatternClause();
     vector<PatternClause> getPatternClauses();
     vector<SuchThatClause> getSuchThatClauses();
+    vector<WithClause> getWithClauses();
     vector<Argument> getSelectedSynonyms();
     DesignEntity getSynonymType(string synonym);
     DesignEntity findEntityType(const std::string&);

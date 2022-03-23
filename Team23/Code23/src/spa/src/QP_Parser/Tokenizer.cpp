@@ -7,8 +7,6 @@
 #include <vector>
 #include <map>
 #include <regex>
-#include <sstream>
-#include <iostream>
 
 using namespace qp;
 
@@ -82,15 +80,7 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
 
 void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken) {
     std::smatch sm;
-    std::vector<std::string> suchThatClauses = std::vector<std::string>();
-
-    // Get each such that clause substring
-    while (std::regex_search (pql, sm, std::regex(REL_REF))) {
-        std::string x = sm[0];
-        x = StringFormatter::removeTrailingSpace(x);
-        suchThatClauses.push_back(x);
-        pql = sm.suffix().str();
-    }
+    std::vector<std::string> suchThatClauses = getSplitStringsWithRegex(pql, SUCH_THAT_CL, REL_REF);
 
     // Convert each such that clause substring to SuchThatClauseToken
     std::vector<SuchThatClauseToken>* suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
@@ -103,6 +93,7 @@ void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken)
 }
 
 SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string suchThatClause) {
+    suchThatClause = std::regex_replace(suchThatClause, std::regex(SINGLE_SPACE_TAB), "");
     std::vector<std::string> suchThatClauseArgs = StringFormatter::tokenizeByRegex(suchThatClause, SPLIT_SUCH_THAT_CLAUSE);
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -114,20 +105,12 @@ SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string su
 
 void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
     std::smatch sm;
-    std::vector<std::string> patternClauses = std::vector<std::string>();
-
-    // Get each pattern substring from pql query
-    while (std::regex_search (pql, sm, std::regex(FIND_PATTERN))) {
-        std::string x = sm[0];
-        x = StringFormatter::removeTrailingSpace(x);
-        patternClauses.push_back(x);
-        pql = sm.suffix().str();
-    }
+    std::vector<std::string> patternStrings = getSplitStringsWithRegex(pql, PATTERN_CL, PATTERN);
 
     // Convert each pattern clause substring to PatternToken
     std::vector<PatternToken>* patternTokens = new std::vector<PatternToken>();
-    for (std::string patternClause : patternClauses) {
-        PatternToken patternToken = convertStringToPatternToken(patternClause);
+    for (std::string patternString : patternStrings) {
+        PatternToken patternToken = convertStringToPatternToken(patternString);
         patternTokens->push_back(patternToken);
     }
 
@@ -135,8 +118,6 @@ void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) 
 }
 
 PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
-    // Remove 'pattern' in substring
-    patternClause = patternClause.substr(PATTERN_LENGTH);
     std::vector<std::string> patternClauseArgs = StringFormatter::tokenizeByRegex(patternClause, PATTERN_ARGUMENTS);
 
     // Split pattern synonym substring and first argument
@@ -152,7 +133,8 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
     for (int i = 1; i < patternClauseArgs.size(); i++) {
         std::string argument = StringFormatter::removeTrailingSpace(patternClauseArgs[i]);
         if (i == patternClauseArgs.size()-1) {
-            argument = argument.substr(0, argument.size()-1);
+            // Remove closing bracket from string
+            argument = StringFormatter::removeTrailingSpace(argument.substr(0, argument.size()-1));
         }
         patternToken.arguments->push_back(argument);
     }
@@ -161,24 +143,47 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
 
 void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
     std::smatch sm;
-    std::vector<std::string> withClauseStrings = std::vector<std::string>();
-
-    // Get all with clauses substring and combine them all into one string
-    while (std::regex_search (pql, sm, std::regex(ATTR_COMPARE))) {
-        cout << sm[0];
-        withClauseStrings.push_back(sm[0]);
-        pql = sm.suffix().str();
-    }
+    std::vector<std::string> withClauseStrings = getSplitStringsWithRegex(pql, WITH_CL, ATTR_COMPARE);
 
     // Split with clauses into each with clause substring
     std::vector<std::pair<std::string, std::string>>* withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     for (std::string withClause : withClauseStrings) {
+        // Removes spaces and tabs
+        withClause = std::regex_replace(withClause, std::regex(SINGLE_SPACE_TAB), "");
         std::vector<std::string> withClauseArgs = StringFormatter::tokenizeByRegex(withClause, SPLIT_EQUALS);
         withClauses->push_back(std::make_pair(withClauseArgs[0], withClauseArgs[1]));
     }
 
     queryToken.withClauses = withClauses;
+}
+
+std::vector<std::string> Tokenizer::getSplitStringsWithRegex(std::string pql, std::string fullClauseReg,
+                                                             std::string singleClauseReg) {
+    std::smatch sm;
+    std::vector<std::string> clauses = std::vector<std::string>();
+
+    // Get clause substrings from pql query
+    while (std::regex_search (pql, sm, std::regex(fullClauseReg))) {
+        std::string x = sm[0];
+        x = StringFormatter::removeTrailingSpace(x);
+        clauses.push_back(x);
+        pql = sm.suffix().str();
+    }
+
+    std::vector<std::string> clauseStrings = std::vector<std::string>();
+
+    // Separate clauses to individual clause
+    for (std::string clause : clauses) {
+        while (std::regex_search (clause, sm, std::regex(singleClauseReg))) {
+            std::string x = sm[0];
+            x = StringFormatter::removeTrailingSpace(x);
+            clauseStrings.push_back(x);
+            clause = sm.suffix().str();
+        }
+    }
+
+    return clauseStrings;
 }
 
 void Tokenizer::cleanQueryToken(QueryToken& queryToken) {

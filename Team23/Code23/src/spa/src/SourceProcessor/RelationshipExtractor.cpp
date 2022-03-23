@@ -11,28 +11,10 @@
 #include "TNode/ReadNode.h"
 #include "TNode/PrintNode.h"
 #include "TNode/CallNode.h"
+#include "TNode/CFG/CFGConstructor.h"
 #include <unordered_set>
 
 using std::begin, std::end;
-
-class GraphNode {
-    string name;
-    vector<ProcName> toOtherNodes;
-public:
-    GraphNode(string name, vector<ProcName> toOtherNodes) {
-        this-> name = name;
-        this->toOtherNodes = toOtherNodes;
-    }
-    vector<ProcName> getDirectedNodes() {
-        return this->toOtherNodes;
-    }
-    string getName() {
-        return this->name;
-    }
-    void changeName(string name) {
-        this->name = name;
-    }
-};
 
 void extractFollowsFromStatementList(StatementList statementList) {
     int numOfChildNodes = statementList.size();
@@ -254,189 +236,22 @@ void RelationshipExtractor::extractCalls(Node* node, vector<ProcedureNode *> pro
 }
 
 
-void extractAllEntities(Node *node) {
-    if(auto value = dynamic_cast<ProgramNode*>(node)) {
-        vector<ProcedureNode*> v = value -> getProcLst();
-        for(ProcedureNode* p: v)
-            extractAllEntities(p);
-    } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
-        vector<Node*> v = value->getStmtLst();
-        for(Node* s: v) {
-            extractAllEntities(s);
-        }
-        PKB::getInstance()->entity.procedures.add(value->getProcName());
-    } else if(auto value = dynamic_cast<WhileNode*>(node)) {
-        Node* condExprNode = value->getCondExpr();
-        vector<VarName> variables = condExprNode->getAllVariables();
-        vector<Constant> constants = condExprNode->getAllConstants();
-        vector<Node*> stmtLst = value->getStmtLst();
-        for(VarName v: variables)
-            PKB::getInstance()->entity.variables.add(v);
-        for(Constant c: constants)
-            PKB::getInstance()->entity.constants.add(c);
-        for(Node* s: stmtLst)
-            extractAllEntities(s);
-        PKB::getInstance()->statement.statements.addStatement(value);
-        PKB::getInstance()->statement.whileStatements.addStatement(value);
-    } else if(auto value = dynamic_cast<IfNode*>(node)) {
-        Node* condExprNode = value->getCondExpr();
-        vector<VarName> variables = condExprNode->getAllVariables();
-        vector<Constant> constants = condExprNode->getAllConstants();
-        vector<Node*> elseVector = value->getElseStmtLst();
-        vector<Node*> thenVector = value->getThenStmtLst();
-        for(VarName v: variables)
-            PKB::getInstance()->entity.variables.add(v);
-        for(Constant c: constants)
-            PKB::getInstance()->entity.constants.add(c);
-        for(Node* s: elseVector)
-            extractAllEntities(s);
-        for(Node* s: thenVector)
-            extractAllEntities(s);
-        PKB::getInstance()->statement.statements.addStatement(value);
-        PKB::getInstance()->statement.ifStatements.addStatement(value);
-    } else if(auto value = dynamic_cast<AssignNode*>(node)) {
-        vector<VarName> variables = value->getAllVariables();
-        vector<Constant> constants = value->getAllConstants();
-        for(VarName variable: variables ) {
-            PKB::getInstance() ->entity.variables.add(variable);
-        }
-        for(Constant constant: constants) {
-            PKB::getInstance() ->entity.constants.add(constant);
-        }
-        PKB::getInstance()->statement.statements.addStatement(value);
-        PKB::getInstance()->statement.assignStatements.addStatement(value);
-    } else if(auto value = dynamic_cast<CondExprNode*>(node)) {
-        vector<VarName> variables = value->getAllVariables();
-        vector<Constant> constants = value->getAllConstants();
-        for(VarName variable: variables ) {
-            PKB::getInstance() ->entity.variables.add(variable);
-        }
-        for(Constant constant: constants) {
-            PKB::getInstance() ->entity.constants.add(constant);
-        }
-    } else if(auto value = dynamic_cast<ReadNode*>(node)) {
-        PKB::getInstance()->statement.statements.addStatement(value);
-        PKB::getInstance()->statement.readStatements.addStatement(value);
-        PKB::getInstance()->entity.variables.add(value->getVarName());
-    } else if(auto value = dynamic_cast<PrintNode*>(node)) {
-        PKB::getInstance()->statement.statements.addStatement(value);
-        PKB::getInstance()->statement.printStatements.addStatement(value);
-        PKB::getInstance()->entity.variables.add(value->getVarName());
-    } else if(auto value = dynamic_cast<CallNode*>(node)) {
-        PKB::getInstance()->statement.statements.addStatement(value);
-        PKB::getInstance()->statement.callStatements.addStatement(value);
-        PKB::getInstance()->entity.procedures.add(value->getProcName());//Not sure if needed
-    }
-}
-
-vector<ProcName> getAllProcedureCall(Node* node) {
-    if(auto value = dynamic_cast<CallNode*>(node)) {
-        ProcName procName = value->getProcName();
-        return vector<ProcName>{procName};
-    } else if (auto value = dynamic_cast<IfNode*>(node)) {
-        vector<Node*> stmtLstNode = value->getStmtLst();
-        vector<ProcName> procNameList, e;
-        for(Node* s: stmtLstNode) {
-            e = getAllProcedureCall(s);
-            procNameList.insert(procNameList.end(), e.begin(), e.end());
-        }
-        return procNameList;
-    } else if (auto value = dynamic_cast<WhileNode*>(node)) {
-        vector<Node*> stmtLstNode = value->getStmtLst();
-        vector<ProcName> procNameList, e;
-        for(Node* s: stmtLstNode) {
-            e = getAllProcedureCall(s);
-            procNameList.insert(procNameList.end(), e.begin(), e.end());
-        }
-        return procNameList;
-    } else if (auto value = dynamic_cast<ProcedureNode*>(node)) {
-        vector<Node*> stmtLstNode = value->getStmtLst();
-        vector<ProcName> procNameList, e;
-        for(Node* s: stmtLstNode) {
-            e = getAllProcedureCall(s);
-            procNameList.insert(procNameList.end(), e.begin(), e.end());
-        }
-        return procNameList;
-    }  else {
-        return {};
-    };
-}
-
-bool detectCyclicCallsRec(ProcName name,
-                          unordered_map<ProcName, GraphNode*> graphNodes,
-                          unordered_map<ProcName, bool> visited,
-                          unordered_map<ProcName, bool> stack) {
-    if(visited[name] == false) {
-        visited[name] = true;
-        stack[name] = true;
-        GraphNode* currentNode = graphNodes[name];
-        vector<ProcName> nameList = currentNode->getDirectedNodes();
-        vector<ProcName>::iterator i;
-        for(i = nameList.begin(); i != nameList.end(); ++i) {
-            if(!visited[*i] &&
-                    detectCyclicCallsRec(*i, graphNodes, stack, visited))
-                return true;
-            else if (stack[*i] == true) return true;
-        }
-    }
-    stack[name] = false;
-    return false;
-}
-void detectCyclicCalls(Node* node) {
-    auto programNode = dynamic_cast<ProgramNode *>(node);
-    vector<ProcedureNode *> v = programNode->getProcLst();
-
-    unordered_map<ProcName, GraphNode *> graphNodes;
-    vector < ProcName > allProcName;
-    unordered_map<ProcName, bool> visited;
-    unordered_map<ProcName, bool> stack;
-
+void RelationshipExtractor::extractCFG (Node * node) {
+    auto value = dynamic_cast<ProgramNode *>(node);
+    vector<ProcedureNode *> v = value->getProcLst();
     for (ProcedureNode *p: v) {
-        ProcName name = p->getProcName();
-        vector < ProcName > NodesFromP = getAllProcedureCall(p);
-        GraphNode *node = new GraphNode(name, NodesFromP);
-        graphNodes[name] = node;
-        allProcName.push_back(name);
-        visited[name], stack[name] = false;
-    }
-    // perform DFS to check for recursions
-    for (int i = 0; i < allProcName.size(); i++) {
-        ProcName name = allProcName[i];
-        if (!visited[name] && detectCyclicCallsRec(name, graphNodes, visited, stack)) {
-            cout << "cyclic call statements detected\n";
-            graphNodes.clear();
-            throw "cyclic calls detected\n";
-        }
-    }
-    graphNodes.clear();
-}
-
-void detectDuplicateProcedure(Node * node) {
-    if(auto value = dynamic_cast<ProgramNode*>(node)) {
-        unordered_set<ProcName> procNames;
-        ProcedureList procLst = value->getProcLst();
-        for(ProcedureNode* p: procLst) {
-            if(procNames.find(p->getProcName()) != procNames.end()) {
-                throw "Cannot have duplicate Procedure names";
-            }
-            procNames.insert(p->getProcName());
+        vector<NodeCFG*> allCFGNodes = CFGConstructor::createCFG(p);
+        for(NodeCFG* n : allCFGNodes){
+            PKB::getInstance()->relationship.next.addCFGNode(n);
         }
     }
 }
-
 void RelationshipExtractor::extractRelationships(Node * node){
-    // check for semantics error
-    detectDuplicateProcedure(node);
-    detectCyclicCalls(node);
-
-    //extract variables and constants etc
-    extractAllEntities(node);
-
-    //extract relationship
     vector<StmtLstNode*> v;
     extractFollows(node);
     extractParent(node,v);
     extractUses(node);
     extractModifies(node);
+    extractCFG(node);
 }
 

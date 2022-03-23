@@ -15,6 +15,8 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<A
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<SuchThatClause> suchThatClauses);
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<PatternClause> patternClauses);
 ResultSet generateResultSet (list<string> result);
-ResultSet evaluateAndCreateResultSet(QueryEvaluator qe, Query *query);
+ResultSet evaluateAndCreateResultSet(QueryEvaluator *qe, Query *query);
 PKB* generateSamplePKB();
 PKB* generateSamplePKBForPatternMatching();
+vector<unordered_map<int, NodeCFG*>> constructCFGForTesting();
+vector<unordered_map<int, NodeCFG*>> constructCFGForSamplePKB();

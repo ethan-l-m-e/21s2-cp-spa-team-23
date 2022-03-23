@@ -14,6 +14,8 @@
 #include "QP_Evaluator/ClauseEvaluators/UsesSClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/ModifiesPClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/UsesPClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/NextClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/NextTClauseEvaluator.h"
 
 std::list<std::string> QueryEvaluator::evaluate(Query* query) {
 
@@ -26,12 +28,8 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
-            // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!patternResult) {
-                resultTable->clearTable();
-                resultTable->setBooleanResult(false);
-                break;
-            }
+            // if the clause evaluates to false, terminate evaluation early.
+            if (!patternResult) break;
         }
     }
 
@@ -42,15 +40,11 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!suchThatResult) {
-                resultTable->clearTable();
-                resultTable->setBooleanResult(false);
-                break;
-            }
+            if (!suchThatResult) break;
         }
     }
 
-    // Evaluate select clause and output the result
+    // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(pkb, query);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
@@ -84,14 +78,18 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
             return new UsesPClauseEvaluator(clause.argList, pkb, query);
         case RelRef::MODIFIES_P:
             return new ModifiesPClauseEvaluator(clause.argList, pkb, query);
-        default:
+        case RelRef::NEXT:
+            return new NextClauseEvaluator(clause.argList, pkb, query);
+        case RelRef::NEXT_T:
+            return new NextTClauseEvaluator(clause.argList, pkb, query);
+       default:
             throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
 }
 
 /**
- * Generate result list from a result object.
- * @param result  an Result object from a select clause evaluator
+ * Generate result list from a result table.
+ * @param result  an ResultTable containing the final result
  * @return  a list of strings representing the result items
  */
 std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {

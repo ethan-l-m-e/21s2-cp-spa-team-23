@@ -8,17 +8,23 @@
 #import "OneToOneRelationship.h"
 #import "TNode/CFG/NodeCFG.h"
 
-class NextRelationship : public OneToOneRelationship<int, NodeCFG *> {
+class NextRelationship : OneToOneRelationship<int, NodeCFG *> {
 public:
-    bool isNext(int previous, int next);
 
-    unordered_map<int, NodeCFG *> getPreviousNodeOf(int next);
+    void addCFGNode(NodeCFG *node);
 
-    NodeCFG* getNextNodeOf(int previous);
+
+    void clear();
+
+    bool isRelationship(string previousStatementNumber, string nextStatementNumber);
+
+    unordered_set<string> getLHS(string nextStatementNumber);
+
+    unordered_set<string> getRHS(string previousStatementNumber);
 
     // Functions below are used to calculate Next*
 
-    NodeCFG* getCFGNode(int statementNumber);
+    NodeCFG* getCFGNode(string statementNumber);
 
     int getCFGSize();
 

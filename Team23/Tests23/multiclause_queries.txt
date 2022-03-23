@@ -1,0 +1,750 @@
+../../../../Tests23/multiclause_source.txt ../../../../Tests23/multiclause_queries.txt ../../../tests/multiclause_out.xml
+stmt s;
+Select s such that Uses(s, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+2 - (2 such that)
+stmt s;
+Select s such that Uses(s, _) and Modifies(s, _)
+3, 4, 5, 6, 7, 8, 9, 12
+5000
+3 - (2 such that)
+stmt s;
+Select s such that Uses(s, _) and Follows(_, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+4 - (2 such that)
+stmt s;
+Select s such that Uses(s, _) and Follows*(_, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+5 - (2 such that)
+stmt s;
+Select s such that Uses(s, _) and Parent(_, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+6 - (2 such that)
+stmt s;
+Select s such that Uses(s, _) and Parent*(_, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+9 - (2 such that)
+stmt s;
+Select s such that Uses(s, _) and Next(_, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+10 - (2 such that)
+stmt s;
+Select s such that Uses(s, _) and Next*(_, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+14 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Uses(s, _)
+3, 4, 5, 6, 7, 8, 9, 12
+5000
+15 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+16 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Follows(_, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+17 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Follows*(_, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+18 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Parent(_, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+19 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Parent*(_, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+22 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Next(_, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+23 - (2 such that)
+stmt s;
+Select s such that Modifies(s, _) and Next*(_, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+26 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+26 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+27 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Follows(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+28 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Follows*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+29 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Parent(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+30 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Parent*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+33 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+34 - (2 such that)
+stmt s;
+Select s such that Follows(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+37 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+38 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+39 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Follows(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+40 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Follows*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+41 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Parent(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+42 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Parent*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+45 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+46 - (2 such that)
+stmt s;
+Select s such that Follows*(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+49 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+50 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+51 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Follows(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+52 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Follows*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+53 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Parent(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+54 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Parent*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+57 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+58 - (2 such that)
+stmt s;
+Select s such that Parent(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+61 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+62 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+63 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Follows(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+64 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Follows*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+65 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Parent(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+66 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Parent*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+69 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+70 - (2 such that)
+stmt s;
+Select s such that Parent*(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+97 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+98 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+99 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Follows(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+100 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Follows*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+101 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Parent(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+102 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Parent*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+105 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+106 - (2 such that)
+stmt s;
+Select s such that Next(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+109 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+110 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+111 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Follows(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+112 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Follows*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+113 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Parent(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+114 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Parent*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+117 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+118 - (2 such that)
+stmt s;
+Select s such that Next*(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+145 - (2 such that) ==================================================================================[Unnumbered tests]
+stmt s;
+Select s such that Uses(s, "a") and Modifies(s, "a")
+3, 4, 5, 6, 7, 8, 9, 12
+5000
+147 - (2 such that)
+procedure p;
+Select p such that Uses(p, "a") and Modifies(p, "a")
+MultiClause, MultiClause1, MultiClause2
+5000
+148 - (2 such that)
+stmt s;
+Select s such that Uses(s, "a") and Follows(s, _)
+1, 3, 8
+5000
+149 - (2 such that)
+stmt s;
+Select s such that Uses(s, "a") and Follows*(s, 3)
+1
+5000
+150 - (2 such that)
+stmt s, s1;
+Select s such that Uses(s1, "a") and Parent(s, s1)
+4, 5, 6, 9
+5000
+151 - (2 such that)
+stmt s, s1;
+Select s such that Uses(s1, "a") and Parent*(s, s1)
+4, 5, 6, 9
+5000
+154 - (2 such that)
+if ifs; call c;
+Select ifs such that Uses(ifs, "a") and Next(c, ifs)
+9
+5000
+155 - (2 such that)
+stmt s;
+Select s such that Uses(s, "a") and Next*(s, s)
+4, 5, 6, 7
+5000
+156 - (2 such that)
+stmt s;
+Select s such that Modifies(s, "a") and Uses(s, "a")
+3, 4, 5, 6, 7, 8, 9, 12
+5000
+157 - (2 such that)
+stmt s;
+Select s such that Modifies(s, "a") and Modifies(s, "a")
+2, 3, 4, 5, 6, 7, 8, 9, 11, 12
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Modifies(s, "a") and Follows(s, _)
+2, 3, 8
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Modifies(s, "a") and Follows*(pr, s)
+2, 3, 4
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Modifies(s, "a") and Follows*(pr, s)
+2, 3, 4
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Modifies(s, "a") and Parent(s, _)
+4, 5, 6, 9
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Modifies(s, "a") and Parent*(4, s)
+5, 6, 7
+5000
+158 - (2 such that)
+while w;
+Select w such that Modifies(w, "a") and Next(4, w)
+5
+5000
+158 - (2 such that)
+while w;
+Select w such that Modifies(w, "a") and Next*(4, w)
+4, 5, 6
+5000
+158 - (2 such that)
+stmt s; assign a;
+Select s such that Follows(s, _) and Uses(s, _)
+1, 3, 8
+5000
+158 - (2 such that)
+stmt s; assign a;
+Select s such that Follows(s, _) and Modifies(s, _)
+2, 3, 8
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows(s, _) and Follows(_, s)
+2, 3
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows(s, _) and Follows*(s, _)
+1, 2, 3, 8
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows(_, s) and Parent(s, _)
+4, 9
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows(_, s) and Parent*(s, _)
+4, 9
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows(_, s) and Next(s, _)
+2, 3, 4, 9
+5000
+158 - (2 such that)
+stmt s; assign a;
+Select s such that Follows(_, s) and Next*(s, a)
+2, 3, 4
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Follows*(pr, s) and Uses(s, _)
+3, 4
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Follows*(pr, s) and Modifies(s, _)
+2, 3, 4
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows*(1, 4) and Follows(s, _)
+1, 2, 3, 8
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows*(1, 4) and Follows*(1, s)
+2, 3, 4
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows*(s, _) and Parent(_, s)
+none
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Follows*(s, _) and Parent*(4, 7)
+1, 2, 3, 8
+5000
+158 - (2 such that)
+stmt s; call c;
+Select s such that Follows*(s, c) and Next(s, c)
+2
+5000
+158 - (2 such that)
+stmt s; call c;
+Select s such that Follows*(s, c) and Next*(s, c)
+1, 2
+5000
+158 - (2 such that)
+stmt s; call c;
+Select s such that Parent(s, _) and Uses(s, _)
+4, 5, 6, 9
+5000
+158 - (2 such that)
+stmt s; call c;
+Select s such that Parent(s, _) and Modifies(s, _)
+4, 5, 6, 9
+5000
+158 - (2 such that)
+stmt s; call c;
+Select s such that Parent(s, _) and Follows(s, _)
+none
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Parent(s, _) and Follows*(pr, s)
+4
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Parent(s, _) and Parent(_, s)
+5, 6
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Parent(s, _) and Parent*(3, 4)
+none
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Parent(s, _) and Next(3, 4)
+4, 5, 6, 9
+5000
+158 - (2 such that)
+stmt s; print pr;
+Select s such that Parent(s, _) and Next*(3, 12)
+none
+5000
+158 - (2 such that)
+stmt s; assign a;
+Select s such that Parent*(s, a) and Uses(a, "a")
+4, 5, 6
+5000
+158 - (2 such that)
+stmt s; assign a;
+Select s such that Parent*(s, a) and Modifies(a, "a")
+4, 5, 6
+5000
+158 - (2 such that)
+stmt s; assign a; call cl;
+Select s such that Parent*(s, a) and Follows(cl, s)
+4
+5000
+158 - (2 such that)
+stmt s; assign a; read r;
+Select s such that Parent*(s, a) and Follows*(r, s)
+4
+5000
+158 - (2 such that)
+stmt s; assign a;
+Select s such that Parent*(s, a) and Parent(s, a)
+6
+5000
+158 - (2 such that)
+stmt s; read r; print pr;
+Select s such that Parent*(s, r) and Parent*(s, pr)
+9
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Parent*(_, s) and Next(s, _)
+5, 6, 7
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Parent*(_, s) and Next*(s, s)
+5, 6, 7
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(s, _) and Uses(s, _)
+1, 3, 4, 5, 6, 7, 8, 9
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(s, _) and Modifies(s, _)
+2, 3, 4, 5, 6, 7, 8, 9
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(s, _) and Follows(s, _)
+1, 2, 3, 8
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(_, s) and Follows*(s, _)
+2, 3
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(_, s) and Parent(s, _)
+4, 5, 6, 9
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(s, _) and Parent*(s, _)
+4, 5, 6, 9
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(s, _) and Next(1, s)
+2
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next(s, _) and Next*(1, s)
+2, 3, 4, 5, 6, 7
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 3) and Uses(s, _)
+1
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 3) and Modifies(s, _)
+2
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 5) and Follows(s, _)
+1, 2, 3
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 5) and Follows*(s, 3)
+1, 2
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 5) and Parent(s, 6)
+5
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 5) and Parent*(s, _)
+4, 5, 6
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 5) and Next(s, 5)
+4, 6
+5000
+158 - (2 such that)
+stmt s;
+Select s such that Next*(s, 5) and Next*(s, 4)
+1, 2, 3, 4, 5, 6, 7
+5000
+156 - (3 such that)
+stmt s;
+Select s such that Uses(s, _) and Follows(_, _) and Parent(_, _)
+1, 3, 4, 5, 6, 7, 8, 9, 10, 12
+5000
+157 - (3 such that)1
+stmt s; while w;
+Select s such that Uses(s, "a") and Next*(4, s) and Parent(s, w)
+4, 5
+5000
+158 - (3 such that)2
+stmt s; while w;
+Select s such that Uses(s, "a") and Parent(s, w) and Next*(4, s)
+4, 5
+5000
+159 - (3 such that)3
+stmt s; while w;
+Select s such that Next*(4, s) and Parent(s, w) and Uses(s, "a")
+4, 5
+5000
+160 - (3 such that)4
+stmt s; while w;
+Select s such that Parent(s, w) and Uses(s, "cond") and Next*(4, s)
+4, 5
+5000
+162 - (4 such that)
+stmt s, s1;
+Select s1 such that Parent(s, s1) and Modifies(s1, "a") and Uses(s1, "a") and Next*(s1, s1)
+5, 6, 7
+5000
+163 - (10 such that)
+stmt s;
+Select s such that Uses(s, _) and Modifies(s, _) and Follows(_, _) and Follows*(_, _) and Parent(_, _) and Parent*(_, _) and Next(_, _) and Next*(_, _)
+3, 4, 5, 6, 7, 8, 9, 12
+5000
+164 - (10 such that - alternating and)
+stmt s;
+Select s such that Uses(s, _) and Modifies(s, _) such that Follows(_, _) and Follows*(_, _) such that Parent(_, _) and Parent*(_, _) such that Next(_, _) and Next*(_, _)
+3, 4, 5, 6, 7, 8, 9, 12
+5000
+163 - (10 such that)
+stmt s, s1; read r;
+Select s such that Uses(s, _) and Modifies(s, _) and Follows(s, _) and Follows*(s, _) and Parent(s1, _) and Parent*(5, 7) and Next(s, s1) and Next*(s, r)
+8
+5000
+163 - (10 such that)
+stmt s, s1; read r;
+Select s such that Next*(s, r) and Uses(s, _) and Parent*(5, 7) and Modifies(s, _) and Follows(s, _) and Parent(s1, _) and Next(s, s1) and Follows*(s, _)
+8
+5000
+165 - (2 such that)
+call cl; stmt s, s1;
+Select cl such that Follows(cl, s1) and Follows(s, cl)
+3
+5000
+166 - (2 pattern)
+assign a;
+Select a pattern a ("a", _) pattern a (_, _"a"_)
+7, 12
+5000
+167 - (3 pattern)
+assign a; variable v;
+Select a pattern a ("a", _) pattern a (_, _"a"_) pattern a (v, "a")
+7, 12
+5000
+168 - (2 pattern 1 such that)1
+assign a;
+Select a pattern a ("a", _) such that Next(a, _) pattern a (_, _"a"_)
+7
+5000
+168 - (2 pattern 1 such that)2
+assign a;
+Select a such that Next(a, _) pattern a ("a", _) pattern a (_, _"a"_)
+7
+5000
+169 - (2 pattern 1 such that)3
+assign a;
+Select a pattern a ("a", _) pattern a (_, _"a"_) such that Next(a, _)
+7
+5000
+169 - (5 alternating pattern and such that)
+assign a;
+Select a pattern a ("a", _) such that Next(a, _) pattern a ("a", _) such that Next(a, _) pattern a ("a", _)
+7
+5000
+169 - (5 alternating pattern and such that)
+assign a; stmt s; variable v;
+Select s such that Uses(s, v) pattern a (v, "a") pattern a ("a", _) such that Follows(s, _) pattern a (v, _"a"_) such that Modifies(s, _)
+3, 8
+5000
+190 - (syntactically invalid) ======================================================================[invalid tests start]
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "x") and such that Next* (1, a)
+none
+5000
+191 (syntactically invalid)
+assign a; while w;
+Select a such that Parent* (w, a) and pattern a ("x", _) such that Next* (1, a)
+none
+5000
+192 (syntactically invalid)
+assign a; while w;
+Select a such that Parent* (w, a) pattern a ("x", _) and Next* (1, a)
+none
+5000

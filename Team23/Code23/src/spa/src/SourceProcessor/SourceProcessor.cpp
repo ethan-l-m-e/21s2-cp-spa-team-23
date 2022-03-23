@@ -11,7 +11,7 @@
 
 #include "SourceProcessor.h"
 #include "Parser.h"
-#include "RelationshipExtractor.h"
+#include "DesignExtractor.h"
 
 void SourceProcessor::run(string filename) {
     // load file
@@ -25,5 +25,5 @@ void SourceProcessor::run(string filename) {
     file.close();
 
     Node* programNode = Parser::Parse(sourceCode);
-    RelationshipExtractor::extractRelationships(programNode);
+    DesignExtractor::Extract(programNode);
 }
