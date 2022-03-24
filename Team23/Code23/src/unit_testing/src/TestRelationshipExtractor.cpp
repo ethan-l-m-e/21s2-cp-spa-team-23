@@ -29,6 +29,8 @@ auto fNode= AssignNode(7,&v3,&v2);
 ProcNameNode p = ProcNameNode("test");
 ProcNameNode p1 = ProcNameNode("name1");
 ProcNameNode p2 = ProcNameNode("name2");
+ProcNameNode p3 = ProcNameNode("name3");
+ProcNameNode p4 = ProcNameNode("name4");
 
 TEST_CASE("test follows - basic") {
     StatementList defaultStmtLst;
@@ -420,4 +422,54 @@ TEST_CASE("test next - 2 procedures") {
     REQUIRE(PKB::getInstance()->relationship.next.isRelationship("3","1")==false);
     REQUIRE(PKB::getInstance()->relationship.next.isRelationship("1","2")==false);
     REQUIRE(PKB::getInstance()->relationship.next.isRelationship("2","1")==false);
+}
+
+TEST_CASE("test calls - basic") {
+    ProcedureList procLst;
+    StatementList s1, s2;
+    auto callNode = CallNode(2, &p1);
+    s1.push_back(&aNode);
+    s2.push_back(&callNode);
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    ProcedureNode proc2 = ProcedureNode(&p2, s2);
+    procLst.push_back(&proc1);
+    procLst.push_back(&proc2);
+    ProgramNode prog = ProgramNode(procLst);
+    RelationshipExtractor::extractCalls(prog);
+    REQUIRE(PKB::getInstance()->relationship.usesS.isRelationship("2","y"));
+}
+
+TEST_CASE("test calls - basic") {
+    ProcedureList procLst;
+    StatementList s1, s2;
+    auto callNode = CallNode(2, &p1);
+    s1.push_back(&aNode);
+    s2.push_back(&callNode);
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    ProcedureNode proc2 = ProcedureNode(&p2, s2);
+    procLst.push_back(&proc1);
+    procLst.push_back(&proc2);
+    ProgramNode prog = ProgramNode(procLst);
+    RelationshipExtractor::extractCalls(prog);
+    REQUIRE(PKB::getInstance()->relationship.usesS.isRelationship("2","y"));
+}
+TEST_CASE("test calls - multiple procedures") {
+    ProcedureList procLst;
+    StatementList s1, s2, s3, s4;
+    auto callNode1 = CallNode(2, &p2);
+    auto callNode2 = CallNode(3, &p3);
+    auto callNode3 = CallNode(4, &p4);
+    s4.push_back(&aNode);
+    s1.push_back(&callNode1);
+    s2.push_back(&callNode2);
+    s3.push_back(&callNode3);
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    ProcedureNode proc2 = ProcedureNode(&p2, s2);
+    ProcedureNode proc3 = ProcedureNode(&p3, s3);
+    ProcedureNode proc4 = ProcedureNode(&p4, s4);
+    procLst.push_back(&proc1);
+    procLst.push_back(&proc2);
+    ProgramNode prog = ProgramNode(procLst);
+    RelationshipExtractor::extractCalls(prog);
+    REQUIRE(PKB::getInstance()->relationship.usesS.isRelationship("2","y"));
 }

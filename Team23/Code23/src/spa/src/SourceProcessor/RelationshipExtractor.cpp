@@ -223,11 +223,15 @@ void RelationshipExtractor::extractCalls(Node* node, vector<ProcedureNode *> pro
             extractCalls(p, currProcList, p);
         }
     }else if (auto value = dynamic_cast<CallNode*>(node)){
-//        PKB::getInstance()->setCalls(latestProc, value->getProcName());
+        if(latestProc != nullptr){
+//        PKB::getInstance()->relationship.calls
+        }
         for (ProcedureNode *p: procList) {
+            1==1;
 //        PKB::getInstance()->setCallsT(p, value->getProcName());
         }
-        extractCalls(value->getProcedure(), procList, dynamic_cast<ProcedureNode *>(value->getProcedure()));
+        procList.push_back(dynamic_cast<ProcedureNode*>(value->getProcedure()));
+        extractCalls(value->getProcedure(), procList, nullptr);
     }else if(node->hasStmtLst()) {
         for (Node *p: node->getStmtLst()) {
             extractCalls(p, procList, latestProc);
