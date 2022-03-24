@@ -46,7 +46,9 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
             }
         }
         //last node in while loop to point towards initial LoopCFG
-        nextSetOfNodes.at(0)->setNextNode(newCFGNode);
+        for(NodeCFG* n : nextSetOfNodes) {
+            n->setNextNode(newCFGNode);
+        }
         for(NodeCFG* n : newSetOfNodes) {
             setOfAllNodes->push_back(n);
         }

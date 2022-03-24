@@ -104,34 +104,44 @@ TEST_CASE("test - basic if") {
 
 }
 
-//TEST_CASE("test - nested while") {
-//    ProcNameNode p1 = ProcNameNode("test");
-//    StatementList defaultStmtLst;
-//    StatementList defaultStmtLst2;
-//
-//    defaultStmtLst.push_back(&aNode1);
-//    defaultStmtLst.push_back(&bNode1);
-//    defaultStmtLst.push_back(&cNode1);
-//    defaultStmtLst2.push_back(&dNode1);
-//    defaultStmtLst2.push_back(&eNode1);
-//
-//    auto wNode = WhileNode(4, condPtr1, defaultStmtLst2);
-//    defaultStmtLst.push_back(&wNode);
-//
-//    ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
-//
-//    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(pNode1);
-//    cout<<"control3";
-//    CHECK(firstSetOfNodes.at(0)->getStatementNumber() == 1);
-//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getStatementNumber() == 2);
-//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getStatementNumber() == 3);
-//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->getStatementNumber()==4);
-//    CHECK(firstSetOfNodes.at(0)->isStart());
-//    //check how isEnd() should work with while loop
-//    CHECK(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()->isEnd());
-//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode()));
-//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getStatementNumber() == 5);
-//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getStatementNumber() == 6);
-//    CHECK(dynamic_cast<LoopCFG*>(firstSetOfNodes.at(0)->getNextNode()->getNextNode()->getNextNode())->getNodeInLoop()->getNextNode()->getNextNode()->getStatementNumber() == 4);
-//
-//}
+TEST_CASE("test - nested while/if-then") {
+    ProcNameNode p1 = ProcNameNode("test");
+    StatementList defaultStmtLst;
+    StatementList defaultStmtLst1;
+    StatementList defaultStmtLst2;
+    StatementList defaultStmtLst3;
+
+    defaultStmtLst1.push_back(&aNode1);
+    defaultStmtLst2.push_back(&bNode1);
+    defaultStmtLst2.push_back(&cNode1);
+    defaultStmtLst3.push_back(&dNode1);
+    defaultStmtLst3.push_back(&eNode1);
+
+    IfNode iNode = IfNode(4, condPtr1, defaultStmtLst3, defaultStmtLst2);
+    defaultStmtLst1.push_back(&iNode);
+
+    auto wNode = WhileNode(0, condPtr1, defaultStmtLst1);
+    defaultStmtLst.push_back(&wNode);
+
+    ProcedureNode pNode1 = ProcedureNode(&p1, defaultStmtLst);
+
+    vector<NodeCFG*> firstSetOfNodes = CFGConstructor::createCFG(&pNode1);
+    NodeCFG* firstNode = firstSetOfNodes.at(6);
+    CHECK(firstNode->getStatementNumber()==0);
+    CHECK(dynamic_cast<LoopCFG*>(firstNode));
+    CHECK(firstNode->getStatementNumber() == 0);
+    CHECK(firstNode->getNextNode()->getStatementNumber() == 1);
+    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode()));
+    CHECK(firstNode->getNextNode()->getNextNode()->getStatementNumber() == 4);
+
+    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getStatementNumber() ==2);
+    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getNextNode()->getStatementNumber() ==3);
+    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getNextNode()->getNextNode()->getStatementNumber() == 0);
+    CHECK(dynamic_cast<LoopCFG*>(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getNextNode()->getNextNode())->getStatementNumber() == 0);
+
+    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getStatementNumber() ==5);
+    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getNextNode()->getStatementNumber() ==6);
+    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getNextNode()->getNextNode()->getStatementNumber() == 0);
+    CHECK(dynamic_cast<LoopCFG*>(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getNextNode()->getNextNode())->getStatementNumber() == 0);
+
+}

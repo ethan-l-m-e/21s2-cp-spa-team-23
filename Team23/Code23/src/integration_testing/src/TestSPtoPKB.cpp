@@ -12,7 +12,7 @@ void require(bool b) {
 }
 
 TEST_CASE("Integration testing - statement type check from parser to pkb") {
-    std::string filename = "integration_source.txt";
+    std::string filename = "../../../src/integration_testing/src/integration_source.txt";
     SourceProcessor::run(filename);
 
     CHECK(PKB::getInstance()->statement.assignStatements.isStatementNumber("1"));
@@ -47,7 +47,7 @@ TEST_CASE("Integration testing - follows relationship type check from parser to 
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
-    SourceProcessor::run("integration_source.txt");
+    SourceProcessor::run("../../../src/integration_testing/src/integration_source.txt");
 
     CHECK(PKB::getInstance()->relationship.follows.isRelationship("1", "2"));
     CHECK(PKB::getInstance()->relationship.follows.isRelationship("2", "3") == false);
@@ -62,7 +62,7 @@ TEST_CASE("Integration testing - parent relationship type check from parser to p
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
-    SourceProcessor::run("integration_source.txt");
+    SourceProcessor::run("../../../src/integration_testing/src/integration_source.txt");
 
     CHECK(PKB::getInstance()->relationship.parent.isRelationship("3", "4") == false);
     CHECK(PKB::getInstance()->relationship.parent.isRelationship("2", "3"));
@@ -76,7 +76,7 @@ TEST_CASE("Integration testing - modifies relationship type check from parser to
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
-    SourceProcessor::run("integration_source.txt");
+    SourceProcessor::run("../../../src/integration_testing/src/integration_source.txt");
 
     CHECK(PKB::getInstance()->relationship.modifiesS.isRelationship("1", "entryPoint"));
     CHECK(PKB::getInstance()->relationship.modifiesS.isRelationship("2", "A") == false);
@@ -94,7 +94,7 @@ TEST_CASE("Integration testing - uses relationship type check from parser to pkb
 
 //    auto programNode = dynamic_cast<ProgramNode *>(Parser::Parse(sourceCode));
 //    RelationshipExtractor::extractRelationships(programNode);
-    SourceProcessor::run("integration_source.txt");
+    SourceProcessor::run("../../../src/integration_testing/src/integration_source.txt");
 
     CHECK(PKB::getInstance()->relationship.usesS.isRelationship("1","entryPoint") == false);
     CHECK(PKB::getInstance()->relationship.usesS.isRelationship("2","A"));
@@ -120,11 +120,45 @@ TEST_CASE("Integration testing - uses relationship type check from parser to pkb
 }
 
 TEST_CASE("Integration testing - additional procedure") {
-    SourceProcessor::run("integration_source.txt");
+    SourceProcessor::run("../../../src/integration_testing/src/integration_source.txt");
 
     CHECK(PKB::getInstance()->statement.assignStatements.isStatementNumber("24"));
     unordered_set<string> allProcedures = PKB::getInstance()->entity.procedures.getAll();
     CHECK(allProcedures.count("genericProcedure") == 1);
     CHECK(allProcedures.count("NestedWithOtherConditions") == 1);
+
+}
+TEST_CASE("nested branch"){
+    SourceProcessor::run("../../../src/integration_testing/src/integration_source_for_CFG.txt");
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("1","2"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("2","3"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("3","4")==false);
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("4","5"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("5","6"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("6","7")==false);
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("7","8"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("8","9")==false);
+}
+
+TEST_CASE("while nested if-then"){
+    SourceProcessor::run("../../../src/integration_testing/src/integration_source_for_CFG.txt");
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("10","11"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("11","12"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("12","13"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("13","14"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("14","15")==false);
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("15","16"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("17","16"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("16","15"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("15","18"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("16","18")==false);
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("18","19"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("19","20"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("21","22"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("22","23")==false);
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("22","19"));
+    CHECK(PKB::getInstance()->relationship.next.isRelationship("23","19"));
+
+
 
 }
