@@ -32,7 +32,7 @@ namespace qp {
         void validateQueryStructure(std::string);
         void checkForSemantics(QueryToken& queryToken);
     private:
-        // Main validate functions
+        // Main validation functions
         void validateSelectClauseTokens(std::set<std::string>, std::vector<std::string>, std::map<std::string, std::string>);
         void validateDeclarations(std::set<std::string>, int, std::vector<std::string>);
         void validateSuchThatClauses(std::map<std::string, std::string>, std::vector<SuchThatClauseToken>);

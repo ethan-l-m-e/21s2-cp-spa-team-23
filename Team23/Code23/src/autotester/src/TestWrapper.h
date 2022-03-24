@@ -17,10 +17,11 @@ private:
     PKB* pkb;
     qp::QueryParser* preProcessor;
     QueryEvaluator* queryEvaluator;
- public:
+
+public:
   // default constructor
   TestWrapper();
-  
+
   // destructor
   ~TestWrapper();
   

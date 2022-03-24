@@ -9,11 +9,11 @@ bool ModifiesPClauseEvaluator::isRelation(std::string left, std::string right) {
 }
 
 unordered_set<std::string> ModifiesPClauseEvaluator::getLeftSynonymValue(std::string right) {
-    return pkb->relationship.modifiesP.getSetLHS(right);
+    return pkb->relationship.modifiesP.getLHS(right);
 }
 
 unordered_set<std::string> ModifiesPClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->relationship.modifiesP.getSetRHS(left);
+    return pkb->relationship.modifiesP.getRHS(left);
 }
 
 pair<DesignEntity, DesignEntity> ModifiesPClauseEvaluator::getWildcardType () {

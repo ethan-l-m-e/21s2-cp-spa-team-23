@@ -18,7 +18,7 @@ using String2DVector = std::vector<std::vector<std::string>>;
 class ResultTable {
 public:
     ResultTable();
-    ResultTable(std::vector<std::string>, String2DVector);
+    void setResultTable(std::vector<std::string>, String2DVector);
     void clearTable();
     void enableBooleanResult();
     bool isBoolean();

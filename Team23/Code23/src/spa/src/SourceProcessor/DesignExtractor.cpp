@@ -1,13 +1,15 @@
-#include<stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
+#include "DesignExtractor.h"
+#include "SemanticsVerifier.h"
+#include "EntityExtractor.h"
+#include "RelationshipExtractor.h"
 
-using namespace std;
+void DesignExtractor::Extract(Node* programNode){
+    // check for semantics error
+    SemanticsVerifier::detectDuplicateProcedure(programNode);
+    SemanticsVerifier::detectCyclicCalls(programNode);
+    //extract variables and constants etc
+    EntityExtractor::extractAllEntities(programNode);
+    //extract relationships
+    RelationshipExtractor::extractRelationships(programNode);
 
-
-#include "PKB/PKB.h"
-
-int DesignExtractor () {
-	return 0;
 }

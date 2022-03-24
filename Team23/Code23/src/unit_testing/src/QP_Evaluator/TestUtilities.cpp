@@ -40,9 +40,9 @@ ResultSet generateResultSet (list<string> result) {
     return {std::begin(result), std::end(result)};
 }
 
-ResultSet evaluateAndCreateResultSet(QueryEvaluator qe, Query *query) {
-    list<string> resultList = qe.evaluate(query);
-    return ResultSet (std::begin(resultList), std::end(resultList));
+ResultSet evaluateAndCreateResultSet(QueryEvaluator *qe, Query *query) {
+    list<string> resultList = qe->evaluate(query);
+    return {std::begin(resultList), std::end(resultList)};
 }
 
 PKB* generateSamplePKB() {
@@ -65,7 +65,7 @@ PKB* generateSamplePKB() {
  */
 
     string s1 = "read x;";
-    string s2 = "y = x + y + 3;";
+    string s2 = "y = x + y + 3 + a + b;";
     string s3 = "z = 3 * y;";
     string s4 = "print z;";
     string s5 = "while (z > 5) {";
@@ -127,6 +127,8 @@ PKB* generateSamplePKB() {
     testPKB->entity.variables.add("x");
     testPKB->entity.variables.add("y");
     testPKB->entity.variables.add("z");
+    testPKB->entity.variables.add("a");
+    testPKB->entity.variables.add("b");
     testPKB->entity.constants.add("1");
     testPKB->entity.constants.add("3");
     testPKB->entity.constants.add("5");
@@ -185,7 +187,7 @@ PKB* generateSamplePKB() {
     testPKB->relationship.modifiesP.setRelationship("prop", unordered_set<string>{"x", "y", "z"});
     testPKB->relationship.modifiesP.setRelationship("pr", unordered_set<string>{"x"});
 
-    testPKB->relationship.usesS.setRelationship(2, unordered_set<string>{"x", "y"});
+    testPKB->relationship.usesS.setRelationship(2, unordered_set<string>{"x", "y", "a", "b"});
     testPKB->relationship.usesS.setRelationship(3, unordered_set<string>{"y"});
     testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"z"});
     testPKB->relationship.usesS.setRelationship(5, unordered_set<string>{"x", "y", "z"});
@@ -195,8 +197,17 @@ PKB* generateSamplePKB() {
     testPKB->relationship.usesS.setRelationship(9, unordered_set<string>{"y", "z"});
     testPKB->relationship.usesS.setRelationship(10, unordered_set<string>{"z"});
     testPKB->relationship.usesS.setRelationship(11, unordered_set<string>{"x"});
-    testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z", "a", "b"});
     testPKB->relationship.usesP.setRelationship("pr", unordered_set<string>{"y"});
+
+    vector<unordered_map<int, NodeCFG*>> v = constructCFGForSamplePKB();
+    unordered_map<int, NodeCFG *> allNodes = v[0];
+
+    for (auto& iter : allNodes) {
+        int statementNumber = iter.first;
+        NodeCFG *node = iter.second;
+        testPKB->relationship.next.addCFGNode(node);
+    }
 
     return testPKB;
 }
@@ -267,6 +278,61 @@ PKB* generateSamplePKBForPatternMatching() {
     testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"y", "x"});
     testPKB->relationship.usesS.setRelationship(5, unordered_set<string>{"y", "x", "z"});
     testPKB->relationship.usesS.setRelationship(6, unordered_set<string>{"y", "x", "z"});
+
+    return testPKB;
+}
+
+PKB* generateAttrRefPKB() {
+    string s1 = "a = b + c + d + h + i;";
+    string s2 = "while(G > H) {";
+    string s3 = "print C;}";
+    string s4 = "while(G > 0) {";
+    string s5 = "read a;}";
+
+
+    PKB *testPKB = PKB::getInstance();
+    testPKB->clearPKB();
+    Parser::resetStatementNumber();
+
+    AssignNode* n1 = Parser::parseAssign(s1);
+    testPKB->statement.statements.addStatement(n1);
+    testPKB->statement.assignStatements.addStatement(n1);
+
+    WhileNode* n2 = Parser::parseWhile(s2);
+    testPKB->statement.statements.addStatement(n2);
+    testPKB->statement.whileStatements.addStatement(n2);
+
+    PrintNode* n3 = Parser::parsePrint(s3);
+    testPKB->statement.statements.addStatement(n3);
+    testPKB->statement.printStatements.addStatement(n3);
+
+    WhileNode* n4 = Parser::parseWhile(s4);
+    testPKB->statement.statements.addStatement(n4);
+    testPKB->statement.whileStatements.addStatement(n4);
+
+    ReadNode* n5 = Parser::parseRead(s5);
+    testPKB->statement.statements.addStatement(n5);
+    testPKB->statement.readStatements.addStatement(n5);
+
+    Parser::resetStatementNumber();
+    testPKB->entity.variables.add("a");
+    testPKB->entity.variables.add("b");
+    testPKB->entity.variables.add("c");
+    testPKB->entity.variables.add("d");
+    testPKB->entity.variables.add("h");
+    testPKB->entity.variables.add("i");
+    testPKB->entity.variables.add("G");
+    testPKB->entity.variables.add("H");
+    testPKB->entity.variables.add("C");
+    testPKB->entity.constants.add("0");
+
+    testPKB->relationship.parent.setRelationship(2, 3);
+    testPKB->relationship.parent.setRelationship(4, 5);
+
+    testPKB->relationship.usesS.setRelationship(1, unordered_set<string>{"b", "c", "d", "h","i"});
+    testPKB->relationship.usesS.setRelationship(2, unordered_set<string>{"G", "H", "C"});
+    testPKB->relationship.usesS.setRelationship(3, unordered_set<string>{"C"});
+    testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"G"});
 
     return testPKB;
 }
@@ -346,3 +412,44 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
     return vector<unordered_map<int, NodeCFG*>>{allNodes, rootNodes};
 }
 
+vector<unordered_map<int, NodeCFG*>> constructCFGForSamplePKB() {
+    NodeCFG* node1 = new NodeCFG(1);
+    NodeCFG* node2 = new NodeCFG(2);
+    NodeCFG* node3 = new NodeCFG(3);
+    NodeCFG* node4 = new NodeCFG(4);
+    LoopCFG* loop5 = new LoopCFG(5);
+    NodeCFG* node6 = new NodeCFG(6);
+    BranchCFG* branch7 = new BranchCFG(7);
+    NodeCFG* node8 = new NodeCFG(8);
+    NodeCFG* node9 = new NodeCFG(9);
+    NodeCFG* node10 = new NodeCFG(10);
+    NodeCFG* node11 = new NodeCFG(11);
+
+    node1->setNextNode(node2);
+    node2->setNextNode(node3);
+    node3->setNextNode(node4);
+    node4->setNextNode(loop5);
+    loop5->setNodeInLoop(node6);
+    node6->setNextNode(branch7);
+    branch7->setLeftNode(node8);
+    branch7->setRightNode(node9);
+    node9->setNextNode(node10);
+    node8->setNextNode(node10);
+    node10->setNextNode(loop5);
+    loop5->setNextNode(node11);
+
+    unordered_map<int, NodeCFG*> allNodes;
+    allNodes[1] = node1;
+    allNodes[2] = node2;
+    allNodes[3] = node3;
+    allNodes[4] = node4;
+    allNodes[5] = loop5;
+    allNodes[6] = node6;
+    allNodes[7] = branch7;
+    allNodes[8] = node8;
+    allNodes[9] = node9;
+    allNodes[10] = node10;
+    allNodes[11] = node11;
+    unordered_map<int, NodeCFG*> rootNodes;
+    return vector<unordered_map<int, NodeCFG*>>{allNodes, rootNodes};
+}
