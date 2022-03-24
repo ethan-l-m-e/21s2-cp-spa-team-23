@@ -14,15 +14,10 @@ string const CONST_VALUE = INTEGER;
 
 string const BASE_CASE_REGEX = VAR_NAME + "|" + PROC_NAME + "|" + CONST_VALUE;
 
-string const COND_EXPR_REGEX;
 string const COND_EXPR_IDENTIFIER = "( |\n|\t)*([!]?( |\n|\t)*[\\(]?(.|\n)*[(&&)(||)<>(>=)(<=)(==)(!=)](.|\n)*[\\)]?)";
-string const EXPR_REGEX;
-// TODO: Edit regex to include newlines and tabs
 string const EXPR_TERM_IDENTIFIER = "([^=;\\[\\]\\{\\}]*)[+-/*%]{1}([^=;\\[\\]\\{\\}]*)";
 string const TERM_REGEX;
 string const TERM_IDENTIFIER;
-string const REL_FACTOR_REGEX;
-string const FACTOR_REGEX;
 
 
 string const READ_REGEX = "^( |\n|\t)*(read)( |\n|\t)+(" + VAR_NAME +")( |\n|\t)*(;)(.*)";
