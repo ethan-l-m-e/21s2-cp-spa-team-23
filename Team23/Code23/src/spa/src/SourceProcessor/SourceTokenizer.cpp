@@ -161,6 +161,7 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
 
 void SourceTokenizer::extractCondExpr(string sourceCode, vector<string> &v) {
     string left, right, oper;
+    sourceCode = StringFormatter::removeMatchingFrontBackBrackets(sourceCode);
     if(regex_match(sourceCode, std::regex("[ ]*![ ]*\\((.*)\\)[ ]*"))) {
         int pos = sourceCode.find("!");
         sourceCode = StringFormatter::removeTrailingSpace(sourceCode.substr(pos + 1, sourceCode.size()));
@@ -174,7 +175,6 @@ void SourceTokenizer::extractCondExpr(string sourceCode, vector<string> &v) {
         oper = opAndBack.substr(0,2);
         string back = StringFormatter::removeTrailingSpace(opAndBack.substr(2, opAndBack.size()));
         right = StringFormatter::removeTrailingSpace(back.substr(1, back.size() - 2));
-        cout << right << "\n";
     } else {        //rel_expr
         left = "";
         right = StringFormatter::removeTrailingSpace(sourceCode);
