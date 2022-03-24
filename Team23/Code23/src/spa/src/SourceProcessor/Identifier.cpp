@@ -15,7 +15,16 @@
 int switchCaseOrError(int, bool);
 
 int Identifier::identifyFirstObject(string sourceCode) {
-    string firstLine = StringFormatter::extractFrontStringByRegex(sourceCode, "\n");
+    std::smatch sm;
+//    std::string check = "while ((!(6 == 9)) || (4 == 2 + 2)) {\n                mu11 = mu12 * mu13;\n                m11 = u19 + u18;\n              }\n              if (72 * 1010101010101 >= u15)\n                then{\n                    mu19 = u19 + u18 + u17 / u16;\n                    mu19 = mu19+ 10;\n                    print u19;\n                    read m19;\n                }\n              else {\n                m17 = u17;\n                m18 = u18;\n                m15 = mu16 + mu17 + mu18 + mu19;\n              }\n              print mu11;\n              read m16;\n              read m12;";
+//    std::regex_search (check, sm, std::regex(STMT_IDENTIFIER));
+//    std::string check2 = sm[0];
+    std::regex_search (sourceCode, sm, std::regex(STMT_IDENTIFIER));
+    std::string firstLine = sm[0];
+//    std::string check = "(((2 > 1) || (u21 < mu21))\n                || (((mu22 > u22) && (mu21 < u23)) && ((mu21) != (18 * (69) - (u24) / 2 + u21 % x2))))\n || (((mu21 > 22) && (3 < 5)) && ((8) != (8 * (8) - (16) / 2 + 16 % 2)))))";
+//    std::string check2 = "\n\n    while ((((2 > 1) || (u21 < mu21))\n                || (((mu22 > u22) && (mu21 < u23)) && ((mu21) != (18 * (69) - (u24) / 2 + u21 % x2))))\n               &&  ((((x1 > x2) || (u21 < u24)))))\n  {";
+//    bool result = std::regex_match(check, std::regex(COND_EXPR_IDENTIFIER));
+    //    string firstLine = StringFormatter::extractFrontStringByRegex(sourceCode, "\n");
     firstLine = StringFormatter::removeTrailingSpace(firstLine);
     if (regex_match(firstLine, std::regex(PROCEDURE_IDENTIFIER))) {
         bool isCorrect = checkParenthesesClosure(sourceCode, "{}");
