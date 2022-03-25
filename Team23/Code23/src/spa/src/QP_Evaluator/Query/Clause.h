@@ -35,7 +35,6 @@ enum class SynonymType {
 
 typedef struct Clause {
     vector<Argument> argList;
-    virtual ~Clause() = default;
 } Clause;
 
 typedef struct SuchThatClause : Clause {
