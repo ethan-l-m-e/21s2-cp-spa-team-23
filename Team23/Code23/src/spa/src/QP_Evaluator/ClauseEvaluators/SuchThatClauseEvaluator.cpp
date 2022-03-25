@@ -120,8 +120,8 @@ void SuchThatClauseEvaluator::evaluateRightSynonym() {
  * @param isSameSynonym  boolean indicating whether the two synonyms are the same
  * @return  a vector of ResultItem of the type tuples
  */
-std::unordered_set<std::pair<std::string, std::string>> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet, bool isSameSynonym) {
-    std::unordered_set<std::pair<std::string, std::string>> tuples;
+unordered_set<std::pair<std::string, std::string>> SuchThatClauseEvaluator::generateTuples(unordered_set<std::string>& leftSet, unordered_set<std::string>& rightSet, bool isSameSynonym) {
+    unordered_set<std::pair<std::string, std::string>> tuples;
     for (const auto & left : leftSet) {
         for (const auto &right: rightSet) {
             if (isSameSynonym && right != left) continue;

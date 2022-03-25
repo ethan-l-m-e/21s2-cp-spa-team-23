@@ -9,10 +9,9 @@
 #include <utility>
 #include <vector>
 #include <cassert>
-#include "PKB/PKB.h"
+#include <unordered_set>
 #include "Result.h"
 #include "ResultTable.h"
-#include "QP_Evaluator/Query/Argument.h"
 #include "QP_Evaluator/Query/Query.h"
 
 

@@ -5,7 +5,6 @@
 #include "ResultTable.h"
 
 #include <utility>
-#include <unordered_set>
 
 ResultTable::ResultTable(){
     tableHeader = std::vector<std::string>{};
@@ -119,7 +118,7 @@ void ResultTable::mergeStringResult(Result& result) {
         crossJoinStrings(stringSet);
     } else {
         // otherwise, do an inner join
-        innerJoin(std::distance(tableHeader.begin(), it), result.resultSet);
+        innerJoin(std::distance(tableHeader.begin(), it), std::get<std::unordered_set<std::string>>(result.resultSet));
     }
 }
 

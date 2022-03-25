@@ -26,7 +26,7 @@ protected:
     virtual pair<DesignEntity, DesignEntity> getWildcardType() = 0;
     virtual RelRef getRelRef() = 0;
 
-    std::unordered_set<std::pair<std::string, std::string>> generateTuples(unordered_set<std::string>&, unordered_set<std::string>&, bool);
+    unordered_set<std::pair<std::string, std::string>> generateTuples(unordered_set<std::string>&, unordered_set<std::string>&, bool);
     bool validateRelation(unordered_set<std::string>&, unordered_set<std::string>&);
     unordered_set<std::string> generateLeftSet (unordered_set<std::string>&);
     unordered_set<std::string> generateRightSet (unordered_set<std::string>&);

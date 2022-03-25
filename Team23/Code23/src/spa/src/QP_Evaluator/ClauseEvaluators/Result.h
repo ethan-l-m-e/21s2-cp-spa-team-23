@@ -5,9 +5,19 @@
 #ifndef SPA_RESULT_H
 #define SPA_RESULT_H
 
+#include <utility>
+#include <unordered_map>
+#include <unordered_set>
 #include <string>
-#include <variant>
 #include <vector>
+#include <variant>
+
+template <> struct std::hash<std::pair<std::string, std::string>> {
+    inline size_t operator()(const std::pair<std::string, std::string> &v) const {
+        std::hash<std::string> string_hasher;
+        return string_hasher(v.first) ^ string_hasher(v.second);
+    }
+};
 
 enum class ResultType {
     BOOLEAN,
