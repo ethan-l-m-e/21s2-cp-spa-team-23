@@ -425,6 +425,8 @@ TEST_CASE("test next - 2 procedures") {
 }
 
 TEST_CASE("test calls - basic") {
+    PKB::getInstance()->clearPKB();
+
     ProcedureList procLst;
     StatementList s1, s2;
     vector<ProcedureNode *> procList;
@@ -442,6 +444,8 @@ TEST_CASE("test calls - basic") {
 }
 
 TEST_CASE("test calls - multiple procedures one after another") {
+    PKB::getInstance()->clearPKB();
+
     ProcedureList procLst;
     StatementList s1, s2, s3, s4;
     vector<ProcedureNode *> procList;
@@ -499,6 +503,8 @@ TEST_CASE("test calls - multiple procedures one after another") {
 
 }
 TEST_CASE("test calls - multiple calls in one procedure") {
+    PKB::getInstance()->clearPKB();
+
     ProcedureList procLst;
     StatementList s1, s2, s3, s4;
     vector<ProcedureNode *> procList;
