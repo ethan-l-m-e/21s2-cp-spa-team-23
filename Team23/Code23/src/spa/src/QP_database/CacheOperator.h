@@ -13,9 +13,9 @@ class CacheOperator {
      * Operator class is to compute results (in-computation instead of pre-computation)
      */
 public:
-    virtual bool findRelation(string left, string right);
-    virtual unordered_set<string> findLHS(string rightNode);
-    virtual unordered_set<string> findRHS(string leftNode);
+    virtual bool computeRelation(string left, string right);
+    virtual unordered_set<string> computeLHS(string rightNode);
+    virtual unordered_set<string> computeRHS(string leftNode);
 protected:
     typedef unordered_set<string> variableSet, stmtSetStr;
     typedef unordered_set<int> stmtSetNum;

@@ -4,7 +4,7 @@
 
 #include "NextTOperator.h"
 
-bool NextTOperator::findRelation(string left, string right) {
+bool NextTOperator::computeRelation(string left, string right) {
     if(stmtIsNotInSource(vector<string>{left, right})) return false;
     NodeCFG* leftNode = retrieveNode(left);
     NodeCFG* rightNode = retrieveNode(right);
@@ -15,7 +15,7 @@ bool NextTOperator::findRelation(string left, string right) {
                                     graphMethods->IsReachableForward);
 }
 
-unordered_set<string> NextTOperator::findRHS(string left) {
+unordered_set<string> NextTOperator::computeRHS(string left) {
     if(stmtIsNotInSource(vector<string>{left})) return {};
     NodeCFG* leftNode = retrieveNode(left);
     int size = getSize();
@@ -26,7 +26,7 @@ unordered_set<string> NextTOperator::findRHS(string left) {
     return convertIntToString(resultSet);
 }
 
-unordered_set<string> NextTOperator::findLHS(string right) {
+unordered_set<string> NextTOperator::computeLHS(string right) {
     if(stmtIsNotInSource(vector<string>{right})) return {};
     NodeCFG* rightNode = retrieveNode(right);
     int size = getSize();

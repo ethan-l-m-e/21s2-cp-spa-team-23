@@ -9,9 +9,9 @@
 
 class NextTOperator : protected CacheOperator {
 public:
-    bool findRelation(string left, string right) override;
-    stmtSetStr findLHS(string rightNode) override;
-    stmtSetStr findRHS(string leftNode) override;
+    bool computeRelation(string left, string right) override;
+    stmtSetStr computeLHS(string rightNode) override;
+    stmtSetStr computeRHS(string leftNode) override;
     static NextTOperator *getInstance();
 
 protected:

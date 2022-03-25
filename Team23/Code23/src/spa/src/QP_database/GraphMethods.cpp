@@ -37,12 +37,9 @@ bool GraphMethods::IsReachableForward(NodeCFG* srcNode,
         NodeCFG* adjacentNode =  *adj;
         // if not visited, perform recursion again
         int adjStmtNo = adjacentNode->getStatementNumber();
-        if (!visited[adjStmtNo]) {
-            if (IsReachableForward(adjacentNode, destNode, visited, path))
+        if (!visited[adjStmtNo] && IsReachableForward(adjacentNode, destNode, visited, path))
                 return true;
-        }
     }
-
     path.pop_back();
     return false;
 }

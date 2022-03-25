@@ -4,9 +4,9 @@
 
 #include "CacheOperator.h"
 
-bool CacheOperator::findRelation(string left, string right) {return false;}
-unordered_set<string> CacheOperator::findLHS(string rightNode) {return {};}
-unordered_set<string> CacheOperator::findRHS(string leftNode) {return {};}
+bool CacheOperator::computeRelation(string left, string right) {return false;}
+unordered_set<string> CacheOperator::computeLHS(string rightNode) {return {};}
+unordered_set<string> CacheOperator::computeRHS(string leftNode) {return {};}
 
 static GraphMethods* graphMethods = GraphMethods::getInstance();
 PKB* CacheOperator::pkb = PKB::getInstance();

@@ -12,9 +12,9 @@ class AffectsOperator: protected CacheOperator {
 public:
     AffectsOperator(PKB *pkb);
 
-    bool findRelation(string left, string right) override;
-    stmtSetStr findLHS(string right) override;
-    stmtSetStr findRHS(string left) override;
+    bool computeRelation(string left, string right) override;
+    stmtSetStr computeLHS(string right) override;
+    stmtSetStr computeRHS(string left) override;
     static AffectsOperator *getInstance();
 
 protected:

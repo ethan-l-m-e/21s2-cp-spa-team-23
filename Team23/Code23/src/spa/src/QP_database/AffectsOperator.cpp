@@ -32,7 +32,7 @@ bool AffectsOperator::isInWhiteList(int stmtNo) {
 }
 
 
-bool AffectsOperator::findRelation(string left, string right) {
+bool AffectsOperator::computeRelation(string left, string right) {
     //step 0: check if left are right are both assign statements
     if(!(isAssignStmt(left) && isAssignStmt(right))) return false;
 
@@ -65,7 +65,7 @@ bool AffectsOperator::findRelation(string left, string right) {
 }
 
 
-unordered_set<string> AffectsOperator::findLHS(string right) {
+unordered_set<string> AffectsOperator::computeLHS(string right) {
     auto blackAndWhiteFoo = [](variable var)->pair<stmtSetStr, stmtSetStr> {
         stmtSetStr black;
         stmtSetStr white;
@@ -108,7 +108,7 @@ unordered_set<string> AffectsOperator::findLHS(string right) {
     return convertIntToString(resultSet);*/
 }
 
-stmtSetStr AffectsOperator::findRHS(string left) {
+stmtSetStr AffectsOperator::computeRHS(string left) {
     auto blackAndWhiteFoo = [](variable var)->pair<stmtSetStr, stmtSetStr> {
         stmtSetStr black = getStmtModifying(var);
         stmtSetStr white;
@@ -277,14 +277,14 @@ stmtSetStr AffectsOperator::getStmtUsing(string var) {return pkb->relationship.u
  * whiteList: blocks traversal and add result list
  *
  *
- * findLHS:
+ * computeLHS:
  *      blackList:
  *          calls modifies var
  *          read modifies var
  *      whiteList:
  *          assign modifies var
  *
- * findRHS:
+ * computeRHS:
  *      blackList:
  *          calls modifies var
  *          read modifies var
