@@ -23,7 +23,7 @@ public:
 
     list<string> evaluate(Query*);
 
-    ClauseEvaluator* generateEvaluator(const SuchThatClause&, Query*);
+    ClauseEvaluator* generateEvaluator(SuchThatClause&, Query&);
 
     static list<string> generateResultString(ResultTable*);
 };

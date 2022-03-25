@@ -12,6 +12,11 @@ bool Query::hasPatternClause(){
     return !patternClauses.empty();
 }
 
+unordered_map<string, DesignEntity>* Query::getDeclarations(){
+    return &declarations;
+}
+
+
 vector<SuchThatClause> Query::getSuchThatClauses(){
     return suchThatClauses;
 }

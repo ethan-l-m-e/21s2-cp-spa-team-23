@@ -9,7 +9,7 @@
 
 class ModifiesSClauseEvaluator : public SuchThatClauseEvaluator {
 public:
-    ModifiesSClauseEvaluator (vector<Argument> args, PKB* pkb, Query* query) : SuchThatClauseEvaluator(std::move(args), pkb, query) {}
+    ModifiesSClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): SuchThatClauseEvaluator(declarations, clause, pkb) {}
     RelRef getRelRef() override {return RelRef::PARENT;};
 protected:
     bool isRelation(string left, string right) override;

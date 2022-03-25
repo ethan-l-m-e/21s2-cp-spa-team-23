@@ -10,7 +10,7 @@
 
 class NextTClauseEvaluator: public CacheClauseEvaluator {
 public:
-    NextTClauseEvaluator (vector<Argument> args, PKB* pkb, Query* query) : CacheClauseEvaluator(std::move(args), pkb, query) {}
+    NextTClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): CacheClauseEvaluator(declarations, clause, pkb) {}
     RelRef getRelRef() override {return RelRef::NEXT_T;};
 protected:
     bool isRelation(string left, string right) override;

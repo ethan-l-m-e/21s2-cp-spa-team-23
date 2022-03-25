@@ -11,7 +11,7 @@
 
 class UsesSClauseEvaluator : public SuchThatClauseEvaluator {
 public:
-    UsesSClauseEvaluator (vector<Argument> args, PKB* pkb, Query* query) : SuchThatClauseEvaluator(std::move(args), pkb, query) {}
+    UsesSClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): SuchThatClauseEvaluator(declarations, clause, pkb) {}
     RelRef getRelRef() override {return RelRef::PARENT;};
 protected:
     bool isRelation(string left, string right) override;

@@ -13,8 +13,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
 
     // Create ClauseEvaluators and evaluate each of the pattern clause
     if(query->hasPatternClause() && resultTable->getBooleanResult()) {
-        for(const PatternClause& clause : query->getPatternClauses()) {
-            auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
+        for(PatternClause& clause : query->getPatternClauses()) {
+            auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), &clause, pkb);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation early.
@@ -24,8 +24,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
 
     // Create ClauseEvaluators and evaluate each of the suchThat clause
     if(query->hasSuchThatClause() && resultTable->getBooleanResult()) {
-        for(const SuchThatClause& clause : query->getSuchThatClauses()) {
-            auto suchThatClauseEvaluator = generateEvaluator(clause, query);
+        for(SuchThatClause& clause : query->getSuchThatClauses()) {
+            auto suchThatClauseEvaluator = generateEvaluator(clause, *query);
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
@@ -34,7 +34,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     }
 
     // Evaluate result clause and output the result
-    auto* resultClauseEvaluator = new ResultClauseEvaluator(pkb, query);
+    auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getSelectedSynonyms(), pkb);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
     if (!result) return {};
@@ -49,34 +49,34 @@ list<string> QueryEvaluator::evaluate(Query* query) {
  * @param query  a Query object pointer
  * @return  a pointer for the generated ClauseEvaluator.
  */
-ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause, Query* query) {
+ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, Query& query) {
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
-            return new FollowsClauseEvaluator(clause.argList, pkb, query);
+            return new FollowsClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::PARENT:
-            return new ParentClauseEvaluator(clause.argList, pkb, query);
+            return new ParentClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::FOLLOWS_T:
-            return new FollowsTClauseEvaluator(clause.argList, pkb, query);
+            return new FollowsTClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::PARENT_T:
-            return new ParentTClauseEvaluator(clause.argList, pkb, query);
+            return new ParentTClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::USES_S:
-            return new UsesSClauseEvaluator(clause.argList, pkb, query);
+            return new UsesSClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::MODIFIES_S:
-            return new ModifiesSClauseEvaluator(clause.argList, pkb, query);
+            return new ModifiesSClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::USES_P:
-            return new UsesPClauseEvaluator(clause.argList, pkb, query);
+            return new UsesPClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::MODIFIES_P:
-            return new ModifiesPClauseEvaluator(clause.argList, pkb, query);
+            return new ModifiesPClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::NEXT:
-            return new NextClauseEvaluator(clause.argList, pkb, query);
+            return new NextClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::NEXT_T:
-            return new NextTClauseEvaluator(clause.argList, pkb, query);
+            return new NextTClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::CALLS:
-            return new CallsClauseEvaluator(clause.argList, pkb, query);
+            return new CallsClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::CALLS_T:
-            return new CallsTClauseEvaluator(clause.argList, pkb, query);
+            return new CallsTClauseEvaluator(query.getDeclarations(), &clause, pkb);
         case RelRef::AFFECTS:
-            return new AffectsClauseEvaluator(clause.argList, pkb, query);
+            return new AffectsClauseEvaluator(query.getDeclarations(), &clause, pkb);
        default:
             throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }

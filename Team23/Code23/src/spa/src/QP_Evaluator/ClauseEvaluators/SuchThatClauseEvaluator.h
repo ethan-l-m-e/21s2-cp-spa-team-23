@@ -17,7 +17,7 @@ enum class ClauseSynonymType {
 
 class SuchThatClauseEvaluator : public ClauseEvaluator {
 public:
-    SuchThatClauseEvaluator(vector<Argument> args, PKB* pkb, Query* query): ClauseEvaluator(std::move(args), pkb, query) {};
+    SuchThatClauseEvaluator(unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): ClauseEvaluator(declarations, clause, pkb) {};
     bool evaluateClause(ResultTable* resultTable) override;
 protected:
     virtual bool isRelation(string left, string right) = 0;
@@ -40,8 +40,8 @@ protected:
     void evaluateLeftSynonym();
     void evaluateRightSynonym();
 
-    Argument argLeft = argList[0];
-    Argument argRight = argList[1];
+    Argument argLeft = clause->argList[0];
+    Argument argRight = clause->argList[1];
 
 };
 

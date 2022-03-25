@@ -8,13 +8,16 @@
 
 #include "ClauseEvaluator.h"
 
+#include <utility>
+
 class ResultClauseEvaluator : public ClauseEvaluator {
 public:
-    ResultClauseEvaluator(PKB *pkb, Query *query) : ClauseEvaluator(pkb, query) {};
+    ResultClauseEvaluator(unordered_map<string, DesignEntity>* declarations, vector<Argument> selectedSynonyms, PKB* pkb) : ClauseEvaluator(declarations, pkb), selectedSynonyms(std::move(selectedSynonyms)) {};
 
     bool evaluateClause(ResultTable *resultTable) override;
 
 private:
+
     void projectSelectedSynonyms(vector<int> *, ResultTable *);
 
     bool applyAttrRef(std::pair<string, AttrName> &attrRef, string (ResultClauseEvaluator::* *func)(string&),
@@ -33,6 +36,8 @@ private:
     void updateTableForAttrReference(std::pair<string, AttrName>&, long*, ResultTable*);
 
     static void unpackSynonym(Argument&, std::pair<string, AttrName>*, string*);
+
+    vector<Argument> selectedSynonyms;
 
 };
 

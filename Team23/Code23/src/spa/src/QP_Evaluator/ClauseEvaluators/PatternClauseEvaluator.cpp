@@ -107,8 +107,8 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
     if(!isWildCard(argRight)) {
         throw "2nd argument is not a wild card";
     }
-    if(argList.size() == 4) {
-        if(!isWildCard(argList[3]))
+    if(clause->argList.size() == 4) {
+        if(!isWildCard(clause->argList[3]))
             throw "3nd argument is not a wild card";
     } else {
         throw "wrong number of arguments";

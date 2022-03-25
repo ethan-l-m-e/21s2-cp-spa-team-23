@@ -11,7 +11,7 @@
 
 class FollowsTClauseEvaluator : public SuchThatClauseEvaluator {
 public:
-        FollowsTClauseEvaluator (vector<Argument> args, PKB* pkb, Query* query) : SuchThatClauseEvaluator(std::move(args), pkb, query) {}
+        FollowsTClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): SuchThatClauseEvaluator(declarations, clause, pkb) {}
         RelRef getRelRef() override {return RelRef::FOLLOWS_T;};
 
 protected:

@@ -73,8 +73,8 @@ void SuchThatClauseEvaluator::evaluateNoSynonym() {
 void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
     string leftSynonym = std::get<string>(argLeft.argumentValue);
     string rightSynonym = std::get<string>(argRight.argumentValue);
-    DesignEntity entityLeft = query->findEntityType(leftSynonym);
-    DesignEntity entityRight = query->findEntityType(rightSynonym);
+    DesignEntity entityLeft = declarations->at(leftSynonym);
+    DesignEntity entityRight = declarations->at(rightSynonym);
     unordered_set<string> leftSet = getAllType(entityLeft);
     unordered_set<string> rightSet = getAllType(entityRight);
     unordered_set<pair<string,string>> resultPairs = generateTuples(leftSet, rightSet, leftSynonym == rightSynonym);
@@ -89,7 +89,7 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
  * Evaluate a clause with a synonym in its left argument.
  */
 void SuchThatClauseEvaluator::evaluateLeftSynonym() {
-    DesignEntity entityLeft = query->findEntityType(std::get<string>(argLeft.argumentValue));
+    DesignEntity entityLeft = declarations->at(std::get<string>(argLeft.argumentValue));
     unordered_set<string> rightSet = generateValueSet(argRight, std::get<1>(getWildcardType()));
     unordered_set<string> results = generateLeftSet(rightSet);
     filterByType(results, entityLeft);
@@ -103,7 +103,7 @@ void SuchThatClauseEvaluator::evaluateLeftSynonym() {
  * Evaluate a clause with a synonym in its right argument.
  */
 void SuchThatClauseEvaluator::evaluateRightSynonym() {
-    DesignEntity entityRight = query->findEntityType(std::get<string>(argRight.argumentValue));
+    DesignEntity entityRight = declarations->at(std::get<string>(argRight.argumentValue));
     unordered_set<string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
     unordered_set<string> results = generateRightSet(leftSet);
     filterByType(results, entityRight);

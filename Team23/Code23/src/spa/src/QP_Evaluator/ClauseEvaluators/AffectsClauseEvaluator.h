@@ -11,7 +11,7 @@
 
 class AffectsClauseEvaluator: public CacheClauseEvaluator {
 public:
-    AffectsClauseEvaluator (vector<Argument> args, PKB* pkb, Query* query) : CacheClauseEvaluator(std::move(args), pkb, query) {}
+    AffectsClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): CacheClauseEvaluator(declarations, clause, pkb) {};
     RelRef getRelRef() override {return RelRef::AFFECTS;};
 protected:
     bool isRelation(string left, string right) override;

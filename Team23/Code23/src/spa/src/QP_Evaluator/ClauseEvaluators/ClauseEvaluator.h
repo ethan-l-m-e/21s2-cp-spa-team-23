@@ -12,15 +12,16 @@
 
 class ClauseEvaluator {
 protected:
-    vector<Argument> argList;
+    Clause* clause;
+    unordered_map<string, DesignEntity>* declarations;
     PKB* pkb;
-    Query* query;
     Result result;
     void mergeResult(ResultTable* resultTable);
 
 public:
-    ClauseEvaluator(vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
-    ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
+    ClauseEvaluator(unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb) : declarations(declarations), clause(clause),  pkb(pkb){}
+    ClauseEvaluator(unordered_map<string, DesignEntity>* declarations, PKB* pkb) : declarations(declarations),  pkb(pkb){}
+
     virtual ~ClauseEvaluator() = default;
     virtual bool evaluateClause(ResultTable* resultTable) = 0;
     unordered_set<string> getAllType(DesignEntity designEntity);

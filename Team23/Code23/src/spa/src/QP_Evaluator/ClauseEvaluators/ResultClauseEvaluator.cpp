@@ -6,10 +6,10 @@
 #include "QP_Parser/Exception.h"
 
 bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
-    if (query->getSelectedSynonyms().empty()) throw qp::QPEvaluatorException("No argument was selected");
+    if (selectedSynonyms.empty()) throw qp::QPEvaluatorException("No argument was selected");
 
     // handle select boolean
-    if ((query->getSelectedSynonyms())[0].argumentType == ArgumentType::BOOLEAN) {
+    if (selectedSynonyms[0].argumentType == ArgumentType::BOOLEAN) {
         resultTable->enableBooleanResult();
         return true;
     }
@@ -29,7 +29,7 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
  */
 void ResultClauseEvaluator::projectSelectedSynonyms(vector<int>* projections, ResultTable* resultTable) {
     auto header = resultTable->getHeader();
-    for (Argument synonym: query->getSelectedSynonyms()) {
+    for (Argument synonym: selectedSynonyms) {
 
         // get synonym value and attribute reference.
         string synonymValue;
@@ -62,7 +62,7 @@ void ResultClauseEvaluator::appendNewSynonym(string synonymValue, ResultTable* r
             .resultType = ResultType::SINGLE,
             .resultBoolean =true,
             .resultHeader = synonymValue,
-            .resultSet = getAllType(query->getSynonymType(synonymValue))
+            .resultSet = getAllType(declarations->at(synonymValue))
     };
     resultTable->mergeResultToTable(result);
 }
@@ -75,13 +75,13 @@ void ResultClauseEvaluator::appendNewSynonym(string synonymValue, ResultTable* r
  * @return  returns a boolean value representing whether name and function pointer have been populated
  */
 bool ResultClauseEvaluator::applyAttrRef(std::pair<string, AttrName>& attrRef, string (ResultClauseEvaluator::**func)(string&), string *name) {
-    if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
+    if(declarations->at(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
         *name = attrRef.first + ".varName";
         *func = &ResultClauseEvaluator::getVarRead;
-    } else if (query->findEntityType(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
+    } else if (declarations->at(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
         *name = attrRef.first + ".varName";
         *func = &ResultClauseEvaluator::getVarPrinted;
-    } else if (query->findEntityType(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
+    } else if (declarations->at(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
         *name = attrRef.first + ".procName";
         *func = &ResultClauseEvaluator::getProcByCall;
     } else {
