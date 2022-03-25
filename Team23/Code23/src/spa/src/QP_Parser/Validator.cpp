@@ -23,19 +23,14 @@ void Validator::validateQueryStructure(std::string pql) {
 void Validator::checkForSemantics(QueryToken& queryToken) {
     std::set<std::string> declarationSet = convertVectorToSet(queryToken.declarations->first);
 
-    // Check declarations
     validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
 
-    // Check if Select Clause synonyms are part of the declarations
     validateSelectClauseTokens(declarationSet, *(queryToken.selectClauseTokens), *(queryToken.declarationTokens));
 
-    // Check pattern arguments
     validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
 
-    // Check Such That clauses
     validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
 
-    // Check with clauses
     validateWithClauses(*(queryToken.withClauses), *(queryToken.declarationTokens));
 }
 
@@ -57,13 +52,10 @@ void Validator::validateDeclarations(std::set<std::string> declarationSet, int l
 void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet,
                                            std::vector<std::string> selectClauseTokens,
                                            std::map<std::string, std::string> declarationTokens) {
-    // If select clause is a boolean, then it is valid
     if (selectClauseTokens[0] == "BOOLEAN") {
         return;
     }
 
-    // Otherwise, the select clause is a tuple of elements or single element
-    // Check the validity of each element
     for (std::string selectClauseToken : selectClauseTokens) {
         validateSynonym(selectClauseToken, declarationSet, declarationTokens);
     }
@@ -119,7 +111,6 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
 
 void Validator::validateWithClauses(std::vector<std::pair<std::string, std::string>> withClauses,
                                     std::map<std::string, std::string> declarationTokens) {
-    // Check arguments of each with clause
     for (std::pair<std::string, std::string> withClause : withClauses) {
         validateAttrRefArgument(withClause.first, declarationTokens);
         validateAttrRefArgument(withClause.second, declarationTokens);
@@ -143,7 +134,6 @@ void Validator::validateSynonym(std::string synonym, std::set<std::string> decla
 
 void Validator::checkArguments(std::vector<std::string> arguments,
                                std::map<std::string, std::string> declarationTokens) {
-    // Check if the synonym is declared if the argument is a synonym
     checkSynonymIsDeclared(arguments[0], declarationTokens);
     checkSynonymIsDeclared(arguments[1], declarationTokens);
 
@@ -171,7 +161,6 @@ void Validator::handleVariableRelationshipClause(std::map<std::string, std::stri
     std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
     std::vector<std::string> arguments = *(suchThatClauseToken.arguments);
 
-    // Check arguments
     checkFirstArgForVariableClauses(arguments[0], argSet, declarationTokens);
     checkSecondArgForVariableClauses(arguments[1], declarationTokens);
 }
@@ -245,7 +234,6 @@ void Validator::checkProcAssignArgument(std::string argument, std::string relRef
 }
 
 void Validator::validatePatternFirstArgument(std::map<std::string, std::string> declarationTokens, std::string argument) {
-    // Check that the pattern's first argument is a declared variable if it's a synonym
     bool isArgumentSynonym = std::regex_match(argument, std::regex(SYNONYM));
     bool isSynonymArgumentNotVariable = isArgumentSynonym && declarationTokens.at(argument) != "variable";
 
