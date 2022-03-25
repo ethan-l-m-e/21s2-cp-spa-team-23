@@ -123,10 +123,17 @@ bool NextTOperator::IsReachableForward(NodeCFG* srcNode,
             auto lastNodeInLeft = pkb->relationship.next.
                     getCFGNode(to_string(branch->getRightNode()->getStatementNumber()-1));
             int lastNodeInLeftInt = lastNodeInLeft->getStatementNumber();
+            visited[branch->getLeftNode()->getStatementNumber()] = true;
             visited[lastNodeInLeftInt] = true;
             if(srcVal < destVal && destVal <= lastNodeInLeftInt) {
                 cout << "destVal " << destVal << "falls between " << srcVal << " and " << lastNodeInLeftInt << "\n";
                 return true;
+            }
+            unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(branch->getRightNode());
+            for (NodeCFG *adjNode: adjNodes) {
+                int adjStmtNo = adjNode->getStatementNumber();
+                if (!visited[adjStmtNo] && IsReachableForward(adjNode, destNode, visited, path))
+                    return true;
             }
         }
         unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(srcNode);
