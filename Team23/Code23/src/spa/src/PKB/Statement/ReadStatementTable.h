@@ -15,5 +15,7 @@ public:
     void addStatement(ReadNode *node);
 
     string getVariableName(string statementNumber);
+
+    //void clear() override;
 };
 
