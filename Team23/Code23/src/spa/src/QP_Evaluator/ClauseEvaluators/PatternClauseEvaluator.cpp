@@ -19,8 +19,8 @@ bool isPartWildCard(Argument arg);
 bool matchVariableValue(VariableNode* assignNode, Expression arg);
 vector<string> collectControlVarInCondExpr(CondExprNode* condExpr);
 
-void addToStmtList(Node* node, unordered_set<string> *stmtNumberList);
-void addToStmtAndVariableList(Node *node, unordered_set<pair<string, string>> *statementAndVarList);
+void addToStmtList(Node* node, ResultItems *stmtNumberList);
+void addToStmtAndVariableList(Node *node, ResultItems *statementAndVarList);
 Expression validateAndParseEntRef(string arg);
 Expression validateAndParseExpression(string arg);
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg);
@@ -87,8 +87,8 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     }
     // setup parsing and results
     unordered_set<AssignNode*> listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
-    unordered_set<pair<string, string>> assignVarPairList;
-    unordered_set<string> stmtNumberList;
+
+    ResultItems resultList;
 
     unordered_set<AssignNode*>::iterator i;
     // process results
@@ -97,30 +97,30 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
         VariableNode* LHSVariable = currentNode->getLeftNode();
         Expression RHSExpression = currentNode ->getRightNode();
         if (isSynonym(argLeft) && isWildCard(argRight)) {
-            addToStmtAndVariableList(currentNode, &assignVarPairList);
+            addToStmtAndVariableList(currentNode, &resultList);
         }
         else if (isIdent(argLeft) && isWildCard(argRight)) {
             if(matchExpressionValue(LHSVariable, varLeft, argLeft)) {
-                addToStmtList(currentNode, &stmtNumberList);
+                addToStmtList(currentNode, &resultList);
             }
         }
         else if (isWildCard(argLeft) && isWildCard(argRight)) {
-            addToStmtList(currentNode, &stmtNumberList);
+            addToStmtList(currentNode, &resultList);
         }
         else if (isSynonym(argLeft) && (isPartWildCard(argRight) || isIdent(argRight))) {
             if(matchExpressionValue(RHSExpression, exprRight, argRight)) {
-                addToStmtAndVariableList(currentNode, &assignVarPairList);
+                addToStmtAndVariableList(currentNode, &resultList);
             }
         }
         else if (isIdent(argLeft) && (isPartWildCard(argRight) || isIdent(argRight))) {
             if(matchExpressionValue(LHSVariable, varLeft, argLeft) &&
             matchExpressionValue(RHSExpression, exprRight, argRight)) {
-                addToStmtList(currentNode, &stmtNumberList);
+                addToStmtList(currentNode, &resultList);
             }
         }
         else if (isWildCard(argLeft) && (isPartWildCard(argRight) || isIdent(argRight))) {
             if(matchExpressionValue(RHSExpression, exprRight, argRight)) {
-                addToStmtList(currentNode, &stmtNumberList);
+                addToStmtList(currentNode, &resultList);
             }
         }
         else {
@@ -129,12 +129,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     }
 
     // result construction
-    if(isSynonym(argLeft)) {
-        constructResults(assignVarPairList, isSynonym(argLeft));
-    } else {
-        constructResults(stmtNumberList, isSynonym(argRight));
-    }
-
+    constructResults(resultList, isSynonym(argLeft));
     if(!result.resultBoolean) {
         resultTable->clearTable();
         resultTable->setBooleanResult(false);
@@ -184,30 +179,34 @@ Expression validateAndParseExpression(string arg) {
     return Parser::parseExpression(trimmedArg);
 }
 
-void addToStmtList(Node *node, unordered_set<string> *stmtNumberList) {
+void addToStmtList(Node *node, ResultItems *resultSet) {
+    std::unordered_set<std::string> stmtNumberList;
     string stmtNo = to_string(node->getStmtNumber());
-    stmtNumberList->insert(stmtNo);
+    stmtNumberList.insert(stmtNo);
+    *resultSet = stmtNumberList;
 }
 
-void addToStmtAndVariableList(Node *node, unordered_set<pair<string, string>> *statementAndVarList) {
+void addToStmtAndVariableList(Node *node, ResultItems *resultSet) {
+    std::unordered_set<std::pair<std::string, std::string>> statementAndVarList;
     if(auto assignNode = dynamic_cast<AssignNode*>(node)) {
         auto assignVarPair = pair<string, string>(to_string(assignNode->getStmtNumber()), assignNode->getLeftNode()->getVariableName());
-        statementAndVarList->insert(assignVarPair);
+        statementAndVarList.insert(assignVarPair);
     } else if (auto whileNode = dynamic_cast<WhileNode*>(node)) {
         string stmtNo = to_string(whileNode->getStmtNumber());
         vector<VarName> controlVariables = collectControlVarInCondExpr(whileNode->getCondExpr());
         for(VarName controlVar: controlVariables) {
             auto stmtVarPair = pair<string, string>(stmtNo, controlVar);
-            statementAndVarList->insert(stmtVarPair);
+            statementAndVarList.insert(stmtVarPair);
         }
     } else if (auto ifNode = dynamic_cast<IfNode*>(node)) {
         string stmtNo = to_string(ifNode->getStmtNumber());
         vector<VarName> controlVariables = collectControlVarInCondExpr(ifNode->getCondExpr());
         for(VarName controlVar: controlVariables) {
             auto stmtVarPair = pair<string, string>(stmtNo, controlVar);
-            statementAndVarList->insert(stmtVarPair);
+            statementAndVarList.insert(stmtVarPair);
         }
     }
+    *resultSet = statementAndVarList;
 }
 
 vector<string> collectControlVarInCondExpr(CondExprNode* condExpr) {

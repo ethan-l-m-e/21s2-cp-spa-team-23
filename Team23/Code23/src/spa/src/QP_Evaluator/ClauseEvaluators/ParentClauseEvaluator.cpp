@@ -14,7 +14,7 @@ unordered_set<std::string> ParentClauseEvaluator::getLeftSynonymValue(std::strin
 }
 
 unordered_set<std::string> ParentClauseEvaluator::getRightSynonymValue(std::string left) {
-    return pkb->relationship.parent.getSetRHS(left);
+    return pkb->relationship.parent.getRHS(left);
 }
 
 pair<DesignEntity, DesignEntity> ParentClauseEvaluator::getWildcardType () {

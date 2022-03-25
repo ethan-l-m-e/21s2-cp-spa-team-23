@@ -382,8 +382,8 @@ TEST_CASE("Add Follows") {
 TEST_CASE("Add FollowsT") {
     pkb->clearPKB();
 
-    REQUIRE(pkb->relationship.followsT.getSetLHS("2").empty());
-    REQUIRE(pkb->relationship.followsT.getSetRHS("1").empty());
+    REQUIRE(pkb->relationship.followsT.getLHS("2").empty());
+    REQUIRE(pkb->relationship.followsT.getRHS("1").empty());
 
 
     unordered_map<int, unordered_set<int>> tFolloweeToFollowersMap = {
@@ -407,8 +407,8 @@ TEST_CASE("Add FollowsT") {
 
 
     REQUIRE(pkb->relationship.followsT.isRelationship("1", "3") == false);
-    REQUIRE(pkb->relationship.followsT.getSetRHS("2") == unordered_set<string>{});
-    REQUIRE(pkb->relationship.followsT.getSetLHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.followsT.getRHS("2") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.followsT.getLHS("3") == unordered_set<string>{});
 
 
     for (auto& iter : tFolloweeToFollowersMap) {
@@ -422,11 +422,11 @@ TEST_CASE("Add FollowsT") {
         for (string follower : followers) {
             REQUIRE(pkb->relationship.followsT.isRelationship(followee, follower));
 
-            unordered_set<string> followeesSet = pkb->relationship.followsT.getSetLHS(follower);
+            unordered_set<string> followeesSet = pkb->relationship.followsT.getLHS(follower);
             REQUIRE(followeesSet.find(followee) != followeesSet.end());
         }
 
-        REQUIRE(pkb->relationship.followsT.getSetRHS(followee) == followers);
+        REQUIRE(pkb->relationship.followsT.getRHS(followee) == followers);
     }
 
 
@@ -437,7 +437,7 @@ TEST_CASE("Add Parent") {
     pkb->clearPKB();
 
     REQUIRE(pkb->relationship.parent.getLHS("2").empty());
-    REQUIRE(pkb->relationship.parent.getSetRHS("1").empty());
+    REQUIRE(pkb->relationship.parent.getRHS("1").empty());
 
     unordered_map<int, unordered_set<int>> parentToChildrenMap = {
             {1, {2}},
@@ -460,7 +460,7 @@ TEST_CASE("Add Parent") {
 
     REQUIRE(pkb->relationship.parent.isRelationship("1", "3") == false);
     REQUIRE(pkb->relationship.parent.getLHS("3") == unordered_set<string>{});
-    REQUIRE(pkb->relationship.parent.getSetRHS("2") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.parent.getRHS("2") == unordered_set<string>{});
 
 
     for (auto& iter : parentToChildrenMap) {
@@ -479,7 +479,7 @@ TEST_CASE("Add Parent") {
             REQUIRE(pkb->relationship.parent.getLHS(child) == unordered_set<string>{parent});
         }
 
-        REQUIRE(pkb->relationship.parent.getSetRHS(parent) == children);
+        REQUIRE(pkb->relationship.parent.getRHS(parent) == children);
 
     }
 
@@ -490,8 +490,8 @@ TEST_CASE("Add Parent") {
 TEST_CASE("Add ParentT") {
     pkb->clearPKB();
 
-    REQUIRE(pkb->relationship.parentT.getSetLHS("2").empty());
-    REQUIRE(pkb->relationship.parentT.getSetRHS("1").empty());
+    REQUIRE(pkb->relationship.parentT.getLHS("2").empty());
+    REQUIRE(pkb->relationship.parentT.getRHS("1").empty());
 
 
     unordered_map<int, unordered_set<int>> tParentToChildrenMap = {
@@ -514,8 +514,8 @@ TEST_CASE("Add ParentT") {
     }
 
     REQUIRE(pkb->relationship.parentT.isRelationship("1", "3") == false);
-    REQUIRE(pkb->relationship.parentT.getSetLHS("3") == unordered_set<string>{});
-    REQUIRE(pkb->relationship.parentT.getSetRHS("2") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.parentT.getLHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.parentT.getRHS("2") == unordered_set<string>{});
 
 
     for (auto& iter : tParentToChildrenMap) {
@@ -529,11 +529,11 @@ TEST_CASE("Add ParentT") {
         for (string child : children) {
             REQUIRE(pkb->relationship.parentT.isRelationship(parent, child));
 
-            unordered_set<string> parentsSet = pkb->relationship.parentT.getSetLHS(child);
+            unordered_set<string> parentsSet = pkb->relationship.parentT.getLHS(child);
             REQUIRE(parentsSet.find(parent) != parentsSet.end());
         }
 
-        REQUIRE(pkb->relationship.parentT.getSetRHS(parent) == children);
+        REQUIRE(pkb->relationship.parentT.getRHS(parent) == children);
     }
 
 
@@ -562,8 +562,8 @@ TEST_CASE("Add UsesS") {
     }
 
     REQUIRE(pkb->relationship.usesS.isRelationship("2", "a") == false);
-    REQUIRE(pkb->relationship.usesS.getSetLHS("unusedVariable") == unordered_set<string>{});
-    REQUIRE(pkb->relationship.usesS.getSetRHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesS.getLHS("unusedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesS.getRHS("3") == unordered_set<string>{});
 
 
     for (auto& iter : statementToVariablesUsedMap) {
@@ -574,11 +574,11 @@ TEST_CASE("Add UsesS") {
         for (string v : variablesUsed) {
             REQUIRE(pkb->relationship.usesS.isRelationship(statement, v));
 
-            unordered_set<string> userStatements = pkb->relationship.usesS.getSetLHS(v);
+            unordered_set<string> userStatements = pkb->relationship.usesS.getLHS(v);
             REQUIRE(userStatements.find(statement) != userStatements.end());
         }
 
-        REQUIRE(pkb->relationship.usesS.getSetRHS(statement) == variablesUsed);
+        REQUIRE(pkb->relationship.usesS.getRHS(statement) == variablesUsed);
 
     }
 
@@ -607,8 +607,8 @@ TEST_CASE("Add UsesP") {
     }
 
     REQUIRE(pkb->relationship.usesP.isRelationship("banana", "a") == false);
-    REQUIRE(pkb->relationship.usesP.getSetLHS("unusedVariable") == unordered_set<string>{});
-    REQUIRE(pkb->relationship.usesP.getSetRHS("dragonfruit") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesP.getLHS("unusedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.usesP.getRHS("dragonfruit") == unordered_set<string>{});
 
 
     for (auto& iter : procedureToVariablesUsedMap) {
@@ -619,11 +619,11 @@ TEST_CASE("Add UsesP") {
         for (string v : variablesUsed) {
             REQUIRE(pkb->relationship.usesP.isRelationship(procedure, v));
 
-            unordered_set<string> userStatements = pkb->relationship.usesP.getSetLHS(v);
+            unordered_set<string> userStatements = pkb->relationship.usesP.getLHS(v);
             REQUIRE(userStatements.find(procedure) != userStatements.end());
         }
 
-        REQUIRE(pkb->relationship.usesP.getSetRHS(procedure) == variablesUsed);
+        REQUIRE(pkb->relationship.usesP.getRHS(procedure) == variablesUsed);
 
     }
 
@@ -654,8 +654,8 @@ TEST_CASE("Add ModifiesS") {
 
 
     REQUIRE(pkb->relationship.modifiesS.isRelationship("2", "a") == false);
-    REQUIRE(pkb->relationship.modifiesS.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
-    REQUIRE(pkb->relationship.modifiesS.getSetRHS("3") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesS.getLHS("unmodifiedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesS.getRHS("3") == unordered_set<string>{});
 
 
     for (auto& iter : statementToVariablesModifiedMap) {
@@ -666,11 +666,11 @@ TEST_CASE("Add ModifiesS") {
         for (string v : variablesModified) {
             REQUIRE(pkb->relationship.modifiesS.isRelationship(statement, v));
 
-            unordered_set<string> modifierStatements = pkb->relationship.modifiesS.getSetLHS(v);
+            unordered_set<string> modifierStatements = pkb->relationship.modifiesS.getLHS(v);
             REQUIRE(modifierStatements.find(statement) != modifierStatements.end());
         }
 
-        REQUIRE(pkb->relationship.modifiesS.getSetRHS(statement) == variablesModified);
+        REQUIRE(pkb->relationship.modifiesS.getRHS(statement) == variablesModified);
 
     }
 
@@ -701,8 +701,8 @@ TEST_CASE("Add ModifiesP") {
 
 
     REQUIRE(pkb->relationship.modifiesP.isRelationship("banana", "a") == false);
-    REQUIRE(pkb->relationship.modifiesP.getSetLHS("unmodifiedVariable") == unordered_set<string>{});
-    REQUIRE(pkb->relationship.modifiesP.getSetRHS("dragonfruit") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesP.getLHS("unmodifiedVariable") == unordered_set<string>{});
+    REQUIRE(pkb->relationship.modifiesP.getRHS("dragonfruit") == unordered_set<string>{});
 
 
     for (auto& iter : procedureToVariablesModifiedMap) {
@@ -713,11 +713,11 @@ TEST_CASE("Add ModifiesP") {
         for (string v : variablesModified) {
             REQUIRE(pkb->relationship.modifiesP.isRelationship(procedure, v));
 
-            unordered_set<string> modifierStatements = pkb->relationship.modifiesP.getSetLHS(v);
+            unordered_set<string> modifierStatements = pkb->relationship.modifiesP.getLHS(v);
             REQUIRE(modifierStatements.find(procedure) != modifierStatements.end());
         }
 
-        REQUIRE(pkb->relationship.modifiesP.getSetRHS(procedure) == variablesModified);
+        REQUIRE(pkb->relationship.modifiesP.getRHS(procedure) == variablesModified);
 
     }
 
@@ -756,71 +756,71 @@ TEST_CASE("Add Next") {
     }
 
 
-    // getNextNodeOf() Test
+    // getRHS() Test
 
-    REQUIRE(pkb->relationship.next.getNextNodeOf("1") == unordered_set<string>{"2", "6"});
+    REQUIRE(pkb->relationship.next.getRHS("1") == unordered_set<string>{"2", "6"});
 
-    REQUIRE(pkb->relationship.next.getNextNodeOf("2") == unordered_set<string>{"3"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("3") == unordered_set<string>{"4"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("4") == unordered_set<string>{"5"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("5") == unordered_set<string>{"9"});
+    REQUIRE(pkb->relationship.next.getRHS("2") == unordered_set<string>{"3"});
+    REQUIRE(pkb->relationship.next.getRHS("3") == unordered_set<string>{"4"});
+    REQUIRE(pkb->relationship.next.getRHS("4") == unordered_set<string>{"5"});
+    REQUIRE(pkb->relationship.next.getRHS("5") == unordered_set<string>{"9"});
 
-    REQUIRE(pkb->relationship.next.getNextNodeOf("6") == unordered_set<string>{"9", "7"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("7") == unordered_set<string>{"6", "8"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("8") == unordered_set<string>{"7"});
+    REQUIRE(pkb->relationship.next.getRHS("6") == unordered_set<string>{"9", "7"});
+    REQUIRE(pkb->relationship.next.getRHS("7") == unordered_set<string>{"6", "8"});
+    REQUIRE(pkb->relationship.next.getRHS("8") == unordered_set<string>{"7"});
 
-    REQUIRE(pkb->relationship.next.getNextNodeOf("9") == unordered_set<string>{"10"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("10") == unordered_set<string>{"11"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("11") == unordered_set<string>{"12"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("12") == unordered_set<string>{"13", "14"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("13") == unordered_set<string>{"10"});
-    REQUIRE(pkb->relationship.next.getNextNodeOf("14") == unordered_set<string>{"10"});
-
-
-    // getPreviousNodeOf() Test
-
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("1") == unordered_set<string>{});
-
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("2") == unordered_set<string>{"1"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("3") == unordered_set<string>{"2"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("4") == unordered_set<string>{"3"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("5") == unordered_set<string>{"4"});
-
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("6") == unordered_set<string>{"1", "7"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("7") == unordered_set<string>{"6", "8"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("8") == unordered_set<string>{"7"});
-
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("9") == unordered_set<string>{"5", "6"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("10") == unordered_set<string>{"9", "13", "14"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("11") == unordered_set<string>{"10"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("12") == unordered_set<string>{"11"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("13") == unordered_set<string>{"12"});
-    REQUIRE(pkb->relationship.next.getPreviousNodeOf("14") == unordered_set<string>{"12"});
+    REQUIRE(pkb->relationship.next.getRHS("9") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getRHS("10") == unordered_set<string>{"11"});
+    REQUIRE(pkb->relationship.next.getRHS("11") == unordered_set<string>{"12"});
+    REQUIRE(pkb->relationship.next.getRHS("12") == unordered_set<string>{"13", "14"});
+    REQUIRE(pkb->relationship.next.getRHS("13") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getRHS("14") == unordered_set<string>{"10"});
 
 
+    // getLHS() Test
 
-    // isNext() Test
+    REQUIRE(pkb->relationship.next.getLHS("1") == unordered_set<string>{});
 
-    pkb->relationship.next.isNext("1", "2");
-    pkb->relationship.next.isNext("1", "6");
-    pkb->relationship.next.isNext("2", "3");
-    pkb->relationship.next.isNext("3", "5");
-    pkb->relationship.next.isNext("4", "5");
-    pkb->relationship.next.isNext("5", "9");
+    REQUIRE(pkb->relationship.next.getLHS("2") == unordered_set<string>{"1"});
+    REQUIRE(pkb->relationship.next.getLHS("3") == unordered_set<string>{"2"});
+    REQUIRE(pkb->relationship.next.getLHS("4") == unordered_set<string>{"3"});
+    REQUIRE(pkb->relationship.next.getLHS("5") == unordered_set<string>{"4"});
 
-    pkb->relationship.next.isNext("6", "7");
-    pkb->relationship.next.isNext("6", "9");
-    pkb->relationship.next.isNext("7", "8");
-    pkb->relationship.next.isNext("7", "6");
-    pkb->relationship.next.isNext("8", "7");
+    REQUIRE(pkb->relationship.next.getLHS("6") == unordered_set<string>{"1", "7"});
+    REQUIRE(pkb->relationship.next.getLHS("7") == unordered_set<string>{"6", "8"});
+    REQUIRE(pkb->relationship.next.getLHS("8") == unordered_set<string>{"7"});
 
-    pkb->relationship.next.isNext("9", "10");
-    pkb->relationship.next.isNext("10", "11");
-    pkb->relationship.next.isNext("11", "12");
-    pkb->relationship.next.isNext("12", "13");
-    pkb->relationship.next.isNext("12", "14");
-    pkb->relationship.next.isNext("13", "10");
-    pkb->relationship.next.isNext("13", "10");
+    REQUIRE(pkb->relationship.next.getLHS("9") == unordered_set<string>{"5", "6"});
+    REQUIRE(pkb->relationship.next.getLHS("10") == unordered_set<string>{"9", "13", "14"});
+    REQUIRE(pkb->relationship.next.getLHS("11") == unordered_set<string>{"10"});
+    REQUIRE(pkb->relationship.next.getLHS("12") == unordered_set<string>{"11"});
+    REQUIRE(pkb->relationship.next.getLHS("13") == unordered_set<string>{"12"});
+    REQUIRE(pkb->relationship.next.getLHS("14") == unordered_set<string>{"12"});
+
+
+
+    // isRelationship() Test
+
+    pkb->relationship.next.isRelationship("1", "2");
+    pkb->relationship.next.isRelationship("1", "6");
+    pkb->relationship.next.isRelationship("2", "3");
+    pkb->relationship.next.isRelationship("3", "5");
+    pkb->relationship.next.isRelationship("4", "5");
+    pkb->relationship.next.isRelationship("5", "9");
+
+    pkb->relationship.next.isRelationship("6", "7");
+    pkb->relationship.next.isRelationship("6", "9");
+    pkb->relationship.next.isRelationship("7", "8");
+    pkb->relationship.next.isRelationship("7", "6");
+    pkb->relationship.next.isRelationship("8", "7");
+
+    pkb->relationship.next.isRelationship("9", "10");
+    pkb->relationship.next.isRelationship("10", "11");
+    pkb->relationship.next.isRelationship("11", "12");
+    pkb->relationship.next.isRelationship("12", "13");
+    pkb->relationship.next.isRelationship("12", "14");
+    pkb->relationship.next.isRelationship("13", "10");
+    pkb->relationship.next.isRelationship("13", "10");
 
 
 }

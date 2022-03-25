@@ -28,7 +28,7 @@ class OneToManyRelationship {
         }
     }
 
-    unordered_set<RHS> getSetRHSNormal(LHS lhs) {
+    unordered_set<RHS> getRHSNormal(LHS lhs) {
 
         unordered_set<RHS> emptySet;
 
@@ -68,9 +68,9 @@ public:
 
 
 
-    unordered_set<string> getSetRHS(string lhs) {
+    unordered_set<string> getRHS(string lhs) {
         LHS l;
-        return convertSetGenericsToSetStrings(getSetRHSNormal(convertToLHS(lhs, l)));
+        return convertSetGenericsToSetStrings(getRHSNormal(convertToLHS(lhs, l)));
     }
 
 

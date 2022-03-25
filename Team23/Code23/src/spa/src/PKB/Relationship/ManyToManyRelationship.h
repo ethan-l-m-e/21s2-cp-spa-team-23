@@ -27,14 +27,14 @@ class ManyToManyRelationship {
         }
     }
 
-    unordered_set<RHS> getSetRhsNormal(LHS lhs) {
+    unordered_set<RHS> getRHSNormal(LHS lhs) {
 
         unordered_set<RHS> emptySet;
 
         return (lhsToSetRhsMap.find(lhs) != lhsToSetRhsMap.end()) ? lhsToSetRhsMap[lhs] : emptySet;
     }
 
-    unordered_set<LHS> getSetLhsNormal(RHS rhs) {
+    unordered_set<LHS> getLHSNormal(RHS rhs) {
 
         unordered_set<LHS> emptySet;
 
@@ -78,14 +78,14 @@ public:
         return isRelationshipNormal(convertToLHS(lhs, l), convertToRHS(rhs, r));
     }
 
-    unordered_set<string> getSetRHS(string lhs) {
+    unordered_set<string> getRHS(string lhs) {
         LHS l;
-        return convertSetGenericsToSetStrings(getSetRhsNormal(convertToLHS(lhs, l)));
+        return convertSetGenericsToSetStrings(getRHSNormal(convertToLHS(lhs, l)));
     }
 
-    unordered_set<string> getSetLHS(string rhs) {
+    unordered_set<string> getLHS(string rhs) {
         RHS r;
-        return convertSetGenericsToSetStrings(getSetLhsNormal(convertToRHS(rhs, r)));
+        return convertSetGenericsToSetStrings(getLHSNormal(convertToRHS(rhs, r)));
     }
 
 

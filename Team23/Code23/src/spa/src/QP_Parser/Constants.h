@@ -21,8 +21,8 @@ std::string const REF = "(\"" + IDENT + "\"|" + INTEGER + "|" + ATTR_REF + ")";
 
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
-std::string const DECLARATION = SPACE_TAB + DESIGN_ENTITY + SINGLE_SPACE_TAB + SYNONYM + "(," + SPACE_TAB + SYNONYM
-        + SPACE_TAB + ")*" + SPACE_TAB + ";";
+std::string const DECLARATION = SPACE_TAB + DESIGN_ENTITY + SINGLE_SPACE_TAB + SYNONYM + SPACE_TAB + "(," + SPACE_TAB
+        + SYNONYM + SPACE_TAB + ")*" + SPACE_TAB + ";";
 
 std::string const TUPLE = "(" + SPACE_TAB + ELEM + "|" + SPACE_TAB + "<"+ SPACE_TAB + ELEM + SPACE_TAB + "("
         + SPACE_TAB + "," + SPACE_TAB + ELEM + SPACE_TAB + ")*>)";
@@ -94,7 +94,7 @@ std::string const WITH_CL = SPACE_TAB + "with" + SINGLE_SPACE_TAB + ATTR_COND;
 std::string const SELECT_CL = "( |\n|\t)*Select( |\n|\t)+" + RESULT_CL + "(" + SINGLE_SPACE_TAB + SUCH_THAT_CL
         + "|" + SINGLE_SPACE_TAB + PATTERN_CL + "|" + SINGLE_SPACE_TAB + WITH_CL + ")*" + SPACE_TAB;
 std::string const DECLARATION_REGEX = "(( |\n|\t)*" + DECLARATION+ ")+";
-std::string const PQL_FORMAT = DECLARATION_REGEX + "( |\n|\t)*" + SELECT_CL + "( |\t|\n)*";
+std::string const PQL_FORMAT = DECLARATION_REGEX + SELECT_CL + "( |\t|\n)*";
 
 // regex needed for semantic validation
 std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*|Next|Next\\*)";
