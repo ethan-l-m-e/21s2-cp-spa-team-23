@@ -15,6 +15,7 @@ vector<NodeCFG*> CFGConstructor::createCFG(ProcedureNode* p) {
     for(Node* s: stmtLst) {
         prevNode = CFGConstructor::populateCFG(s, prevNode,&setOfAllNodes);
     }
+
     return setOfAllNodes;
 }
 
