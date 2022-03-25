@@ -16,4 +16,6 @@ public:
     void addStatement(PrintNode *node);
 
     string getVariableName(string statementNumber);
+
+    //void clear() override;
 };

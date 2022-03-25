@@ -36,25 +36,6 @@ unordered_map<int, NodeCFG*> NodeCFG::getAllPreviousNode() {
     return this->mapOfPreviousNodes;
 }
 
-NodeCFG* NodeCFG::getStartNode() {
-    if(this->mapOfPreviousNodes.size() == 0) {
-        return this;
-    } else {
-        for(auto x : this->mapOfPreviousNodes) {
-            return x.second->getStartNode();
-        }
-    }
-    return nullptr;
-}
-
- NodeCFG* NodeCFG::getEndNode() {
-     if(this->nextNode== nullptr) {
-         return this;
-     } else {
-         return this->nextNode->getEndNode();
-     }
-}
-
 bool NodeCFG::isStart() {
     return this->mapOfPreviousNodes.size() == 0;
 }
