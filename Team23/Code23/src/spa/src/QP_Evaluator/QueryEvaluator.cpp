@@ -6,7 +6,7 @@
 #include "QP_Parser/Exception.h"
 #include "QP_Evaluator/ClauseEvaluators/ClauseEvaluatorCollection.h"
 
-std::list<std::string> QueryEvaluator::evaluate(Query* query) {
+list<string> QueryEvaluator::evaluate(Query* query) {
 
     // Initialise an empty synonym relations for storing intermediate result
     auto* resultTable = new ResultTable();
@@ -38,7 +38,7 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
     if (!result) return {};
-    std::list<std::string> output = generateResultString(resultTable);
+    list<string> output = generateResultString(resultTable);
     delete resultTable;
     return output;
 }
@@ -83,14 +83,14 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
  * @param result  an ResultTable containing the final result
  * @return  a list of strings representing the result items
  */
-std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
-    std::unordered_set<std::string> stringSet;
+list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
+    std::unordered_set<string> stringSet;
 
     if (resultTable->isBoolean()) {
         stringSet.insert(resultTable->getBooleanResultString());
     } else if (!resultTable->isEmpty()) {
-        for(int i = 0; i < resultTable->getTableSize(); i++) {
-            std::string s;
+        for(int i = 0; i < resultTable->getTableHeight(); i++) {
+            string s;
             for (auto &col: *resultTable->getList()) {
                 if (!s.empty()) s += " ";
                 s += col[i];
@@ -98,6 +98,6 @@ std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultT
             stringSet.insert(s);
         }
     }
-    return std::list<std::string> {std::begin(stringSet), std::end(stringSet)};
+    return list<string> {std::begin(stringSet), std::end(stringSet)};
 }
 

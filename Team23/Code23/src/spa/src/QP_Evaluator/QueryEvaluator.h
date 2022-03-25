@@ -5,15 +5,15 @@
 #ifndef SPA_QUERYEVALUATOR_H
 #define SPA_QUERYEVALUATOR_H
 
-
 #include "PKB/PKB.h"
 #include "QP_Evaluator/Query/Query.h"
 #include "QP_Evaluator/ClauseEvaluators/Result.h"
 #include "QP_Evaluator/ClauseEvaluators/ClauseEvaluator.h"
 
-#include <sstream>
-#include <iostream>
 #include <list>
+
+using std::string;
+using std::list;
 
 class QueryEvaluator {
 private:
@@ -21,11 +21,11 @@ private:
 public:
     explicit QueryEvaluator(PKB* pkb) : pkb(pkb) { }
 
-    std::list<std::string> evaluate(Query*);
+    list<string> evaluate(Query*);
 
     ClauseEvaluator* generateEvaluator(const SuchThatClause&, Query*);
 
-    static std::list<std::string> generateResultString(ResultTable*);
+    static list<string> generateResultString(ResultTable*);
 };
 
 

@@ -4,15 +4,15 @@
 
 #include "ModifiesSClauseEvaluator.h"
 
-bool ModifiesSClauseEvaluator::isRelation(std::string left, std::string right) {
+bool ModifiesSClauseEvaluator::isRelation(string left, string right) {
     return pkb->relationship.modifiesS.isRelationship(left, right);
 }
 
-unordered_set<std::string> ModifiesSClauseEvaluator::getLeftSynonymValue(std::string right) {
+unordered_set<string> ModifiesSClauseEvaluator::getLeftSynonymValue(string right) {
     return pkb->relationship.modifiesS.getLHS(right);
 }
 
-unordered_set<std::string> ModifiesSClauseEvaluator::getRightSynonymValue(std::string left) {
+unordered_set<string> ModifiesSClauseEvaluator::getRightSynonymValue(string left) {
     return pkb->relationship.modifiesS.getRHS(left);
 }
 

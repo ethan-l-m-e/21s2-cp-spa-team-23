@@ -5,30 +5,36 @@
 #ifndef SPA_RESULT_H
 #define SPA_RESULT_H
 
-#include <utility>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <string>
-#include <vector>
+#include <utility>
 #include <variant>
+#include <vector>
 
-template <> struct std::hash<std::pair<std::string, std::string>> {
-    inline size_t operator()(const std::pair<std::string, std::string> &v) const {
-        std::hash<std::string> string_hasher;
+using std::pair;
+using std::string;
+using std::unordered_set;
+using std::variant;
+
+template <> struct std::hash<pair<string, string>> {
+    inline size_t operator()(const pair<string, string> &v) const {
+        std::hash<string> string_hasher;
         return string_hasher(v.first) ^ string_hasher(v.second);
     }
 };
 
 enum class ResultType {
     BOOLEAN,
-    STRING,
-    TUPLES,
+    SINGLE,
+    PAIR,
     EMPTY
 };
-using ResultHeader = std::variant<
-        std::string,
-        std::pair<std::string, std::string>>;
-using ResultItems = std::variant<std::unordered_set<std::string>, std::unordered_set<std::pair<std::string, std::string>>>;
+using ResultHeader = variant<string, pair<string, string>>;
+using ResultItems = variant<
+        unordered_set<string>,
+        unordered_set<pair<string, string>>
+        >;
 
 typedef struct Result {
     ResultType resultType = ResultType::EMPTY;

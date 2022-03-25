@@ -4,8 +4,6 @@
 
 #include "Query.h"
 
-#include <utility>
-
 bool Query::hasSuchThatClause(){
     return !suchThatClauses.empty();
 }

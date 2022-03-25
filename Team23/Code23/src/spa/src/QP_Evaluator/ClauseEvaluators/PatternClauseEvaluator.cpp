@@ -55,7 +55,7 @@ bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
     Expression varLeft;
     Expression exprRight;
     if(isIdent(argLeft)) {
-        varLeft  = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
+        varLeft  = validateAndParseEntRef(std::get<string>(argLeft.argumentValue));
     }
     if(!isWildCard(argRight)) {
         throw "right side is not a wild card";
@@ -102,7 +102,7 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
     Expression varLeft;
     Expression exprRight;
     if(isIdent(argLeft)) {
-        varLeft  = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
+        varLeft  = validateAndParseEntRef(std::get<string>(argLeft.argumentValue));
     }
     if(!isWildCard(argRight)) {
         throw "2nd argument is not a wild card";
@@ -158,10 +158,10 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     Expression varLeft;
     Expression exprRight;
     if(isIdent(argLeft)) {
-        varLeft  = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
+        varLeft  = validateAndParseEntRef(std::get<string>(argLeft.argumentValue));
     }
     if(!isWildCard(argRight)) {
-        exprRight = validateAndParseExpression(std::get<std::string>(argRight.argumentValue));
+        exprRight = validateAndParseExpression(std::get<string>(argRight.argumentValue));
     }
     // setup parsing and results
     auto listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
@@ -203,7 +203,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
             }
         }
         else {
-            throw "arguments in pattern clause mismatch " + std::get<std::string>(arg1.argumentValue) + " " + std::get<std::string>(arg2.argumentValue);
+            throw "arguments in pattern clause mismatch " + std::get<string>(arg1.argumentValue) + " " + std::get<string>(arg2.argumentValue);
         }
     }
 
@@ -226,17 +226,17 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
 void PatternClauseEvaluator::constructResults(ResultItems results, bool hasTuples) {
     if (hasTuples) {
         // configure resultType, to have both variable names and assign
-        result.resultType = ResultType::TUPLES;
+        result.resultType = ResultType::PAIR;
         result.resultBoolean = !(get<unordered_set<pair<string, string>>>(results)).empty();
-        result.resultHeader = tuple<string, string>(std::get<std::string>(patternSynonym.argumentValue),
-                                                    std::get<std::string>(arg1.argumentValue));
+        result.resultHeader = tuple<string, string>(std::get<string>(patternSynonym.argumentValue),
+                                                    std::get<string>(arg1.argumentValue));
         result.resultSet = results;
 
     } else {
         // configure resultType to have only a list of assign
-        result.resultType = ResultType::STRING;
+        result.resultType = ResultType::SINGLE;
         result.resultBoolean = !(get<unordered_set<string>>(results)).empty();
-        result.resultHeader = std::get<std::string>(patternSynonym.argumentValue);
+        result.resultHeader = std::get<string>(patternSynonym.argumentValue);
         result.resultSet = results;
 
     }

@@ -3,6 +3,7 @@
 //
 
 #include "ClauseEvaluator.h"
+
 #include "QP_Parser/Exception.h"
 
 /**
@@ -10,7 +11,7 @@
  * @param designEntity  a design entity
  * @return  set of all string identifiers belonging the design entity
  */
-unordered_set<std::string> ClauseEvaluator::getAllType(DesignEntity designEntity) {
+unordered_set<string> ClauseEvaluator::getAllType(DesignEntity designEntity) {
 
     switch (designEntity) {
         case DesignEntity::STMT:

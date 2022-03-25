@@ -17,10 +17,10 @@ public:
 private:
     void projectSelectedSynonyms(vector<int> *, ResultTable *);
 
-    bool applyAttrRef(std::pair<string, AttrName> &attrRef, std::string (ResultClauseEvaluator::* *func)(std::string&),
-                      std::string *name);
+    bool applyAttrRef(std::pair<string, AttrName> &attrRef, string (ResultClauseEvaluator::* *func)(string&),
+                      string *name);
 
-    std::vector<std::string> getMapping(std::vector<std::string> &, std::string (ResultClauseEvaluator::*func)(std::string&));
+    vector<string> getMapping(vector<string> &, string (ResultClauseEvaluator::*func)(string&));
 
     string getVarRead(string&);
 

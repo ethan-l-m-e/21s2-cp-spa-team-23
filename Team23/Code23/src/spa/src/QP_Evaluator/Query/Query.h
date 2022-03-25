@@ -5,9 +5,16 @@
 #ifndef SPA_QUERY_H
 #define SPA_QUERY_H
 
-#include <unordered_map>
-#include "PKB/PKB.h"
 #include "Clause.h"
+
+#include <unordered_map>
+#include <variant>
+#include <vector>
+
+using std::pair;
+using std::string;
+using std::unordered_map;
+using std::vector;
 
 enum class DesignEntity{
     EMPTY,
@@ -38,9 +45,9 @@ public:
     vector<WithClause> getWithClauses();
     vector<Argument> getSelectedSynonyms();
     DesignEntity getSynonymType(string synonym);
-    DesignEntity findEntityType(const std::string&);
+    DesignEntity findEntityType(const string&);
     void setDeclarations(unordered_map<string, DesignEntity>);
-    void setSynonyms(std::vector<Argument>);
+    void setSynonyms(vector<Argument>);
     void setSuchThatClauses(vector<SuchThatClause>);
     void setPatternClauses(vector<PatternClause>);
     void setWithClauses(vector<WithClause>);

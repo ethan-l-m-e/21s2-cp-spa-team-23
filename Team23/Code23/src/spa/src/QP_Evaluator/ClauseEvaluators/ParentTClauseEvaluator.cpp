@@ -4,15 +4,15 @@
 
 #include "ParentTClauseEvaluator.h"
 
-bool ParentTClauseEvaluator::isRelation(std::string left, std::string right) {
+bool ParentTClauseEvaluator::isRelation(string left, string right) {
     return pkb->relationship.parentT.isRelationship(left, right);
 }
 
-unordered_set<std::string> ParentTClauseEvaluator::getLeftSynonymValue(std::string right) {
+unordered_set<string> ParentTClauseEvaluator::getLeftSynonymValue(string right) {
     return pkb->relationship.parentT.getLHS(right);
 }
 
-unordered_set<std::string> ParentTClauseEvaluator::getRightSynonymValue(std::string left) {
+unordered_set<string> ParentTClauseEvaluator::getRightSynonymValue(string left) {
     return pkb->relationship.parentT.getRHS(left);
 }
 

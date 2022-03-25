@@ -11,7 +11,7 @@ using namespace std;
 TEST_CASE("Add result to empty synonym relations") {
     auto* rt = new ResultTable();
     Result result1 = {
-            ResultType::BOOLEAN,
+            variant::BOOLEAN,
             true,
     };
     rt->mergeResultToTable(result1);
@@ -19,7 +19,7 @@ TEST_CASE("Add result to empty synonym relations") {
 
     rt->clearTable();
     Result result2 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "a",
             {"1", "2", "3", "4", "5"}
@@ -31,7 +31,7 @@ TEST_CASE("Add result to empty synonym relations") {
 
     rt->clearTable();
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("a", "b"),
             {
@@ -64,7 +64,7 @@ TEST_CASE("Add result to existing synonym relations") {
     rt->setResultTable({"x"}, {{"1", "2", "3", "4"}});
 
     Result result2 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "a",
             {"1", "2"}
@@ -80,7 +80,7 @@ TEST_CASE("Add result to existing synonym relations") {
     rt->setResultTable({"x"},{{"1", "2", "3", "4"}});
 
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("a", "b"),
             {
@@ -108,7 +108,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     rt->setResultTable({"a", "c"},{{"1", "2", "3", "4"},{"w", "w", "w", "r"}});
 
     Result result1 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "a",
             {"1", "2"}
@@ -122,7 +122,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     rt->setResultTable({"a", "c"},{{"1", "1", "2", "3", "4"},{"w", "r", "w", "w", "r"}});
 
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("a", "b"),
             {
@@ -149,7 +149,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
         );
 
     Result result4 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("a", "c"),
             {
@@ -172,7 +172,7 @@ TEST_CASE("Multi-steps") {
     auto* rt = new ResultTable();
 
     Result result1 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "s3",
             {"6", "5", "7"}
@@ -180,7 +180,7 @@ TEST_CASE("Multi-steps") {
     rt->mergeResultToTable(result1);
 
     Result result2 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("s3", "v1"),
             {
@@ -194,7 +194,7 @@ TEST_CASE("Multi-steps") {
     rt->mergeResultToTable(result2);
 
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("s2", "v1"),
             {
@@ -209,7 +209,7 @@ TEST_CASE("Multi-steps") {
     rt->mergeResultToTable(result3);
 
     Result result4 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("s3", "s1"),
             {
@@ -223,7 +223,7 @@ TEST_CASE("Multi-steps") {
     rt->mergeResultToTable(result4);
 
     Result result5 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
             make_tuple("s1", "s2"),
             {

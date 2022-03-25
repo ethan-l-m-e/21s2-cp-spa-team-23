@@ -12,11 +12,11 @@ bool NextTClauseEvaluator::isRelation(string left, string right) {
     return nextTOperator->computeRelation(left, right);
 }
 
-unordered_set<std::string> NextTClauseEvaluator::getLeftSynonymValue(std::string right) {
+unordered_set<string> NextTClauseEvaluator::getLeftSynonymValue(string right) {
     return nextTOperator->computeLHS(right);
 }
 
-unordered_set<std::string> NextTClauseEvaluator::getRightSynonymValue(std::string left) {
+unordered_set<string> NextTClauseEvaluator::getRightSynonymValue(string left) {
     return nextTOperator->computeRHS(left);
 }
 

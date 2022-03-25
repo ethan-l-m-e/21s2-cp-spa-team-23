@@ -59,7 +59,7 @@ void ResultClauseEvaluator::projectSelectedSynonyms(vector<int>* projections, Re
  */
 void ResultClauseEvaluator::appendNewSynonym(string synonymValue, ResultTable* resultTable){
     Result result = {
-            .resultType = ResultType::STRING,
+            .resultType = ResultType::SINGLE,
             .resultBoolean =true,
             .resultHeader = synonymValue,
             .resultSet = getAllType(query->getSynonymType(synonymValue))
@@ -74,7 +74,7 @@ void ResultClauseEvaluator::appendNewSynonym(string synonymValue, ResultTable* r
  * @param name  pointer to the name of the new header to be added to result table for identifying the attribute column
  * @return  returns a boolean value representing whether name and function pointer have been populated
  */
-bool ResultClauseEvaluator::applyAttrRef(std::pair<string, AttrName>& attrRef, std::string (ResultClauseEvaluator::**func)(std::string&), std::string *name) {
+bool ResultClauseEvaluator::applyAttrRef(std::pair<string, AttrName>& attrRef, string (ResultClauseEvaluator::**func)(string&), string *name) {
     if(query->findEntityType(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
         *name = attrRef.first + ".varName";
         *func = &ResultClauseEvaluator::getVarRead;
@@ -96,10 +96,10 @@ bool ResultClauseEvaluator::applyAttrRef(std::pair<string, AttrName>& attrRef, s
  * @param func  function pointer indicating the function to be applied for getting the mapped value
  * @return  a new list with the values for the attribute corresponding to each value
  */
-std::vector<std::string> ResultClauseEvaluator::getMapping(std::vector<std::string>& lst, std::string (ResultClauseEvaluator::*func) (std::string&)) {
-    std::vector<std::string> mappings;
-    for (std::string& val: lst) {
-        std::string mapped = (this->*func)(val);
+vector<string> ResultClauseEvaluator::getMapping(vector<string>& lst, string (ResultClauseEvaluator::*func) (string&)) {
+    vector<string> mappings;
+    for (string& val: lst) {
+        string mapped = (this->*func)(val);
         mappings.emplace_back(mapped);
     }
     return mappings;
@@ -116,7 +116,7 @@ void ResultClauseEvaluator::unpackSynonym(Argument &synonym, std::pair<string, A
         *attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
         *synonymValue = attrRef->first;
     } else if (synonym.argumentType == ArgumentType::SYNONYM) {
-        *synonymValue = std::get<std::string>(synonym.argumentValue);
+        *synonymValue = std::get<string>(synonym.argumentValue);
     } else {
         throw qp::QPEvaluatorException("Invalid selected argument type");
     }
@@ -130,13 +130,13 @@ void ResultClauseEvaluator::unpackSynonym(Argument &synonym, std::pair<string, A
  */
 void ResultClauseEvaluator::updateTableForAttrReference(std::pair<string, AttrName> &attrRef, long* index, ResultTable* resultTable) {
     auto header = resultTable->getHeader();
-    std::string(ResultClauseEvaluator::*func) (std::string&);
-    std::string name;
+    string(ResultClauseEvaluator::*func) (string&);
+    string name;
     if (applyAttrRef(attrRef, &func, &name)) {
         auto it1 = std::find(header->begin(), header->end(), name);
         long newIndex = std::distance(header->begin(), it1);
         if (it1 == header->end()) {
-            std::vector<std::string> newColumn = getMapping((*resultTable->getList())[*index], func);
+            vector<string> newColumn = getMapping((*resultTable->getList())[*index], func);
             resultTable->appendColumn(name, newColumn);
         }
         *index = newIndex;
