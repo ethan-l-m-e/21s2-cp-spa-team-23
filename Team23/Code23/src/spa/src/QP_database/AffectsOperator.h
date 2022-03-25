@@ -37,15 +37,12 @@ protected:
 
     stmtSetStr removeContainerFromSet(unordered_set<string> &stmtSet);
 
-    stmtSetNum
-    static DFSResultSetRecursion(NodeCFG *currentNode, unordered_map<int, bool> &visited, unordered_set<int> resultSet,
+    stmtSetNum static DFSResultSetRecursion(NodeCFG *currentNode, unordered_map<int, bool> &visited, unordered_set<int> resultSet,
                           unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *));
 
-    stmtSetNum
-    static searchForAffectsBefore(NodeCFG *rightNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
+    stmtSetNum static searchForAffectsBefore(NodeCFG *rightNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 
-    stmtSetNum
-    static searchForAffectsAfter(NodeCFG *leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
+    stmtSetNum static searchForAffectsAfter(NodeCFG *leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 
     static bool IsReachableForward(NodeCFG *srcNode, NodeCFG *destNode, unordered_map<int, bool> &visited, vector<int> &path);
 

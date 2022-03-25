@@ -14,24 +14,6 @@ typedef  int statementNum;
 static stmtSetStr blackListStatements = {};
 static stmtSetStr whiteListStatements = {};
 
-
-bool AffectsOperator::isInBlackList(int stmtNo) {
-    if(blackListStatements.find(to_string(stmtNo)) != blackListStatements.end()) {
-        cout << stmtNo << "is in blackList\n";
-        return true;
-    }
-    else return false;
-}
-
-bool AffectsOperator::isInWhiteList(int stmtNo) {
-    if(whiteListStatements.find(to_string(stmtNo)) != whiteListStatements.end()) {
-        cout << stmtNo << "is in whiteList\n";
-        return true;
-    }
-    else return false;
-}
-
-
 bool AffectsOperator::computeRelation(string left, string right) {
     //step 0: check if left are right are both assign statements
     if(!(isAssignStmt(left) && isAssignStmt(right))) return false;
@@ -246,18 +228,6 @@ unordered_set<string> AffectsOperator::removeContainerFromSet(unordered_set<stri
     return outputSet;
 }
 
-// called obstacle list as it "trips" affects
-void AffectsOperator::setBlacklist(unordered_set<string> newSet) {
-    blackListStatements.clear();
-    blackListStatements = removeContainerFromSet(newSet);
-}
-
-void AffectsOperator::setWhiteList(unordered_set<string> newSet) {
-    whiteListStatements.clear();
-    whiteListStatements = removeContainerFromSet(newSet);
-}
-
-
 
 bool AffectsOperator::isContainerStatement(string stmtNo) {
     bool isWhile = pkb->statement.whileStatements.isStatementNumber(stmtNo);
@@ -267,10 +237,6 @@ bool AffectsOperator::isContainerStatement(string stmtNo) {
 bool AffectsOperator::isAssignStmt(string stmtNo) {return pkb->statement.assignStatements.isStatementNumber(stmtNo);}
 stmtSetStr AffectsOperator::getStmtModifying(string var) {return pkb->relationship.modifiesS.getLHS(var);}
 stmtSetStr AffectsOperator::getStmtUsing(string var) {return pkb->relationship.usesS.getLHS(var);}
-
-//stmtSetStr AffectsOperator::collectBlackAndWhiteList(string var) {
-
-//}
 
 /*
  * blackList: blocks further traversal
@@ -296,6 +262,29 @@ stmtSetStr AffectsOperator::getStmtUsing(string var) {return pkb->relationship.u
 variableSet AffectsOperator::getVarModifiedBy(string stmt) {return pkb->relationship.modifiesS.getRHS(stmt);}
 variableSet AffectsOperator::getVarUsedBy(string stmt) {return pkb->relationship.usesS.getRHS(stmt);}
 
+bool AffectsOperator::isInBlackList(int stmtNo) {
+    if(blackListStatements.find(to_string(stmtNo)) != blackListStatements.end()) {
+        return true;
+    }
+    else return false;
+}
+
+bool AffectsOperator::isInWhiteList(int stmtNo) {
+    if(whiteListStatements.find(to_string(stmtNo)) != whiteListStatements.end()) {
+        return true;
+    }
+    else return false;
+}
+
+void AffectsOperator::setBlacklist(unordered_set<string> newSet) {
+    blackListStatements.clear();
+    blackListStatements = removeContainerFromSet(newSet);
+}
+
+void AffectsOperator::setWhiteList(unordered_set<string> newSet) {
+    whiteListStatements.clear();
+    whiteListStatements = removeContainerFromSet(newSet);
+}
 
 AffectsOperator *AffectsOperator::singleton = nullptr;
 AffectsOperator::AffectsOperator(): CacheOperator() {}
