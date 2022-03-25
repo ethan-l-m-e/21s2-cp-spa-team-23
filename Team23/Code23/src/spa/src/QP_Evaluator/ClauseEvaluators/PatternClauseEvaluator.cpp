@@ -2,7 +2,7 @@
 // Created by Tin Hong Wen on 10/2/22.
 //
 #include <regex>
-#include <iostream>
+#include<iostream>
 
 #include "PKB/PKB.h"
 #include "PatternClauseEvaluator.h"
@@ -19,8 +19,8 @@ bool isPartWildCard(Argument arg);
 bool matchVariableValue(VariableNode* assignNode, Expression arg);
 vector<string> collectControlVarInCondExpr(CondExprNode* condExpr);
 
-void addToStmtList(Node* node, ResultItems *stmtNumberList);
-void addToStmtAndVariableList(Node *node, ResultItems *statementAndVarList);
+void addToStmtList(Node* node, ResultItems *resultSet);
+void addToStmtAndVariableList(Node *node, ResultItems *resultSet);
 Expression validateAndParseEntRef(string arg);
 Expression validateAndParseExpression(string arg);
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg);
@@ -87,7 +87,6 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     }
     // setup parsing and results
     unordered_set<AssignNode*> listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
-
     ResultItems resultList;
 
     unordered_set<AssignNode*>::iterator i;
@@ -114,7 +113,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
         }
         else if (isIdent(argLeft) && (isPartWildCard(argRight) || isIdent(argRight))) {
             if(matchExpressionValue(LHSVariable, varLeft, argLeft) &&
-            matchExpressionValue(RHSExpression, exprRight, argRight)) {
+               matchExpressionValue(RHSExpression, exprRight, argRight)) {
                 addToStmtList(currentNode, &resultList);
             }
         }
@@ -140,13 +139,12 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
 }
 
 void PatternClauseEvaluator::constructResults(ResultItems results, bool hasTuples) {
-
     if (hasTuples) {
         // configure resultType, to have both variable names and assign
         result.resultType = ResultType::TUPLES;
         result.resultBoolean = !(get<unordered_set<pair<string, string>>>(results)).empty();
         result.resultHeader = pair<string, string>(std::get<std::string>(patternSynonym.argumentValue),
-                std::get<std::string>(arg1.argumentValue));
+                                                    std::get<std::string>(arg1.argumentValue));
         result.resultSet = results;
 
     } else {
@@ -284,16 +282,16 @@ bool matchExpressionValue(Expression firstExpression, Expression secondExpressio
      * if exact, go straight to direct matching
      * if wildcard, go to searching -> matching
      */
-     if(arg.argumentType == ArgumentType::IDENT){
-         return performExactMatchExpr(firstExpression, secondExpression);
+    if(arg.argumentType == ArgumentType::IDENT){
+        return performExactMatchExpr(firstExpression, secondExpression);
 
-     } else if (arg.argumentType == ArgumentType::PARTIAL_UNDERSCORE) {
-         // perform searching
-         bool result =  searchForMatchInExpr(firstExpression, secondExpression);
-         return result;
-     }
+    } else if (arg.argumentType == ArgumentType::PARTIAL_UNDERSCORE) {
+        // perform searching
+        bool result =  searchForMatchInExpr(firstExpression, secondExpression);
+        return result;
+    }
 
-     return false;
+    return false;
 }
 
 
