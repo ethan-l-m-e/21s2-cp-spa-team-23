@@ -4,7 +4,8 @@
 
 #include "NodeCFG.h"
 #include <vector>
-
+#include <unordered_set>
+#include <iostream>
 LoopCFG::LoopCFG(int statementNumber): NodeCFG(statementNumber) {}
 
 void LoopCFG::setNodeInLoop(NodeCFG *node) {
@@ -14,17 +15,31 @@ void LoopCFG::setNodeInLoop(NodeCFG *node) {
 }
 
 bool LoopCFG::isStart() {
-        if(this->getAllPreviousNode().size() == 1) {
-            return true;
-        }
-        else {
-            unordered_map<int, NodeCFG*>::iterator i;
-            for(i = this->getAllPreviousNode().begin(); i != this->getAllPreviousNode().end(); ++i){
-                if(i->first < this->getStatementNumber()) {
-                    return true;
-                }
-            }
+    auto allPrevNode = this->getAllPreviousNode();
+    unordered_map<int, NodeCFG*>::iterator i;
+    for(i = allPrevNode.begin(); i != allPrevNode.end(); i++) {
+        if(i->first < this->getStatementNumber()) {
             return false;
         }
+    }
+    return true;
+
 }
 NodeCFG* LoopCFG::getNodeInLoop() {return this->nodeInLoop; }
+
+vector<int> LoopCFG::generateNodesInLoopList() {
+    auto allPrevNode = this->getAllPreviousNode();
+    int currentNum = this->getStatementNumber();
+    int previousInLoop = currentNum;
+    unordered_map<int, NodeCFG*>::iterator i;
+    for(i = allPrevNode.begin(); i != allPrevNode.end(); i++) {
+        if(i->first > previousInLoop) {
+            previousInLoop = i->first;
+        }
+    }
+
+    //generate a list quickly
+    std::vector<int> v(previousInLoop - currentNum);
+    std::generate(v.begin(), v.end(), [n = currentNum + 1] () mutable { return n++; });
+    return v;
+}

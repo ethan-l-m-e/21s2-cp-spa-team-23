@@ -16,3 +16,8 @@ string ReadStatementTable::getVariableName(string statementNumber) {
 
     return statementNumberToVariableNameMap[std::stoi(statementNumber)];
 }
+/*
+void ReadStatementTable::clear() {
+    StatementTable<ReadNode*>::clear();
+    statementNumberToVariableNameMap.clear();
+}*/

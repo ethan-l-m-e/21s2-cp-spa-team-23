@@ -15,7 +15,9 @@
 int switchCaseOrError(int, bool);
 
 int Identifier::identifyFirstObject(string sourceCode) {
-    string firstLine = StringFormatter::extractFrontStringByRegex(sourceCode, "\n");
+    std::smatch sm;
+    std::regex_search (sourceCode, sm, std::regex(STMT_IDENTIFIER));
+    std::string firstLine = sm[0];
     firstLine = StringFormatter::removeTrailingSpace(firstLine);
     if (regex_match(firstLine, std::regex(PROCEDURE_IDENTIFIER))) {
         bool isCorrect = checkParenthesesClosure(sourceCode, "{}");
