@@ -498,7 +498,7 @@ TEST_CASE("test calls - multiple procedures one after another") {
     REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name4","name4")==false);
 
 }
-TEST_CASE("test calls - multiple procedures in one procedure") {
+TEST_CASE("test calls - multiple calls in one procedure") {
     ProcedureList procLst;
     StatementList s1, s2, s3, s4;
     vector<ProcedureNode *> procList;
