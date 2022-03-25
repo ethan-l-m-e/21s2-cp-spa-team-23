@@ -130,18 +130,18 @@ TEST_CASE("test - nested while/if-then") {
     CHECK(firstNode->getStatementNumber()==0);
     CHECK(dynamic_cast<LoopCFG*>(firstNode));
     CHECK(firstNode->getStatementNumber() == 0);
-    CHECK(firstNode->getNextNode()->getStatementNumber() == 1);
-    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode()));
-    CHECK(firstNode->getNextNode()->getNextNode()->getStatementNumber() == 4);
+    CHECK(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getStatementNumber() == 1);
+    CHECK(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode()));
+    CHECK(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode()->getStatementNumber() == 4);
 
-    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getStatementNumber() ==2);
-    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getNextNode()->getStatementNumber() ==3);
-    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getNextNode()->getNextNode()->getStatementNumber() == 0);
-    CHECK(dynamic_cast<LoopCFG*>(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getRightNode()->getNextNode()->getNextNode())->getStatementNumber() == 0);
+    CHECK(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getRightNode()->getStatementNumber() ==2);
+    CHECK(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getRightNode()->getNextNode()->getStatementNumber() ==3);
+    CHECK(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getRightNode()->getNextNode()->getNextNode()->getStatementNumber() == 0);
+    CHECK(dynamic_cast<LoopCFG*>(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getRightNode()->getNextNode()->getNextNode())->getStatementNumber() == 0);
 
-    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getStatementNumber() ==5);
-    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getNextNode()->getStatementNumber() ==6);
-    CHECK(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getNextNode()->getNextNode()->getStatementNumber() == 0);
-    CHECK(dynamic_cast<LoopCFG*>(dynamic_cast<BranchCFG*>(firstNode->getNextNode()->getNextNode())->getLeftNode()->getNextNode()->getNextNode())->getStatementNumber() == 0);
+    CHECK(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getLeftNode()->getStatementNumber() ==5);
+    CHECK(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getLeftNode()->getNextNode()->getStatementNumber() ==6);
+    CHECK(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getLeftNode()->getNextNode()->getNextNode()->getStatementNumber() == 0);
+    CHECK(dynamic_cast<LoopCFG*>(dynamic_cast<BranchCFG*>(dynamic_cast<LoopCFG*>(firstNode)->getNodeInLoop()->getNextNode())->getLeftNode()->getNextNode()->getNextNode())->getStatementNumber() == 0);
 
 }
