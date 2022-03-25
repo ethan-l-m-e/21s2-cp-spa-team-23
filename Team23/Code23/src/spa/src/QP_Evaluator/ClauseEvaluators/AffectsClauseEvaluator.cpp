@@ -3,14 +3,21 @@
 //
 
 #include "AffectsClauseEvaluator.h"
-#include "TNode/CFG/NodeCFG.h"
+
 #include "QP_database/AffectsOperator.h"
 
 bool AffectsClauseEvaluator::isRelation(string left, string right) {
-    NodeCFG* leftNode = pkb->relationship.next.getCFGNode(left);
-    NodeCFG* rightNode = pkb->relationship.next.getCFGNode(right);
-    int size = pkb->relationship.next.getCFGSize();
+    affectsOperator->computeRelation(left, right);
+}
 
-    AffectsOperator::getInstance()->pathExistBetween(leftNode, rightNode, size);
-    return false;
+unordered_set<std::string> AffectsClauseEvaluator::getLeftSynonymValue(std::string right) {
+    return affectsOperator->computeLHS(right);
+}
+
+unordered_set<std::string> AffectsClauseEvaluator::getRightSynonymValue(std::string left) {
+    return affectsOperator->computeRHS(left);
+}
+
+pair<DesignEntity, DesignEntity> AffectsClauseEvaluator::getWildcardType () {
+    return make_pair(DesignEntity::ASSIGN, DesignEntity::ASSIGN);
 }
