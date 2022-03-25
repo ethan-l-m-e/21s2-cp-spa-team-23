@@ -26,13 +26,9 @@ bool SuchThatClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         default:
             break;
     }
-    if(!result.resultBoolean) {
-        resultTable->clearTable();
-        resultTable->setBooleanResult(false);
-        return false;
-    }
-    mergeResult(resultTable);
-    return true;
+
+    processResult(resultTable);
+    return processResult(resultTable);
 }
 
 /**

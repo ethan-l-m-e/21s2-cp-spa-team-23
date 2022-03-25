@@ -87,13 +87,7 @@ bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
         constructResults(stmtSet, false);
     }
 
-    if(!result.resultBoolean) {
-        resultTable->clearTable();
-        resultTable->setBooleanResult(false);
-        return false;
-    }
-    mergeResult(resultTable);
-    return true;
+    return processResult(resultTable);
 }
 
 bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
@@ -140,13 +134,7 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
         constructResults(stmtSet, false);
     }
 
-    if(!result.resultBoolean) {
-        resultTable->clearTable();
-        resultTable->setBooleanResult(false);
-        return false;
-    }
-    mergeResult(resultTable);
-    return true;
+    return processResult(resultTable);
 }
 
 
@@ -214,13 +202,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
         constructResults(stmtSet, false);
     }
 
-    if(!result.resultBoolean) {
-        resultTable->clearTable();
-        resultTable->setBooleanResult(false);
-        return false;
-    }
-    mergeResult(resultTable);
-    return true;
+    return processResult(resultTable);
 }
 
 void PatternClauseEvaluator::constructResults(ResultItems results, bool hasTuples) {
