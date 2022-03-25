@@ -39,7 +39,13 @@ unordered_set<string> ClauseEvaluator::getAllType(DesignEntity designEntity) {
     }
 }
 
-void ClauseEvaluator::mergeResult(ResultTable* resultTable) {
+bool ClauseEvaluator::processResult(ResultTable* resultTable) {
+    if(!result.resultBoolean) {
+        resultTable->clearTable();
+        resultTable->setBooleanResult(false);
+        return false;
+    }
     resultTable->mergeResultToTable(result);
+    return true;
 }
 

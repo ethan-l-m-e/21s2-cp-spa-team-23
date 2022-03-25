@@ -16,7 +16,7 @@ protected:
     unordered_map<string, DesignEntity>* declarations;
     PKB* pkb;
     Result result;
-    void mergeResult(ResultTable* resultTable);
+    bool processResult(ResultTable* resultTable);
 
 public:
     ClauseEvaluator(unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb) : declarations(declarations), clause(clause),  pkb(pkb){}
