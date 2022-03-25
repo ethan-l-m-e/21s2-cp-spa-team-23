@@ -9,8 +9,6 @@
 #include "CacheClauseEvaluator.h"
 #include "QP_database/AffectsOperator.h"
 
-#include <utility>
-
 class AffectsClauseEvaluator: public CacheClauseEvaluator {
 public:
     AffectsClauseEvaluator (std::vector<Argument> args, PKB* pkb, Query* query) : CacheClauseEvaluator(std::move(args), pkb, query) {}
