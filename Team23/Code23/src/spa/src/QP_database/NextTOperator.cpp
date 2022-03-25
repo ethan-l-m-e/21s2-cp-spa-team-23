@@ -119,7 +119,6 @@ bool NextTOperator::IsReachableForward(NodeCFG* srcNode,
                 return true;
             }
         }
-
         if(auto branch = dynamic_cast<BranchCFG*>(srcNode)) {
             auto lastNodeInLeft = pkb->relationship.next.
                     getCFGNode(to_string(branch->getRightNode()->getStatementNumber()-1));
@@ -129,25 +128,7 @@ bool NextTOperator::IsReachableForward(NodeCFG* srcNode,
                 cout << "destVal " << destVal << "falls between " << srcVal << " and " << lastNodeInLeftInt << "\n";
                 return true;
             }
-            if(!lastNodeInLeft->isEnd()) {
-                NodeCFG* mergeNode = lastNodeInLeft->getNextNode();
-                int mergeStmtNo = mergeNode->getStatementNumber();
-                visited[mergeStmtNo] = true;
-                if(srcVal < destVal && destVal <= mergeStmtNo) {
-                    cout << "destVal " << destVal << "falls between " << srcVal << " and " << mergeStmtNo << "\n";
-                    return true;
-                } else {
-                    cout << "you skipped from " << srcVal << " to " << mergeStmtNo << "!\n";
-                    unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(mergeNode);
-                    for (NodeCFG *adjNode: adjNodes) {
-                        int adjStmtNo = adjNode->getStatementNumber();
-                        if (!visited[adjStmtNo] && IsReachableForward(adjNode, destNode, visited, path))
-                            return true;
-                    }
-                }
-            }
         }
-
         unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(srcNode);
         for (NodeCFG *adjNode: adjNodes) {
             int adjStmtNo = adjNode->getStatementNumber();
