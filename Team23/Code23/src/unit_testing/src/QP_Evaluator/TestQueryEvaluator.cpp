@@ -45,7 +45,6 @@ TEST_CASE("Query with no clauses") {
     REQUIRE(generateResultSet(qe->evaluate(&query_4)) == ResultSet {"z", "x"});
 
     delete qe;
-    
 }
 
 TEST_CASE("Query with false clauses") {
@@ -287,7 +286,7 @@ TEST_CASE("Multi clauses with ref") {
 }
 
 TEST_CASE("Pattern clause: return stmt") {
-    PKB *testPKB = generateSamplePKBForPatternMatching();
+    PKB *testPKB = generateSamplePKBForPatternMatchingAssign();
     Query query;
     auto qe = new QueryEvaluator(testPKB);
     unordered_map<string, DesignEntity> declarations = {{"a1", DesignEntity::ASSIGN}};
@@ -343,7 +342,7 @@ TEST_CASE("Pattern clause: return stmt") {
 }
 
 TEST_CASE("Pattern clause: return var + Stmt") {
-    PKB *testPKB = generateSamplePKBForPatternMatching();
+    PKB *testPKB = generateSamplePKBForPatternMatchingAssign();
     Query query;
     auto qe = new QueryEvaluator(testPKB);
     unordered_map<string, DesignEntity> declarations = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
@@ -370,8 +369,56 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     
 }
 
+TEST_CASE("Pattern clause: conditional expressions") {
+    PKB *testPKB = generateSamplePKBForPatternMatchingCondition();
+    Query query;
+    auto qe = new QueryEvaluator(testPKB);
+    unordered_map<string, DesignEntity> declarations = {{"v",  DesignEntity::VARIABLE},
+                                                        {"w",  DesignEntity::WHILE},
+                                                        {"a", DesignEntity::ASSIGN},
+                                                        {"ifs", DesignEntity::IF}
+    };
+    Argument w = {ArgumentType::SYNONYM, "w"};
+    Argument v = {ArgumentType::SYNONYM, "v"};
+    Argument a = {ArgumentType::SYNONYM, "a"};
+    Argument ifs = {ArgumentType::SYNONYM, "ifs"};
+
+    Argument wild = {ArgumentType::UNDERSCORE, "_"};
+
+    PatternClause clauseWild = {ArgList {w, wild, wild},
+                                     SynonymType::WHILE};
+    query = makeQuery(declarations, {w}, {clauseWild});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1" , "3", "5"});
+
+    PatternClause clauseSynonym = {ArgList {w, v, wild},SynonymType::WHILE};
+    query = makeQuery(declarations,
+                      {w, v}, {clauseSynonym});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1 x" , "1 y", "5 x", "5 y"});
+
+    PatternClause clauseIdent1 = {ArgList {w, {ArgumentType::IDENT, "\"x\""}, wild},
+                                   SynonymType::WHILE};
+    query = makeQuery(declarations,{w}, {clauseIdent1});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "5"});
+
+    PatternClause clauseIdent2 = {ArgList {w, {ArgumentType::IDENT, "\"z\""}, wild},
+                                  SynonymType::WHILE};
+    query = makeQuery(declarations,{w}, {clauseIdent2});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
+
+    PatternClause clauseIdentAssign = {ArgList {a, {ArgumentType::IDENT, "\"z\""}, wild},
+                                       SynonymType::ASSIGN};
+    query = makeQuery(declarations,{a}, {clauseIdentAssign});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"7"});
+
+    PatternClause clauseIf = {ArgList {ifs, {ArgumentType::IDENT, "\"x\""}, wild, wild},
+                                  SynonymType::IF};
+    query = makeQuery(declarations,{ifs}, {clauseIf});
+    REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"8"});
+    delete qe;
+}
+
 TEST_CASE("Pattern clause: full expression and exact matching") {
-    PKB *testPKB = generateSamplePKBForPatternMatching();
+    PKB *testPKB = generateSamplePKBForPatternMatchingAssign();
     Query query;
     auto qe = new QueryEvaluator(testPKB);
     unordered_map<string, DesignEntity> declarations = {{"a1", DesignEntity::ASSIGN}};
@@ -431,12 +478,10 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     //invalid query: wrong brackets
     //invalid query: wrong var/const
     delete qe;
-    
-
 }
 
 TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
-    PKB *testPKB = generateSamplePKBForPatternMatching();
+    PKB *testPKB = generateSamplePKBForPatternMatchingAssign();
     unordered_map<string, DesignEntity> declarations = {{"a", DesignEntity::ASSIGN}, {"v", DesignEntity::VARIABLE}};
     Argument aa = {ArgumentType::SYNONYM, "a"};
     Argument av = {ArgumentType::SYNONYM, "v"};
