@@ -219,6 +219,13 @@ TEST_CASE("nextOp* - isRelation") {
 
 }
 
+TEST_CASE("next* - test optimisation linear") {
+    generateSamplePKB();
+    CHECK(nextOp->computeRelation("1", "11"));
+    CHECK(nextOp->computeRelation("8", "9"));
+    // might need more samples to fully utilise
+}
+
 TEST_CASE("nextOp* - computeRHS"){
     constructPKBForNextT();
 

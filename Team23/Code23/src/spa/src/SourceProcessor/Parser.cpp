@@ -91,6 +91,8 @@ Expression Parser::parseExpression(string expression) {
     }
     vector<string> tokens;
     SourceTokenizer::extractExpression(expression, tokens);
+    if(tokens[0] == "") throw "left side of binary operator cannot be empty";
+    if(tokens[1] == "") throw "right side of binary operator cannot be empty";
     Expression left = parseExpression(tokens[0]);
     Expression right = parseExpression(tokens[1]);
     return new BinaryOperatorNode(left, right, tokens[2]);
