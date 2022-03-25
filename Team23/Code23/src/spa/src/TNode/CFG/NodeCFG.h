@@ -25,8 +25,6 @@ public:
     NodeCFG* getNextNode();
     unordered_map<int, NodeCFG*> getAllPreviousNode();
 
-    NodeCFG* getStartNode();
-    virtual NodeCFG* getEndNode();
     virtual bool isStart();
 
     virtual bool isEnd();
@@ -45,11 +43,8 @@ public:
     void setRightNode(NodeCFG* node);
     NodeCFG* getLeftNode();
     NodeCFG* getRightNode();
+    //int calculateMergeNodeNum();
 
-    NodeCFG* getLastLeftNode();
-    NodeCFG* getLastRightNode();
-
-    bool isEnd();
 };
 
 class LoopCFG: public NodeCFG {
@@ -60,5 +55,6 @@ public:
     void setNodeInLoop(NodeCFG* node);
     NodeCFG* getNodeInLoop();
     bool isStart() override;
+    vector<int> generateNodesInLoopList();
 };
 #endif //SPA_NODECFG_H

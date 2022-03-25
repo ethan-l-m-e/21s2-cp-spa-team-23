@@ -17,6 +17,11 @@ public:
 protected:
     NextTOperator();
     static NextTOperator* singleton;
+
+    unordered_set<int>
+    searchNodesAlongPathAfter(NodeCFG *leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
+
+    static bool IsReachableForward(NodeCFG *srcNode, NodeCFG *destNode, unordered_map<int, bool> &visited, vector<int> &path);
 };
 
 
