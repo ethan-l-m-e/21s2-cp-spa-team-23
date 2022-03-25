@@ -5,10 +5,7 @@
 #ifndef SPA_RESULTCLAUSEEVALUATOR_H
 #define SPA_RESULTCLAUSEEVALUATOR_H
 
-
 #include "ClauseEvaluator.h"
-
-#include <utility>
 
 class ResultClauseEvaluator : public ClauseEvaluator {
 public:

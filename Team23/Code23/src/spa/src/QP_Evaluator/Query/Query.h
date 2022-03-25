@@ -40,6 +40,7 @@ protected:
 public:
     bool hasSuchThatClause();
     bool hasPatternClause();
+    bool hasWithClause();
     unordered_map<string, DesignEntity>* getDeclarations();
     vector<PatternClause> getPatternClauses();
     vector<SuchThatClause> getSuchThatClauses();

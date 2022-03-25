@@ -23,4 +23,5 @@
 #include "QP_Evaluator/ClauseEvaluators/AffectsTClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/CallsClauseEvaluator.h"
 #include "QP_Evaluator/ClauseEvaluators/CallsTClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/WithClauseEvaluator.h"
 

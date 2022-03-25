@@ -12,6 +12,10 @@ bool Query::hasPatternClause(){
     return !patternClauses.empty();
 }
 
+bool Query::hasWithClause(){
+    return !withClauses.empty();
+}
+
 unordered_map<string, DesignEntity>* Query::getDeclarations(){
     return &declarations;
 }

@@ -7,7 +7,6 @@
 #include <utility>
 #include "catch.hpp"
 
-using namespace std;
 
 void resetSampleResultTable(ResultTable* resultTable) {
     resultTable->clearTable();
