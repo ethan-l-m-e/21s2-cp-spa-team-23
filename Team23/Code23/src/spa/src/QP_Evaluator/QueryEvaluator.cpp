@@ -5,8 +5,6 @@
 #include "QueryEvaluator.h"
 #include "QP_Parser/Exception.h"
 #include "QP_Evaluator/ClauseEvaluators/ClauseEvaluatorCollection.h"
-#include "QP_Evaluator/ClauseEvaluators/CallsClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/CallsTClauseEvaluator.h"
 
 list<string> QueryEvaluator::evaluate(Query* query) {
 
