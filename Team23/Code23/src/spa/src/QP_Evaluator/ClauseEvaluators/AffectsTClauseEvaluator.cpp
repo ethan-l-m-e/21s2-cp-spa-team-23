@@ -7,7 +7,7 @@
 #include "QP_database/AffectsTOperator.h"
 
 bool AffectsTClauseEvaluator::isRelation(string left, string right) {
-    affectsTOperator->computeRelation(left, right);
+    return affectsTOperator->computeRelation(left, right);
 }
 
 unordered_set<std::string> AffectsTClauseEvaluator::getLeftSynonymValue(std::string right) {
