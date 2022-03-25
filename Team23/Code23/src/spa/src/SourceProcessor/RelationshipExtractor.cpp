@@ -223,12 +223,12 @@ void RelationshipExtractor::extractCalls(Node* node, vector<ProcedureNode *> pro
             extractCalls(p, currProcList, p);
         }
     }else if (auto value = dynamic_cast<CallNode*>(node)){
+        ProcName calledProc = value->getProcName();
         if(latestProc != nullptr){
-//        PKB::getInstance()->relationship.calls
+            PKB::getInstance()->relationship.calls.setRelationship(latestProc->getProcName(),calledProc);
         }
         for (ProcedureNode *p: procList) {
-            1==1;
-//        PKB::getInstance()->setCallsT(p, value->getProcName());
+            PKB::getInstance()->relationship.callsT.setRelationship(p->getProcName(), calledProc);
         }
         procList.push_back(dynamic_cast<ProcedureNode*>(value->getProcedure()));
         extractCalls(value->getProcedure(), procList, nullptr);
@@ -252,10 +252,12 @@ void RelationshipExtractor::extractCFG (Node * node) {
 }
 void RelationshipExtractor::extractRelationships(Node * node){
     vector<StmtLstNode*> v;
+    vector<ProcedureNode *> procList;
     extractFollows(node);
     extractParent(node,v);
     extractUses(node);
     extractModifies(node);
+    extractCalls(node,procList,nullptr);
     extractCFG(node);
 }
 

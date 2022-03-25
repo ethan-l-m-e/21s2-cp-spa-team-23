@@ -427,6 +427,7 @@ TEST_CASE("test next - 2 procedures") {
 TEST_CASE("test calls - basic") {
     ProcedureList procLst;
     StatementList s1, s2;
+    vector<ProcedureNode *> procList;
     auto callNode = CallNode(2, &p1);
     s1.push_back(&aNode);
     s2.push_back(&callNode);
@@ -435,27 +436,16 @@ TEST_CASE("test calls - basic") {
     procLst.push_back(&proc1);
     procLst.push_back(&proc2);
     ProgramNode prog = ProgramNode(procLst);
-    RelationshipExtractor::extractCalls(prog);
-    REQUIRE(PKB::getInstance()->relationship.usesS.isRelationship("2","y"));
+    RelationshipExtractor::extractCalls(&prog,procList,nullptr);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name2","name1"));
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name1","name2")==false);
 }
 
-TEST_CASE("test calls - basic") {
-    ProcedureList procLst;
-    StatementList s1, s2;
-    auto callNode = CallNode(2, &p1);
-    s1.push_back(&aNode);
-    s2.push_back(&callNode);
-    ProcedureNode proc1 = ProcedureNode(&p1, s1);
-    ProcedureNode proc2 = ProcedureNode(&p2, s2);
-    procLst.push_back(&proc1);
-    procLst.push_back(&proc2);
-    ProgramNode prog = ProgramNode(procLst);
-    RelationshipExtractor::extractCalls(prog);
-    REQUIRE(PKB::getInstance()->relationship.usesS.isRelationship("2","y"));
-}
 TEST_CASE("test calls - multiple procedures") {
     ProcedureList procLst;
     StatementList s1, s2, s3, s4;
+    vector<ProcedureNode *> procList;
+
     auto callNode1 = CallNode(2, &p2);
     auto callNode2 = CallNode(3, &p3);
     auto callNode3 = CallNode(4, &p4);
@@ -469,7 +459,42 @@ TEST_CASE("test calls - multiple procedures") {
     ProcedureNode proc4 = ProcedureNode(&p4, s4);
     procLst.push_back(&proc1);
     procLst.push_back(&proc2);
+    procLst.push_back(&proc3);
+    procLst.push_back(&proc4);
     ProgramNode prog = ProgramNode(procLst);
-    RelationshipExtractor::extractCalls(prog);
-    REQUIRE(PKB::getInstance()->relationship.usesS.isRelationship("2","y"));
+    RelationshipExtractor::extractCalls(&prog,procList,nullptr);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name1","name2"));
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name1","name3")==false);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name1","name4")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name1","name2"));
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name1","name3"));
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name1","name4"));
+
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name2","name3"));
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name2","name1")==false);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name2","name4")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name2","name3"));
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name2","name4"));
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name2","name1")==false);
+
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name3","name4"));
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name3","name1")==false);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name3","name2")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name3","name4"));
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name3","name1")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name3","name2")==false);
+
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name4","name1")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name4","name1")==false);
+
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name1","name1")==false);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name2","name2")==false);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name3","name3")==false);
+    REQUIRE(PKB::getInstance()->relationship.calls.isRelationship("name4","name4")==false);
+
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name1","name1")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name2","name2")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name3","name3")==false);
+    REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name4","name4")==false);
+
 }
