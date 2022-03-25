@@ -9,12 +9,12 @@ BranchCFG::BranchCFG(int statementNumber): NodeCFG(statementNumber) {
 
 void BranchCFG::setLeftNode(NodeCFG *node) {
     this->leftNode = node;
+    this->nextNode = node;
     node->addPreviousNode(this);
 }
 
 void BranchCFG::setRightNode(NodeCFG *node) {
     this->rightNode = node;
-    this->nextNode = this->rightNode;
     node->addPreviousNode(this);
 }
 
