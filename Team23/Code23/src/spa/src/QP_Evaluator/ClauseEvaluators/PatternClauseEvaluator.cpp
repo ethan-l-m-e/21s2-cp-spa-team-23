@@ -23,6 +23,7 @@ void addToStmtList(Node* node, vector<ResultItem> *stmtNumberList);
 void addToStmtAndVariableList(Node *node, vector<ResultItem> *statementAndVarList);
 Expression validateAndParseEntRef(string arg);
 Expression validateAndParseExpression(string arg);
+bool matchControlVarInCondExpr(CondExprNode* condExpr, Expression arg);
 bool matchExpressionValue(Expression firstExpression, Expression secondExpression, Argument arg);
 bool searchForMatchInExpr(Expression expressionNode, Expression arg);
 bool performExactMatchExpr(Expression expressionNode, Expression arg);
@@ -37,41 +38,100 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg);
 
 
 bool PatternClauseEvaluator::evaluateClause(ResultTable *resultTable) {
-    if(patternSynonymType == SynonymType::ASSIGN) {
+    if (patternSynonymType == SynonymType::ASSIGN) {
         return evaluateAssign(resultTable);
+    } else if (patternSynonymType == SynonymType::WHILE) {
+        return evaluateWhile(resultTable);
+    } else if (patternSynonymType == SynonymType::IF) {
+        return evaluateIf(resultTable);
     } else {
-        cout << "pattern not ready for if and while synonyms\n";
-        return true;
+        throw "unknown pattern synonyms\n";
     }
-
 }
 
 bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
+    Argument argLeft = arg1;
+    Argument argRight = arg2;
+    Expression varLeft;
+    Expression exprRight;
+    if(isIdent(argLeft)) {
+        varLeft  = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
+    }
+    if(!isWildCard(argRight)) {
+        throw "right side is not a wild card";
+    }
+
+    auto listOfWhile = PKB::getInstance()->statement.whileStatements.getAllStatementNodes();
+    vector<ResultItem> resultList;
+    for(WhileNode* currentNode: listOfWhile) {
+        CondExprNode* condExpr = currentNode->getCondExpr();
+        if(isSynonym(argLeft)) {
+            addToStmtAndVariableList(currentNode, &resultList);
+        }
+        else if (isWildCard(argLeft)) {
+            addToStmtList(currentNode, &resultList);
+        }
+        else if(isIdent(argLeft)) {
+            if(matchControlVarInCondExpr(condExpr, varLeft)) {
+                addToStmtList(currentNode, &resultList);
+            }
+        }
+    }
+    constructResults(resultList, isSynonym(argLeft));
+    if(!result.resultBoolean) {
+        resultTable->clearTable();
+        resultTable->setBooleanResult(false);
+        return false;
+    }
+    mergeResult(resultTable);
     return true;
 }
 
 bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
+    Argument argLeft = arg1;
+    Argument argRight = arg2;
+    Expression varLeft;
+    Expression exprRight;
+    if(isIdent(argLeft)) {
+        varLeft  = validateAndParseEntRef(std::get<std::string>(argLeft.argumentValue));
+    }
+    if(!isWildCard(argRight)) {
+        throw "2nd argument is not a wild card";
+    }
+    if(argList.size() == 4) {
+        if(!isWildCard(argList[3]))
+            throw "3nd argument is not a wild card";
+    } else {
+        throw "wrong number of arguments";
+    }
+
+    auto listOfWhile = PKB::getInstance()->statement.ifStatements.getAllStatementNodes();
+    vector<ResultItem> resultList;
+    for(IfNode* currentNode: listOfWhile) {
+        CondExprNode* condExpr = currentNode->getCondExpr();
+        if(isSynonym(argLeft)) {
+            addToStmtAndVariableList(currentNode, &resultList);
+        }
+        else if (isWildCard(argLeft)) {
+            addToStmtList(currentNode, &resultList);
+        }
+        else if(isIdent(argLeft)) {
+            if(matchControlVarInCondExpr(condExpr, varLeft)) {
+                addToStmtList(currentNode, &resultList);
+            }
+        }
+    }
+    constructResults(resultList, isSynonym(argLeft));
+    if(!result.resultBoolean) {
+        resultTable->clearTable();
+        resultTable->setBooleanResult(false);
+        return false;
+    }
+    mergeResult(resultTable);
     return true;
 }
 
-// function not ready yet
-/*
-bool PatternClauseEvaluator::evaluateWithFunc_Pointers(ResultTable* resultTable,
-                                                       void(*validateAndParse)(Argument, Argument, Argument,
-                                                               Expression, Expression),
-                                                               vector<ResultItem> (*collectResults)(Argument, Argument, Expression, Expression)){
-    Argument argLeft = arg1;
-    Argument argRight = arg2;
-    Argument argLast = arg3;
-    Expression varLeft;
-    Expression exprRight;
-    //validation and parsing algorithm
-    validateAndParse(arg1, arg2, arg3, varLeft, exprRight);
-    vector<ResultItem> results = collectResults(arg1, arg2, varLeft, exprRight);
-    constructResults(results, isSynonym(argLeft));
-    return false;
-}
-*/
+
 
 bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     //validation and LHS/RHS parsing
@@ -86,7 +146,7 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
         exprRight = validateAndParseExpression(std::get<std::string>(argRight.argumentValue));
     }
     // setup parsing and results
-    unordered_set<AssignNode*> listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
+    auto listOfAssignNodes = PKB::getInstance()->statement.assignStatements.getAllStatementNodes();
     vector<ResultItem> resultList;
 
     unordered_set<AssignNode*>::iterator i;
