@@ -3,8 +3,8 @@
 //
 #pragma once
 
-#ifndef SPA_EXECUTIONPATHSERVICES_H
-#define SPA_EXECUTIONPATHSERVICES_H
+#ifndef SPA_GRAPHMETHODS_H
+#define SPA_GRAPHMETHODS_H
 
 #include <unordered_set>
 #include <unordered_map>
@@ -16,10 +16,10 @@
 
 using namespace std;
 
-class ExecutionPathServices {
+class GraphMethods {
 private:
-    static ExecutionPathServices* singleton;
-    ExecutionPathServices();
+    static GraphMethods* singleton;
+    GraphMethods();
 public:
     static bool IsReachableForward(NodeCFG* srcNode,
                                    NodeCFG* destNode,
@@ -44,10 +44,10 @@ public:
                                                     unordered_map<int, bool> &visited,
                                                     unordered_set<int> resultSet, unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *));
 
-    static ExecutionPathServices *getInstance();
+    static GraphMethods *getInstance();
 
 
 };
 
 
-#endif //SPA_EXECUTIONPATHSERVICES_H
+#endif //SPA_GRAPHMETHODS_H
