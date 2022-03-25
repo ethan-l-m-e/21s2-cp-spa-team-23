@@ -17,16 +17,6 @@ void SourceProcessor::run(string filename) {
     // load file
     ifstream file;
     file.open(filename);
-//    if(file.is_open()){
-//        cout<<"file is open\n";
-//    }else{
-////        std::ofstream outfile ("trace.txt");
-////        outfile<<"mytext"<< std::endl;
-////        outfile.close();
-//        cout<<filename;
-//        cout<<"\nfile cannot open\n";
-//        cout<<system("ls");
-//    }
     // preferably throw exception if file invalid
     // extract text
     stringstream codeStream;
