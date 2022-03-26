@@ -55,5 +55,4 @@ void PKB::clearPKB() {
 
     relationship.calls.clear();
     relationship.callsT.clear();
-
 }
