@@ -7,14 +7,18 @@
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     return query;
 }
 
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<SuchThatClause> suchThatClauses, vector<PatternClause> patternClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     query.setSuchThatClauses(std::move(suchThatClauses));
     query.setPatternClauses(std::move(patternClauses));
     return query;
@@ -23,7 +27,9 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<A
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<SuchThatClause> suchThatClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     query.setSuchThatClauses(std::move(suchThatClauses));
     return query;
 }
@@ -31,7 +37,9 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<A
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<PatternClause> patternClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     query.setPatternClauses(std::move(patternClauses));
     return query;
 }
