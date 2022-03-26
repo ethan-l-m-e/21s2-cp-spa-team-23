@@ -6,6 +6,11 @@
 #define SPA_ARGUMENT_H
 
 #include <string>
+#include <variant>
+
+using std::pair;
+using std::string;
+using std::variant;
 
 enum class ArgumentType {
     SYNONYM,
@@ -25,7 +30,7 @@ enum class AttrName {
     STMT_NO,
 };
 
-using ArgumentValue = std::variant<std::string, std::pair<std::string, AttrName>>;
+using ArgumentValue = variant<string, pair<string, AttrName>>;
 
 typedef struct Argument {
     ArgumentType argumentType;

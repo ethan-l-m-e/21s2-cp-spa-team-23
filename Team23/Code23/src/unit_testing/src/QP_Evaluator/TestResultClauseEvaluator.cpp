@@ -16,7 +16,7 @@ void resetSampleResultTable(ResultTable* resultTable) {
 }
 
 ResultSet evaluateResultClause(ResultTable* resultTable, Query *query, PKB *testPKB) {
-    auto *resultClauseEvaluator = new ResultClauseEvaluator(testPKB, query);
+    auto *resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), testPKB);
     resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
     return generateResultSet(QueryEvaluator::generateResultString(resultTable));

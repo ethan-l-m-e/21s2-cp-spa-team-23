@@ -5,31 +5,26 @@
 #ifndef SPA_CLAUSEEVALUATOR_H
 #define SPA_CLAUSEEVALUATOR_H
 
-
-#include <utility>
-#include <vector>
-#include <cassert>
+#include "QP_Evaluator/Query/Query.h"
 #include "PKB/PKB.h"
 #include "Result.h"
 #include "ResultTable.h"
-#include "QP_Evaluator/Query/Argument.h"
-#include "QP_Evaluator/Query/Query.h"
-
 
 class ClauseEvaluator {
 protected:
-    std::vector<Argument> argList;
+    Clause* clause;
+    unordered_map<string, DesignEntity>* declarations;
     PKB* pkb;
-    Query* query;
     Result result;
-    void mergeResult(ResultTable* resultTable);
+    bool processResult(ResultTable* resultTable);
 
 public:
-    ClauseEvaluator(std::vector<Argument> args, PKB* pkb,  Query* query) : argList(std::move(args)),  pkb(pkb), query(query){}
-    ClauseEvaluator(PKB* pkb,  Query* query) : pkb(pkb), query(query){}
+    ClauseEvaluator(unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb) : declarations(declarations), clause(clause),  pkb(pkb){}
+    ClauseEvaluator(unordered_map<string, DesignEntity>* declarations, PKB* pkb) : declarations(declarations),  pkb(pkb){}
+
     virtual ~ClauseEvaluator() = default;
     virtual bool evaluateClause(ResultTable* resultTable) = 0;
-    unordered_set<std::string> getAllType(DesignEntity designEntity);
+    unordered_set<string> getAllType(DesignEntity designEntity);
 
 };
 

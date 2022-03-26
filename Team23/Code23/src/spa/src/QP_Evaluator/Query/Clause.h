@@ -5,10 +5,10 @@
 #ifndef SPA_CLAUSE_H
 #define SPA_CLAUSE_H
 
-#include <string>
-#include <variant>
 #include <vector>
 #include "Argument.h"
+
+using std::vector;
 
 enum class RelRef{
     FOLLOWS,
@@ -34,7 +34,7 @@ enum class SynonymType {
 };
 
 typedef struct Clause {
-    std::vector<Argument> argList;
+    vector<Argument> argList;
 } Clause;
 
 typedef struct SuchThatClause : Clause {
@@ -47,6 +47,9 @@ typedef struct PatternClause : Clause {
 
 typedef struct WithClause : Clause {
 } WithClause;
+
+typedef struct ResultClause : Clause {
+} ResultClause;
 
 
 

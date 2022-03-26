@@ -4,8 +4,6 @@
 
 #include "Query.h"
 
-#include <utility>
-
 bool Query::hasSuchThatClause(){
     return !suchThatClauses.empty();
 }
@@ -14,20 +12,25 @@ bool Query::hasPatternClause(){
     return !patternClauses.empty();
 }
 
-vector<SuchThatClause> Query::getSuchThatClauses(){
-    return suchThatClauses;
+unordered_map<string, DesignEntity>* Query::getDeclarations(){
+    return &declarations;
 }
 
-vector<PatternClause> Query::getPatternClauses(){
-    return patternClauses;
+
+vector<SuchThatClause>* Query::getSuchThatClauses(){
+    return &suchThatClauses;
 }
 
-std::vector<WithClause> Query::getWithClauses(){
-    return withClauses;
+vector<PatternClause>* Query::getPatternClauses(){
+    return &patternClauses;
 }
 
-std::vector<Argument> Query::getSelectedSynonyms() {
-    return selectedSynonyms;
+std::vector<WithClause>* Query::getWithClauses(){
+    return &withClauses;
+}
+
+ResultClause* Query::getResultClause() {
+    return &resultClause;
 }
 
 DesignEntity Query::getSynonymType(std::string synonym) {
@@ -46,8 +49,8 @@ void Query::setDeclarations(unordered_map<string, DesignEntity> declarationsMap)
     this->declarations = std::move(declarationsMap);
 }
 
-void Query::setSynonyms(std::vector<Argument> synonyms) {
-    this->selectedSynonyms = std::move(synonyms);
+void Query::setResultClause(ResultClause clause) {
+    this->resultClause = std::move(clause);
 }
 
 void Query::setSuchThatClauses(vector<SuchThatClause> clauses) {

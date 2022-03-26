@@ -4,7 +4,7 @@
 
 #include "QP_Evaluator/ClauseEvaluators/ResultTable.h"
 #include "catch.hpp"
-#include <set>
+#include <unordered_set>
 
 using namespace std;
 
@@ -19,10 +19,10 @@ TEST_CASE("Add result to empty synonym relations") {
 
     rt->clearTable();
     Result result2 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "a",
-            {"1", "2", "3", "4", "5"}
+            std::unordered_set<string>{"1", "2", "3", "4", "5"}
     };
     rt->mergeResultToTable(result2);
     
@@ -31,15 +31,15 @@ TEST_CASE("Add result to empty synonym relations") {
 
     rt->clearTable();
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("a", "b"),
-            {
-                make_tuple("1", "x"),
-                make_tuple("1", "y"),
-                make_tuple("1", "z"),
-                make_tuple("2", "x"),
-                make_tuple("2", "y")
+            make_pair("a", "b"),
+            std::unordered_set<pair<string, string>> {
+                make_pair("1", "x"),
+                make_pair("1", "y"),
+                make_pair("1", "z"),
+                make_pair("2", "x"),
+                make_pair("2", "y")
             }
     };
     rt->mergeResultToTable(result3);
@@ -64,10 +64,10 @@ TEST_CASE("Add result to existing synonym relations") {
     rt->setResultTable({"x"}, {{"1", "2", "3", "4"}});
 
     Result result2 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "a",
-            {"1", "2"}
+            std::unordered_set<string>{"1", "2"}
     };
     rt->mergeResultToTable(result2);
     
@@ -80,15 +80,15 @@ TEST_CASE("Add result to existing synonym relations") {
     rt->setResultTable({"x"},{{"1", "2", "3", "4"}});
 
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("a", "b"),
-            {
-                    make_tuple("1", "x"),
-                    make_tuple("1", "y"),
-                    make_tuple("1", "z"),
-                    make_tuple("2", "x"),
-                    make_tuple("2", "y")
+            make_pair("a", "b"),
+            std::unordered_set<pair<string, string>>{
+                    make_pair("1", "x"),
+                    make_pair("1", "y"),
+                    make_pair("1", "z"),
+                    make_pair("2", "x"),
+                    make_pair("2", "y")
             }
     };
     rt->mergeResultToTable(result3);
@@ -108,10 +108,10 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     rt->setResultTable({"a", "c"},{{"1", "2", "3", "4"},{"w", "w", "w", "r"}});
 
     Result result1 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "a",
-            {"1", "2"}
+            std::unordered_set<string>{"1", "2"}
     };
     rt->mergeResultToTable(result1);
 
@@ -122,15 +122,15 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     rt->setResultTable({"a", "c"},{{"1", "1", "2", "3", "4"},{"w", "r", "w", "w", "r"}});
 
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("a", "b"),
-            {
-                    make_tuple("1", "x"),
-                    make_tuple("1", "y"),
-                    make_tuple("1", "z"),
-                    make_tuple("2", "x"),
-                    make_tuple("2", "y")
+            make_pair("a", "b"),
+            std::unordered_set<pair<string, string>>{
+                    make_pair("1", "x"),
+                    make_pair("1", "y"),
+                    make_pair("1", "z"),
+                    make_pair("2", "x"),
+                    make_pair("2", "y")
             }
     };
     rt->mergeResultToTable(result3);
@@ -149,15 +149,15 @@ TEST_CASE("Add result to existing synonym relations, join required") {
         );
 
     Result result4 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("a", "c"),
-            {
-                    make_tuple("1", "x"),
-                    make_tuple("1", "y"),
-                    make_tuple("1", "z"),
-                    make_tuple("2", "w"),
-                    make_tuple("2", "r")
+            make_pair("a", "c"),
+            std::unordered_set<pair<string, string>>{
+                    make_pair("1", "x"),
+                    make_pair("1", "y"),
+                    make_pair("1", "z"),
+                    make_pair("2", "w"),
+                    make_pair("2", "r")
             }
     };
     rt->mergeResultToTable(result4);
@@ -172,65 +172,65 @@ TEST_CASE("Multi-steps") {
     auto* rt = new ResultTable();
 
     Result result1 = {
-            ResultType::STRING,
+            ResultType::SINGLE,
             true,
             "s3",
-            {"6", "5", "7"}
+            std::unordered_set<string>{"6", "5", "7"}
     };
     rt->mergeResultToTable(result1);
 
     Result result2 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("s3", "v1"),
-            {
-                    make_tuple("5", "y"),
-                    make_tuple("5", "z"),
-                    make_tuple("7", "x"),
-                    make_tuple("8", "y"),
-                    make_tuple("2", "y")
+            make_pair("s3", "v1"),
+            std::unordered_set<pair<string, string>>{
+                    make_pair("5", "y"),
+                    make_pair("5", "z"),
+                    make_pair("7", "x"),
+                    make_pair("8", "y"),
+                    make_pair("2", "y")
             }
     };
     rt->mergeResultToTable(result2);
 
     Result result3 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("s2", "v1"),
-            {
-                    make_tuple("11", "y"),
-                    make_tuple("20", "x"),
-                    make_tuple("4", "x"),
-                    make_tuple("20", "y"),
-                    make_tuple("11", "z"),
-                    make_tuple("10", "z")
+            make_pair("s2", "v1"),
+            std::unordered_set<pair<string, string>>{
+                    make_pair("11", "y"),
+                    make_pair("20", "x"),
+                    make_pair("4", "x"),
+                    make_pair("20", "y"),
+                    make_pair("11", "z"),
+                    make_pair("10", "z")
             }
     };
     rt->mergeResultToTable(result3);
 
     Result result4 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("s3", "s1"),
-            {
-                    make_tuple("5", "6"),
-                    make_tuple("5", "8"),
-                    make_tuple("2", "7"),
-                    make_tuple("2", "3"),
-                    make_tuple("7", "6"),
+            make_pair("s3", "s1"),
+            std::unordered_set<pair<string, string>>{
+                    make_pair("5", "6"),
+                    make_pair("5", "8"),
+                    make_pair("2", "7"),
+                    make_pair("2", "3"),
+                    make_pair("7", "6"),
             }
     };
     rt->mergeResultToTable(result4);
 
     Result result5 = {
-            ResultType::TUPLES,
+            ResultType::PAIR,
             true,
-            make_tuple("s1", "s2"),
-            {
-                    make_tuple("6", "20"),
-                    make_tuple("3", "4"),
-                    make_tuple("10", "15"),
-                    make_tuple("8", "11"),
+            make_pair("s1", "s2"),
+            std::unordered_set<pair<string, string>>{
+                    make_pair("6", "20"),
+                    make_pair("3", "4"),
+                    make_pair("10", "15"),
+                    make_pair("8", "11"),
             }
     };
     rt->mergeResultToTable(result5);

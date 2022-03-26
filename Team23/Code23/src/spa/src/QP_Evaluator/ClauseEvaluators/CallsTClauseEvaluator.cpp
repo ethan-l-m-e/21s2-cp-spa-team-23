@@ -4,15 +4,15 @@
 
 #include "CallsTClauseEvaluator.h"
 
-bool CallsTClauseEvaluator::isRelation(std::string left, std::string right) {
+bool CallsTClauseEvaluator::isRelation(string left, string right) {
     return pkb->relationship.callsT.isRelationship(left, right);
 }
 
-unordered_set<std::string> CallsTClauseEvaluator::getLeftSynonymValue(std::string right) {
+unordered_set<string> CallsTClauseEvaluator::getLeftSynonymValue(string right) {
     return pkb->relationship.callsT.getLHS(right);
 }
 
-unordered_set<std::string> CallsTClauseEvaluator::getRightSynonymValue(std::string left) {
+unordered_set<string> CallsTClauseEvaluator::getRightSynonymValue(string left) {
     return pkb->relationship.callsT.getRHS(left);
 }
 

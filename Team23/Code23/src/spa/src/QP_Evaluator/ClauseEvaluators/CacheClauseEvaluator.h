@@ -9,7 +9,7 @@
 
 class CacheClauseEvaluator: public SuchThatClauseEvaluator {
 public:
-    CacheClauseEvaluator (std::vector<Argument> args, PKB* pkb, Query* query) : SuchThatClauseEvaluator(std::move(args), pkb, query) {
+    CacheClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): SuchThatClauseEvaluator(declarations, clause, pkb) {
         //nextTOperator = NextTOperator::getInstance();
     }
 protected:

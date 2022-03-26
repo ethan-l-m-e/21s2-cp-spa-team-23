@@ -10,11 +10,11 @@ bool AffectsTClauseEvaluator::isRelation(string left, string right) {
     return affectsTOperator->computeRelation(left, right);
 }
 
-unordered_set<std::string> AffectsTClauseEvaluator::getLeftSynonymValue(std::string right) {
+unordered_set<string> AffectsTClauseEvaluator::getLeftSynonymValue(string right) {
     return affectsTOperator->computeLHS(right);
 }
 
-unordered_set<std::string> AffectsTClauseEvaluator::getRightSynonymValue(std::string left) {
+unordered_set<string> AffectsTClauseEvaluator::getRightSynonymValue(string left) {
     return affectsTOperator->computeRHS(left);
 }
 

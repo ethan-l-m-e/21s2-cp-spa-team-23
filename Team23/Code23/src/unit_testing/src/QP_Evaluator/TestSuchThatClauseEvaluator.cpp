@@ -20,70 +20,70 @@
 using namespace std;
 
 bool evaluateFollowsClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new FollowsClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new FollowsClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateFollowsTClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new FollowsTClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new FollowsTClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateParentClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new ParentClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new ParentClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateParentTClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new ParentTClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new ParentTClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateModifiesSClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new ModifiesSClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new ModifiesSClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateModifiesPClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new ModifiesPClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new ModifiesPClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateUsesSClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new UsesSClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new UsesSClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateUsesPClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new UsesPClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new UsesPClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateNextClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new NextClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new NextClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateNextTClause(ResultTable* resultTable, Query *query, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new NextTClauseEvaluator(query->getSuchThatClauses()[0].argList, pkb, query);
+    auto *suchThatClauseEvaluator = new NextTClauseEvaluator(query->getDeclarations(), &(*query->getSuchThatClauses())[0], pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;

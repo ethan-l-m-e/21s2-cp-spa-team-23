@@ -17,23 +17,22 @@ enum class ClauseSynonymType {
 
 class SuchThatClauseEvaluator : public ClauseEvaluator {
 public:
-    SuchThatClauseEvaluator(std::vector<Argument> args, PKB* pkb, Query* query): ClauseEvaluator(std::move(args), pkb, query) {};
+    SuchThatClauseEvaluator(unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): ClauseEvaluator(declarations, clause, pkb) {};
     bool evaluateClause(ResultTable* resultTable) override;
 protected:
-    virtual bool isRelation(std::string left, std::string right) = 0;
-    virtual unordered_set<std::string> getLeftSynonymValue(std::string right) = 0;
-    virtual unordered_set<std::string> getRightSynonymValue(std::string left) = 0;
+    virtual bool isRelation(string left, string right) = 0;
+    virtual unordered_set<string> getLeftSynonymValue(string right) = 0;
+    virtual unordered_set<string> getRightSynonymValue(string left) = 0;
     virtual pair<DesignEntity, DesignEntity> getWildcardType() = 0;
     virtual RelRef getRelRef() = 0;
 
-    vector<ResultItem> generateTuples(unordered_set<std::string>&, unordered_set<std::string>&, bool);
-    bool validateRelation(unordered_set<std::string>&, unordered_set<std::string>&);
-    unordered_set<std::string> generateLeftSet (unordered_set<std::string>&);
-    unordered_set<std::string> generateRightSet (unordered_set<std::string>&);
-    void filterByType (unordered_set<std::string>&, DesignEntity);
-    bool isEntityType (const std::string&, DesignEntity);
+    unordered_set<std::pair<string, string>> generateTuples(unordered_set<string>&, unordered_set<string>&, bool);
+    bool validateRelation(unordered_set<string>&, unordered_set<string>&);
+    unordered_set<string> generateLeftSet (unordered_set<string>&);
+    unordered_set<string> generateRightSet (unordered_set<string>&);
+    void filterByType (unordered_set<string>&, DesignEntity);
+    bool isEntityType (const string&, DesignEntity);
     unordered_set<string> generateValueSet(Argument&, DesignEntity);
-    static vector<ResultItem> convertSetToVector(unordered_set<std::string>);
 
     [[nodiscard]] ClauseSynonymType getClauseSynonymType() const;
     void evaluateNoSynonym();
@@ -41,8 +40,8 @@ protected:
     void evaluateLeftSynonym();
     void evaluateRightSynonym();
 
-    Argument argLeft = argList[0];
-    Argument argRight = argList[1];
+    Argument argLeft = clause->argList[0];
+    Argument argRight = clause->argList[1];
 
 };
 

@@ -4,15 +4,15 @@
 
 #include "FollowsClauseEvaluator.h"
 
-bool FollowsClauseEvaluator::isRelation(std::string left, std::string right) {
+bool FollowsClauseEvaluator::isRelation(string left, string right) {
     return pkb->relationship.follows.isRelationship(left, right);
 }
 
-unordered_set<std::string> FollowsClauseEvaluator::getLeftSynonymValue(std::string right) {
+unordered_set<string> FollowsClauseEvaluator::getLeftSynonymValue(string right) {
     return pkb->relationship.follows.getLHS(right);
 }
 
-unordered_set<std::string> FollowsClauseEvaluator::getRightSynonymValue(std::string left) {
+unordered_set<string> FollowsClauseEvaluator::getRightSynonymValue(string left) {
     return pkb->relationship.follows.getRHS(left);
 }
 
