@@ -101,6 +101,50 @@ vector<VarName> extractUsesFromAssignPrintNode(Node * node) {
     return variables;
 }
 
+vector<VarName> extractModifiesFromProcedureNode(ProcedureNode* value) {
+    vector<Node*> stmtLst = value->getStmtLst();
+    vector<VarName> allModifiedVariables, e;
+    for(Node* s: stmtLst) {
+        e = RelationshipExtractor::extractModifies(s);
+        allModifiedVariables.insert(allModifiedVariables.end(), e.begin(), e.end());
+    }
+    PKB::getInstance()->relationship.modifiesP.setRelationship(value->getProcName(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+    return allModifiedVariables;
+}
+
+vector<VarName> extractModifiesFromWhileNode(WhileNode* value) {
+    vector<Node*> stmtLst = value->getStmtLst();
+    vector<VarName> allModifiedVariables;
+    for(Node* stmt: stmtLst) {
+        vector<VarName> modifiedVariables = RelationshipExtractor::extractModifies(stmt);
+        allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
+    }
+    PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+    return allModifiedVariables;
+}
+
+vector<VarName> extractModifiesFromIfNode(IfNode* value) {
+    vector<Node*> elseVector = value->getElseStmtLst();
+    vector<Node*> thenVector = value->getThenStmtLst();
+    vector<VarName> allModifiedVariables;
+    for(Node* stmt: elseVector) {
+        vector<VarName> modifiedVariables = RelationshipExtractor::extractModifies(stmt);
+        allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
+    }
+    for(Node* stmt: thenVector) {
+        vector<VarName> modifiedVariables = RelationshipExtractor::extractModifies(stmt);
+        allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
+    }
+    PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+    return allModifiedVariables;
+}
+
+vector<VarName> extractModifiesFromAssignReadNode(Node* value) {
+    vector<VarName> variables = value->getListOfVarModified();
+    PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+    return variables;
+}
+
 void RelationshipExtractor::extractFollows(Node * node) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode *> v = value->getProcLst();
@@ -188,46 +232,15 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
 
         return {};
     } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
-        vector<Node*> stmtLst = value->getStmtLst();
-        vector<VarName> allModifiedVariables, e;
-        for(Node* s: stmtLst) {
-            e = extractModifies(s);
-            allModifiedVariables.insert(allModifiedVariables.end(), e.begin(), e.end());
-        }
-        PKB::getInstance()->relationship.modifiesP.setRelationship(value->getProcName(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
-        return allModifiedVariables;
+        return extractModifiesFromProcedureNode(value);
     } else if(auto value = dynamic_cast<WhileNode*>(node)) {
-        vector<Node*> stmtLst = value->getStmtLst();
-        vector<VarName> allModifiedVariables;
-        for(Node* stmt: stmtLst) {
-            vector<VarName> modifiedVariables = extractModifies(stmt);
-            allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
-        }
-        PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
-        return allModifiedVariables;
+        return extractModifiesFromWhileNode(value);
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
-        vector<Node*> elseVector = value->getElseStmtLst();
-        vector<Node*> thenVector = value->getThenStmtLst();
-        vector<VarName> allModifiedVariables;
-        for(Node* stmt: elseVector) {
-            vector<VarName> modifiedVariables = extractModifies(stmt);
-            allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
-        }
-        for(Node* stmt: thenVector) {
-            vector<VarName> modifiedVariables = extractModifies(stmt);
-            allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
-        }
-        PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
-        return allModifiedVariables;
+        return extractModifiesFromIfNode(value);
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
-        vector<VarName> variables = value->getListOfVarModified();
-        PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
-        return variables;
+        return extractModifiesFromAssignReadNode(node);
     } else if(auto value = dynamic_cast<ReadNode*>(node)) {
-        vector<VarName> variables = value->getListOfVarModified();
-        PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(),
-                                        unordered_set<VarName>{variables.begin(), variables.end()});
-        return variables;
+        return extractModifiesFromAssignReadNode(node);
     } else if (auto value = dynamic_cast<CallNode*>(node)) {
         Node* procedureCalled = value->getProcedure();
         vector<VarName> variables = extractModifies(procedureCalled);
