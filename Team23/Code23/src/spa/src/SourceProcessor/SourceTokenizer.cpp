@@ -89,57 +89,23 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
     int exprPos = -1;
     while(true) {
         for (int i = sourceCode.length()-1; i >= 0; i--) {
-            switch (sourceCode[i]) {
-                case ('+'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('-'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case (')'):
-                    bracketCheck++;
-                    break;
-                case ('('):
-                    bracketCheck--;
-                    break;
-                default:
-                    break;
+            if ((sourceCode[i] == '+' || sourceCode[i] == '-') && bracketCheck == 0) {
+                exprPos = i;
+                goto exit_loop;
+            } else if (sourceCode[i] == ')') {
+                bracketCheck++;
+            } else if (sourceCode[i] == '(') {
+                bracketCheck--;
             }
         }
         for (int i = sourceCode.length()-1; i >= 0; i--) {
-            switch (sourceCode[i]) {
-                case ('*'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('/'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('%'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case (')'):
-                    bracketCheck++;
-                    break;
-                case ('('):
-                    bracketCheck--;
-                    break;
-                default:
-                    break;
+            if ((sourceCode[i] == '*' || sourceCode[i] == '/' || sourceCode[i] == '%') && bracketCheck == 0) {
+                exprPos = i;
+                goto exit_loop;
+            } else if (sourceCode[i] == ')') {
+                bracketCheck++;
+            } else if (sourceCode[i] == '(') {
+                bracketCheck--;
             }
         }
 
