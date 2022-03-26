@@ -1,9 +1,8 @@
-//
-// Created by リム・イーサン on 4/3/22.
-//
-
 #ifndef SPA_RELATIONSHIP_H
 #define SPA_RELATIONSHIP_H
+
+#include "AbstractRelationship.h"
+#include "AbstractManyToManyRelationship.h"
 
 #include "OneToOneRelationship.h"
 #include "OneToManyRelationship.h"

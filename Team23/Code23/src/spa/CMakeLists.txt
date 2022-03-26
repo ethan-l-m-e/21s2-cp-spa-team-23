@@ -13,6 +13,8 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Entity/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Relationship/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Statement/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/Cache/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/Cache/CachedRelationships/*.cpp"
         )
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
@@ -29,6 +31,9 @@ file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Entity/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Relationship/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Statement/*.h"
+
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/Cache/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/Cache/CachedRelationships/*.h"
         )
 add_library(spa ${srcs} ${headers})
 # this makes the headers accessible for other projects which uses spa lib

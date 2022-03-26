@@ -10,10 +10,12 @@
 
 #include "PKB/PKBHelper.h"
 
+#include "AbstractRelationship.h"
+
 using namespace std;
 
 template<class LHS, class RHS>
-class OneToManyRelationship {
+class OneToManyRelationship : public AbstractRelationship<LHS, RHS> {
 
     unordered_map<LHS, unordered_set<RHS>> lhsToRhsMap;
 
@@ -48,7 +50,7 @@ class OneToManyRelationship {
 
 
 public:
-    void setRelationship(LHS lhs, RHS rhs) {
+    void setRelationship(LHS lhs, RHS rhs) override {
 
         rhsToLhs.emplace(rhs, lhs);
 
@@ -60,7 +62,7 @@ public:
 
     }
 
-    bool isRelationship(string lhs, string rhs) {
+    bool isRelationship(string lhs, string rhs) override {
         LHS l;
         RHS r;
         return isRelationshipNormal(convertToLHS(lhs, l), convertToRHS(rhs, r));
@@ -68,13 +70,13 @@ public:
 
 
 
-    unordered_set<string> getRHS(string lhs) {
+    unordered_set<string> getRHS(string lhs) override {
         LHS l;
         return convertSetGenericsToSetStrings(getRHSNormal(convertToLHS(lhs, l)));
     }
 
 
-    unordered_set<string> getLHS(string rhs) {
+    unordered_set<string> getLHS(string rhs) override {
         RHS r;
         return convertSetGenericsToSetStrings(getLHSNormal(convertToRHS(rhs, r)));
     }
@@ -82,7 +84,7 @@ public:
 
 
 
-    void clear() {
+    void clear() override {
         lhsToRhsMap.clear();
         rhsToLhs.clear();
     }
