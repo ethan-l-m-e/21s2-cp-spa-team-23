@@ -69,10 +69,10 @@ public:
         ManyToManyRelationship<int, string> modifiesS;
         ManyToManyRelationship<string, string> modifiesP;
 
-        NextRelationship next;
-
         ManyToManyRelationship<string, string> calls;
         ManyToManyRelationship<string, string> callsT;
+
+        NextRelationship next;
 
     };
 
