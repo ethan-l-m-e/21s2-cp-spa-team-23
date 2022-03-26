@@ -25,7 +25,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     // Create ClauseEvaluators and evaluate each suchThat clause
     if(query->hasSuchThatClause() && resultTable->getBooleanResult()) {
         for(SuchThatClause& clause : *query->getSuchThatClauses()) {
-            auto suchThatClauseEvaluator = generateEvaluator(clause, *query);
+            auto suchThatClauseEvaluator = generateEvaluator(clause, *query->getDeclarations());
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
@@ -60,35 +60,35 @@ list<string> QueryEvaluator::evaluate(Query* query) {
  * @param query  a Query object pointer
  * @return  a pointer for the generated ClauseEvaluator.
  */
-ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, Query& query) {
+ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, unordered_map<string, DesignEntity>& declarations) {
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
-            return new FollowsClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<OneToOneRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.follows);
         case RelRef::PARENT:
-            return new ParentClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<OneToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.parent);
         case RelRef::FOLLOWS_T:
-            return new FollowsTClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.followsT);
         case RelRef::PARENT_T:
-            return new ParentTClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.parentT);
         case RelRef::USES_S:
-            return new UsesSClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, string>>(&declarations, &clause, pkb, &pkb->relationship.usesS);
         case RelRef::MODIFIES_S:
-            return new ModifiesSClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, string>>(&declarations, &clause, pkb, &pkb->relationship.modifiesS);
         case RelRef::USES_P:
-            return new UsesPClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.usesP);
         case RelRef::MODIFIES_P:
-            return new ModifiesPClauseEvaluator(query.getDeclarations(), &clause, pkb);
-        case RelRef::NEXT:
-            return new NextClauseEvaluator(query.getDeclarations(), &clause, pkb);
-        case RelRef::NEXT_T:
-            return new NextTClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.modifiesP);
         case RelRef::CALLS:
-            return new CallsClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.calls);
         case RelRef::CALLS_T:
-            return new CallsTClauseEvaluator(query.getDeclarations(), &clause, pkb);
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.callsT);
+        case RelRef::NEXT:
+            return new TableClauseEvaluator<NextRelationship>(&declarations, &clause, pkb, &pkb->relationship.next);
+        case RelRef::NEXT_T:
+            return new NextTClauseEvaluator(&declarations, &clause, pkb);
         case RelRef::AFFECTS:
-            return new AffectsClauseEvaluator(query.getDeclarations(), &clause, pkb);
-       default:
+            return new AffectsClauseEvaluator(&declarations, &clause, pkb);
+        default:
             throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
 }
