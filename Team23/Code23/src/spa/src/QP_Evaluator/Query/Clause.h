@@ -48,6 +48,9 @@ typedef struct PatternClause : Clause {
 typedef struct WithClause : Clause {
 } WithClause;
 
+typedef struct ResultClause : Clause {
+} ResultClause;
+
 
 
 #endif //SPA_CLAUSE_H

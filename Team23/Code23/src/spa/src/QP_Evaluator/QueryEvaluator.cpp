@@ -34,7 +34,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     }
 
     // Evaluate result clause and output the result
-    auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getSelectedSynonyms(), pkb);
+    auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
     if (!result) return {};
