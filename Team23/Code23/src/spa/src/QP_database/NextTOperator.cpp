@@ -230,6 +230,7 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
                     getCFGNode(to_string(branch->getRightNode()->getStatementNumber()-1));
             int lastNodeInLeftInt = lastNodeInLeft->getStatementNumber();
             visited[branch->getLeftNode()->getStatementNumber()] = true;
+            visited[branch->getRightNode()->getStatementNumber()] = true;
             visited[lastNodeInLeftInt] = true;
             unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(lastNodeInLeft);
             for (NodeCFG *adjNode: adjNodes) {
