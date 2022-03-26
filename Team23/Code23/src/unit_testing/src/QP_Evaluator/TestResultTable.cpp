@@ -6,7 +6,7 @@
 #include "catch.hpp"
 #include <unordered_set>
 
-using namespace std;
+using std::make_pair;
 
 TEST_CASE("Add result to empty synonym relations") {
     auto* rt = new ResultTable();
@@ -45,7 +45,7 @@ TEST_CASE("Add result to empty synonym relations") {
     rt->mergeResultToTable(result3);
 
     REQUIRE(*(rt->getHeader()) == std::vector<std::string>{"a", "b"});
-    REQUIRE(*(rt->getList()) == String2DVector{{ "1", "1", "1", "2", "2" }, { "x", "y", "z", "x", "y" } });
+    REQUIRE(*(rt->getList()) == String2DVector{{ "1", "1", "1", "2", "2" }, { "x", "y", "z", "y", "x" } });
     delete rt;
 }
 

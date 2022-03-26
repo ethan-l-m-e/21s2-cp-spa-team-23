@@ -58,51 +58,8 @@ void ResultClauseEvaluator::projectSelectedSynonyms(vector<int>* projections, Re
  * @param resultTable  pointer to the result table used
  */
 void ResultClauseEvaluator::appendNewSynonym(string synonymValue, ResultTable* resultTable){
-    Result result = {
-            .resultType = ResultType::SINGLE,
-            .resultBoolean =true,
-            .resultHeader = synonymValue,
-            .resultSet = getAllType(declarations->at(synonymValue))
-    };
+    Result result = makeResult(synonymValue, getAllType(declarations->at(synonymValue)));
     resultTable->mergeResultToTable(result);
-}
-
-/**
- * Apply attribute reference and populate the header name and caller function for attributes with different value from default.
- * @param attrRef  the attribute reference struct with a string identifier and an attribute name
- * @param func  pointer to the function pointer to be used for getting the mapping of the attribute for each value
- * @param name  pointer to the name of the new header to be added to result table for identifying the attribute column
- * @return  returns a boolean value representing whether name and function pointer have been populated
- */
-bool ResultClauseEvaluator::applyAttrRef(std::pair<string, AttrName>& attrRef, string (ResultClauseEvaluator::**func)(string&), string *name) {
-    if(declarations->at(attrRef.first) == DesignEntity::READ && attrRef.second == AttrName::VAR_NAME) {
-        *name = attrRef.first + ".varName";
-        *func = &ResultClauseEvaluator::getVarRead;
-    } else if (declarations->at(attrRef.first) == DesignEntity::PRINT && attrRef.second == AttrName::VAR_NAME) {
-        *name = attrRef.first + ".varName";
-        *func = &ResultClauseEvaluator::getVarPrinted;
-    } else if (declarations->at(attrRef.first) == DesignEntity::CALL && attrRef.second == AttrName::PROC_NAME) {
-        *name = attrRef.first + ".procName";
-        *func = &ResultClauseEvaluator::getProcByCall;
-    } else {
-        return false;
-    }
-    return true;
-}
-
-/**
- * Get the mapped new values for the attribute reference from the values in an existing column
- * @param lst  reference to the list in the result table
- * @param func  function pointer indicating the function to be applied for getting the mapped value
- * @return  a new list with the values for the attribute corresponding to each value
- */
-vector<string> ResultClauseEvaluator::getMapping(vector<string>& lst, string (ResultClauseEvaluator::*func) (string&)) {
-    vector<string> mappings;
-    for (string& val: lst) {
-        string mapped = (this->*func)(val);
-        mappings.emplace_back(mapped);
-    }
-    return mappings;
 }
 
 /**
@@ -130,7 +87,7 @@ void ResultClauseEvaluator::unpackSynonym(Argument &synonym, std::pair<string, A
  */
 void ResultClauseEvaluator::updateTableForAttrReference(std::pair<string, AttrName> &attrRef, long* index, ResultTable* resultTable) {
     auto header = resultTable->getHeader();
-    string(ResultClauseEvaluator::*func) (string&);
+    string(ClauseEvaluator::*func) (string&);
     string name;
     if (applyAttrRef(attrRef, &func, &name)) {
         auto it1 = std::find(header->begin(), header->end(), name);
@@ -141,15 +98,4 @@ void ResultClauseEvaluator::updateTableForAttrReference(std::pair<string, AttrNa
         }
         *index = newIndex;
     }
-}
-
-
-string ResultClauseEvaluator::getVarRead(string& stmtNumber) {
-    return pkb->statement.readStatements.getVariableName(stmtNumber);
-}
-string ResultClauseEvaluator::getVarPrinted(string& stmtNumber) {
-    return pkb->statement.printStatements.getVariableName(stmtNumber);
-}
-string ResultClauseEvaluator::getProcByCall(string& stmtNumber) {
-    return pkb->statement.callStatements.getProcedureName(stmtNumber);
 }

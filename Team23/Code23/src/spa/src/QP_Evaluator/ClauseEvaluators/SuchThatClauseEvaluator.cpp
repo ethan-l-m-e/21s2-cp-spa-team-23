@@ -56,11 +56,7 @@ void SuchThatClauseEvaluator::evaluateNoSynonym() {
 
     unordered_set<string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
     unordered_set<string> rightSet = generateValueSet(argRight, std::get<1>(getWildcardType()));
-
-    result = {
-            .resultType = ResultType::BOOLEAN,
-            .resultBoolean = validateRelation(leftSet, rightSet)
-    };
+    result = makeResult(validateRelation(leftSet, rightSet));
 }
 
 /**
@@ -74,11 +70,7 @@ void SuchThatClauseEvaluator::evaluateTwoSynonyms() {
     unordered_set<string> leftSet = getAllType(entityLeft);
     unordered_set<string> rightSet = getAllType(entityRight);
     unordered_set<pair<string,string>> resultPairs = generateTuples(leftSet, rightSet, leftSynonym == rightSynonym);
-    result = {.resultType = ResultType::PAIR,
-              .resultBoolean = !resultPairs.empty(),
-              .resultHeader = tuple<string, string> { std::get<string>(argLeft.argumentValue), std::get<string>(argRight.argumentValue)},
-              .resultSet = resultPairs,
-    };
+    result = makeResult(make_pair( std::get<string>(argLeft.argumentValue), std::get<string>(argRight.argumentValue)), resultPairs);
 }
 
 /**
@@ -89,10 +81,7 @@ void SuchThatClauseEvaluator::evaluateLeftSynonym() {
     unordered_set<string> rightSet = generateValueSet(argRight, std::get<1>(getWildcardType()));
     unordered_set<string> results = generateLeftSet(rightSet);
     filterByType(results, entityLeft);
-    result = {.resultType = ResultType::SINGLE,
-            .resultBoolean = !results.empty(),
-            .resultHeader = std::get<string>(argLeft.argumentValue),
-            .resultSet = results};
+    result = makeResult(std::get<string>(argLeft.argumentValue), results);
 }
 
 /**
@@ -103,10 +92,7 @@ void SuchThatClauseEvaluator::evaluateRightSynonym() {
     unordered_set<string> leftSet = generateValueSet(argLeft, std::get<0>(getWildcardType()));
     unordered_set<string> results = generateRightSet(leftSet);
     filterByType(results, entityRight);
-    result = {.resultType = ResultType::SINGLE,
-              .resultBoolean = !results.empty(),
-              .resultHeader = std::get<string>(argRight.argumentValue),
-              .resultSet = results};
+    result = makeResult(std::get<string>(argRight.argumentValue), results);
 }
 
 /**

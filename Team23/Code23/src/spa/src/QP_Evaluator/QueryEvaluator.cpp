@@ -11,7 +11,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     // Initialise an empty synonym relations for storing intermediate result
     auto* resultTable = new ResultTable();
 
-    // Create ClauseEvaluators and evaluate each of the pattern clause
+    // Create ClauseEvaluators and evaluate each pattern clause
     if(query->hasPatternClause() && resultTable->getBooleanResult()) {
         for(PatternClause& clause : *query->getPatternClauses()) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), &clause, pkb);
@@ -22,7 +22,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
-    // Create ClauseEvaluators and evaluate each of the suchThat clause
+    // Create ClauseEvaluators and evaluate each suchThat clause
     if(query->hasSuchThatClause() && resultTable->getBooleanResult()) {
         for(SuchThatClause& clause : *query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, *query);
@@ -30,6 +30,17 @@ list<string> QueryEvaluator::evaluate(Query* query) {
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
             if (!suchThatResult) break;
+        }
+    }
+
+    // Create ClauseEvaluators and evaluate each with clause
+    if(query->hasWithClause() && resultTable->getBooleanResult()) {
+        for(WithClause& clause : *query->getWithClauses()) {
+            auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), &clause, pkb);
+            bool withResult = withClauseEvaluator->evaluateClause(resultTable);
+            delete withClauseEvaluator;
+            // if the clause evaluates to false, terminate evaluation and output an empty list.
+            if (!withResult) break;
         }
     }
 

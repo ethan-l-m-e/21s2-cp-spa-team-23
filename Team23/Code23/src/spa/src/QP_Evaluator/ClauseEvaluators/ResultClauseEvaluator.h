@@ -5,10 +5,7 @@
 #ifndef SPA_RESULTCLAUSEEVALUATOR_H
 #define SPA_RESULTCLAUSEEVALUATOR_H
 
-
 #include "ClauseEvaluator.h"
-
-#include <utility>
 
 class ResultClauseEvaluator : public ClauseEvaluator {
 public:
@@ -19,17 +16,6 @@ public:
 private:
 
     void projectSelectedSynonyms(vector<int> *, ResultTable *);
-
-    bool applyAttrRef(std::pair<string, AttrName> &attrRef, string (ResultClauseEvaluator::* *func)(string&),
-                      string *name);
-
-    vector<string> getMapping(vector<string> &, string (ResultClauseEvaluator::*func)(string&));
-
-    string getVarRead(string&);
-
-    string getVarPrinted(string&);
-
-    string getProcByCall(string&);
 
     void appendNewSynonym(string, ResultTable*);
 

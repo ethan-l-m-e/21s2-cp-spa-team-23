@@ -81,10 +81,11 @@ bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
         }
     }
 
+    // result construction
     if (isSynonym(argLeft)) {
-        constructResults(stmtAndVarSet, true);
+        result = makeResult(make_pair(std::get<string>(patternSynonym.argumentValue), std::get<string>(arg1.argumentValue)), stmtAndVarSet);
     } else {
-        constructResults(stmtSet, false);
+        result = makeResult(std::get<string>(patternSynonym.argumentValue), stmtSet);
     }
 
     return processResult(resultTable);
@@ -128,16 +129,15 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
         }
     }
 
+    // result construction
     if (isSynonym(argLeft)) {
-        constructResults(stmtAndVarSet, true);
+        result = makeResult(make_pair(std::get<string>(patternSynonym.argumentValue), std::get<string>(arg1.argumentValue)), stmtAndVarSet);
     } else {
-        constructResults(stmtSet, false);
+        result = makeResult(std::get<string>(patternSynonym.argumentValue), stmtSet);
     }
 
     return processResult(resultTable);
 }
-
-
 
 bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     //validation and LHS/RHS parsing
@@ -197,31 +197,12 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
 
     // result construction
     if (isSynonym(argLeft)) {
-        constructResults(stmtAndVarSet, true);
+        result = makeResult(make_pair(std::get<string>(patternSynonym.argumentValue), std::get<string>(arg1.argumentValue)), stmtAndVarSet);
     } else {
-        constructResults(stmtSet, false);
+        result = makeResult(std::get<string>(patternSynonym.argumentValue), stmtSet);
     }
 
     return processResult(resultTable);
-}
-
-void PatternClauseEvaluator::constructResults(ResultItems results, bool hasTuples) {
-    if (hasTuples) {
-        // configure resultType, to have both variable names and assign
-        result.resultType = ResultType::PAIR;
-        result.resultBoolean = !(get<unordered_set<pair<string, string>>>(results)).empty();
-        result.resultHeader = tuple<string, string>(std::get<string>(patternSynonym.argumentValue),
-                                                    std::get<string>(arg1.argumentValue));
-        result.resultSet = results;
-
-    } else {
-        // configure resultType to have only a list of assign
-        result.resultType = ResultType::SINGLE;
-        result.resultBoolean = !(get<unordered_set<string>>(results)).empty();
-        result.resultHeader = std::get<string>(patternSynonym.argumentValue);
-        result.resultSet = results;
-
-    }
 }
 
 Expression validateAndParseEntRef(string arg) {
