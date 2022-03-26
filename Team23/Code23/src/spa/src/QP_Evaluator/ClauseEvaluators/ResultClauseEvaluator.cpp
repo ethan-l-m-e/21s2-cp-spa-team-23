@@ -6,10 +6,10 @@
 #include "QP_Parser/Exception.h"
 
 bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
-    if (selectedSynonyms.empty()) throw qp::QPEvaluatorException("No argument was selected");
+    if (clause->argList.empty()) throw qp::QPEvaluatorException("No argument was selected");
 
     // handle select boolean
-    if (selectedSynonyms[0].argumentType == ArgumentType::BOOLEAN) {
+    if (clause->argList[0].argumentType == ArgumentType::BOOLEAN) {
         resultTable->enableBooleanResult();
         return true;
     }
@@ -29,7 +29,7 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
  */
 void ResultClauseEvaluator::projectSelectedSynonyms(vector<int>* projections, ResultTable* resultTable) {
     auto header = resultTable->getHeader();
-    for (Argument synonym: selectedSynonyms) {
+    for (Argument synonym: clause->argList) {
 
         // get synonym value and attribute reference.
         string synonymValue;

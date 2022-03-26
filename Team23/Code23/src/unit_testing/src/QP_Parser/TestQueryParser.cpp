@@ -24,8 +24,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     Argument expectedArgument = Argument();
     expectedArgument.argumentValue = "v";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    vector<Argument> resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("v") == DesignEntity::VARIABLE);
 
     // constant design entity
@@ -35,8 +36,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "c";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("c") == DesignEntity::CONSTANT);
 
     // procedure design entity
@@ -46,8 +48,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "p";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("p") == DesignEntity::PROCEDURE);
 
     // stmt design entity
@@ -57,8 +60,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "s";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("s") == DesignEntity::STMT);
 
     // read design entity
@@ -68,8 +72,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "r";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("r") == DesignEntity::READ);
 
     // print design entity
@@ -79,8 +84,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "pn";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("pn") == DesignEntity::PRINT);
 
     // assign design entity
@@ -90,8 +96,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "a";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
 
     // call design entity
@@ -101,8 +108,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "c";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("c") == DesignEntity::CALL);
 
     // while design entity
@@ -112,8 +120,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "w";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("w") == DesignEntity::WHILE);
 
     // if design entity
@@ -123,8 +132,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "ifs";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("ifs") == DesignEntity::IF);
 
     // multiple declarations
@@ -134,8 +144,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "ifs";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("ifs") == DesignEntity::IF);
     CHECK(query.findEntityType("a") == DesignEntity::ASSIGN);
 
@@ -146,8 +157,9 @@ TEST_CASE ("PARSER - DECLARATIONS CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "a1";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
     CHECK(query.findEntityType("a1") == DesignEntity::ASSIGN);
     CHECK(query.findEntityType("a2") == DesignEntity::ASSIGN);
 }
@@ -162,8 +174,9 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     Argument expectedArgument = Argument();
     expectedArgument.argumentValue = "Select";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    vector<Argument> resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
 
     // synonym named pattern
     pql = "variable pattern; \nSelect pattern";
@@ -172,8 +185,9 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "pattern";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
 
     // synonym named pattern with pattern clause
     pql = "assign pattern; \nSelect pattern pattern pattern(_, _)";
@@ -182,8 +196,9 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "pattern";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
 
     // synonym named with
     pql = "assign with; \nSelect with pattern with(_, _)";
@@ -192,8 +207,9 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "with";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
 
     // synonym named and
     pql = "assign a, and; \nSelect and pattern a(_, _) and and(_, _)";
@@ -202,9 +218,10 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "and";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
-    CHECK(query.getPatternClauses().size() == 2);
+    CHECK(resultArgs[0] == expectedArgument);
+    CHECK(query.getPatternClauses()->size() == 2);
 
     // tuple: one element
     pql = "assign a; \nSelect <a>";
@@ -213,8 +230,9 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "a";
     expectedArgument.argumentType = ArgumentType::SYNONYM;
+    resultArgs = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(resultArgs[0] == expectedArgument);
 
     // tuple: multiple elements
     pql = "assign a1, a2; procedure p; \nSelect <a1, a2, p.procName>";
@@ -233,7 +251,7 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     thirdArgument.argumentType = ArgumentType::ATTR_REF;
 
     std::vector<Argument> synonymList = std::vector<Argument>({firstArgument, secondArgument, thirdArgument});
-    auto synonyms = query.getSelectedSynonyms();
+    auto synonyms = query.getResultClause()->argList;
 
     CHECK(synonyms[0] == synonymList[0]);
     CHECK(synonyms[1] == synonymList[1]);
@@ -246,8 +264,9 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = std::pair<std::string, AttrName>("s", AttrName::STMT_NO);
     expectedArgument.argumentType = ArgumentType::ATTR_REF;
+    synonyms = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(synonyms[0] == expectedArgument);
 
     // synonym is boolean
     pql = "stmt s; \nSelect BOOLEAN";
@@ -256,8 +275,9 @@ TEST_CASE ("PARSER - SYNONYM CHECK") {
     expectedArgument = Argument();
     expectedArgument.argumentValue = "";
     expectedArgument.argumentType = ArgumentType::BOOLEAN;
+    synonyms = query.getResultClause()->argList;
 
-    CHECK(query.getSelectedSynonyms()[0] == expectedArgument);
+    CHECK(synonyms[0] == expectedArgument);
 }
 
 TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WILDCARD") {
@@ -265,7 +285,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, WIL
 
     std::string pql = "stmt s; \nSelect s such that Follows(s,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
@@ -286,7 +306,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, INT
 
     std::string pql = "stmt s; \nSelect s such that Follows(s,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
@@ -307,7 +327,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: SYNONYM, SYN
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(s1, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
@@ -328,7 +348,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: INTEGER, SYN
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(3, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
@@ -349,7 +369,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS CHECK WITH ARGUMENTS: WILDCARD, SY
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Follows(_, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
@@ -370,7 +390,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, WI
 
     std::string pql = "stmt s; \nSelect s such that Follows*(s,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
@@ -391,7 +411,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, IN
 
     std::string pql = "stmt s; \nSelect s such that Follows*(s,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
@@ -412,7 +432,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: SYNONYM, SY
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(s1, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
@@ -433,7 +453,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: INTEGER, SY
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(3, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
@@ -454,7 +474,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE FOLLOWS* CHECK WITH ARGUMENTS: WILDCARD, S
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Follows*(_, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS_T);
@@ -475,7 +495,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, WILD
 
     std::string pql = "stmt s; \nSelect s such that Parent(s,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT);
@@ -496,7 +516,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, INTE
 
     std::string pql = "stmt s; \nSelect s such that Parent(s,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT);
@@ -517,7 +537,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: SYNONYM, SYNO
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(s1, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT);
@@ -538,7 +558,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: INTEGER, SYNO
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(3, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT);
@@ -559,7 +579,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT CHECK WITH ARGUMENTS: WILDCARD, SYN
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Parent(_, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT);
@@ -580,7 +600,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, WIL
 
     std::string pql = "stmt s; \nSelect s such that Parent*(s,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT_T);
@@ -601,7 +621,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, INT
 
     std::string pql = "stmt s; \nSelect s such that Parent*(s,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT_T);
@@ -622,7 +642,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: SYNONYM, SYN
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(s1, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT_T);
@@ -643,7 +663,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: INTEGER, SYN
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(3, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT_T);
@@ -664,7 +684,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE PARENT* CHECK WITH ARGUMENTS: WILDCARD, SY
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Parent*(_, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT_T);
@@ -685,7 +705,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: IDENT, WILDCARD
 
     std::string pql = "variable v; assign a; \nSelect v such that Uses(\"x\", _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_P);
@@ -706,7 +726,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, W
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_S);
@@ -727,7 +747,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - 
 
     std::string pql = "variable v; assign a; stmt s; print pn; \nSelect v such that Uses(pn, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_S);
@@ -748,7 +768,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - 
 
     std::string pql = "variable v; assign a; stmt s; print pn; if ifs; \nSelect v such that Uses(ifs, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_S);
@@ -769,7 +789,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - 
 
     std::string pql = "variable v; assign a; stmt s; print pn; if ifs; while w; \nSelect v such that Uses(w, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_S);
@@ -790,7 +810,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM - 
 
     std::string pql = "variable v; call c; stmt s; print pn; if ifs; while w; \nSelect v such that Uses(c, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_S);
@@ -811,7 +831,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, S
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, v)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_S);
@@ -832,7 +852,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE USES CHECK WITH ARGUMENTS: STMT SYNONYM, I
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v such that Uses(a, \"x\")";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::USES_S);
@@ -853,7 +873,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: IDENT, WILD
 
     std::string pql = "variable v; assign a; \nSelect v such that Modifies(\"x\", _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_P);
@@ -874,7 +894,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
@@ -895,7 +915,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 
     std::string pql = "variable v; assign a; stmt s; read r; \nSelect v such that Modifies(r, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
@@ -915,7 +935,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 
     std::string pql = "variable v; assign a; stmt s; print pn; if ifs; \nSelect v such that Modifies(ifs, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
@@ -936,7 +956,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 
     std::string pql = "variable v; assign a; stmt s; print pn; procedure p, q; if ifs; while w; \nSelect v such that Modifies(w, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
@@ -957,7 +977,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 
     std::string pql = "variable v; call c; stmt s; print pn; if ifs; while w; \nSelect v such that Modifies(c, _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
@@ -978,7 +998,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, v)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
@@ -999,7 +1019,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE MODIFIES CHECK WITH ARGUMENTS: STMT SYNONY
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v such that Modifies(a, \"x\")";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::MODIFIES_S);
@@ -1020,7 +1040,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: SYNONYM, WILDCA
 
     std::string pql = "stmt s; \nSelect s such that Next(s,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT);
@@ -1041,7 +1061,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: SYNONYM, INTEGE
 
     std::string pql = "stmt s; \nSelect s such that Next(s,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT);
@@ -1062,7 +1082,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: SYNONYM, SYNONY
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Next(s1, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT);
@@ -1083,7 +1103,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: INTEGER, SYNONY
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Next(3, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT);
@@ -1104,7 +1124,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT CHECK WITH ARGUMENTS: WILDCARD, SYNON
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Next(_, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT);
@@ -1125,7 +1145,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: SYNONYM, WILDC
 
     std::string pql = "stmt s; \nSelect s such that Next*(s,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT_T);
@@ -1146,7 +1166,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: SYNONYM, INTEG
 
     std::string pql = "stmt s; \nSelect s such that Next*(s,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT_T);
@@ -1167,7 +1187,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: SYNONYM, SYNON
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Next*(s1, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT_T);
@@ -1188,7 +1208,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: INTEGER, SYNON
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Next*(3, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT_T);
@@ -1209,7 +1229,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE NEXT* CHECK WITH ARGUMENTS: WILDCARD, SYNO
 
     std::string pql = "stmt s1, s2; \nSelect s1 such that Next*(_, s2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::NEXT_T);
@@ -1230,7 +1250,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: SYNONYM, WIL
 
     std::string pql = "assign a; \nSelect a such that Affects(a,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS);
@@ -1251,7 +1271,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: SYNONYM, INT
 
     std::string pql = "assign a; \nSelect a such that Affects(a,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS);
@@ -1272,7 +1292,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: SYNONYM, SYN
 
     std::string pql = "assign a1, a2; \nSelect a1 such that Affects(a1, a2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS);
@@ -1293,7 +1313,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: INTEGER, SYN
 
     std::string pql = "assign a1, a2; \nSelect a1 such that Affects(3, a2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS);
@@ -1314,7 +1334,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS CHECK WITH ARGUMENTS: WILDCARD, SY
 
     std::string pql = "assign a1, a2; \nSelect a1 such that Affects(_, a2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS);
@@ -1335,7 +1355,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: SYNONYM, WI
 
     std::string pql = "assign a; \nSelect a such that Affects*(a,_)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
@@ -1356,7 +1376,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: SYNONYM, IN
 
     std::string pql = "assign a; \nSelect a such that Affects*(a,3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
@@ -1377,7 +1397,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: SYNONYM, SY
 
     std::string pql = "assign a1, a2; \nSelect a1 such that Affects*(a1, a2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
@@ -1398,7 +1418,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: INTEGER, SY
 
     std::string pql = "assign a1, a2; \nSelect a1 such that Affects*(3, a2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
@@ -1419,7 +1439,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE AFFECTS* CHECK WITH ARGUMENTS: WILDCARD, S
 
     std::string pql = "assign a1, a2; \nSelect a1 such that Affects*(_, a2)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::AFFECTS_T);
@@ -1440,7 +1460,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS CHECK WITH ARGUMENTS: IDENT, WILDCAR
 
     std::string pql = "procedure p; \nSelect p such that Calls(\"x\", _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::CALLS);
@@ -1461,7 +1481,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS CHECK WITH ARGUMENTS: SYNONYM, IDENT
 
     std::string pql = "procedure p; \nSelect p such that Calls(p, \"x\")";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::CALLS);
@@ -1482,7 +1502,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS CHECK WITH ARGUMENTS: WILDCARD, SYNO
 
     std::string pql = "procedure p; \nSelect p such that Calls(_, p)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::CALLS);
@@ -1503,7 +1523,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS* CHECK WITH ARGUMENTS: IDENT, WILDCA
 
     std::string pql = "procedure p; \nSelect p such that Calls*(\"x\", _)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::CALLS_T);
@@ -1524,7 +1544,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS* CHECK WITH ARGUMENTS: SYNONYM, IDEN
 
     std::string pql = "procedure p; \nSelect p such that Calls*(p, \"x\")";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::CALLS_T);
@@ -1545,7 +1565,7 @@ TEST_CASE ("PARSER - SUCH THAT CLAUSE CALLS* CHECK WITH ARGUMENTS: WILDCARD, SYN
 
     std::string pql = "procedure p; \nSelect p such that Calls*(_, p)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::CALLS_T);
@@ -1566,7 +1586,7 @@ TEST_CASE ("PARSER - MULTIPLE SUCH THAT CLAUSES: CALLS* AND FOLLOWS") {
 
     std::string pql = "procedure p; \nSelect p such that Calls*(_, p) and Follows(2, 3)";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::CALLS_T);
@@ -1582,7 +1602,7 @@ TEST_CASE ("PARSER - MULTIPLE SUCH THAT CLAUSES: CALLS* AND FOLLOWS") {
     CHECK(argList[1] == expectedSecondArgument);
 
     // Check second such that clause
-    suchThatClause = query.getSuchThatClauses()[1];
+    suchThatClause = (*query.getSuchThatClauses())[1];
     argList = suchThatClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::FOLLOWS);
@@ -1603,7 +1623,7 @@ TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (\"x\", _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1627,7 +1647,7 @@ TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDC
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (_, _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1651,7 +1671,7 @@ TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDC
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1675,7 +1695,7 @@ TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, IDENT
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, \"x\")";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1699,7 +1719,7 @@ TEST_CASE ("PARSER - ASSIGN PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, PARTI
 
     std::string pql = "variable v; assign a; stmt s; \nSelect v pattern a (v, _\"x\"_)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1723,7 +1743,7 @@ TEST_CASE ("PARSER - WHILE PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD"
 
     std::string pql = "while w; variable v; \nSelect v pattern w (\"x\", _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1747,7 +1767,7 @@ TEST_CASE ("PARSER - WHILE PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCA
 
     std::string pql = "while w; variable v; \nSelect v pattern w (_, _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1771,7 +1791,7 @@ TEST_CASE ("PARSER - WHILE PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCA
 
     std::string pql = "while w; variable v; \nSelect v pattern w (v, _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1795,7 +1815,7 @@ TEST_CASE ("PARSER - IF PATTERN CLAUSE CHECK WITH ARGUMENTS: IDENT, WILDCARD, WI
 
     std::string pql = "variable v; if ifs; \nSelect v pattern ifs (\"x\", _, _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1819,7 +1839,7 @@ TEST_CASE ("PARSER - IF PATTERN CLAUSE CHECK WITH ARGUMENTS: WILDCARD, WILDCARD"
 
     std::string pql = "variable v;  if ifs; \nSelect v pattern ifs (_, _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1843,7 +1863,7 @@ TEST_CASE ("PARSER - IF PATTERN CLAUSE CHECK WITH ARGUMENTS: VARIABLE, WILDCARD"
 
     std::string pql = "variable v;  if ifs; \nSelect v pattern ifs (v, _)";
     Query query = parser.getQuery(pql);
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> argList = patternClause.argList;
 
     Argument expectedFirstArgument = Argument();
@@ -1867,7 +1887,7 @@ TEST_CASE ("PARSER - WITH CLAUSES") {
 
     std::string pql = "constant c; procedure p; stmt s; variable v; \nSelect s with s.stmt#=5 and c.value = v.varName with p.procName = \"x\"";
     Query query = parser.getQuery(pql);
-    WithClause withClause = query.getWithClauses()[0];
+    WithClause withClause = (*query.getWithClauses())[0];
     std::vector<Argument> argList = withClause.argList;
 
     // First with clause
@@ -1882,7 +1902,7 @@ TEST_CASE ("PARSER - WITH CLAUSES") {
     CHECK(argList[1] == expectedSecondArgument);
 
     // Second with clause
-    argList = query.getWithClauses()[1].argList;
+    argList = (*query.getWithClauses())[1].argList;
     expectedFirstArgument = Argument();
     expectedFirstArgument.argumentValue = std::pair<std::string, AttrName>("c", AttrName::VALUE);
     expectedFirstArgument.argumentType = ArgumentType::ATTR_REF;
@@ -1894,7 +1914,7 @@ TEST_CASE ("PARSER - WITH CLAUSES") {
     CHECK(argList[1] == expectedSecondArgument);
 
     // Third with clause
-    argList = query.getWithClauses()[2].argList;
+    argList = (*query.getWithClauses())[2].argList;
     expectedFirstArgument = Argument();
     expectedFirstArgument.argumentValue = std::pair<std::string, AttrName>("p", AttrName::PROC_NAME);
     expectedFirstArgument.argumentType = ArgumentType::ATTR_REF;
@@ -1911,10 +1931,10 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
 
     std::string pql = "stmt s; assign a; constant c; variable v; \nSelect s such that Parent*(s,3) pattern a (_, _) with c.value=v.varName";
     Query query = parser.getQuery(pql);
-    SuchThatClause suchThatClause = query.getSuchThatClauses()[0];
+    SuchThatClause suchThatClause = (*query.getSuchThatClauses())[0];
     std::vector<Argument> argList = suchThatClause.argList;
 
-    PatternClause patternClause = query.getPatternClauses()[0];
+    PatternClause patternClause = (*query.getPatternClauses())[0];
     std::vector<Argument> patternArgList = patternClause.argList;
 
     CHECK(suchThatClause.relRef == RelRef::PARENT_T);
@@ -1943,7 +1963,7 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
     CHECK(patternArgList[1] == expectedPatternSecondArgument);
     CHECK(patternArgList[2] == expectedPatternThirdArgument);
 
-    argList = query.getWithClauses()[0].argList;
+    argList = (*query.getWithClauses())[0].argList;
     expectedFirstArgument = Argument();
     expectedFirstArgument.argumentValue = std::pair<std::string, AttrName>("c", AttrName::VALUE);
     expectedFirstArgument.argumentType = ArgumentType::ATTR_REF;

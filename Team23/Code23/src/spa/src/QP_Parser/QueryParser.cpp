@@ -66,7 +66,9 @@ void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
         Argument argument = getArgument(synonym, *(queryToken.declarationTokens));
         argList.push_back(argument);
     }
-    query.setSynonyms(argList);
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = argList;
+    query.setResultClause(resultClause);
 }
 
 void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {

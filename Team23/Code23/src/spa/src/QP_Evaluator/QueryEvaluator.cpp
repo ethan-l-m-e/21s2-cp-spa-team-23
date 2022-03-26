@@ -13,7 +13,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
 
     // Create ClauseEvaluators and evaluate each pattern clause
     if(query->hasPatternClause() && resultTable->getBooleanResult()) {
-        for(PatternClause& clause : query->getPatternClauses()) {
+        for(PatternClause& clause : *query->getPatternClauses()) {
             auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), &clause, pkb);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
@@ -24,7 +24,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
 
     // Create ClauseEvaluators and evaluate each suchThat clause
     if(query->hasSuchThatClause() && resultTable->getBooleanResult()) {
-        for(SuchThatClause& clause : query->getSuchThatClauses()) {
+        for(SuchThatClause& clause : *query->getSuchThatClauses()) {
             auto suchThatClauseEvaluator = generateEvaluator(clause, *query);
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
@@ -45,7 +45,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     }
 
     // Evaluate result clause and output the result
-    auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getSelectedSynonyms(), pkb);
+    auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
     if (!result) return {};

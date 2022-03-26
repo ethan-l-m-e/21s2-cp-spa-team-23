@@ -36,20 +36,20 @@ protected:
     vector<SuchThatClause> suchThatClauses;
     vector<PatternClause> patternClauses;
     vector<WithClause> withClauses;
-    vector<Argument> selectedSynonyms;
+    ResultClause resultClause;
 public:
     bool hasSuchThatClause();
     bool hasPatternClause();
     bool hasWithClause();
     unordered_map<string, DesignEntity>* getDeclarations();
-    vector<PatternClause> getPatternClauses();
-    vector<SuchThatClause> getSuchThatClauses();
-    vector<WithClause> getWithClauses();
-    vector<Argument> getSelectedSynonyms();
+    vector<PatternClause>* getPatternClauses();
+    vector<SuchThatClause>* getSuchThatClauses();
+    vector<WithClause>* getWithClauses();
+    ResultClause* getResultClause();
     DesignEntity getSynonymType(string synonym);
     DesignEntity findEntityType(const string&);
     void setDeclarations(unordered_map<string, DesignEntity>);
-    void setSynonyms(vector<Argument>);
+    void setResultClause(ResultClause clause) ;
     void setSuchThatClauses(vector<SuchThatClause>);
     void setPatternClauses(vector<PatternClause>);
     void setWithClauses(vector<WithClause>);

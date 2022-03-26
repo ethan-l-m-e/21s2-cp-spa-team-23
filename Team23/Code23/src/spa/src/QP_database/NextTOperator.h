@@ -22,6 +22,13 @@ protected:
     searchNodesAlongPathAfter(NodeCFG *leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 
     static bool IsReachableForward(NodeCFG *srcNode, NodeCFG *destNode, unordered_map<int, bool> &visited, vector<int> &path);
+
+    static bool
+    IsReachableForwardV2(NodeCFG *srcNode, NodeCFG *destNode, unordered_map<int, bool> &visited, vector<int> &path);
+
+    static bool hasLoopAsParent(int srcVal, int destVal);
+
+    static int findLargestValue(stmtSetStr stmtSet);
 };
 
 

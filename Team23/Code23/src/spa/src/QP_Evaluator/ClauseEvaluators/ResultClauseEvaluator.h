@@ -9,7 +9,7 @@
 
 class ResultClauseEvaluator : public ClauseEvaluator {
 public:
-    ResultClauseEvaluator(unordered_map<string, DesignEntity>* declarations, vector<Argument> selectedSynonyms, PKB* pkb) : ClauseEvaluator(declarations, pkb), selectedSynonyms(std::move(selectedSynonyms)) {};
+    ResultClauseEvaluator(unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb) : ClauseEvaluator(declarations, clause, pkb) {};
 
     bool evaluateClause(ResultTable *resultTable) override;
 
@@ -33,8 +33,6 @@ private:
     void updateTableForAttrReference(std::pair<string, AttrName>&, long*, ResultTable*);
 
     static void unpackSynonym(Argument&, std::pair<string, AttrName>*, string*);
-
-    vector<Argument> selectedSynonyms;
 
 };
 
