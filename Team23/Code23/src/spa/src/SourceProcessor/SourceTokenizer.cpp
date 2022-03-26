@@ -12,21 +12,21 @@
 using namespace std;
 
 void SourceTokenizer::extractCall(string sourceCode, vector<string> &v) {
-    int call = sourceCode.find("call")+4;
+    int call = sourceCode.find("call") + CALL_SIZE;
     int end = sourceCode.find(';');
     string procName = StringFormatter::removeTrailingSpace(sourceCode.substr(call, end - call));
     v.push_back(procName);
 }
 
 void SourceTokenizer::extractRead(string sourceCode, vector<string> &v) {
-    int read = sourceCode.find("read")+4;
+    int read = sourceCode.find("read") + READ_SIZE;
     int end = sourceCode.find(';');
     string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(read, end - read));
     v.push_back(varname);
 }
 
 void SourceTokenizer::extractPrint(string sourceCode, vector<string> &v) {
-    int print = sourceCode.find("print")+5;
+    int print = sourceCode.find("print") + PRINT_SIZE;
     int end = sourceCode.find(';');
     string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(print, end - print));
     v.push_back(varname);
@@ -64,7 +64,7 @@ void SourceTokenizer::extractIfElseThen(string sourceCode, vector<string> &v) {
 }
 
 void SourceTokenizer::extractWhile(string sourceCode, vector<string> &v) {
-    int startOfCond = sourceCode.find("while")+5;
+    int startOfCond = sourceCode.find("while") + WHILE_SIZE;
     int endOfCond = sourceCode.find('{');
     string cond = sourceCode.substr(startOfCond, endOfCond-startOfCond);
     cond = StringFormatter::removeFrontBackBrackets(cond);
@@ -89,57 +89,23 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
     int exprPos = -1;
     while(true) {
         for (int i = sourceCode.length()-1; i >= 0; i--) {
-            switch (sourceCode[i]) {
-                case ('+'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('-'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case (')'):
-                    bracketCheck++;
-                    break;
-                case ('('):
-                    bracketCheck--;
-                    break;
-                default:
-                    break;
+            if ((sourceCode[i] == '+' || sourceCode[i] == '-') && bracketCheck == 0) {
+                exprPos = i;
+                goto exit_loop;
+            } else if (sourceCode[i] == ')') {
+                bracketCheck++;
+            } else if (sourceCode[i] == '(') {
+                bracketCheck--;
             }
         }
         for (int i = sourceCode.length()-1; i >= 0; i--) {
-            switch (sourceCode[i]) {
-                case ('*'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('/'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('%'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case (')'):
-                    bracketCheck++;
-                    break;
-                case ('('):
-                    bracketCheck--;
-                    break;
-                default:
-                    break;
+            if ((sourceCode[i] == '*' || sourceCode[i] == '/' || sourceCode[i] == '%') && bracketCheck == 0) {
+                exprPos = i;
+                goto exit_loop;
+            } else if (sourceCode[i] == ')') {
+                bracketCheck++;
+            } else if (sourceCode[i] == '(') {
+                bracketCheck--;
             }
         }
 

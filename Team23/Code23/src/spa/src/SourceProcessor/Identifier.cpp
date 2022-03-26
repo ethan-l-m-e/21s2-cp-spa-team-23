@@ -81,15 +81,15 @@ bool Identifier::checkParenthesesClosure(string code, string brackets) {
         if (startedCount == true && count == 0) {
             return true;
         } else if (code[i]== bracketLeft) {
-            startedCount = true;
             count++;
         } else if (code[i] == bracketRight) {
-            startedCount = true;
             count--;
-            if ( count < 0) {
-                cout << "excessive " << bracketRight <<"\n";
-                return false;
-            }
+        }
+
+        startedCount = true;
+        if (count < 0) {
+            cout << "excessive " << bracketRight <<"\n";
+            return false;
         }
     }
 
@@ -118,10 +118,11 @@ bool Identifier::checkParenthesesCorrectness(string code, string brackets)  {
             count++;
         } else if (code[i] == bracketRight) {
             count--;
-            if ( count < 0) {
-                cout << "excessive " << bracketRight <<"\n";
-                return false;
-            }
+        }
+
+        if (count < 0) {
+            cout << "excessive " << bracketRight <<"\n";
+            return false;
         }
     }
 
