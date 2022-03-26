@@ -51,6 +51,56 @@ void extractParentFromParentList(Node *parent, vector<StmtLstNode*> parentList, 
     }
 }
 
+vector<VarName> extractUsesFromProcedureNode(ProcedureNode* value) {
+    vector<Node*> stmtLst = value->getStmtLst();
+    vector<VarName> allUsedVariables, e;
+    for(Node* s: stmtLst) {
+        e = RelationshipExtractor::extractUses(s);
+        allUsedVariables.insert(allUsedVariables.end(), e.begin(), e.end());
+    }
+    PKB::getInstance()->relationship.usesP.setRelationship(value->getProcName(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+    return allUsedVariables;
+}
+
+vector<VarName> extractUsesFromWhileNode(WhileNode* value) {
+    //gather variables from cond_expr and stmtLst
+    vector<VarName> condVariables = value->getCondExpr()->getListOfVarUsed();
+    vector<Node*> stmtLst = value->getStmtLst();
+    vector<VarName> allUsedVariables;
+    allUsedVariables.insert(allUsedVariables.end(), condVariables.begin(), condVariables.end());
+    for(Node* stmt: stmtLst) {
+        vector<VarName> usedVariables = RelationshipExtractor::extractUses(stmt);
+        allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
+    }
+    PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+    return allUsedVariables;
+}
+
+vector<VarName> extractUsesFromIfNode(IfNode* value) {
+    vector<VarName> condVariables = value->getCondExpr()->getAllVariables();
+    vector<Node*> elseVector = value->getElseStmtLst();
+    vector<Node*> thenVector = value->getThenStmtLst();
+    vector<VarName> allUsedVariables;
+    allUsedVariables.insert(allUsedVariables.end(), condVariables.begin(), condVariables.end());
+    for(Node* stmt: elseVector) {
+        vector<VarName> usedVariables = RelationshipExtractor::extractUses(stmt);
+        allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
+    }
+    for(Node* stmt: thenVector) {
+        vector<VarName> usedVariables = RelationshipExtractor::extractUses(stmt);
+        allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
+    }
+
+    PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+    return allUsedVariables;
+}
+
+vector<VarName> extractUsesFromAssignPrintNode(Node * node) {
+    vector<VarName> variables = node->getListOfVarUsed();
+    PKB::getInstance()->relationship.usesS.setRelationship(node->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+    return variables;
+}
+
 void RelationshipExtractor::extractFollows(Node * node) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode *> v = value->getProcLst();
@@ -81,7 +131,7 @@ void RelationshipExtractor::extractFollows(Node * node) {
 
 //extracts all parents relationship starting from given node
 void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> parentList) {
-    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+    if (auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode *> v = value->getProcLst();
         for (ProcedureNode *p: v)
             extractParent(p,parentList);
@@ -101,58 +151,21 @@ void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> pare
 
 //set all variables used by the node in the pkb
 vector<string>  RelationshipExtractor::extractUses (Node * node) {
-    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+    if (auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode*> v = value -> getProcLst();
         for(ProcedureNode* p: v)
             extractUses(p);
-
         return {};
     } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
-        vector<Node*> stmtLst = value->getStmtLst();
-        vector<VarName> allUsedVariables, e;
-        for(Node* s: stmtLst) {
-            e = extractUses(s);
-            allUsedVariables.insert(allUsedVariables.end(), e.begin(), e.end());
-        }
-        PKB::getInstance()->relationship.usesP.setRelationship(value->getProcName(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
-        return allUsedVariables;
+        return extractUsesFromProcedureNode(value);
     } else if(auto value = dynamic_cast<WhileNode*>(node)) {
-        //gather variables from cond_expr and stmtLst
-        vector<VarName> condVariables = value->getCondExpr()->getListOfVarUsed();
-        vector<Node*> stmtLst = value->getStmtLst();
-        vector<VarName> allUsedVariables;
-        allUsedVariables.insert(allUsedVariables.end(), condVariables.begin(), condVariables.end());
-        for(Node* stmt: stmtLst) {
-            vector<VarName> usedVariables = extractUses(stmt);
-            allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
-        }
-        PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
-        return allUsedVariables;
+        return extractUsesFromWhileNode(value);
     } else if(auto value = dynamic_cast<IfNode*>(node)) {
-        vector<VarName> condVariables = value->getCondExpr()->getAllVariables();
-        vector<Node*> elseVector = value->getElseStmtLst();
-        vector<Node*> thenVector = value->getThenStmtLst();
-        vector<VarName> allUsedVariables;
-        allUsedVariables.insert(allUsedVariables.end(), condVariables.begin(), condVariables.end());
-        for(Node* stmt: elseVector) {
-            vector<VarName> usedVariables = extractUses(stmt);
-            allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
-        }
-        for(Node* stmt: thenVector) {
-            vector<VarName> usedVariables = extractUses(stmt);
-            allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
-        }
-
-        PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
-        return allUsedVariables;
+        return extractUsesFromIfNode(value);
     } else if(auto value = dynamic_cast<AssignNode*>(node)) {
-        vector<VarName> variables = value->getListOfVarUsed();
-        PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
-        return variables;
+        return extractUsesFromAssignPrintNode(value);
     } else if(auto value = dynamic_cast<PrintNode*>(node)) {
-        vector<VarName> variables = value->getListOfVarUsed();
-        PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
-        return variables;
+        return extractUsesFromAssignPrintNode(value);
     } else if (auto value = dynamic_cast<CallNode*>(node)) {
         Node* procedureCalled = value->getProcedure();
         vector<VarName> variables = extractUses(procedureCalled);
