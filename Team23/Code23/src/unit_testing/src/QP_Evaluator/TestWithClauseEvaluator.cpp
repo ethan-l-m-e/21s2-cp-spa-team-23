@@ -28,6 +28,7 @@ TEST_CASE("Test with clause evaluator") {
     Argument a1 = {ArgumentType::STMT_NO, "1"};
     Argument ax = {ArgumentType::IDENT, "x"};
     Argument ay = {ArgumentType::IDENT, "y"};
+    Argument az = {ArgumentType::IDENT, "z"};
     Argument a11 = {ArgumentType::STMT_NO, "11"};
     Argument apn_stmt = {ArgumentType::ATTR_REF, make_pair("pn", AttrName::STMT_NO)};
     Argument apn_var = {ArgumentType::ATTR_REF, make_pair("pn", AttrName::VAR_NAME)};
@@ -40,8 +41,10 @@ TEST_CASE("Test with clause evaluator") {
     WithClause clause_pn_var_x = {ArgList{apn_var, ax}};
     WithClause clause_pn_var_r_var = {ArgList{apn_var, ar_var}};
     WithClause clause_pn_var_v = {ArgList{apn_var, av}};
+    WithClause clause_z_pn_var = {ArgList{az, apn_var}};
 
     auto *resultTable = new ResultTable();
+
     SECTION("select zero synonym") {
         /**
         * with 1 = 1
@@ -72,6 +75,14 @@ TEST_CASE("Test with clause evaluator") {
         resultTable->clearTable();
         REQUIRE(evaluateWithClause(&declarations, resultTable, &clause_pn_var_x, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"11"});
+
+        /**
+       * with "z" = pn.varName
+       */
+        resultTable->clearTable();
+        REQUIRE(evaluateWithClause(&declarations, resultTable, &clause_z_pn_var, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"4"});
+
     }
 
     SECTION("select two synonyms") {
