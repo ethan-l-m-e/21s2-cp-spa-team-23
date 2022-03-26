@@ -223,34 +223,9 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
     if (largestValInLinear == 0) {
         if(pkb->relationship.parentT.isRelationship(to_string(srcVal), to_string(destVal))) return true;
         if (auto loop = dynamic_cast<LoopCFG *>(srcNode)) {
-            /*
-            auto wholeLoopInOrder = loop->generateNodesInLoopList();
-            visited[loop->getNodeInLoop()->getStatementNumber()] = true;
-            int largestValInLoop = *wholeLoopInOrder.end()--;
-            if (destVal <= largestValInLoop) {
-                //cout << "destVal " << destVal << " falls between " << srcVal << " and " << largestValInLoop << "\n";
-                return true;
-            }*/
-
             visited[loop->getNodeInLoop()->getStatementNumber()] = true;
         }
         if(auto branch = dynamic_cast<BranchCFG*>(srcNode)) {
-            /*
-            auto lastNodeInLeft = pkb->relationship.next.
-                    getCFGNode(to_string(branch->getRightNode()->getStatementNumber()-1));
-            int lastNodeInLeftInt = lastNodeInLeft->getStatementNumber();
-            visited[branch->getLeftNode()->getStatementNumber()] = true;
-            visited[lastNodeInLeftInt] = true;
-            if(srcVal < destVal && destVal <= lastNodeInLeftInt) {
-                //cout << "destVal " << destVal << "falls between " << srcVal << " and " << lastNodeInLeftInt << "\n";
-                return true;
-            }
-            unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(branch->getRightNode());
-            for (NodeCFG *adjNode: adjNodes) {
-                int adjStmtNo = adjNode->getStatementNumber();
-                if (!visited[adjStmtNo] && IsReachableForward(adjNode, destNode, visited, path))
-                    return true;
-            }*/
             auto lastNodeInLeft = pkb->relationship.next.
                     getCFGNode(to_string(branch->getRightNode()->getStatementNumber()-1));
             int lastNodeInLeftInt = lastNodeInLeft->getStatementNumber();
