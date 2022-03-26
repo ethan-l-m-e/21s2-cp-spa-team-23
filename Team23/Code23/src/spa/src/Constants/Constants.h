@@ -23,5 +23,6 @@ int const STMT_LIST = ASSIGN;
 int const CALL_SIZE = 4;
 int const READ_SIZE = 4;
 int const PRINT_SIZE = 5;
+int const WHILE_SIZE = 5;
 
 string const EMPTY = "";

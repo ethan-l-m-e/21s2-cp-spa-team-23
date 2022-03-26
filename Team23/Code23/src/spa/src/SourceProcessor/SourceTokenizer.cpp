@@ -64,7 +64,7 @@ void SourceTokenizer::extractIfElseThen(string sourceCode, vector<string> &v) {
 }
 
 void SourceTokenizer::extractWhile(string sourceCode, vector<string> &v) {
-    int startOfCond = sourceCode.find("while")+5;
+    int startOfCond = sourceCode.find("while") + WHILE_SIZE;
     int endOfCond = sourceCode.find('{');
     string cond = sourceCode.substr(startOfCond, endOfCond-startOfCond);
     cond = StringFormatter::removeFrontBackBrackets(cond);
