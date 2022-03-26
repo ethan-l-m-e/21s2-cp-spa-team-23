@@ -17,20 +17,20 @@ unordered_map<string, DesignEntity>* Query::getDeclarations(){
 }
 
 
-vector<SuchThatClause> Query::getSuchThatClauses(){
-    return suchThatClauses;
+vector<SuchThatClause>* Query::getSuchThatClauses(){
+    return &suchThatClauses;
 }
 
-vector<PatternClause> Query::getPatternClauses(){
-    return patternClauses;
+vector<PatternClause>* Query::getPatternClauses(){
+    return &patternClauses;
 }
 
-std::vector<WithClause> Query::getWithClauses(){
-    return withClauses;
+std::vector<WithClause>* Query::getWithClauses(){
+    return &withClauses;
 }
 
-ResultClause Query::getResultClause() {
-    return resultClause;
+ResultClause* Query::getResultClause() {
+    return &resultClause;
 }
 
 DesignEntity Query::getSynonymType(std::string synonym) {

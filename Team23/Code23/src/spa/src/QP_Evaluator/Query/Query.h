@@ -41,10 +41,10 @@ public:
     bool hasSuchThatClause();
     bool hasPatternClause();
     unordered_map<string, DesignEntity>* getDeclarations();
-    vector<PatternClause> getPatternClauses();
-    vector<SuchThatClause> getSuchThatClauses();
-    vector<WithClause> getWithClauses();
-    ResultClause getResultClause();
+    vector<PatternClause>* getPatternClauses();
+    vector<SuchThatClause>* getSuchThatClauses();
+    vector<WithClause>* getWithClauses();
+    ResultClause* getResultClause();
     DesignEntity getSynonymType(string synonym);
     DesignEntity findEntityType(const string&);
     void setDeclarations(unordered_map<string, DesignEntity>);
