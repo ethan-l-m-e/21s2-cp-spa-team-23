@@ -19,4 +19,9 @@ int const PROCEDURE_NAME = VARIABLE_NAME;
 int const CONSTANT_VALUE = 14;
 int const STMT_LIST = ASSIGN;
 
+// length of stmts
+int const CALL_SIZE = 4;
+int const READ_SIZE = 4;
+int const PRINT_SIZE = 5;
+
 string const EMPTY = "";

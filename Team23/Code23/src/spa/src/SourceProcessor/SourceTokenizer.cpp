@@ -12,21 +12,21 @@
 using namespace std;
 
 void SourceTokenizer::extractCall(string sourceCode, vector<string> &v) {
-    int call = sourceCode.find("call")+4;
+    int call = sourceCode.find("call") + CALL_SIZE;
     int end = sourceCode.find(';');
     string procName = StringFormatter::removeTrailingSpace(sourceCode.substr(call, end - call));
     v.push_back(procName);
 }
 
 void SourceTokenizer::extractRead(string sourceCode, vector<string> &v) {
-    int read = sourceCode.find("read")+4;
+    int read = sourceCode.find("read") + READ_SIZE;
     int end = sourceCode.find(';');
     string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(read, end - read));
     v.push_back(varname);
 }
 
 void SourceTokenizer::extractPrint(string sourceCode, vector<string> &v) {
-    int print = sourceCode.find("print")+5;
+    int print = sourceCode.find("print") + PRINT_SIZE;
     int end = sourceCode.find(';');
     string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(print, end - print));
     v.push_back(varname);
