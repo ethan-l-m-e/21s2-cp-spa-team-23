@@ -4,10 +4,6 @@
 
 #include "CachedAffectsRelationship.h"
 
-void CachedAffectsRelationship::setRelationship(int lhs, int rhs) {
-
-}
-
 bool CachedAffectsRelationship::isRelationship(string lhs, string rhs) {
     return false;
 }
@@ -21,14 +17,5 @@ unordered_set<string> CachedAffectsRelationship::getLHS(string rhs) {
 }
 
 void CachedAffectsRelationship::clear() {
-
-}
-
-
-void CachedAffectsRelationship::setRelationship(int lhs, unordered_set<int> setRhs) {
-
-}
-
-void CachedAffectsRelationship::setRelationship(unordered_set<int> setLhs, int rhs) {
 
 }

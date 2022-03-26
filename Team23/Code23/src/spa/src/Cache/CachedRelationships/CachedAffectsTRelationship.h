@@ -11,11 +11,6 @@
 class CachedAffectsTRelationship : public ManyToManyRelationship<int, int> {
 
 public:
-    void setRelationship(int lhs, int rhs) override;
-
-    void setRelationship(int lhs, unordered_set<int> setRhs) override;
-
-    void setRelationship(unordered_set<int> setLhs, int rhs) override;
 
     bool isRelationship(string lhs, string rhs) override;
 

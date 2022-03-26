@@ -4,9 +4,6 @@
 
 #include "CachedAffectsTRelationship.h"
 
-void CachedAffectsTRelationship::setRelationship(int lhs, int rhs) {
-
-}
 
 bool CachedAffectsTRelationship::isRelationship(string lhs, string rhs) {
     return false;
@@ -24,10 +21,3 @@ void CachedAffectsTRelationship::clear() {
 
 }
 
-void CachedAffectsTRelationship::setRelationship(int lhs, unordered_set<int> setRhs) {
-
-}
-
-void CachedAffectsTRelationship::setRelationship(unordered_set<int> setLhs, int rhs) {
-
-}
