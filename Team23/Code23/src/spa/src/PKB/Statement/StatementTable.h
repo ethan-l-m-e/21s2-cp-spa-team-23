@@ -51,7 +51,7 @@ public:
 
 
 
-    void clear() {
+    virtual void clear() {
         statementNumbersSet.clear();
         statementNodesSet.clear();
     }
