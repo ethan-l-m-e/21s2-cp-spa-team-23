@@ -2,6 +2,7 @@
 #define SPA_RELATIONSHIP_H
 
 #include "AbstractRelationship.h"
+#include "AbstractManyToManyRelationship.h"
 
 #include "OneToOneRelationship.h"
 #include "OneToManyRelationship.h"

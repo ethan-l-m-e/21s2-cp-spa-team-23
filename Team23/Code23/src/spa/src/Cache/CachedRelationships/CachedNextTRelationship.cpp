@@ -23,3 +23,11 @@ unordered_set<string> CachedNextTRelationship::getLHS(string rhs) {
 void CachedNextTRelationship::clear() {
 
 }
+
+void CachedNextTRelationship::setRelationship(int lhs, unordered_set<int> setRhs) {
+
+}
+
+void CachedNextTRelationship::setRelationship(unordered_set<int> setLhs, int rhs) {
+
+}
