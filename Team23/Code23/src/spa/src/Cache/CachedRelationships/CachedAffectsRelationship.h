@@ -7,15 +7,15 @@
 
 #include "PKB/Relationship/Relationship.h"
 
-class CachedAffectsRelationship : public AbstractManyToManyRelationship<int, int> {
+class CachedAffectsRelationship : public ManyToManyRelationship<int, int> {
 
 
 public:
     void setRelationship(int lhs, int rhs) override;
 
-    virtual void setRelationship(int lhs, unordered_set<int> setRhs) override;
+    void setRelationship(int lhs, unordered_set<int> setRhs) override;
 
-    virtual void setRelationship(unordered_set<int> setLhs, int rhs) override;
+    void setRelationship(unordered_set<int> setLhs, int rhs) override;
 
     bool isRelationship(string lhs, string rhs) override;
 

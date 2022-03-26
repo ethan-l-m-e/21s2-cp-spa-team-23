@@ -13,7 +13,7 @@
 using namespace std;
 
 template<class LHS, class RHS>
-class ManyToManyRelationship {
+class ManyToManyRelationship : public AbstractManyToManyRelationship<LHS, RHS> {
 
     unordered_map<LHS, unordered_set<RHS>> lhsToSetRhsMap;
 
@@ -46,7 +46,7 @@ class ManyToManyRelationship {
     RHS convertToRHS(string s, RHS&);
 
 public:
-    void setRelationship(LHS lhs, RHS rhs) {
+    void setRelationship(LHS lhs, RHS rhs) override {
         if (lhsToSetRhsMap.find(lhs) == lhsToSetRhsMap.end()) {
             lhsToSetRhsMap.emplace(lhs, unordered_set<RHS>{rhs});
         } else {
@@ -60,7 +60,7 @@ public:
         }
     }
 
-    void setRelationship(LHS lhs, unordered_set<RHS> setRhs) {
+    void setRelationship(LHS lhs, unordered_set<RHS> setRhs) override {
         lhsToSetRhsMap[lhs] = setRhs;
 
         for (RHS rhs : setRhs) {
@@ -72,24 +72,36 @@ public:
         }
     }
 
-    bool isRelationship(string lhs, string rhs) {
+    void setRelationship(unordered_set<LHS> setLhs, RHS rhs) override {
+        rhsToSetLhsMap[rhs] = setLhs;
+
+        for (LHS lhs : setLhs) {
+            if (lhsToSetRhsMap.find(lhs) == lhsToSetRhsMap.end()) {
+                lhsToSetRhsMap.emplace(lhs, unordered_set<RHS>{rhs});
+            } else {
+                lhsToSetRhsMap[lhs].insert(rhs);
+            }
+        }
+    }
+
+    bool isRelationship(string lhs, string rhs) override {
         LHS l;
         RHS r;
         return isRelationshipNormal(convertToLHS(lhs, l), convertToRHS(rhs, r));
     }
 
-    unordered_set<string> getRHS(string lhs) {
+    unordered_set<string> getRHS(string lhs) override {
         LHS l;
         return convertSetGenericsToSetStrings(getRHSNormal(convertToLHS(lhs, l)));
     }
 
-    unordered_set<string> getLHS(string rhs) {
+    unordered_set<string> getLHS(string rhs) override {
         RHS r;
         return convertSetGenericsToSetStrings(getLHSNormal(convertToRHS(rhs, r)));
     }
 
 
-    void clear() {
+    void clear() override {
         lhsToSetRhsMap.clear();
         rhsToSetLhsMap.clear();
     }
