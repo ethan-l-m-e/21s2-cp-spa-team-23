@@ -67,6 +67,20 @@ bool evaluateUsesPClause(unordered_map<string, DesignEntity>* declarations, Resu
     return result;
 }
 
+bool evaluateCallsClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<string, string>>(declarations, clause, pkb, &pkb->relationship.calls);
+    bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
+    delete suchThatClauseEvaluator;
+    return result;
+}
+
+bool evaluateCallsTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<string, string>>(declarations, clause, pkb, &pkb->relationship.callsT);
+    bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
+    delete suchThatClauseEvaluator;
+    return result;
+}
+
 bool evaluateNextClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<NextRelationship>(declarations, clause, pkb, &pkb->relationship.next);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
@@ -81,7 +95,7 @@ bool evaluateNextTClause(unordered_map<string, DesignEntity>* declarations, Resu
     return result;
 }
 
-TEST_CASE("Test Follow clause evaluator") {
+TEST_CASE("Test Follow relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
                                                         {"a", DesignEntity::ASSIGN},
@@ -208,7 +222,7 @@ TEST_CASE("Test Follow clause evaluator") {
     
 }
 
-TEST_CASE("Test Follows* clause evaluator") {
+TEST_CASE("Test Follows* relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
                                                         {"a", DesignEntity::ASSIGN},
@@ -322,7 +336,7 @@ TEST_CASE("Test Follows* clause evaluator") {
     
 }
 
-TEST_CASE("Test Parent clause evaluator") {
+TEST_CASE("Test Parent relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
                                                         {"s1", DesignEntity::STMT},
@@ -443,7 +457,7 @@ TEST_CASE("Test Parent clause evaluator") {
     
 }
 
-TEST_CASE("Test Parent* clause evaluator") {
+TEST_CASE("Test Parent* relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
                                                         {"s1", DesignEntity::STMT},
@@ -540,7 +554,7 @@ TEST_CASE("Test Parent* clause evaluator") {
     
 }
 
-TEST_CASE("Test ModifiesS clause evaluator") {
+TEST_CASE("Test ModifiesS relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"s1", DesignEntity::STMT},
@@ -639,7 +653,7 @@ TEST_CASE("Test ModifiesS clause evaluator") {
     
 }
 
-TEST_CASE("Test UsesS clause evaluator") {
+TEST_CASE("Test UsesS relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"s1", DesignEntity::STMT},
@@ -750,7 +764,7 @@ TEST_CASE("Test UsesS clause evaluator") {
     
 }
 
-TEST_CASE("Test ModifiesP clause evaluator") {
+TEST_CASE("Test ModifiesP relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"p", DesignEntity::PROCEDURE},
@@ -811,7 +825,7 @@ TEST_CASE("Test ModifiesP clause evaluator") {
     
 }
 
-TEST_CASE("Test UsesP clause evaluator") {
+TEST_CASE("Test UsesP relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"p", DesignEntity::PROCEDURE},
@@ -829,13 +843,6 @@ TEST_CASE("Test UsesP clause evaluator") {
     SuchThatClause clause_p_x = {ArgList{ap, ax},RelRef::USES_P};
     SuchThatClause clause_p_v = {ArgList{ap, av},RelRef::USES_P};
     SuchThatClause clause_p_x1 = {ArgList{ap, ax1},RelRef::USES_P};
-
-    Argument dummySelect = {ArgumentType::SYNONYM, "s"};
-
-    Query query_0 = makeQuery(declarations, {dummySelect}, {clause_prop_v});
-    Query query_1 = makeQuery(declarations, {dummySelect}, {clause_p_x});
-    Query query_2 = makeQuery(declarations, {dummySelect}, {clause_p_v});
-    Query query_3 = makeQuery(declarations, {dummySelect}, {clause_p_x1});
 
     auto *resultTable = new ResultTable();
     SECTION("select one synonym") {
@@ -877,7 +884,127 @@ TEST_CASE("Test UsesP clause evaluator") {
     
 }
 
-TEST_CASE("Test Next clause evaluator") {
+TEST_CASE("Test Calls relationship") {
+    PKB *testPKB = generateSamplePKB();
+    unordered_map<string, DesignEntity> declarations = {
+            {"p", DesignEntity::PROCEDURE},
+            {"p1", DesignEntity::PROCEDURE},
+    };
+
+    Argument aprop = {ArgumentType::IDENT, "prop"};
+    Argument apr = {ArgumentType::IDENT, "pr"};
+    Argument ap = {ArgumentType::SYNONYM, "p"};
+    Argument ap1 = {ArgumentType::SYNONYM, "p1"};
+
+    SuchThatClause clause_prop_pr = {ArgList{aprop, apr},RelRef::CALLS};
+    SuchThatClause clause_p_p1 = {ArgList{ap, ap1},RelRef::CALLS};
+    SuchThatClause clause_p_pr = {ArgList{ap, apr},RelRef::CALLS};
+    SuchThatClause clause_prop_p = {ArgList{aprop, ap},RelRef::CALLS};
+
+    auto *resultTable = new ResultTable();
+    SECTION("select no synonym") {
+        /**
+         * Calls("prop", "pr")
+         * Type: Calls
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsClause(&declarations, resultTable, &clause_prop_pr, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
+    }
+
+    SECTION("select one synonym") {
+        /**
+        * Calls("prop", p)
+        * Type: Calls
+        */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsClause(&declarations, resultTable, &clause_prop_p, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"pr"});
+
+        /**
+        * Calls(p, "pr")
+        * Type: Calls
+        */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsClause(&declarations, resultTable, &clause_p_pr, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"prop"});
+    }
+
+    SECTION("select two synonyms") {
+        /**
+        * Calls(p, "pr")
+        * Type: Calls
+        */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsClause(&declarations, resultTable, &clause_p_p1, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"prop pr"});
+    }
+
+    delete resultTable;
+
+}
+
+TEST_CASE("Test Calls* relationship") {
+    PKB *testPKB = generateSamplePKB();
+    unordered_map<string, DesignEntity> declarations = {
+            {"p", DesignEntity::PROCEDURE},
+            {"p1", DesignEntity::PROCEDURE},
+    };
+
+    Argument aprop = {ArgumentType::IDENT, "prop"};
+    Argument apr = {ArgumentType::IDENT, "pr"};
+    Argument ap = {ArgumentType::SYNONYM, "p"};
+    Argument ap1 = {ArgumentType::SYNONYM, "p1"};
+
+    SuchThatClause clause_prop_pr = {ArgList{aprop, apr},RelRef::CALLS_T};
+    SuchThatClause clause_p_p1 = {ArgList{ap, ap1},RelRef::CALLS_T};
+    SuchThatClause clause_p_pr = {ArgList{ap, apr},RelRef::CALLS_T};
+    SuchThatClause clause_prop_p = {ArgList{aprop, ap},RelRef::CALLS_T};
+
+    auto *resultTable = new ResultTable();
+    SECTION("select no synonym") {
+        /**
+         * Calls("prop", "pr")
+         * Type: Calls
+         */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsTClause(&declarations, resultTable, &clause_prop_pr, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)).empty());
+    }
+
+    SECTION("select one synonym") {
+        /**
+        * Calls("prop", p)
+        * Type: Calls
+        */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsTClause(&declarations, resultTable, &clause_prop_p, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"pr"});
+
+        /**
+        * Calls(p, "pr")
+        * Type: Calls
+        */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsTClause(&declarations, resultTable, &clause_p_pr, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"prop"});
+    }
+
+    SECTION("select two synonyms") {
+        /**
+        * Calls(p, "pr")
+        * Type: Calls
+        */
+        resultTable->clearTable();
+        REQUIRE(evaluateCallsTClause(&declarations, resultTable, &clause_p_p1, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"prop pr"});
+    }
+
+    delete resultTable;
+
+}
+
+TEST_CASE("Test Next relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"w", DesignEntity::WHILE},
@@ -981,7 +1108,7 @@ TEST_CASE("Test Next clause evaluator") {
     
 }
 
-TEST_CASE("Test NextT clause evaluator") {
+TEST_CASE("Test NextT relationship") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"w", DesignEntity::WHILE},
