@@ -35,7 +35,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
 
     // Create ClauseEvaluators and evaluate each with clause
     if(query->hasWithClause() && resultTable->getBooleanResult()) {
-        for(WithClause& clause : query->getWithClauses()) {
+        for(WithClause& clause : *query->getWithClauses()) {
             auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), &clause, pkb);
             bool withResult = withClauseEvaluator->evaluateClause(resultTable);
             delete withClauseEvaluator;

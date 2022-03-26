@@ -17,17 +17,6 @@ private:
 
     void projectSelectedSynonyms(vector<int> *, ResultTable *);
 
-    bool applyAttrRef(std::pair<string, AttrName> &attrRef, string (ResultClauseEvaluator::* *func)(string&),
-                      string *name);
-
-    vector<string> getMapping(vector<string> &, string (ResultClauseEvaluator::*func)(string&));
-
-    string getVarRead(string&);
-
-    string getVarPrinted(string&);
-
-    string getProcByCall(string&);
-
     void appendNewSynonym(string, ResultTable*);
 
     void updateTableForAttrReference(std::pair<string, AttrName>&, long*, ResultTable*);
