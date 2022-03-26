@@ -23,6 +23,8 @@ TEST_CASE("Test with clause evaluator") {
             {"v", DesignEntity::VARIABLE},
             {"pn", DesignEntity::PRINT},
             {"r", DesignEntity::READ},
+            {"c", DesignEntity::CONSTANT},
+            {"s", DesignEntity::STMT}
     };
 
     Argument a1 = {ArgumentType::STMT_NO, "1"};
@@ -34,6 +36,8 @@ TEST_CASE("Test with clause evaluator") {
     Argument apn_var = {ArgumentType::ATTR_REF, make_pair("pn", AttrName::VAR_NAME)};
     Argument ar_var = {ArgumentType::ATTR_REF, make_pair("r", AttrName::VAR_NAME)};
     Argument av = {ArgumentType::ATTR_REF, make_pair("v", AttrName::VAR_NAME)};
+    Argument ac = {ArgumentType::ATTR_REF, make_pair("c", AttrName::VALUE)};
+    Argument as = {ArgumentType::ATTR_REF, make_pair("s", AttrName::STMT_NO)};
 
     WithClause clause_1_1 = {ArgList{a1, a1}};
     WithClause clause_x_y = {ArgList{ax, ay}};
@@ -42,6 +46,7 @@ TEST_CASE("Test with clause evaluator") {
     WithClause clause_pn_var_r_var = {ArgList{apn_var, ar_var}};
     WithClause clause_pn_var_v = {ArgList{apn_var, av}};
     WithClause clause_z_pn_var = {ArgList{az, apn_var}};
+    WithClause clause_s_c = {ArgList{as, ac}};
 
     auto *resultTable = new ResultTable();
 
@@ -99,5 +104,13 @@ TEST_CASE("Test with clause evaluator") {
         resultTable->clearTable();
         REQUIRE(evaluateWithClause(&declarations, resultTable, &clause_pn_var_v, testPKB) == true);
         REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"4 z", "11 x"});
+
+        /**
+        * s.stmt# = c.value
+        */
+        resultTable->clearTable();
+        REQUIRE(evaluateWithClause(&declarations, resultTable, &clause_s_c, testPKB) == true);
+        REQUIRE(generateResultSet(QueryEvaluator::generateResultString(resultTable)) == ResultSet{"1 1", "3 3", "5 5"});
+
     }
 }
