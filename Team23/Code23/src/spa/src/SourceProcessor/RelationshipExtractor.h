@@ -20,7 +20,7 @@ public:
     static void extractParent(Node*,vector<StmtLstNode*>);
     static vector<string> extractModifies(Node*);
     static vector<string> extractUses(Node*);
-    static void extractCFG(Node*);
+    static void createCFGAndExtractNext(Node*);
     static void extractRelationships(Node*);
 
     static void extractCalls(Node *node, vector<ProcedureNode *> parentList, ProcedureNode* latestProc);

@@ -214,6 +214,7 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
         return {};
     }
 }
+
 void RelationshipExtractor::extractCalls(Node* node, vector<ProcedureNode *> procList,ProcedureNode* latestProc) {
     if(auto value = dynamic_cast<ProgramNode*>(node)) {
         vector<ProcedureNode *> v = value->getProcLst();

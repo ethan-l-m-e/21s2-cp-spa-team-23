@@ -74,6 +74,9 @@ public:
 
         NextRelationship next;
 
+        ManyToManyRelationship<string, string> calls;
+        ManyToManyRelationship<string, string> callsT;
+
     };
 
     Relationship relationship;
