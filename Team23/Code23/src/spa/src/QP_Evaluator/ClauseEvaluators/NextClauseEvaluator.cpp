@@ -7,16 +7,15 @@
 unordered_set<string> retrieveStmtSetFromMap(unordered_map<int, NodeCFG*> nextMap);
 
 bool NextClauseEvaluator::isRelation(string left, string right) {
-    return pkb->getInstance()->relationship.next.isRelationship(left, right);
+    return pkb->relationship.next.isRelationship(left, right);
 }
 
 unordered_set<string> NextClauseEvaluator::getLeftSynonymValue(string right) {
-    return pkb->getInstance()->relationship.next.getLHS(right);
+    return pkb->relationship.next.getLHS(right);
 }
 
 unordered_set<string> NextClauseEvaluator::getRightSynonymValue(string left) {
-    return pkb->getInstance()->
-            relationship.next.getRHS(left);
+    return pkb->relationship.next.getRHS(left);
 }
 
 pair<DesignEntity, DesignEntity> NextClauseEvaluator::getWildcardType () {
