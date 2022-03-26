@@ -14,6 +14,8 @@
 #include "TNode/CFG/CFGConstructor.h"
 #include <unordered_set>
 
+void setFollowsInPkb(int i, int i1, StatementList vector1);
+
 using std::begin, std::end;
 
 void extractFollowsFromStatementList(StatementList statementList) {
@@ -21,14 +23,30 @@ void extractFollowsFromStatementList(StatementList statementList) {
     if (numOfChildNodes > 1) {
         for (int i = 0; i < (numOfChildNodes - 1); i++) {
             Node *child = statementList.at(i);
-            for (int j = i; j < numOfChildNodes - 1; j++) {
-                Node *nextChild = statementList.at(j + 1);
-                if (j == i) {
-                    PKB::getInstance()->relationship.follows.setRelationship(child->getStmtNumber(), nextChild->getStmtNumber());
-                }
-                PKB::getInstance()->relationship.followsT.setRelationship(child->getStmtNumber(), nextChild->getStmtNumber());
+            setFollowsInPkb(i, numOfChildNodes - 1, statementList);
+        }
+    }
+}
 
-            }
+void setFollowsInPkb(int start, int end, StatementList statementList) {
+    Node *child = statementList.at(start);
+    for (int i = start; i < end; i++) {
+        Node *nextChild = statementList.at(i + 1);
+        if (i == start) {
+            PKB::getInstance()->relationship.follows.setRelationship(child->getStmtNumber(), nextChild->getStmtNumber());
+        }
+        PKB::getInstance()->relationship.followsT.setRelationship(child->getStmtNumber(), nextChild->getStmtNumber());
+    }
+}
+
+void extractParentFromParentList(Node *parent, vector<StmtLstNode*> parentList, StatementList statementList) {
+    int numOfChildNodes = statementList.size();
+    for (int i = 0; i < (numOfChildNodes); i++) {
+        Node *child = statementList.at(i);
+        PKB::getInstance()->relationship.parent.setRelationship(parent->getStmtNumber(), child->getStmtNumber());
+        for (int j = 0; j < parentList.size(); j++) {
+            Node *parentT = parentList.at(j);
+            PKB::getInstance()->relationship.parentT.setRelationship(parentT->getStmtNumber(), child->getStmtNumber());
         }
     }
 }
@@ -68,19 +86,12 @@ void RelationshipExtractor::extractParent(Node * node, vector<StmtLstNode*> pare
         for (ProcedureNode *p: v)
             extractParent(p,parentList);
 
-    }else if(node->hasStmtLst()) {
+    } else if(node->hasStmtLst()) {
         int numOfChildNodes = node->getStmtLst().size();
         if(node->getStmtNumber()!=-1) {
             parentList.push_back((StmtLstNode *) node);
             Node *parent = node;
-            for (int i = 0; i < (numOfChildNodes); i++) {
-                Node *child = node->getStmtLst().at(i);
-                PKB::getInstance()->relationship.parent.setRelationship(parent->getStmtNumber(), child->getStmtNumber());
-                for (int j = 0; j < parentList.size(); j++) {
-                    Node *parentT = parentList.at(j);
-                    PKB::getInstance()->relationship.parentT.setRelationship(parentT->getStmtNumber(), child->getStmtNumber());
-                }
-            }
+            extractParentFromParentList(parent, parentList, node->getStmtLst());
         }
         for (int i = 0; i < (numOfChildNodes); i++) {
             extractParent(node->getStmtLst().at(i), parentList);
