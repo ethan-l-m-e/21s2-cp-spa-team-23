@@ -23,7 +23,6 @@ void SourceProcessor::run(string filename) {
     codeStream << file.rdbuf();
     string sourceCode = codeStream.str();
     file.close();
-
     Node* programNode = Parser::Parse(sourceCode);
     DesignExtractor::Extract(programNode);
 }

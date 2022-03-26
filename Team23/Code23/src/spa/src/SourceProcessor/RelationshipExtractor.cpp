@@ -214,7 +214,7 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
         return {};
     }
 }
-void RelationshipExtractor::extractCFG (Node * node) {
+void RelationshipExtractor::createCFGAndExtractNext (Node * node) {
     auto value = dynamic_cast<ProgramNode *>(node);
     vector<ProcedureNode *> v = value->getProcLst();
     for (ProcedureNode *p: v) {
@@ -230,6 +230,6 @@ void RelationshipExtractor::extractRelationships(Node * node){
     extractParent(node,v);
     extractUses(node);
     extractModifies(node);
-    extractCFG(node);
+    createCFGAndExtractNext(node);
 }
 
