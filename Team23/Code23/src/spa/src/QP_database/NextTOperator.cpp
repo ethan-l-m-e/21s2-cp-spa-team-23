@@ -4,20 +4,23 @@
 
 #include "NextTOperator.h"
 
-static bool optimisation_activated = false;
-static bool cache_activated = false;
 
 bool NextTOperator::computeRelation(string left, string right) {
     if(stmtIsNotInSource(vector<string>{left, right})) return false;
     NodeCFG* leftNode = retrieveNode(left);
     NodeCFG* rightNode = retrieveNode(right);
     int size = getSize();
-    bool result = graphMethods->DFSBoolean(leftNode,
-                                    rightNode,
-                                    size,
-                                    IsReachableForwardV2);
-
-    return result;
+    if(isOptimised()) {
+        return graphMethods->DFSBoolean(leftNode,
+                                        rightNode,
+                                        size,
+                                        IsReachableForwardV2);
+    } else {
+        return graphMethods->DFSBoolean(leftNode,
+                                        rightNode,
+                                        size,
+                                        graphMethods->IsReachableForward);
+    }
 }
 
 unordered_set<string> NextTOperator::computeRHS(string left) {
