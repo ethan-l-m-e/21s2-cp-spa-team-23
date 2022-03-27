@@ -15,7 +15,7 @@ bool NextTOperator::computeRelation(string left, string right) {
     return graphMethods->DFSBoolean(leftNode,
                                     rightNode,
                                     size,
-                                    IsReachableForwardV2);
+                                    graphMethods->IsReachableForward);
 }
 
 unordered_set<string> NextTOperator::computeRHS(string left) {
