@@ -7,7 +7,7 @@
 
 #include "CacheOperator.h"
 
-class NextTOperator : protected CacheOperator {
+class NextTOperator : public CacheOperator {
 public:
     bool computeRelation(string left, string right) override;
     stmtSetStr computeLHS(string rightNode) override;

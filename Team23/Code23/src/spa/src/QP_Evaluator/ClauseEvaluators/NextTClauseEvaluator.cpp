@@ -9,7 +9,7 @@
 
 //TODO: switch all graph operator to cacheClass
 bool NextTClauseEvaluator::isRelation(string left, string right) {
-    return nextTOperator->computeRelation(left, right);
+    return nextTOperator->setOptimisation(true)->computeRelation(left, right);
 }
 
 unordered_set<string> NextTClauseEvaluator::getLeftSynonymValue(string right) {

@@ -16,6 +16,11 @@ public:
     virtual bool computeRelation(string left, string right);
     virtual unordered_set<string> computeLHS(string rightNode);
     virtual unordered_set<string> computeRHS(string leftNode);
+
+    bool isOptimised();
+
+    CacheOperator* setOptimisation(bool in);
+
 protected:
     typedef unordered_set<string> variableSet, stmtSetStr;
     typedef unordered_set<int> stmtSetNum;
@@ -29,7 +34,6 @@ protected:
     int getSize();
     unordered_set<string> convertIntToString(unordered_set<int> intSet);
     bool stmtIsNotInSource(vector<string> argList);
-
 };
 
 
