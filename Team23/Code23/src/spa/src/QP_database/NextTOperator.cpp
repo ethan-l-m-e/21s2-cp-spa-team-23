@@ -58,25 +58,7 @@ bool NextTOperator::IsReachableForward(NodeCFG* srcNode,
                                       NodeCFG* destNode,
                                       unordered_map<int, bool> &visited,
                                       vector<int> &path) {
-    int srcVal = srcNode->getStatementNumber();
-    int destVal = destNode->getStatementNumber();
-
-    if(srcVal == destVal) {
-        return true;
-    }
-    visited[srcVal] = true;
-    path.push_back(srcVal);
-
-    unordered_set<NodeCFG*> adjNodes = graphMethods->collateAllAdjacentNodes(srcNode);
-    unordered_set<NodeCFG*>::iterator adj;
-    for(adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
-        NodeCFG* adjacentNode =  *adj;
-        // if not visited, perform recursion again
-        int adjStmtNo = adjacentNode->getStatementNumber();
-        if (!visited[adjStmtNo] && IsReachableForward(adjacentNode, destNode, visited, path))
-            return true;
-    }
-    path.pop_back();
+    cout << "no implementation done in IsReachableForward in NextTOperator\n";
     return false;
 }
 
