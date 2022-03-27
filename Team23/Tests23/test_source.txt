@@ -14,3 +14,76 @@ procedure test
 procedure test3             {
     variable3 = 5+ ( variable2 / 6 % variable1 ) - 7 * variable3    ;
 }
+
+procedure
+
+test4
+
+{
+
+X
+
+=
+
+a
+
+;
+
+while
+
+(
+
+1
+
+!=
+
+2
+
+)
+
+{
+
+if
+
+( left
+
+
+
+
+                        ==
+
+
+
+
+            right
+    )
+
+then
+
+{
+
+Y=2;
+
+}
+
+else
+
+{
+
+Z
+
+=
+
+X
+
++
+
+Y
+
+;
+
+}
+
+}
+
+}

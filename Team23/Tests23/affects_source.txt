@@ -1,0 +1,37 @@
+procedure Affects {
+    b=a;
+    c=b;
+    d=c;
+    e=d;
+    f=e;
+    while (cond == true) {
+        g=f+g;
+    }
+    if (cond == false) then {
+        g = g+rand;
+        affected=g;
+    } else {
+        unused = e;
+    }
+    if (cond == false) then {
+        read g;
+        affected=g;
+    } else {
+        print g;
+    }
+    if (cond == false) then {
+        call Modifies;
+        affected=g;
+    } else {
+        call DoesNotModify;
+    }
+    affected=b+c-d*e/f%g;
+    affected=g;
+}
+
+procedure Modifies {
+    read g;
+}
+procedure DoesNotModify {
+    print g;
+}

@@ -1,0 +1,190 @@
+../../../../Tests23/attributes_source.txt ../../../../Tests23/attributes_queries.txt ../../../tests/attributes_out.xml
+procedure p;
+Select p with p.procName = "CalledProc"
+CalledProc
+5000
+1 - [not valid] procName does not exist
+procedure p;
+Select p with p.procName = "NonExistentProcName"
+none
+5000
+2 - [valid] call procName
+call c;
+Select c with c.procName = "CalledProc1"
+1
+5000
+3 - [not valid] call procName does not exist
+call c;
+Select c with c.procName = "NonExistentProcName"
+none
+5000
+4 - [valid] read varName
+read r;
+Select r with r.varName = "readVar1"
+8
+5000
+5 - [not valid] read varName does not exist
+read r;
+Select r with r.varName = "readVar7"
+none
+5000
+6 - [valid] print varName
+print p;
+Select p with p.varName = "printVar"
+5
+5000
+7 - [not valid] print varName does not exist
+print p;
+Select p with p.varName = "name"
+none
+5000
+8 - [valid] const value
+const c;
+Select c with c.value = 0
+0
+5000
+9 - [not valid] const value does not exist
+const c;
+Select c with c.value = 9000
+none
+5000
+10 - [valid] stmt stmt#
+stmt s;
+Select s with s.stmt# = 12
+12
+5000
+11 - [not valid] stmt stmt# does not exist
+stmt s;
+Select s with s.stmt# = 14
+none
+5000
+12 - [valid] read stmt#
+read r;
+Select r with r.stmt# = 3
+3
+5000
+13 - [not valid] read stmt# does not exist
+read r;
+Select r with r.stmt# = 4
+none
+5000
+14 - [valid] print stmt#
+print p;
+Select p with p.stmt# = 5
+5
+5000
+15 - [not valid] print stmt# does not exist
+print p;
+Select p with p.stmt# = 6
+none
+5000
+16 - [valid] while stmt#
+while w;
+Select w with w.stmt# = 8
+8
+5000
+17 - [not valid] while stmt# does not exist
+while w;
+Select w with w.stmt# = 9
+none
+5000
+18 - [valid] if stmt#
+if ifs;
+Select ifs with ifs.stmt# = 4
+4
+5000
+19 - [not valid] if stmt# does not exist
+if ifs;
+Select ifs with ifs.stmt# = 5
+none
+5000
+20 - [valid] assign stmt#
+assign a;
+Select a with a.stmt# = 13
+13
+5000
+21 - [not valid] assign stmt# does not exist
+assign a;
+Select a with a.stmt# = 1
+none
+5000
+22 - [valid] call stmt#
+call c;
+Select c with c.stmt# = 1
+1
+5000
+23 - [not valid] call stmt# does not exist
+call c;
+Select c with c.stmt# = 2
+none
+5000
+24 - [valid] stmt const = const
+stmt s;
+Select s with 12 = 12
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+25 - [valid] select stmt# =====================================================================[select attr tests start]
+stmt s;
+Select s.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+26 - [valid] select varName
+variable v;
+Select v.varName
+cond, true, readVar, printVar, modifiedVar, readVar1, printVar1, assignedVar1, assignedVar2, x
+5000
+27 - [valid] select value
+const c;
+Select c.value
+0, 1
+5000
+28 - [valid] select read stmt#
+read r;
+Select r.stmt#
+3, 9
+5000
+29 - [valid] select print stmt#
+print pr;
+Select pr.stmt#
+5, 11
+5000
+29 - [valid] select if stmt#
+if ifs;
+Select ifs.stmt#
+4, 10
+5000
+30 - [valid] select while stmt#
+while w;
+Select w.stmt#
+2, 8
+5000
+31 - [valid] select assign stmt#
+assign a;
+Select a.stmt#
+6, 12, 13
+5000
+32 - [valid] select call stmt#
+call cl;
+Select cl.stmt#
+1, 7
+5000
+30 - [valid] select read varName
+read r;
+Select r.varName
+readVar, readVar1
+5000
+31 - [valid] select print varName
+print pr;
+Select pr.varName
+printVar, printVar1
+5000
+32 - [valid] select call procName
+call cl;
+Select cl.procName
+CalledProc1, CalledProc2
+5000
+33 - [valid] select proc procName
+procedure p;
+Select p.procName
+Attributes, CalledProc1, CalledProc2
+5000
