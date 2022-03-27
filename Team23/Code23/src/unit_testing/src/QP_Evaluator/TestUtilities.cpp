@@ -208,6 +208,9 @@ PKB* generateSamplePKB() {
     testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z", "a", "b"});
     testPKB->relationship.usesP.setRelationship("pr", unordered_set<string>{"y"});
 
+    testPKB->relationship.calls.setRelationship("prop", unordered_set<string>{"pr"});
+    testPKB->relationship.callsT.setRelationship("prop", unordered_set<string>{"pr"});
+
     vector<unordered_map<int, NodeCFG*>> v = constructCFGForSamplePKB();
     unordered_map<int, NodeCFG *> allNodes = v[0];
 

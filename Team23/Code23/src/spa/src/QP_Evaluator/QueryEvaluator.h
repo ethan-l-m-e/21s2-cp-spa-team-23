@@ -23,7 +23,7 @@ public:
 
     list<string> evaluate(Query*);
 
-    ClauseEvaluator* generateEvaluator(SuchThatClause&, Query&);
+    ClauseEvaluator* generateEvaluator(SuchThatClause& clause, unordered_map<string, DesignEntity>&);
 
     static list<string> generateResultString(ResultTable*);
 };

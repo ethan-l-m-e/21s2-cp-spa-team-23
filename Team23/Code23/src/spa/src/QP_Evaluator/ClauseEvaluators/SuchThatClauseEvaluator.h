@@ -25,7 +25,6 @@ protected:
     virtual unordered_set<string> getRightSynonymValue(string left) = 0;
     virtual pair<DesignEntity, DesignEntity> getWildcardType() = 0;
     virtual RelRef getRelRef() = 0;
-
     unordered_set<std::pair<string, string>> generateTuples(unordered_set<string>&, unordered_set<string>&, bool);
     bool validateRelation(unordered_set<string>&, unordered_set<string>&);
     unordered_set<string> generateLeftSet (unordered_set<string>&);
