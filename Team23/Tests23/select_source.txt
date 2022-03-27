@@ -16,4 +16,10 @@ procedure Procedure {
     print k;
     X = l;
   }
+  call AnotherProcedure;
+}
+procedure AnotherProcedure {
+    read m;
+    print n;
+    X = o;
 }

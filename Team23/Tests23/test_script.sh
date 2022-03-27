@@ -2,6 +2,7 @@ function autotest() {
   ../Code23/cmake-build-debug/src/autotester/autotester $1 $2 $3
 }
 OUT_PATH=../Code23/tests/
+autotest affects_source.txt affects_queries.txt ${OUT_PATH}affects_out.xml
 autotest attributes_source.txt attributes_queries.txt ${OUT_PATH}attributes_out.xml
 autotest boolean_source.txt boolean_queries.txt ${OUT_PATH}boolean_out.xml
 autotest follows_source.txt follows_queries.txt ${OUT_PATH}follows_out.xml
