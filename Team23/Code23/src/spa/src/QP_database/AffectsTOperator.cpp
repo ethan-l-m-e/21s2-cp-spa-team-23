@@ -23,29 +23,59 @@ bool AffectsTOperator::computeRelation(string left, string right) {
 }
 
 stmtSetStr AffectsTOperator::computeLHS(string right) {
+    /*
     stmtSetStr resultSet;
     stmtSetStr left_new = affectsOperator->computeLHS(right);
-    resultSet.insert(left_new.begin(), left_new.end());
+
+    auto computeFoo = [](string x)->stmtSetStr {
+        return AffectsOperator::getInstance()->computeLHS(x);};
+
     for(stmtStr stmt: left_new) {
-        stmtSetStr newResults = computeLHS(stmt);
+        stmtSetStr newResults = resultSetRecursionHelper(stmt, computeFoo);
         resultSet.insert(newResults.begin(), newResults.end());
     }
     return resultSet;
+     */
+
+    auto computeFoo = [](string x)->stmtSetStr {
+        return AffectsOperator::getInstance()->computeLHS(x);};
+    return computeResultSetHelper(right, computeFoo);
 }
 
 stmtSetStr AffectsTOperator::computeRHS(string left) {
+    auto computeFoo = [](string x)->stmtSetStr {
+        return AffectsOperator::getInstance()->computeRHS(x);};
+    return computeResultSetHelper(left, computeFoo);
+}
+
+stmtSetStr AffectsTOperator::computeResultSetHelper(string stmt,
+                                              stmtSetStr (*computeDirection)(string)) {
     stmtSetStr resultSet;
-    stmtSetStr right_new = affectsOperator->computeRHS(left);
-    resultSet.insert(right_new.begin(), right_new.end());
-    for(stmtStr stmt: right_new) {
-        stmtSetStr newResults = computeRHS(stmt);
+    stmtSetStr adjStmts = computeDirection(stmt);
+
+    for(stmtStr stmt: adjStmts) {
+        stmtSetStr newResults = resultSetRecursionHelper(stmt, computeDirection);
         resultSet.insert(newResults.begin(), newResults.end());
     }
     return resultSet;
 }
 
+stmtSetStr AffectsTOperator::resultSetRecursionHelper(string stmt, stmtSetStr (*computeDirection)(string)) {
+    stmtSetStr resultSet;
+    resultSet.insert(stmt);
+    if(stmt == "21") {
+        cout << "21";
+    }
+    stmtSetStr adjStatementList = computeDirection(stmt);
 
-
+    for(stmtStr adjStmt: adjStatementList) {
+        if(adjStmt != stmt) {
+            stmtSetStr newResults = resultSetRecursionHelper(adjStmt, computeDirection);
+            resultSet.insert(newResults.begin(), newResults.end());
+        }
+    }
+    return resultSet;
+}
 
 AffectsTOperator *AffectsTOperator::singleton = nullptr;
 AffectsTOperator::AffectsTOperator(): CacheOperator() {}
