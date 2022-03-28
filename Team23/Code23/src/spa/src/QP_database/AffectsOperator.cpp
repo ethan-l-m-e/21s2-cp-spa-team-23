@@ -3,6 +3,7 @@
 //
 
 #include "AffectsOperator.h"
+#include "NextTOperator.h"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ typedef  int statementNum;
 
 static stmtSetStr blackListStatements = {};
 static stmtSetStr whiteListStatements = {};
+
 
 bool AffectsOperator::computeRelation(string left, string right) {
     //step 0: check if left are right are both assign statements
@@ -48,110 +50,25 @@ bool AffectsOperator::computeRelation(string left, string right) {
 
 
 unordered_set<string> AffectsOperator::computeLHS(string right) {
-    auto blackAndWhiteFoo = [](variable var)->pair<stmtSetStr, stmtSetStr> {
-        stmtSetStr black;
-        stmtSetStr white;
-        stmtSetStr allModifyingVar = getStmtModifying(var);
-        for(stmtStr x: allModifyingVar) {
-            if(pkb->statement.assignStatements.isStatementNumber(x)) {
-                white.insert(x);
-            } else {
-                black.insert(x);
-            }
+    stmtSetStr lhsSet = NextTOperator::getInstance()->computeLHS(right);
+    stmtSetStr  resultSet;
+    for(stmtStr left: lhsSet) {
+        if(computeRelation(left, right)) {
+            resultSet.insert(left);
         }
-        return pair<stmtSetStr, stmtSetStr>{black, white};
-    };
-
-    return findResultSet(right,
-                         getVarUsedBy(right),
-                         blackAndWhiteFoo,
-                         graphMethods->collateAllPreviousNodes,
-                         searchForAffectsBefore);
-
-     /*if(!isAssignStmt(right)) return {};
-    auto usedVar = getVarUsedBy(right);
-    unordered_set<string> allStmtModifyingVar;
-    for(string var: usedVar) {
-        // get all stmt that modifies this var
-        unordered_set<string> newSet = getStmtModifying(var);
-        allStmtModifyingVar.insert(newSet.begin(), newSet.end());
     }
-
-    setBlacklist(allStmtModifyingVar);
-    NodeCFG* rightNode = retrieveNode(right);
-    int size = getSize();
-    unordered_set<int> resultSet = graphMethods->DFSResultSet(
-            rightNode,
-            size,
-            graphMethods->collateAllPreviousNodes,
-            searchForAffectsBefore
-            );
-
-    return convertIntToString(resultSet);*/
+    return resultSet;
 }
 
 stmtSetStr AffectsOperator::computeRHS(string left) {
-    auto blackAndWhiteFoo = [](variable var)->pair<stmtSetStr, stmtSetStr> {
-        stmtSetStr black = getStmtModifying(var);
-        stmtSetStr white;
-        stmtSetStr allUsingVar = getStmtUsing(var);
-        for(stmtStr x: allUsingVar) {
-            if(pkb->statement.assignStatements.isStatementNumber(x))
-                white.insert(x);
+    stmtSetStr rhsSet = NextTOperator::getInstance()->computeRHS(left);
+    stmtSetStr  resultSet;
+    for(stmtStr right: rhsSet) {
+        if(computeRelation(left, right)) {
+            resultSet.insert(right);
         }
-        return pair<stmtSetStr, stmtSetStr>{black, white};
-    };
-    return findResultSet(left,
-                         getVarModifiedBy(left),
-                         blackAndWhiteFoo,
-                         graphMethods->collateAllAdjacentNodes,
-                         searchForAffectsAfter);
-
-}
-
-stmtSetStr AffectsOperator::findResultSet(string stmt,
-                                          variableSet variables,
-                                          pair<stmtSetStr, stmtSetStr>(*blackAndWhiteListFoo)(string),
-                                          unordered_set<NodeCFG*>(*getAdjFoo)(NodeCFG*),
-                                          stmtSetNum (*dfsRecursionFoo)(NodeCFG*,
-                                                                        unordered_map<int, bool>&,
-                                                                        unordered_set<int>)) {
-    if(!isAssignStmt(stmt)) return {};
-    unordered_set<string> listOfAllObstacles;
-    unordered_set<string> listOfAllLookouts;
-
-    for(string var: variables) {
-        auto blackAndWhite = blackAndWhiteListFoo(var);
-        listOfAllObstacles.insert(blackAndWhite.first.begin(), blackAndWhite.first.end());
-        listOfAllLookouts.insert(blackAndWhite.second.begin(), blackAndWhite.second.end());
     }
-
-    setBlacklist(listOfAllObstacles);
-    setWhiteList(listOfAllLookouts);
-    NodeCFG* node = retrieveNode(stmt);
-    int size = getSize();
-    unordered_set<int> resultSet = graphMethods->DFSResultSet(
-            node,
-            size,
-            getAdjFoo,
-            dfsRecursionFoo
-    );
-
-    return convertIntToString(resultSet);
-}
-
-unordered_set<int> AffectsOperator::searchForAffectsBefore(NodeCFG* rightNode,
-                                                           unordered_map<int, bool> &visited,
-                                                           unordered_set<int> nextSet) {
-    return DFSResultSetRecursion(rightNode, visited, nextSet,
-                                 graphMethods->collateAllPreviousNodes);
-}
-
-unordered_set<int> AffectsOperator::searchForAffectsAfter(NodeCFG* leftNode,
-                                                          unordered_map<int, bool> &visited,
-                                                          unordered_set<int> nextSet) {
-    return DFSResultSetRecursion(leftNode, visited, nextSet,
-                                 graphMethods->collateAllAdjacentNodes);
+    return resultSet;
 }
 
 bool AffectsOperator::IsReachableForward(NodeCFG* srcNode,
@@ -164,7 +81,10 @@ bool AffectsOperator::IsReachableForward(NodeCFG* srcNode,
     if(srcVal == destVal) {
         return true;
     }
-    if(isInBlackList(srcVal)) return false;
+
+    if(isInBlackList(srcVal)) {
+        return false;
+    }
 
     visited[srcVal] = true;
     path.push_back(srcVal);
@@ -192,11 +112,21 @@ unordered_set<int> AffectsOperator::DFSResultSetRecursion(NodeCFG* currentNode,
                                                           unordered_set<int> resultSet,
                                                           unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *)) {
     int currVal = currentNode->getStatementNumber();
-    // for find LHS
-    if(isInBlackList(currVal))
-        return {};
+
+    /**
+     * perform isRelation to ensure correctness
+     *
+     *
+     * check if is an obstacle or a lookout for LHS direction with map?
+     * Say, you got multiple whiteList values and a single blackList value
+     * if hit blackList value, the var for that whiteListed value becomes inaccessible for that portion
+     */
+
     if(isInWhiteList(currVal))
         return {currVal};
+
+    if(isInBlackList(currVal))
+        return {};
 
     visited[currVal] = true;
     unordered_set<NodeCFG *> adjNodes = getAdjFoo(currentNode);
@@ -213,8 +143,6 @@ unordered_set<int> AffectsOperator::DFSResultSetRecursion(NodeCFG* currentNode,
     }
     return resultSet;
 }
-
-
 
 unordered_set<string> AffectsOperator::removeContainerFromSet(unordered_set<string> &stmtSet) {
     unordered_set<string> outputSet = {};
@@ -237,27 +165,6 @@ bool AffectsOperator::isContainerStatement(string stmtNo) {
 bool AffectsOperator::isAssignStmt(string stmtNo) {return pkb->statement.assignStatements.isStatementNumber(stmtNo);}
 stmtSetStr AffectsOperator::getStmtModifying(string var) {return pkb->relationship.modifiesS.getLHS(var);}
 stmtSetStr AffectsOperator::getStmtUsing(string var) {return pkb->relationship.usesS.getLHS(var);}
-
-/*
- * blackList: blocks further traversal
- * whiteList: blocks traversal and add result list
- *
- *
- * computeLHS:
- *      blackList:
- *          calls modifies var
- *          read modifies var
- *      whiteList:
- *          assign modifies var
- *
- * computeRHS:
- *      blackList:
- *          calls modifies var
- *          read modifies var
- *          assign modifies var
- *      whiteList:
- *          assign uses var
- */
 
 variableSet AffectsOperator::getVarModifiedBy(string stmt) {return pkb->relationship.modifiesS.getRHS(stmt);}
 variableSet AffectsOperator::getVarUsedBy(string stmt) {return pkb->relationship.usesS.getRHS(stmt);}
@@ -294,3 +201,52 @@ AffectsOperator* AffectsOperator::getInstance() {
     }
     return AffectsOperator::singleton;
 }
+
+/*
+stmtSetStr AffectsOperator::findResultSet(string stmt,
+                                          variableSet variables,
+                                          pair<stmtSetStr, stmtSetStr>(*blackAndWhiteListFoo)(string),
+                                          unordered_set<NodeCFG*>(*getAdjFoo)(NodeCFG*),
+                                          stmtSetNum (*dfsRecursionFoo)(NodeCFG*,
+                                                                        unordered_map<int, bool>&,
+                                                                        unordered_set<int>)) {
+    if(!isAssignStmt(stmt)) return {};
+    unordered_set<string> listOfAllObstacles;
+    unordered_set<string> listOfAllLookouts;
+
+
+    for(string var: variables) {
+        auto blackAndWhite = blackAndWhiteListFoo(var);
+        listOfAllObstacles.insert(blackAndWhite.first.begin(), blackAndWhite.first.end());
+        listOfAllLookouts.insert(blackAndWhite.second.begin(), blackAndWhite.second.end());
+    }
+
+    setBlacklist(listOfAllObstacles);
+    setWhiteList(listOfAllLookouts);
+
+    NodeCFG* node = retrieveNode(stmt);
+    int size = getSize();
+    unordered_set<int> resultSet = graphMethods->DFSResultSet(
+            node,
+            size,
+            getAdjFoo,
+            dfsRecursionFoo
+    );
+
+    return convertIntToString(resultSet);
+}
+
+unordered_set<int> AffectsOperator::searchForAffectsBefore(NodeCFG* rightNode,
+                                                           unordered_map<int, bool> &visited,
+                                                           unordered_set<int> nextSet) {
+    return DFSResultSetRecursion(rightNode, visited, nextSet,
+                                 graphMethods->collateAllPreviousNodes);
+}
+
+unordered_set<int> AffectsOperator::searchForAffectsAfter(NodeCFG* leftNode,
+                                                          unordered_map<int, bool> &visited,
+                                                          unordered_set<int> nextSet) {
+    return DFSResultSetRecursion(leftNode, visited, nextSet,
+                                 graphMethods->collateAllAdjacentNodes);
+}
+*/

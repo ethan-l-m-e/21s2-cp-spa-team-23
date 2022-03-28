@@ -24,6 +24,8 @@ protected:
     AffectsOperator* affectsOperator = AffectsOperator::getInstance();
     NextTOperator* nextTOperator = NextTOperator::getInstance();
 
+    stmtSetStr computeResultSetHelper(string stmt, stmtSetStr (*computeDirection)(string));
+    stmtSetStr resultSetRecursionHelper(string stmt, stmtSetStr (*computeDirection)(string));
 };
 
 
