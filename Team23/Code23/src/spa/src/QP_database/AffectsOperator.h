@@ -40,11 +40,13 @@ protected:
     stmtSetNum static DFSResultSetRecursion(NodeCFG *currentNode, unordered_map<int, bool> &visited, unordered_set<int> resultSet,
                           unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *));
 
+    static bool IsReachableForward(NodeCFG *srcNode, NodeCFG *destNode, unordered_map<int, bool> &visited, vector<int> &path);
+
+    /*
     stmtSetNum static searchForAffectsBefore(NodeCFG *rightNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 
     stmtSetNum static searchForAffectsAfter(NodeCFG *leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
 
-    static bool IsReachableForward(NodeCFG *srcNode, NodeCFG *destNode, unordered_map<int, bool> &visited, vector<int> &path);
 
     stmtSetStr
     findResultSet(string stmt,
@@ -52,7 +54,7 @@ protected:
                   pair<stmtSetStr, stmtSetStr >(*blackAndWhiteListFoo)(string),
                   unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *),
                   stmtSetNum (*dfsRecursionFoo)(NodeCFG *, unordered_map<int, bool> &, unordered_set<int>));
-
+    */
 };
 
 

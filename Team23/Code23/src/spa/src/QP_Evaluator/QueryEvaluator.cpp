@@ -88,6 +88,9 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, unord
             return new NextTClauseEvaluator(&declarations, &clause, pkb);
         case RelRef::AFFECTS:
             return new AffectsClauseEvaluator(&declarations, &clause, pkb);
+        case RelRef::AFFECTS_T:
+            return new AffectsTClauseEvaluator(&declarations, &clause, pkb);
+
         default:
             throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
