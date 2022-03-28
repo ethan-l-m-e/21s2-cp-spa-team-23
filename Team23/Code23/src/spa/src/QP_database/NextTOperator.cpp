@@ -25,44 +25,27 @@ bool NextTOperator::computeRelation(string left, string right) {
 
 unordered_set<string> NextTOperator::computeRHS(string left) {
     if(stmtIsNotInSource(vector<string>{left})) return {};
-    NodeCFG* leftNode = retrieveNode(left);
-    int size = getSize();
-    stmtSetNum resultSet;
-    resultSet = graphMethods->DFSResultSet(leftNode,
-                                               size,
-                                               graphMethods->collateAllAdjacentNodes,
-                                               graphMethods->searchNodesAlongPathAfter);
-
-    return convertIntToString(resultSet);
+    stmtSetStr  resultSet;
+    stmtSetStr allStmtNo = pkb->statement.statements.getAllStatementNumbers();
+    for(stmtStr right: allStmtNo){
+        if(computeRelation(left, right)) {
+            resultSet.insert(right);
+        }
+    }
+    return resultSet;
 }
 
 
 unordered_set<string> NextTOperator::computeLHS(string right) {
     if(stmtIsNotInSource(vector<string>{right})) return {};
-    NodeCFG* rightNode = retrieveNode(right);
-    int size = getSize();
-    stmtSetNum resultSet = graphMethods->DFSResultSet(rightNode,
-                                                      size,
-                                                      graphMethods->collateAllPreviousNodes,
-                                                      graphMethods->searchNodesAlongPathBefore);
-    return convertIntToString(resultSet);
-}
-
-
-
-unordered_set<int> NextTOperator::searchNodesAlongPathAfter(NodeCFG* leftNode,
-                                                            unordered_map<int, bool> &visited,
-                                                            unordered_set<int> resultSet) {
-
+    stmtSetStr  resultSet;
+    stmtSetStr allStmtNo = pkb->statement.statements.getAllStatementNumbers();
+    for(stmtStr left: allStmtNo){
+        if(computeRelation(left, right)) {
+            resultSet.insert(left);
+        }
+    }
     return resultSet;
-}
-
-bool NextTOperator::IsReachableForward(NodeCFG* srcNode,
-                                      NodeCFG* destNode,
-                                      unordered_map<int, bool> &visited,
-                                      vector<int> &path) {
-    cout << "no implementation done in IsReachableForward in NextTOperator\n";
-    return false;
 }
 
 bool NextTOperator::hasLoopAsParent(int srcVal, int destVal) {
