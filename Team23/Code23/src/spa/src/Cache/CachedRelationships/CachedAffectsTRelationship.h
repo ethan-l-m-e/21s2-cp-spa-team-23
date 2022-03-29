@@ -17,8 +17,6 @@ public:
     unordered_set<string> getRHS(string lhs) override;
 
     unordered_set<string> getLHS(string rhs) override;
-
-    void clear() override;
 };
 
 
