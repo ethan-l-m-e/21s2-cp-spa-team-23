@@ -6,9 +6,9 @@
 #ifndef SPA_CACHEDAFFECTSTRELATIONSHIP_H
 #define SPA_CACHEDAFFECTSTRELATIONSHIP_H
 
-#include "PKB/Relationship/Relationship.h"
+#include "CachedManyToManyRelationship.h"
 
-class CachedAffectsTRelationship : public ManyToManyRelationship {
+class CachedAffectsTRelationship : public CachedManyToManyRelationship {
 
 public:
 
