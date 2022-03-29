@@ -11,6 +11,7 @@
 
 class CachedManyToManyRelationship : public ManyToManyRelationship {
 
+    // `unordered_set` cannot have a tuple as a key by default, that's why I am using a `set`
     set<tuple<string, string>> history;
 
 protected:
