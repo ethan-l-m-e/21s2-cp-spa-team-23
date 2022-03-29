@@ -20,7 +20,7 @@ class StatementTable {
 
 private:
 
-    unordered_set<int> statementNumbersSet;
+    unordered_set<string> statementNumbersSet;
     unordered_set<Node> statementNodesSet;
 
 public:
@@ -28,21 +28,18 @@ public:
 
     void addStatement(Node node) {
 
-        statementNumbersSet.insert(node->getStmtNumber());
+        statementNumbersSet.insert(std::to_string(node->getStmtNumber()));
         statementNodesSet.insert(node);
 
     }
 
 
-    bool isStatementNumber(int statementNumber) {
-        return statementNumbersSet.find(statementNumber) != statementNumbersSet.end();
-    }
     bool isStatementNumber(string statementNumber) {
-        return isStatementNumber(std::stoi(statementNumber));
+        return statementNumbersSet.find(statementNumber) != statementNumbersSet.end();
     }
 
     unordered_set<string> getAllStatementNumbers() {
-        return convertSetGenericsToSetStrings(statementNumbersSet);
+        return statementNumbersSet;
     }
 
     unordered_set<Node> getAllStatementNodes() {

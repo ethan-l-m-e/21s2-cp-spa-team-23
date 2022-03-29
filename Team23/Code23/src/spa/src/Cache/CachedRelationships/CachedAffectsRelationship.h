@@ -7,7 +7,7 @@
 
 #include "PKB/Relationship/Relationship.h"
 
-class CachedAffectsRelationship : public ManyToManyRelationship<int, int> {
+class CachedAffectsRelationship : public ManyToManyRelationship {
 
 
 public:

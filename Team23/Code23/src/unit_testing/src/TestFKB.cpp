@@ -345,18 +345,18 @@ TEST_CASE("Add Follows") {
     REQUIRE(pkb->relationship.follows.getLHS("2").empty());
     REQUIRE(pkb->relationship.follows.getRHS("1").empty());
 
-    unordered_map<int, int> followeeToFollowerMap = {
-            {1, 5},
-            {4, 8},
-            {34, 84},
-            {56, 89},
-            {345, 986},
+    unordered_map<string, string> followeeToFollowerMap = {
+            {"1", "5"},
+            {"4", "8"},
+            {"34", "84"},
+            {"56", "89"},
+            {"345", "986"},
     };
 
 
     for (auto& iter : followeeToFollowerMap) {
-        int followee = iter.first;
-        int follower = iter.second;
+        string followee = iter.first;
+        string follower = iter.second;
 
         pkb->relationship.follows.setRelationship(followee, follower);
     }
@@ -367,8 +367,8 @@ TEST_CASE("Add Follows") {
     REQUIRE(pkb->relationship.follows.getLHS("3") == unordered_set<string>{});
 
     for (auto& iter : followeeToFollowerMap) {
-        string followee = std::to_string(iter.first);
-        string follower = std::to_string(iter.second);
+        string followee = iter.first;
+        string follower = iter.second;
 
         REQUIRE(pkb->relationship.follows.isRelationship(followee, follower));
         REQUIRE(pkb->relationship.follows.getRHS(followee) == unordered_set<string>{follower});
@@ -386,20 +386,20 @@ TEST_CASE("Add FollowsT") {
     REQUIRE(pkb->relationship.followsT.getRHS("1").empty());
 
 
-    unordered_map<int, unordered_set<int>> tFolloweeToFollowersMap = {
-            {1, {2}},
-            {4, {8, 23}},
-            {34, {45, 55, 67, 84}},
-            {56, {89}},
-            {345, {347, 349, 358, 456, 568, 678, 789, 986}},
+    unordered_map<string , unordered_set<string>> tFolloweeToFollowersMap = {
+            {"1", {"2"}},
+            {"4", {"8", "23"}},
+            {"34", {"45", "55", "67", "84"}},
+            {"56", {"89"}},
+            {"345", {"347", "349", "358", "456", "568", "678", "789", "986"}},
     };
 
 
     for (auto& iter : tFolloweeToFollowersMap) {
-        int followee = iter.first;
-        unordered_set<int> followers = iter.second;
+        string followee = iter.first;
+        unordered_set<string> followers = iter.second;
 
-        for (int follower : followers) {
+        for (string follower : followers) {
             pkb->relationship.followsT.setRelationship(followee, follower);
         }
 
@@ -412,12 +412,8 @@ TEST_CASE("Add FollowsT") {
 
 
     for (auto& iter : tFolloweeToFollowersMap) {
-        string followee = std::to_string(iter.first);
-        unordered_set<int> followerIntegers = iter.second;
-        unordered_set<string> followers;
-        for (int follower : followerIntegers) {
-            followers.insert(std::to_string(follower));
-        }
+        string followee = iter.first;
+        unordered_set<string> followers = iter.second;
 
         for (string follower : followers) {
             REQUIRE(pkb->relationship.followsT.isRelationship(followee, follower));
@@ -439,20 +435,20 @@ TEST_CASE("Add Parent") {
     REQUIRE(pkb->relationship.parent.getLHS("2").empty());
     REQUIRE(pkb->relationship.parent.getRHS("1").empty());
 
-    unordered_map<int, unordered_set<int>> parentToChildrenMap = {
-            {1, {2}},
-            {4, {8,9,10,11,12,13,14,15,16}},
-            {34, {45, 47, 51}},
-            {56, {89, 98, 123, 167, 265}},
-            {345, {567, 986}},
+    unordered_map<string, unordered_set<string>> parentToChildrenMap = {
+            {"1", {"2"}},
+            {"4", {"8","9","10","11","12","13","14","15","16"}},
+            {"34", {"45", "47", "51"}},
+            {"56", {"89", "98", "123", "167", "265"}},
+            {"345", {"567", "986"}},
     };
 
 
     for (auto& iter : parentToChildrenMap) {
-        int parent = iter.first;
-        unordered_set<int> children = iter.second;
+        string parent = iter.first;
+        unordered_set<string> children = iter.second;
 
-        for (int child : children) {
+        for (string child : children) {
             pkb->relationship.parent.setRelationship(parent, child);
         }
     }
@@ -465,13 +461,8 @@ TEST_CASE("Add Parent") {
 
     for (auto& iter : parentToChildrenMap) {
 
-        string parent = std::to_string(iter.first);
-
-        unordered_set<int> childrenIntegers = iter.second;
-        unordered_set<string> children;
-        for (int child : childrenIntegers) {
-            children.insert(std::to_string(child));
-        }
+        string parent = iter.first;
+        unordered_set<string> children = iter.second;
 
 
         for (string child : children) {
@@ -494,20 +485,20 @@ TEST_CASE("Add ParentT") {
     REQUIRE(pkb->relationship.parentT.getRHS("1").empty());
 
 
-    unordered_map<int, unordered_set<int>> tParentToChildrenMap = {
-            {1, {2}},
-            {4, {8, 23}},
-            {34, {45, 55, 67, 84}},
-            {56, {89}},
-            {345, {347, 349, 358, 456, 568, 678, 789, 986}},
+    unordered_map<string, unordered_set<string>> tParentToChildrenMap = {
+            {"1", {"2"}},
+            {"4", {"8", "23"}},
+            {"34", {"45", "55", "67", "84"}},
+            {"56", {"89"}},
+            {"345", {"347", "349", "358", "456", "568", "678", "789", "986"}},
     };
 
 
     for (auto& iter : tParentToChildrenMap) {
-        int parent = iter.first;
-        unordered_set<int> children = iter.second;
+        string parent = iter.first;
+        unordered_set<string> children = iter.second;
 
-        for (int child : children) {
+        for (string child : children) {
             pkb->relationship.parentT.setRelationship(parent, child);
         }
 
@@ -519,12 +510,8 @@ TEST_CASE("Add ParentT") {
 
 
     for (auto& iter : tParentToChildrenMap) {
-        string parent = std::to_string(iter.first);
-        unordered_set<int> childrenIntegers = iter.second;
-        unordered_set<string> children;
-        for (int child : childrenIntegers) {
-            children.insert(std::to_string(child));
-        }
+        string parent = iter.first;
+        unordered_set<string> children = iter.second;
 
         for (string child : children) {
             REQUIRE(pkb->relationship.parentT.isRelationship(parent, child));
@@ -543,16 +530,16 @@ TEST_CASE("Add ParentT") {
 TEST_CASE("Add UsesS") {
     pkb->clearPKB();
 
-    unordered_map<int, unordered_set<string>> statementToVariablesUsedMap = {
-            {1, {"a"}},
-            {4, {"obama", "biden", "trump"}},
-            {34, {"red", "green", "yellow", "blue", "white", "black"}},
-            {56, {"a", "b", "c", "d", "e", "f"}},
-            {345, {"x", "y", "z"}},
+    unordered_map<string, unordered_set<string>> statementToVariablesUsedMap = {
+            {"1", {"a"}},
+            {"4", {"obama", "biden", "trump"}},
+            {"34", {"red", "green", "yellow", "blue", "white", "black"}},
+            {"56", {"a", "b", "c", "d", "e", "f"}},
+            {"345", {"x", "y", "z"}},
     };
 
     for (auto& iter : statementToVariablesUsedMap) {
-        int statement = iter.first;
+        string statement = iter.first;
         unordered_set<string> variablesUsed = iter.second;
 
         pkb->relationship.usesS.setRelationship(statement, variablesUsed);
@@ -568,7 +555,7 @@ TEST_CASE("Add UsesS") {
 
     for (auto& iter : statementToVariablesUsedMap) {
 
-        string statement = std::to_string(iter.first);
+        string statement = iter.first;
         unordered_set<string> variablesUsed = iter.second;
 
         for (string v : variablesUsed) {
@@ -635,16 +622,16 @@ TEST_CASE("Add UsesP") {
 TEST_CASE("Add ModifiesS") {
     pkb->clearPKB();
 
-    unordered_map<int, unordered_set<string>> statementToVariablesModifiedMap = {
-            {1, {"a"}},
-            {4, {"obama", "biden", "trump"}},
-            {34, {"red", "green", "yellow", "blue", "white", "black"}},
-            {56, {"a", "b", "c", "d", "e", "f"}},
-            {345, {"x", "y", "z"}},
+    unordered_map<string, unordered_set<string>> statementToVariablesModifiedMap = {
+            {"1", {"a"}},
+            {"4", {"obama", "biden", "trump"}},
+            {"34", {"red", "green", "yellow", "blue", "white", "black"}},
+            {"56", {"a", "b", "c", "d", "e", "f"}},
+            {"345", {"x", "y", "z"}},
     };
 
     for (auto& iter : statementToVariablesModifiedMap) {
-        int statement = iter.first;
+        string statement = iter.first;
         unordered_set<string> variablesModified = iter.second;
 
         pkb->relationship.modifiesS.setRelationship(statement, variablesModified);
@@ -660,7 +647,7 @@ TEST_CASE("Add ModifiesS") {
 
     for (auto& iter : statementToVariablesModifiedMap) {
 
-        string statement = std::to_string(iter.first);
+        string statement = iter.first;
         unordered_set<string> variablesModified = iter.second;
 
         for (string v : variablesModified) {
