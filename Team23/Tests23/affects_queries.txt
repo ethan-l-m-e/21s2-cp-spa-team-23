@@ -193,7 +193,7 @@ assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10;
 Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) and Affects*(a9, a10)
 1, 2, 3, 4, 5, 7
 5000
-39 - [valid] 10 affects* (High time taken)
+39 - [valid] 8 affects* (High time taken)
 assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10;
 Select a such that Affects*(_, _) and Affects*(a, _) and Affects*(_, a) and Affects*(a, a2) and Affects*(a3, a) and Affects*(a, a4) and Affects*(a6, a7) and Affects*(a7, a8)
 2, 3, 4, 5, 7, 9
