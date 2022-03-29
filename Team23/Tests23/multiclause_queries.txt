@@ -1158,6 +1158,21 @@ stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
 Select s5 such that Next(s, s1) and Next(s1, s2) and Next(s2, s3) and Next(s3, s4) and Next(s4, s5) and Next(s5, s6) and Next(s6, s7) and Next(s7, s8) and Next(s8, s9) and Next(s9, s10)
 4, 5, 6, 7
 5000
+229 - (30 such that)
+stmt s;
+Select s such that Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+230 - (30 such that)
+stmt s;
+Select s such that Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+232 - (30 such that)
+stmt s;
+Select s such that Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
 229 - (2 pattern)
 assign a;
 Select a pattern a ("a", _) pattern a (_, _"a"_)

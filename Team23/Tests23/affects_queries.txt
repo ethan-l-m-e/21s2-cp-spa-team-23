@@ -11,7 +11,7 @@ Select a such that Affects(a, _)
 2 - [valid] select assign with wildcard lhs
 assign a;
 Select a such that Affects(_, a)
-2, 3, 4, 5, 7, 9, 10, 11, 20, 21
+2, 3, 4, 5, 7, 9, 10, 20, 21
 5000
 3 - [valid] select assign same syn
 assign a;
@@ -26,7 +26,7 @@ Select a such that Affects(a, a1)
 5 - [valid] select assign diff syn rhs
 assign a, a1;
 Select a such that Affects(a1, a)
-2, 3, 4, 5, 7, 9, 10, 11, 20, 21
+2, 3, 4, 5, 7, 9, 10, 20, 21
 5000
 6 - [valid] select assign with stmt# and wildcard
 assign a;
@@ -95,8 +95,8 @@ none
 5000
 19 - [valid] select assign with stmt# not affecting and wildcard lhs
 assign a;
-Select a such that Affects(_, 9)
-1, 3, 4, 5,7,9, 10, 11, 14, 18, 2, 20, 21
+Select a such that Affects(_, 11)
+none
 5000
 20 - [valid] select assign with two wildcard ===========================================[select assign stmt tests start]
 assign a;
@@ -111,7 +111,7 @@ Select a such that Affects*(a, _)
 22 - [valid] select assign with wildcard lhs
 assign a;
 Select a such that Affects*(_, a)
-2, 3, 4, 5, 7, 9, 10, 11, 20, 21
+2, 3, 4, 5, 7, 9, 10, 20, 21
 5000
 23 - [valid] select assign same syn
 assign a;
@@ -126,7 +126,7 @@ Select a such that Affects*(a, a1)
 25 - [valid] select assign diff syn lhs
 assign a, a1;
 Select a such that Affects*(a1, a)
-2, 3, 4, 5, 7, 9, 10, 11, 20, 21
+2, 3, 4, 5, 7, 9, 10, 20, 21
 5000
 26 - [valid] select assign with stmt# and wildcard
 assign a;
@@ -141,7 +141,7 @@ Select a such that Affects*(_, 2)
 28 - [valid] select assign with stmt# lhs
 assign a;
 Select a such that Affects*(1, a)
-2, 3, 4, 5, 7, 9, 10, 11, 20, 21
+2, 3, 4, 5, 7, 9, 10, 20, 21
 5000
 29 - [valid] select assign with stmt# lhs
 assign a;
@@ -188,22 +188,32 @@ assign a;
 Select a such that Affects*(_, 18)
 none
 5000
-38 - [invalid] non assign (read) ==================================================================[invalid tests start]
+38 - [valid] 10 affects*
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10;
+Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) and Affects*(a9, a10)
+1, 2, 3, 4, 5, 7
+5000
+39 - [valid] 10 affects* (High time taken)
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10;
+Select a such that Affects*(_, _) and Affects*(a, _) and Affects*(_, a) and Affects*(a, a2) and Affects*(a3, a) and Affects*(a, a4) and Affects*(a6, a7) and Affects*(a7, a8)
+2, 3, 4, 5, 7, 9
+5000
+40 - [invalid] non assign (read) ==================================================================[invalid tests start]
 stmt s; read r;
 Select s such that Affects(_, r)
 none
 5000
-39 - [invalid] non assign (read) lhs
+41 - [invalid] non assign (read) lhs
 stmt s; read r;
 Select s such that Affects(r, _)
 none
 5000
-40 - [invalid] non assign (print)
+42 - [invalid] non assign (print)
 stmt s; print p;
 Select s such that Affects(_, p)
 none
 5000
-41 - [invalid] non assign (print) lhs
+43 - [invalid] non assign (print) lhs
 stmt s; print p;
 Select s such that Affects(p, _)
 none

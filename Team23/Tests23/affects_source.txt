@@ -11,7 +11,7 @@ procedure Affects {
         g = g+rand;
         affected=g;
     } else {
-        unused = e;
+        unused = 1;
     }
     if (cond == false) then {
         read g;
