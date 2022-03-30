@@ -69,8 +69,8 @@ public:
         ManyToManyRelationship modifiesS;
         ManyToManyRelationship modifiesP;
 
-        ManyToManyRelationship<string, string> calls;
-        ManyToManyRelationship<string, string> callsT;
+        ManyToManyRelationship calls;
+        ManyToManyRelationship callsT;
 
         NextRelationship next;
 
