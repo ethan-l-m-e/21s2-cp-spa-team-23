@@ -704,7 +704,7 @@ TEST_CASE ("QP TOKENIZER: SELECT CLAUSE WITH BOOLEAN AS SYNONYM") {
 }
 
 TEST_CASE ("QP TOKENIZER: SELECT CLAUSE WITH ATTR REF: CONSTANT.VALUE") {
-    std::string firstQuery = "const c; Select c.value";
+    std::string firstQuery = "constant c; Select c.value";
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 

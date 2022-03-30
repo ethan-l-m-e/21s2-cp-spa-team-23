@@ -13,6 +13,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // FOLLOWS SUCH THAT CLAUSE
     std::string firstQuery = "stmt s; \n Select s such that Follows(3, 2)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check declarations
@@ -39,6 +40,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // FOLLOWS* SUCH THAT CLAUSE
     firstQuery = "stmt Select; \n Select s such that Follows*(3, 2)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -53,6 +55,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // PARENT SUCH THAT CLAUSE
     firstQuery = "stmt Select; \n Select s such that Parent(3, 2)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -65,6 +68,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // PARENT* SUCH THAT CLAUSE
     firstQuery = "stmt Select; \n Select s such that Parent*(3, 2)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -77,6 +81,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // USES SUCH THAT CLAUSE
     firstQuery = "variable v; \n Select v such that Uses(v, \"eg\")";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -89,6 +94,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // NEXT SUCH THAT CLAUSE
     firstQuery = "stmt s; \n Select v such that Next(_, s)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -113,6 +119,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // CALLS SUCH THAT CLAUSE
     firstQuery = "procedure p; \n Select v such that Calls(_, p)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -125,6 +132,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // CALLS* SUCH THAT CLAUSE
     firstQuery = "procedure p; \n Select v such that Calls*(_, p)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -137,6 +145,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // AFFECTS SUCH THAT CLAUSE
     firstQuery = "assign a; \n Select v such that Affects(_, a)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -149,6 +158,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // AFFECTS* SUCH THAT CLAUSE
     firstQuery = "assign a; \n Select v such that Affects*(_, a)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -161,6 +171,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // MODIFIES SUCH THAT CLAUSE
     firstQuery = "variable v; \n Select v such that Modifies(v, \"eg\")";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -173,6 +184,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // MODIFIES SUCH THAT CLAUSE WITH 2 IDENTS AS ARGUMENTS
     firstQuery = "variable v; \n Select v such that Modifies(\"entref\", \"eg\")";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -185,6 +197,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // MODIFIES SUCH THAT CLAUSE WITH SYNONYM AND WILDCARD AS ARGUMENTS
     firstQuery = "variable v1, v2; \n Select v1 such that Modifies(v1, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -197,6 +210,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME PROCNAME
     firstQuery = "variable procName; \n Select v1 such that Modifies(procName, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -209,6 +223,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
     // MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME VARNAME
     firstQuery = "variable varName; \n Select v1 such that Modifies(varName, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check SuchThatClause Token
@@ -222,6 +237,7 @@ TEST_CASE ("QP TOKENIZER: VALID SUCH THAT CLAUSE QUERIES") {
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME VALUE") {
     std::string firstQuery = "variable value; \n Select v1 such that Modifies(value, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -236,6 +252,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME VALUE") {
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: SELECT") {
     std::string firstQuery = "variable Select; \n Select Select such that Modifies(Select, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -250,6 +267,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: SELECT") 
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: PATTERN") {
     std::string firstQuery = "variable pattern; \n Select pattern such that Modifies(pattern, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -264,6 +282,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: PATTERN")
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: WITH") {
     std::string firstQuery = "variable with; \n Select pattern such that Modifies(with, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -278,6 +297,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: WITH") {
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: AND") {
     std::string firstQuery = "variable and; \n Select pattern such that Modifies(and, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -292,6 +312,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: AND") {
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: MODIFIES") {
     std::string firstQuery = "variable Modifies; \n Select pattern such that Modifies(Modifies, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -306,6 +327,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SYNONYM NAME: MODIFIES"
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE SUCH THAT CLAUSES: MODIFIES AND NEXT AND FOLLOWS") {
     std::string firstQuery = "variable value; stmt s; \n Select v1 such that Modifies(value, _) and Next(s, _) and Follows(s, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
     auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
@@ -334,6 +356,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE SUCH THAT CLAUSES: MODIFIES AND NEXT AND FOLL
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE SUCH THAT CLAUSES WITHOUT AND: MODIFIES AND NEXT AND FOLLOWS") {
     std::string firstQuery = "variable value; stmt s; \n Select v1 such that Modifies(value, _) such that Next(s, _) such that Follows(s, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
     auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
@@ -362,6 +385,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE SUCH THAT CLAUSES WITHOUT AND: MODIFIES AND N
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE SUCH THAT CLAUSES WITH AND: MODIFIES AND NEXT AND FOLLOWS") {
     std::string firstQuery = "variable value; stmt s; \n Select v1 such that Modifies(value, _) and Next(s, _) such that Follows(s, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
     auto suchThatClauseTokens = *(queryToken.suchThatClauseTokens);
@@ -390,6 +414,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE SUCH THAT CLAUSES WITH AND: MODIFIES AND NEXT
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN 'SUCH' AND 'THAT'") {
     std::string firstQuery = "variable v; \n Select v1 such \t  \t  that Modifies(v, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -404,6 +429,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN 'THAT' AND RELATIONSHIP") {
     std::string firstQuery = "variable v; \n Select v such that\t\t  \t\t  Modifies(v, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -418,6 +444,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACE AND TABS BETWEEN RELREF AND '('") {
     std::string firstQuery = "variable v; \n Select v such that Modifies\t  \t  \t(v, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -432,6 +459,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACE AND TABS BETWEEN 
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN '(' AND FIRST ARGUMENT") {
     std::string firstQuery = "variable v; \n Select v such that Modifies(\t  \t  \tv, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -446,6 +474,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN FIRST ARGUMENT AND COMMA") {
     std::string firstQuery = "variable v; \n Select v such that Modifies(v \t \t , _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -460,6 +489,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN COMMA AND SECOND ARGUMENT") {
     std::string firstQuery = "variable v; \n Select v such that Modifies(v,\t \t  _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -474,6 +504,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN SECOND ARGUMENT AND ')'") {
     std::string firstQuery = "variable v; \n Select v such that Modifies(v, _\t \t )";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -488,6 +519,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
 
 TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN RELATIONSHIP AND AND") {
     std::string firstQuery = "variable v; \n Select v such that Modifies(v, _)  \t \t and Next(3, 2)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -502,6 +534,7 @@ TEST_CASE ("QP TOKENIZER: MODIFIES SUCH THAT CLAUSE WITH SPACES AND TABS BETWEEN
 
 TEST_CASE ("QP TOKENIZER: ASSIGN PATTERN") {
     std::string firstQuery = "assign a; \nSelect a pattern a(_, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -541,6 +574,7 @@ TEST_CASE ("QP TOKENIZER: ASSIGN PATTERN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SYNONYM ARGUMENT") {
     std::string firstQuery = "assign a; variable v; \nSelect a pattern a(v, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -555,6 +589,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SYNONYM ARGUMENT") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH IDENT ARGUMENT") {
     std::string firstQuery = "assign a; variable v; \nSelect a pattern a(\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -569,6 +604,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH IDENT ARGUMENT") {
 
 TEST_CASE ("QP TOKENIZER: IF PATTERN WITH 3 WILDCARD ARGUMENTS") {
     std::string firstQuery = "if ifs; variable v; \nSelect a pattern ifs(_, _, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -583,6 +619,7 @@ TEST_CASE ("QP TOKENIZER: IF PATTERN WITH 3 WILDCARD ARGUMENTS") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH DOUBLE CHAR SYN-ASSIGN") {
     std::string firstQuery = "assign as; variable v; \nSelect as pattern as (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -597,6 +634,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH DOUBLE CHAR SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH DOUBLE CHAR AND INT SYN-ASSIGN") {
     std::string firstQuery = "assign as1; variable v; \nSelect as1 pattern as1 (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -611,6 +649,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH DOUBLE CHAR AND INT SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SELECT AS SYN-ASSIGN") {
     std::string firstQuery = "assign Select; variable v; \nSelect Select pattern Select (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -625,6 +664,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SELECT AS SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYNONYM") {
     std::string firstQuery = "assign pattern; variable v; \nSelect pattern pattern pattern (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -639,6 +679,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYNONYM") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYN-ASSIGN") {
     std::string firstQuery = "assign pattern, a; \nSelect a pattern pattern (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -653,6 +694,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH PATTERN AS SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH PROCNAME AS SYN-ASSIGN") {
     std::string firstQuery = "assign procName, a; \nSelect a pattern procName (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -667,6 +709,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH PROCNAME AS SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH VARNAME AS SYN-ASSIGN") {
     std::string firstQuery = "assign varName, a; \nSelect a pattern varName (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -681,6 +724,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH VARNAME AS SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH VALUE AS SYN-ASSIGN") {
     std::string firstQuery = "assign value, a; \nSelect a pattern value (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -695,6 +739,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH VALUE AS SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH 'WITH' AS SYN-ASSIGN") {
     std::string firstQuery = "assign with, a; \nSelect a pattern with (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -709,6 +754,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH 'WITH' AS SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH 'AND' AS SYN-ASSIGN") {
     std::string firstQuery = "assign and, a; \nSelect a pattern and (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -723,6 +769,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH 'AND' AS SYN-ASSIGN") {
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH 'FOLLOWS' AS SYN-ASSIGN") {
     std::string firstQuery = "assign Follows, a; \nSelect a pattern Follows (a, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -741,6 +788,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH 'FOLLOWS' AS SYN-ASSIGN") {
 // Check multiple pattern clauses
 TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES WITH AND") {
     std::string firstQuery = "assign a1, a2, a3; \nSelect a1 pattern a1 (\"x\", _) and a2(_, _) and a3(_, _, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -771,6 +819,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES WITH AND") {
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES") {
     std::string firstQuery = "assign a1, a2, a3; \nSelect a1 pattern a1 (\"x\", _) pattern a2(_, _) pattern a3(_, _, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -801,6 +850,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES") {
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES AND PATTERN") {
     std::string firstQuery = "assign a1, a2, a3; \nSelect a1 pattern a1 (\"x\", _) and a2(_, _) pattern a3(_, _, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -831,6 +881,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES AND PATTERN") {
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES AND PATTERN WITH AND AS SYNONYM") {
     std::string firstQuery = "assign a1, and, a3; \nSelect a1 pattern a1 (\"x\", _) and and(_, _) pattern a3(_, _, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -861,6 +912,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES AND PATTERN WITH AND AS SYNON
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN PATTERN AND SYNONYM") {
     std::string firstQuery = "assign a; \nSelect a pattern \t   \t  \ta (\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -875,6 +927,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN PATTERN AND SY
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN SYNONYM AND '('") {
     std::string firstQuery = "assign a; \nSelect a pattern a\t   \t  \t(\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -889,6 +942,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN SYNONYM AND '(
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN '(' AND FIRST ARGUMENT") {
     std::string firstQuery = "assign a; \nSelect a pattern a(\t   \t  \t\"x\", _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -903,6 +957,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN '(' AND FIRST 
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN FIRST ARGUMENT AND ','") {
     std::string firstQuery = "assign a; \nSelect a pattern a(\"x\"\t   \t  \t, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -917,6 +972,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN FIRST ARGUMENT
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN ',' AND SECOND ARGUMENT") {
     std::string firstQuery = "assign a; \nSelect a pattern a(\"x\",\t   \t  \t _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -931,6 +987,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN ',' AND SECOND
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN SECOND ARGUMENT AND ')'") {
     std::string firstQuery = "assign a; \nSelect a pattern a(\"x\", _\t   \t  \t)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -945,6 +1002,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN SECOND ARGUMEN
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN ')' AND AND") {
     std::string firstQuery = "assign a; \nSelect a pattern a(\"x\", _)\t   \t  \tand a(_, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -967,6 +1025,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN ')' AND AND") 
 
 TEST_CASE ("QP TOKENIZER: PATTERN WITH SPACES AND TABS IN BETWEEN AND AND SYNONYM") {
     std::string firstQuery = "assign a; \nSelect a pattern a(\"x\", _) and\t   \t  \ta(_, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -993,6 +1052,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSES") {
 
     // PROCNAME AND PROCNAME
     std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = p2.procName";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
     // Check With Clause
@@ -1065,6 +1125,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSES") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME VARNAME") {
     std::string firstQuery = "procedure varName; \nSelect procName with procName.varName = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1077,6 +1138,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME VARNAME") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME VALUE") {
     std::string firstQuery = "procedure value; \nSelect procName with procName.value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1089,6 +1151,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME VALUE") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME SELECT") {
     std::string firstQuery = "procedure Select, p; \nSelect p with Select.value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1101,6 +1164,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME SELECT") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME PATTERN") {
     std::string firstQuery = "procedure pattern, p; \nSelect p with pattern.value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1113,6 +1177,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME PATTERN") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME WITH") {
     std::string firstQuery = "procedure with, p; \nSelect p with with.value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1125,6 +1190,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME WITH") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME AND") {
     std::string firstQuery = "procedure and, p; \nSelect p with and.value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1137,6 +1203,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME AND") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME FOLLOWS") {
     std::string firstQuery = "procedure Follows, p; \nSelect p with Follows.value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1149,6 +1216,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE - SYNONYM NAME FOLLOWS") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER WITH") {
     std::string firstQuery = "procedure p; \nSelect p with \t  \t  p.value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1161,6 +1229,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER WITH") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER synonym") {
     std::string firstQuery = "procedure p; \nSelect p with p\t  \t  .value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1173,6 +1242,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER synonym") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER '.'") {
     std::string firstQuery = "procedure p; \nSelect p with p.\t  \t  value = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1185,6 +1255,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER '.'") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS BEFORE '='") {
     std::string firstQuery = "procedure p; \nSelect p with p.value\t  \t   = \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1197,6 +1268,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS BEFORE '='") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER '='") {
     std::string firstQuery = "procedure p; \nSelect p with p.value = \t  \t   \"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1209,6 +1281,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE: SPACES AND TABS AFTER '='") {
 
 TEST_CASE ("QP TOKENIZER: WITH CLAUSE: NO SPACES AND TABS BEFORE AND AFTER '='") {
     std::string firstQuery = "procedure p; \nSelect p with p.value=\"x\"";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1221,6 +1294,7 @@ TEST_CASE ("QP TOKENIZER: WITH CLAUSE: NO SPACES AND TABS BEFORE AND AFTER '='")
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES AND") {
     std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = \"x\" and p2.procName = p1.procName and p2.stmt# = 3";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1240,6 +1314,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES AND") {
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES WITHOUT AND") {
     std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = \"x\" with p2.procName = p1.procName with p2.stmt# = 3";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1259,6 +1334,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES WITHOUT AND") {
 
 TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES AND AND") {
     std::string firstQuery = "procedure p1, p2; \nSelect p1 with p1.procName = \"x\" and p2.procName = p1.procName with p2.stmt# = 3";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1278,6 +1354,7 @@ TEST_CASE ("QP TOKENIZER: MULTIPLE WITH CLAUSES AND AND") {
 
 TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST PATTERN FIRST THEN SUCH THAT CLAUSE") {
     std::string firstQuery = "assign a; \nSelect a pattern a(_, _) such that Follows(2, 1)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1320,6 +1397,7 @@ TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST PATTERN FIRST THEN SUCH THAT CLAUSE"
 
 TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST SUCH THAT CLAUSE FIRST THEN PATTERN") {
     std::string firstQuery = "assign a; \nSelect a such that Follows(2, 1) pattern a(_, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1362,6 +1440,7 @@ TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST SUCH THAT CLAUSE FIRST THEN PATTERN"
 
 TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST SUCH THAT CLAUSE FIRST THEN PATTERN WITH PATTERN AS SYN-ASSIGN") {
     std::string firstQuery = "assign pattern; \nSelect pattern such that Follows(2, 1) pattern pattern(_, _)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1404,6 +1483,7 @@ TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST SUCH THAT CLAUSE FIRST THEN PATTERN 
 
 TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST PATTERN FIRST THEN WITH CLAUSE") {
     std::string firstQuery = "assign a; procedure p1, p2; \nSelect a pattern a(_, _) with p1.procName=p2.procName";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1424,6 +1504,7 @@ TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST PATTERN FIRST THEN WITH CLAUSE") {
 
 TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST WITH CLAUSE THEN SUCH THAT CLAUSE") {
     std::string firstQuery = "assign a; procedure p1, p2; \nSelect a with p1.procName=p2.procName such that Follows(2, 1)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 
@@ -1444,6 +1525,7 @@ TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST WITH CLAUSE THEN SUCH THAT CLAUSE") 
 
 TEST_CASE ("QP TOKENIZER: MULTI CLAUSE TEST PATTERN AND WITH CLAUSE AND SUCH THAT CLAUSE") {
     std::string firstQuery = "assign a; procedure p1, p2; \nSelect a pattern a(_, _) with p1.procName=p2.procName such that Follows(2, 1)";
+    firstQuery = Tokenizer::lexicalTokens(firstQuery);
     Tokenizer tokenizer = Tokenizer();
     QueryToken queryToken = tokenizer.getQueryToken(firstQuery);
 

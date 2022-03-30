@@ -14,16 +14,15 @@ using namespace qp;
 std::string Tokenizer::lexicalTokens(std::string pql) {
     std::smatch sm;
     std::string reconstructedQuery;
-    reconstructedQuery.reserve(pql.size());
 
     reconstructedQuery = "";
-    pql = std::regex_replace(pql, std::regex("^\\s+"), std::string(""));
+    pql = std::regex_replace(pql, std::regex("^\\s+"), "");
 
     while (std::regex_search (pql, sm, std::regex(LEXICAL_TOKENS))) {
         std::string x = sm[0];
         reconstructedQuery += x + " ";
         pql = sm.suffix().str();
-        pql = std::regex_replace(pql, std::regex("^\\s+"), std::string(""));
+        pql = std::regex_replace(pql, std::regex("^\\s+"), "");
     }
 
     if (!pql.empty()) {
@@ -49,7 +48,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
     return queryToken;
 }
 
-void Tokenizer::getDeclarationTokens(std::string& pql, QueryToken& queryToken) {
+void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
     std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, DECLARATIONS_LINE)[0];
     std::vector<std::string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, SPLIT_DESIGN_ENTITIES);
     splitDeclarations(declarationsToken, queryToken);
@@ -175,8 +174,7 @@ void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
     queryToken.withClauses = withClauses;
 }
 
-std::vector<std::string> Tokenizer::getSplitStringsWithRegex(std::string pql, std::string fullClauseReg,
-                                                             std::string singleClauseReg) {
+std::vector<std::string> Tokenizer::getSplitStringsWithRegex(std::string pql, std::string fullClauseReg, std::string singleClauseReg) {
     std::smatch sm;
     std::vector<std::string> clauses = std::vector<std::string>();
 

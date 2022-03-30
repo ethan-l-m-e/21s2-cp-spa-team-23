@@ -11,50 +11,62 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: CHECK DECLARATIONS") {
 
     // Single Char declaration
     std::string query = "variable v1; Select v";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Double char declaration
-    query = "variable va; \n Select va";
+    query = "variable va; Select va";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Char + Int declaration
-    query = "variable v1; \n Select v1";
+    query = "variable v1; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // All possible declarations
-    query = "stmt s; read r; print pn; call c; while w; if ifs; assign a; constant con; procedure p; \n Select v1";
+    query = "stmt s; read r; print pn; call c; while w; if ifs; assign a; constant con; procedure p; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Double declarations
-    query = "variable v; stmt s; \n Select v1";
+    query = "variable v; stmt s; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Triple Declarations
-    query = "variable v; stmt s; procedure p; \n Select v1";
+    query = "variable v; stmt s; procedure p; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Multiple declaration sof same design entity
-    query = "variable v1, v2, v3; \n Select v1";
+    query = "variable v1, v2, v3; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Multiple declarations of same design entities
-    query = "variable v1, v2, v3; procedure p1, p2; \n Select v1";
+    query = "variable v1, v2, v3; procedure p1, p2; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym name same as design entities
-    query = "stmt stmt; read read; print print; call call; while while; if if; assign assign; variable variable; constant constant; procedure procedure; \n Select v1";
+    query = "stmt stmt; read read; print print; call call; while while; if if; assign assign; variable variable; constant constant; procedure procedure; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym name same as design entity - stmt read
-    query = "stmt read; \n Select v1";
+    query = "stmt read; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym name is Select
-    query = "stmt Select; \n Select v1";
+    query = "stmt Select; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym name is pattern
-    query = "stmt pattern; \n Select v1";
+    query = "stmt pattern; Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -63,38 +75,47 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID DECLARATIONS") {
 
     // integer as declaration synonym
     std::string query = "variable 1; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // int-char as declaration name
     query = "variable 1v; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Invalid design entity
     query = "unknown v; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Misspelt design entity
     query = "varible v; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // shortened version of design entity
     query = "var v; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Wrong caps design entity
     query = "Variable v; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect semicolon usage
     query = "variable v1; v2; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect comma usage
     query = "variable v1, stmt s; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect comma usage - 2
     query = "variable v1; stmt, s; \n Select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
@@ -102,67 +123,77 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID SELECT CLAUSE TESTS") {
     Validator validator = Validator();
 
     // Normal Select clause
-    std::string query = "variable v; \n Select v";
+    std::string query = "variable v; Select v";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with synonym having an int
-    query = "variable v; \n Select v2";
+    query = "variable v; Select v2";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with multi char synonym
-    query = "variable v; \n Select var";
+    query = "variable v; Select var";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with Select as synonym
-    query = "variable v; \n Select Select";
+    query = "variable v; Select Select";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with 'with' as synonym
-    query = "variable with; \n Select with";
+    query = "variable with; Select with";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with 'and' as synonym
-    query = "variable and; \n Select and";
+    query = "variable and; Select and";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with 'Follows' as synonym
-    query = "variable Follows; \n Select Follows";
+    query = "variable Follows; Select Follows";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with 'BOOLEAN' as synonym
-    query = "variable Follows; \n Select BOOLEAN";
+    query = "variable Follows; Select BOOLEAN";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with tuple: single element
-    query = "variable example; \n Select <example>";
+    query = "variable example; Select <example>";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with tuple: Select as synonym name
-    query = "variable Select; \n Select <Select>";
+    query = "variable Select; Select <Select>";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with tuple: Select and with as synonym names
-    query = "variable Select, with; \n Select <Select, with>";
+    query = "variable Select, with; Select <Select, with>";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with tuple: Attribute References
-    query = "variable Select, with; \n Select <p.procName, s.stmt#, v.varName, c.value>";
+    query = "variable Select, with; Select <p.procName, s.stmt#, v.varName, c.value>";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - procName
-    query = "procedure p; \n Select p.procName";
+    query = "procedure p; Select p.procName";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - varName
-    query = "procedure p; \n Select p.varName";
+    query = "procedure p; Select p.varName";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - value
-    query = "procedure p; \n Select p.value";
+    query = "procedure p; Select p.value";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - stmt#
-    query = "procedure p; \n Select p.stmt#";
+    query = "procedure p; Select p.stmt#";
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -879,27 +910,30 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID WITH CLAUSE QUERIES") {
 
     // With clause with synonym as first argument
     std::string query = "assign a; procedure p1, p2; Select a with p1=p2.procName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // With clause with synonym as second argument
     query = "assign a; procedure p1, p2; Select a with p1.procName=p2";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // With clause with invalid synonym
     query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
 
     // With clause and pattern
     query = "assign a; procedure p1, p2; Select a with p1.procName=p2.procName and a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // With clause and Follows
     query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName and Follows (_, _)";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
 
     // With clause and pattern
     query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName and pattern a (_, _)";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
 }
 
 TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID MULTI CLAUSES QUERIES") {
@@ -963,354 +997,441 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: RANDOM SPACES AND TABS") {
 
     // multiple spaces between design entity and declaration
     std::string query = "assign        a; stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between design entity and declaration
     query = "assign\ta; stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between design entity and declaration
     query = "assign\t   a; stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // no space between 2 declarations
     query = "assign a,a2; stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between 2 declarations of same design entity
     query = "assign a,     a2; stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between declarations of different design entities
     query = "assign a;     stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between declarations of different design entities
     query = "assign a;\tstmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between declarations of different design entities
     query = "assign a;\t     stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // no space between 2 design entities declarations
     query = "assign a;stmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between declarations and Select clause
     query = "assign a; stmt s;         Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between declarations and Select clause
     query = "assign a; stmt s;\tSelect a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between declarations and Select clause
     query = "assign a; stmt s;\t      Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // no tab and spaces between declarations and Select clause
     query = "assign a; stmt s;Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between Select clause and synonym
     query = "assign a; stmt s; Select     a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between Select clause and synonym
     query = "assign a; stmt s; Select\ta such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between Select clause and synonym
     query = "assign a; stmt s; Select\t     a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between synonym and such
     query = "assign a; stmt s; Select a      such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between synonym and such
     query = "assign a; stmt s; Select a\tsuch that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between synonym and such
     query = "assign a; stmt s; Select a\t       such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between such that
     query = "assign a; stmt s; Select a such      that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between such that
     query = "assign a; stmt s; Select a such\tthat Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces and tab between such that
     query = "assign a; stmt s; Select a such\t      that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between such that and Relationship
     query = "assign a; stmt s; Select a such that      Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between such that and Relationship
     query = "assign a; stmt s; Select a such that\tFollows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between such that and Relationship
     query = "assign a; stmt s; Select a such that\t    Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between RelRef and (
     query = "assign a; stmt s; Select a such that Follows    (3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between RelRef and (
     query = "assign a; stmt s; Select a such that Follows\t(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between RelRef and (
     query = "assign a; stmt s; Select a such that Follows\t    (3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between such that clause ( and first argument
     query = "assign a; stmt s; Select a such that Follows(     3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between such that clause ( and first argument
     query = "assign a; stmt s; Select a such that Follows(\t3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between such that clause ( and first argument
     query = "assign a; stmt s; Select a such that Follows(\t    3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between such that clause first argument and comma
     query = "assign a; stmt s; Select a such that Follows(3    , 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between such that clause first argument and comma
     query = "assign a; stmt s; Select a such that Follows(3\t, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between such that clause first argument and comma
     query = "assign a; stmt s; Select a such that Follows(3\t    , 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // no tab and spaces between such that clause comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3,2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between such that clause comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3,    2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between such that clause comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3,\t2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces and tab and spaces between such that clause comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3,\t      2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between such that clause second argument and closing bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2    )";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between such that clause second argument and closing bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2\t)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between such that clause second argument and closing bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2\t     )";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // no space between such that clause and pattern
     query = "assign a; stmt s; Select a such that Follows(3, 2)pattern a (_, _)";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between such that clause and pattern
     query = "assign a; stmt s; Select a such that Follows(3, 2)      pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between such that clause and pattern
     query = "assign a; stmt s; Select a such that Follows(3, 2)\tpattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between such that clause and pattern
     query = "assign a; stmt s; Select a such that Follows(3, 2)\t       pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between pattern and syn-assign
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern      a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between pattern and syn-assign
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern\ta (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between pattern and syn-assign
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern\t    a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // multiple tabs and spaces between pattern and syn-assign
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern\t\t\t    a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between syn-assign and opening bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a     (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between syn-assign and opening bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a\t(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between syn-assign and opening bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a\t     (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // no tab and spaces between syn-assign and opening bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between opening bracket and first argument
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (       _, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between opening bracket and first argument
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (\t_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between opening bracket and first argument
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (\t        _, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between first argument and comma
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_     , _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between first argument and comma
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_\t, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between first argument and comma
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_\t        , _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_,     _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_,\t_)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_,\t       _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // no tab and spaces between comma and second argument
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_,_)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // spaces between second argument and closing bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_,_    )";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab between second argument and closing bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_,_\t)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces between second argument and closing bracket
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_,_\t      )";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces at the end
     query = "assign a; stmt s; Select a such that Follows(3, 2) pattern a (_, _)      \t\t\t";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces at the end
     query = "assign a; stmt s; Select a      \t\t\t";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces at the end
     query = "assign a; stmt s; Select a such that Follows(3, 2)     \t\t\t";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tab and spaces at the end
     query = "assign a; stmt s; Select a pattern a (_, _)     \t\t\t";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tabs and spaces between '.' in Select clause attr ref
     query = "assign a; procedure p; Select p  \t  \t . \t \t \tprocName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tabs and spaces between '.' in with clause attr ref
     query = "assign a; procedure p; Select p with p  \t  \t . \t \t \tprocName = \"x\"";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tabs and spaces between 'and' in with clauses
     query = "assign a; procedure p; Select p with p.procName = \"x\" \t \t \t \t and c.value=3";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tabs and spaces between 'and' in pattern clauses
     query = "assign a; procedure p; Select p pattern a (_, _)\t \t \t \t  and a2(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // tabs and spaces between 'and' in such that clauses
     query = "assign a; procedure p; Select p such that Next(3, 2) \t \t \t \t  and Follows(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assigna; stmt s; Select a such that Follows(3, 2) pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; stmts; Select a such that Follows(3, 2) pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; stmt s; Selecta such that Follows(3, 2) pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; stmt s; Select asuch that Follows(3, 2) pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; stmt s; Select a suchthat Follows(3, 2) pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; stmt s; Select a such thatFollows(3, 2) pattern a (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; stmt s; Select a such that Follows(3, 2)pattern a (_, _)";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; stmt s; Select a such that Follows(3, 2) patterna (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing
     query = "assign a; procedure p; Select p withp.procName = \"x\"";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // missed spacing between 2 such that clauses
     query = "assign a; procedure p; Select p such that Follows(2, 3)and Next(2, 3)";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // missed spacing between 2 patterns
-    query = "assign a; procedure p; Select p such that pattern a(_,_)and a1(_, _)";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    query = "assign a; procedure p; Select p pattern a(_,_)and a1(_, _)";
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // incorrect spacing for with clause
     query = "assign a; procedure p; Select p with p.proc Name = \"x\"";
-    REQUIRE_THROWS(validator.validateQueryStructure(query));
+    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
 
     // incorrect spacing for with clause
-    query = "assign a; procedure p; Select p wi th p.proc Name = \"x\"";
+    query = "assign a; procedure p; Select p wi th p.procName = \"x\"";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
@@ -1319,17 +1440,21 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INCORRECT NEW LINES") {
 
     // newline in the middle of a design entity
     std::string query = "assign a; st\nmt s; Select a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // newline in the middle of Select
     query = "assign a; stmt s; Sel\nect a such that Follows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // newline in the middle of a relationship
     query = "assign a; stmt s; Select a such that Foll\nows(3, 2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // newline in the middle of pattern
     query = "assign a; stmt s; Select a such that Follows(3, 2) pat\ntern a(2, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
