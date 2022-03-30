@@ -38,20 +38,20 @@ namespace qp {
 
     class Tokenizer {
     public:
-        static std::string lexicalTokens(std::string);
+        static std::string lexicalTokens(std::string&);
         static void cleanQueryToken(QueryToken&);
-        QueryToken getQueryToken(std::string);
+        QueryToken getQueryToken(std::string&);
     private:
-        void getDeclarationTokens(std::string, QueryToken&);
-        void getSelectClauseTokens(std::string, QueryToken&);
-        void getSuchThatClauseTokens(std::string, QueryToken&);
-        void getPatternClauseTokens(std::string, QueryToken&);
-        void getWithClauseToken(std::string, QueryToken&);
+        void getDeclarationTokens(std::string&, QueryToken&);
+        void getSelectClauseTokens(std::string&, QueryToken&);
+        void getSuchThatClauseTokens(std::string&, QueryToken&);
+        void getPatternClauseTokens(std::string&, QueryToken&);
+        void getWithClauseToken(std::string&, QueryToken&);
 
         // Helper functions
         void splitDeclarations(std::vector<std::string>&, QueryToken&);
-        SuchThatClauseToken convertStringToSuchThatClauseToken(std::string);
-        PatternToken convertStringToPatternToken(std::string);
+        SuchThatClauseToken convertStringToSuchThatClauseToken(std::string&);
+        PatternToken convertStringToPatternToken(std::string&);
         std::vector<std::string> getSplitStringsWithRegex(std::string, std::string, std::string);
     };
 }

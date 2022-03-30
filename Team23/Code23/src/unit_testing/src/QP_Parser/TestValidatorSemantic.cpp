@@ -38,6 +38,9 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: REPEATED DECLARATION NAMES") {
     queryToken.declarations = declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"v"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     Validator validator = Validator();
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
@@ -56,6 +59,9 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: REPEATED DESIGN ENTITIES") {
     queryToken.declarations = declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"v1"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     Validator validator = Validator();
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));
@@ -73,6 +79,9 @@ TEST_CASE ("QP SEMANTIC VALIDATOR: SYNONYM NOT IN DECLARATIONS") {
     queryToken.declarations = declarations;
     queryToken.declarationTokens = declarationTokens;
     queryToken.selectClauseTokens = new std::vector<std::string>({"v"});
+    queryToken.patternTokens = new std::vector<PatternToken>();
+    queryToken.suchThatClauseTokens = new std::vector<SuchThatClauseToken>();
+    queryToken.withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     Validator validator = Validator();
     REQUIRE_THROWS(validator.checkForSemantics(queryToken));

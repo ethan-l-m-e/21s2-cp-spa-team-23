@@ -11,7 +11,7 @@
 
 using namespace qp;
 
-std::string Tokenizer::lexicalTokens(std::string pql) {
+std::string Tokenizer::lexicalTokens(std::string& pql) {
     std::smatch sm;
     std::string reconstructedQuery;
 
@@ -32,7 +32,7 @@ std::string Tokenizer::lexicalTokens(std::string pql) {
     return reconstructedQuery;
 }
 
-QueryToken Tokenizer::getQueryToken(std::string query) {
+QueryToken Tokenizer::getQueryToken(std::string& query) {
     QueryToken queryToken = QueryToken();
 
     if (query.length() == 0) {
@@ -48,7 +48,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
     return queryToken;
 }
 
-void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
+void Tokenizer::getDeclarationTokens(std::string& pql, QueryToken& queryToken) {
     std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, DECLARATIONS_LINE)[0];
     std::vector<std::string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, SPLIT_DESIGN_ENTITIES);
     splitDeclarations(declarationsToken, queryToken);
@@ -76,7 +76,7 @@ void Tokenizer::splitDeclarations(std::vector<std::string>& declarations, QueryT
             std::vector<std::string>>(declarationNames, designEntities);
 }
 
-void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
+void Tokenizer::getSelectClauseTokens(std::string& pql, QueryToken& queryToken) {
     // Get Select Synonym string
     std::smatch sm;
     std::regex_search (pql, sm, std::regex(SPLIT_SELECT_SYNONYM + RESULT_CL));
@@ -94,7 +94,7 @@ void Tokenizer::getSelectClauseTokens(std::string pql, QueryToken& queryToken) {
     queryToken.selectClauseTokens = selectClauseTokens;
 }
 
-void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken) {
+void Tokenizer::getSuchThatClauseTokens(std::string& pql, QueryToken& queryToken) {
     std::smatch sm;
     std::vector<std::string> suchThatClauses = getSplitStringsWithRegex(pql, SUCH_THAT_CL, REL_REF);
 
@@ -108,7 +108,7 @@ void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken)
     queryToken.suchThatClauseTokens = suchThatClauseTokens;
 }
 
-SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string suchThatClause) {
+SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string& suchThatClause) {
     suchThatClause = std::regex_replace(suchThatClause, std::regex(SINGLE_SPACE), "");
     std::vector<std::string> suchThatClauseArgs = StringFormatter::tokenizeByRegex(suchThatClause, SPLIT_SUCH_THAT_CLAUSE);
 
@@ -119,7 +119,7 @@ SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string su
 }
 
 
-void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) {
+void Tokenizer::getPatternClauseTokens(std::string& pql, QueryToken& queryToken) {
     std::smatch sm;
     std::vector<std::string> patternStrings = getSplitStringsWithRegex(pql, PATTERN_CL, PATTERN);
 
@@ -133,7 +133,7 @@ void Tokenizer::getPatternClauseTokens(std::string pql, QueryToken& queryToken) 
     queryToken.patternTokens = patternTokens;
 }
 
-PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
+PatternToken Tokenizer::convertStringToPatternToken(std::string& patternClause) {
     std::vector<std::string> patternClauseArgs = StringFormatter::tokenizeByRegex(patternClause, PATTERN_ARGUMENTS);
 
     // Split pattern synonym substring and first argument
@@ -157,7 +157,7 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
     return patternToken;
 }
 
-void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
+void Tokenizer::getWithClauseToken(std::string& pql, QueryToken& queryToken) {
     std::smatch sm;
     std::vector<std::string> withClauseStrings = getSplitStringsWithRegex(pql, WITH_CL, ATTR_COMPARE);
 

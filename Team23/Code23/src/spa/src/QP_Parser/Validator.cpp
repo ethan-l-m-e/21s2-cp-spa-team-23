@@ -11,7 +11,7 @@
 
 using namespace qp;
 
-void Validator::validateQueryStructure(std::string pql) {
+void Validator::validateQueryStructure(std::string& pql) {
     std::regex reg(PQL_FORMAT);
     bool isValid = regex_match(pql, reg);
 
@@ -35,7 +35,7 @@ void Validator::checkForSemantics(QueryToken& queryToken) {
     }
 }
 
-void Validator::validateDeclarations(std::set<std::string> declarationSet, int length, std::vector<std::string> designEntities) {
+void Validator::validateDeclarations(std::set<std::string>& declarationSet, int length, std::vector<std::string>& designEntities) {
     // Check for duplicate declaration names
     bool isDeclarationNamesDuplicate = declarationSet.size() != length;
     if (isDeclarationNamesDuplicate) {
@@ -50,9 +50,9 @@ void Validator::validateDeclarations(std::set<std::string> declarationSet, int l
     }
 }
 
-void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet,
-                                           std::vector<std::string> selectClauseTokens,
-                                           std::map<std::string, std::string> declarationTokens) {
+void Validator::validateSelectClauseTokens(std::set<std::string>& declarationSet,
+                                           std::vector<std::string>& selectClauseTokens,
+                                           std::map<std::string, std::string>& declarationTokens) {
     if (selectClauseTokens[0] == "BOOLEAN") {
         return;
     }
@@ -62,8 +62,8 @@ void Validator::validateSelectClauseTokens(std::set<std::string> declarationSet,
     }
 }
 
-void Validator::validateSuchThatClauses(std::map<std::string, std::string> declarationTokens,
-                                        std::vector<SuchThatClauseToken> suchThatClauseTokens) {
+void Validator::validateSuchThatClauses(std::map<std::string, std::string>& declarationTokens,
+                                        std::vector<SuchThatClauseToken>& suchThatClauseTokens) {
     for (SuchThatClauseToken suchThatClauseToken : suchThatClauseTokens) {
         checkArguments(*(suchThatClauseToken.arguments), declarationTokens);
 
@@ -81,8 +81,8 @@ void Validator::validateSuchThatClauses(std::map<std::string, std::string> decla
     }
 }
 
-void Validator::validatePatterns(std::map<std::string, std::string> declarationTokens,
-                                 std::vector<PatternToken> patternTokens) {
+void Validator::validatePatterns(std::map<std::string, std::string>& declarationTokens,
+                                 std::vector<PatternToken>& patternTokens) {
     for (PatternToken patternToken : patternTokens) {
         // Check that the pattern's syn-assign and first argument do not have the same synonym and synonym is declared
         std::vector<std::string> patternArguments = *patternToken.arguments;
@@ -110,16 +110,16 @@ void Validator::validatePatterns(std::map<std::string, std::string> declarationT
     }
 }
 
-void Validator::validateWithClauses(std::vector<std::pair<std::string, std::string>> withClauses,
-                                    std::map<std::string, std::string> declarationTokens) {
+void Validator::validateWithClauses(std::vector<std::pair<std::string, std::string>>& withClauses,
+                                    std::map<std::string, std::string>& declarationTokens) {
     for (std::pair<std::string, std::string> withClause : withClauses) {
         validateAttrRefArgument(withClause.first, declarationTokens);
         validateAttrRefArgument(withClause.second, declarationTokens);
     }
 }
 
-void Validator::validateSynonym(std::string synonym, std::set<std::string> declarationSet,
-                                std::map<std::string, std::string> declarationTokens) {
+void Validator::validateSynonym(std::string synonym, std::set<std::string>& declarationSet,
+                                std::map<std::string, std::string>& declarationTokens) {
     // If synonym is an attribute reference, check that it's a valid reference
     bool isAttrRef = std::regex_match(synonym, std::regex(ATTR_REF));
     if (isAttrRef) {
@@ -133,15 +133,15 @@ void Validator::validateSynonym(std::string synonym, std::set<std::string> decla
     }
 }
 
-void Validator::checkArguments(std::vector<std::string> arguments,
-                               std::map<std::string, std::string> declarationTokens) {
+void Validator::checkArguments(std::vector<std::string>& arguments,
+                               std::map<std::string, std::string>& declarationTokens) {
     checkSynonymIsDeclared(arguments[0], declarationTokens);
     checkSynonymIsDeclared(arguments[1], declarationTokens);
 
 }
 
-void Validator::checkSynonymIsDeclared(std::string argument,
-                                       std::map<std::string, std::string> declarationTokens) {
+void Validator::checkSynonymIsDeclared(std::string& argument,
+                                       std::map<std::string, std::string>& declarationTokens) {
     // If argument is a synonym, check that the synonym is declared
     bool isSynonymArgumentNotDeclared = (std::regex_match(argument, std::regex (SYNONYM))
                                          && declarationTokens.find(argument) == declarationTokens.end());
@@ -151,13 +151,13 @@ void Validator::checkSynonymIsDeclared(std::string argument,
 }
 
 void Validator::handleSuchThatStatementClause(std::map<std::string, std::string>& declarationTokens,
-                                              std::vector<std::string> arguments) {
+                                              std::vector<std::string>& arguments) {
     checkArgumentForStatementClauses(declarationTokens, arguments[0]);
     checkArgumentForStatementClauses(declarationTokens, arguments[1]);
 }
 
-void Validator::handleVariableRelationshipClause(std::map<std::string, std::string> declarationTokens,
-                                                 SuchThatClauseToken suchThatClauseToken) {
+void Validator::handleVariableRelationshipClause(std::map<std::string, std::string>& declarationTokens,
+                                                 SuchThatClauseToken& suchThatClauseToken) {
     // Get set of possible first argument types
     std::set<std::string> argSet = relationshipAndArgumentsMap.at(suchThatClauseToken.relRef);
     std::vector<std::string> arguments = *(suchThatClauseToken.arguments);
@@ -166,13 +166,13 @@ void Validator::handleVariableRelationshipClause(std::map<std::string, std::stri
     checkSecondArgForVariableClauses(arguments[1], declarationTokens);
 }
 
-void Validator::handleCallsAffectsClauses(SuchThatClauseToken suchThatClauseToken, std::map<std::string, std::string> declarationTokens) {
+void Validator::handleCallsAffectsClauses(SuchThatClauseToken& suchThatClauseToken, std::map<std::string, std::string>& declarationTokens) {
     std::vector<std::string> arguments = *suchThatClauseToken.arguments;
     checkProcAssignArgument(arguments[0], suchThatClauseToken.relRef, declarationTokens);
     checkProcAssignArgument(arguments[1], suchThatClauseToken.relRef, declarationTokens);
 }
 
-void Validator::checkArgumentForStatementClauses(std::map<std::string, std::string>& declarationTokens, std::string argument) {
+void Validator::checkArgumentForStatementClauses(std::map<std::string, std::string>& declarationTokens, std::string& argument) {
     // If argument is an ident or integer, then it's valid
     if (regex_match(argument, std::regex((INT_WILDCARD)))) {
         return;
@@ -184,7 +184,7 @@ void Validator::checkArgumentForStatementClauses(std::map<std::string, std::stri
     }
 }
 
-void Validator::checkFirstArgForVariableClauses(std::string argument, std::set<std::string>& argSet,
+void Validator::checkFirstArgForVariableClauses(std::string& argument, std::set<std::string>& argSet,
                                                 std::map<std::string, std::string>& declarationTokens) {
     // If argument is wildcard, throw semantic exception
     bool isWildcard = argument == "_";
@@ -201,7 +201,7 @@ void Validator::checkFirstArgForVariableClauses(std::string argument, std::set<s
     }
 }
 
-void Validator::checkSecondArgForVariableClauses(std::string argument, std::map<std::string,
+void Validator::checkSecondArgForVariableClauses(std::string& argument, std::map<std::string,
                                               std::string>& declarationTokens) {
     // If the argument is a synonym, check that it's a declared variable
     bool isArgumentSynonym = std::regex_match(argument, std::regex(SYNONYM));
@@ -211,8 +211,8 @@ void Validator::checkSecondArgForVariableClauses(std::string argument, std::map<
     }
 }
 
-void Validator::checkProcAssignArgument(std::string argument, std::string relRef,
-                                         std::map<std::string, std::string> declarationTokens) {
+void Validator::checkProcAssignArgument(std::string& argument, std::string& relRef,
+                                         std::map<std::string, std::string>& declarationTokens) {
     bool isSynonym = std::regex_match(argument, std::regex(SYNONYM));
     if (!isSynonym) {
         return;
@@ -234,7 +234,7 @@ void Validator::checkProcAssignArgument(std::string argument, std::string relRef
     }
 }
 
-void Validator::validatePatternFirstArgument(std::map<std::string, std::string> declarationTokens, std::string argument) {
+void Validator::validatePatternFirstArgument(std::map<std::string, std::string>& declarationTokens, std::string& argument) {
     bool isArgumentSynonym = std::regex_match(argument, std::regex(SYNONYM));
     bool isSynonymArgumentNotVariable = isArgumentSynonym && declarationTokens.at(argument) != "variable";
 
@@ -243,7 +243,7 @@ void Validator::validatePatternFirstArgument(std::map<std::string, std::string> 
     }
 }
 
-void Validator::validateAttrRefArgument(std::string argument, std::map<std::string, std::string> declarationTokens) {
+void Validator::validateAttrRefArgument(std::string& argument, std::map<std::string, std::string>& declarationTokens) {
     // If argument is an ident or integer, then it's valid
     bool isArgumentIdentOrInt = std::regex_match(argument, std::regex(IDENT_INT_CHECK));
     if (isArgumentIdentOrInt) {
@@ -261,7 +261,7 @@ void Validator::validateAttrRefArgument(std::string argument, std::map<std::stri
     }
 }
 
-std::set<std::string> Validator::convertVectorToSet(std::vector<std::string> vec) {
+std::set<std::string> Validator::convertVectorToSet(std::vector<std::string>& vec) {
     std::set<std::string> s;
     for (std::string x : vec) {
         s.insert(x);
