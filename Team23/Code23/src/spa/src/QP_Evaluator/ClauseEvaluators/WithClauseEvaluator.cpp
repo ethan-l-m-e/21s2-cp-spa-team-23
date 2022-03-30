@@ -27,7 +27,9 @@ bool WithClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         bool isEqual = std::get<string>(argLeft.argumentValue) == std::get<string>(argRight.argumentValue);
         result = makeResult(isEqual);
     }
-    return processResult(resultTable);
+
+    bool resultValidity = processResult(resultTable);
+    return resultValidity;
 }
 
 unordered_set<pair<string, string>> WithClauseEvaluator::compareAttributes(unordered_map<string, string> leftMap, unordered_map<string, string> rightMap) {

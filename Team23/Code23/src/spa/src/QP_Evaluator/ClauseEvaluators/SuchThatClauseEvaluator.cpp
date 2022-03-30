@@ -27,8 +27,8 @@ bool SuchThatClauseEvaluator::evaluateClause(ResultTable* resultTable) {
             break;
     }
 
-    processResult(resultTable);
-    return processResult(resultTable);
+    bool resultValidity = processResult(resultTable);
+    return resultValidity;
 }
 
 /**
