@@ -5,6 +5,7 @@
 #ifndef SPA_CLAUSE_H
 #define SPA_CLAUSE_H
 
+#include <utility>
 #include <vector>
 #include "Argument.h"
 
@@ -35,38 +36,26 @@ enum class SynonymType {
 
 typedef struct Clause {
     vector<Argument> argList;
+    explicit Clause(vector<Argument> argList): argList{std::move(argList)} {};
     virtual ~Clause()= default;
 } Clause;
 
 typedef struct SuchThatClause : Clause {
     RelRef relRef;
-    string getName()
-    {
-        return "such that clause: " + std::get<string>(argList[0].argumentValue) + " " + std::get<string>(argList[1].argumentValue);
-    }
+    explicit SuchThatClause(vector<Argument> argList, RelRef relRef): Clause(std::move(argList)), relRef{relRef} {};
 } SuchThatClause;
 
 typedef struct PatternClause : Clause {
     SynonymType synonymType;
-    string getName()
-    {
-        return "pattern clause: " + std::get<string>(argList[0].argumentValue) + " " + std::get<string>(argList[1].argumentValue);
-    }
+    explicit PatternClause(vector<Argument> argList, SynonymType synonymType): Clause(std::move(argList)), synonymType{synonymType} {};
 } PatternClause;
 
 typedef struct WithClause : Clause {
-    string getName()
-    {
-        return "with clause: " + (argList[0].argumentType == ArgumentType::ATTR_REF ?
-                                     std::get<pair<string, AttrName>>(argList[0].argumentValue).first :
-                                     std::get<string>(argList[0].argumentValue)) + " " +
-                (argList[1].argumentType == ArgumentType::ATTR_REF ?
-                 std::get<pair<string, AttrName>>(argList[1].argumentValue).first :
-                 std::get<string>(argList[1].argumentValue));
-    }
+    explicit WithClause(vector<Argument> argList): Clause(std::move(argList)) {};
 } WithClause;
 
 typedef struct ResultClause : Clause {
+    explicit ResultClause(vector<Argument> argList): Clause(std::move(argList)) {};
 } ResultClause;
 
 #endif //SPA_CLAUSE_H

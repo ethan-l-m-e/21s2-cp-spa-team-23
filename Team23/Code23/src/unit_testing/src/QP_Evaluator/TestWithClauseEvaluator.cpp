@@ -39,14 +39,14 @@ TEST_CASE("Test with clause evaluator") {
     Argument ac = {ArgumentType::ATTR_REF, make_pair("c", AttrName::VALUE)};
     Argument as = {ArgumentType::ATTR_REF, make_pair("s", AttrName::STMT_NO)};
 
-    WithClause clause_1_1 = {ArgList{a1, a1}};
-    WithClause clause_x_y = {ArgList{ax, ay}};
-    WithClause clause_pn_stmt_11 = {ArgList{apn_stmt, a11}};
-    WithClause clause_pn_var_x = {ArgList{apn_var, ax}};
-    WithClause clause_pn_var_r_var = {ArgList{apn_var, ar_var}};
-    WithClause clause_pn_var_v = {ArgList{apn_var, av}};
-    WithClause clause_z_pn_var = {ArgList{az, apn_var}};
-    WithClause clause_s_c = {ArgList{as, ac}};
+    WithClause clause_1_1 = WithClause(ArgList{a1, a1});
+    WithClause clause_x_y = WithClause(ArgList{ax, ay});
+    WithClause clause_pn_stmt_11 = WithClause(ArgList{apn_stmt, a11});
+    WithClause clause_pn_var_x = WithClause(ArgList{apn_var, ax});
+    WithClause clause_pn_var_r_var = WithClause(ArgList{apn_var, ar_var});
+    WithClause clause_pn_var_v = WithClause(ArgList{apn_var, av});
+    WithClause clause_z_pn_var = WithClause(ArgList{az, apn_var});
+    WithClause clause_s_c = WithClause(ArgList{as, ac});
 
     auto *resultTable = new ResultTable();
 

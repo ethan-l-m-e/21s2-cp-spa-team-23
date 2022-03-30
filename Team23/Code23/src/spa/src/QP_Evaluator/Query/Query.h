@@ -36,7 +36,7 @@ protected:
     vector<SuchThatClause> suchThatClauses;
     vector<PatternClause> patternClauses;
     vector<WithClause> withClauses;
-    ResultClause resultClause;
+    ResultClause resultClause = ResultClause({});
 public:
     bool hasSuchThatClause();
     bool hasPatternClause();

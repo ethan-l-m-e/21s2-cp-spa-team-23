@@ -59,8 +59,7 @@ void QueryParser::getSynonym(QueryToken& queryToken, Query& query) {
         Argument argument = getArgument(synonym, *(queryToken.declarationTokens));
         argList.push_back(argument);
     }
-    ResultClause resultClause = ResultClause();
-    resultClause.argList = argList;
+    ResultClause resultClause = ResultClause(argList);
     query.setResultClause(resultClause);
 }
 
@@ -75,9 +74,7 @@ void QueryParser::getSuchThatClauses(QueryToken& queryToken, Query& query) {
         RelRef relRef = getRelRefFromString(relationship, argList[0], *(queryToken.declarationTokens));
 
         // Create SuchThatClause Object
-        SuchThatClause suchThatClause = SuchThatClause();
-        suchThatClause.argList = argList;
-        suchThatClause.relRef = relRef;
+        SuchThatClause suchThatClause = SuchThatClause(argList, relRef);
         suchThatClauses.push_back(suchThatClause);
     }
     query.setSuchThatClauses(suchThatClauses);
@@ -185,9 +182,7 @@ void QueryParser::getPattern(QueryToken& queryToken, Query& query) {
         argList.insert(argList.begin(), synAssign);
 
         // Create PatternClause Object
-        PatternClause patternClause = PatternClause();
-        patternClause.argList = argList;
-        patternClause.synonymType = getPatternSynonymType(patternToken.synonym, *(queryToken.declarationTokens));
+        PatternClause patternClause = PatternClause(argList, getPatternSynonymType(patternToken.synonym, *(queryToken.declarationTokens)));
         patternClauses.push_back(patternClause);
     }
 
@@ -212,8 +207,7 @@ void QueryParser::getWithClauses(QueryToken& queryToken, Query& query) {
         std::vector<Argument> argList = getArgumentList(arguments, *(queryToken.declarationTokens));
 
         // Create WithClause Object
-        WithClause withClause = WithClause();
-        withClause.argList = argList;
+        WithClause withClause = WithClause(argList);
         withClauses.push_back(withClause);
     }
 
