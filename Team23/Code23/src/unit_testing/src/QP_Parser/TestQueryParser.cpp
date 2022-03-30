@@ -1978,7 +1978,7 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
 TEST_CASE ("PARSER - INCORRECT CHECK") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "constant c; Select c with c.value = 0such that Follows(_, _)and Parent*(_,_)";
+    std::string pql = "assign a; Select a pattern a(_, _)";
     Query query = parser.getQuery(pql);
 
 }

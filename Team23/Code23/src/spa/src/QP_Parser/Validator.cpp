@@ -98,6 +98,10 @@ void Validator::validatePatterns(std::map<std::string, std::string>& declaration
             throw QPInvalidSemanticException("Invalid Pattern Synonym");
         }
 
+        if (!regex_match(patternArguments[1], std::regex(EXPRESSION_SPEC))) {
+            throw QPInvalidSemanticException("Invalid Second argument");
+        }
+
         // Check validity of if and while patterns
         bool isInvalidWhilePatternArgument = (patternSynonym == "while") && (patternArguments[1] != "_");
         bool isInvalidIfPattern = (patternSynonym == "if") && (patternArguments[1] != "_");

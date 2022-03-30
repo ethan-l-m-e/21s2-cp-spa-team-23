@@ -12,16 +12,16 @@ std::string const SINGLE_SPACE = "( )";
 
 std::string const SYNONYM = IDENT;
 std::string const STMT_REF = "(" + SYNONYM + "|_|" + INTEGER + ")";
-std::string const ENT_REF = "(" + SYNONYM + "|_|" + '"' + IDENT + '"' + ")";
+std::string const ENT_REF = "(" + SYNONYM + "|_|" + '"' + SPACE + IDENT + SPACE + '"' + ")";
 
 std::string const ATTR_NAME = "(procName|varName|value|stmt#)";
 std::string const ATTR_REF = SYNONYM + SPACE + "\\." + SPACE + ATTR_NAME;
 std::string const ELEM = "(" + ATTR_REF + "|" + SYNONYM + ")";
-std::string const REF = "(\"" + IDENT + "\"|" + INTEGER + "|" + ATTR_REF + ")";
+std::string const REF = "(\"" + SPACE + IDENT + SPACE + "\"|" + INTEGER + "|" + ATTR_REF + ")";
 
 std::string const REL = "(Follows\\*|Parent\\*|Calls\\*|Next\\*|Affects\\*)";
-std::string const LEXICAL_TOKENS = "^(" + REL + "|\\(|\\)|<|>|,|=|;|\\.|" + ATTR_NAME + "|" + SYNONYM + "|" + NAME
-        + "|" + INTEGER + "|" + STMT_REF + "|" + ENT_REF + ")";
+std::string const LEXICAL_TOKENS = "^(" + REL + "|\\(|\\)|<|>|,|=|;|\\.|_|(-|\\+|\\/|\\*|%|\"(.)+\")|" + ATTR_NAME + "|"
+        + SYNONYM + "|" + NAME + "|" + INTEGER + ")";
 
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";

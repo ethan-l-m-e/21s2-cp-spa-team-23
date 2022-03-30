@@ -139,7 +139,7 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string& patternClause) 
     // Split pattern synonym substring and first argument
     int indexOfOpeningBracket = patternClauseArgs[0].find("(");
     std::string synonym = StringFormatter::removeTrailingSpace(patternClauseArgs[0].substr(0, indexOfOpeningBracket));
-    std::string firstArgument = StringFormatter::removeTrailingSpace(patternClauseArgs[0].substr(indexOfOpeningBracket+1));
+    std::string firstArgument = std::regex_replace(patternClauseArgs[0].substr(indexOfOpeningBracket+1), std::regex(SINGLE_SPACE), "");
 
     PatternToken patternToken = PatternToken();
     patternToken.synonym = synonym;
