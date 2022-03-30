@@ -10,34 +10,22 @@
 #include <iostream>
 
 vector<ProcName> getAllProcedureCall(Node* node) {
-    if(auto value = dynamic_cast<CallNode*>(node)) {
-        ProcName procName = value->getProcName();
+    auto callNodeValue = dynamic_cast<CallNode*>(node);
+    auto ifNodeValue = dynamic_cast<IfNode*>(node);
+    auto whileNodeValue = dynamic_cast<WhileNode*>(node);
+    auto procedureNodeValue = dynamic_cast<ProcedureNode*>(node);
+    if(callNodeValue) {
+        ProcName procName = callNodeValue->getProcName();
         return vector<ProcName>{procName};
-    } else if (auto value = dynamic_cast<IfNode*>(node)) {
-        vector<Node*> stmtLstNode = value->getStmtLst();
+    } else if (ifNodeValue || whileNodeValue || procedureNodeValue) {
+        vector<Node*> stmtLstNode = node->getStmtLst();
         vector<ProcName> procNameList, e;
         for(Node* s: stmtLstNode) {
             e = getAllProcedureCall(s);
             procNameList.insert(procNameList.end(), e.begin(), e.end());
         }
         return procNameList;
-    } else if (auto value = dynamic_cast<WhileNode*>(node)) {
-        vector<Node*> stmtLstNode = value->getStmtLst();
-        vector<ProcName> procNameList, e;
-        for(Node* s: stmtLstNode) {
-            e = getAllProcedureCall(s);
-            procNameList.insert(procNameList.end(), e.begin(), e.end());
-        }
-        return procNameList;
-    } else if (auto value = dynamic_cast<ProcedureNode*>(node)) {
-        vector<Node*> stmtLstNode = value->getStmtLst();
-        vector<ProcName> procNameList, e;
-        for(Node* s: stmtLstNode) {
-            e = getAllProcedureCall(s);
-            procNameList.insert(procNameList.end(), e.begin(), e.end());
-        }
-        return procNameList;
-    }  else {
+    } else {
         return {};
     };
 }
@@ -53,10 +41,9 @@ bool detectCyclicCallsRec(ProcName name,
         vector<ProcName> nameList = currentNode->getDirectedNodes();
         vector<ProcName>::iterator i;
         for (i = nameList.begin(); i != nameList.end(); ++i) {
-            if (!visited[*i] &&
-                detectCyclicCallsRec(*i, graphNodes, stack, visited))
+            if ((!visited[*i] &&
+                detectCyclicCallsRec(*i, graphNodes, stack, visited)) || stack[*i])
                 return true;
-            else if (stack[*i] == true) return true;
         }
     }
     stack[name] = false;

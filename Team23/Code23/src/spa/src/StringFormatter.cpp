@@ -37,16 +37,13 @@ string StringFormatter::removeMatchingFrontBackBrackets(const string& s) {
             } else if (temp[i] == ')') {
                 bracketCount--;
             }
-            if (bracketCount == 0) {
-                if (i == temp.length() -1) {
-                    temp = temp.substr(1,temp.length()-2);
-                } else {
-                    goto exit_loop;
-                }
+            if (bracketCount == 0 && (i == temp.length() -1)) {
+                temp = temp.substr(1,temp.length()-2);
+            } else if (bracketCount == 0) {
+                return temp;
             }
         }
     }
-    exit_loop:;
     return temp;
 }
 
@@ -57,22 +54,6 @@ string StringFormatter::removeMatchingFrontBackBrackets(const string& s) {
  * @return
  */
 vector<string> StringFormatter::tokenizeByRegex(string s, string regex) {
-    /*
-    std::regex r(regex);
-    string spaced = std::regex_replace(s, r, "//");
-
-    char * sourceAsChar = new char[spaced.size() + 1];
-    char * regexChar = "//";
-    strcpy(sourceAsChar, spaced.c_str());
-    char *token = strtok(sourceAsChar,regexChar);
-    vector<string> v;
-    while (token) {
-        v.push_back(token);
-        token = strtok(NULL, regexChar);
-    }
-    delete [] sourceAsChar;
-    return v;
-    */
     std::regex rgx(regex);
     vector<string> v;
     copy( std::sregex_token_iterator(s.begin(), s.end(), rgx, -1),

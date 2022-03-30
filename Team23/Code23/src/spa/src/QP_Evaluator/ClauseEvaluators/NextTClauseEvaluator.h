@@ -5,17 +5,19 @@
 #ifndef SPA_NEXTTCLAUSEEVALUATOR_H
 #define SPA_NEXTTCLAUSEEVALUATOR_H
 
-#include "SuchThatClauseEvaluator.h"
+#include "CacheClauseEvaluator.h"
+#include "QP_database/NextTOperator.h"
 
-class NextTClauseEvaluator: public SuchThatClauseEvaluator {
+class NextTClauseEvaluator: public CacheClauseEvaluator {
 public:
-    NextTClauseEvaluator (std::vector<Argument> args, PKB* pkb, Query* query) : SuchThatClauseEvaluator(std::move(args), pkb, query) {}
-    RelRef getRelRef() override {return RelRef::NEXT;};
+    NextTClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): CacheClauseEvaluator(declarations, clause, pkb) {}
+    RelRef getRelRef() override {return RelRef::NEXT_T;};
 protected:
     bool isRelation(string left, string right) override;
-    unordered_set<std::string> getLeftSynonymValue(std::string right) override;
-    unordered_set<std::string> getRightSynonymValue(std::string left) override;
+    unordered_set<string> getLeftSynonymValue(string right) override;
+    unordered_set<string> getRightSynonymValue(string left) override;
     pair<DesignEntity, DesignEntity> getWildcardType() override;
+    NextTOperator* nextTOperator = NextTOperator::getInstance();
 };
 
 

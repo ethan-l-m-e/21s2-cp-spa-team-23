@@ -7,46 +7,52 @@
 
 #include "Result.h"
 
-#include <utility>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 #include <vector>
 
-using String2DVector = std::vector<std::vector<std::string>>;
+using std::pair;
+using std::string;
+using std::unordered_map;
+using std::unordered_set;
+using std::vector;
 
+using String2DVector = vector<vector<string>>;
 
 class ResultTable {
 public:
     ResultTable();
-    void setResultTable(std::vector<std::string>, String2DVector);
+    void setResultTable(vector<string>, String2DVector);
     void clearTable();
     void enableBooleanResult();
     bool isBoolean();
     bool isEmpty();
     bool getBooleanResult();
-    std::string getBooleanResultString();
-    std::vector<std::string> *getHeader();
+    string getBooleanResultString();
+    vector<string> *getHeader();
     String2DVector *getList();
-    size_t getTableSize();
+    size_t getTableHeight();
     size_t getTableWidth();
     void setBooleanResult(bool);
-    void appendColumn(std::string, std::vector<std::string>&);
+    void appendColumn(string, vector<string>&);
     void mergeResultToTable(Result &result);
-    void rearrangeSynonyms(std::vector<int>&);
+    void rearrangeSynonyms(vector<int>&);
 
 private:
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
-    void appendHeader(const std::vector<std::string>&);
-    void crossJoinStrings(std::vector<ResultItem>&);
-    void crossJoinTuples(std::vector<ResultItem>&);
-    void innerJoin(size_t, std::vector<ResultItem>&);
-    void innerJoin(std::pair<size_t, size_t>, std::vector<ResultItem>&);
-    void innerJoin(size_t, std::unordered_map<std::string,std::vector<std::string>>);
-    static std::unordered_map<std::string, std::vector<std::string>> convertVectorToMap(std::vector<ResultItem>&, bool);
-    std::unordered_map<std::string, std::vector<std::string>> createSnapShot();
+    void appendHeader(const vector<string>&);
+    void crossJoinStrings(unordered_set<string>&);
+    void crossJoinTuples(unordered_set<pair<string, string>>&);
+    void innerJoin(size_t, unordered_set<string>&);
+    void innerJoin(pair<size_t, size_t>, unordered_set<pair<string, string>>&);
+    void innerJoin(size_t, unordered_map<string,vector<string>>);
+    static unordered_map<string, vector<string>> convertToMap(unordered_set<pair<string, string>>&, bool);
+    unordered_map<string, vector<string>> createSnapShot();
 
-    std::vector<std::string> tableHeader;
+    vector<string> tableHeader;
     String2DVector tableEntries;
     bool isBooleanResult;
     bool booleanResult;

@@ -20,16 +20,6 @@ TEST_CASE("Test straight Nodes") {
 
     CHECK(node1->isStart());
     CHECK(!node2->isStart());
-    CHECK(!node2->isEnd());
-    CHECK(node5->isEnd());
-
-    CHECK(5 == node1->getEndNode()->getStatementNumber());
-    CHECK(5 == node3->getEndNode()->getStatementNumber());
-    CHECK(5 == node5->getEndNode()->getStatementNumber());
-
-    CHECK(1 == node1->getStartNode()->getStatementNumber());
-    CHECK(1 == node3->getStartNode()->getStatementNumber());
-    CHECK(1 == node5->getStartNode()->getStatementNumber());
 
     CHECK(node2->getAllPreviousNode()[1] == node1);
     CHECK(node2 -> getNextNode() == node3);
@@ -53,8 +43,6 @@ TEST_CASE("Branch Nodes") {
     CHECK(node2->getRightNode() == node4);
     CHECK(node5->getAllPreviousNode()[3] == node3);
     CHECK(node5->getAllPreviousNode()[4] == node4);
-    CHECK(node1->getEndNode() == node5);
-    CHECK(node5->getStartNode() == node1);
 }
 
 TEST_CASE("node with imaginary end") {
@@ -70,7 +58,6 @@ TEST_CASE("node with imaginary end") {
 
     CHECK(node2->getLeftNode() == node3);
     CHECK(node2->getRightNode() == node4);
-    CHECK(node1->getEndNode() == node4);
 
 }
 
@@ -115,10 +102,6 @@ TEST_CASE("nested branches with real end") {
     node4->setNextNode(node8);
     node6->setNextNode(node8);
     node7->setNextNode(node8);
-
-
-    CHECK(node1->getEndNode() == node8);
-    CHECK(node8->getStartNode() == node1);
 }
 
 TEST_CASE("nexted Branch; imaginary end") {
@@ -156,8 +139,6 @@ TEST_CASE("nexted Branch; imaginary end") {
     node5->setRightNode(node7);
 
 
-
-    CHECK(node1->getEndNode() == node7);
 }
 
 TEST_CASE("Loop Nodes") {
@@ -168,13 +149,20 @@ TEST_CASE("Loop Nodes") {
     node2->setNextNode(node3);
     NodeCFG* node4 = new NodeCFG(4);
     node3->setNextNode(node4);
-    NodeCFG* node5 = new NodeCFG(5);
+    BranchCFG* node5 = new BranchCFG(5);
     node4->setNextNode(node5);
-    node5->setNextNode(node1);
+    NodeCFG* node6 = new NodeCFG(6);
+    node5->setLeftNode(node6);
+    NodeCFG* node7 = new NodeCFG(7);
+    node5->setLeftNode(node7);
+    node6->setNextNode(node1);
+    node7->setNextNode(node1);
+    NodeCFG* node8 = new NodeCFG(8);
+    node1->setNextNode(node8);
 
     CHECK(node1->isStart());
-    CHECK(node1->isEnd());
     CHECK(node1->getNodeInLoop() == node2);
+    CHECK(vector<int>{2, 3, 4, 5, 6, 7} == node1->generateNodesInLoopList());
 }
 
 

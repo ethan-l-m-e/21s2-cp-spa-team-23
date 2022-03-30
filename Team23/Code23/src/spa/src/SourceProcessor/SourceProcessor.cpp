@@ -17,13 +17,12 @@ void SourceProcessor::run(string filename) {
     // load file
     ifstream file;
     file.open(filename);
-    // preferably throw exception if file invalid
+    // TODO: throw exception if file invalid
     // extract text
     stringstream codeStream;
     codeStream << file.rdbuf();
     string sourceCode = codeStream.str();
     file.close();
-
     Node* programNode = Parser::Parse(sourceCode);
     DesignExtractor::Extract(programNode);
 }

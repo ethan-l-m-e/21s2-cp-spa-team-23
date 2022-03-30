@@ -140,6 +140,13 @@ TEST_CASE("parse with Expression") {
     //expr = Parser::parseExpression(wrongBrackets);
 }
 
+TEST_CASE("parse invalid expression") {
+    string code = "x =  + ";
+    //auto testNode = Parser::parseAssign(code);
+    //BinaryOperatorNode* binNode = *std::get_if<BinaryOperatorNode*>(&testNode);
+    cout << "hello world\n";
+}
+
 TEST_CASE("While parsing") {
     string code = "while (number > 0) { X = a;\nwhile (number > 0) { X = a; } }";
     auto testNode = Parser::parseWhile(code);

@@ -1,0 +1,40 @@
+procedure branchSet {
+                    x = y;
+                    if(x < y) then {
+                        x = y;
+                    } else {
+                        if(x < y) then {
+                            read x;
+                            y = x;
+                        } else {
+                            if(x < y) then {
+                                y = x;
+                            } else {
+                                y = x;
+                            }
+                        }
+                    }
+                 }
+
+procedure proc1 {
+                        if(x < 1) then {
+                        print x;
+                        print y;
+                        print z;
+                        read ddd;} else {
+                        while (s < a){
+                        while (a < b) {
+                        read s; }}}
+                        x = x + 1;
+                        while (s < a) {
+                        x = x + 1;
+                        if(s < a) then {
+                        x = x + 1; } else {
+                        x = x + 1;}
+                        }
+                        }
+                        procedure proc2 {
+                        x = x + 1;
+                        x = x + 1;
+                        x = x + 1;
+                        }

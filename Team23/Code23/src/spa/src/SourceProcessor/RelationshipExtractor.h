@@ -22,6 +22,8 @@ public:
     static vector<string> extractUses(Node*);
     static void extractCFG(Node*);
     static void extractRelationships(Node*);
+
+    static void extractCalls(Node *node, vector<ProcedureNode *> parentList, ProcedureNode* latestProc);
 };
 
 

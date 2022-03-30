@@ -6,7 +6,7 @@ Select c
 1 -  vars
 variable v;
 Select v
-variable1, variable2, variable3
+variable1, variable2, variable3, X, Y, Z, a, left, right
 5000
 2 - pattern spacing
 assign a;
@@ -38,3 +38,9 @@ stmt s; call c;
 Select s pattern s(_, _) such that Parent(c, _)
 none
 5000
+8 - procedure
+procedure p;
+Select p
+test, test2, test3, test4
+5000
+

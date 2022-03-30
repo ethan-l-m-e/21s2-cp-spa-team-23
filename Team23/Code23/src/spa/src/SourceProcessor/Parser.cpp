@@ -12,9 +12,7 @@ using namespace std;
 #include "Parser.h"
 #include "TNode/Node.cpp"
 #include "Constants/Constants.h"
-#include "Constants/regex.h"
 #include "Identifier.h"
-//#include "RelationshipExtractor.h"
 #include "StringFormatter.h"
 #include "SourceTokenizer.h"
 
@@ -25,9 +23,6 @@ Identifier identifier;
 string extractFrontStringByRegex(string sourceCode, string regex);
 
 Node* Parser::Parse (string sourceCode) {
-    //extract relationship entities from AST and transmit data to PKB
-    //TODO: replace parseProcedure with parseMain/parseProgram
-    //StatementList statementList = Parser::parseStatementList(sourceCode);
     auto programNode = parseProgram(sourceCode);
     return programNode;
 }
@@ -91,6 +86,8 @@ Expression Parser::parseExpression(string expression) {
     }
     vector<string> tokens;
     SourceTokenizer::extractExpression(expression, tokens);
+    if(tokens[0] == "") throw "left side of binary operator cannot be empty";
+    if(tokens[1] == "") throw "right side of binary operator cannot be empty";
     Expression left = parseExpression(tokens[0]);
     Expression right = parseExpression(tokens[1]);
     return new BinaryOperatorNode(left, right, tokens[2]);

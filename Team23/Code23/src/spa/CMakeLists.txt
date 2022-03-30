@@ -35,7 +35,7 @@ file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/Cache/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/Cache/CachedRelationships/*.h"
         )
-add_library(spa ${srcs} ${headers} src/SourceProcessor/SemanticsVerifier.cpp src/SourceProcessor/SemanticsVerifier.h src/SourceProcessor/GraphNode.cpp src/SourceProcessor/GraphNode.h src/SourceProcessor/EntityExtractor.cpp src/SourceProcessor/EntityExtractor.h src/SourceProcessor/DesignExtractor.h)
+add_library(spa ${srcs} ${headers})
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

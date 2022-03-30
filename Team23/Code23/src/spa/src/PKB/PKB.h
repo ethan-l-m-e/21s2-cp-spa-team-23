@@ -1,6 +1,6 @@
 #pragma once
 
-#include<stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -68,6 +68,9 @@ public:
 
         ManyToManyRelationship modifiesS;
         ManyToManyRelationship modifiesP;
+
+        ManyToManyRelationship<string, string> calls;
+        ManyToManyRelationship<string, string> callsT;
 
         NextRelationship next;
 

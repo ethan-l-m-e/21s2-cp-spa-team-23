@@ -5,6 +5,8 @@
 #include <utility>
 #include "QP_Evaluator/QueryEvaluator.h"
 #include "SourceProcessor/Parser.h"
+#include "SourceProcessor/DesignExtractor.h"
+
 #pragma once
 
 using ArgList = std::vector<Argument>;
@@ -14,9 +16,12 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<A
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<SuchThatClause> suchThatClauses, vector<PatternClause> patternClauses);
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<SuchThatClause> suchThatClauses);
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<PatternClause> patternClauses);
+Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<WithClause> withClauses);
 ResultSet generateResultSet (list<string> result);
 ResultSet evaluateAndCreateResultSet(QueryEvaluator *qe, Query *query);
 PKB* generateSamplePKB();
-PKB* generateSamplePKBForPatternMatching();
+PKB* generateSamplePKBForPatternMatchingAssign();
+PKB* generateSamplePKBForPatternMatchingCondition();
+PKB* constructPKBWithParser(string);
 vector<unordered_map<int, NodeCFG*>> constructCFGForTesting();
 vector<unordered_map<int, NodeCFG*>> constructCFGForSamplePKB();

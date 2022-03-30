@@ -1,0 +1,25 @@
+procedure Attributes {
+    call CalledProc1;
+    while (cond == true) {
+        read readVar;
+    }
+    if (cond == false) then {
+        print printVar;
+    } else {
+        modifiedVar = 0;
+    }
+}
+procedure CalledProc1 {
+    call CalledProc2;
+    while (cond == true) {
+        read readVar1;
+    }
+    if (cond == false) then {
+        print printVar1;
+    } else {
+        assignedVar1 = 1;
+    }
+}
+procedure CalledProc2 {
+    assignedVar2 = x;
+}

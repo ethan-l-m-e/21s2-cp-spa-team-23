@@ -15,7 +15,9 @@
 int switchCaseOrError(int, bool);
 
 int Identifier::identifyFirstObject(string sourceCode) {
-    string firstLine = StringFormatter::extractFrontStringByRegex(sourceCode, "\n");
+    std::smatch sm;
+    std::regex_search (sourceCode, sm, std::regex(STMT_IDENTIFIER));
+    std::string firstLine = sm[0];
     firstLine = StringFormatter::removeTrailingSpace(firstLine);
     if (regex_match(firstLine, std::regex(PROCEDURE_IDENTIFIER))) {
         bool isCorrect = checkParenthesesClosure(sourceCode, "{}");
@@ -79,15 +81,15 @@ bool Identifier::checkParenthesesClosure(string code, string brackets) {
         if (startedCount == true && count == 0) {
             return true;
         } else if (code[i]== bracketLeft) {
-            startedCount = true;
             count++;
         } else if (code[i] == bracketRight) {
-            startedCount = true;
             count--;
-            if ( count < 0) {
-                cout << "excessive " << bracketRight <<"\n";
-                return false;
-            }
+        }
+
+        startedCount = true;
+        if (count < 0) {
+            cout << "excessive " << bracketRight <<"\n";
+            return false;
         }
     }
 
@@ -116,10 +118,11 @@ bool Identifier::checkParenthesesCorrectness(string code, string brackets)  {
             count++;
         } else if (code[i] == bracketRight) {
             count--;
-            if ( count < 0) {
-                cout << "excessive " << bracketRight <<"\n";
-                return false;
-            }
+        }
+
+        if (count < 0) {
+            cout << "excessive " << bracketRight <<"\n";
+            return false;
         }
     }
 

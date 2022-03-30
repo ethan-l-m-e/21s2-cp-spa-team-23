@@ -13,7 +13,6 @@ using namespace qp;
 QueryToken Tokenizer::getQueryToken(std::string query) {
     QueryToken queryToken = QueryToken();
 
-    // check if length of query is non-zero
     if (query.length() == 0) {
         return queryToken;
     }
@@ -21,7 +20,6 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
     // Replace all newlines in the query
     query = std::regex_replace(query, regex("\n"), "");
 
-    // Gets all the different tokens
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
     getSuchThatClauseTokens(query, queryToken);
@@ -33,7 +31,6 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
 
 void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
     std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, DECLARATIONS_LINE)[0];
-    // Separates declarations by design entities
     std::vector<std::string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, SPLIT_DESIGN_ENTITIES);
     splitDeclarations(declarationsToken, queryToken);
 }

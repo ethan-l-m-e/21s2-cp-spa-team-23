@@ -12,21 +12,21 @@
 using namespace std;
 
 void SourceTokenizer::extractCall(string sourceCode, vector<string> &v) {
-    int call = sourceCode.find("call")+4;
+    int call = sourceCode.find("call") + CALL_SIZE;
     int end = sourceCode.find(';');
     string procName = StringFormatter::removeTrailingSpace(sourceCode.substr(call, end - call));
     v.push_back(procName);
 }
 
 void SourceTokenizer::extractRead(string sourceCode, vector<string> &v) {
-    int read = sourceCode.find("read")+4;
+    int read = sourceCode.find("read") + READ_SIZE;
     int end = sourceCode.find(';');
     string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(read, end - read));
     v.push_back(varname);
 }
 
 void SourceTokenizer::extractPrint(string sourceCode, vector<string> &v) {
-    int print = sourceCode.find("print")+5;
+    int print = sourceCode.find("print") + PRINT_SIZE;
     int end = sourceCode.find(';');
     string varname = StringFormatter::removeTrailingSpace(sourceCode.substr(print, end - print));
     v.push_back(varname);
@@ -43,7 +43,7 @@ void SourceTokenizer::extractAssign(string sourceCode, vector<string> &v) {
     v.push_back(expr);
 }
 void SourceTokenizer::extractIfElseThen(string sourceCode, vector<string> &v) {
-    string condBlock = StringFormatter::tokenizeByRegex(sourceCode, "[ ]*if[ ]*\\(|\\)[ ]*then[ ]*\\{")[0];
+    string condBlock = StringFormatter::tokenizeByRegex(sourceCode, "( |\n|\t)*if( |\n|\t)*\\(|\\)( |\n|\t)*then( |\n|\t)*\\{")[0];
     v.push_back(condBlock);
 
     vector<string> thenElse = StringFormatter::partitionBasedOnParentheses(sourceCode, "{}");
@@ -64,7 +64,7 @@ void SourceTokenizer::extractIfElseThen(string sourceCode, vector<string> &v) {
 }
 
 void SourceTokenizer::extractWhile(string sourceCode, vector<string> &v) {
-    int startOfCond = sourceCode.find("while")+5;
+    int startOfCond = sourceCode.find("while") + WHILE_SIZE;
     int endOfCond = sourceCode.find('{');
     string cond = sourceCode.substr(startOfCond, endOfCond-startOfCond);
     cond = StringFormatter::removeFrontBackBrackets(cond);
@@ -89,57 +89,23 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
     int exprPos = -1;
     while(true) {
         for (int i = sourceCode.length()-1; i >= 0; i--) {
-            switch (sourceCode[i]) {
-                case ('+'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('-'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case (')'):
-                    bracketCheck++;
-                    break;
-                case ('('):
-                    bracketCheck--;
-                    break;
-                default:
-                    break;
+            if ((sourceCode[i] == '+' || sourceCode[i] == '-') && bracketCheck == 0) {
+                exprPos = i;
+                goto exit_loop;
+            } else if (sourceCode[i] == ')') {
+                bracketCheck++;
+            } else if (sourceCode[i] == '(') {
+                bracketCheck--;
             }
         }
         for (int i = sourceCode.length()-1; i >= 0; i--) {
-            switch (sourceCode[i]) {
-                case ('*'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('/'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case ('%'):
-                    if (bracketCheck == 0) {
-                        exprPos = i;
-                        goto exit_loop;
-                    }
-                    break;
-                case (')'):
-                    bracketCheck++;
-                    break;
-                case ('('):
-                    bracketCheck--;
-                    break;
-                default:
-                    break;
+            if ((sourceCode[i] == '*' || sourceCode[i] == '/' || sourceCode[i] == '%') && bracketCheck == 0) {
+                exprPos = i;
+                goto exit_loop;
+            } else if (sourceCode[i] == ')') {
+                bracketCheck++;
+            } else if (sourceCode[i] == '(') {
+                bracketCheck--;
             }
         }
 
@@ -161,12 +127,13 @@ void SourceTokenizer::extractExpression(string sourceCode, vector<string> &v) {
 
 void SourceTokenizer::extractCondExpr(string sourceCode, vector<string> &v) {
     string left, right, oper;
-    if(regex_match(sourceCode, std::regex("[ ]*![ ]*\\((.*)\\)[ ]*"))) {
+    sourceCode = StringFormatter::removeMatchingFrontBackBrackets(sourceCode);
+    if(regex_match(sourceCode, std::regex("( |\n|\t)*!( |\n|\t)*\\((.*)\\)( |\n|\t)*"))) {
         int pos = sourceCode.find("!");
         sourceCode = StringFormatter::removeTrailingSpace(sourceCode.substr(pos + 1, sourceCode.size()));
         string removedBrackets = sourceCode.substr(1, sourceCode.size() - 2);
         extractCondExpr(removedBrackets, v);
-    }else if(regex_match(sourceCode, std::regex("\\((.*)\\)[ ]*\\&\\&[ ]*\\((.*)\\)|\\((.*)\\)[ ]*\\|\\|[ ]*\\((.*)\\)"))) {
+    }else if(regex_match(sourceCode, std::regex("\\((.|\n)*\\)( |\n|\t)*\\&\\&( |\n|\t)*\\((.|\n)*\\)|\\((.|\n)*\\)( |\n|\t)*\\|\\|( |\n|\t)*\\((.|\n)*\\)"))) {
         vector<string> partition = StringFormatter::partitionBasedOnParentheses(sourceCode, "()");
         string front = StringFormatter::removeTrailingSpace(partition[0]);
         string opAndBack = partition[1];
@@ -174,7 +141,6 @@ void SourceTokenizer::extractCondExpr(string sourceCode, vector<string> &v) {
         oper = opAndBack.substr(0,2);
         string back = StringFormatter::removeTrailingSpace(opAndBack.substr(2, opAndBack.size()));
         right = StringFormatter::removeTrailingSpace(back.substr(1, back.size() - 2));
-        cout << right << "\n";
     } else {        //rel_expr
         left = "";
         right = StringFormatter::removeTrailingSpace(sourceCode);

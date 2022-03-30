@@ -4,28 +4,17 @@
 
 #include "QueryEvaluator.h"
 #include "QP_Parser/Exception.h"
-#include "QP_Evaluator/ClauseEvaluators/FollowsClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/ParentClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/PatternClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/ResultClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/FollowsTClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/ParentTClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/ModifiesSClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/UsesSClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/ModifiesPClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/UsesPClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/NextClauseEvaluator.h"
-#include "QP_Evaluator/ClauseEvaluators/NextTClauseEvaluator.h"
+#include "QP_Evaluator/ClauseEvaluators/ClauseEvaluatorCollection.h"
 
-std::list<std::string> QueryEvaluator::evaluate(Query* query) {
+list<string> QueryEvaluator::evaluate(Query* query) {
 
     // Initialise an empty synonym relations for storing intermediate result
     auto* resultTable = new ResultTable();
 
-    // Create ClauseEvaluators and evaluate each of the pattern clause
+    // Create ClauseEvaluators and evaluate each pattern clause
     if(query->hasPatternClause() && resultTable->getBooleanResult()) {
-        for(const PatternClause& clause : query->getPatternClauses()) {
-            auto patternClauseEvaluator = new PatternClauseEvaluator(clause.synonymType, clause.argList, pkb, query);
+        for(PatternClause& clause : *query->getPatternClauses()) {
+            auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), &clause, pkb);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation early.
@@ -33,10 +22,10 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
-    // Create ClauseEvaluators and evaluate each of the suchThat clause
+    // Create ClauseEvaluators and evaluate each suchThat clause
     if(query->hasSuchThatClause() && resultTable->getBooleanResult()) {
-        for(const SuchThatClause& clause : query->getSuchThatClauses()) {
-            auto suchThatClauseEvaluator = generateEvaluator(clause, query);
+        for(SuchThatClause& clause : *query->getSuchThatClauses()) {
+            auto suchThatClauseEvaluator = generateEvaluator(clause, *query->getDeclarations());
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
@@ -44,12 +33,23 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
+    // Create ClauseEvaluators and evaluate each with clause
+    if(query->hasWithClause() && resultTable->getBooleanResult()) {
+        for(WithClause& clause : *query->getWithClauses()) {
+            auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), &clause, pkb);
+            bool withResult = withClauseEvaluator->evaluateClause(resultTable);
+            delete withClauseEvaluator;
+            // if the clause evaluates to false, terminate evaluation and output an empty list.
+            if (!withResult) break;
+        }
+    }
+
     // Evaluate result clause and output the result
-    auto* resultClauseEvaluator = new ResultClauseEvaluator(pkb, query);
+    auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
     delete resultClauseEvaluator;
     if (!result) return {};
-    std::list<std::string> output = generateResultString(resultTable);
+    list<string> output = generateResultString(resultTable);
     delete resultTable;
     return output;
 }
@@ -60,29 +60,38 @@ std::list<std::string> QueryEvaluator::evaluate(Query* query) {
  * @param query  a Query object pointer
  * @return  a pointer for the generated ClauseEvaluator.
  */
-ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause, Query* query) {
+ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, unordered_map<string, DesignEntity>& declarations) {
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
-            return new FollowsClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<OneToOneRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.follows);
         case RelRef::PARENT:
-            return new ParentClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<OneToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.parent);
         case RelRef::FOLLOWS_T:
-            return new FollowsTClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.followsT);
         case RelRef::PARENT_T:
-            return new ParentTClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.parentT);
         case RelRef::USES_S:
-            return new UsesSClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, string>>(&declarations, &clause, pkb, &pkb->relationship.usesS);
         case RelRef::MODIFIES_S:
-            return new ModifiesSClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<ManyToManyRelationship<int, string>>(&declarations, &clause, pkb, &pkb->relationship.modifiesS);
         case RelRef::USES_P:
-            return new UsesPClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.usesP);
         case RelRef::MODIFIES_P:
-            return new ModifiesPClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.modifiesP);
+        case RelRef::CALLS:
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.calls);
+        case RelRef::CALLS_T:
+            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.callsT);
         case RelRef::NEXT:
-            return new NextClauseEvaluator(clause.argList, pkb, query);
+            return new TableClauseEvaluator<NextRelationship>(&declarations, &clause, pkb, &pkb->relationship.next);
         case RelRef::NEXT_T:
-            return new NextTClauseEvaluator(clause.argList, pkb, query);
-       default:
+            return new NextTClauseEvaluator(&declarations, &clause, pkb);
+        case RelRef::AFFECTS:
+            return new AffectsClauseEvaluator(&declarations, &clause, pkb);
+        case RelRef::AFFECTS_T:
+            return new AffectsTClauseEvaluator(&declarations, &clause, pkb);
+
+        default:
             throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
 }
@@ -92,14 +101,14 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(const SuchThatClause& clause,
  * @param result  an ResultTable containing the final result
  * @return  a list of strings representing the result items
  */
-std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
-    std::unordered_set<std::string> stringSet;
+list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
+    std::unordered_set<string> stringSet;
 
     if (resultTable->isBoolean()) {
         stringSet.insert(resultTable->getBooleanResultString());
     } else if (!resultTable->isEmpty()) {
-        for(int i = 0; i < resultTable->getTableSize(); i++) {
-            std::string s;
+        for(int i = 0; i < resultTable->getTableHeight(); i++) {
+            string s;
             for (auto &col: *resultTable->getList()) {
                 if (!s.empty()) s += " ";
                 s += col[i];
@@ -107,6 +116,6 @@ std::list<std::string> QueryEvaluator::generateResultString(ResultTable* resultT
             stringSet.insert(s);
         }
     }
-    return std::list<std::string> {std::begin(stringSet), std::end(stringSet)};
+    return list<string> {std::begin(stringSet), std::end(stringSet)};
 }
 

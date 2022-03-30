@@ -7,14 +7,18 @@
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     return query;
 }
 
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<SuchThatClause> suchThatClauses, vector<PatternClause> patternClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     query.setSuchThatClauses(std::move(suchThatClauses));
     query.setPatternClauses(std::move(patternClauses));
     return query;
@@ -23,7 +27,9 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<A
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<SuchThatClause> suchThatClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     query.setSuchThatClauses(std::move(suchThatClauses));
     return query;
 }
@@ -31,7 +37,9 @@ Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<A
 Query makeQuery(unordered_map<string, DesignEntity>& declarations, std::vector<Argument> synonyms, vector<PatternClause> patternClauses) {
     Query query;
     query.setDeclarations(declarations);
-    query.setSynonyms(std::move(synonyms));
+    ResultClause resultClause = ResultClause();
+    resultClause.argList = synonyms;
+    query.setResultClause(resultClause);
     query.setPatternClauses(std::move(patternClauses));
     return query;
 }
@@ -200,6 +208,9 @@ PKB* generateSamplePKB() {
     testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z", "a", "b"});
     testPKB->relationship.usesP.setRelationship("pr", unordered_set<string>{"y"});
 
+    testPKB->relationship.calls.setRelationship("prop", unordered_set<string>{"pr"});
+    testPKB->relationship.callsT.setRelationship("prop", unordered_set<string>{"pr"});
+
     vector<unordered_map<int, NodeCFG*>> v = constructCFGForSamplePKB();
     unordered_map<int, NodeCFG *> allNodes = v[0];
 
@@ -212,7 +223,7 @@ PKB* generateSamplePKB() {
     return testPKB;
 }
 
-PKB* generateSamplePKBForPatternMatching() {
+PKB* generateSamplePKBForPatternMatchingAssign() {
     /**
      * Original. DO NOT DELETE OR MODIFY UNLESS YOU KNOW WHAT YOU ARE DOING.
      *    x = y;        // test var
@@ -281,6 +292,49 @@ PKB* generateSamplePKBForPatternMatching() {
 
     return testPKB;
 }
+
+PKB* generateSamplePKBForPatternMatchingCondition() {
+    PKB *testPKB = PKB::getInstance();
+    testPKB->clearPKB();
+    Parser::resetStatementNumber();
+    string wh1le = "while";
+    string filler = "{print x;}";
+    string If = "if";
+    string th3n = "then";
+    string els3 = "else";
+
+    string if_filler = th3n + filler + els3 + filler;
+
+    string w1 = wh1le + "(x < y)" + filler;
+    string w2 = wh1le + "(1 == 2)" + filler;
+    string w3 = wh1le + "(!((x + 3) < (y + 2)))" + filler;
+    string a4 = "z = (y + (3 - z)) + 1;";
+    string i5 = If + "(x < y)" + if_filler;
+
+    WhileNode* n1 = Parser::parseWhile(w1);
+    WhileNode* n2 = Parser::parseWhile(w2);
+    WhileNode* n3 = Parser::parseWhile(w3);
+
+    testPKB->statement.statements.addStatement(n1);
+    testPKB->statement.statements.addStatement(n2);
+    testPKB->statement.statements.addStatement(n3);
+
+    testPKB->statement.whileStatements.addStatement(n1);
+    testPKB->statement.whileStatements.addStatement(n2);
+    testPKB->statement.whileStatements.addStatement(n3);
+
+    AssignNode* n4 = Parser::parseAssign(a4);
+    testPKB->statement.statements.addStatement(n4);
+    testPKB->statement.assignStatements.addStatement(n4);
+
+    IfNode* n5 = Parser::parseIf(i5);
+    testPKB->statement.statements.addStatement(n5);
+    testPKB->statement.ifStatements.addStatement(n5);
+    return testPKB;
+}
+
+
+
 
 PKB* generateAttrRefPKB() {
     string s1 = "a = b + c + d + h + i;";
@@ -412,6 +466,7 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForTesting() {
     return vector<unordered_map<int, NodeCFG*>>{allNodes, rootNodes};
 }
 
+
 vector<unordered_map<int, NodeCFG*>> constructCFGForSamplePKB() {
     NodeCFG* node1 = new NodeCFG(1);
     NodeCFG* node2 = new NodeCFG(2);
@@ -452,4 +507,12 @@ vector<unordered_map<int, NodeCFG*>> constructCFGForSamplePKB() {
     allNodes[11] = node11;
     unordered_map<int, NodeCFG*> rootNodes;
     return vector<unordered_map<int, NodeCFG*>>{allNodes, rootNodes};
+}
+
+PKB* constructPKBWithParser(string sourceCode) {
+    PKB *testPKB = PKB::getInstance();
+    testPKB->clearPKB();
+    Parser::resetStatementNumber();
+    DesignExtractor::Extract(Parser::Parse(sourceCode));
+    return testPKB;
 }
