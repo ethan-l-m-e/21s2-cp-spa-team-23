@@ -1158,52 +1158,67 @@ stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
 Select s5 such that Next(s, s1) and Next(s1, s2) and Next(s2, s3) and Next(s3, s4) and Next(s4, s5) and Next(s5, s6) and Next(s6, s7) and Next(s7, s8) and Next(s8, s9) and Next(s9, s10)
 4, 5, 6, 7
 5000
-229 - (2 pattern)
+229 - (30 such that)
+stmt s;
+Select s such that Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _) and Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+230 - (30 such that)
+stmt s;
+Select s such that Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+232 - (30 such that)
+stmt s;
+Select s such that Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _) and Affects*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+233 - (2 pattern)
 assign a;
 Select a pattern a ("a", _) pattern a (_, _"a"_)
 7, 12
 5000
-230 - (3 pattern)
+234 - (3 pattern)
 assign a; variable v;
 Select a pattern a ("a", _) pattern a (_, _"a"_) pattern a (v, "a")
 7, 12
 5000
-231 - (2 pattern 1 such that)1
+235 - (2 pattern 1 such that)1
 assign a;
 Select a pattern a ("a", _) such that Next(a, _) pattern a (_, _"a"_)
 7
 5000
-232 - (2 pattern 1 such that)2
+236 - (2 pattern 1 such that)2
 assign a;
 Select a such that Next(a, _) pattern a ("a", _) pattern a (_, _"a"_)
 7
 5000
-233 - (2 pattern 1 such that)3
+237 - (2 pattern 1 such that)3
 assign a;
 Select a pattern a ("a", _) pattern a (_, _"a"_) such that Next(a, _)
 7
 5000
-234 - (5 alternating pattern and such that)
+238 - (5 alternating pattern and such that)
 assign a;
 Select a pattern a ("a", _) such that Next(a, _) pattern a ("a", _) such that Next(a, _) pattern a ("a", _)
 7
 5000
-235 - (5 alternating pattern and such that)
+239 - (5 alternating pattern and such that)
 assign a; stmt s; variable v;
 Select s such that Uses(s, v) pattern a (v, "a") pattern a ("a", _) such that Follows(s, _) pattern a (v, _"a"_) such that Modifies(s, _)
 3, 8
 5000
-236 - (syntactically invalid) ======================================================================[invalid tests start]
+240 - (syntactically invalid) ======================================================================[invalid tests start]
 assign a; while w;
 Select a such that Parent* (w, a) and Modifies (a, "x") and such that Next* (1, a)
 none
 5000
-237 (syntactically invalid)
+241 (syntactically invalid)
 assign a; while w;
 Select a such that Parent* (w, a) and pattern a ("x", _) such that Next* (1, a)
 none
 5000
-238 (syntactically invalid)
+242 (syntactically invalid)
 assign a; while w;
 Select a such that Parent* (w, a) pattern a ("x", _) and Next* (1, a)
 none

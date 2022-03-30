@@ -1,129 +1,269 @@
 ../../../../Tests23/attributes_source.txt ../../../../Tests23/attributes_queries.txt ../../../tests/attributes_out.xml
 procedure p;
-Select p with p.procName = "CalledProc"
-CalledProc
+Select p with p.procName = "CalledProc2"
+CalledProc2
 5000
-1 - [not valid] procName does not exist
+1 - [valid] procedure procName lhs
+procedure p;
+Select p with "CalledProc2" = p.procName
+CalledProc2
+5000
+2 - [valid] procName does not exist
 procedure p;
 Select p with p.procName = "NonExistentProcName"
 none
 5000
-2 - [valid] call procName
+3 - [valid] procName does not exist lhs
+procedure p;
+Select p with "NonExistentProcName" = p.procName
+none
+5000
+4 - [valid] call procName
 call c;
 Select c with c.procName = "CalledProc1"
 1
 5000
-3 - [not valid] call procName does not exist
+5 - [valid] call procName lhs
+call c;
+Select c with "CalledProc1" = c.procName
+1
+5000
+6 - [valid] call procName does not exist
 call c;
 Select c with c.procName = "NonExistentProcName"
 none
 5000
-4 - [valid] read varName
+7 - [valid] call procName does not exist lhs
+call c;
+Select c with "NonExistentProcName" = c.procName
+none
+5000
+8 - [valid] read varName
 read r;
 Select r with r.varName = "readVar1"
-8
+9
 5000
-5 - [not valid] read varName does not exist
+9 - [valid] read varName lhs
+read r;
+Select r with "readVar1" = r.varName
+9
+5000
+10 - [valid] read varName does not exist
 read r;
 Select r with r.varName = "readVar7"
 none
 5000
-6 - [valid] print varName
-print p;
-Select p with p.varName = "printVar"
-5
-5000
-7 - [not valid] print varName does not exist
-print p;
-Select p with p.varName = "name"
+11 - [valid] read varName does not exist lhs
+read r;
+Select r with "readVar7" = r.varName
 none
 5000
-8 - [valid] const value
-const c;
+12 - [valid] print varName
+print pr;
+Select pr with pr.varName = "printVar"
+5
+5000
+13 - [valid] print varName lhs
+print pr;
+Select pr with "printVar" = pr.varName
+5
+5000
+14 - [valid] print varName does not exist
+print pr;
+Select pr with pr.varName = "name"
+none
+5000
+15 - [valid] print varName does not exist lhs
+print pr;
+Select pr with "name" = pr.varName
+none
+5000
+16 - [valid] const value
+constant c;
 Select c with c.value = 0
 0
 5000
-9 - [not valid] const value does not exist
-const c;
+17 - [valid] const value lhs
+constant c;
+Select c with 0 = c.value
+0
+5000
+18 - [valid] const value does not exist
+constant c;
 Select c with c.value = 9000
 none
 5000
-10 - [valid] stmt stmt#
+19 - [valid] const value does not exist lhs
+constant c;
+Select c with 9000 = c.value
+none
+5000
+20 - [valid] stmt stmt#
 stmt s;
 Select s with s.stmt# = 12
 12
 5000
-11 - [not valid] stmt stmt# does not exist
+21 - [valid] stmt stmt# lhs
+stmt s;
+Select s with 12 = s.stmt#
+12
+5000
+22 - [valid] stmt stmt# does not exist
 stmt s;
 Select s with s.stmt# = 14
 none
 5000
-12 - [valid] read stmt#
+23 - [valid] stmt stmt# does not exist lhs
+stmt s;
+Select s with 14 = s.stmt#
+none
+5000
+24 - [valid] read stmt#
 read r;
 Select r with r.stmt# = 3
 3
 5000
-13 - [not valid] read stmt# does not exist
+25 - [valid] read stmt# lhs
+read r;
+Select r with 3 = r.stmt#
+3
+5000
+26 - [valid] read stmt# does not exist
 read r;
 Select r with r.stmt# = 4
 none
 5000
-14 - [valid] print stmt#
-print p;
-Select p with p.stmt# = 5
-5
-5000
-15 - [not valid] print stmt# does not exist
-print p;
-Select p with p.stmt# = 6
+27 - [valid] read stmt# does not exist lhs
+read r;
+Select r with 4 = r.stmt#
 none
 5000
-16 - [valid] while stmt#
+28 - [valid] print stmt#
+print pr;
+Select pr with pr.stmt# = 5
+5
+5000
+29 - [valid] print stmt# lhs
+print pr;
+Select pr with 5 = pr.stmt#
+5
+5000
+30 - [valid] print stmt# does not exist
+print pr;
+Select pr with pr.stmt# = 6
+none
+5000
+31 - [valid] print stmt# does not exist lhs
+print pr;
+Select pr with 6 = pr.stmt#
+none
+5000
+32 - [valid] while stmt#
 while w;
 Select w with w.stmt# = 8
 8
 5000
-17 - [not valid] while stmt# does not exist
+33 - [valid] while stmt# lhs
+while w;
+Select w with 8 = w.stmt#
+8
+5000
+34 - [valid] while stmt# does not exist
 while w;
 Select w with w.stmt# = 9
 none
 5000
-18 - [valid] if stmt#
+35 - [valid] while stmt# does not exist lhs
+while w;
+Select w with 9 = w.stmt#
+none
+5000
+36 - [valid] if stmt#
 if ifs;
 Select ifs with ifs.stmt# = 4
 4
 5000
-19 - [not valid] if stmt# does not exist
+37 - [valid] if stmt# lhs
+if ifs;
+Select ifs with 4 = ifs.stmt#
+4
+5000
+38 - [valid] if stmt# does not exist
 if ifs;
 Select ifs with ifs.stmt# = 5
 none
 5000
-20 - [valid] assign stmt#
+39 - [valid] if stmt# does not exist lhs
+if ifs;
+Select ifs with 5 = ifs.stmt#
+none
+5000
+40 - [valid] assign stmt#
 assign a;
 Select a with a.stmt# = 13
 13
 5000
-21 - [not valid] assign stmt# does not exist
+41 - [valid] assign stmt# lhs
+assign a;
+Select a with 13 = a.stmt#
+13
+5000
+42 - [valid] assign stmt# does not exist
 assign a;
 Select a with a.stmt# = 1
 none
 5000
-22 - [valid] call stmt#
+43 - [valid] assign stmt# does not exist lhs
+assign a;
+Select a with 1 = a.stmt#
+none
+5000
+44 - [valid] call stmt#
 call c;
 Select c with c.stmt# = 1
 1
 5000
-23 - [not valid] call stmt# does not exist
+45 - [valid] call stmt# lhs
+call c;
+Select c with 1 = c.stmt#
+1
+5000
+46 - [valid] call stmt# does not exist
 call c;
 Select c with c.stmt# = 2
 none
 5000
-24 - [valid] stmt const = const
+47 - [valid] call stmt# does not exist lhs
+call c;
+Select c with 2 = c.stmt#
+none
+5000
+48 - [valid] stmt const = const
 stmt s;
 Select s with 12 = 12
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
-25 - [valid] select stmt# =====================================================================[select attr tests start]
+49 - [valid] stmt const =/= const
+stmt s;
+Select s with 12 = 13
+none
+5000
+50 - [valid] stmt var == var
+stmt s;
+Select s with "var" = "var"
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+51 - [valid] stmt var =/= var
+stmt s;
+Select s with "var" = "notVar"
+none
+5000
+52 - [valid] stmt var =/= const
+stmt s;
+Select s with "readVar" = 1
+none
+5000
+52 - [valid] select stmt# =====================================================================[select attr tests start]
 stmt s;
 Select s.stmt#
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
@@ -131,10 +271,10 @@ Select s.stmt#
 26 - [valid] select varName
 variable v;
 Select v.varName
-cond, true, readVar, printVar, modifiedVar, readVar1, printVar1, assignedVar1, assignedVar2, x
+cond, true, false, readVar, printVar, modifiedVar, readVar1, printVar1, assignedVar1, assignedVar2, x
 5000
 27 - [valid] select value
-const c;
+constant c;
 Select c.value
 0, 1
 5000
@@ -188,3 +328,4 @@ procedure p;
 Select p.procName
 Attributes, CalledProc1, CalledProc2
 5000
+
