@@ -11,7 +11,7 @@ void NextRelationship::clear() {
 void NextRelationship::addCFGNode(NodeCFG *node) {
     int statementNumber = node->getStatementNumber();
 
-    statementNumberToCfgNodeMap.emplace(statementNumber, node);
+    statementNumberToCfgNodeMap.emplace(std::to_string(statementNumber), node);
 
 }
 
@@ -25,7 +25,7 @@ bool NextRelationship::isRelationship(string previousStatementNumber, string nex
 
 unordered_set<string> NextRelationship::getLHS(string nextStatementNumber) {
 
-    NodeCFG *node = statementNumberToCfgNodeMap[std::stoi(nextStatementNumber)];
+    NodeCFG *node = statementNumberToCfgNodeMap[nextStatementNumber];
 
     unordered_set<string> statementNumbers;
 
@@ -42,7 +42,7 @@ unordered_set<string> NextRelationship::getLHS(string nextStatementNumber) {
 
 unordered_set<string> NextRelationship::getRHS(string previousStatementNumber) {
 
-    NodeCFG *node = statementNumberToCfgNodeMap[std::stoi(previousStatementNumber)];
+    NodeCFG *node = statementNumberToCfgNodeMap[previousStatementNumber];
 
     unordered_set<string> setNextStatementNumbers;
 
@@ -81,7 +81,7 @@ unordered_set<string> NextRelationship::getRHS(string previousStatementNumber) {
 
 
 NodeCFG* NextRelationship::getCFGNode(string statementNumber) {
-    return statementNumberToCfgNodeMap[std::stoi(statementNumber)];
+    return statementNumberToCfgNodeMap[statementNumber];
 }
 
 int NextRelationship::getCFGSize() {

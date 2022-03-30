@@ -24,11 +24,10 @@ bool WithClauseEvaluator::evaluateClause(ResultTable* resultTable) {
         unordered_set<string> resultItems = compareAttributes(rightResult, std::get<string>(argLeft.argumentValue));
         result = makeResult(synonym, resultItems);
     } else {
-        return std::get<string>(argLeft.argumentValue) == std::get<string>(argRight.argumentValue);
+        bool isEqual = std::get<string>(argLeft.argumentValue) == std::get<string>(argRight.argumentValue);
+        result = makeResult(isEqual);
     }
-
-    processResult(resultTable);
-    return true;
+    return processResult(resultTable);
 }
 
 unordered_set<pair<string, string>> WithClauseEvaluator::compareAttributes(unordered_map<string, string> leftMap, unordered_map<string, string> rightMap) {

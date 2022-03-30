@@ -6,18 +6,19 @@
 
 
 bool CachedAffectsTRelationship::isRelationship(string lhs, string rhs) {
-    return false;
+    bool defaultReturn = CachedManyToManyRelationship::isRelationship(lhs, lhs);
+
+    return defaultReturn;
 }
 
 unordered_set<string> CachedAffectsTRelationship::getRHS(string lhs) {
-    return unordered_set<string>();
+    unordered_set<string> defaultReturn = CachedManyToManyRelationship::getRHS(lhs);
+
+    return defaultReturn;
 }
 
 unordered_set<string> CachedAffectsTRelationship::getLHS(string rhs) {
-    return unordered_set<string>();
+    unordered_set<string> defaultReturn = CachedManyToManyRelationship::getLHS(rhs);
+
+    return defaultReturn;
 }
-
-void CachedAffectsTRelationship::clear() {
-
-}
-
