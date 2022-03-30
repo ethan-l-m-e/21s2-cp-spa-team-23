@@ -174,26 +174,32 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID SELECT CLAUSE TESTS") {
 
     // Select clause with tuple: Select and with as synonym names
     query = "variable Select, with; Select <Select, with>";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with tuple: Attribute References
     query = "variable Select, with; Select <p.procName, s.stmt#, v.varName, c.value>";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - procName
     query = "procedure p; Select p.procName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - varName
     query = "procedure p; Select p.varName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - value
     query = "procedure p; Select p.value";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Select clause with AttrRef - stmt#
     query = "procedure p; Select p.stmt#";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -202,42 +208,52 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID SELECT CLAUSE QUERIES") {
 
     // Select clause with int as synonym
     std::string query = "variable v; \n Select 123";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Lower case select clause
     query = "variable v; \n select v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Misspelled select clause
     query = "variable v; \n Selec v1";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // No select clause
     query = "variable v;";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Tuple: Invalid bracket
     query = "variable v; Select <example)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Tuple: Invalid brackets
     query = "variable v; Select (example)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Tuple: Invalid semicolon
     query = "procedure p1, p2; Select <p1; p2>";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Tuple: Invalid semicolon after synonym
     query = "procedure p1, p2; Select p1;";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Missing Select synonym
     query = "procedure p1, p2; Select such that Follows(s1, s2)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Invalid synonym
     query = "procedure p1, p2; Select stmt#";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
@@ -246,26 +262,32 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID FOLLOWS CLAUSE QUERIES") {
 
     // Synonym First argument
     std::string query = "stmt s; Select s such that Follows(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; Select s such that Follows(_, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; Select s such that Follows(5, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; Select s such that Follows(3, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; Select s such that Follows(s, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer Second argument
     query = "stmt s; Select s such that Follows(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -274,26 +296,32 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID FOLLOWS* CLAUSE QUERIES") {
 
     // Synonym First argument
     std::string query = "stmt s; Select s such that Follows*(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; Select s such that Follows*(_, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; Select s such that Follows*(5, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; Select s such that Follows*(3, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; Select s such that Follows*(s, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer Second argument
     query = "stmt s; Select s such that Follows*(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -302,26 +330,32 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID PARENT CLAUSE QUERIES") {
 
     // Synonym First argument
     std::string query = "stmt s; Select s such that Parent(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; Select s such that Parent(_, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; Select s such that Parent(5, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; Select s such that Parent(3, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; Select s such that Parent(s, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer Second argument
     query = "stmt s; Select s such that Parent(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -330,26 +364,32 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID PARENT* CLAUSE QUERIES") {
 
     // Synonym First argument
     std::string query = "stmt s; Select s such that Parent*(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; Select s such that Parent*(_, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; Select s such that Parent*(5, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; Select s such that Parent*(3, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; Select s such that Parent*(s, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer Second argument
     query = "stmt s; Select s such that Parent*(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -358,30 +398,37 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: USES CLAUSE VALID QUERIES") {
 
     // Synonym first argument
     std::string query = "stmt s; variable v; Select s such that Uses(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Uses(_, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; variable v; Select s such that Uses(5, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident first argument
     query = "stmt s; variable v; Select s such that Uses(\"x\", v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; variable v; Select s such that Uses(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Uses(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident second argument
     query = "stmt s; variable v; Select s such that Uses(v, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -390,30 +437,37 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: MODIFIES CLAUSE VALID QUERIES") {
 
     // Synonym first argument
     std::string query = "stmt s; variable v; Select s such that Modifies(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Modifies(_, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; variable v; Select s such that Modifies(5, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident first argument
     query = "stmt s; variable v; Select s such that Modifies(\"x\", v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; variable v; Select s such that Modifies(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Modifies(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident second argument
     query = "stmt s; variable v; Select s such that Modifies(v, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -422,26 +476,32 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID NEXT CLAUSE QUERIES") {
 
     // Synonym First argument
     std::string query = "stmt s; Select s such that Next(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; Select s such that Next(_, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; Select s such that Next(5, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; Select s such that Next(3, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; Select s such that Next(s, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer Second argument
     query = "stmt s; Select s such that Next(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -450,26 +510,32 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID NEXT* CLAUSE QUERIES") {
 
     // Synonym First argument
     std::string query = "stmt s; Select s such that Next*(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; Select s such that Next*(_, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; Select s such that Next*(5, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; Select s such that Next*(3, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; Select s such that Next*(s, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer Second argument
     query = "stmt s; Select s such that Next*(s, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -478,26 +544,32 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID CALLS QUERIES") {
 
     // Synonym first argument
     std::string query = "stmt s; variable v; Select s such that Calls(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; variable v; Select s such that Calls(_, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident first argument
     query = "stmt s; variable v; Select s such that Calls(\"x\", v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; variable v; Select s such that Calls(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Calls(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident second argument
     query = "stmt s; variable v; Select s such that Calls(v, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -506,26 +578,32 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID CALLS* QUERIES") {
 
     // Synonym first argument
     std::string query = "stmt s; variable v; Select s such that Calls*(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; variable v; Select s such that Calls*(_, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident first argument
     query = "stmt s; variable v; Select s such that Calls*(\"x\", v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; variable v; Select s such that Calls*(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Calls*(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Ident second argument
     query = "stmt s; variable v; Select s such that Calls*(v, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -534,26 +612,32 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID FFECTS QUERIES") {
 
     // Synonym first argument
     std::string query = "stmt s; variable v; Select s such that Affects(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; variable v; Select s such that Affects(_, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; variable v; Select s such that Affects(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; variable v; Select s such that Affects(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Affects(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer second argument
     query = "stmt s; variable v; Select s such that Affects(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -562,26 +646,32 @@ TEST_CASE("QP SYNTACTIC VALIDATOR: VALID AFFECTS* QUERIES") {
 
     // Synonym first argument
     std::string query = "stmt s; variable v; Select s such that Affects*(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard first argument
     query = "stmt s; variable v; Select s such that Affects*(_, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer first argument
     query = "stmt s; variable v; Select s such that Affects*(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Synonym second argument
     query = "stmt s; variable v; Select s such that Affects*(s, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Wildcard second argument
     query = "stmt s; variable v; Select s such that Affects*(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Integer second argument
     query = "stmt s; variable v; Select s such that Affects*(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -590,14 +680,17 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: MULTIPLE SUCH THAT CLAUSES") {
 
     // Such that relationship and relationship and relationship
     std::string query = "stmt s; variable v; Select s such that Modifies(v, _) and Follows(3, 2) and Next*(s, 4)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Multiple such that clauses
     query = "stmt s; variable v; Select s such that Modifies(v, _) such that Follows(3, 2) and Next*(s, 4) such that Affects(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Check attr names as arguments
     query = "stmt s; variable v; Select s such that Modifies(procName, varName) such that Follows(3, 2) and Affects*(value, 4)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -606,134 +699,167 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID SUCH THAT CLAUSE QUERIES") {
 
     // No space for such that
     std::string query = "stmt s; variable v; Select s suchthat Modifies(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // misspelled such that
     query = "stmt s; variable v; Select s such tht Modifies(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // misspelled modifies clause
     query = "stmt s; variable v; Select s such tht Modifie(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect caps for modifies clause
     query = "stmt s; variable v; Select s such tht modifies(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident first argument for Follows
     query = "stmt s; variable v; Select s such tht Follows(\"x\", 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident second argument for Follows
     query = "stmt s; variable v; Select s such tht Follows(2, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident first argument for Follows*
     query = "stmt s; variable v; Select s such tht Follows*(\"x\", 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident second argument for Follows*
     query = "stmt s; variable v; Select s such tht Follows*(2, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident first argument for Parent
     query = "stmt s; variable v; Select s such tht Parent(\"x\", 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident second argument for Parent
     query = "stmt s; variable v; Select s such tht Parent(2, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident first argument for Parent*
     query = "stmt s; variable v; Select s such tht Parent*(\"x\", 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident second argument for Parent*
     query = "stmt s; variable v; Select s such tht Parent*(2, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect integer first argument for Uses
     query = "stmt s; variable v; Select v such tht Uses(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect integer second argument for Uses
     query = "stmt s; variable v; Select v such tht Uses(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect integer first argument for Modifies
     query = "stmt s; variable v; Select v such tht Modifies(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect second argument for Modifies
     query = "stmt s; variable v; Select v such tht Modifies(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident first argument for Next
     query = "stmt s; variable v; Select s such tht Next(\"x\", 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident second argument for Next
     query = "stmt s; variable v; Select s such tht Next(2, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident first argument for Next*
     query = "stmt s; variable v; Select s such tht Next*(\"x\", 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect ident second argument for Next*
     query = "stmt s; variable v; Select s such tht Next*(2, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect integer first argument for Affects
     query = "stmt s; variable v; Select v such tht Affects(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect second argument for Affects
     query = "stmt s; variable v; Select v such tht Affects(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect integer first argument for Affects*
     query = "stmt s; variable v; Select v such tht Affects*(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect second argument for Affects*
     query = "stmt s; variable v; Select v such tht Affects*(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect integer first argument for Calls
     query = "stmt s; variable v; Select v such tht Calls(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect second argument for Calls
     query = "stmt s; variable v; Select v such tht Calls(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect integer first argument for Calls*
     query = "stmt s; variable v; Select v such tht Calls*(3, v)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Incorrect second argument for Affects*
     query = "stmt s; variable v; Select v such tht Affects*(v, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // pattern followed by such that
     query = "stmt s; variable v; Select v such tht pattern a1(v1, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // pattern followed by such that
     query = "stmt s; variable v; Select v such tht pattern(v1, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // pattern followed by such that
     query = "stmt s; variable v; Select v such tht Uses(v1, _) and pattern a1(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // pattern followed by such that
     query = "stmt s; variable v; Select v such tht Uses(v1, _) and a1(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // with clause followed by such that
     query = "stmt s; variable v; Select v such tht Uses(v1, _) and p.procName=p2.procName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
@@ -742,58 +868,72 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID PATTERN CLAUSE QUERIES") {
 
     // Simple pattern clause
     std::string query = "assign a; Select a pattern a(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with double char syn-assign
     query = "assign a; Select a pattern ab(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with char+int syn-assign
     query = "assign a; Select a pattern a1(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with synonym for first argument
     query = "assign a; stmt s; Select a pattern a1(s, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with ident for first argument
     query = "assign a; stmt s; Select a pattern a1(\"x\", _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with partial wildcard for second argument
     query = "assign a; stmt s; Select a pattern a1(_, _\"x\"_)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with ident for second argument
     query = "assign a; stmt s; Select a pattern a1(_, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with pattern for syn-assign
     query = "assign a; stmt s; Select pattern pattern pattern(_, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with Select for syn-assign
     query = "assign a; stmt s; Select Select pattern Select(_, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern with 3 wildcard arguments
     query = "assign a; stmt s; Select Select pattern a(_, _, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern and pattern and pattern
     query = "assign a; stmt s; Select Select pattern a(_, _, _) and a1 (_, _) and a2(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern and pattern pattern
     query = "assign a; stmt s; Select Select pattern a(_, _, _) and a1 (_, _) pattern a2(v, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern and pattern synonym named Follows
     query = "assign a; stmt s; Select Select pattern a(_, _, _) and Follows (_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Pattern arguments attr names
     query = "assign a; stmt s; Select Select pattern a(varName, _, _) and a1 (procName, _) pattern a2(value, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
@@ -802,50 +942,62 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID PATTERN QUERIES") {
 
     // Pattern with integer as first argument
     std::string query = "assign a; stmt s; Select Select pattern Select(3, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with integer as second argument
     query = "assign a; stmt s; Select a pattern a(_, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with integer as third argument
     query = "assign a; stmt s; Select a pattern a(_, _, 3)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with ident as third argument
     query = "assign a; stmt s; Select a pattern a(_, _, \"x\")";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with partial wildcard as first argument
     query = "assign a; stmt s; Select a pattern a(_\"x\"_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with partial wildcard as third argument
     query = "assign a; stmt s; Select a pattern a(_, _, _\"x\"_)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with synonym for second argument
     query = "assign a; stmt s; Select a pattern a(_, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with synonym for third argument
     query = "assign a; stmt s; Select a pattern a(_, _, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern with integer as syn-assign
     query = "assign a; stmt s; Select a pattern 3(_, s)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern and invalid pattern
     query = "assign a; stmt s; Select a pattern a(_, _) and pattern a(_, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // 4 arguments for pattern
     query = "assign a; stmt s; Select a pattern a(_, _, _, _)";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // Pattern and with clause
     query = "assign a; stmt s; Select a pattern a(_, _, _) and p.procName=\"x\"";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
@@ -854,54 +1006,67 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID WITH CLAUSE QUERIES") {
 
     // With clause with procName attribute
     std::string query = "assign a; procedure p1, p2; Select a with p1.procName=p2.procName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with varName attribute
     query = "assign a; procedure p1, p2; Select a with p1.varName=p2.varName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with value attribute
     query = "assign a; procedure p1, p2; Select a with p1.value=p2.value";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with stmt# attribute
     query = "assign a; procedure p1, p2; Select a with p1.stmt#=p2.stmt#";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with ident as first argument
     query = "assign a; procedure p1, p2; Select a with \"x\"=p2.procName";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with integer as first argument
     query = "assign a; procedure p1, p2; Select a with 3=p2.stmt#";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with ident as second argument
     query = "assign a; procedure p1, p2; Select a with p1.procName=\"x\"";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with integer as second argument
     query = "assign a; procedure p1, p2; Select a with p2.stmt#=3";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause and with clause and with clause
     query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 and p1.procName=\"x\" and p1.value=4";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Multiple with clauses
     query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 with p1.procName=\"x\" with p1.value=4";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // Multiple with clauses with 'and'
     query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 with p1.procName=\"x\" and p1.value=4";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with synonym called 'with'
     query = "assign a; procedure p1, p2; Select a with with.stmt#=3";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
     // With clause with synonym called 'procName'
     query = "assign a; procedure p1, p2; Select a with procName.stmt#=3";
+    query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 }
 
