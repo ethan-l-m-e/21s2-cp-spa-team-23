@@ -19,6 +19,9 @@ protected:
 
     void addToHistory(string lhs, string rhs);
 
+public:
+    void clear() override;
+
 };
 
 

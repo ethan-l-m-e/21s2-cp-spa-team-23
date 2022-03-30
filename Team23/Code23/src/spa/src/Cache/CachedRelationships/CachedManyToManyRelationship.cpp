@@ -16,3 +16,8 @@ void CachedManyToManyRelationship::addToHistory(string lhs, string rhs) {
 
     history.insert(tup);
 }
+
+void CachedManyToManyRelationship::clear() {
+    ManyToManyRelationship::clear();
+    history.clear();
+}
