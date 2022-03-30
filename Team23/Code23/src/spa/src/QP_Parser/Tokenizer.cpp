@@ -16,13 +16,13 @@ std::string Tokenizer::lexicalTokens(std::string pql) {
     std::string reconstructedQuery;
 
     reconstructedQuery = "";
-    pql = std::regex_replace(pql, std::regex("^\\s+"), "");
+    pql = std::regex_replace(pql, std::regex(WHITESPACE), "");
 
     while (std::regex_search (pql, sm, std::regex(LEXICAL_TOKENS))) {
         std::string x = sm[0];
         reconstructedQuery += x + " ";
         pql = sm.suffix().str();
-        pql = std::regex_replace(pql, std::regex("^\\s+"), "");
+        pql = std::regex_replace(pql, std::regex(WHITESPACE), "");
     }
 
     if (!pql.empty()) {
@@ -167,7 +167,7 @@ void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
     for (std::string withClause : withClauseStrings) {
         // Removes spaces and tabs
         withClause = std::regex_replace(withClause, std::regex(SINGLE_SPACE), "");
-        std::vector<std::string> withClauseArgs = StringFormatter::tokenizeByRegex(withClause, SPLIT_EQUALS);
+        std::vector<std::string> withClauseArgs = StringFormatter::tokenizeByRegex(withClause, EQUALS);
         withClauses->push_back(std::make_pair(withClauseArgs[0], withClauseArgs[1]));
     }
 

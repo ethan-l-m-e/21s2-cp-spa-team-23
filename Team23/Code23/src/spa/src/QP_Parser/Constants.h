@@ -105,7 +105,6 @@ std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*|Next|Next\\*)"
 std::string const VARIABLE_RS = "(Modifies|Uses)";
 std::string const CALLS_RS = "(Calls|Calls\\*)";
 std::string const PATTERN_SYNONYMS = "(if|while|assign)";
-std::string const SYN_ARG = "(\"" + IDENT + "\"|_)";
 std::string const INT_WILDCARD = "(_|" + INTEGER + ")";
 std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|" + INTEGER + ")";
 std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";
@@ -121,7 +120,8 @@ std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ ]+|<|>)";
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 std::string const PATTERN_ARGUMENTS = ",";
 
-std::string const SPLIT_EQUALS = "=";
+std::string const EQUALS = "=";
+std::string const WHITESPACE = "^\\s+";
 std::string const CLAUSES = "(^" + SUCH_THAT_CL + "|^" + PATTERN_CL + "|^" + WITH_CL + ")";
 
 int const SELECT_LENGTH = 6;

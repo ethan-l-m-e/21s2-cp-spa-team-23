@@ -23,15 +23,16 @@ void Validator::validateQueryStructure(std::string pql) {
 void Validator::checkForSemantics(QueryToken& queryToken) {
     std::set<std::string> declarationSet = convertVectorToSet(queryToken.declarations->first);
 
-    validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
-
-    validateSelectClauseTokens(declarationSet, *(queryToken.selectClauseTokens), *(queryToken.declarationTokens));
-
-    validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
-
-    validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
-
-    validateWithClauses(*(queryToken.withClauses), *(queryToken.declarationTokens));
+    try {
+        validateDeclarations(declarationSet, queryToken.declarations->first.size(), queryToken.declarations->second);
+        validateSelectClauseTokens(declarationSet, *(queryToken.selectClauseTokens), *(queryToken.declarationTokens));
+        validatePatterns(*(queryToken.declarationTokens), *(queryToken.patternTokens));
+        validateSuchThatClauses(*(queryToken.declarationTokens), *(queryToken.suchThatClauseTokens));
+        validateWithClauses(*(queryToken.withClauses), *(queryToken.declarationTokens));
+    } catch (QPInvalidSemanticException e) {
+        Tokenizer::cleanQueryToken(queryToken);
+        throw e;
+    }
 }
 
 void Validator::validateDeclarations(std::set<std::string> declarationSet, int length, std::vector<std::string> designEntities) {

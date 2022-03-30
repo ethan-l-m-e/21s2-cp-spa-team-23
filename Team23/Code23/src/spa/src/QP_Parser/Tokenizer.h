@@ -39,8 +39,8 @@ namespace qp {
     class Tokenizer {
     public:
         static std::string lexicalTokens(std::string);
+        static void cleanQueryToken(QueryToken&);
         QueryToken getQueryToken(std::string);
-        void cleanQueryToken(QueryToken&);
     private:
         void getDeclarationTokens(std::string, QueryToken&);
         void getSelectClauseTokens(std::string, QueryToken&);

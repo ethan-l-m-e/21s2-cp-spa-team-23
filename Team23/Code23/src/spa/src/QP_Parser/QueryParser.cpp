@@ -15,6 +15,7 @@ Query QueryParser::getQuery(std::string pql) {
     Tokenizer tokenizer = Tokenizer();
     Validator validator = Validator();
 
+    // reconstruct query based on lexical tokens
     pql = Tokenizer::lexicalTokens(pql);
 
     validator.validateQueryStructure(pql);
@@ -28,7 +29,7 @@ Query QueryParser::getQuery(std::string pql) {
     getPattern(queryToken, query);
     getWithClauses(queryToken, query);
 
-    tokenizer.cleanQueryToken(queryToken);
+    Tokenizer::cleanQueryToken(queryToken);
 
     return query;
 };
