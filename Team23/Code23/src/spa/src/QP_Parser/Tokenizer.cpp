@@ -109,7 +109,7 @@ void Tokenizer::getSuchThatClauseTokens(std::string pql, QueryToken& queryToken)
 }
 
 SuchThatClauseToken Tokenizer::convertStringToSuchThatClauseToken(std::string suchThatClause) {
-    suchThatClause = std::regex_replace(suchThatClause, std::regex(SINGLE_SPACE_TAB), "");
+    suchThatClause = std::regex_replace(suchThatClause, std::regex(SINGLE_SPACE), "");
     std::vector<std::string> suchThatClauseArgs = StringFormatter::tokenizeByRegex(suchThatClause, SPLIT_SUCH_THAT_CLAUSE);
 
     SuchThatClauseToken suchThatClauseToken = SuchThatClauseToken();
@@ -166,7 +166,7 @@ void Tokenizer::getWithClauseToken(std::string pql, QueryToken& queryToken) {
 
     for (std::string withClause : withClauseStrings) {
         // Removes spaces and tabs
-        withClause = std::regex_replace(withClause, std::regex(SINGLE_SPACE_TAB), "");
+        withClause = std::regex_replace(withClause, std::regex(SINGLE_SPACE), "");
         std::vector<std::string> withClauseArgs = StringFormatter::tokenizeByRegex(withClause, SPLIT_EQUALS);
         withClauses->push_back(std::make_pair(withClauseArgs[0], withClauseArgs[1]));
     }

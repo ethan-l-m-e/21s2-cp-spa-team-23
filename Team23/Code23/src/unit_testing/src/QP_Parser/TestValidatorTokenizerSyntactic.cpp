@@ -1085,7 +1085,8 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID WITH CLAUSE QUERIES") {
 
     // With clause with invalid synonym
     query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName";
-    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // With clause and pattern
     query = "assign a; procedure p1, p2; Select a with p1.procName=p2.procName and a (_, _)";
@@ -1094,11 +1095,13 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: INVALID WITH CLAUSE QUERIES") {
 
     // With clause and Follows
     query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName and Follows (_, _)";
-    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // With clause and pattern
     query = "assign a; procedure p1, p2; Select a with 1.procName=p2.procName and pattern a (_, _)";
-    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 }
 
 TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID MULTI CLAUSES QUERIES") {
@@ -1592,7 +1595,8 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: RANDOM SPACES AND TABS") {
 
     // incorrect spacing for with clause
     query = "assign a; procedure p; Select p with p.proc Name = \"x\"";
-    REQUIRE_THROWS(Tokenizer::lexicalTokens(query));
+    query = Tokenizer::lexicalTokens(query);
+    REQUIRE_THROWS(validator.validateQueryStructure(query));
 
     // incorrect spacing for with clause
     query = "assign a; procedure p; Select p wi th p.procName = \"x\"";
