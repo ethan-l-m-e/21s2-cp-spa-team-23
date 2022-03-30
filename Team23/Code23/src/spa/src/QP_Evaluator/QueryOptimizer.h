@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <map>
 #include <iostream>
+
 class DisjointSet {
 public:
     DisjointSet(int size) : root(size) {
@@ -41,7 +42,7 @@ typedef struct GroupedClause {
     int group;
     bool operator <(const GroupedClause & other) const
     {
-        return group < other.group;
+        return group < other.group; // compare group number
     }
 } GroupedClause;
 

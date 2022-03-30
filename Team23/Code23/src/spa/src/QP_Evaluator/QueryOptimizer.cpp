@@ -7,6 +7,8 @@
 std::vector<GroupedClause> QueryOptimizer::groupClauses(){
     std::map<string, int> synonymIndices;
     vector<Clause*> allClauses;
+
+    // add all clauses into a single vector
     for(auto& patternClause : *query->getPatternClauses()) {
         allClauses.emplace_back(&patternClause);
     }
@@ -16,16 +18,25 @@ std::vector<GroupedClause> QueryOptimizer::groupClauses(){
     for(auto& withClause : *query->getWithClauses()) {
         allClauses.emplace_back(&withClause);
     }
-    auto n = allClauses.size();
+
+    // disjoint set algorithm is used to identify which group a synonym belongs to
     DisjointSet ds(int(query->getDeclarations()->size()));
+
+    // synonym indices maps each synonym to an integer (1 to n+1), which is used in disjoint set algorithm.
     for(auto iter = query->getDeclarations()->begin(); iter != query->getDeclarations()->end(); ++iter){
         auto index = std::distance(query->getDeclarations()->begin(), iter);
         synonymIndices[iter->first] = int(index + 1);
     }
-    std::vector<GroupedClause> rearrangedClauses;
 
-    std::map<Clause*, int> groupIdentifier;
-    for(int i = 0; i < n; i ++) {
+    std::vector<GroupedClause> rearrangedClauses; // the output vector, initially empty
+    std::map<Clause*, int> groupIdentifier; // stores the mapping from each clause to one of its synonyms (0 for clauses without synonyms)
+
+    /*
+     * for each clause, get all its synonyms. For cases with more than 1 synonym, join them under the same group.
+     * set one of its synonym's index as the group identifier for the clause, which will be used to retrieve the group no. at the end.
+     */
+    auto numOfClauses = allClauses.size();
+    for(int i = 0; i < numOfClauses; i ++) {
         std::vector<int> synonyms;
         for(const Argument& a : allClauses[i]->argList) {
             if(a.argumentType == ArgumentType::SYNONYM) {
@@ -46,12 +57,16 @@ std::vector<GroupedClause> QueryOptimizer::groupClauses(){
         }
     }
 
-    for(int i = 0; i < n; i ++) {
+    // GroupedClause stores a pointer to the clause and the group number for the clause, append it to the output vector
+    for(int i = 0; i < numOfClauses; i ++) {
         int synonym = groupIdentifier.at(allClauses[i]);
         rearrangedClauses.emplace_back(GroupedClause{allClauses[i], ds.find(synonym)});
     }
 
+    // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
     std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
+
+    // for testing
     /*
     for(GroupedClause gc : rearrangedClauses) {
         if (dynamic_cast<WithClause*>(gc.clause)) {
