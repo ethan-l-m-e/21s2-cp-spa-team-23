@@ -95,10 +95,10 @@ std::string const ATTR_COND = ATTR_COMPARE + "(" + SINGLE_SPACE_TAB + "and" + SI
 std::string const WITH_CL = SPACE_TAB + "with" + SINGLE_SPACE_TAB + ATTR_COND;
 
 
-std::string const SELECT_CL = "( |\n|\t)*Select( |\n|\t)+" + RESULT_CL + "(" + SINGLE_SPACE_TAB + SUCH_THAT_CL
+std::string const SELECT_CL = SPACE_TAB + "Select" + SINGLE_SPACE_TAB + RESULT_CL + "(" + SINGLE_SPACE_TAB + SUCH_THAT_CL
         + "|" + SINGLE_SPACE_TAB + PATTERN_CL + "|" + SINGLE_SPACE_TAB + WITH_CL + ")*" + SPACE_TAB;
-std::string const DECLARATION_REGEX = "(( |\n|\t)*" + DECLARATION+ ")+";
-std::string const PQL_FORMAT = DECLARATION_REGEX + SELECT_CL + "( |\t|\n)*";
+std::string const DECLARATION_REGEX = "(" + SPACE_TAB + DECLARATION+ ")+";
+std::string const PQL_FORMAT = DECLARATION_REGEX + SELECT_CL + SPACE_TAB;
 
 // regex needed for semantic validation
 std::string const STMT_RS = "(Follows|Follows\\*|Parent|Parent\\*|Next|Next\\*)";
@@ -121,6 +121,6 @@ std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t|\n]+|<|>)";
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 std::string const PATTERN_ARGUMENTS = ",";
 
-std::string const SPLIT_EQUALS = "[ |\\t]*=[ |\\t]*";
+std::string const SPLIT_EQUALS = "[ |\t]*=[ |\t]*";
 
 int const SELECT_LENGTH = 6;

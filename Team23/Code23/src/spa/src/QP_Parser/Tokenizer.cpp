@@ -1,6 +1,7 @@
 #include "Tokenizer.h"
 #include "StringFormatter.h"
 #include "Constants.h"
+#include "Exception.h"
 
 #include <string>
 #include <utility>
@@ -25,7 +26,9 @@ std::string Tokenizer::lexicalTokens(std::string pql) {
         pql = std::regex_replace(pql, std::regex("^\\s+"), std::string(""));
     }
 
-    // TODO: throw error of pql size not 0
+    if (!pql.empty()) {
+        throw QPTokenizerException("Invalid Syntax");
+    }
 
     return reconstructedQuery;
 }
@@ -46,7 +49,7 @@ QueryToken Tokenizer::getQueryToken(std::string query) {
     return queryToken;
 }
 
-void Tokenizer::getDeclarationTokens(std::string pql, QueryToken& queryToken) {
+void Tokenizer::getDeclarationTokens(std::string& pql, QueryToken& queryToken) {
     std::string allDeclarationsOnly = StringFormatter::tokenizeByRegex(pql, DECLARATIONS_LINE)[0];
     std::vector<std::string> declarationsToken = StringFormatter::tokenizeByRegex(allDeclarationsOnly, SPLIT_DESIGN_ENTITIES);
     splitDeclarations(declarationsToken, queryToken);

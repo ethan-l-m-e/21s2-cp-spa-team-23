@@ -42,7 +42,7 @@ namespace qp {
         QueryToken getQueryToken(std::string);
         void cleanQueryToken(QueryToken&);
     private:
-        void getDeclarationTokens(std::string, QueryToken&);
+        void getDeclarationTokens(std::string&, QueryToken&);
         void getSelectClauseTokens(std::string, QueryToken&);
         void getSuchThatClauseTokens(std::string, QueryToken&);
         void getPatternClauseTokens(std::string, QueryToken&);
