@@ -33,9 +33,9 @@ TEST_CASE("Test single") {
     Argument as = {ArgumentType::SYNONYM, "s"};
     Argument a0 = {ArgumentType::BOOLEAN, ""};
 
-    ResultClause clause_v = {ArgList{av}};
-    ResultClause clause_s = {ArgList{as}};
-    ResultClause clause_0 = {ArgList{a0}};
+    ResultClause clause_v = ResultClause(ArgList{av});
+    ResultClause clause_s = ResultClause(ArgList{as});
+    ResultClause clause_0 = ResultClause(ArgList{a0});
 
     auto *resultTable = new ResultTable();
     SECTION("select single") {
@@ -79,16 +79,16 @@ TEST_CASE("Test tuple results") {
     Argument ac1 = {ArgumentType::ATTR_REF, make_pair("c", AttrName::PROC_NAME)};
     Argument av1 = {ArgumentType::ATTR_REF, make_pair("v", AttrName::VAR_NAME)};
 
-    ResultClause clause_s_a = {ArgList{as, aa}};
-    ResultClause clause_s_pn1 = {ArgList{as, apn1}};
-    ResultClause clause_pn_pn1 = {ArgList{apn, apn1}};
-    ResultClause clause_a_a1 = {ArgList{aa, aa1}};
-    ResultClause clause_a_a1_a1 = {ArgList{aa, aa1, aa1}};
-    ResultClause clause_s_pn1_pn1_pn = {ArgList{as, apn1, apn1, apn}};
-    ResultClause clause_pn_r_r_pn1_r1 = {ArgList{apn, ar, ar, apn1, ar1}};
-    ResultClause clause_r1_pn1_pn_a_r = {ArgList{ar1, apn1, apn, aa, ar}};
-    ResultClause clause_r1_pn1_c1 = {ArgList{ar1, apn1, ac1}};
-    ResultClause clause_a_v1 = {ArgList{aa, av1}};
+    ResultClause clause_s_a = ResultClause(ArgList{as, aa});
+    ResultClause clause_s_pn1 = ResultClause(ArgList{as, apn1});
+    ResultClause clause_pn_pn1 = ResultClause(ArgList{apn, apn1});
+    ResultClause clause_a_a1 = ResultClause(ArgList{aa, aa1});
+    ResultClause clause_a_a1_a1 = ResultClause(ArgList{aa, aa1, aa1});
+    ResultClause clause_s_pn1_pn1_pn = ResultClause(ArgList{as, apn1, apn1, apn});
+    ResultClause clause_pn_r_r_pn1_r1 = ResultClause(ArgList{apn, ar, ar, apn1, ar1});
+    ResultClause clause_r1_pn1_pn_a_r = ResultClause(ArgList{ar1, apn1, apn, aa, ar});
+    ResultClause clause_r1_pn1_c1 = ResultClause(ArgList{ar1, apn1, ac1});
+    ResultClause clause_a_v1 = ResultClause(ArgList{aa, av1});
 
     auto *resultTable = new ResultTable();
     SECTION("select tuples") {

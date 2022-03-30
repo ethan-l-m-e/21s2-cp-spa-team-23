@@ -58,11 +58,11 @@ TEST_CASE("Query with false clauses") {
     Argument wild = {ArgumentType::UNDERSCORE, "_"};
 
 
-    SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS}; //true
-    SuchThatClause clause_5_6 = {ArgList{a5, a6},RelRef::FOLLOWS}; //false
-    SuchThatClause clause_6_5 = {ArgList{a6, a5},RelRef::NEXT}; //false
-    PatternClause clause_a_0_0 = {ArgList{aa, wild, wild}, SynonymType::ASSIGN}; //true
-    PatternClause clause_a_0_w = {ArgList{aa, wild, aw}, SynonymType::ASSIGN}; //false
+    SuchThatClause clause_4_5 = SuchThatClause(ArgList{a4, a5}, RelRef::FOLLOWS); //true
+    SuchThatClause clause_5_6 = SuchThatClause(ArgList{a5, a6}, RelRef::FOLLOWS); //false
+    SuchThatClause clause_6_5 = SuchThatClause(ArgList{a6, a5},RelRef::NEXT); //false
+    PatternClause clause_a_0_0 = PatternClause(ArgList{aa, wild, wild}, SynonymType::ASSIGN); //true
+    PatternClause clause_a_0_w = PatternClause(ArgList{aa, wild, aw}, SynonymType::ASSIGN); //false
 
 
     Query query_1 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}}, {clause_5_6});
@@ -118,13 +118,13 @@ TEST_CASE("Multi clauses") {
     Argument a4 = {ArgumentType::STMT_NO, "4"};
     Argument a5 = {ArgumentType::STMT_NO, "5"};
 
-    SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::FOLLOWS};
-    SuchThatClause clause_s2_s3 = {ArgList{as2, as3},RelRef::FOLLOWS};
-    SuchThatClause clause_s2_5 = {ArgList{as2, a5},RelRef::FOLLOWS};
-    SuchThatClause clause_s1_s3 = {ArgList{as1, as3},RelRef::FOLLOWS};
-    SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::FOLLOWS};
-    SuchThatClause clause_s2_0 = {ArgList{as2, a0},RelRef::FOLLOWS};
-    SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS};
+    SuchThatClause clause_s1_s2 = SuchThatClause(ArgList{as1, as2},RelRef::FOLLOWS);
+    SuchThatClause clause_s2_s3 = SuchThatClause(ArgList{as2, as3},RelRef::FOLLOWS);
+    SuchThatClause clause_s2_5 = SuchThatClause(ArgList{as2, a5},RelRef::FOLLOWS);
+    SuchThatClause clause_s1_s3 = SuchThatClause(ArgList{as1, as3},RelRef::FOLLOWS);
+    SuchThatClause clause_s1_0 = SuchThatClause(ArgList{as1, a0},RelRef::FOLLOWS);
+    SuchThatClause clause_s2_0 = SuchThatClause(ArgList{as2, a0},RelRef::FOLLOWS);
+    SuchThatClause clause_4_5 = SuchThatClause(ArgList{a4, a5},RelRef::FOLLOWS);
 
     Query query_0 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s1"}}, {clause_s1_s2, clause_4_5});
     Query query_1 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "s1"}}, {clause_s1_s2, clause_s2_5});
@@ -205,14 +205,14 @@ TEST_CASE("Multi clauses with tuples") {
     Argument a4 = {ArgumentType::STMT_NO, "4"};
     Argument a5 = {ArgumentType::STMT_NO, "5"};
 
-    SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::FOLLOWS};
-    SuchThatClause clause_s2_s3 = {ArgList{as2, as3},RelRef::FOLLOWS};
-    SuchThatClause clause_s2_5 = {ArgList{as2, a5},RelRef::FOLLOWS};
-    SuchThatClause clause_s1_s3 = {ArgList{as1, as3},RelRef::FOLLOWS};
-    SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::FOLLOWS};
-    SuchThatClause clause_s2_0 = {ArgList{as2, a0},RelRef::FOLLOWS};
-    SuchThatClause clause_4_5 = {ArgList{a4, a5},RelRef::FOLLOWS};
-    SuchThatClause clause_5_s3 = {ArgList{a5, as3},RelRef::PARENT};
+    SuchThatClause clause_s1_s2 = SuchThatClause(ArgList{as1, as2},RelRef::FOLLOWS);
+    SuchThatClause clause_s2_s3 = SuchThatClause(ArgList{as2, as3},RelRef::FOLLOWS);
+    SuchThatClause clause_s2_5 = SuchThatClause(ArgList{as2, a5},RelRef::FOLLOWS);
+    SuchThatClause clause_s1_s3 = SuchThatClause(ArgList{as1, as3},RelRef::FOLLOWS);
+    SuchThatClause clause_s1_0 = SuchThatClause(ArgList{as1, a0},RelRef::FOLLOWS);
+    SuchThatClause clause_s2_0 = SuchThatClause(ArgList{as2, a0},RelRef::FOLLOWS);
+    SuchThatClause clause_4_5 = SuchThatClause(ArgList{a4, a5},RelRef::FOLLOWS);
+    SuchThatClause clause_5_s3 = SuchThatClause(ArgList{a5, as3},RelRef::PARENT);
 
 
     Query query_0 = makeQuery(declarations, {
@@ -265,8 +265,8 @@ TEST_CASE("Multi clauses with ref") {
     Argument av = {ArgumentType::SYNONYM, "v"};
     Argument a0 = {ArgumentType::UNDERSCORE, "_"};
 
-    SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::PARENT};
-    SuchThatClause clause_s1_v = {ArgList{as1, av},RelRef::USES_S};
+    SuchThatClause clause_s1_0 = SuchThatClause(ArgList{as1, a0},RelRef::PARENT);
+    SuchThatClause clause_s1_v = SuchThatClause(ArgList{as1, av},RelRef::USES_S);
 
     Query query_1 = makeQuery(declarations, {
                                       Argument{ArgumentType::ATTR_REF, make_pair("s1", AttrName::STMT_NO)},
@@ -299,14 +299,14 @@ TEST_CASE("Pattern clause: return stmt") {
     Argument wild = {ArgumentType::UNDERSCORE, "_"};
 
     // create PatternClause using arguments and synonym
-    PatternClause wild_wild = {ArgList {assignSyn, wild, wild}, SynonymType::ASSIGN};
-    PatternClause ident_wild = {ArgList {assignSyn, leftIdent, wild}, SynonymType::ASSIGN};
-    PatternClause wild_const = {ArgList {assignSyn, wild, rightConst}, SynonymType::ASSIGN};
-    PatternClause ident_const = {ArgList {assignSyn, leftIdent, rightConst}, SynonymType::ASSIGN};
-    PatternClause wild_var = {ArgList {assignSyn, wild, rightVar}, SynonymType::ASSIGN};
-    PatternClause ident_var = {ArgList {assignSyn, leftIdent, rightVar}, SynonymType::ASSIGN};
-    PatternClause none_wild = {ArgList {assignSyn, noResultLeft, wild}, SynonymType::ASSIGN};
-    PatternClause wild_none = {ArgList {assignSyn, wild, noResultsRight}, SynonymType::ASSIGN};
+    PatternClause wild_wild = PatternClause(ArgList{assignSyn, wild, wild}, SynonymType::ASSIGN);
+    PatternClause ident_wild = PatternClause(ArgList{assignSyn, leftIdent, wild}, SynonymType::ASSIGN);
+    PatternClause wild_const = PatternClause(ArgList{assignSyn, wild, rightConst}, SynonymType::ASSIGN);
+    PatternClause ident_const = PatternClause(ArgList{assignSyn, leftIdent, rightConst}, SynonymType::ASSIGN);
+    PatternClause wild_var = PatternClause(ArgList{assignSyn, wild, rightVar}, SynonymType::ASSIGN);
+    PatternClause ident_var = PatternClause(ArgList{assignSyn, leftIdent, rightVar}, SynonymType::ASSIGN);
+    PatternClause none_wild = PatternClause(ArgList{assignSyn, noResultLeft, wild}, SynonymType::ASSIGN);
+    PatternClause wild_none = PatternClause(ArgList{assignSyn, wild, noResultsRight}, SynonymType::ASSIGN);
 
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {wild_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "2", "3", "4", "5", "6", "7"});
@@ -334,7 +334,7 @@ TEST_CASE("Pattern clause: return stmt") {
 
     //non-standardized spacing
     Argument spacingRightVar = {ArgumentType::PARTIAL_UNDERSCORE, "_\"   y  \"_"};
-    PatternClause wild_weirdVar = {ArgList {assignSyn, wild, spacingRightVar}, SynonymType::ASSIGN};
+    PatternClause wild_weirdVar = PatternClause(ArgList{assignSyn, wild, spacingRightVar}, SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {wild_weirdVar});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "3", "4", "5", "6", "7"});
     delete qe;
@@ -351,8 +351,8 @@ TEST_CASE("Pattern clause: return var + Stmt") {
     Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
     Argument wild = {ArgumentType::UNDERSCORE, "_"};
 
-    PatternClause synonym_wild = {ArgList {assignSyn, leftSynonym, wild}, SynonymType::ASSIGN};
-    PatternClause synonym_var = {ArgList {assignSyn, leftSynonym, rightConst}, SynonymType::ASSIGN};
+    PatternClause synonym_wild = PatternClause(ArgList{assignSyn, leftSynonym, wild}, SynonymType::ASSIGN);
+    PatternClause synonym_var = PatternClause(ArgList{assignSyn, leftSynonym, rightConst}, SynonymType::ASSIGN);
 
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}}, {synonym_wild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "2", "3", "4", "5", "6", "7"});
@@ -385,33 +385,33 @@ TEST_CASE("Pattern clause: conditional expressions") {
 
     Argument wild = {ArgumentType::UNDERSCORE, "_"};
 
-    PatternClause clauseWild = {ArgList {w, wild, wild},
-                                     SynonymType::WHILE};
+    PatternClause clauseWild = PatternClause(ArgList{w, wild, wild},
+                                     SynonymType::WHILE);
     query = makeQuery(declarations, {w}, {clauseWild});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1" , "3", "5"});
 
-    PatternClause clauseSynonym = {ArgList {w, v, wild},SynonymType::WHILE};
+    PatternClause clauseSynonym = PatternClause(ArgList{w, v, wild},SynonymType::WHILE);
     query = makeQuery(declarations,
                       {w, v}, {clauseSynonym});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1 x" , "1 y", "5 x", "5 y"});
 
-    PatternClause clauseIdent1 = {ArgList {w, {ArgumentType::IDENT, "\"x\""}, wild},
-                                   SynonymType::WHILE};
+    PatternClause clauseIdent1 = PatternClause(ArgList{w, {ArgumentType::IDENT, "\"x\""}, wild},
+                                   SynonymType::WHILE);
     query = makeQuery(declarations,{w}, {clauseIdent1});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"1", "5"});
 
-    PatternClause clauseIdent2 = {ArgList {w, {ArgumentType::IDENT, "\"z\""}, wild},
-                                  SynonymType::WHILE};
+    PatternClause clauseIdent2 = PatternClause(ArgList{w, {ArgumentType::IDENT, "\"z\""}, wild},
+                                  SynonymType::WHILE);
     query = makeQuery(declarations,{w}, {clauseIdent2});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {});
 
-    PatternClause clauseIdentAssign = {ArgList {a, {ArgumentType::IDENT, "\"z\""}, wild},
-                                       SynonymType::ASSIGN};
+    PatternClause clauseIdentAssign = PatternClause(ArgList{a, {ArgumentType::IDENT, "\"z\""}, wild},
+                                       SynonymType::ASSIGN);
     query = makeQuery(declarations,{a}, {clauseIdentAssign});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"7"});
 
-    PatternClause clauseIf = {ArgList {ifs, {ArgumentType::IDENT, "\"x\""}, wild, wild},
-                                  SynonymType::IF};
+    PatternClause clauseIf = PatternClause(ArgList{ifs, {ArgumentType::IDENT, "\"x\""}, wild, wild},
+                                  SynonymType::IF);
     query = makeQuery(declarations,{ifs}, {clauseIf});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"8"});
     delete qe;
@@ -426,52 +426,52 @@ TEST_CASE("Pattern clause: full expression and exact matching") {
     Argument leftWild = {ArgumentType::UNDERSCORE, "_"};
 
     // exact matching simple
-    PatternClause clauseIdentEasy = {ArgList {assignSyn, leftWild,
+    PatternClause clauseIdentEasy = PatternClause(ArgList{assignSyn, leftWild,
                                           {ArgumentType::IDENT, "\"y + 1\""}},
-                                 SynonymType::ASSIGN};
+                                 SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {clauseIdentEasy});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"3"});
 
      // exact matching difficult
-    PatternClause clauseIdentHard = {ArgList {assignSyn, leftWild,
+    PatternClause clauseIdentHard = PatternClause(ArgList{assignSyn, leftWild,
                                               {ArgumentType::IDENT, "\"((y + (3 - z)) * (x + 2)) + 1\""}},
-                                     SynonymType::ASSIGN};
+                                     SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {clauseIdentHard});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5"});
 
     // no exact match
-    PatternClause clauseIdentNoResults = {ArgList {assignSyn, leftWild,
+    PatternClause clauseIdentNoResults = PatternClause(ArgList{assignSyn, leftWild,
                                               {ArgumentType::IDENT, "\"((y + (3 - z)) * (x + 2))\""}},
-                                     SynonymType::ASSIGN};
+                                     SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {clauseIdentNoResults});
     REQUIRE(evaluateAndCreateResultSet(qe, &query).empty());
 
     // wild easy match
-    PatternClause clauseWildEasy = {ArgList {assignSyn, leftWild,
+    PatternClause clauseWildEasy = PatternClause(ArgList{assignSyn, leftWild,
                                                    {ArgumentType::PARTIAL_UNDERSCORE, "_\"x * 1\"_"}},
-                                          SynonymType::ASSIGN};
+                                          SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {clauseWildEasy});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"6"});
 
     // wild medium match
-    PatternClause clauseWildMedium = {ArgList {assignSyn, leftWild,
+    PatternClause clauseWildMedium = PatternClause(ArgList{assignSyn, leftWild,
                                              {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + x\"_"}},
-                                    SynonymType::ASSIGN};
+                                    SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {clauseWildMedium});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"4"});
 
     // wild difficult match
-    PatternClause clauseWildHard = {ArgList {assignSyn, leftWild,
+    PatternClause clauseWildHard = PatternClause(ArgList{assignSyn, leftWild,
                                                {ArgumentType::PARTIAL_UNDERSCORE, "_\"y + (3 - z)\"_"}},
-                                      SynonymType::ASSIGN};
+                                      SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {clauseWildHard});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"5" , "7"});
 
 
     // valid queries with non standardised spacing
-    PatternClause weirdSpacing = {ArgList {assignSyn, leftWild,
+    PatternClause weirdSpacing = PatternClause(ArgList{assignSyn, leftWild,
                                            {ArgumentType::PARTIAL_UNDERSCORE, "_\"  y  +   x   \"_"}},
-                                  SynonymType::ASSIGN};
+                                  SynonymType::ASSIGN);
     query = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a1"}}, {weirdSpacing});
     REQUIRE(evaluateAndCreateResultSet(qe, &query) == ResultSet {"4"});
 
@@ -488,9 +488,9 @@ TEST_CASE("Merge synonyms 1 such that and 1 pattern") {
     Argument rightConst = {ArgumentType::PARTIAL_UNDERSCORE, "_\"2\"_"};
     Argument a5 = {ArgumentType::STMT_NO, "5"};
 
-    SuchThatClause clause_a_5 = {ArgList{aa, a5},RelRef::FOLLOWS};
-    SuchThatClause clause_5_v = {ArgList{a5, av},RelRef::USES_S};
-    PatternClause synonym_var = {ArgList {aa, av, rightConst}, SynonymType::ASSIGN};
+    SuchThatClause clause_a_5 = SuchThatClause(ArgList{aa, a5},RelRef::FOLLOWS);
+    SuchThatClause clause_5_v = SuchThatClause(ArgList{a5, av},RelRef::USES_S);
+    PatternClause synonym_var = PatternClause(ArgList{aa, av, rightConst}, SynonymType::ASSIGN);
 
 
     Query query_1 = makeQuery(declarations, {Argument{ArgumentType::SYNONYM, "a"}}, {clause_a_5}, {synonym_var});

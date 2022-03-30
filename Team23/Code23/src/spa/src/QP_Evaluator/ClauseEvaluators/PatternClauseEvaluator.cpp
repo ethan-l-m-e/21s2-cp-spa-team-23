@@ -88,7 +88,8 @@ bool PatternClauseEvaluator::evaluateWhile(ResultTable* resultTable) {
         result = makeResult(std::get<string>(patternSynonym.argumentValue), stmtSet);
     }
 
-    return processResult(resultTable);
+    bool resultValidity = processResult(resultTable);
+    return resultValidity;
 }
 
 bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
@@ -136,7 +137,8 @@ bool PatternClauseEvaluator::evaluateIf(ResultTable* resultTable) {
         result = makeResult(std::get<string>(patternSynonym.argumentValue), stmtSet);
     }
 
-    return processResult(resultTable);
+    bool resultValidity = processResult(resultTable);
+    return resultValidity;
 }
 
 bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
@@ -201,8 +203,8 @@ bool PatternClauseEvaluator::evaluateAssign(ResultTable* resultTable) {
     } else {
         result = makeResult(std::get<string>(patternSynonym.argumentValue), stmtSet);
     }
-
-    return processResult(resultTable);
+    bool resultValidity = processResult(resultTable);
+    return resultValidity;
 }
 
 Expression validateAndParseEntRef(string arg) {

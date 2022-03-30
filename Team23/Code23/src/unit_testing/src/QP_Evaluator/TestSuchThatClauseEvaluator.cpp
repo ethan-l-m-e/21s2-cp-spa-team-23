@@ -115,17 +115,17 @@ TEST_CASE("Test Follow relationship") {
     Argument a5 = {ArgumentType::STMT_NO, "5"};
     Argument a12 = {ArgumentType::STMT_NO, "12"};
 
-    SuchThatClause clause_0_0 = {ArgList{a0, a0},RelRef::FOLLOWS};
-    SuchThatClause clause_0_3 = {ArgList{a0, a3},RelRef::FOLLOWS};
-    SuchThatClause clause_3_5 = {ArgList{a3, a5},RelRef::FOLLOWS};
-    SuchThatClause clause_3_s1 = {ArgList{a3, as1},RelRef::FOLLOWS};
-    SuchThatClause clause_r_3 = {ArgList{ar, a3},RelRef::FOLLOWS};
-    SuchThatClause clause_0_s1 = {ArgList{a0, as1},RelRef::FOLLOWS};
-    SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::FOLLOWS};
-    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::FOLLOWS};
-    SuchThatClause clause_0_12 = {ArgList{a0, a12},RelRef::FOLLOWS};
-    SuchThatClause clause_s1_pn = {ArgList{as1, apn},RelRef::FOLLOWS};
-    SuchThatClause clause_r_a = {ArgList{ar, aa},RelRef::FOLLOWS};
+    SuchThatClause clause_0_0 = SuchThatClause(ArgList{a0, a0},RelRef::FOLLOWS);
+    SuchThatClause clause_0_3 = SuchThatClause(ArgList{a0, a3},RelRef::FOLLOWS);
+    SuchThatClause clause_3_5 = SuchThatClause(ArgList{a3, a5},RelRef::FOLLOWS);
+    SuchThatClause clause_3_s1 = SuchThatClause(ArgList{a3, as1},RelRef::FOLLOWS);
+    SuchThatClause clause_r_3 = SuchThatClause(ArgList{ar, a3},RelRef::FOLLOWS);
+    SuchThatClause clause_0_s1 = SuchThatClause(ArgList{a0, as1},RelRef::FOLLOWS);
+    SuchThatClause clause_s1_s2 = SuchThatClause(ArgList{as1, as2},RelRef::FOLLOWS);
+    SuchThatClause clause_s1_s1 = SuchThatClause(ArgList{as1, as1},RelRef::FOLLOWS);
+    SuchThatClause clause_0_12 = SuchThatClause(ArgList{a0, a12},RelRef::FOLLOWS);
+    SuchThatClause clause_s1_pn = SuchThatClause(ArgList{as1, apn},RelRef::FOLLOWS);
+    SuchThatClause clause_r_a = SuchThatClause(ArgList{ar, aa},RelRef::FOLLOWS);
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -241,16 +241,16 @@ TEST_CASE("Test Follows* relationship") {
     Argument a5 = {ArgumentType::STMT_NO, "5"};
     Argument a10 = {ArgumentType::STMT_NO, "10"};
 
-    SuchThatClause clause_0_0 = {ArgList{a0, a0},RelRef::FOLLOWS_T};
-    SuchThatClause clause_0_3 = {ArgList{a0, a3},RelRef::FOLLOWS_T};
-    SuchThatClause clause_3_5 = {ArgList{a3, a5},RelRef::FOLLOWS_T};
-    SuchThatClause clause_3_s1 = {ArgList{a3, as1},RelRef::FOLLOWS_T};
-    SuchThatClause clause_r_3 = {ArgList{ar, a3},RelRef::FOLLOWS_T};
-    SuchThatClause clause_0_s1 = {ArgList{a0, as1},RelRef::FOLLOWS_T};
-    SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::FOLLOWS_T};
-    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::FOLLOWS_T};
-    SuchThatClause clause_0_10 = {ArgList{a0, a10},RelRef::FOLLOWS_T};
-    SuchThatClause clause_s1_pn = {ArgList{as1, apn},RelRef::FOLLOWS_T};
+    SuchThatClause clause_0_0 = SuchThatClause(ArgList{a0, a0},RelRef::FOLLOWS_T);
+    SuchThatClause clause_0_3 = SuchThatClause(ArgList{a0, a3},RelRef::FOLLOWS_T);
+    SuchThatClause clause_3_5 = SuchThatClause(ArgList{a3, a5},RelRef::FOLLOWS_T);
+    SuchThatClause clause_3_s1 = SuchThatClause(ArgList{a3, as1},RelRef::FOLLOWS_T);
+    SuchThatClause clause_r_3 = SuchThatClause(ArgList{ar, a3},RelRef::FOLLOWS_T);
+    SuchThatClause clause_0_s1 = SuchThatClause(ArgList{a0, as1},RelRef::FOLLOWS_T);
+    SuchThatClause clause_s1_s2 = SuchThatClause(ArgList{as1, as2},RelRef::FOLLOWS_T);
+    SuchThatClause clause_s1_s1 = SuchThatClause(ArgList{as1, as1},RelRef::FOLLOWS_T);
+    SuchThatClause clause_0_10 = SuchThatClause(ArgList{a0, a10},RelRef::FOLLOWS_T);
+    SuchThatClause clause_s1_pn = SuchThatClause(ArgList{as1, apn},RelRef::FOLLOWS_T);
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -356,16 +356,16 @@ TEST_CASE("Test Parent relationship") {
     Argument a10 = {ArgumentType::STMT_NO, "10"};
     Argument a00 = {ArgumentType::STMT_NO, "0"};
 
-    SuchThatClause clause0 = {ArgList{a0, a0},RelRef::PARENT};
-    SuchThatClause clause1 = {ArgList{a0, a3},RelRef::PARENT};
-    SuchThatClause clause_3_5 = {ArgList{a3, a5},RelRef::PARENT};
-    SuchThatClause clause_5_s1 = {ArgList{a5, as1},RelRef::PARENT};
-    SuchThatClause clause_w_7 = {ArgList{aw, a7},RelRef::PARENT};
-    SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::PARENT};
-    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::PARENT};
-    SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::PARENT};
-    SuchThatClause clause_0_10 = {ArgList{a00, as1},RelRef::PARENT};
-    SuchThatClause clause_w_a = {ArgList{aw, aa},RelRef::PARENT};
+    SuchThatClause clause0 = SuchThatClause(ArgList{a0, a0},RelRef::PARENT);
+    SuchThatClause clause1 = SuchThatClause(ArgList{a0, a3},RelRef::PARENT);
+    SuchThatClause clause_3_5 = SuchThatClause(ArgList{a3, a5},RelRef::PARENT);
+    SuchThatClause clause_5_s1 = SuchThatClause(ArgList{a5, as1},RelRef::PARENT);
+    SuchThatClause clause_w_7 = SuchThatClause(ArgList{aw, a7},RelRef::PARENT);
+    SuchThatClause clause_s1_0 = SuchThatClause(ArgList{as1, a0},RelRef::PARENT);
+    SuchThatClause clause_s1_s1 = SuchThatClause(ArgList{as1, as1},RelRef::PARENT);
+    SuchThatClause clause_s1_s2 = SuchThatClause(ArgList{as1, as2},RelRef::PARENT);
+    SuchThatClause clause_0_10 = SuchThatClause(ArgList{a00, as1},RelRef::PARENT);
+    SuchThatClause clause_w_a = SuchThatClause(ArgList{aw, aa},RelRef::PARENT);
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -474,15 +474,15 @@ TEST_CASE("Test Parent* relationship") {
     Argument a7 = {ArgumentType::STMT_NO, "7"};
     Argument a10 = {ArgumentType::STMT_NO, "10"};
 
-    SuchThatClause clause0 = {ArgList{a0, a0},RelRef::PARENT_T};
-    SuchThatClause clause1 = {ArgList{a0, a3},RelRef::PARENT_T};
-    SuchThatClause clause_3_5 = {ArgList{a3, a5},RelRef::PARENT_T};
-    SuchThatClause clause_5_s1 = {ArgList{a5, as1},RelRef::PARENT_T};
-    SuchThatClause clause_i_7 = {ArgList{ai, a7},RelRef::PARENT_T};
-    SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::PARENT_T};
-    SuchThatClause clause_s1_s2 = {ArgList{as1, as2},RelRef::PARENT_T};
-    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::PARENT_T};
-    SuchThatClause clause_0_10 = {ArgList{a0, a10},RelRef::PARENT_T};
+    SuchThatClause clause0 = SuchThatClause(ArgList{a0, a0},RelRef::PARENT_T);
+    SuchThatClause clause1 = SuchThatClause(ArgList{a0, a3},RelRef::PARENT_T);
+    SuchThatClause clause_3_5 = SuchThatClause(ArgList{a3, a5},RelRef::PARENT_T);
+    SuchThatClause clause_5_s1 = SuchThatClause(ArgList{a5, as1},RelRef::PARENT_T);
+    SuchThatClause clause_i_7 = SuchThatClause(ArgList{ai, a7},RelRef::PARENT_T);
+    SuchThatClause clause_s1_0 = SuchThatClause(ArgList{as1, a0},RelRef::PARENT_T);
+    SuchThatClause clause_s1_s2 = SuchThatClause(ArgList{as1, as2},RelRef::PARENT_T);
+    SuchThatClause clause_s1_s1 = SuchThatClause(ArgList{as1, as1},RelRef::PARENT_T);
+    SuchThatClause clause_0_10 = SuchThatClause(ArgList{a0, a10},RelRef::PARENT_T);
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -577,14 +577,14 @@ TEST_CASE("Test ModifiesS relationship") {
     Argument ax1 = {ArgumentType::IDENT, "x1"};
     Argument a7 = {ArgumentType::STMT_NO, "7"};
 
-    SuchThatClause clause_6_v = {ArgList{a6, av},RelRef::MODIFIES_S};
-    SuchThatClause clause_r_x = {ArgList{ar, ax},RelRef::MODIFIES_S};
-    SuchThatClause clause_s1_0 = {ArgList{as1, a0},RelRef::MODIFIES_S};
-    SuchThatClause clause_s1_x1 = {ArgList{as1, ax1},RelRef::MODIFIES_S};
-    SuchThatClause clause_s1_x = {ArgList{as1, ax},RelRef::MODIFIES_S};
-    SuchThatClause clause_s1_v = {ArgList{as1, av},RelRef::MODIFIES_S};
-    SuchThatClause clause_w_v = {ArgList{aw, av},RelRef::MODIFIES_S};
-    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::MODIFIES_S};
+    SuchThatClause clause_6_v = SuchThatClause(ArgList{a6, av},RelRef::MODIFIES_S);
+    SuchThatClause clause_r_x = SuchThatClause(ArgList{ar, ax},RelRef::MODIFIES_S);
+    SuchThatClause clause_s1_0 = SuchThatClause(ArgList{as1, a0},RelRef::MODIFIES_S);
+    SuchThatClause clause_s1_x1 = SuchThatClause(ArgList{as1, ax1},RelRef::MODIFIES_S);
+    SuchThatClause clause_s1_x = SuchThatClause(ArgList{as1, ax},RelRef::MODIFIES_S);
+    SuchThatClause clause_s1_v = SuchThatClause(ArgList{as1, av},RelRef::MODIFIES_S);
+    SuchThatClause clause_w_v = SuchThatClause(ArgList{aw, av},RelRef::MODIFIES_S);
+    SuchThatClause clause_s1_s1 = SuchThatClause(ArgList{as1, as1},RelRef::MODIFIES_S);
 
     auto *resultTable = new ResultTable();
     SECTION("select one synonym") {
@@ -677,15 +677,15 @@ TEST_CASE("Test UsesS relationship") {
     Argument a7 = {ArgumentType::STMT_NO, "7"};
     Argument az = {ArgumentType::IDENT, "z"};
 
-    SuchThatClause clause_2_v = {ArgList{a2, av},RelRef::USES_S};
-    SuchThatClause clause_s1_x = {ArgList{as1, ax},RelRef::USES_S};
-    SuchThatClause clause_a_0 = {ArgList{aa, a0},RelRef::USES_S};
-    SuchThatClause clause_a_z = {ArgList{aa, az},RelRef::USES_S};
-    SuchThatClause clause_7_v = {ArgList{a7, av},RelRef::USES_S};
-    SuchThatClause clause_s1_v = {ArgList{as1, av},RelRef::USES_S};
-    SuchThatClause clause_a_v = {ArgList{aa, av},RelRef::USES_S};
-    SuchThatClause clause_pn_v = {ArgList{apn, av},RelRef::USES_S};
-    SuchThatClause clause_r_v = {ArgList{ar, av},RelRef::USES_S};
+    SuchThatClause clause_2_v = SuchThatClause(ArgList{a2, av},RelRef::USES_S);
+    SuchThatClause clause_s1_x = SuchThatClause(ArgList{as1, ax},RelRef::USES_S);
+    SuchThatClause clause_a_0 = SuchThatClause(ArgList{aa, a0},RelRef::USES_S);
+    SuchThatClause clause_a_z = SuchThatClause(ArgList{aa, az},RelRef::USES_S);
+    SuchThatClause clause_7_v = SuchThatClause(ArgList{a7, av},RelRef::USES_S);
+    SuchThatClause clause_s1_v = SuchThatClause(ArgList{as1, av},RelRef::USES_S);
+    SuchThatClause clause_a_v = SuchThatClause(ArgList{aa, av},RelRef::USES_S);
+    SuchThatClause clause_pn_v = SuchThatClause(ArgList{apn, av},RelRef::USES_S);
+    SuchThatClause clause_r_v = SuchThatClause(ArgList{ar, av},RelRef::USES_S);
 
     auto *resultTable = new ResultTable();
     SECTION("select one synonym") {
@@ -778,10 +778,10 @@ TEST_CASE("Test ModifiesP relationship") {
     Argument ax = {ArgumentType::IDENT, "x"};
     Argument ax1 = {ArgumentType::IDENT, "x1"};
 
-    SuchThatClause clause_prop_v = {ArgList{aprop, av},RelRef::MODIFIES_P};
-    SuchThatClause clause_p_x = {ArgList{ap, ax},RelRef::MODIFIES_P};
-    SuchThatClause clause_p_v = {ArgList{ap, av},RelRef::MODIFIES_P};
-    SuchThatClause clause_p_x1 = {ArgList{ap, ax1},RelRef::MODIFIES_P};
+    SuchThatClause clause_prop_v = SuchThatClause(ArgList{aprop, av},RelRef::MODIFIES_P);
+    SuchThatClause clause_p_x = SuchThatClause(ArgList{ap, ax},RelRef::MODIFIES_P);
+    SuchThatClause clause_p_v = SuchThatClause(ArgList{ap, av},RelRef::MODIFIES_P);
+    SuchThatClause clause_p_x1 = SuchThatClause(ArgList{ap, ax1},RelRef::MODIFIES_P);
 
     auto *resultTable = new ResultTable();
     SECTION("select one synonym") {
@@ -839,10 +839,10 @@ TEST_CASE("Test UsesP relationship") {
     Argument ax = {ArgumentType::IDENT, "x"};
     Argument ax1 = {ArgumentType::IDENT, "x1"};
 
-    SuchThatClause clause_prop_v = {ArgList{aprop, av},RelRef::USES_P};
-    SuchThatClause clause_p_x = {ArgList{ap, ax},RelRef::USES_P};
-    SuchThatClause clause_p_v = {ArgList{ap, av},RelRef::USES_P};
-    SuchThatClause clause_p_x1 = {ArgList{ap, ax1},RelRef::USES_P};
+    SuchThatClause clause_prop_v = SuchThatClause(ArgList{aprop, av},RelRef::USES_P);
+    SuchThatClause clause_p_x = SuchThatClause(ArgList{ap, ax},RelRef::USES_P);
+    SuchThatClause clause_p_v = SuchThatClause(ArgList{ap, av},RelRef::USES_P);
+    SuchThatClause clause_p_x1 = SuchThatClause(ArgList{ap, ax1},RelRef::USES_P);
 
     auto *resultTable = new ResultTable();
     SECTION("select one synonym") {
@@ -896,13 +896,14 @@ TEST_CASE("Test Calls relationship") {
     Argument ap = {ArgumentType::SYNONYM, "p"};
     Argument ap1 = {ArgumentType::SYNONYM, "p1"};
 
-    SuchThatClause clause_prop_pr = {ArgList{aprop, apr},RelRef::CALLS};
-    SuchThatClause clause_p_p1 = {ArgList{ap, ap1},RelRef::CALLS};
-    SuchThatClause clause_p_pr = {ArgList{ap, apr},RelRef::CALLS};
-    SuchThatClause clause_prop_p = {ArgList{aprop, ap},RelRef::CALLS};
+    SuchThatClause clause_prop_pr = SuchThatClause(ArgList{aprop, apr},RelRef::CALLS);
+    SuchThatClause clause_p_p1 = SuchThatClause(ArgList{ap, ap1},RelRef::CALLS);
+    SuchThatClause clause_p_pr = SuchThatClause(ArgList{ap, apr},RelRef::CALLS);
+    SuchThatClause clause_prop_p = SuchThatClause(ArgList{aprop, ap},RelRef::CALLS);
 
     auto *resultTable = new ResultTable();
     SECTION("select no synonym") {
+
         /**
          * Calls("prop", "pr")
          * Type: Calls
@@ -956,10 +957,10 @@ TEST_CASE("Test Calls* relationship") {
     Argument ap = {ArgumentType::SYNONYM, "p"};
     Argument ap1 = {ArgumentType::SYNONYM, "p1"};
 
-    SuchThatClause clause_prop_pr = {ArgList{aprop, apr},RelRef::CALLS_T};
-    SuchThatClause clause_p_p1 = {ArgList{ap, ap1},RelRef::CALLS_T};
-    SuchThatClause clause_p_pr = {ArgList{ap, apr},RelRef::CALLS_T};
-    SuchThatClause clause_prop_p = {ArgList{aprop, ap},RelRef::CALLS_T};
+    SuchThatClause clause_prop_pr = SuchThatClause(ArgList{aprop, apr},RelRef::CALLS_T);
+    SuchThatClause clause_p_p1 = SuchThatClause(ArgList{ap, ap1},RelRef::CALLS_T);
+    SuchThatClause clause_p_pr = SuchThatClause(ArgList{ap, apr},RelRef::CALLS_T);
+    SuchThatClause clause_prop_p = SuchThatClause(ArgList{aprop, ap},RelRef::CALLS_T);
 
     auto *resultTable = new ResultTable();
     SECTION("select no synonym") {
@@ -1024,16 +1025,16 @@ TEST_CASE("Test Next relationship") {
     Argument aa = {ArgumentType::SYNONYM, "a"};
 
 
-    SuchThatClause clause_0_0 = {ArgList{a0, a0},RelRef::NEXT};
-    SuchThatClause clause_10_5 = {ArgList{a10, a5},RelRef::NEXT};
-    SuchThatClause clause_10_11 = {ArgList{a10, a11},RelRef::NEXT};
-    SuchThatClause clause_11_0 = {ArgList{a11, a0},RelRef::NEXT};
-    SuchThatClause clause_5_s1 = {ArgList{a5, as1},RelRef::NEXT};
-    SuchThatClause clause_ifs_9 = {ArgList{aifs, a9},RelRef::NEXT};
-    SuchThatClause clause_a_9 = {ArgList{aa, a9},RelRef::NEXT};
-    SuchThatClause clause_ifs_s1 = {ArgList{aifs, as1},RelRef::NEXT};
-    SuchThatClause clause_s1_w = {ArgList{as1, aw},RelRef::NEXT};
-    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::NEXT};
+    SuchThatClause clause_0_0 = SuchThatClause(ArgList{a0, a0},RelRef::NEXT);
+    SuchThatClause clause_10_5 = SuchThatClause(ArgList{a10, a5},RelRef::NEXT);
+    SuchThatClause clause_10_11 = SuchThatClause(ArgList{a10, a11},RelRef::NEXT);
+    SuchThatClause clause_11_0 = SuchThatClause(ArgList{a11, a0},RelRef::NEXT);
+    SuchThatClause clause_5_s1 = SuchThatClause(ArgList{a5, as1},RelRef::NEXT);
+    SuchThatClause clause_ifs_9 = SuchThatClause(ArgList{aifs, a9},RelRef::NEXT);
+    SuchThatClause clause_a_9 = SuchThatClause(ArgList{aa, a9},RelRef::NEXT);
+    SuchThatClause clause_ifs_s1 = SuchThatClause(ArgList{aifs, as1},RelRef::NEXT);
+    SuchThatClause clause_s1_w = SuchThatClause(ArgList{as1, aw},RelRef::NEXT);
+    SuchThatClause clause_s1_s1 = SuchThatClause(ArgList{as1, as1},RelRef::NEXT);
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {
@@ -1133,17 +1134,17 @@ TEST_CASE("Test NextT relationship") {
     Argument ar = {ArgumentType::SYNONYM, "r"};
     Argument apn = {ArgumentType::SYNONYM, "pn"};
 
-    SuchThatClause clause_0_0 = {ArgList{a0, a0},RelRef::NEXT_T};
-    SuchThatClause clause_6_6 = {ArgList{a6, a6},RelRef::NEXT_T};
-    SuchThatClause clause_10_11 = {ArgList{a10, a11},RelRef::NEXT_T};
-    SuchThatClause clause_11_0 = {ArgList{a11, a0},RelRef::NEXT_T};
-    SuchThatClause clause_5_s1 = {ArgList{a5, as1},RelRef::NEXT_T};
-    SuchThatClause clause_ifs_11 = {ArgList{aifs, a11},RelRef::NEXT_T};
-    SuchThatClause clause_a_9 = {ArgList{aa, a9},RelRef::NEXT_T};
-    SuchThatClause clause_ifs_s1 = {ArgList{aifs, as1},RelRef::NEXT_T};
-    SuchThatClause clause_s1_w = {ArgList{as1, aw},RelRef::NEXT_T};
-    SuchThatClause clause_r_pn = {ArgList{ar, apn},RelRef::NEXT_T};
-    SuchThatClause clause_s1_s1 = {ArgList{as1, as1},RelRef::NEXT_T};
+    SuchThatClause clause_0_0 = SuchThatClause(ArgList{a0, a0},RelRef::NEXT_T);
+    SuchThatClause clause_6_6 = SuchThatClause(ArgList{a6, a6},RelRef::NEXT_T);
+    SuchThatClause clause_10_11 = SuchThatClause(ArgList{a10, a11},RelRef::NEXT_T);
+    SuchThatClause clause_11_0 = SuchThatClause(ArgList{a11, a0},RelRef::NEXT_T);
+    SuchThatClause clause_5_s1 = SuchThatClause(ArgList{a5, as1},RelRef::NEXT_T);
+    SuchThatClause clause_ifs_11 = SuchThatClause(ArgList{aifs, a11},RelRef::NEXT_T);
+    SuchThatClause clause_a_9 = SuchThatClause(ArgList{aa, a9},RelRef::NEXT_T);
+    SuchThatClause clause_ifs_s1 = SuchThatClause(ArgList{aifs, as1},RelRef::NEXT_T);
+    SuchThatClause clause_s1_w = SuchThatClause(ArgList{as1, aw},RelRef::NEXT_T);
+    SuchThatClause clause_r_pn = SuchThatClause(ArgList{ar, apn},RelRef::NEXT_T);
+    SuchThatClause clause_s1_s1 = SuchThatClause(ArgList{as1, as1},RelRef::NEXT_T);
 
     auto *resultTable = new ResultTable();
     SECTION("select zero synonym") {

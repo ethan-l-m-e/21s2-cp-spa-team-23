@@ -5,6 +5,7 @@
 #ifndef SPA_CLAUSE_H
 #define SPA_CLAUSE_H
 
+#include <utility>
 #include <vector>
 #include "Argument.h"
 
@@ -35,22 +36,26 @@ enum class SynonymType {
 
 typedef struct Clause {
     vector<Argument> argList;
+    explicit Clause(vector<Argument> argList): argList{std::move(argList)} {};
+    virtual ~Clause()= default;
 } Clause;
 
 typedef struct SuchThatClause : Clause {
     RelRef relRef;
+    explicit SuchThatClause(vector<Argument> argList, RelRef relRef): Clause(std::move(argList)), relRef{relRef} {};
 } SuchThatClause;
 
 typedef struct PatternClause : Clause {
     SynonymType synonymType;
+    explicit PatternClause(vector<Argument> argList, SynonymType synonymType): Clause(std::move(argList)), synonymType{synonymType} {};
 } PatternClause;
 
 typedef struct WithClause : Clause {
+    explicit WithClause(vector<Argument> argList): Clause(std::move(argList)) {};
 } WithClause;
 
 typedef struct ResultClause : Clause {
+    explicit ResultClause(vector<Argument> argList): Clause(std::move(argList)) {};
 } ResultClause;
-
-
 
 #endif //SPA_CLAUSE_H

@@ -12,7 +12,7 @@ template<typename T>
 class TableClauseEvaluator : public SuchThatClauseEvaluator {
 public:
     TableClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb, T* relationship): SuchThatClauseEvaluator(declarations, clause, pkb), relationship{relationship} {}
-    RelRef getRelRef() override {return static_cast<SuchThatClause*>(clause)->relRef;};
+    RelRef getRelRef() override {return dynamic_cast<SuchThatClause*>(clause)->relRef;};
 protected:
     T* relationship;
 
@@ -42,7 +42,7 @@ unordered_set<string> TableClauseEvaluator<T>::getRightSynonymValue(string left)
 
 template<typename T>
 pair<DesignEntity, DesignEntity> TableClauseEvaluator<T>::getWildcardType () {
-    switch(static_cast<SuchThatClause*>(clause)->relRef) {
+    switch(dynamic_cast<SuchThatClause*>(clause)->relRef) {
         case RelRef::FOLLOWS:
         case RelRef::PARENT:
         case RelRef::FOLLOWS_T:
