@@ -8,11 +8,11 @@
 #import "OneToOneRelationship.h"
 #import "TNode/CFG/NodeCFG.h"
 
-class NextRelationship : AbstractRelationship<int, int> {
+class NextRelationship : AbstractRelationship {
 
-    unordered_map<int, NodeCFG *> statementNumberToCfgNodeMap;
+    unordered_map<string, NodeCFG *> statementNumberToCfgNodeMap;
 
-    void setRelationship(int lhs, int rhs) override {
+    void setRelationship(string lhs, string rhs) override {
 
     }; // This is private because we don't want anyone to call it
 

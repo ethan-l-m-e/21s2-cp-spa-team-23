@@ -63,25 +63,25 @@ list<string> QueryEvaluator::evaluate(Query* query) {
 ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, unordered_map<string, DesignEntity>& declarations) {
     switch (clause.relRef) {
         case RelRef::FOLLOWS:
-            return new TableClauseEvaluator<OneToOneRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.follows);
+            return new TableClauseEvaluator<OneToOneRelationship>(&declarations, &clause, pkb, &pkb->relationship.follows);
         case RelRef::PARENT:
-            return new TableClauseEvaluator<OneToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.parent);
+            return new TableClauseEvaluator<OneToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.parent);
         case RelRef::FOLLOWS_T:
-            return new TableClauseEvaluator<ManyToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.followsT);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.followsT);
         case RelRef::PARENT_T:
-            return new TableClauseEvaluator<ManyToManyRelationship<int, int>>(&declarations, &clause, pkb, &pkb->relationship.parentT);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.parentT);
         case RelRef::USES_S:
-            return new TableClauseEvaluator<ManyToManyRelationship<int, string>>(&declarations, &clause, pkb, &pkb->relationship.usesS);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.usesS);
         case RelRef::MODIFIES_S:
-            return new TableClauseEvaluator<ManyToManyRelationship<int, string>>(&declarations, &clause, pkb, &pkb->relationship.modifiesS);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.modifiesS);
         case RelRef::USES_P:
-            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.usesP);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.usesP);
         case RelRef::MODIFIES_P:
-            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.modifiesP);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.modifiesP);
         case RelRef::CALLS:
-            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.calls);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.calls);
         case RelRef::CALLS_T:
-            return new TableClauseEvaluator<ManyToManyRelationship<string, string>>(&declarations, &clause, pkb, &pkb->relationship.callsT);
+            return new TableClauseEvaluator<ManyToManyRelationship>(&declarations, &clause, pkb, &pkb->relationship.callsT);
         case RelRef::NEXT:
             return new TableClauseEvaluator<NextRelationship>(&declarations, &clause, pkb, &pkb->relationship.next);
         case RelRef::NEXT_T:

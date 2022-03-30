@@ -16,10 +16,10 @@
 
 using namespace std;
 
-template<class LHS, class RHS>
+
 class AbstractRelationship {
 
-    virtual void setRelationship(LHS lhs, RHS rhs) = 0;
+    virtual void setRelationship(string lhs, string rhs) = 0;
 
     virtual bool isRelationship(string lhs, string rhs) = 0;
 

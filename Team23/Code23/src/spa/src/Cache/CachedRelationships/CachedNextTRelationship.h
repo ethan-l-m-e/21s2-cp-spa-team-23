@@ -5,9 +5,9 @@
 #ifndef SPA_CACHEDNEXTTRELATIONSHIP_H
 #define SPA_CACHEDNEXTTRELATIONSHIP_H
 
-#include "PKB/Relationship/Relationship.h"
+#include "CachedManyToManyRelationship.h"
 
-class CachedNextTRelationship : public ManyToManyRelationship<int, int> {
+class CachedNextTRelationship : public CachedManyToManyRelationship {
 
 public:
 
@@ -16,8 +16,6 @@ public:
     unordered_set<string> getRHS(string lhs) override;
 
     unordered_set<string> getLHS(string rhs) override;
-
-    void clear() override;
 };
 
 

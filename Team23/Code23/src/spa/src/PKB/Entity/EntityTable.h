@@ -8,16 +8,12 @@
 using namespace std;
 
 
-template<class T>
+
 class EntityTable {
 
 
 private:
-    unordered_set<T> set;
-
-    bool isEntityNormal(T element) {
-        return set.find(element) != set.end();
-    }
+    unordered_set<string> set;
 
 public:
 
@@ -26,24 +22,18 @@ public:
     }
 
 
-    void add(T element) {
+    void add(string element) {
 
         set.insert(element);
     }
 
     unordered_set<string> getAll() {
-        return convertSetGenericsToSetStrings(set);
+        return set;
     }
 
     bool isEntity(string element) {
-        T t;
-        return isEntityNormal(convert(element, t));
+        return set.find(element) != set.end();
     }
-
-    T convert(string s, T&);
-
-
-
 
 
     void clear() {
@@ -53,12 +43,4 @@ public:
 
 };
 
-
-template<> inline string EntityTable<string>::convert(string s, string&) {
-    return s;
-}
-
-template<> inline int EntityTable<int>::convert(string s, int&) {
-    return std::stoi(s);
-}
 

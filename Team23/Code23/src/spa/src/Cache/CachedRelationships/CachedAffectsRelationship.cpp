@@ -5,17 +5,19 @@
 #include "CachedAffectsRelationship.h"
 
 bool CachedAffectsRelationship::isRelationship(string lhs, string rhs) {
-    return false;
+    bool defaultReturn = CachedManyToManyRelationship::isRelationship(lhs, lhs);
+
+    return defaultReturn;
 }
 
 unordered_set<string> CachedAffectsRelationship::getRHS(string lhs) {
-    return unordered_set<string>();
+    unordered_set<string> defaultReturn = CachedManyToManyRelationship::getRHS(lhs);
+
+    return defaultReturn;
 }
 
 unordered_set<string> CachedAffectsRelationship::getLHS(string rhs) {
-    return unordered_set<string>();
-}
+    unordered_set<string> defaultReturn = CachedManyToManyRelationship::getLHS(rhs);
 
-void CachedAffectsRelationship::clear() {
-
+    return defaultReturn;
 }

@@ -18,12 +18,12 @@
 
 using namespace std;
 
-template<class LHS, class RHS>
-class AbstractManyToManyRelationship : public AbstractRelationship<LHS, RHS> {
 
-    virtual void setRelationship(LHS lhs, unordered_set<RHS> setRhs) = 0;
+class AbstractManyToManyRelationship : public AbstractRelationship {
 
-    virtual void setRelationship(unordered_set<LHS> setLhs, RHS rhs) = 0;
+    virtual void setRelationship(string lhs, unordered_set<string> setRhs) = 0;
+
+    virtual void setRelationship(unordered_set<string> setLhs, string rhs) = 0;
 
 
 };
