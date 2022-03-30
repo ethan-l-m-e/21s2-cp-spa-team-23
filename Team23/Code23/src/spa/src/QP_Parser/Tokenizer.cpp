@@ -16,13 +16,13 @@ std::string Tokenizer::lexicalTokens(std::string pql) {
     std::string reconstructedQuery;
 
     reconstructedQuery = "";
-    pql = std::regex_replace(pql, std::regex(WHITESPACE), "");
+    pql = std::regex_replace(pql, std::regex(WHITESPACE_START), "");
 
     while (std::regex_search (pql, sm, std::regex(LEXICAL_TOKENS))) {
         std::string x = sm[0];
         reconstructedQuery += x + " ";
         pql = sm.suffix().str();
-        pql = std::regex_replace(pql, std::regex(WHITESPACE), "");
+        pql = std::regex_replace(pql, std::regex(WHITESPACE_START), "");
     }
 
     if (!pql.empty()) {
@@ -150,7 +150,7 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
         std::string argument = StringFormatter::removeTrailingSpace(patternClauseArgs[i]);
         if (i == patternClauseArgs.size()-1) {
             // Remove closing bracket from string
-            argument = std::regex_replace(argument.substr(0, argument.size()-1), std::regex("\\s+"), std::string(""));
+            argument = std::regex_replace(argument.substr(0, argument.size()-1), std::regex(WHITESPACE), std::string(""));
         }
         patternToken.arguments->push_back(argument);
     }

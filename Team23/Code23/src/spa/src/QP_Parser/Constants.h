@@ -121,7 +121,8 @@ std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 std::string const PATTERN_ARGUMENTS = ",";
 
 std::string const EQUALS = "=";
-std::string const WHITESPACE = "^\\s+";
+std::string const WHITESPACE_START = "^\\s+";
+std::string const WHITESPACE = "\\s+";
 std::string const CLAUSES = "(^" + SUCH_THAT_CL + "|^" + PATTERN_CL + "|^" + WITH_CL + ")";
 
 int const SELECT_LENGTH = 6;
