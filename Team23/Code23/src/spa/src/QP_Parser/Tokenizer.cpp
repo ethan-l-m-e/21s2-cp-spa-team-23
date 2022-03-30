@@ -10,15 +10,32 @@
 
 using namespace qp;
 
+std::string Tokenizer::lexicalTokens(std::string pql) {
+    std::smatch sm;
+    std::string reconstructedQuery;
+    reconstructedQuery.reserve(pql.size());
+
+    reconstructedQuery = "";
+    pql = std::regex_replace(pql, std::regex("^\\s+"), std::string(""));
+
+    while (std::regex_search (pql, sm, std::regex(LEXICAL_TOKENS))) {
+        std::string x = sm[0];
+        reconstructedQuery += x + " ";
+        pql = sm.suffix().str();
+        pql = std::regex_replace(pql, std::regex("^\\s+"), std::string(""));
+    }
+
+    // TODO: throw error of pql size not 0
+
+    return reconstructedQuery;
+}
+
 QueryToken Tokenizer::getQueryToken(std::string query) {
     QueryToken queryToken = QueryToken();
 
     if (query.length() == 0) {
         return queryToken;
     }
-
-    // Replace all newlines in the query
-    query = std::regex_replace(query, regex("\n"), "");
 
     getDeclarationTokens(query, queryToken);
     getSelectClauseTokens(query, queryToken);
@@ -131,7 +148,7 @@ PatternToken Tokenizer::convertStringToPatternToken(std::string patternClause) {
         std::string argument = StringFormatter::removeTrailingSpace(patternClauseArgs[i]);
         if (i == patternClauseArgs.size()-1) {
             // Remove closing bracket from string
-            argument = StringFormatter::removeTrailingSpace(argument.substr(0, argument.size()-1));
+            argument = std::regex_replace(argument.substr(0, argument.size()-1), std::regex("\\s+"), std::string(""));
         }
         patternToken.arguments->push_back(argument);
     }

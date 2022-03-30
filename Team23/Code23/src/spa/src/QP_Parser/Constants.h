@@ -7,8 +7,8 @@ std::string const NZDIGIT = "[1-9]";
 std::string const IDENT = "[A-Za-z][A-Za-z|0-9]*";
 std::string const NAME = "[A-Za-z][A-Za-z|0-9]*";
 std::string const INTEGER = "(0|" + NZDIGIT + DIGIT + "*)";
-std::string const SPACE_TAB = "( |\t)*";
-std::string const SINGLE_SPACE_TAB = "( |\t)+";
+std::string const SPACE_TAB = "( |\t|\n)*";
+std::string const SINGLE_SPACE_TAB = "( |\t|\n)+";
 
 std::string const SYNONYM = IDENT;
 std::string const STMT_REF = "(" + SYNONYM + "|_|" + INTEGER + ")";
@@ -18,6 +18,10 @@ std::string const ATTR_NAME = "(procName|varName|value|stmt#)";
 std::string const ATTR_REF = SYNONYM + SPACE_TAB + "\\." + SPACE_TAB + ATTR_NAME;
 std::string const ELEM = "(" + ATTR_REF + "|" + SYNONYM + ")";
 std::string const REF = "(\"" + IDENT + "\"|" + INTEGER + "|" + ATTR_REF + ")";
+
+std::string const REL = "(Follows\\*|Follows|Parent\\*|Parent|Uses|Modifies|Calls\\*|Calls|Next\\*|Next|Affects\\*|Affects)";
+std::string const LEXICAL_TOKENS = "(^" + REL + "|^\\(|^\\)|^<|^>|^,|^=|^;|^" + ELEM + "|^" + NAME + "|^" + INTEGER + "|^"
+        + STMT_REF + "|^" + ENT_REF + ")";
 
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
@@ -73,7 +77,7 @@ std::string const REL_COND = REL_REF + "(" + SINGLE_SPACE_TAB + "and" + SINGLE_S
 std::string const SUCH_THAT_CL = "such" + SINGLE_SPACE_TAB + "that" + SINGLE_SPACE_TAB + REL_COND;
 
 // pattern regex
-std::string const EXPRESSION_SPEC = "(_|_\"(.)+\"_|\"(.)+\")";
+std::string const EXPRESSION_SPEC = "(_|_" + SPACE_TAB + "\"(.)+\"" + SPACE_TAB + "_|\"(.)+\")";
 std::string const ASSIGN = SYNONYM + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE_TAB + "," + SPACE_TAB
         + EXPRESSION_SPEC + SPACE_TAB + "\\)";
 std::string const WHILE = SYNONYM + SPACE_TAB + "\\(" + SPACE_TAB + ENT_REF + SPACE_TAB + "," + SPACE_TAB + "_"
@@ -112,7 +116,7 @@ std::string const SPLIT_DESIGN_ENTITIES = SPACE_TAB + ";" + SPACE_TAB;
 std::string const SPACE_OR_COMMA = "(" + SINGLE_SPACE_TAB + "|,)";
 
 std::string const SPLIT_SELECT_SYNONYM = "Select" + SINGLE_SPACE_TAB;
-std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t]+|<|>)";
+std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t|\n]+|<|>)";
 
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 std::string const PATTERN_ARGUMENTS = ",";

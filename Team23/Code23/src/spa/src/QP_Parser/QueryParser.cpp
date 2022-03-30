@@ -15,6 +15,8 @@ Query QueryParser::getQuery(std::string pql) {
     Tokenizer tokenizer = Tokenizer();
     Validator validator = Validator();
 
+    pql = Tokenizer::lexicalTokens(pql);
+
     validator.validateQueryStructure(pql);
     QueryToken queryToken = tokenizer.getQueryToken(pql);
     validator.checkForSemantics(queryToken);
