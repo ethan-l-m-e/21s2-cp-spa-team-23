@@ -111,17 +111,17 @@ std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|" + INTEGER + ")";
 std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";
 
 // regex strings for tokenizer
-std::string const DECLARATIONS_LINE = "( |\n|\t)*;( |\n|\t)*(Select.*)";
+std::string const DECLARATIONS_LINE = "( )*;( )*(Select.*)";
 std::string const SPLIT_DESIGN_ENTITIES = SPACE + ";" + SPACE;
 std::string const SPACE_OR_COMMA = "(" + SINGLE_SPACE + "|,)";
 
 std::string const SPLIT_SELECT_SYNONYM = "Select" + SINGLE_SPACE;
-std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ |\t|\n]+|<|>)";
+std::string const SELECT_SPACE_ANGLE_BRACKETS = "([ ]+|<|>)";
 
 std::string const SPLIT_SUCH_THAT_CLAUSE = "[ ]*[\\(\\),][ ]*";
 std::string const PATTERN_ARGUMENTS = ",";
 
-std::string const SPLIT_EQUALS = "[ |\t]*=[ |\t]*";
+std::string const SPLIT_EQUALS = "=";
 std::string const CLAUSES = "(^" + SUCH_THAT_CL + "|^" + PATTERN_CL + "|^" + WITH_CL + ")";
 
 int const SELECT_LENGTH = 6;
