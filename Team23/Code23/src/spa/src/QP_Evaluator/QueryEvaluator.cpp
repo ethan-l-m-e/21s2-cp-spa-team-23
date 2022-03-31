@@ -13,9 +13,9 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     auto* resultTable = new ResultTable();
 
     auto* optimizer = new QueryOptimizer(query);
-    std::vector<GroupedClause> clauses = optimizer->groupClauses();
+    std::vector<GroupedClause>* clauses = optimizer->groupClauses();
 
-    for (auto gc : clauses) {
+    for (auto gc : *clauses) {
         if (dynamic_cast<WithClause*>(gc.clause)) {
             // Create ClauseEvaluators and evaluate each with clause
             auto *clause = dynamic_cast<WithClause*>(gc.clause);
@@ -47,6 +47,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
             if (!patternResult) break;
         }
     }
+
+    delete clauses;
 
     // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
