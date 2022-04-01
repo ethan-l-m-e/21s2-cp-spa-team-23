@@ -7,7 +7,6 @@
 
 
 #include "CacheClauseEvaluator.h"
-#include "QP_database/AffectsOperator.h"
 
 class AffectsClauseEvaluator: public CacheClauseEvaluator {
 public:

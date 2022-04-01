@@ -63,9 +63,6 @@ stmtSetStr AffectsTOperator::computeResultSetHelper(string stmt,
 stmtSetStr AffectsTOperator::resultSetRecursionHelper(string stmt, stmtSetStr (*computeDirection)(string)) {
     stmtSetStr resultSet;
     resultSet.insert(stmt);
-    if(stmt == "21") {
-        cout << "21";
-    }
     stmtSetStr adjStatementList = computeDirection(stmt);
 
     for(stmtStr adjStmt: adjStatementList) {

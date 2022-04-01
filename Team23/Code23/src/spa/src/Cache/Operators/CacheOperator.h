@@ -7,6 +7,7 @@
 
 #include "GraphMethods.h"
 #include "PKB/PKB.h"
+//#include "Cache/Cache.h"
 
 class CacheOperator {
     /*
@@ -20,6 +21,8 @@ public:
     bool isOptimised();
 
     CacheOperator* setOptimisation(bool in);
+    bool stmtIsNotInSource(vector<string> argList);
+
 
 protected:
     typedef unordered_set<string> variableSet, stmtSetStr;
@@ -33,7 +36,6 @@ protected:
     NodeCFG* retrieveNode(string stmtNo);
     int getSize();
     unordered_set<string> convertIntToString(unordered_set<int> intSet);
-    bool stmtIsNotInSource(vector<string> argList);
 };
 
 

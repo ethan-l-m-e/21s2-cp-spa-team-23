@@ -3,3 +3,7 @@
 //
 
 #include "CacheClauseEvaluator.h"
+
+bool CacheClauseEvaluator::setOptimisation(bool in) {
+    optimisation_activated = in;
+}

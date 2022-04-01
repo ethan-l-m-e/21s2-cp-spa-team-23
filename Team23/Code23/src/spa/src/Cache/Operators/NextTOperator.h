@@ -29,6 +29,7 @@ protected:
     static bool hasLoopAsParent(int srcVal, int destVal);
 
     static int findLargestValue(stmtSetStr stmtSet);
+
 };
 
 

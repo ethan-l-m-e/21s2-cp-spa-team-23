@@ -4,20 +4,32 @@
 
 #include "NextTClauseEvaluator.h"
 #include "TNode/CFG/NodeCFG.h"
-#include "QP_database/NextTOperator.h"
 
 
 //TODO: switch all graph operator to cacheClass
 bool NextTClauseEvaluator::isRelation(string left, string right) {
-    return nextTOperator->setOptimisation(true)->computeRelation(left, right);
+    if(optimisation_activated) {
+        return cache->relationship.nextT->isRelationship(left, right);
+    } else {
+        return nextTOperator->computeRelation(left, right);
+    }
+
 }
 
 unordered_set<string> NextTClauseEvaluator::getLeftSynonymValue(string right) {
-    return nextTOperator->computeLHS(right);
+    if(optimisation_activated) {
+        return cache->relationship.nextT->getLHS(right);
+    } else {
+        return nextTOperator->computeLHS(right);
+    }
 }
 
 unordered_set<string> NextTClauseEvaluator::getRightSynonymValue(string left) {
-    return nextTOperator->computeRHS(left);
+    if(optimisation_activated) {
+        return cache->relationship.nextT->getRHS(left);
+    } else {
+        return nextTOperator->computeRHS(left);
+    }
 }
 
 pair<DesignEntity, DesignEntity> NextTClauseEvaluator::getWildcardType () {

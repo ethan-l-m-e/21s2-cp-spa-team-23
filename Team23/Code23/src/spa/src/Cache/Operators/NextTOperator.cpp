@@ -24,6 +24,16 @@ bool NextTOperator::computeRelation(string left, string right) {
 }
 
 unordered_set<string> NextTOperator::computeRHS(string left) {
+    NodeCFG* leftNode = retrieveNode(left);
+    int size = getSize();
+    stmtSetNum resultSet;
+    resultSet = graphMethods->DFSResultSet(leftNode,
+                                           size,
+                                           graphMethods->collateAllAdjacentNodes,
+                                           graphMethods->searchNodesAlongPathAfter);
+    return convertIntToString(resultSet);
+
+    /*
     if(stmtIsNotInSource(vector<string>{left})) return {};
     stmtSetStr  resultSet;
     stmtSetStr allStmtNo = pkb->statement.statements.getAllStatementNumbers();
@@ -33,10 +43,13 @@ unordered_set<string> NextTOperator::computeRHS(string left) {
         }
     }
     return resultSet;
+    */
+
 }
 
 
 unordered_set<string> NextTOperator::computeLHS(string right) {
+
     if(stmtIsNotInSource(vector<string>{right})) return {};
     stmtSetStr  resultSet;
     stmtSetStr allStmtNo = pkb->statement.statements.getAllStatementNumbers();
@@ -46,6 +59,7 @@ unordered_set<string> NextTOperator::computeLHS(string right) {
         }
     }
     return resultSet;
+
 }
 
 bool NextTOperator::hasLoopAsParent(int srcVal, int destVal) {
