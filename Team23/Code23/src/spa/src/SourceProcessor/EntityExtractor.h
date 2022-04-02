@@ -9,6 +9,8 @@
 class EntityExtractor {
 public:
     static void extractAllEntities(Node *node);
+
+    static void assignProcedureToNodes(Node *node,ProcedureNode* proc);
 };
 
 
