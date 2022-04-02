@@ -1,0 +1,10 @@
+../../../../Tests23/supernest_source.txt ../../../../Tests23/supernest_queries.txt ../../../tests/supernest_out.xml
+procedure p;
+Select p
+SuperNest
+5000
+1
+read r;
+Select r such that Parent*(1, r)
+501
+5000
