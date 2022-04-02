@@ -98,6 +98,21 @@ assign a;
 Select a such that Affects(_, 11)
 none
 5000
+38 - [valid] 3, 3 affects* disconnected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21;
+Select a such that Affects(a, a1) and Affects(a1, a2) and Affects(a2, a3) and Affects(a10, a11) and Affects(a11, a12) and Affects(a12, a13)
+1, 2, 3, 4, 5, 7
+5000
+38 - [valid] 2, 2, 2 affects* disconnected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21;
+Select a such that Affects(a, a1) and Affects(a1, a2) and Affects(a3, a4) and Affects(a4, a5) and Affects(a5, a6) and Affects(a6, a7)
+1, 2, 3, 4, 5, 7
+5000
+38 - [valid] 5 affects disconnected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9;
+Select a such that Affects(a, a1) and Affects(a2, a3) and Affects(a4, a5) and Affects(a6, a7) and Affects(a8, a9)
+1, 2, 3, 4, 5, 7, 9
+5000
 20 - [valid] select assign with two wildcard ===========================================[select assign stmt tests start]
 assign a;
 Select a such that Affects*(_, _)
@@ -188,9 +203,34 @@ assign a;
 Select a such that Affects*(_, 18)
 none
 5000
+38 - [valid] 3, 3 affects* disconnected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21;
+Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a10, a11) and Affects*(a11, a12) and Affects*(a12, a13)
+1, 2, 3, 4, 5, 7
+5000
+38 - [valid] 2, 2, 2 affects* disconnected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21;
+Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7)
+1, 2, 3, 4, 5, 7
+5000
 38 - [valid] 10 affects*
 assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10;
 Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) and Affects*(a9, a10)
+1, 2, 3, 4, 5, 7
+5000
+38 - [valid] 10 affects*
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12;
+Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) and Affects*(a9, a10) and Affects(a11, a12)
+1, 2, 3, 4, 5, 7
+5000
+38 - [valid] 20 affects* connected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20;
+Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) and Affects*(a9, a10) and Affects*(a10, a11) and Affects*(a11, a12) and Affects*(a12, a13) and Affects*(a13, a14) and Affects*(a14, a15) and Affects*(a15, a16) and Affects*(a16, a17) and Affects*(a17, a18) and Affects*(a18, a19) and Affects*(a19, a20)
+1, 2, 3, 4, 5, 7
+5000
+38 - [valid] 30 affects* connected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30;
+Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) and Affects*(a9, a10) and Affects*(a10, a11) and Affects*(a11, a12) and Affects*(a12, a13) and Affects*(a13, a14) and Affects*(a14, a15) and Affects*(a15, a16) and Affects*(a16, a17) and Affects*(a17, a18) and Affects*(a18, a19) and Affects*(a19, a20) and Affects*(a20, a21) and Affects*(a21, a22) and Affects*(a22, a23) and Affects*(a23, a24) and Affects*(a24, a25) and Affects*(a25, a26) and Affects*(a26, a27) and Affects*(a27, a28) and Affects*(a28, a29) and Affects*(a29, a30)
 1, 2, 3, 4, 5, 7
 5000
 39 - [valid] 8 affects* (High time taken)
@@ -217,4 +257,16 @@ none
 stmt s; print p;
 Select s such that Affects(p, _)
 none
+5000
+
+//timeouts
+38 - [valid] 30 affects connected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42, a43, a44, a45, a46, a47, a48;
+Select a such that Affects(a, a1) and Affects(a2, a3) and Affects(a4, a5) and Affects(a6, a7) and Affects(a8, a9) and Affects(a10, a11) and Affects(a12, a13) and Affects(a14, a15) and Affects(a16, a17) and Affects(a18, a19) and Affects(a10, a11) and Affects(a11, a12) and Affects(a13, a14) and Affects(a15, a16) and Affects(a17, a18) and Affects(a19, a20) and Affects(a21, a22) and Affects(a23, a24) and Affects(a25, a26) and Affects(a27, a28) and Affects(a29, a30) and Affects(a31, a32) and Affects(a33, a34) and Affects(a35, a36) and Affects(a37, a38) and Affects(a39, a40) and Affects(a41, a42) and Affects(a43, a44) and Affects(a45, a46) and Affects(a47, a48)
+1, 2, 3, 4, 5, 7
+5000
+38 - [valid] 20 affects* disconnected
+assign a, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21;
+Select a such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a4) and Affects*(a4, a5) and Affects*(a5, a6) and Affects*(a6, a7) and Affects*(a7, a8) and Affects*(a8, a9) and Affects*(a9, a10) and Affects*(a11, a12) and Affects*(a12, a13) and Affects*(a13, a14) and Affects*(a14, a15) and Affects*(a15, a16) and Affects*(a16, a17) and Affects*(a17, a18) and Affects*(a18, a19) and Affects*(a19, a20) and Affects*(a20, a21)
+1, 2, 3, 4, 5, 7
 5000
