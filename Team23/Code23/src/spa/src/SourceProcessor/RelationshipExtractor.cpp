@@ -33,9 +33,9 @@ void setFollowsInPkb(int start, int end, StatementList statementList) {
     for (int i = start; i < end; i++) {
         Node *nextChild = statementList.at(i + 1);
         if (i == start) {
-            PKB::getInstance()->relationship.follows.setRelationship(child->getStmtNumber(), nextChild->getStmtNumber());
+            PKB::getInstance()->relationship.follows.setRelationship(std::to_string(child->getStmtNumber()), std::to_string(nextChild->getStmtNumber()));
         }
-        PKB::getInstance()->relationship.followsT.setRelationship(child->getStmtNumber(), nextChild->getStmtNumber());
+        PKB::getInstance()->relationship.followsT.setRelationship(std::to_string(child->getStmtNumber()), std::to_string(nextChild->getStmtNumber()));
     }
 }
 
@@ -43,10 +43,10 @@ void extractParentFromParentList(Node *parent, vector<StmtLstNode*> parentList, 
     int numOfChildNodes = statementList.size();
     for (int i = 0; i < (numOfChildNodes); i++) {
         Node *child = statementList.at(i);
-        PKB::getInstance()->relationship.parent.setRelationship(parent->getStmtNumber(), child->getStmtNumber());
+        PKB::getInstance()->relationship.parent.setRelationship(std::to_string(parent->getStmtNumber()), std::to_string(child->getStmtNumber()));
         for (int j = 0; j < parentList.size(); j++) {
             Node *parentT = parentList.at(j);
-            PKB::getInstance()->relationship.parentT.setRelationship(parentT->getStmtNumber(), child->getStmtNumber());
+            PKB::getInstance()->relationship.parentT.setRelationship(std::to_string(parentT->getStmtNumber()), std::to_string(child->getStmtNumber()));
         }
     }
 }
@@ -72,7 +72,7 @@ vector<VarName> extractUsesFromWhileNode(WhileNode* value) {
         vector<VarName> usedVariables = RelationshipExtractor::extractUses(stmt);
         allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
     }
-    PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+    PKB::getInstance()->relationship.usesS.setRelationship(std::to_string(value->getStmtNumber()), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
     return allUsedVariables;
 }
 
@@ -91,13 +91,13 @@ vector<VarName> extractUsesFromIfNode(IfNode* value) {
         allUsedVariables.insert(allUsedVariables.end(), usedVariables.begin(), usedVariables.end());
     }
 
-    PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
+    PKB::getInstance()->relationship.usesS.setRelationship(std::to_string(value->getStmtNumber()), unordered_set<VarName>{allUsedVariables.begin(), allUsedVariables.end()});
     return allUsedVariables;
 }
 
 vector<VarName> extractUsesFromAssignPrintNode(Node * node) {
     vector<VarName> variables = node->getListOfVarUsed();
-    PKB::getInstance()->relationship.usesS.setRelationship(node->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+    PKB::getInstance()->relationship.usesS.setRelationship(std::to_string(node->getStmtNumber()), unordered_set<VarName>{variables.begin(), variables.end()});
     return variables;
 }
 
@@ -119,7 +119,7 @@ vector<VarName> extractModifiesFromWhileNode(WhileNode* value) {
         vector<VarName> modifiedVariables = RelationshipExtractor::extractModifies(stmt);
         allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
     }
-    PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+    PKB::getInstance()->relationship.modifiesS.setRelationship(std::to_string(value->getStmtNumber()), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
     return allModifiedVariables;
 }
 
@@ -135,13 +135,13 @@ vector<VarName> extractModifiesFromIfNode(IfNode* value) {
         vector<VarName> modifiedVariables = RelationshipExtractor::extractModifies(stmt);
         allModifiedVariables.insert(allModifiedVariables.end(), modifiedVariables.begin(), modifiedVariables.end());
     }
-    PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
+    PKB::getInstance()->relationship.modifiesS.setRelationship(std::to_string(value->getStmtNumber()), unordered_set<VarName>{allModifiedVariables.begin(), allModifiedVariables.end()});
     return allModifiedVariables;
 }
 
 vector<VarName> extractModifiesFromAssignReadNode(Node* value) {
     vector<VarName> variables = value->getListOfVarModified();
-    PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(), unordered_set<VarName>{variables.begin(), variables.end()});
+    PKB::getInstance()->relationship.modifiesS.setRelationship(std::to_string(value->getStmtNumber()), unordered_set<VarName>{variables.begin(), variables.end()});
     return variables;
 }
 
@@ -213,7 +213,7 @@ vector<string>  RelationshipExtractor::extractUses (Node * node) {
     } else if (auto value = dynamic_cast<CallNode*>(node)) {
         Node* procedureCalled = value->getProcedure();
         vector<VarName> variables = extractUses(procedureCalled);
-        PKB::getInstance()->relationship.usesS.setRelationship(value->getStmtNumber(),
+        PKB::getInstance()->relationship.usesS.setRelationship(std::to_string(value->getStmtNumber()),
                                         unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else {
@@ -244,7 +244,7 @@ vector<string> RelationshipExtractor::extractModifies (Node * node) {
     } else if (auto value = dynamic_cast<CallNode*>(node)) {
         Node* procedureCalled = value->getProcedure();
         vector<VarName> variables = extractModifies(procedureCalled);
-        PKB::getInstance()->relationship.modifiesS.setRelationship(value->getStmtNumber(),
+        PKB::getInstance()->relationship.modifiesS.setRelationship(std::to_string(value->getStmtNumber()),
                                         unordered_set<VarName>{variables.begin(), variables.end()});
         return variables;
     } else {

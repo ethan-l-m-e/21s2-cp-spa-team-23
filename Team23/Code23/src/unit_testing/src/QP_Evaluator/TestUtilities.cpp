@@ -139,68 +139,68 @@ PKB* generateSamplePKB() {
     testPKB->entity.procedures.add("prop");
     testPKB->entity.procedures.add("pr");
 
-    testPKB->relationship.follows.setRelationship(1, 2);
-    testPKB->relationship.follows.setRelationship(2, 3);
-    testPKB->relationship.follows.setRelationship(3, 4);
-    testPKB->relationship.follows.setRelationship(4, 5);
-    testPKB->relationship.follows.setRelationship(5, 11);
-    testPKB->relationship.follows.setRelationship(6, 7);
-    testPKB->relationship.follows.setRelationship(7, 10);
+    testPKB->relationship.follows.setRelationship("1", "2");
+    testPKB->relationship.follows.setRelationship("2", "3");
+    testPKB->relationship.follows.setRelationship("3", "4");
+    testPKB->relationship.follows.setRelationship("4", "5");
+    testPKB->relationship.follows.setRelationship("5", "11");
+    testPKB->relationship.follows.setRelationship("6", "7");
+    testPKB->relationship.follows.setRelationship("7", "10");
 
-    testPKB->relationship.followsT.setRelationship(1,2);
-    testPKB->relationship.followsT.setRelationship(1,3);
-    testPKB->relationship.followsT.setRelationship(1,4);
-    testPKB->relationship.followsT.setRelationship(1,5);
-    testPKB->relationship.followsT.setRelationship(1,11);
-    testPKB->relationship.followsT.setRelationship(2,3);
-    testPKB->relationship.followsT.setRelationship(2,4);
-    testPKB->relationship.followsT.setRelationship(2,5);
-    testPKB->relationship.followsT.setRelationship(2,11);
-    testPKB->relationship.followsT.setRelationship(3,4);
-    testPKB->relationship.followsT.setRelationship(3,5);
-    testPKB->relationship.followsT.setRelationship(3,11);
-    testPKB->relationship.followsT.setRelationship(4,5);
-    testPKB->relationship.followsT.setRelationship(4,11);
-    testPKB->relationship.followsT.setRelationship(5,11);
-    testPKB->relationship.followsT.setRelationship(6, 7);
-    testPKB->relationship.followsT.setRelationship(6, 10);
-    testPKB->relationship.followsT.setRelationship(7, 10);
+    testPKB->relationship.followsT.setRelationship("1","2");
+    testPKB->relationship.followsT.setRelationship("1","3");
+    testPKB->relationship.followsT.setRelationship("1","4");
+    testPKB->relationship.followsT.setRelationship("1","5");
+    testPKB->relationship.followsT.setRelationship("1","11");
+    testPKB->relationship.followsT.setRelationship("2","3");
+    testPKB->relationship.followsT.setRelationship("2","4");
+    testPKB->relationship.followsT.setRelationship("2","5");
+    testPKB->relationship.followsT.setRelationship("2","11");
+    testPKB->relationship.followsT.setRelationship("3","4");
+    testPKB->relationship.followsT.setRelationship("3","5");
+    testPKB->relationship.followsT.setRelationship("3","11");
+    testPKB->relationship.followsT.setRelationship("4","5");
+    testPKB->relationship.followsT.setRelationship("4","11");
+    testPKB->relationship.followsT.setRelationship("5","11");
+    testPKB->relationship.followsT.setRelationship("6", "7");
+    testPKB->relationship.followsT.setRelationship("6", "10");
+    testPKB->relationship.followsT.setRelationship("7", "10");
 
-    testPKB->relationship.parent.setRelationship(5, 6);
-    testPKB->relationship.parent.setRelationship(5, 7);
-    testPKB->relationship.parent.setRelationship(5, 10);
-    testPKB->relationship.parent.setRelationship(7, 8);
-    testPKB->relationship.parent.setRelationship(7, 9);
+    testPKB->relationship.parent.setRelationship("5", "6");
+    testPKB->relationship.parent.setRelationship("5", "7");
+    testPKB->relationship.parent.setRelationship("5", "10");
+    testPKB->relationship.parent.setRelationship("7", "8");
+    testPKB->relationship.parent.setRelationship("7", "9");
 
-    testPKB->relationship.parentT.setRelationship(5,6);
-    testPKB->relationship.parentT.setRelationship(5,7);
-    testPKB->relationship.parentT.setRelationship(5,8);
-    testPKB->relationship.parentT.setRelationship(5,9);
-    testPKB->relationship.parentT.setRelationship(5,10);
-    testPKB->relationship.parentT.setRelationship(7, 8);
-    testPKB->relationship.parentT.setRelationship(7, 9);
+    testPKB->relationship.parentT.setRelationship("5","6");
+    testPKB->relationship.parentT.setRelationship("5","7");
+    testPKB->relationship.parentT.setRelationship("5","8");
+    testPKB->relationship.parentT.setRelationship("5","9");
+    testPKB->relationship.parentT.setRelationship("5","10");
+    testPKB->relationship.parentT.setRelationship("7", "8");
+    testPKB->relationship.parentT.setRelationship("7", "9");
 
-    testPKB->relationship.modifiesS.setRelationship(1, unordered_set<string>{"x"});
-    testPKB->relationship.modifiesS.setRelationship(2, unordered_set<string>{"y"});
-    testPKB->relationship.modifiesS.setRelationship(3, unordered_set<string>{"z"});
-    testPKB->relationship.modifiesS.setRelationship(5, unordered_set<string>{"x", "y", "z"});
-    testPKB->relationship.modifiesS.setRelationship(6, unordered_set<string>{"x"});
-    testPKB->relationship.modifiesS.setRelationship(8, unordered_set<string>{"y"});
-    testPKB->relationship.modifiesS.setRelationship(9, unordered_set<string>{"x"});
-    testPKB->relationship.modifiesS.setRelationship(10, unordered_set<string>{"z"});
+    testPKB->relationship.modifiesS.setRelationship("1", unordered_set<string>{"x"});
+    testPKB->relationship.modifiesS.setRelationship("2", unordered_set<string>{"y"});
+    testPKB->relationship.modifiesS.setRelationship("3", unordered_set<string>{"z"});
+    testPKB->relationship.modifiesS.setRelationship("5", unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.modifiesS.setRelationship("6", unordered_set<string>{"x"});
+    testPKB->relationship.modifiesS.setRelationship("8", unordered_set<string>{"y"});
+    testPKB->relationship.modifiesS.setRelationship("9", unordered_set<string>{"x"});
+    testPKB->relationship.modifiesS.setRelationship("10", unordered_set<string>{"z"});
     testPKB->relationship.modifiesP.setRelationship("prop", unordered_set<string>{"x", "y", "z"});
     testPKB->relationship.modifiesP.setRelationship("pr", unordered_set<string>{"x"});
 
-    testPKB->relationship.usesS.setRelationship(2, unordered_set<string>{"x", "y", "a", "b"});
-    testPKB->relationship.usesS.setRelationship(3, unordered_set<string>{"y"});
-    testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"z"});
-    testPKB->relationship.usesS.setRelationship(5, unordered_set<string>{"x", "y", "z"});
-    testPKB->relationship.usesS.setRelationship(6, unordered_set<string>{"y"});
-    testPKB->relationship.usesS.setRelationship(7, unordered_set<string>{"x", "y", "z"});
-    testPKB->relationship.usesS.setRelationship(8, unordered_set<string>{"x", "z"});
-    testPKB->relationship.usesS.setRelationship(9, unordered_set<string>{"y", "z"});
-    testPKB->relationship.usesS.setRelationship(10, unordered_set<string>{"z"});
-    testPKB->relationship.usesS.setRelationship(11, unordered_set<string>{"x"});
+    testPKB->relationship.usesS.setRelationship("2", unordered_set<string>{"x", "y", "a", "b"});
+    testPKB->relationship.usesS.setRelationship("3", unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship("4", unordered_set<string>{"z"});
+    testPKB->relationship.usesS.setRelationship("5", unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.usesS.setRelationship("6", unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship("7", unordered_set<string>{"x", "y", "z"});
+    testPKB->relationship.usesS.setRelationship("8", unordered_set<string>{"x", "z"});
+    testPKB->relationship.usesS.setRelationship("9", unordered_set<string>{"y", "z"});
+    testPKB->relationship.usesS.setRelationship("10", unordered_set<string>{"z"});
+    testPKB->relationship.usesS.setRelationship("11", unordered_set<string>{"x"});
     testPKB->relationship.usesP.setRelationship("prop", unordered_set<string>{"x", "y", "z", "a", "b"});
     testPKB->relationship.usesP.setRelationship("pr", unordered_set<string>{"y"});
 
@@ -273,18 +273,18 @@ PKB* generateSamplePKBForPatternMatchingAssign() {
     testPKB->statement.statements.addStatement(n7);
     testPKB->statement.assignStatements.addStatement(n7);
 
-    testPKB->relationship.follows.setRelationship(1, 2);
-    testPKB->relationship.follows.setRelationship(2, 3);
-    testPKB->relationship.follows.setRelationship(3, 4);
-    testPKB->relationship.follows.setRelationship(4, 5);
-    testPKB->relationship.follows.setRelationship(5, 6);
-    testPKB->relationship.follows.setRelationship(6, 7);
+    testPKB->relationship.follows.setRelationship("1", "2");
+    testPKB->relationship.follows.setRelationship("2", "3");
+    testPKB->relationship.follows.setRelationship("3", "4");
+    testPKB->relationship.follows.setRelationship("4", "5");
+    testPKB->relationship.follows.setRelationship("5", "6");
+    testPKB->relationship.follows.setRelationship("6", "7");
 
-    testPKB->relationship.usesS.setRelationship(1, unordered_set<string>{"y"});
-    testPKB->relationship.usesS.setRelationship(3, unordered_set<string>{"y"});
-    testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"y", "x"});
-    testPKB->relationship.usesS.setRelationship(5, unordered_set<string>{"y", "x", "z"});
-    testPKB->relationship.usesS.setRelationship(6, unordered_set<string>{"y", "x", "z"});
+    testPKB->relationship.usesS.setRelationship("1", unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship("3", unordered_set<string>{"y"});
+    testPKB->relationship.usesS.setRelationship("4", unordered_set<string>{"y", "x"});
+    testPKB->relationship.usesS.setRelationship("5", unordered_set<string>{"y", "x", "z"});
+    testPKB->relationship.usesS.setRelationship("6", unordered_set<string>{"y", "x", "z"});
 
     return testPKB;
 }
@@ -376,13 +376,13 @@ PKB* generateAttrRefPKB() {
     testPKB->entity.variables.add("C");
     testPKB->entity.constants.add("0");
 
-    testPKB->relationship.parent.setRelationship(2, 3);
-    testPKB->relationship.parent.setRelationship(4, 5);
+    testPKB->relationship.parent.setRelationship("2", "3");
+    testPKB->relationship.parent.setRelationship("4", "5");
 
-    testPKB->relationship.usesS.setRelationship(1, unordered_set<string>{"b", "c", "d", "h","i"});
-    testPKB->relationship.usesS.setRelationship(2, unordered_set<string>{"G", "H", "C"});
-    testPKB->relationship.usesS.setRelationship(3, unordered_set<string>{"C"});
-    testPKB->relationship.usesS.setRelationship(4, unordered_set<string>{"G"});
+    testPKB->relationship.usesS.setRelationship("1", unordered_set<string>{"b", "c", "d", "h","i"});
+    testPKB->relationship.usesS.setRelationship("2", unordered_set<string>{"G", "H", "C"});
+    testPKB->relationship.usesS.setRelationship("3", unordered_set<string>{"C"});
+    testPKB->relationship.usesS.setRelationship("4", unordered_set<string>{"G"});
 
     return testPKB;
 }

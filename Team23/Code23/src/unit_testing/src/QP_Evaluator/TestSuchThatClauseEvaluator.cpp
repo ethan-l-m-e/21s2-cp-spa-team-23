@@ -12,70 +12,70 @@
 using namespace std;
 
 bool evaluateFollowsClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<OneToOneRelationship<int, int>>(declarations, clause, pkb, &pkb->relationship.follows);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<OneToOneRelationship>(declarations, clause, pkb, &pkb->relationship.follows);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateFollowsTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<int, int>>(declarations, clause, pkb, &pkb->relationship.followsT);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.followsT);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateParentClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<OneToManyRelationship<int, int>>(declarations, clause, pkb, &pkb->relationship.parent);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<OneToManyRelationship>(declarations, clause, pkb, &pkb->relationship.parent);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateParentTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<int, int>>(declarations, clause, pkb, &pkb->relationship.parentT);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.parentT);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateModifiesSClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<int, string>>(declarations, clause, pkb, &pkb->relationship.modifiesS);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.modifiesS);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateModifiesPClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<string, string>>(declarations, clause, pkb, &pkb->relationship.modifiesP);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.modifiesP);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateUsesSClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<int, string>>(declarations, clause, pkb, &pkb->relationship.usesS);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.usesS);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateUsesPClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<string, string>>(declarations, clause, pkb, &pkb->relationship.usesP);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.usesP);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateCallsClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<string, string>>(declarations, clause, pkb, &pkb->relationship.calls);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.calls);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;
 }
 
 bool evaluateCallsTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
-    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship<string, string>>(declarations, clause, pkb, &pkb->relationship.callsT);
+    auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.callsT);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
     return result;

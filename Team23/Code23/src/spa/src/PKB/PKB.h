@@ -34,9 +34,9 @@ public:
     void clearPKB();
 
     struct Entity {
-        EntityTable<string> variables;
-        EntityTable<string> procedures;
-        EntityTable<string> constants;
+        EntityTable variables;
+        EntityTable procedures;
+        EntityTable constants;
     };
 
     Entity entity;
@@ -55,22 +55,22 @@ public:
 
     struct Relationship {
 
-        OneToOneRelationship<int, int> follows;
+        OneToOneRelationship follows;
 
-        ManyToManyRelationship<int, int> followsT;
+        ManyToManyRelationship followsT;
 
-        OneToManyRelationship<int, int> parent;
+        OneToManyRelationship parent;
 
-        ManyToManyRelationship<int, int> parentT;
+        ManyToManyRelationship parentT;
 
-        ManyToManyRelationship<int, string> usesS;
-        ManyToManyRelationship<string, string> usesP;
+        ManyToManyRelationship usesS;
+        ManyToManyRelationship usesP;
 
-        ManyToManyRelationship<int, string> modifiesS;
-        ManyToManyRelationship<string, string> modifiesP;
+        ManyToManyRelationship modifiesS;
+        ManyToManyRelationship modifiesP;
 
-        ManyToManyRelationship<string, string> calls;
-        ManyToManyRelationship<string, string> callsT;
+        ManyToManyRelationship calls;
+        ManyToManyRelationship callsT;
 
         NextRelationship next;
 

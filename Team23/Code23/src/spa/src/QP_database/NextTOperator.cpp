@@ -50,7 +50,7 @@ unordered_set<string> NextTOperator::computeLHS(string right) {
 
 bool NextTOperator::hasLoopAsParent(int srcVal, int destVal) {
 
-    if(pkb->statement.whileStatements.isStatementNumber(destVal)) {
+    if(pkb->statement.whileStatements.isStatementNumber(std::to_string(destVal))) {
         if(pkb->relationship.parentT.isRelationship(to_string(destVal), to_string(srcVal))) {
             return true;
         }

@@ -1978,7 +1978,7 @@ TEST_CASE ("PARSER - MULTICLAUSE CHECK") {
 TEST_CASE ("PARSER - INCORRECT CHECK") {
     QueryParser parser = QueryParser();
 
-    std::string pql = "stmt s; assign a; constant c; variable v; \nSelect <s.stmt#, v.varName> such that Parent(s, _) and Uses(s, v)";
+    std::string pql = "assign a; Select a pattern a(_, _)";
     Query query = parser.getQuery(pql);
 
 }
