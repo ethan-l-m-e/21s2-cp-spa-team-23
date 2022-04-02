@@ -115,9 +115,9 @@ list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
     } else if (!resultTable->isEmpty()) {
         for(int i = 0; i < resultTable->getTableHeight(); i++) {
             string s;
-            for (auto &col: *resultTable->getList()) {
+            for (auto col: resultTable->getProjection()) {
                 if (!s.empty()) s += " ";
-                s += col[i];
+                s += (*resultTable->getList())[col][i];
             }
             stringSet.insert(s);
         }
