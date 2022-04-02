@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits.h>
 
 #include <unordered_set>
 #include <unordered_map>
@@ -92,5 +93,38 @@ public:
 
 
 
+
+};
+
+
+class ManyToManyRelationshipWithMinMax : public ManyToManyRelationship {
+private:
+    int min = INT_MAX;
+    int max = INT_MIN;
+
+public:
+    void setRelationship(string lhs, string rhs) override {
+
+        int rhsInteger = std::stoi(rhs);
+
+        if (min > rhsInteger) {
+            min = rhsInteger;
+        }
+
+        if (max < rhsInteger) {
+            max = rhsInteger;
+        }
+
+
+        ManyToManyRelationship::setRelationship(lhs, rhs);
+    }
+
+    string getRHSMin() {
+        return std::to_string(min);
+    }
+
+    string getRHSMax() {
+        return std::to_string(max);
+    }
 
 };
