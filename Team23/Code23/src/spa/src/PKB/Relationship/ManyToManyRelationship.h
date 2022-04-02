@@ -105,6 +105,8 @@ private:
 public:
     void setRelationship(string lhs, string rhs) override {
 
+        ManyToManyRelationship::setRelationship(lhs, rhs);
+
         int rhsInteger = std::stoi(rhs);
 
         if (min > rhsInteger) {
@@ -115,8 +117,6 @@ public:
             max = rhsInteger;
         }
 
-
-        ManyToManyRelationship::setRelationship(lhs, rhs);
     }
 
     string getRHSMin() {
