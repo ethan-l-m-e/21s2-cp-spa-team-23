@@ -4,18 +4,18 @@
 
 #include "QueryOptimizer.h"
 
-std::vector<GroupedClause> QueryOptimizer::groupClauses(){
+std::vector<GroupedClause>* QueryOptimizer::groupClauses(){
     std::map<string, int> synonymIndices;
     vector<Clause*> allClauses;
 
     // add all clauses into a single vector
-    for(auto& patternClause : *query->getPatternClauses()) {
+    for(auto &patternClause : *query->getPatternClauses()) {
         allClauses.emplace_back(&patternClause);
     }
-    for(auto& suchThatClause : *query->getSuchThatClauses()) {
+    for(auto &suchThatClause : *query->getSuchThatClauses()) {
         allClauses.emplace_back(&suchThatClause);
     }
-    for(auto& withClause : *query->getWithClauses()) {
+    for(auto &withClause : *query->getWithClauses()) {
         allClauses.emplace_back(&withClause);
     }
 
@@ -28,7 +28,6 @@ std::vector<GroupedClause> QueryOptimizer::groupClauses(){
         synonymIndices[iter->first] = int(index + 1);
     }
 
-    std::vector<GroupedClause> rearrangedClauses; // the output vector, initially empty
     std::map<Clause*, int> groupIdentifier; // stores the mapping from each clause to one of its synonyms (0 for clauses without synonyms)
 
     /*
@@ -59,8 +58,11 @@ std::vector<GroupedClause> QueryOptimizer::groupClauses(){
 
     // GroupedClause stores a pointer to the clause and the group number for the clause, append it to the output vector
     for(int i = 0; i < numOfClauses; i ++) {
-        int synonym = groupIdentifier.at(allClauses[i]);
-        rearrangedClauses.emplace_back(GroupedClause{allClauses[i], ds.find(synonym)});
+        Clause* clause = allClauses[i];
+        int synonym = groupIdentifier.at(clause);
+        int group = ds.find(synonym);
+        GroupedClause newClause = {clause, group};
+        rearrangedClauses.emplace_back(newClause);
     }
 
     // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
@@ -83,5 +85,5 @@ std::vector<GroupedClause> QueryOptimizer::groupClauses(){
         }
     }
     */
-    return rearrangedClauses;
+    return &rearrangedClauses;
 }

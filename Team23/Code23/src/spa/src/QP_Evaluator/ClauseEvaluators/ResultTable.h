@@ -39,8 +39,9 @@ public:
     void appendColumn(string, vector<string>&);
     void mergeResultToTable(Result &result);
     void rearrangeSynonyms(vector<int>&);
-
+    vector<int> getProjection();
 private:
+    void updateEntries(String2DVector newList);
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
     void appendHeader(const vector<string>&);
@@ -56,6 +57,7 @@ private:
     String2DVector tableEntries;
     bool isBooleanResult;
     bool booleanResult;
+    vector<int> projection;
 };
 
 #endif //SPA_RESULTTABLE_H

@@ -68,15 +68,15 @@ namespace qp {
         void getSuchThatClauses(QueryToken&, Query&);
         void getPattern(QueryToken&, Query&);
         void getWithClauses(QueryToken&, Query&);
-        Argument getArgument(std::string, std::map<std::string, std::string>);
-        void getArgumentValue(std::string, ArgumentType, Argument&);
-        ArgumentType getArgumentType(std::string, std::map<std::string, std::string>);
-        DesignEntity getDesignEntity(std::string);
-        std::vector<Argument> getArgumentList(std::vector<std::string>, std::map<std::string, std::string>);
-        RelRef getRelRefFromString(std::string, Argument, std::map<std::string, std::string>);
-        std::string determineRelationshipBasedOnArg(Argument, std::string, std::map<std::string, std::string>);
-        SynonymType getPatternSynonymType(std::string, std::map<std::string, std::string>);
-        std::pair<std::string, AttrName> getAttrName(std::string);
+        Argument getArgument(std::string&, std::map<std::string, std::string>&);
+        void getArgumentValue(std::string&, ArgumentType&, Argument&);
+        ArgumentType getArgumentType(std::string&, std::map<std::string, std::string>&);
+        DesignEntity getDesignEntity(std::string&);
+        std::vector<Argument> getArgumentList(std::vector<std::string>&, std::map<std::string, std::string>&);
+        RelRef getRelRefFromString(std::string&, Argument&, std::map<std::string, std::string>&);
+        std::string determineRelationshipBasedOnArg(Argument&, std::string&, std::map<std::string, std::string>&);
+        SynonymType getPatternSynonymType(std::string&, std::map<std::string, std::string>&);
+        std::pair<std::string, AttrName> getAttrName(std::string&);
     };
 }
 

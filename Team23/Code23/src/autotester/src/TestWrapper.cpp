@@ -46,6 +46,8 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
       std::cout << "Invalid Syntax: " << e.what();
   } catch (qp::QPInvalidSemanticException e) {
     std::cout << "Invalid Semantics: " << e.what();
+  } catch (qp::QPTokenizerException e) {
+      std::cout << "Invalid Syntax: " << e.what();
   } catch (qp::QPEvaluatorException e) {
       // TODO Add results
   }

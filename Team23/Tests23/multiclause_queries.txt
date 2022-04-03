@@ -1223,3 +1223,18 @@ assign a; while w;
 Select a such that Parent* (w, a) pattern a ("x", _) and Next* (1, a)
 none
 5000
+243 (syntactically invalid)
+assign a; while w;
+Select a such that Parent* (w, a) and w.stmt# = 4
+none
+5000
+244 (syntactically invalid)
+assign a; while w;
+Select a with w.stmt# = 4 and Parent* (w, a)
+none
+5000
+245 (syntactically invalid)
+read r; print pr;
+Select a with r.varName = pr.varName and pattern a (_, _)
+none
+5000

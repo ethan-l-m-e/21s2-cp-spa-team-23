@@ -158,3 +158,123 @@ print p; call c;
 Select p such that Uses(p, c)
 none
 5000
+32 - [not valid] Calls with not procedure (assign)
+assign a;
+Select s such that Calls(a, _)
+none
+5000
+33 - [not valid] Calls with not procedure (assign)
+assign a;
+Select s such that Calls(_, a)
+none
+5000
+34 - [not valid] Calls with not procedure (read)
+read r;
+Select s such that Calls(r, _)
+none
+5000
+35 - [not valid] Calls with not procedure (read)
+read r;
+Select s such that Calls(_, r)
+none
+5000
+36 - [not valid] Calls with not procedure (print)
+print pr;
+Select s such that Calls(pr, _)
+none
+5000
+37 - [not valid] Calls with not procedure (print)
+print pr;
+Select s such that Calls(_, pr)
+none
+5000
+38 - [not valid] Calls with not procedure (while)
+while w;
+Select s such that Calls(w, _)
+none
+5000
+39 - [not valid] Calls with not procedure (while)
+while w;
+Select s such that Calls(_, w)
+none
+5000
+40 - [not valid] Calls with not procedure (ifs)
+if ifs;
+Select s such that Calls(ifs, _)
+none
+5000
+41 - [not valid] Calls with not procedure (ifs)
+if ifs;
+Select s such that Calls(_, ifs)
+none
+5000
+42 - [not valid] Calls with not procedure (call)
+call cl;
+Select s such that Calls(cl, _)
+none
+5000
+43 - [not valid] Calls with not procedure (call)
+call cl;
+Select s such that Calls(_, cl)
+none
+5000
+44 - [not valid] Calls* with not procedure (assign)
+assign a;
+Select s such that Calls*(a, _)
+none
+5000
+45 - [not valid] Calls* with not procedure (assign)
+assign a;
+Select s such that Calls*(_, a)
+none
+5000
+46 - [not valid] Calls* with not procedure (read)
+read r;
+Select s such that Calls*(r, _)
+none
+5000
+47 - [not valid] Calls* with not procedure (read)
+read r;
+Select s such that Calls*(_, r)
+none
+5000
+48 - [not valid] Calls* with not procedure (print)
+print pr;
+Select s such that Calls*(pr, _)
+none
+5000
+49 - [not valid] Calls* with not procedure (print)
+print pr;
+Select s such that Calls*(_, pr)
+none
+5000
+50 - [not valid] Calls* with not procedure (while)
+while w;
+Select s such that Calls*(w, _)
+none
+5000
+51 - [not valid] Calls* with not procedure (while)
+while w;
+Select s such that Calls*(_, w)
+none
+5000
+52 - [not valid] Calls* with not procedure (ifs)
+if ifs;
+Select s such that Calls*(ifs, _)
+none
+5000
+53 - [not valid] Calls* with not procedure (ifs)
+if ifs;
+Select s such that Calls*(_, ifs)
+none
+5000
+54 - [not valid] Calls* with not procedure (call)
+call cl;
+Select s such that Calls*(cl, _)
+none
+5000
+55 - [not valid] Calls* with not procedure (call)
+call cl;
+Select s such that Calls*(_, cl)
+none
+5000
