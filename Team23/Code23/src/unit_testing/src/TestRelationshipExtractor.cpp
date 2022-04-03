@@ -600,7 +600,7 @@ TEST_CASE("Entity Extractor - assign all stmt nodes to a procedure") {
     ProgramNode prog = ProgramNode(procLst);
     EntityExtractor::assignProcedureToNodes(&prog,nullptr);
     REQUIRE(dynamic_cast<ProcedureNode*>(aNode.getProc())->getProcName() == "name1");
-    REQUIRE(dynamic_cast<ProcedureNode*>(bNode.getProc())->getProcName() == "name2");
+    REQUIRE(dynamic_cast<ProcedureNode*>(bNode.getProc())->getProcName() == "name1");
 
 }
 
