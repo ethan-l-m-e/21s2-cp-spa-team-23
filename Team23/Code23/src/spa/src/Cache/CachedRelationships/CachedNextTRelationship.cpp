@@ -30,9 +30,8 @@ bool CachedNextTRelationship::isRelationship(string lhs, string rhs) {
 unordered_set<string> CachedNextTRelationship::getRHS(string lhs) {
     unordered_set<string> results;
     //Taking from cache. O(n) -> O(1)
-    if(getRhsHistory.isInHistory(lhs) || CachedManyToManyRelationship::getRHS(lhs).size() > 0) {
+    if(getRhsHistory.isInHistory(lhs)) {
         printStmt("retrieving NextT getRHS"  + lhs + " from storage\n");
-        getRhsHistory.addToHistory(lhs);
         results = CachedManyToManyRelationship::getRHS(lhs);
     } else {
         // computing. runtime: O(n*h).
@@ -66,9 +65,8 @@ unordered_set<string> CachedNextTRelationship::getRHS(string lhs) {
 
 unordered_set<string> CachedNextTRelationship::getLHS(string rhs) {
     unordered_set<string> results;
-    if(getLhsHistory.isInHistory(rhs) || CachedManyToManyRelationship::getLHS(rhs).size() > 0) {
+    if(getLhsHistory.isInHistory(rhs)) {
         printStmt("retrieving NextT getLHS"  + rhs + " from storage\n");
-        getLhsHistory.addToHistory(rhs);
         results = CachedManyToManyRelationship::getLHS(rhs);
     } else {
         printStmt("computing NextT LHS " + rhs + "\n");
