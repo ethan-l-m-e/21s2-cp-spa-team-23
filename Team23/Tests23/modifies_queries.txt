@@ -28,6 +28,26 @@ assign a;
 Select a such that Modifies(a, "modifiedVar1")
 1, 4, 6, 10
 5000
+6 - [valid] select assign with assign stmt# and wildcard
+assign a;
+Select a such that Modifies(1, _)
+1, 4, 6, 7, 9, 10
+5000
+7 - [valid] select assign with assign stmt# and var synonym
+assign a;
+Select a such that Modifies(1, v)
+1, 4, 6, 7, 9, 10
+5000
+8 - [valid] select assign with assign stmt# and var name
+assign a;
+Select a such that Modifies(1, "modifiedVar1")
+1, 4, 6, 7, 9, 10
+5000
+9 - [valid] select assign with assign stmt# and var name not modified
+assign a;
+Select a such that Modifies(1, "x")
+none
+5000
 6 - [valid] select read with wildcard =====================================================[Select read tests start]
 read r;
 Select r such that Modifies(r, _)
@@ -47,6 +67,26 @@ Select r such that Modifies(r, "modifiedVar1")
 read r;
 Select r such that Modifies(r, "modifiedVar3")
 13
+5000
+9 - [valid] select read with read stmt# and wildcard
+read r;
+Select r such that Modifies(2, _)
+2, 11, 13
+5000
+9 - [valid] select read with read stmt# and var synonym
+read r; variable v;
+Select r such that Modifies(2, v)
+2, 11, 13
+5000
+9 - [valid] select read with read stmt# and var name
+read r; variable v;
+Select r such that Modifies(2, "modifiedVar1")
+2, 11, 13
+5000
+9 - [valid] select read with read stmt# and var name not modified
+read r; variable v;
+Select r such that Modifies(2, "modifiedVar2")
+none
 5000
 10 - [valid] select while with wildcard ===================================================[Select while tests start]
 while w;

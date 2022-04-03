@@ -83,93 +83,380 @@ stmt s;
 Select s such that Next(12, 13)
 none
 5000
-17 - [valid] select stmt with wildcards =============================================================[Next* tests start]
+17 - [valid] select assign with wildcard
+assign a;
+Select a such that Next(a, _)
+1, 2, 4, 8, 9, 10, 11
+5000
+2 - [valid] select assign with wildcard lhs
+assign a;
+Select a such that Next(_, a)
+2, 4, 8, 9, 10, 11
+5000
+3 - [valid] select assign with stmt syn
+stmt s1; assign a;
+Select a such that Next(a, s1)
+1, 2, 4, 8, 9, 10, 11
+5000
+4 - [valid] select assign with stmt syn lhs
+stmt s1; assign a;
+Select a such that Next(s1, a)
+2, 4, 8, 9, 10, 11
+5000
+5 - [valid] select assign with stmt no
+assign a;
+Select a such that Next(a, 2)
+1
+5000
+6 - [valid] select assign with stmt no lhs
+assign a;
+Select a such that Next(1, a)
+2
+5000
+7 - [valid] select assign with while stmt no
+assign a;
+Select a such that Next(a, 3)
+2, 10
+5000
+8 - [valid] select assign with while stmt no lhs
+assign a;
+Select a such that Next(3, a)
+4, 11
+5000
+9 - [valid] select assign with if-then stmt no
+assign a;
+Select a such that Next(8, a)
+10
+5000
+10 - [valid] select assign with if-else stmt no
+assign a;
+Select a such that Next(a, 9)
+none
+5000
+11 - [valid] select assign with if-cond stmt no lhs
+assign a;
+Select a such that Next(7, a)
+8, 9
+5000
+12 - [valid] select assign with stmt no in other procedure
+assign a;
+Select a such that Next(a, 13)
+none
+5000
+13 - [valid] select assign with stmt no in other procedure
+assign a;
+Select a such that Next(13, a)
+none
+5000
+14 - [valid] select two stmt no
+assign a;
+Select a such that Next(1, 2)
+1, 2, 4, 8, 9, 10, 11, 13
+5000
+15 - [valid] select two stmt no but not immediately after
+assign a;
+Select a such that Next(1, 3)
+none
+5000
+16 - [valid] select two stmt no but different procedure
+assign a;
+Select a such that Next(12, 13)
+none
+5000
+17 - [valid] select read with wildcard
+read r;
+Select r such that Next(r, _)
+6
+5000
+18 - [valid] select read with wildcard lhs
+read r;
+Select r such that Next(_, r)
+6
+5000
+19 - [valid] select read with stmt syn
+stmt s1; read r;
+Select r such that Next(r, s1)
+6
+5000
+20 - [valid] select read with stmt syn lhs
+stmt s1; read r;
+Select r such that Next(s1, r)
+6
+5000
+21 - [valid] select read with stmt no
+read r;
+Select r such that Next(r, 7)
+6
+5000
+22 - [valid] select read with stmt no lhs
+read r;
+Select r such that Next(5, r)
+6
+5000
+23 - [valid] select print with wildcard
+print pr;
+Select pr such that Next(pr, _)
+5
+5000
+24 - [valid] select print with wildcard lhs
+print pr;
+Select pr such that Next(_, pr)
+5
+5000
+25 - [valid] select print with stmt syn
+stmt s1; print pr;
+Select pr such that Next(pr, s1)
+5
+5000
+26 - [valid] select print with stmt syn lhs
+stmt s1; print pr;
+Select pr such that Next(s1, pr)
+5
+5000
+27 - [valid] select print with stmt no
+print pr;
+Select pr such that Next(pr, 6)
+5
+5000
+28 - [valid] select print with stmt no lhs
+print pr;
+Select pr such that Next(4, pr)
+5
+5000
+29 - [valid] select while with wildcard
+while w;
+Select w such that Next(w, _)
+3
+5000
+30 - [valid] select while with wildcard lhs
+while w;
+Select w such that Next(_, w)
+3
+5000
+31 - [valid] select while with stmt syn
+stmt s1; while w;
+Select w such that Next(w, s1)
+3
+5000
+32 - [valid] select while with stmt syn lhs
+stmt s1; while w;
+Select w such that Next(s1, w)
+3
+5000
+33 - [valid] select while with stmt no
+while w;
+Select w such that Next(w, 4)
+3
+5000
+34 - [valid] select while with stmt no lhs
+while w;
+Select w such that Next(2, w)
+3
+5000
+35 - [valid] select if with wildcard
+if ifs;
+Select ifs such that Next(ifs, _)
+7
+5000
+36 - [valid] select if with wildcard lhs
+if ifs;
+Select ifs such that Next(_, ifs)
+7
+5000
+37 - [valid] select if with stmt syn
+stmt s1; if ifs;
+Select ifs such that Next(ifs, s1)
+7
+5000
+38 - [valid] select if with stmt syn lhs
+stmt s1; if ifs;
+Select ifs such that Next(s1, ifs)
+7
+5000
+39 - [valid] select if with stmt no
+if ifs;
+Select ifs such that Next(ifs, 9)
+7
+5000
+40 - [valid] select if with stmt no lhs
+if ifs;
+Select ifs such that Next(6, ifs)
+7
+5000
+41 - [valid] select call with wildcard
+call cl;
+Select cl such that Next(cl, _)
+none
+5000
+42 - [valid] select call with wildcard lhs
+call cl;
+Select cl such that Next(_, cl)
+12
+5000
+43 - [valid] select call with stmt syn
+stmt s1; call cl;
+Select cl such that Next(cl, s1)
+none
+5000
+44 - [valid] select call with stmt syn lhs
+stmt s1; call cl;
+Select cl such that Next(s1, cl)
+12
+5000
+45 - [valid] select call with stmt no
+call cl;
+Select cl such that Next(cl, _)
+none
+5000
+46 - [valid] select call with stmt no lhs
+call cl;
+Select cl such that Next(11, cl)
+12
+5000
+47 - [valid] select stmt with wildcards =============================================================[Next* tests start]
 stmt s;
 Select s such that Next*(_, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
-18 - [valid] select stmt with wildcard rhs
+48 - [valid] select stmt with wildcard rhs
 stmt s;
 Select s such that Next*(s, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
-19 - [valid] select stmt with wildcard lhs
+49 - [valid] select stmt with wildcard lhs
 stmt s;
 Select s such that Next*(_, s)
 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-20 - [valid] select stmt with stmt syn
+50 - [valid] select stmt with stmt syn
 stmt s, s1;
 Select s such that Next*(s, s1)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
-21 - [valid] select stmt with stmt syn lhs
+51 - [valid] select stmt with stmt syn lhs
 stmt s, s1;
 Select s such that Next*(s1, s)
 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-22 - [valid] select stmt with stmt no
+52 - [valid] select stmt with stmt no
 stmt s;
 Select s such that Next*(s, 12)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
-23 - [valid] select stmt with stmt no lhs
+53 - [valid] select stmt with stmt no lhs
 stmt s;
 Select s such that Next*(1, s)
 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-24 - [valid] select stmt with while-cond stmt no
+54 - [valid] select stmt with while-cond stmt no
 stmt s;
 Select s such that Next*(s, 3)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-25 - [valid] select stmt with while-loop stmt no lhs
+55 - [valid] select stmt with while-loop stmt no lhs
 stmt s;
 Select s such that Next*(4, s)
 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-26 - [valid] select stmt with while-loop stmt no
+56 - [valid] select stmt with while-loop stmt no
 stmt s;
 Select s such that Next*(s, 10)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-27 - [valid] select stmt with while-loop stmt no lhs
+57 - [valid] select stmt with while-loop stmt no lhs
 stmt s;
 Select s such that Next*(6, s)
 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
-28 - [valid] select stmt with if-then stmt no
+58 - [valid] select stmt with if-then stmt no
 stmt s;
 Select s such that Next*(s, 8)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-29 - [valid] select stmt with if-else stmt no
+59 - [valid] select stmt with if-else stmt no
 stmt s;
 Select s such that Next*(s, 9)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-30 - [valid] select stmt in loop
+60 - [valid] select stmt in loop
 stmt s;
 Select s such that Next*(s, s)
 3, 4, 5, 6, 7, 8, 9, 10
 5000
-31 - [valid] select two stmt no
+61 - [valid] select two stmt no
 stmt s;
 Select s such that Next*(1, 2)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
-32 - [valid] select two stmt no but not immediately after
+62 - [valid] select two stmt no but not immediately after
 stmt s;
 Select s such that Next*(1, 11)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
-33 - [valid] select two stmt no but different procedure
+63 - [valid] select two stmt no but different procedure
 stmt s;
 Select s such that Next*(1, 13)
 none
 5000
-34 - [valid] select two stmt no in while
+64 - [valid] select two stmt no in while
 stmt s;
 Select s such that Next*(3, 3)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+5000
+65 - [valid] select 5 next disconnected =======================================================[multiclause tests start]
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+66 - [valid] select 6 next disconnected
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9) and Next(s10, s11)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+67 - [valid] select 2 next disconnected
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+68 - [valid] select 3 next* disconnected
+stmt s, s1, s2, s3, s4, s5;
+Select s such that Next*(s, s1) and Next*(s2, s3) and Next*(s4, s5)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+69 - [valid] select 2, 2 next* disconnected
+stmt s, s1, s2, s3, s4, s5;
+Select s such that Next*(s, s1) and Next*(s1, s2) and Next*(s3, s4)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+
+//timeouts to paste in later..
+70 - [valid] select 7 next disconnected
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9) and Next(s10, s11) and Next(s12, s13)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+71 - [valid] select 8 next disconnected
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9) and Next(s10, s11) and Next(s12, s13) and Next(s14, s15)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+72 - [valid] select 4 next* disconnected (dunno why it won't finish)
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next*(s, s1) and Next*(s2, s3) and Next*(s4, s5) and Next*(s6, s7)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+73 - [valid] select 5 next* disconnected
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next*(s, s1) and Next*(s2, s3) and Next*(s4, s5) and Next*(s6, s7) and Next*(s8, s9)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+74 - [valid] select 5 next* disconnected
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next*(s, s1) and Next*(s2, s3) and Next*(s4, s5) and Next*(s6, s7) and Next*(s8, s9) and Next*(10, 11)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+75 - [valid] select 10 next* disconnected
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next*(s, s1) and Next*(s2, s3) and Next*(s4, s5) and Next*(s6, s7) and Next*(s8, s9) and Next*(s10, s11) and Next*(s12, s13) and Next*(s14, s15) and Next*(s16, s17) and Next*(s18, s19)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
