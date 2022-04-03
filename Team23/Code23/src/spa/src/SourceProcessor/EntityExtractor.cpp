@@ -103,7 +103,7 @@ void EntityExtractor::assignProcedureToNodes(Node* node, ProcedureNode* proc){
             assignProcedureToNodes(s,proc);
         for(Node* s: thenVector)
             assignProcedureToNodes(s,proc);
-    } else {
+    } else if(auto value = dynamic_cast<StmtNode*>(node)) {
         value->setProc(proc);
     }
 }
