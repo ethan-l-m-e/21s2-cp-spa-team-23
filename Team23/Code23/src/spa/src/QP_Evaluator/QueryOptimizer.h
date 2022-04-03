@@ -48,10 +48,11 @@ typedef struct GroupedClause {
 
 class QueryOptimizer {
 private:
+    std::vector<GroupedClause> rearrangedClauses; // the output vector, initially empty
     Query *query;
 public:
     QueryOptimizer(Query* query): query{query}{}
-    std::vector<GroupedClause> groupClauses();
+    std::vector<GroupedClause>* groupClauses();
 };
 
 

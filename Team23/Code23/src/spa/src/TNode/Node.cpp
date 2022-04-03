@@ -6,7 +6,9 @@
 
 using namespace std;
 
-Node::Node() { this->parent = nullptr; }
+Node::Node() {
+    this->parent = nullptr;
+}
 
 void Node::setParentNode(Node *parent) {this -> parent = parent;}
 Node *Node::getParentNode() const {return this -> parent;}

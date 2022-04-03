@@ -6,10 +6,10 @@
 #define SPA_CACHEDAFFECTSRELATIONSHIP_H
 
 #include "CachedManyToManyRelationship.h"
+#include "CachedNextTRelationship.h"
+#include "Cache/Operators/AffectsOperator.h"
 
 class CachedAffectsRelationship : public CachedManyToManyRelationship {
-
-
 public:
 
     bool isRelationship(string lhs, string rhs) override;
@@ -17,6 +17,14 @@ public:
     unordered_set<string> getRHS(string lhs) override;
 
     unordered_set<string> getLHS(string rhs) override;
+
+    static CachedAffectsRelationship *getInstance();
+
+protected:
+    AffectsOperator* affectsOp = AffectsOperator::getInstance();
+    CachedNextTRelationship* nextT = CachedNextTRelationship::getInstance();
+    static CachedAffectsRelationship *singleton;
+
 };
 
 

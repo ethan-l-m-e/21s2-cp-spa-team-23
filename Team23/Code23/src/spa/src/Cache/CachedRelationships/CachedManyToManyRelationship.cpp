@@ -3,21 +3,61 @@
 //
 
 #include "CachedManyToManyRelationship.h"
+#include "PKB/PKB.h"
 
-
+/*
 bool CachedManyToManyRelationship::isInHistory(string lhs, string rhs) {
     tuple<string, string> tup = make_tuple(lhs, rhs);
 
-    return history.find(tup) != history.end();
+    return historyPair.find(tup) != historyPair.end();
 }
 
 void CachedManyToManyRelationship::addToHistory(string lhs, string rhs) {
     tuple<string, string> tup = make_tuple(lhs, rhs);
 
-    history.insert(tup);
+    historyPair.insert(tup);
+}
+*/
+
+unordered_set<string> CachedManyToManyRelationship::getAllStmtInSameProcedureAs(string stmt) {
+    return PKB::getInstance()->statement.statements.getAllStatementNumbers();
 }
 
 void CachedManyToManyRelationship::clear() {
     ManyToManyRelationship::clear();
-    history.clear();
+    pairHistory.clear();
+    getLhsHistory.clear();
+    getRhsHistory.clear();
+}
+
+static bool print = false;
+
+
+void CachedManyToManyRelationship::printStmt(string input) {
+    if(print) {
+        cout << input;
+    }
+}
+
+bool History::isInHistory(string key) {
+    return historySingle.find(key) != historySingle.end();
+}
+
+bool History::isInHistory(string lhs, string rhs) {
+    tuple<string, string> tup = make_tuple(lhs, rhs);
+    return historyPair.find(tup) != historyPair.end();;
+}
+
+void History::addToHistory(string key) {
+    historySingle.insert(key);
+}
+
+void History::addToHistory(string lhs, string rhs) {
+    tuple<string, string> tup = make_tuple(lhs, rhs);
+    historyPair.insert(tup);
+}
+
+void History::clear() {
+    historySingle.clear();
+    historyPair.clear();
 }

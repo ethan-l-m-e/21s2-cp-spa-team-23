@@ -263,69 +263,128 @@ stmt s;
 Select s with "readVar" = 1
 none
 5000
-52 - [valid] select stmt# =====================================================================[select attr tests start]
+53 - [valid] select stmt# =====================================================================[select attr tests start]
 stmt s;
 Select s.stmt#
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
-26 - [valid] select varName
+54 - [valid] select varName
 variable v;
 Select v.varName
 cond, true, false, readVar, printVar, modifiedVar, readVar1, printVar1, assignedVar1, assignedVar2, x
 5000
-27 - [valid] select value
+55 - [valid] select value
 constant c;
 Select c.value
 0, 1
 5000
-28 - [valid] select read stmt#
+56 - [valid] select read stmt#
 read r;
 Select r.stmt#
 3, 9
 5000
-29 - [valid] select print stmt#
+57 - [valid] select print stmt#
 print pr;
 Select pr.stmt#
 5, 11
 5000
-29 - [valid] select if stmt#
+58 - [valid] select if stmt#
 if ifs;
 Select ifs.stmt#
 4, 10
 5000
-30 - [valid] select while stmt#
+59 - [valid] select while stmt#
 while w;
 Select w.stmt#
 2, 8
 5000
-31 - [valid] select assign stmt#
+60 - [valid] select assign stmt#
 assign a;
 Select a.stmt#
 6, 12, 13
 5000
-32 - [valid] select call stmt#
+61 - [valid] select call stmt#
 call cl;
 Select cl.stmt#
 1, 7
 5000
-30 - [valid] select read varName
+62 - [valid] select read varName
 read r;
 Select r.varName
 readVar, readVar1
 5000
-31 - [valid] select print varName
+63 - [valid] select print varName
 print pr;
 Select pr.varName
 printVar, printVar1
 5000
-32 - [valid] select call procName
+64 - [valid] select call procName
 call cl;
 Select cl.procName
 CalledProc1, CalledProc2
 5000
-33 - [valid] select proc procName
+65 - [valid] select proc procName
 procedure p;
 Select p.procName
 Attributes, CalledProc1, CalledProc2
 5000
-
+66 - [invalid] stmt# =/= varName ==================================================================[Invalid tests start]
+stmt s; variable v;
+Select s with s.stmt# = v.varName
+none
+5000
+67 - [invalid] stmt# =/= varName lhs
+stmt s; variable v;
+Select s with v.varName = s.stmt#
+none
+5000
+68 - [invalid] stmt# =/= procName
+stmt s; procedure p;
+Select s with s.stmt# = p.procName
+none
+5000
+69 - [invalid] stmt# =/= procName lhs
+stmt s; procedure p;
+Select s with p.procName = s.stmt#
+none
+5000
+70 - [invalid] value =/= varName
+constant c; variable v;
+Select c with c.value = v.varName
+none
+5000
+71 - [invalid] value =/= varName lhs
+constant c; variable v;
+Select c with v.varName = c.value
+none
+5000
+72 - [invalid] value =/= procName
+constant c; procedure p;
+Select c with c.value = p.procName
+none
+5000
+73 - [invalid] value =/= procName lhs
+constant c; procedure p;
+Select c with p.procName = c.value
+none
+5000
+74 - [invalid] value =/= string
+stmt s;
+Select s with 3 = "3"
+none
+5000
+75 - [invalid] value =/= string lhs
+stmt s;
+Select s with "3" = 3
+none
+5000
+76 - [invalid] stmt# =/= string
+stmt s;
+Select s with s.stmt# = "10"
+none
+5000
+77 - [invalid] stmt# =/= string lhs
+stmt s;
+Select s with "9" = s.stmt#
+none
+5000

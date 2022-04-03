@@ -9,6 +9,8 @@ void DesignExtractor::Extract(Node* programNode){
     SemanticsVerifier::detectCyclicCalls(programNode);
     //extract variables and constants etc
     EntityExtractor::extractAllEntities(programNode);
+    //attaches each stmt node to a procedure
+    EntityExtractor::assignProcedureToNodes(programNode,nullptr);
     //extract relationships
     RelationshipExtractor::extractRelationships(programNode);
 

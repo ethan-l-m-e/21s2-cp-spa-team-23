@@ -13,9 +13,9 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     auto* resultTable = new ResultTable();
 
     auto* optimizer = new QueryOptimizer(query);
-    std::vector<GroupedClause> clauses = optimizer->groupClauses();
+    std::vector<GroupedClause>* clauses = optimizer->groupClauses();
 
-    for (auto gc : clauses) {
+    for (auto gc : *clauses) {
         if (dynamic_cast<WithClause*>(gc.clause)) {
             // Create ClauseEvaluators and evaluate each with clause
             auto *clause = dynamic_cast<WithClause*>(gc.clause);
@@ -31,6 +31,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
             auto *clause = dynamic_cast<SuchThatClause *>(gc.clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto suchThatClauseEvaluator = generateEvaluator(*clause, *query->getDeclarations());
+            //for cache testing! can be remove if needed. default: true
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
@@ -48,6 +49,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
+    delete clauses;
+
     // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
@@ -55,6 +58,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     if (!result) return {};
     list<string> output = generateResultString(resultTable);
     delete resultTable;
+
+    Cache::getInstance()->clearCache();
     return output;
 }
 
@@ -113,9 +118,9 @@ list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
     } else if (!resultTable->isEmpty()) {
         for(int i = 0; i < resultTable->getTableHeight(); i++) {
             string s;
-            for (auto &col: *resultTable->getList()) {
+            for (auto col: resultTable->getProjection()) {
                 if (!s.empty()) s += " ";
-                s += col[i];
+                s += (*resultTable->getList())[col][i];
             }
             stringSet.insert(s);
         }

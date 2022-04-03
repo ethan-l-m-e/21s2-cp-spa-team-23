@@ -1,0 +1,10 @@
+../../../../Tests23/stress_source.txt ../../../../Tests23/stress_queries.txt ../../../tests/stress_out.xml
+procedure p;
+Select p
+Stress
+5000
+1 statement that reads b
+read r;
+Select r such that Modifies(r, "b")
+1000
+5000

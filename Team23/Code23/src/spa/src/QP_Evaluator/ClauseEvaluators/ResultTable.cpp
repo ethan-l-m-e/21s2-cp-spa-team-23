@@ -118,7 +118,7 @@ void ResultTable::mergeStringResult(Result& result) {
         crossJoinStrings(stringSet);
     } else {
         // otherwise, do an inner join
-        innerJoin(std::distance(tableHeader.begin(), it), std::get<unordered_set<string>>(result.resultSet));
+        innerJoin(std::distance(tableHeader.begin(), it), stringSet);
     }
 }
 
@@ -168,8 +168,7 @@ void ResultTable::crossJoinStrings(unordered_set<string>& synonymValues) {
     if(tableEntries.empty()) {
         tableEntries.emplace_back(vector<string>());
         for(const auto& resultItem : synonymValues) {
-            auto curr = resultItem;
-            tableEntries[0].emplace_back(curr);
+            tableEntries[0].emplace_back(resultItem);
         }
     } else {
         size_t length = tableEntries[0].size();
@@ -237,15 +236,24 @@ void ResultTable::crossJoinTuples(unordered_set<pair<string, string>>& synonymVa
  * @param index  the index of the common synonym in the table header
  * @param resultItemList  a list of ResultItem of the type string
  */
+
 void ResultTable::innerJoin(size_t index, unordered_set<string>& resultItemList) {
-    for (int i= 0; i< tableEntries[index].size();) {
-        if (!resultItemList.count(tableEntries[index][i])) {
-            for(auto & tableEntry : tableEntries)
-                tableEntry.erase(tableEntry.begin() + i);
-        } else {
-            ++i;
-        }
-    }
+   size_t height = getTableHeight();
+   size_t width = getTableWidth();
+   unordered_set<int> deletedRows;
+   for (int r = 0; r < height; r++) {
+       if (!std::count(resultItemList.begin(), resultItemList.end(), tableEntries[index][r])) {
+           deletedRows.insert(r);
+       }
+   }
+   for (int c = 0; c < width; c++) {
+       vector<string> newValues;
+       for (int r = 0; r < height; r++) {
+           if(deletedRows.find(r) != deletedRows.end()) continue;
+           newValues.emplace_back(tableEntries[c][r]);
+       }
+       tableEntries[c] = newValues;
+   }
 }
 
 /**
@@ -253,17 +261,26 @@ void ResultTable::innerJoin(size_t index, unordered_set<string>& resultItemList)
  * @param indices  pair of indices representing the position of the two synonyms in the table header
  * @param resultItemList  a list of ResultItem of the type tuple
  */
-void ResultTable::innerJoin(pair<size_t, size_t> indices, unordered_set<pair<string, string>>& resultItemList) {
-    for (int i= 0; i< tableEntries[indices.first].size();) {
-        string left = tableEntries[indices.first][i];
-        string right = tableEntries[indices.second][i];
-        pair<string, string> curr = std::make_pair(left, right);
-        if (!resultItemList.count(curr)) {
-            for(auto & tableEntry : tableEntries)
-                tableEntry.erase(tableEntry.begin() + i);
-        } else {
-            ++i;
+
+void ResultTable::innerJoin(std::pair<size_t, size_t> indices, unordered_set<pair<string, string>>& resultItemList) {
+    size_t height = getTableHeight();
+    size_t width = getTableWidth();
+    unordered_set<int> deletedRows;
+    for (int r = 0; r < height; r++) {
+        string left = tableEntries[indices.first][r];
+        string right = tableEntries[indices.second][r];
+        if (!std::count(resultItemList.begin(), resultItemList.end(), make_pair(left, right))) {
+            deletedRows.insert(r);
         }
+    }
+
+    for (int c = 0; c < width; c++) {
+        vector<string> newValues;
+        for (int r = 0; r < height; r++) {
+            if(deletedRows.find(r) != deletedRows.end()) continue;
+            newValues.emplace_back(tableEntries[c][r]);
+        }
+        tableEntries[c] = newValues;
     }
 }
 
@@ -272,30 +289,31 @@ void ResultTable::innerJoin(pair<size_t, size_t> indices, unordered_set<pair<str
  * @param index  the index of the common synonym in the table header
  * @param map  an unordered map representation of the tuple result with the values of the common synonym as the key
  */
+
 void ResultTable::innerJoin(size_t index, unordered_map<string,vector<string>> map){
-    // for each row
-    size_t oldSize = tableEntries[0].size();
+    size_t height = getTableHeight();
+    size_t width = getTableWidth();
+    std::unordered_set<int> deletedRows;
     tableEntries.emplace_back(vector<string>());
-    for (int i = 0; i < oldSize;) {
-        auto it = map.find(tableEntries[index][i]);
-        if (it != map.end()) {
-            vector<string> rightSet = it->second;
-            size_t numNewRows = rightSet.size();
-            for (auto col = tableEntries.begin(); col != tableEntries.end(); ++col) {
-                if(col == tableEntries.end() - 1) {
-                    for (const auto& right: rightSet )
-                        col->emplace_back(right);
-                } else {
-                    col->insert(col->end(), numNewRows, (*col)[i]);
-                    col->erase(col->begin() + i);
-                }
-            }
+
+    for (int r = 0; r < height; r++) {
+        auto it = map.find(tableEntries[index][r]);
+        if (it == map.end()) {
+            deletedRows.insert(r);
         } else {
-            for (auto col = tableEntries.begin(); col != tableEntries.end() - 1; ++col) {
-                col->erase(col->begin() + i);
-            }
+            auto newCol = tableEntries[width];
+            tableEntries[width].insert(tableEntries[width].end(), it->second.begin(), it->second.end());
         }
-        oldSize -= 1;
+    }
+
+    for (int c = 0; c < width; c++) {
+        std::vector<std::string> newValues;
+        for (int r = 0; r < height; r++) {
+            if(deletedRows.find(r) != deletedRows.end()) continue;
+            auto it = map.find(tableEntries[index][r]);
+            newValues.insert(newValues.end(), (it->second).size(), tableEntries[c][r]);
+        }
+        tableEntries[c] = newValues;
     }
 }
 
@@ -336,6 +354,17 @@ unordered_map<string, vector<string>> ResultTable::createSnapShot() {
         snapshot.insert(pair<string,vector<string>>(tableHeader[index], temp));
     }
     return snapshot;
+}
+
+vector<int> ResultTable::getProjection() {
+    if (projection.empty()) {
+        vector<int> defaultProjection;
+        defaultProjection.reserve(tableHeader.size());
+        for( int i = 0; i < tableHeader.size(); i++ ) defaultProjection.emplace_back( i );
+        return defaultProjection;
+    } else {
+        return projection;
+    }
 }
 
 

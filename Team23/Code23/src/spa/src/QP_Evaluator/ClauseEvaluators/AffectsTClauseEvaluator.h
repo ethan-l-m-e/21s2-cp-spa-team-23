@@ -6,7 +6,7 @@
 #define SPA_AFFECTSTCLAUSEEVALUATOR_H
 
 #include "CacheClauseEvaluator.h"
-#include "QP_database/AffectsTOperator.h"
+#include "Cache/Operators/AffectsTOperator.h"
 
 class AffectsTClauseEvaluator: public CacheClauseEvaluator {
 public:
