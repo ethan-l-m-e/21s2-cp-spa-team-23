@@ -40,14 +40,13 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
 
     }else if(auto value = dynamic_cast<IfNode*>(currNode)) {
         auto* newCFGNode = new BranchCFG(currNode->getStmtNumber());
-
         setNextNodeOfPrevSetOfNodes(newCFGNode,prevSetOfNodes);
 
         vector<Node *> thenBranch = value->getThenStmtLst();
         vector<Node *> elseBranch = value->getElseStmtLst();
 
         newSetOfNodes = populateCFGInBranchNode(newCFGNode,thenBranch,elseBranch,setOfAllNodes);
-
+        newSetOfNodes.push_back(newCFGNode);
         setOfAllNodes->push_back(newCFGNode);
     }else{
         auto* newCFGNode = new NodeCFG(currNode->getStmtNumber());
@@ -64,8 +63,9 @@ vector<NodeCFG*> CFGConstructor::populateCFG(Node* currNode, vector<NodeCFG*> pr
 }
 
 void CFGConstructor::setNextNodeOfPrevSetOfNodes(NodeCFG* currNode, vector<NodeCFG*> prevSetOfNodes){
-    if (!prevSetOfNodes.empty()) {
-        for (NodeCFG *s: prevSetOfNodes) {
+    for (NodeCFG *s: prevSetOfNodes) {
+        if(auto value = dynamic_cast<BranchCFG*>(s)) {
+        }else{
             s->setNextNode(currNode);
         }
     }
@@ -73,12 +73,17 @@ void CFGConstructor::setNextNodeOfPrevSetOfNodes(NodeCFG* currNode, vector<NodeC
 
 void CFGConstructor::populateCFGInWhileLoop(LoopCFG* initNode, vector<Node *> stmtLst,vector<NodeCFG*>* setOfAllNodes){
     vector<NodeCFG*> nextSetOfNodes;
+    nextSetOfNodes.push_back(initNode);
     bool isFirstLoop = true;
     for (Node *s: stmtLst) {
         nextSetOfNodes = CFGConstructor::populateCFG(s,nextSetOfNodes,setOfAllNodes );
 
         if(isFirstLoop){
-            initNode->setNodeInLoop(nextSetOfNodes.at(0));
+            if(auto newNode = dynamic_cast<IfNode*>(s)){
+                initNode->setNodeInLoop(nextSetOfNodes.back());
+            }else {
+                initNode->setNodeInLoop(nextSetOfNodes.at(0));
+            }
             isFirstLoop = false;
         }
     }
@@ -97,7 +102,11 @@ vector<NodeCFG*> CFGConstructor::populateCFGInBranchNode(BranchCFG* initNode, ve
     for (Node *s: thenBranch) {
         if(isThenBranchFirstLoop){
             nextSetOfNodes1 = CFGConstructor::populateCFG(s,currSetOfNodes,setOfAllNodes );
-            for (NodeCFG *t: nextSetOfNodes1) {initNode->setLeftNode(t);}
+            if(auto newNode = dynamic_cast<IfNode*>(s)) {
+                initNode->setLeftNode(nextSetOfNodes1.back());
+            }else {
+                for (NodeCFG *t: nextSetOfNodes1) { initNode->setLeftNode(t); }
+            }
             isThenBranchFirstLoop = false;
         }else{
             nextSetOfNodes1 = CFGConstructor::populateCFG(s,nextSetOfNodes1,setOfAllNodes );
@@ -108,7 +117,11 @@ vector<NodeCFG*> CFGConstructor::populateCFGInBranchNode(BranchCFG* initNode, ve
     for (Node *s: elseBranch) {
         if(isElseBranchFirstLoop){
             nextSetOfNodes2 = CFGConstructor::populateCFG(s,currSetOfNodes,setOfAllNodes );
-            for (NodeCFG *t: nextSetOfNodes2) {initNode->setRightNode(t);}
+            if(auto newNode = dynamic_cast<IfNode*>(s)) {
+                initNode->setRightNode(nextSetOfNodes2.back());
+            }else {
+                for (NodeCFG *t: nextSetOfNodes2) { initNode->setRightNode(t); }
+            }
             isElseBranchFirstLoop = false;
         }else{
             nextSetOfNodes2 = CFGConstructor::populateCFG(s,nextSetOfNodes2,setOfAllNodes );
