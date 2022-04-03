@@ -14,14 +14,14 @@ bool AffectsTClauseEvaluator::isRelation(string left, string right) {
 
 // disabled the latter 2 due to unknown issues causing timeout
 unordered_set<string> AffectsTClauseEvaluator::getLeftSynonymValue(string right) {
-    if(optimisation_activated && false) {
+    if(optimisation_activated) {
         return cache->relationship.affectsT.getLHS(right);
     } else {
         return affectsTOperator->computeLHS(right);
     }}
 
 unordered_set<string> AffectsTClauseEvaluator::getRightSynonymValue(string left) {
-    if (optimisation_activated && false){
+    if (optimisation_activated){
         return cache->relationship.affectsT.getRHS(left);
     } else {
         return affectsTOperator->computeRHS(left);
