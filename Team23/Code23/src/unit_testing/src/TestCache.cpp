@@ -18,6 +18,6 @@ Cache *cache = Cache::getInstance();
 TEST_CASE("Help me pls") {
     cache->clearCache();
 
-    cache->relationship.affects.setRelationship("1","2");
+    cache->relationship.affects->setRelationship("1","2");
 
 }
