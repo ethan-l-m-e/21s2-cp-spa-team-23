@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <variant>
-
 #include "regex.h"
 
 #ifndef SPA_NODE_H
