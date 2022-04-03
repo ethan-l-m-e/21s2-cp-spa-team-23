@@ -14,7 +14,7 @@ bool CachedAffectsTRelationship::isRelationship(string lhs, string rhs) {
         boolResults = CachedManyToManyRelationship::isRelationship(lhs, rhs);
     } else {
         pairHistory.addToHistory(lhs, rhs);
-        boolResults = computeRelation(lhs, rhs);
+        boolResults = affectsTOp->computeRelation(lhs, rhs);
         if (boolResults) CachedManyToManyRelationship::setRelationship(lhs, rhs);
     }
     return boolResults;
