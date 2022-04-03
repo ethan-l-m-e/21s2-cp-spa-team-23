@@ -14,11 +14,12 @@ bool AffectsTOperator::computeRelation(string left, string right) {
         return true;
     } else {
         stmtSetStr left_new = affectsOperator->computeRHS(left);
-        bool isRelation = false;
-        for(stmtStr stmt: left_new) {
-            isRelation = isRelation || affectsOperator->computeRelation(stmt, right);
+
+        for(stmtStr leftAdj: left_new) {
+            if(left != leftAdj && computeRelation(leftAdj, right))
+                    return true;
         }
-        return isRelation;
+        return false;
     }
 }
 

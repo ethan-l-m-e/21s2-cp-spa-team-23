@@ -24,6 +24,7 @@ bool NextTOperator::computeRelation(string left, string right) {
 }
 
 unordered_set<string> NextTOperator::computeRHS(string left) {
+    /*
     NodeCFG* leftNode = retrieveNode(left);
     int size = getSize();
     stmtSetNum resultSet;
@@ -32,8 +33,8 @@ unordered_set<string> NextTOperator::computeRHS(string left) {
                                            graphMethods->collateAllAdjacentNodes,
                                            graphMethods->searchNodesAlongPathAfter);
     return convertIntToString(resultSet);
+    */
 
-    /*
     if(stmtIsNotInSource(vector<string>{left})) return {};
     stmtSetStr  resultSet;
     stmtSetStr allStmtNo = pkb->statement.statements.getAllStatementNumbers();
@@ -43,13 +44,12 @@ unordered_set<string> NextTOperator::computeRHS(string left) {
         }
     }
     return resultSet;
-    */
+
 
 }
 
 
 unordered_set<string> NextTOperator::computeLHS(string right) {
-
     if(stmtIsNotInSource(vector<string>{right})) return {};
     stmtSetStr  resultSet;
     stmtSetStr allStmtNo = pkb->statement.statements.getAllStatementNumbers();
@@ -125,6 +125,7 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
 
     // performs #1
     auto linear = pkb->relationship.followsT.getRHS(to_string(srcVal));
+    //int largestValInLinear = stoi(pkb->relationship.followsT.getRHSMax(to_string(srcVal)));
     int largestValInLinear = findLargestValue(linear);
     if (srcVal < destVal && destVal <= largestValInLinear) {
         return true;
