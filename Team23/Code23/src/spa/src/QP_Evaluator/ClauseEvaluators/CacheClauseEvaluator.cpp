@@ -6,4 +6,5 @@
 
 bool CacheClauseEvaluator::setOptimisation(bool in) {
     optimisation_activated = in;
+    return optimisation_activated;
 }

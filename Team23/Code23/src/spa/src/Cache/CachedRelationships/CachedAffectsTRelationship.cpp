@@ -20,26 +20,17 @@ bool CachedAffectsTRelationship::isRelationship(string lhs, string rhs) {
     return boolResults;
 }
 
-unordered_set<string> CachedAffectsTRelationship::callAffectsRHS(string stmt) {
-    return affects->getRHS(stmt);
-}
-
 unordered_set<string> CachedAffectsTRelationship::getRHS(string lhs) {
     unordered_set<string> results;
-
-    if(getRhsHistory.isInHistory(lhs) || CachedManyToManyRelationship::getRHS(lhs).size() > 0) {
-        //getRhsHistory.addToHistory(lhs);
+    if(getRhsHistory.isInHistory(lhs)) {
+        getRhsHistory.addToHistory(lhs);
         results = CachedManyToManyRelationship::getRHS(lhs);
     } else {
         getRhsHistory.addToHistory(lhs);
-        unordered_set<string> allStmtNo = nextT->getRHS(lhs);
-
-        for(string right: allStmtNo) {
-            if(isRelationship(lhs, right)) results.insert(right);
-        }
-
+        std::function computeFoo = [&lhs](string x)->unordered_set<string> {return affects->getRHS(lhs);};
+        results = computeResultSetHelper(lhs, computeFoo);
+        CachedManyToManyRelationship::setRelationship(lhs, results);
     }
-
     return results;
 }
 
@@ -48,20 +39,11 @@ unordered_set<string> CachedAffectsTRelationship::getLHS(string rhs) {
     if(getLhsHistory.isInHistory(rhs)) {
         results = CachedManyToManyRelationship::getLHS(rhs);
     } else {
-
-
-        /*
         getLhsHistory.addToHistory(rhs);
-        // execute
-        std::function computeFoo = [this, &rhs](string x)->unordered_set<string> {return affects->getLHS(rhs);};
+        std::function computeFoo = [&rhs](string x)->unordered_set<string> {return affects->getLHS(rhs);};
         results = computeResultSetHelper(rhs, computeFoo);
-        CachedManyToManyRelationship::setRelationship(results, rhs);
-        */
-        results = affectsTOp->computeLHS(rhs);
         CachedManyToManyRelationship::setRelationship(rhs, results);
-
     }
-
     return results;
 }
 
