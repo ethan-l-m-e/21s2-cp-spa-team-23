@@ -405,7 +405,6 @@ TEST_CASE("Add FollowsT") {
 
     }
 
-
     REQUIRE(pkb->relationship.followsT.isRelationship("1", "3") == false);
     REQUIRE(pkb->relationship.followsT.getRHS("2") == unordered_set<string>{});
     REQUIRE(pkb->relationship.followsT.getLHS("3") == unordered_set<string>{});
@@ -437,6 +436,88 @@ TEST_CASE("Add FollowsT") {
 
         REQUIRE(pkb->relationship.followsT.getRHS(followee) == followers);
     }
+
+
+}
+
+
+
+TEST_CASE("Add FollowsT with SetRelationship(string, set)") {
+    pkb->clearPKB();
+
+    REQUIRE(pkb->relationship.followsT.getLHS("2").empty());
+    REQUIRE(pkb->relationship.followsT.getRHS("1").empty());
+
+
+    unordered_map<string , unordered_set<string>> tFolloweeToFollowersMap = {
+            {"1", {"2"}},
+            {"4", {"8", "23"}},
+            {"34", {"45", "55", "67", "84"}},
+            {"56", {"89"}},
+            {"345", {"347", "349", "358", "456", "568", "678", "789", "986"}},
+    };
+
+
+    for (auto& iter : tFolloweeToFollowersMap) {
+        string followee = iter.first;
+        unordered_set<string> followers = iter.second;
+
+        pkb->relationship.followsT.setRelationship(followee, followers);
+    }
+
+    REQUIRE(pkb->relationship.followsT.getRHSMin("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("4") == "8");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("34") == "45");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("345") == "347");
+
+    REQUIRE(pkb->relationship.followsT.getRHSMax("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("4") == "23");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("34") == "84");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("345") == "986");
+
+
+}
+
+
+
+TEST_CASE("Add FollowsT with SetRelationship(set, string)") {
+    pkb->clearPKB();
+
+    REQUIRE(pkb->relationship.followsT.getLHS("2").empty());
+    REQUIRE(pkb->relationship.followsT.getRHS("1").empty());
+
+
+    unordered_map<string , unordered_set<string>> tFolloweeToFollowersMap = {
+            {"1", {"2"}},
+            {"4", {"8", "23"}},
+            {"34", {"45", "55", "67", "84"}},
+            {"56", {"89"}},
+            {"345", {"347", "349", "358", "456", "568", "678", "789", "986"}},
+    };
+
+
+    for (auto& iter : tFolloweeToFollowersMap) {
+        string followee = iter.first;
+        unordered_set<string> followers = iter.second;
+
+        for (string follower : followers) {
+            pkb->relationship.followsT.setRelationship(unordered_set<string>{followee}, follower);
+        }
+    }
+
+    REQUIRE(pkb->relationship.followsT.getRHSMin("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("4") == "8");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("34") == "45");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("345") == "347");
+
+    REQUIRE(pkb->relationship.followsT.getRHSMax("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("4") == "23");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("34") == "84");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("345") == "986");
 
 
 }
