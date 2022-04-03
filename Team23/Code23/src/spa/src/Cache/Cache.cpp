@@ -24,8 +24,8 @@ Cache* Cache::getInstance() {
 
 void Cache::clearCache() {
 
-    relationship.nextT.clear();
-    relationship.affects.clear();
+    relationship.nextT->clear();
+    relationship.affects->clear();
     relationship.affectsT.clear();
 
 }

@@ -78,13 +78,8 @@ bool AffectsOperator::IsReachableForward(NodeCFG* srcNode,
     int srcVal = srcNode->getStatementNumber();
     int destVal = destNode->getStatementNumber();
 
-    if(srcVal == destVal) {
-        return true;
-    }
-
-    if(isInBlackList(srcVal)) {
-        return false;
-    }
+    if(srcVal == destVal) return true;
+    if(isInBlackList(srcVal)) return false;
 
     visited[srcVal] = true;
     path.push_back(srcVal);
@@ -98,7 +93,6 @@ bool AffectsOperator::IsReachableForward(NodeCFG* srcNode,
         if (!visited[adjStmtNo]) {
             if (IsReachableForward(adjacentNode, destNode, visited, path))
                 return true;
-
         }
     }
 

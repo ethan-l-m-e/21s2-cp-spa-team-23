@@ -31,6 +31,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
             auto *clause = dynamic_cast<SuchThatClause *>(gc.clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto suchThatClauseEvaluator = generateEvaluator(*clause, *query->getDeclarations());
+            //for cache testing! can be remove if needed. default: true
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
@@ -57,6 +58,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     if (!result) return {};
     list<string> output = generateResultString(resultTable);
     delete resultTable;
+
+    Cache::getInstance()->clearCache();
     return output;
 }
 

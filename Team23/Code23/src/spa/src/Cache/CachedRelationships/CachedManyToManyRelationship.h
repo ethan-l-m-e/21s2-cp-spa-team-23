@@ -8,20 +8,36 @@
 #include "PKB/Relationship/Relationship.h"
 
 #include <set>
+#include <vector>
+struct History {
+    unordered_set<string> historySingle;
+    set<tuple<string, string>> historyPair;
+    bool isInHistory(string key);
+    void addToHistory(string key);
+    bool isInHistory(string lhs, string rhs);
+    void addToHistory(string lhs, string rhs);
+    void clear();
+};
 
 class CachedManyToManyRelationship : public ManyToManyRelationship {
 
     // `unordered_set` cannot have a tuple as a key by default, that's why I am using a `set`
-    set<tuple<string, string>> history;
+    //set<tuple<string, string>> historyPair;
 
 protected:
-    bool isInHistory(string lhs, string rhs);
+    //bool isInHistory(string lhs, string rhs);
+    //void addToHistory(string lhs, string rhs);
+    History pairHistory;
+    History getLhsHistory;
+    History getRhsHistory;
 
-    void addToHistory(string lhs, string rhs);
+    void printStmt(string input);
+
 
 public:
     void clear() override;
 
+    unordered_set<string> getAllStmtInSameProcedureAs(string stmt);
 };
 
 
