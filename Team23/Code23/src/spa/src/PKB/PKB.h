@@ -57,7 +57,7 @@ public:
 
         OneToOneRelationship follows;
 
-        ManyToManyRelationship followsT;
+        ManyToManyRelationshipWithMinMax followsT;
 
         OneToManyRelationship parent;
 

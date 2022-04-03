@@ -411,6 +411,9 @@ TEST_CASE("Add FollowsT") {
     REQUIRE(pkb->relationship.followsT.getLHS("3") == unordered_set<string>{});
 
 
+    REQUIRE(pkb->relationship.followsT.getRHSMin() == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMax() == "986");
+
     for (auto& iter : tFolloweeToFollowersMap) {
         string followee = iter.first;
         unordered_set<string> followers = iter.second;
