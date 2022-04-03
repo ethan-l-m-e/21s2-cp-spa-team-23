@@ -10,7 +10,7 @@ void DesignExtractor::Extract(Node* programNode){
     //extract variables and constants etc
     EntityExtractor::extractAllEntities(programNode);
     //attaches each stmt node to a procedure
-    EntityExtractor::assignProcedureToNodes(programNode);
+    EntityExtractor::assignProcedureToNodes(programNode,nullptr);
     //extract relationships
     RelationshipExtractor::extractRelationships(programNode);
 
