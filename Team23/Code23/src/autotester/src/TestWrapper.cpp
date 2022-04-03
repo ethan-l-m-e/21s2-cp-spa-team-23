@@ -29,7 +29,7 @@ void TestWrapper::parse(std::string filename) {
     try {
         SourceProcessor::run(filename);
     } catch (std::exception ex) {
-
+        std::cout << "Invalid source code: " << ex.what();
     }
     // call your parser to do the parsing
     // ...rest of your code...
