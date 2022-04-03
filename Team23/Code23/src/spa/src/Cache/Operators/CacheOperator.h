@@ -23,6 +23,9 @@ public:
     CacheOperator* setOptimisation(bool in);
     bool stmtIsNotInSource(vector<string> argList);
 
+    NodeCFG* retrieveNode(string stmtNo);
+    int getSize();
+    unordered_set<string> convertIntToString(unordered_set<int> intSet);
 
 protected:
     typedef unordered_set<string> variableSet, stmtSetStr;
@@ -32,10 +35,6 @@ protected:
 
     static PKB* pkb;
     static GraphMethods* graphMethods;
-
-    NodeCFG* retrieveNode(string stmtNo);
-    int getSize();
-    unordered_set<string> convertIntToString(unordered_set<int> intSet);
 };
 
 

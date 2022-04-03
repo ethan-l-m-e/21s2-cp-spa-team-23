@@ -30,6 +30,10 @@ protected:
     History pairHistory;
     History getLhsHistory;
     History getRhsHistory;
+
+    void printStmt(string input);
+
+
 public:
     void clear() override;
 

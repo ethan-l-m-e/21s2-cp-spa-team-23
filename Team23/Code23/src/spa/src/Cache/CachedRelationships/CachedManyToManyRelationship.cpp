@@ -30,7 +30,14 @@ void CachedManyToManyRelationship::clear() {
     getRhsHistory.clear();
 }
 
+static bool print = false;
 
+
+void CachedManyToManyRelationship::printStmt(string input) {
+    if(print) {
+        cout << input;
+    }
+}
 
 bool History::isInHistory(string key) {
     return historySingle.find(key) != historySingle.end();

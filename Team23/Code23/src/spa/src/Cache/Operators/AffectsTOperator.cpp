@@ -23,20 +23,6 @@ bool AffectsTOperator::computeRelation(string left, string right) {
 }
 
 stmtSetStr AffectsTOperator::computeLHS(string right) {
-    /*
-    stmtSetStr resultSet;
-    stmtSetStr left_new = affectsOperator->computeLHS(right);
-
-    auto computeFoo = [](string x)->stmtSetStr {
-        return AffectsOperator::getInstance()->computeLHS(x);};
-
-    for(stmtStr stmt: left_new) {
-        stmtSetStr newResults = resultSetRecursionHelper(stmt, computeFoo);
-        resultSet.insert(newResults.begin(), newResults.end());
-    }
-    return resultSet;
-     */
-
     auto computeFoo = [](string x)->stmtSetStr {
         return AffectsOperator::getInstance()->computeLHS(x);};
     return computeResultSetHelper(right, computeFoo);
