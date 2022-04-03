@@ -15,7 +15,7 @@ using namespace std;
 
 Cache *cache = Cache::getInstance();
 
-TEST_CASE("Help me pls") {
+TEST_CASE("can do yourself lol") {
     cache->clearCache();
 
     cache->relationship.affects->setRelationship("1","2");
