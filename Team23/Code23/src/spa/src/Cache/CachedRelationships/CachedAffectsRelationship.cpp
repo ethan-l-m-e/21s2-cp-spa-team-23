@@ -22,9 +22,8 @@ bool CachedAffectsRelationship::isRelationship(string lhs, string rhs) {
 
 unordered_set<string> CachedAffectsRelationship::getRHS(string lhs) {
     unordered_set<string> results;
-    if(getRhsHistory.isInHistory(lhs) || CachedManyToManyRelationship::getRHS(lhs).size() > 0) {
+    if(getRhsHistory.isInHistory(lhs)) {
         printStmt("retrieving Affects getRHS"  + lhs + " from storage\n");
-        getRhsHistory.addToHistory(lhs);
         results = CachedManyToManyRelationship::getRHS(lhs);
     } else {
         printStmt("computing Affects getRHS " + lhs + "\n");
@@ -40,9 +39,8 @@ unordered_set<string> CachedAffectsRelationship::getRHS(string lhs) {
 
 unordered_set<string> CachedAffectsRelationship::getLHS(string rhs) {
     unordered_set<string> results;
-    if(getLhsHistory.isInHistory(rhs) || CachedManyToManyRelationship::getLHS(rhs).size() > 0) {
+    if(getLhsHistory.isInHistory(rhs)) {
         printStmt("retrieving Affects getLHS"  + rhs + " from storage\n");
-        getLhsHistory.addToHistory(rhs);
         results = CachedManyToManyRelationship::getLHS(rhs);
     } else {
         printStmt("computing Affects getLHS " + rhs + "\n");

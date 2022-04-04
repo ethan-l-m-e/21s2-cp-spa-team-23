@@ -39,6 +39,12 @@ void CachedManyToManyRelationship::printStmt(string input) {
     }
 }
 
+void CachedManyToManyRelationship::printStmt(string input, bool in) {
+    if(in) {
+        cout << input;
+    }
+}
+
 bool History::isInHistory(string key) {
     return historySingle.find(key) != historySingle.end();
 }

@@ -38,6 +38,8 @@ public:
     void clear() override;
 
     unordered_set<string> getAllStmtInSameProcedureAs(string stmt);
+
+    void printStmt(string input, bool in);
 };
 
 
