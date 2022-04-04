@@ -13,35 +13,35 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     auto* resultTable = new ResultTable();
 
     auto* optimizer = new QueryOptimizer(query);
-    std::vector<GroupedClause>* clauses = optimizer->groupClauses();
+    optimizer->groupClauses();
+    std::vector<Clause*> clauses = optimizer->getClauses();
 
-    for (auto gc : *clauses) {
-        if (dynamic_cast<WithClause*>(gc.clause)) {
+    for (Clause* clause : clauses) {
+        if (dynamic_cast<WithClause*>(clause)) {
             // Create ClauseEvaluators and evaluate each with clause
-            auto *clause = dynamic_cast<WithClause*>(gc.clause);
+            auto* withClause = dynamic_cast<WithClause*>(clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
-            auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), clause, pkb);
+            auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), withClause, pkb);
             bool withResult = withClauseEvaluator->evaluateClause(resultTable);
             delete withClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
             if (!withResult) break;
         }
-        else if (dynamic_cast<SuchThatClause*>(gc.clause)){
+        else if (dynamic_cast<SuchThatClause*>(clause)){
             // Create ClauseEvaluators and evaluate each suchThat clause
-            auto *clause = dynamic_cast<SuchThatClause *>(gc.clause);
+            auto* suchThatClause = dynamic_cast<SuchThatClause *>(clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
-            auto suchThatClauseEvaluator = generateEvaluator(*clause, *query->getDeclarations());
-            //for cache testing! can be remove if needed. default: true
+            auto suchThatClauseEvaluator = generateEvaluator(*suchThatClause, *query->getDeclarations());
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
             if (!suchThatResult) break;
         }
-        else if (dynamic_cast<PatternClause*>(gc.clause)){
+        else if (dynamic_cast<PatternClause*>(clause)){
             // Create ClauseEvaluators and evaluate each pattern clause
-            auto *clause = dynamic_cast<PatternClause *>(gc.clause);
+            auto* patternClause = dynamic_cast<PatternClause *>(clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
-            auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), clause, pkb);
+            auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), patternClause, pkb);
             bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation early.
@@ -49,7 +49,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
-    delete clauses;
+    delete optimizer;
 
     // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);

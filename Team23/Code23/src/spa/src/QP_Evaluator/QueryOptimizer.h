@@ -12,9 +12,9 @@
 
 class DisjointSet {
 public:
-    DisjointSet(int size) : root(size) {
+    explicit DisjointSet(int size) {
         for (int i = 0; i < size + 1; i++) {
-            root[i] = i;
+            root.emplace_back(i);
         }
     }
 
@@ -52,7 +52,8 @@ private:
     Query *query;
 public:
     QueryOptimizer(Query* query): query{query}{}
-    std::vector<GroupedClause>* groupClauses();
+    void groupClauses();
+    std::vector<Clause*> getClauses();
 };
 
 
