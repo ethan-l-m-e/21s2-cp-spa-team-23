@@ -21,8 +21,8 @@ public:
     void clearCache();
 
     struct Relationship {
-        CachedNextTRelationship nextT;
-        CachedAffectsRelationship affects;
+        CachedNextTRelationship* nextT = CachedNextTRelationship::getInstance();
+        CachedAffectsRelationship* affects = CachedAffectsRelationship::getInstance();
         CachedAffectsTRelationship affectsT;
     };
 

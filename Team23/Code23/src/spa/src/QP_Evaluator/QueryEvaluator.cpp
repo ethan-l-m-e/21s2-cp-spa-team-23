@@ -58,6 +58,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     if (!result) return {};
     list<string> output = generateResultString(resultTable);
     delete resultTable;
+
+    Cache::getInstance()->clearCache();
     return output;
 }
 

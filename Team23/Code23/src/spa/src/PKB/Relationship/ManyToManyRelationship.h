@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits.h>
 
 #include <unordered_set>
 #include <unordered_map>
@@ -92,5 +93,89 @@ public:
 
 
 
+
+};
+
+
+class ManyToManyRelationshipWithMinMax : public ManyToManyRelationship {
+private:
+
+    unordered_map<string, string> lhsToMinRHSMap;
+    unordered_map<string, string> lhsToMaxRHSMap;
+
+public:
+    void setRelationship(string lhs, string rhs) override {
+
+        ManyToManyRelationship::setRelationship(lhs, rhs);
+
+        if (lhsToMinRHSMap.find(lhs) == lhsToMinRHSMap.end()) {
+            lhsToMinRHSMap[lhs] = rhs;
+        } else {
+            lhsToMinRHSMap[lhs] = std::to_string(std::min(std::stoi(rhs), std::stoi(lhsToMinRHSMap[lhs])));
+        }
+
+        if (lhsToMaxRHSMap.find(lhs) == lhsToMaxRHSMap.end()) {
+            lhsToMaxRHSMap[lhs] = rhs;
+        } else {
+            lhsToMaxRHSMap[lhs] = std::to_string(std::max(std::stoi(rhs), std::stoi(lhsToMaxRHSMap[lhs])));
+        }
+
+
+    }
+
+    void setRelationship(string lhs, unordered_set<string> setRhs) override {
+        ManyToManyRelationship::setRelationship(lhs, setRhs);
+
+        int min = std::stoi(*setRhs.begin());
+        int max = std::stoi(*setRhs.begin());
+
+        for (string rhs : setRhs) {
+
+            int rhsInteger = std::stoi(rhs);
+
+            if (rhsInteger < min) {
+                min = rhsInteger;
+            }
+            if (rhsInteger > max) {
+                max = rhsInteger;
+            }
+        }
+
+        lhsToMinRHSMap[lhs] = std::to_string(min);
+        lhsToMaxRHSMap[lhs] = std::to_string(max);
+
+    }
+
+    void setRelationship(unordered_set<string> setLhs, string rhs) override {
+        ManyToManyRelationship::setRelationship(setLhs, rhs);
+
+        for (string lhs : setLhs) {
+
+            if (lhsToMinRHSMap.find(lhs) == lhsToMinRHSMap.end()) {
+                lhsToMinRHSMap[lhs] = rhs;
+            } else {
+                lhsToMinRHSMap[lhs] = std::to_string(std::min(std::stoi(rhs), std::stoi(lhsToMinRHSMap[lhs])));
+            }
+
+            if (lhsToMaxRHSMap.find(lhs) == lhsToMaxRHSMap.end()) {
+                lhsToMaxRHSMap[lhs] = rhs;
+            } else {
+                lhsToMaxRHSMap[lhs] = std::to_string(std::max(std::stoi(rhs), std::stoi(lhsToMaxRHSMap[lhs])));
+            }
+
+        }
+
+
+
+    }
+
+
+    string getRHSMin(string lhs) {
+        return lhsToMinRHSMap[lhs];
+    }
+
+    string getRHSMax(string lhs) {
+        return lhsToMaxRHSMap[lhs];
+    }
 
 };

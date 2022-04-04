@@ -411,6 +411,19 @@ TEST_CASE("Add FollowsT") {
     REQUIRE(pkb->relationship.followsT.getLHS("3") == unordered_set<string>{});
 
 
+    REQUIRE(pkb->relationship.followsT.getRHSMin("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("4") == "8");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("34") == "45");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("345") == "347");
+
+    REQUIRE(pkb->relationship.followsT.getRHSMax("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("4") == "23");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("34") == "84");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("345") == "986");
+
+
     for (auto& iter : tFolloweeToFollowersMap) {
         string followee = iter.first;
         unordered_set<string> followers = iter.second;

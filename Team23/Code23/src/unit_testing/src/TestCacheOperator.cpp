@@ -2,8 +2,8 @@
 // Created by Tin Hong Wen on 11/3/22.
 //
 
-#include "QP_database/AffectsOperator.h"
-#include "QP_database/NextTOperator.h"
+#include "Cache/Operators/AffectsOperator.h"
+#include "Cache/Operators/NextTOperator.h"
 #include "QP_Evaluator/TestUtilities.h"
 #include "QP_Parser/QueryParser.h"
 #include "catch.hpp"

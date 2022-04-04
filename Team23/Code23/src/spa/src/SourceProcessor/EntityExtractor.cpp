@@ -79,3 +79,31 @@ void EntityExtractor::extractAllEntities(Node *node) {
         PKB::getInstance()->entity.procedures.add(value->getProcName());//Not sure if needed
     }
 }
+void EntityExtractor::assignProcedureToNodes(Node* node, ProcedureNode* proc){
+    if(auto value = dynamic_cast<ProgramNode*>(node)) {
+        vector<ProcedureNode*> v = value -> getProcLst();
+        for(ProcedureNode* p: v)
+            assignProcedureToNodes(p,nullptr);
+    } else if(auto value = dynamic_cast<ProcedureNode*>(node)) {
+        vector<Node*> v = value->getStmtLst();
+        for(Node* s: v) {
+            assignProcedureToNodes(s,value);
+        }
+    } else if(auto value = dynamic_cast<WhileNode*>(node)) {
+        value->setProc(proc);
+        vector<Node*> stmtLst = value->getStmtLst();
+        for(Node* s: stmtLst)
+            assignProcedureToNodes(s,proc);
+    } else if(auto value = dynamic_cast<IfNode*>(node)) {
+        value->setProc(proc);
+        vector<Node*> elseVector = value->getElseStmtLst();
+        vector<Node*> thenVector = value->getThenStmtLst();
+
+        for(Node* s: elseVector)
+            assignProcedureToNodes(s,proc);
+        for(Node* s: thenVector)
+            assignProcedureToNodes(s,proc);
+    } else if(auto value = dynamic_cast<StmtNode*>(node)){
+        value->setProc(proc);
+    }
+}
