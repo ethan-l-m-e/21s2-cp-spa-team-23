@@ -49,6 +49,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
         }
     }
 
+    delete optimizer;
+
     // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
     bool result = resultClauseEvaluator->evaluateClause(resultTable);
