@@ -171,11 +171,11 @@ public:
 
 
     string getRHSMin(string lhs) {
-        return lhsToMinRHSMap[lhs];
+        return lhsToMinRHSMap.find(lhs) != lhsToMinRHSMap.end() ? lhsToMinRHSMap[lhs] : std::to_string(INT_MAX);
     }
 
     string getRHSMax(string lhs) {
-        return lhsToMaxRHSMap[lhs];
+        return lhsToMaxRHSMap.find(lhs) != lhsToMaxRHSMap.end() ? lhsToMaxRHSMap[lhs] : 0;
     }
 
 };

@@ -17,8 +17,8 @@ string PrintStatementTable::getVariableName(string statementNumber) {
     return statementNumberToVariableNameMap[std::stoi(statementNumber)];
 }
 
-/*
+
 void PrintStatementTable::clear() {
     StatementTable<PrintNode*>::clear();
     statementNumberToVariableNameMap.clear();
-}*/
+}

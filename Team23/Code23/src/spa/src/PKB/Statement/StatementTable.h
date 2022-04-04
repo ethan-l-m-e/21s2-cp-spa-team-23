@@ -38,18 +38,19 @@ public:
         statementNumbersSet.insert(statementNumber);
         statementNodesSet.insert(node);
 
-//        Node *n = node->getProc();
-//        ProcedureNode *procedureNode = dynamic_cast<ProcedureNode *>(n);
-//
-//        string procedureName = procedureNode->getProcName();
-//
-//        if (procedureNameToSetStatementNumbersMap.find(procedureName) == procedureNameToSetStatementNumbersMap.end()) {
-//            procedureNameToSetStatementNumbersMap[procedureName] = unordered_set<string>{statementNumber};
-//        } else {
-//            procedureNameToSetStatementNumbersMap[procedureName].template emplace(unordered_set<string>{statementNumber});
-//        }
-//
-//        statementNumberToProcedureNameMap[statementNumber] = procedureName;
+
+        Node *n = node->getProc();
+        ProcedureNode *procedureNode = dynamic_cast<ProcedureNode *>(n);
+
+        string procedureName = procedureNode->getProcName();
+
+        if (procedureNameToSetStatementNumbersMap.find(procedureName) == procedureNameToSetStatementNumbersMap.end()) {
+            procedureNameToSetStatementNumbersMap.emplace(procedureName, unordered_set<string>{statementNumber});
+        } else {
+            procedureNameToSetStatementNumbersMap[procedureName].insert(statementNumber);
+        }
+
+        statementNumberToProcedureNameMap[statementNumber] = procedureName;
 
     }
 
@@ -59,6 +60,8 @@ public:
     }
 
     bool areInSameProcedure(string statementA, string statementB) {
+        return statementNumberToProcedureNameMap.find(statementA) != statementNumberToProcedureNameMap.end() &&
+        statementNumberToProcedureNameMap.find(statementB) != statementNumberToProcedureNameMap.end() &&
         statementNumberToProcedureNameMap[statementA] == statementNumberToProcedureNameMap[statementB];
     }
 
@@ -82,6 +85,9 @@ public:
     virtual void clear() {
         statementNumbersSet.clear();
         statementNodesSet.clear();
+
+        procedureNameToSetStatementNumbersMap.clear();
+        statementNumberToProcedureNameMap.clear();
     }
 };
 

@@ -15,5 +15,7 @@ public:
     void addStatement(CallNode *node);
 
     string getProcedureName(string statementNumber);
+
+    void clear() override;
 };
 

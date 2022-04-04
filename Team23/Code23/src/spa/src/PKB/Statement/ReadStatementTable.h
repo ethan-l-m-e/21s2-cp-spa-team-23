@@ -16,6 +16,6 @@ public:
 
     string getVariableName(string statementNumber);
 
-    //void clear() override;
+    void clear() override;
 };
 

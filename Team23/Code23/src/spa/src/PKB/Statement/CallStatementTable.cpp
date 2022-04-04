@@ -17,3 +17,8 @@ string CallStatementTable::getProcedureName(string statementNumber) {
 
     return statementNumberToProcedureNameMap[std::stoi(statementNumber)];
 }
+
+void CallStatementTable::clear() {
+    StatementTable<CallNode *>::clear();
+    statementNumberToProcedureNameMap.clear();
+}
