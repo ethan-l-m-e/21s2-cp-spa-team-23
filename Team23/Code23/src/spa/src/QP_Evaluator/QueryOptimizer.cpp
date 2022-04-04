@@ -4,7 +4,7 @@
 
 #include "QueryOptimizer.h"
 
-std::vector<GroupedClause>* QueryOptimizer::groupClauses(){
+void QueryOptimizer::groupClauses(){
     std::map<string, int> synonymIndices;
     vector<Clause*> allClauses;
 
@@ -68,6 +68,8 @@ std::vector<GroupedClause>* QueryOptimizer::groupClauses(){
     // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
     std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
 
+
+
     // for testing
     /*
     for(GroupedClause gc : rearrangedClauses) {
@@ -85,5 +87,12 @@ std::vector<GroupedClause>* QueryOptimizer::groupClauses(){
         }
     }
     */
-    return &rearrangedClauses;
 }
+
+std::vector<Clause*> QueryOptimizer::getClauses() {
+    std::vector<Clause*> clauses;
+    for(auto grouped : rearrangedClauses) {
+        clauses.emplace_back(grouped.clause);
+    }
+    return clauses;
+};

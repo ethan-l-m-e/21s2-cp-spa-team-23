@@ -52,7 +52,8 @@ private:
     Query *query;
 public:
     QueryOptimizer(Query* query): query{query}{}
-    std::vector<GroupedClause>* groupClauses();
+    void groupClauses();
+    std::vector<Clause*> getClauses();
 };
 
 
