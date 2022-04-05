@@ -101,17 +101,10 @@ void QueryOptimizer::setSynonymIndices() {
 
 void QueryOptimizer::setGroups() {
     for (auto groupedClause : rearrangedClauses) {
-        groups.insert(std::make_pair(groupedClause.group, unordered_set<string>()));
-    }
-
-    for (auto & synonymPair : *query->getDeclarations()) {
-        string synonym = synonymPair.first;
-        int group = synonymIndices[synonym];
-        if (groups.find(group) != groups.end())
-            groups.at(group).insert(synonym);
+        groups.insert(groupedClause.group);
     }
 };
 
-unordered_map<int, unordered_set<string>>* QueryOptimizer::getGroups() {
+unordered_set<int>* QueryOptimizer::getGroups() {
     return &groups;
 };

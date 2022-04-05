@@ -14,9 +14,8 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     std::vector<GroupedClause> groupedClauses = optimizer->getClauses();
 
     unordered_map<int, ResultTable*> groupedResultTables;
-    int a = optimizer->getGroups()->size();
     for(const auto& group: *optimizer->getGroups()) {
-        groupedResultTables.insert(std::make_pair(group.first, new ResultTable()));
+        groupedResultTables.insert(std::make_pair(group, new ResultTable()));
     }
 
     bool isFalse = false;

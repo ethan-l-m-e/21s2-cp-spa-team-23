@@ -53,7 +53,7 @@ class QueryOptimizer {
 private:
     std::vector<GroupedClause> rearrangedClauses; // the output vector, initially empty
     Query *query;
-    unordered_map<int, unordered_set<string>> groups;
+    unordered_set<int> groups;
     unordered_map<string, int> synonymIndices;
     void setSynonymIndices();
     void setGroups();
@@ -61,7 +61,7 @@ public:
     QueryOptimizer(Query* query): query{query}{}
     void groupClauses();
     vector<GroupedClause> getClauses();
-    unordered_map<int, unordered_set<string>>* getGroups();
+    unordered_set<int>* getGroups();
 };
 
 
