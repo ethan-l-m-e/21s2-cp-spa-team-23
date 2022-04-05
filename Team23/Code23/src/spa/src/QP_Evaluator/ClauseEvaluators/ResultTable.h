@@ -45,6 +45,7 @@ private:
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
     void appendHeader(const vector<string>&);
+    void crossJoin(vector<vector<string>> columns, vector<string> headers);
     void crossJoinStrings(unordered_set<string>&);
     void crossJoinTuples(unordered_set<pair<string, string>>&);
     void innerJoin(size_t, unordered_set<string>&);
@@ -52,6 +53,7 @@ private:
     void innerJoin(size_t, unordered_map<string,vector<string>>);
     static unordered_map<string, vector<string>> convertToMap(unordered_set<pair<string, string>>&, bool);
     unordered_map<string, vector<string>> createSnapShot();
+    vector<vector<string>> getResultColumns (unordered_set<pair<string, string>>& resultSet);
 
     vector<string> tableHeader;
     String2DVector tableEntries;

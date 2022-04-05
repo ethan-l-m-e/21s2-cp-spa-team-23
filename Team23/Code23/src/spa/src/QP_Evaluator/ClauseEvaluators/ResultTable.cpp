@@ -114,8 +114,9 @@ void ResultTable::mergeStringResult(Result& result) {
     auto it = std::find(tableHeader.begin(), tableHeader.end(), header);
     if (it == tableHeader.end()) {
         // compute cross product if the synonym is not in the header
-        appendHeader({std::get<string>(result.resultHeader)});
-        crossJoinStrings(stringSet);
+        vector<string> stringVector (stringSet.begin(), stringSet.end());
+        crossJoin({stringVector},
+                  {std::get<string>(result.resultHeader)});
     } else {
         // otherwise, do an inner join
         innerJoin(std::distance(tableHeader.begin(), it), stringSet);
@@ -134,8 +135,8 @@ void ResultTable::mergeTuplesResult(Result& result) {
 
     if (it1 == tableHeader.end() && it2 == tableHeader.end()) {
         // compute cross product if both the synonyms are not in the header
-        appendHeader({headerTuple.first, headerTuple.second});
-        crossJoinTuples(tupleSet);
+        crossJoin(getResultColumns(tupleSet),
+                  {headerTuple.first, headerTuple.second});
     } else if (it1 != tableHeader.end() && it2 != tableHeader.end()) {
         innerJoin(std::make_pair(std::distance(tableHeader.begin(), it1), std::distance(tableHeader.begin(), it2)),
                   tupleSet);
@@ -231,6 +232,30 @@ void ResultTable::crossJoinTuples(unordered_set<pair<string, string>>& synonymVa
     }
 }
 
+
+void ResultTable::crossJoin(vector<vector<string>> columns, vector<string> headers) {
+
+    if(columns.empty()) return;
+
+    long numRows = (long) (getTableHeight() == 0 ? 1 : getTableHeight());
+    long numVals = (long) columns[0].size();
+
+    for (auto & column : tableEntries) {
+        std::vector<std::string> temp (column.begin(), column.begin() + numRows);
+        for(int i = 0; i < numVals - 1; i++) {
+            column.insert(column.end(), temp.begin(), temp.end());
+        }
+    }
+
+    for (int i = 0; i < columns.size(); i++) {
+        vector<string> updatedColumn;
+        for ( const auto& value : columns[i]) {
+            updatedColumn.insert(updatedColumn.end(), numRows, value);
+        }
+        appendColumn(headers[i], updatedColumn);
+    }
+}
+
 /**
  * Inner join method to join the table with a string result, with a common synonym.
  * @param index  the index of the common synonym in the table header
@@ -242,7 +267,7 @@ void ResultTable::innerJoin(size_t index, unordered_set<string>& resultItemList)
    size_t width = getTableWidth();
    unordered_set<int> deletedRows;
    for (int r = 0; r < height; r++) {
-       if (!std::count(resultItemList.begin(), resultItemList.end(), tableEntries[index][r])) {
+       if (!resultItemList.count(tableEntries[index][r])) {
            deletedRows.insert(r);
        }
    }
@@ -269,7 +294,7 @@ void ResultTable::innerJoin(std::pair<size_t, size_t> indices, unordered_set<pai
     for (int r = 0; r < height; r++) {
         string left = tableEntries[indices.first][r];
         string right = tableEntries[indices.second][r];
-        if (!std::count(resultItemList.begin(), resultItemList.end(), make_pair(left, right))) {
+        if (!resultItemList.count(make_pair(left, right))) {
             deletedRows.insert(r);
         }
     }
@@ -365,6 +390,16 @@ vector<int> ResultTable::getProjection() {
     } else {
         return projection;
     }
+}
+
+vector<vector<string>> ResultTable::getResultColumns (unordered_set<pair<string, string>>& resultSet) {
+    vector<string> row1;
+    vector<string> row2;
+    for(const auto& pair : resultSet) {
+        row1.emplace_back(pair.first);
+        row2.emplace_back(pair.second);
+    }
+    return {row1, row2};
 }
 
 
