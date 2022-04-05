@@ -47,7 +47,7 @@ typedef struct GroupedClause {
     bool operator <(const GroupedClause & other) const
     {
         return weight < other.weight;
-        return group < other.group; // compare group number
+//        return group < other.group; // compare group number
     }
 } GroupedClause;
 
