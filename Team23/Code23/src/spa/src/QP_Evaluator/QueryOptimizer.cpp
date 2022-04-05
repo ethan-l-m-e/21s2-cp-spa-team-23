@@ -4,6 +4,10 @@
 
 #include "QueryOptimizer.h"
 
+std::pair<int, int> getNumSynonymConst(vector<Argument> vector1);
+
+void setWeightByClause(GroupedClause clause);
+
 void QueryOptimizer::groupClauses(){
     vector<Clause*> allClauses;
 
@@ -63,6 +67,8 @@ void QueryOptimizer::groupClauses(){
         rearrangedClauses.emplace_back(newClause);
     }
 
+    assignWeights(&rearrangedClauses);
+
     // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
     std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
 
@@ -91,6 +97,48 @@ std::vector<GroupedClause> QueryOptimizer::getClauses() {
     return rearrangedClauses;
 };
 
+void QueryOptimizer::assignWeights(std::vector<GroupedClause>* clauses) {
+    for (GroupedClause clause : *clauses) {
+        setWeightByClause(&clause);
+    }
+}
+
+void QueryOptimizer::setWeightByClause(GroupedClause* clause) {
+    std::pair<int, int> numSynonymConst = getNumSynonymConst(&clause->clause->argList);
+    if (numSynonymConst.second == 2) {
+        clause->weight = 0;
+    } else if (numSynonymConst.first == 1 && numSynonymConst.second == 1) {
+        clause->weight = 0.1;
+    } else if (dynamic_cast<WithClause*>(clause->clause)) {
+        clause->weight = 0.8;
+    } else if (dynamic_cast<PatternClause*>(clause->clause)) {
+        clause->weight = 0.9;
+    } else {
+        SuchThatClause suchThatClause = *dynamic_cast<SuchThatClause*>(clause->clause);
+        clause->weight = 0.2;
+        if (suchThatClause.relRef == RelRef::NEXT_T) {
+            clause->weight = 0.6;
+        } else if (suchThatClause.relRef == RelRef::AFFECTS || suchThatClause.relRef == RelRef::AFFECTS_T) {
+            clause->weight = 1;
+        }
+    }
+}
+
+std::pair<int, int> QueryOptimizer::getNumSynonymConst(std::vector<Argument>* argList) {
+    int constants = 0;
+    int synonyms = 0;
+    for (Argument argument : *argList) {
+        if (argument.argumentType == ArgumentType::SYNONYM) {
+            synonyms += 1;
+        } else if (argument.argumentType == ArgumentType::STMT_NO || argument.argumentType == ArgumentType::BOOLEAN
+                   || argument.argumentType == ArgumentType::IDENT) {
+            constants += 1;
+        }
+    }
+
+    return std::pair(synonyms, constants);
+}
+
 void QueryOptimizer::setSynonymIndices() {
     // synonym indices maps each synonym to an integer (1 to n+1), which is used in disjoint set algorithm.
     for(auto iter = query->getDeclarations()->begin(); iter != query->getDeclarations()->end(); ++iter){
@@ -107,4 +155,4 @@ void QueryOptimizer::setGroups() {
 
 unordered_set<int>* QueryOptimizer::getGroups() {
     return &groups;
-};
+}
