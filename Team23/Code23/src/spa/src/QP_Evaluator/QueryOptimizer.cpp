@@ -97,9 +97,10 @@ std::vector<GroupedClause> QueryOptimizer::getClauses() {
     return rearrangedClauses;
 };
 
-void QueryOptimizer::assignWeights(std::vector<GroupedClause>* clauses) {
-    for (GroupedClause clause : *clauses) {
-        setWeightByClause(&clause);
+void QueryOptimizer::assignWeights(std::vector<GroupedClause>* groupedClauses) {
+    std::vector<GroupedClause>& clauses = *groupedClauses;
+    for (size_t i = 0; i < clauses.size(); i++) {
+        setWeightByClause(&clauses[i]);
     }
 }
 
