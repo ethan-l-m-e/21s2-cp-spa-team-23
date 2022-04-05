@@ -4,10 +4,6 @@
 
 #include "QueryOptimizer.h"
 
-std::pair<int, int> getNumSynonymConst(vector<Argument> vector1);
-
-void setWeightByClause(GroupedClause clause);
-
 void QueryOptimizer::groupClauses(){
     vector<Clause*> allClauses;
 
