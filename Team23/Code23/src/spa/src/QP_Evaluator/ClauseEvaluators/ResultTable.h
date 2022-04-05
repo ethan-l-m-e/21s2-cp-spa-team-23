@@ -33,12 +33,14 @@ public:
     string getBooleanResultString();
     vector<string> *getHeader();
     String2DVector *getList();
+    vector<string> *getColumn(string& synonym);
     size_t getTableHeight();
     size_t getTableWidth();
     void setBooleanResult(bool);
-    void appendColumn(string, vector<string>&);
+    void appendColumn(string header, vector<string>& value);
     void mergeResultToTable(Result &result);
     void rearrangeSynonyms(vector<int>&);
+    void mergeColumnsToTable(vector<vector<string>> columns, vector<string> headers);
     vector<int> getProjection();
 private:
     void mergeStringResult(Result &result);

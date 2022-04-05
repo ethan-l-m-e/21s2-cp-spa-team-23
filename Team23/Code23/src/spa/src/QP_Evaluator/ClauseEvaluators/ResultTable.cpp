@@ -53,6 +53,17 @@ String2DVector* ResultTable::getList() {
     return &tableEntries;
 }
 
+vector<string>* ResultTable::getColumn(string& synonym) {
+    auto it = find(tableHeader.begin(), tableHeader.end(), synonym);
+    if (it != tableHeader.end())
+    {
+        size_t index = it - tableHeader.begin();
+        return &tableEntries[index];
+    } else {
+        return {};
+    }
+}
+
 size_t ResultTable::getTableHeight() {
     if(isEmpty()) return 0;
     return tableEntries[0].size();
@@ -67,9 +78,9 @@ void ResultTable::setBooleanResult(bool result) {
     booleanResult = result;
 }
 
-void ResultTable::appendColumn(string colName, vector<string>& col) {
-    tableHeader.emplace_back(colName);
-    tableEntries.emplace_back(col);
+void ResultTable::appendColumn(string header, vector<string>& value) {
+    tableHeader.emplace_back(header);
+    tableEntries.emplace_back(value);
 }
 
 void ResultTable::rearrangeSynonyms(vector<int>& orders) {
@@ -83,6 +94,11 @@ void ResultTable::rearrangeSynonyms(vector<int>& orders) {
     tableHeader = newHeader;
     tableEntries = newEntries;
 }
+
+void ResultTable::mergeColumnsToTable(vector<vector<string>> columns, vector<string> headers) {
+    crossJoin(std::move(columns), std::move(headers));
+}
+
 
 /**
  * Merge a result to the table.

@@ -12,7 +12,7 @@
 class PatternClauseEvaluator : public ClauseEvaluator {
 public:
     PatternClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb): ClauseEvaluator(declarations, clause, pkb) {
-        patternSynonymType = static_cast<PatternClause*>(clause)->synonymType;
+        patternSynonymType = dynamic_cast<PatternClause*>(clause)->synonymType;
     }
     bool evaluateClause(ResultTable* resultTable) override;
 protected:

@@ -6,17 +6,17 @@
 #include "QP_Parser/Exception.h"
 
 bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
-    if (clause->argList.empty()) throw qp::QPEvaluatorException("No argument was selected");
+    if (clause->argList.empty())
+        throw qp::QPEvaluatorException("No argument was selected");
 
     // handle select boolean
-    if (clause->argList[0].argumentType == ArgumentType::BOOLEAN) {
-        resultTable->enableBooleanResult();
-        return true;
-    }
+    if (resultTable->isBoolean()) return true;
 
     // handle select synonym / attribute references
     vector<int> projections;
-    if (resultTable->getBooleanResult()) projectSelectedSynonyms(&projections, resultTable);
+    if (resultTable->getBooleanResult())
+        projectSelectedSynonyms(&projections, resultTable);
+
     resultTable->rearrangeSynonyms(projections);
     return true;
 

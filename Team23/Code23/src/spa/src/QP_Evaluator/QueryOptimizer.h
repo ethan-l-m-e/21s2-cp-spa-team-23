@@ -7,8 +7,11 @@
 
 #include "QP_Evaluator/Query/Query.h"
 #include <unordered_set>
-#include <map>
+#include <unordered_map>
 #include <iostream>
+
+using std::unordered_set;
+using std::unordered_map;
 
 class DisjointSet {
 public:
@@ -50,10 +53,15 @@ class QueryOptimizer {
 private:
     std::vector<GroupedClause> rearrangedClauses; // the output vector, initially empty
     Query *query;
+    unordered_map<int, unordered_set<string>> groups;
+    unordered_map<string, int> synonymIndices;
+    void setSynonymIndices();
+    void setGroups();
 public:
     QueryOptimizer(Query* query): query{query}{}
     void groupClauses();
-    std::vector<Clause*> getClauses();
+    vector<GroupedClause> getClauses();
+    unordered_map<int, unordered_set<string>>* getGroups();
 };
 
 

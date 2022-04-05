@@ -5,7 +5,6 @@
 #include "QueryOptimizer.h"
 
 void QueryOptimizer::groupClauses(){
-    std::map<string, int> synonymIndices;
     vector<Clause*> allClauses;
 
     // add all clauses into a single vector
@@ -19,16 +18,12 @@ void QueryOptimizer::groupClauses(){
         allClauses.emplace_back(&withClause);
     }
 
+    setSynonymIndices();
+
     // disjoint set algorithm is used to identify which group a synonym belongs to
     DisjointSet ds(int(query->getDeclarations()->size()));
 
-    // synonym indices maps each synonym to an integer (1 to n+1), which is used in disjoint set algorithm.
-    for(auto iter = query->getDeclarations()->begin(); iter != query->getDeclarations()->end(); ++iter){
-        auto index = std::distance(query->getDeclarations()->begin(), iter);
-        synonymIndices[iter->first] = int(index + 1);
-    }
-
-    std::map<Clause*, int> groupIdentifier; // stores the mapping from each clause to one of its synonyms (0 for clauses without synonyms)
+    std::unordered_map<Clause*, int> groupIdentifier; // stores the mapping from each clause to one of its synonyms (0 for clauses without synonyms)
 
     /*
      * for each clause, get all its synonyms. For cases with more than 1 synonym, join them under the same group.
@@ -39,11 +34,14 @@ void QueryOptimizer::groupClauses(){
         std::vector<int> synonyms;
         for(const Argument& a : allClauses[i]->argList) {
             if(a.argumentType == ArgumentType::SYNONYM) {
-                synonyms.emplace_back(synonymIndices[std::get<string>(a.argumentValue)]);
+                string synonym = std::get<string>(a.argumentValue);
+                synonyms.emplace_back(synonymIndices[synonym]);
             } else if (a.argumentType == ArgumentType::ATTR_REF) {
-                synonyms.emplace_back(synonymIndices[std::get<pair<string, AttrName>>(a.argumentValue).first]);
+                string synonym = std::get<pair<string, AttrName>>(a.argumentValue).first;
+                synonyms.emplace_back(synonymIndices[synonym]);
             }
         }
+
         if(synonyms.size() > 1) {
             for (int j = 0; j < synonyms.size() - 1; j++) {
                 ds.unionSet(synonyms[j], synonyms[j + 1]);
@@ -68,7 +66,7 @@ void QueryOptimizer::groupClauses(){
     // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
     std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
 
-
+    setGroups();
 
     // for testing
     /*
@@ -89,10 +87,31 @@ void QueryOptimizer::groupClauses(){
     */
 }
 
-std::vector<Clause*> QueryOptimizer::getClauses() {
-    std::vector<Clause*> clauses;
-    for(auto grouped : rearrangedClauses) {
-        clauses.emplace_back(grouped.clause);
+std::vector<GroupedClause> QueryOptimizer::getClauses() {
+    return rearrangedClauses;
+};
+
+void QueryOptimizer::setSynonymIndices() {
+    // synonym indices maps each synonym to an integer (1 to n+1), which is used in disjoint set algorithm.
+    for(auto iter = query->getDeclarations()->begin(); iter != query->getDeclarations()->end(); ++iter){
+        auto index = std::distance(query->getDeclarations()->begin(), iter);
+        synonymIndices[iter->first] = int(index + 1);
     }
-    return clauses;
+}
+
+void QueryOptimizer::setGroups() {
+    for (auto groupedClause : rearrangedClauses) {
+        groups.insert(std::make_pair(groupedClause.group, unordered_set<string>()));
+    }
+
+    for (auto & synonymPair : *query->getDeclarations()) {
+        string synonym = synonymPair.first;
+        int group = synonymIndices[synonym];
+        if (groups.find(group) != groups.end())
+            groups.at(group).insert(synonym);
+    }
+};
+
+unordered_map<int, unordered_set<string>>* QueryOptimizer::getGroups() {
+    return &groups;
 };

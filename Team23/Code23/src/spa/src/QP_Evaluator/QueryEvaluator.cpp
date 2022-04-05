@@ -9,57 +9,113 @@
 
 list<string> QueryEvaluator::evaluate(Query* query) {
 
-    // Initialise an empty synonym relations for storing intermediate result
-    auto* resultTable = new ResultTable();
-
     auto* optimizer = new QueryOptimizer(query);
     optimizer->groupClauses();
-    std::vector<Clause*> clauses = optimizer->getClauses();
+    std::vector<GroupedClause> groupedClauses = optimizer->getClauses();
 
-    for (Clause* clause : clauses) {
-        if (dynamic_cast<WithClause*>(clause)) {
+    unordered_map<int, ResultTable*> groupedResultTables;
+    int a = optimizer->getGroups()->size();
+    for(const auto& group: *optimizer->getGroups()) {
+        groupedResultTables.insert(std::make_pair(group.first, new ResultTable()));
+    }
+
+    bool isFalse = false;
+
+    for (GroupedClause gc : groupedClauses) {
+        if (dynamic_cast<WithClause*>(gc.clause)) {
             // Create ClauseEvaluators and evaluate each with clause
-            auto* withClause = dynamic_cast<WithClause*>(clause);
+            auto* withClause = dynamic_cast<WithClause*>(gc.clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), withClause, pkb);
-            bool withResult = withClauseEvaluator->evaluateClause(resultTable);
+            bool withResult = withClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete withClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!withResult) break;
+            if (!withResult) {
+                isFalse = true;
+                break;
+            }
         }
-        else if (dynamic_cast<SuchThatClause*>(clause)){
+        else if (dynamic_cast<SuchThatClause*>(gc.clause)){
             // Create ClauseEvaluators and evaluate each suchThat clause
-            auto* suchThatClause = dynamic_cast<SuchThatClause *>(clause);
+            auto* suchThatClause = dynamic_cast<SuchThatClause *>(gc.clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto suchThatClauseEvaluator = generateEvaluator(*suchThatClause, *query->getDeclarations());
-            bool suchThatResult = suchThatClauseEvaluator->evaluateClause(resultTable);
+            bool suchThatResult = suchThatClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete suchThatClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!suchThatResult) break;
+            if (!suchThatResult){
+                isFalse = true;
+                break;
+            }
         }
-        else if (dynamic_cast<PatternClause*>(clause)){
+        else if (dynamic_cast<PatternClause*>(gc.clause)){
             // Create ClauseEvaluators and evaluate each pattern clause
-            auto* patternClause = dynamic_cast<PatternClause *>(clause);
+            auto* patternClause = dynamic_cast<PatternClause *>(gc.clause);
             //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), patternClause, pkb);
-            bool patternResult = patternClauseEvaluator->evaluateClause(resultTable);
+            bool patternResult = patternClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete patternClauseEvaluator;
             // if the clause evaluates to false, terminate evaluation early.
-            if (!patternResult) break;
+            if (!patternResult) {
+                isFalse = true;
+                break;
+            }
+        } else {
+            throw qp::QPEvaluatorException("Invalid clause type");
+        }
+    }
+    auto* finalResultTable = new ResultTable();
+
+    unordered_set<string> selectedSynonyms;
+    for (Argument synonym: query->getResultClause()->argList) {
+        if (synonym.argumentType == ArgumentType::ATTR_REF) {
+            auto attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
+            selectedSynonyms.insert(attrRef.first);
+        } else if (synonym.argumentType == ArgumentType::SYNONYM) {
+            selectedSynonyms.insert(std::get<string>(synonym.argumentValue));
+        } else if (synonym.argumentType == ArgumentType::BOOLEAN) {
+            finalResultTable->enableBooleanResult();
         }
     }
 
-    delete optimizer;
+    if (isFalse) {
+        finalResultTable->setBooleanResult(false);
+    } else {
+        if (!selectedSynonyms.empty()) {
+            for (auto map: groupedResultTables) {
+                auto synonymList = map.second->getHeader();
+                unordered_set<string> synonyms (synonymList->begin(),synonymList->end());
+                for (auto synonym : selectedSynonyms) {
+                    vector<vector<string>> selectedColumns;
+                    vector<string> selectedSynonymHeaders;
+                    if (synonyms.find(synonym) != synonyms.end()) {
+                        auto column = map.second->getColumn(synonym);
+                        selectedColumns.emplace_back(*column);
+                        selectedSynonymHeaders.emplace_back(synonym);
+                    }
+
+                    if(!selectedColumns.empty())
+                        finalResultTable->mergeColumnsToTable(selectedColumns, selectedSynonymHeaders);
+                }
+            }
+        }
+    }
 
     // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
-    bool result = resultClauseEvaluator->evaluateClause(resultTable);
+    bool result = resultClauseEvaluator->evaluateClause(finalResultTable);
     delete resultClauseEvaluator;
     if (!result) return {};
-    list<string> output = generateResultString(resultTable);
-    delete resultTable;
+    list<string> output = generateResultString(finalResultTable);
+
+    delete finalResultTable;
+    for (auto map: groupedResultTables) {
+        delete map.second;
+    }
+    delete optimizer;
 
     Cache::getInstance()->clearCache();
+
     return output;
 }
 
