@@ -142,96 +142,12 @@ void ResultTable::mergeTuplesResult(Result& result) {
                   tupleSet);
     } else if (it1 != tableHeader.end()) {
         innerJoin(std::distance(tableHeader.begin(), it1),
-                  convertToMap(tupleSet, false));
-        appendHeader({headerTuple.second});
+                  convertToMap(tupleSet, false), headerTuple.second);
     } else{
         innerJoin(std::distance(tableHeader.begin(), it2),
-                  convertToMap(tupleSet, true));
-        appendHeader({headerTuple.first});
+                  convertToMap(tupleSet, true), headerTuple.first);
     }
 }
-
-/**
- * Append a list of synonyms to the table header.
- * @param synonymList  reference to the list of synonyms to be appended
- */
-void ResultTable::appendHeader(const vector<string>& synonymList) {
-    for (const auto& synonym : synonymList) {
-        tableHeader.emplace_back(synonym);
-    }
-}
-
-/**
- * Compute cross product of the table and a string result and assign the updated values to the table.
- * @param synonymValues  reference to the ResultSet of the type string
- */
-void ResultTable::crossJoinStrings(unordered_set<string>& synonymValues) {
-    if(tableEntries.empty()) {
-        tableEntries.emplace_back(vector<string>());
-        for(const auto& resultItem : synonymValues) {
-            tableEntries[0].emplace_back(resultItem);
-        }
-    } else {
-        size_t length = tableEntries[0].size();
-        unordered_map<string, vector<string>> snapshot = createSnapShot();
-        tableEntries.emplace_back(vector<string>());
-
-        for (auto resultItem = synonymValues.begin(); resultItem != synonymValues.end(); ++resultItem) {
-            for (auto it = tableEntries.begin(); it != tableEntries.end(); ++it) {
-                long index = std::distance(tableEntries.begin(), it);
-                vector<string> values;
-                if(it == tableEntries.end() - 1) {
-                    values.insert(values.end(), length, *resultItem);
-                } else {
-                    if(resultItem == synonymValues.begin()) {
-                        values = {};
-                    } else {
-                        values = snapshot.find(tableHeader[index])->second;
-                    }
-                }
-                it->insert(it->end(), values.begin(), values.end());
-            }
-        }
-    }
-}
-
-/**
- * Compute cross product of the table and a tuple result and assign the updated values to the table.
- * @param synonymValues  reference to the list of ResultItem of the type tuple
- */
-void ResultTable::crossJoinTuples(unordered_set<pair<string, string>>& synonymValues) {
-    if(tableEntries.empty()) {
-        tableEntries.insert(tableEntries.end(), 2, vector<string>());
-        for(const auto& resultItem : synonymValues) {
-            auto curr = resultItem;
-            tableEntries[0].emplace_back(curr.first);
-            tableEntries[1].emplace_back(curr.second);
-        }
-    } else {
-        size_t length = tableEntries[0].size();
-        unordered_map<string, vector<string>> snapshot = createSnapShot();
-        tableEntries.insert(tableEntries.end(), 2, vector<string>());
-        for (auto resultItem = synonymValues.begin(); resultItem != synonymValues.end(); ++resultItem) {
-            for (auto it = tableEntries.begin(); it != tableEntries.end(); ++it) {
-                long index = std::distance(tableEntries.begin(), it);
-                vector<string> values;
-                if(it == tableEntries.end() - 2) {
-                    values.insert(values.end(),length,resultItem->first);
-                } else if (it == tableEntries.end() - 1) {
-                    values.insert(values.end(), length,resultItem->second);
-                } else {
-                    if(resultItem == synonymValues.begin()) {
-                        values = {};
-                    } else {
-                        values = snapshot.find(tableHeader[index])->second;
-                    }
-                }
-                it->insert(it->end(), values.begin(), values.end());
-            }
-        }
-    }
-}
-
 
 void ResultTable::crossJoin(vector<vector<string>> columns, vector<string> headers) {
 
@@ -315,19 +231,18 @@ void ResultTable::innerJoin(std::pair<size_t, size_t> indices, unordered_set<pai
  * @param map  an unordered map representation of the tuple result with the values of the common synonym as the key
  */
 
-void ResultTable::innerJoin(size_t index, unordered_map<string,vector<string>> map){
+void ResultTable::innerJoin(size_t index, unordered_map<string,vector<string>> map, string newHeader){
     size_t height = getTableHeight();
     size_t width = getTableWidth();
     std::unordered_set<int> deletedRows;
-    tableEntries.emplace_back(vector<string>());
+    vector<string> newCol;
 
     for (int r = 0; r < height; r++) {
         auto it = map.find(tableEntries[index][r]);
         if (it == map.end()) {
             deletedRows.insert(r);
         } else {
-            auto newCol = tableEntries[width];
-            tableEntries[width].insert(tableEntries[width].end(), it->second.begin(), it->second.end());
+            newCol.insert(newCol.end(), it->second.begin(), it->second.end());
         }
     }
 
@@ -340,6 +255,7 @@ void ResultTable::innerJoin(size_t index, unordered_map<string,vector<string>> m
         }
         tableEntries[c] = newValues;
     }
+    appendColumn(std::move(newHeader), newCol);
 }
 
 /**
@@ -370,17 +286,6 @@ unordered_map<string, vector<string>> ResultTable::convertToMap (unordered_set<p
     return map;
 }
 
-unordered_map<string, vector<string>> ResultTable::createSnapShot() {
-    unordered_map<string, vector<string>> snapshot;
-    for (auto it = tableEntries.begin(); it != tableEntries.end(); ++it) {
-        long index = std::distance(tableEntries.begin(), it);
-        vector<string> temp;
-        temp.assign(it->begin(), it->end());
-        snapshot.insert(pair<string,vector<string>>(tableHeader[index], temp));
-    }
-    return snapshot;
-}
-
 vector<int> ResultTable::getProjection() {
     if (projection.empty()) {
         vector<int> defaultProjection;
@@ -401,7 +306,6 @@ vector<vector<string>> ResultTable::getResultColumns (unordered_set<pair<string,
     }
     return {row1, row2};
 }
-
 
 
 

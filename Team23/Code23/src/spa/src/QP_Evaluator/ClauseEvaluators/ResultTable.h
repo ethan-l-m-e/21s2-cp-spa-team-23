@@ -41,18 +41,13 @@ public:
     void rearrangeSynonyms(vector<int>&);
     vector<int> getProjection();
 private:
-    void updateEntries(String2DVector newList);
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
-    void appendHeader(const vector<string>&);
     void crossJoin(vector<vector<string>> columns, vector<string> headers);
-    void crossJoinStrings(unordered_set<string>&);
-    void crossJoinTuples(unordered_set<pair<string, string>>&);
     void innerJoin(size_t, unordered_set<string>&);
     void innerJoin(pair<size_t, size_t>, unordered_set<pair<string, string>>&);
-    void innerJoin(size_t, unordered_map<string,vector<string>>);
+    void innerJoin(size_t, unordered_map<string,vector<string>>, string);
     static unordered_map<string, vector<string>> convertToMap(unordered_set<pair<string, string>>&, bool);
-    unordered_map<string, vector<string>> createSnapShot();
     vector<vector<string>> getResultColumns (unordered_set<pair<string, string>>& resultSet);
 
     vector<string> tableHeader;
