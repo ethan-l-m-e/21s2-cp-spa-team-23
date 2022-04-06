@@ -54,10 +54,18 @@ TEST_CASE("ASSIGN") {
     CHECK(switchCase == ASSIGN);
     switchCase = Identifier::identifyFirstObject(assign2);  //non-standard spacing
     CHECK(switchCase == ASSIGN);
+    switchCase = Identifier::identifyFirstObject("x = 1;");
+    CHECK(switchCase == ASSIGN);
+    switchCase = Identifier::identifyFirstObject("x = (1);");
+    CHECK(switchCase == ASSIGN);
+    switchCase = Identifier::identifyFirstObject("x = (((a)));");
+    CHECK(switchCase == ASSIGN);
+    /*
     switchCase = Identifier::identifyFirstObject("x = ;");  // missing RHS expr
     CHECK(switchCase == ERROR);
     switchCase = Identifier::identifyFirstObject("x = 1 + 1");  //missing ;
     CHECK(switchCase == ERROR);
+    */
 }
 
 TEST_CASE("BASE CASE") {

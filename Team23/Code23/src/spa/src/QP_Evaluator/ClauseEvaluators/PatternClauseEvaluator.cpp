@@ -300,22 +300,15 @@ bool performExactMatchExpr(Expression expressionNode, Expression arg) {
 }
 
 bool matchControlVarInCondExpr(CondExprNode* condExpr, Expression arg) {
-    if(condExpr->getRelExpr() != nullptr) {
-        RelExprNode* relExprNode = condExpr->getRelExpr();
-        Expression leftNode = relExprNode->getLeftFactor();
-        Expression rightNode = relExprNode->getRightFactor();
-        return searchForMatchInExpr(leftNode, arg) || searchForMatchInExpr(rightNode, arg);
-        // perform search
-    } else if (condExpr->getCondOperator() != "") {
-        CondExprNode* innerCondExpr = condExpr->getRightNode();
-        return matchControlVarInCondExpr(innerCondExpr, arg);
-    } else if (condExpr->getLeftNode() != nullptr && condExpr->getRightNode() != nullptr) {
-        CondExprNode* leftCondExpr = condExpr->getLeftNode();
-        CondExprNode* rightCondExpr = condExpr->getRightNode();
-        return matchControlVarInCondExpr(leftCondExpr, arg) ||
-               matchControlVarInCondExpr(rightCondExpr, arg);
+    if(auto value = get_if<VariableNode*>(&arg)) {
+        VariableNode* varNode = *value;
+        string varName = varNode->getVariableName();
+        vector<VarName> varNameList= condExpr->getAllVariables();
+        if(std::find(varNameList.begin(), varNameList.end(), varName) != varNameList.end()) return true;
+        else return false;
+
     } else {
-        throw "there is something wrong with your conditional node. cond Node can only have 1) relExpr 2) relExpr && || relExpr or 3) another cond Op";
+        throw "expression given HAS to be a variableNode for matchControlVarInCondExpr";
     }
 }
 
