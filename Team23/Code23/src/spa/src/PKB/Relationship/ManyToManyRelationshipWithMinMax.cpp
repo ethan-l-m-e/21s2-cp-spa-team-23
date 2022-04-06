@@ -76,5 +76,5 @@ string ManyToManyRelationshipWithMinMax::getRHSMin(string lhs) {
 }
 
 string ManyToManyRelationshipWithMinMax::getRHSMax(string lhs) {
-    return lhsToMaxRHSMap.find(lhs) != lhsToMaxRHSMap.end() ? lhsToMaxRHSMap[lhs] : 0;
+    return lhsToMaxRHSMap.find(lhs) != lhsToMaxRHSMap.end() ? lhsToMaxRHSMap[lhs] : std::to_string(0);
 }
