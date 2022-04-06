@@ -60,18 +60,18 @@ void StatementTable<N>::addStatement(N node) {
     statementNodesSet.insert(node);
 
 
-    Node *n = node->getProc();
-    ProcedureNode *procedureNode = dynamic_cast<ProcedureNode *>(n);
-
-    string procedureName = procedureNode->getProcName();
-
-    if (procedureNameToSetStatementNumbersMap.find(procedureName) == procedureNameToSetStatementNumbersMap.end()) {
-        procedureNameToSetStatementNumbersMap.emplace(procedureName, unordered_set<string>{statementNumber});
-    } else {
-        procedureNameToSetStatementNumbersMap[procedureName].insert(statementNumber);
-    }
-
-    statementNumberToProcedureNameMap[statementNumber] = procedureName;
+//    Node *n = node->getProc();
+//    ProcedureNode *procedureNode = dynamic_cast<ProcedureNode *>(n);
+//
+//    string procedureName = procedureNode->getProcName();
+//
+//    if (procedureNameToSetStatementNumbersMap.find(procedureName) == procedureNameToSetStatementNumbersMap.end()) {
+//        procedureNameToSetStatementNumbersMap.emplace(procedureName, unordered_set<string>{statementNumber});
+//    } else {
+//        procedureNameToSetStatementNumbersMap[procedureName].insert(statementNumber);
+//    }
+//
+//    statementNumberToProcedureNameMap[statementNumber] = procedureName;
 
 }
 
