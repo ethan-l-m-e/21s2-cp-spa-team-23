@@ -43,9 +43,11 @@ private:
 typedef struct GroupedClause {
     Clause* clause;
     int group;
+    float weight;
     bool operator <(const GroupedClause & other) const
     {
-        return group < other.group; // compare group number
+        return weight < other.weight;
+//        return group < other.group; // compare group number
     }
 } GroupedClause;
 
@@ -62,6 +64,10 @@ public:
     void groupClauses();
     vector<GroupedClause> getClauses();
     unordered_set<int>* getGroups();
+
+    void assignWeights(std::vector<GroupedClause>*);
+    void setWeightByClause(GroupedClause*);
+    std::pair<int, int> getNumSynonymConst(std::vector<Argument>*);
 };
 
 
