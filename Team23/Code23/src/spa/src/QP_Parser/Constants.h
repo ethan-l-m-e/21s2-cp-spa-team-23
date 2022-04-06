@@ -20,8 +20,8 @@ std::string const ELEM = "(" + ATTR_REF + "|" + SYNONYM + ")";
 std::string const REF = "(\"" + SPACE + IDENT + SPACE + "\"|" + INTEGER + "|" + ATTR_REF + ")";
 
 std::string const REL = "(Follows\\*|Parent\\*|Calls\\*|Next\\*|Affects\\*)";
-std::string const LEXICAL_TOKENS = "^(" + REL + "|\\(|\\)|<|>|,|=|;|\\.|_|(-|\\+|\\/|\\*|%|\"(.)+\")|" + ATTR_NAME + "|"
-        + SYNONYM + "|" + NAME + "|" + INTEGER + ")";
+std::string const LEXICAL_TOKENS = "^(" + REL + "|\\(|\\)|<|>|,|=|;|\\.|_|(-|\\+|\\/|\\*|%)|" + ATTR_NAME + "|"
+                                   + SYNONYM + "|" + NAME + "|" + INTEGER + "|\"" + SYNONYM + "\"" "|(\"))";
 
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
