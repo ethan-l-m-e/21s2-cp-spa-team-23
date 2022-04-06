@@ -7,6 +7,7 @@
 #include "OneToOneRelationship.h"
 #include "OneToManyRelationship.h"
 #include "ManyToManyRelationship.h"
+#include "ManyToManyRelationshipWithMinMax.h"
 #include "NextRelationship.h"
 
-#endif //SPA_TNODE_H
+#endif //SPA_RELATIONSHIP_H

@@ -1,4 +1,5 @@
 #include "StatementTable.h"
-#include "ReadStatementTable.h"
-#include "PrintStatementTable.h"
-#include "CallStatementTable.h"
+
+#include "StatementTableWithAdditionalMap.h"
+#include "StatementTableWithVariableMap.h"
+#include "StatementTableWithProcedureMap.h"
