@@ -6,7 +6,6 @@
 #define SPA_NEXTTCLAUSEEVALUATOR_H
 
 #include "CacheClauseEvaluator.h"
-#include "QP_database/NextTOperator.h"
 
 class NextTClauseEvaluator: public CacheClauseEvaluator {
 public:

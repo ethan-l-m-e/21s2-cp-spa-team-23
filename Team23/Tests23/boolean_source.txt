@@ -1,6 +1,6 @@
 procedure Boolean {
     follower = 1;
-    followed = 2;
+    followed = 2+follower;
     while(used < often) {
         read nextStar;
     }
@@ -8,4 +8,9 @@ procedure Boolean {
 }
 procedure Called {
     print unFollowed;
+    if (1 != 2) then {
+        a = a;
+    } else {
+        b = b;
+    }
 }

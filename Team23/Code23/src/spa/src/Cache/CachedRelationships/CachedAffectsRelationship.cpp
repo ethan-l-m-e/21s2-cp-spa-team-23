@@ -5,19 +5,58 @@
 #include "CachedAffectsRelationship.h"
 
 bool CachedAffectsRelationship::isRelationship(string lhs, string rhs) {
-    bool defaultReturn = CachedManyToManyRelationship::isRelationship(lhs, lhs);
-
-    return defaultReturn;
+    bool boolResults;
+    //checks if result (returning true) exist or if query is inside history
+    if(pairHistory.isInHistory(lhs, rhs) || CachedManyToManyRelationship::isRelationship(lhs, rhs)) {
+        printStmt("retrieving Affects isRelationship "  + lhs + " " + rhs + " from storage\n");
+        pairHistory.addToHistory(lhs, rhs);
+        boolResults = CachedManyToManyRelationship::isRelationship(lhs, rhs);
+    } else {
+        printStmt("computing Affects isRelationship " + lhs + " " + rhs + "\n");
+        pairHistory.addToHistory(lhs, rhs);
+        boolResults = affectsOp->computeRelation(lhs, rhs);
+        if (boolResults) CachedManyToManyRelationship::setRelationship(lhs, rhs);
+    }
+    return boolResults;
 }
 
 unordered_set<string> CachedAffectsRelationship::getRHS(string lhs) {
-    unordered_set<string> defaultReturn = CachedManyToManyRelationship::getRHS(lhs);
+    unordered_set<string> results;
+    if(getRhsHistory.isInHistory(lhs)) {
+        printStmt("retrieving Affects getRHS"  + lhs + " from storage\n");
+        results = CachedManyToManyRelationship::getRHS(lhs);
+    } else {
+        printStmt("computing Affects getRHS " + lhs + "\n");
+        getRhsHistory.addToHistory(lhs);
+        unordered_set<string> allStmtNo = nextT->getRHS(lhs);//getAllStmtInSameProcedureAs(lhs);
 
-    return defaultReturn;
+        for(string right: allStmtNo) {
+            if(isRelationship(lhs, right)) results.insert(right);
+        }
+    }
+    return results;
 }
 
 unordered_set<string> CachedAffectsRelationship::getLHS(string rhs) {
-    unordered_set<string> defaultReturn = CachedManyToManyRelationship::getLHS(rhs);
+    unordered_set<string> results;
+    if(getLhsHistory.isInHistory(rhs)) {
+        printStmt("retrieving Affects getLHS"  + rhs + " from storage\n");
+        results = CachedManyToManyRelationship::getLHS(rhs);
+    } else {
+        printStmt("computing Affects getLHS " + rhs + "\n");
+        getLhsHistory.addToHistory(rhs);
+        unordered_set<string> allStmtNo = nextT->getLHS(rhs);//getAllStmtInSameProcedureAs(rhs);
+        for(string left: allStmtNo) {
+            if(isRelationship(left, rhs)) results.insert(left);
+        }
+    }
+    return results;
+}
 
-    return defaultReturn;
+CachedAffectsRelationship *CachedAffectsRelationship::singleton = nullptr;
+CachedAffectsRelationship *CachedAffectsRelationship::getInstance() {
+    if (CachedAffectsRelationship::singleton == nullptr) {
+        CachedAffectsRelationship::singleton = new CachedAffectsRelationship;
+    }
+    return CachedAffectsRelationship::singleton;
 }

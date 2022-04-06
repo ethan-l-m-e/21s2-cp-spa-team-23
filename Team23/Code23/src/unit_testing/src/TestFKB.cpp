@@ -6,6 +6,7 @@
 #include "PKB/PKB.h"
 
 #include "TNode/TNode.h"
+#include "SourceProcessor/EntityExtractor.h"
 
 #include "QP_Evaluator/TestUtilities.h"
 
@@ -21,6 +22,17 @@ RelExprNode rel = RelExprNode(&v, &v, "&&");
 CondExprNode cond = CondExprNode(&rel);
 
 
+unordered_set<string> convertSetIntegersToSetStrings(unordered_set<int> setIntegers) {
+
+    unordered_set<string> setStrings;
+
+    for (int i : setIntegers) {
+        setStrings.insert(std::to_string(i));
+    }
+
+    return setStrings;
+}
+
 
 TEST_CASE("Add statements") {
     pkb->clearPKB();
@@ -30,10 +42,21 @@ TEST_CASE("Add statements") {
     unordered_set<StmtNode *> statementNodes;
 
     for (int i = 1; i <= 10; i++) {
-        auto n = StmtNode(i);
-        statementNodes.insert(&n);
-        pkb->statement.statements.addStatement(&n);
+        auto n = new StmtNode(i);
+        statementNodes.insert(n);
     }
+
+    StatementList statementList{statementNodes.begin(), statementNodes.end()};
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+    for (auto n: statementNodes) {
+        pkb->statement.statements.addStatement(n);
+    }
+
+    REQUIRE(pkb->statement.statements.getStatementNumbersInSameProcedure("1") == unordered_set<string>{"1","2","3","4","5","6","7","8","9","10"});
+    REQUIRE(pkb->statement.statements.getStatementNumbersInSameProcedure("21").empty());
 
     REQUIRE(pkb->statement.statements.getAllStatementNodes() == statementNodes);
 
@@ -45,6 +68,10 @@ TEST_CASE("Add statements") {
         REQUIRE(pkb->statement.statements.isStatementNumber(s));
 
         REQUIRE(statementsSet.find(s) != statementsSet.end());
+
+        for (int j = 1; j <= 10; j++) {
+            REQUIRE(pkb->statement.statements.areInSameProcedure(std::to_string(i), std::to_string(j)));
+        }
     }
 
 }
@@ -123,11 +150,24 @@ TEST_CASE("Add Assign Statements") {
 
     unordered_set<AssignNode *> statementNodes;
 
+
+
     for (int i : statements) {
-        auto n = AssignNode(i, &v, &v);
-        statementNodes.insert(&n);
-        pkb->statement.assignStatements.addStatement(&n);
+        auto n = new AssignNode(i, &v, &v);
+        statementNodes.insert(n);
     }
+
+    StatementList statementList{statementNodes.begin(), statementNodes.end()};
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+    for (auto n: statementNodes) {
+        pkb->statement.assignStatements.addStatement(n);
+    }
+
+    REQUIRE(pkb->statement.assignStatements.getStatementNumbersInSameProcedure("1") == convertSetIntegersToSetStrings(statements));
+    REQUIRE(pkb->statement.assignStatements.getStatementNumbersInSameProcedure("21").empty());
 
 
     REQUIRE(pkb->statement.assignStatements.getAllStatementNodes() == statementNodes);
@@ -140,6 +180,10 @@ TEST_CASE("Add Assign Statements") {
         REQUIRE(pkb->statement.assignStatements.isStatementNumber(s));
 
         REQUIRE(assignStatementsSet.find(s) != assignStatementsSet.end());
+
+        for (int j: statements) {
+            REQUIRE(pkb->statement.assignStatements.areInSameProcedure(std::to_string(i), std::to_string(j)));
+        }
     }
 
 }
@@ -163,11 +207,27 @@ TEST_CASE("Add Read Statements") {
         int i = iter.first;
         string name = iter.second;
 
-        VariableNode v = VariableNode(name);
-        auto n = ReadNode(i, &v);
-        statementNodes.insert(&n);
-        pkb->statement.readStatements.addStatement(&n);
+        VariableNode *v = new VariableNode(name);
+        auto n = new ReadNode(i, v);
+
+        statementNodes.insert(n);
     }
+
+    StatementList statementList{statementNodes.begin(), statementNodes.end()};
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+    for (auto n : statementNodes) {
+        pkb->statement.readStatements.addStatement(n);
+    }
+
+    unordered_set<string> statementNumbersSet;
+    for (auto& iter : statementToVariableMap) {
+        statementNumbersSet.insert(std::to_string(iter.first));
+    }
+    REQUIRE(pkb->statement.readStatements.getStatementNumbersInSameProcedure("1") == statementNumbersSet);
+    REQUIRE(pkb->statement.readStatements.getStatementNumbersInSameProcedure("21").empty());
 
 
     REQUIRE(pkb->statement.readStatements.getAllStatementNodes() == statementNodes);
@@ -185,6 +245,11 @@ TEST_CASE("Add Read Statements") {
         REQUIRE(readStatementsSet.find(s) != readStatementsSet.end());
 
         REQUIRE(pkb->statement.readStatements.getVariableName(s) == name);
+
+        for (auto& iter2 : statementToVariableMap) {
+            int j = iter.first;
+            REQUIRE(pkb->statement.readStatements.areInSameProcedure(std::to_string(i), std::to_string(j)));
+        }
     }
 
 }
@@ -208,12 +273,28 @@ TEST_CASE("Add Print Statements") {
         int i = iter.first;
         string name = iter.second;
 
-        VariableNode f = VariableNode(name);
+        VariableNode *f = new VariableNode(name);
 
-        auto n = PrintNode(i, &f);
-        statementNodes.insert(&n);
-        pkb->statement.printStatements.addStatement(&n);
+        auto n = new PrintNode(i, f);
+        statementNodes.insert(n);
     }
+
+    StatementList statementList{statementNodes.begin(), statementNodes.end()};
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+    for (auto n : statementNodes) {
+        pkb->statement.printStatements.addStatement(n);
+    }
+
+    unordered_set<string> statementNumbersSet;
+    for (auto& iter : statementToVariableMap) {
+        statementNumbersSet.insert(std::to_string(iter.first));
+    }
+    REQUIRE(pkb->statement.printStatements.getStatementNumbersInSameProcedure("1") == statementNumbersSet);
+    REQUIRE(pkb->statement.printStatements.getStatementNumbersInSameProcedure("21").empty());
+
 
     REQUIRE(pkb->statement.printStatements.getAllStatementNodes() == statementNodes);
 
@@ -230,6 +311,11 @@ TEST_CASE("Add Print Statements") {
         REQUIRE(printStatementsSet.find(s) != printStatementsSet.end());
 
         REQUIRE(pkb->statement.printStatements.getVariableName(s) == name);
+
+        for (auto& iter2 : statementToVariableMap) {
+            int j = iter.first;
+            REQUIRE(pkb->statement.printStatements.areInSameProcedure(std::to_string(i), std::to_string(j)));
+        }
     }
 
 }
@@ -245,10 +331,21 @@ TEST_CASE("Add If Statements") {
     unordered_set<IfNode *> statementNodes;
 
     for (int i : statements) {
-        auto n = IfNode(i, &cond, {}, {});
-        statementNodes.insert(&n);
-        pkb->statement.ifStatements.addStatement(&n);
+        auto n = new IfNode(i, &cond, {}, {});
+        statementNodes.insert(n);
     }
+
+    StatementList statementList{statementNodes.begin(), statementNodes.end()};
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+    for (auto n : statementNodes) {
+        pkb->statement.ifStatements.addStatement(n);
+    }
+
+    REQUIRE(pkb->statement.ifStatements.getStatementNumbersInSameProcedure("1") == convertSetIntegersToSetStrings(statements));
+    REQUIRE(pkb->statement.ifStatements.getStatementNumbersInSameProcedure("21").empty());
 
     REQUIRE(pkb->statement.ifStatements.getAllStatementNodes() == statementNodes);
 
@@ -260,6 +357,10 @@ TEST_CASE("Add If Statements") {
         REQUIRE(pkb->statement.ifStatements.isStatementNumber(s));
 
         REQUIRE(ifStatementsSet.find(s) != ifStatementsSet.end());
+
+        for (int j: statements) {
+            REQUIRE(pkb->statement.ifStatements.areInSameProcedure(std::to_string(i), std::to_string(j)));
+        }
     }
 }
 
@@ -275,10 +376,21 @@ TEST_CASE("Add While Statements") {
     unordered_set<WhileNode *> statementNodes;
 
     for (int i : statements) {
-        auto n = WhileNode(i, &cond, {});
-        statementNodes.insert(&n);
-        pkb->statement.whileStatements.addStatement(&n);
+        auto n = new WhileNode(i, &cond, {});
+        statementNodes.insert(n);
     }
+
+    StatementList statementList{statementNodes.begin(), statementNodes.end()};
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+    for (auto n: statementNodes) {
+        pkb->statement.whileStatements.addStatement(n);
+    }
+
+    REQUIRE(pkb->statement.whileStatements.getStatementNumbersInSameProcedure("1") == convertSetIntegersToSetStrings(statements));
+    REQUIRE(pkb->statement.whileStatements.getStatementNumbersInSameProcedure("21").empty());
 
     REQUIRE(pkb->statement.whileStatements.getAllStatementNodes() == statementNodes);
 
@@ -290,6 +402,10 @@ TEST_CASE("Add While Statements") {
         REQUIRE(pkb->statement.whileStatements.isStatementNumber(s));
 
         REQUIRE(whileStatementsSet.find(s) != whileStatementsSet.end());
+
+        for (int j: statements) {
+            REQUIRE(pkb->statement.whileStatements.areInSameProcedure(std::to_string(i), std::to_string(j)));
+        }
     }
 }
 
@@ -299,32 +415,49 @@ TEST_CASE("Add Call Statements") {
 
     REQUIRE(pkb->statement.callStatements.getAllStatementNumbers().empty());
 
-    unordered_map<int, string> statementToVariableMap = {{1, "apple"},
-                                                         {7, "orange"},
-                                                         {45, "guava"},
-                                                         {898, "mango"},
-                                                         {124214123, "banana"},
-                                                         {989988999, "grapes"}};
+    unordered_map<int, string> statementToProcedureMap = {{1,         "apple"},
+                                                          {7,         "orange"},
+                                                          {45,        "guava"},
+                                                          {898,       "mango"},
+                                                          {124214123, "banana"},
+                                                          {989988999, "grapes"}};
+
+
 
 
     unordered_set<CallNode *> statementNodes;
 
-    for (auto& iter : statementToVariableMap) {
+    for (auto& iter : statementToProcedureMap) {
         int i = iter.first;
         string name = iter.second;
 
-        ProcNameNode procedureName = ProcNameNode(name);
-        auto n = CallNode(i, &procedureName);
-        statementNodes.insert(&n);
-        pkb->statement.callStatements.addStatement(&n);
+        ProcNameNode *procedureName = new ProcNameNode(name);
+        auto n = new CallNode(i, procedureName);
+        statementNodes.insert(n);
     }
+
+    StatementList statementList{statementNodes.begin(), statementNodes.end()};
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+    for (auto n: statementNodes) {
+        pkb->statement.callStatements.addStatement(n);
+    }
+
+    unordered_set<string> statementNumbersSet;
+    for (auto& iter : statementToProcedureMap) {
+        statementNumbersSet.insert(std::to_string(iter.first));
+    }
+    REQUIRE(pkb->statement.callStatements.getStatementNumbersInSameProcedure("1") == statementNumbersSet);
+    REQUIRE(pkb->statement.callStatements.getStatementNumbersInSameProcedure("21").empty());
 
 
     REQUIRE(pkb->statement.callStatements.getAllStatementNodes() == statementNodes);
 
     unordered_set<string> callStatementsSet = pkb->statement.callStatements.getAllStatementNumbers();
 
-    for (auto& iter : statementToVariableMap) {
+    for (auto& iter : statementToProcedureMap) {
         int i = iter.first;
         string name = iter.second;
 
@@ -335,6 +468,11 @@ TEST_CASE("Add Call Statements") {
         REQUIRE(callStatementsSet.find(s) != callStatementsSet.end());
 
         REQUIRE(pkb->statement.callStatements.getProcedureName(s) == name);
+
+        for (auto& iter2 : statementToProcedureMap) {
+            int j = iter.first;
+            REQUIRE(pkb->statement.callStatements.areInSameProcedure(std::to_string(i), std::to_string(j)));
+        }
     }
 }
 
@@ -405,10 +543,22 @@ TEST_CASE("Add FollowsT") {
 
     }
 
-
     REQUIRE(pkb->relationship.followsT.isRelationship("1", "3") == false);
     REQUIRE(pkb->relationship.followsT.getRHS("2") == unordered_set<string>{});
     REQUIRE(pkb->relationship.followsT.getLHS("3") == unordered_set<string>{});
+
+
+    REQUIRE(pkb->relationship.followsT.getRHSMin("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("4") == "8");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("34") == "45");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("345") == "347");
+
+    REQUIRE(pkb->relationship.followsT.getRHSMax("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("4") == "23");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("34") == "84");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("345") == "986");
 
 
     for (auto& iter : tFolloweeToFollowersMap) {
@@ -424,6 +574,88 @@ TEST_CASE("Add FollowsT") {
 
         REQUIRE(pkb->relationship.followsT.getRHS(followee) == followers);
     }
+
+
+}
+
+
+
+TEST_CASE("Add FollowsT with SetRelationship(string, set)") {
+    pkb->clearPKB();
+
+    REQUIRE(pkb->relationship.followsT.getLHS("2").empty());
+    REQUIRE(pkb->relationship.followsT.getRHS("1").empty());
+
+
+    unordered_map<string , unordered_set<string>> tFolloweeToFollowersMap = {
+            {"1", {"2"}},
+            {"4", {"8", "23"}},
+            {"34", {"45", "55", "67", "84"}},
+            {"56", {"89"}},
+            {"345", {"347", "349", "358", "456", "568", "678", "789", "986"}},
+    };
+
+
+    for (auto& iter : tFolloweeToFollowersMap) {
+        string followee = iter.first;
+        unordered_set<string> followers = iter.second;
+
+        pkb->relationship.followsT.setRelationship(followee, followers);
+    }
+
+    REQUIRE(pkb->relationship.followsT.getRHSMin("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("4") == "8");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("34") == "45");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("345") == "347");
+
+    REQUIRE(pkb->relationship.followsT.getRHSMax("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("4") == "23");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("34") == "84");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("345") == "986");
+
+
+}
+
+
+
+TEST_CASE("Add FollowsT with SetRelationship(set, string)") {
+    pkb->clearPKB();
+
+    REQUIRE(pkb->relationship.followsT.getLHS("2").empty());
+    REQUIRE(pkb->relationship.followsT.getRHS("1").empty());
+
+
+    unordered_map<string , unordered_set<string>> tFolloweeToFollowersMap = {
+            {"1", {"2"}},
+            {"4", {"8", "23"}},
+            {"34", {"45", "55", "67", "84"}},
+            {"56", {"89"}},
+            {"345", {"347", "349", "358", "456", "568", "678", "789", "986"}},
+    };
+
+
+    for (auto& iter : tFolloweeToFollowersMap) {
+        string followee = iter.first;
+        unordered_set<string> followers = iter.second;
+
+        for (string follower : followers) {
+            pkb->relationship.followsT.setRelationship(unordered_set<string>{followee}, follower);
+        }
+    }
+
+    REQUIRE(pkb->relationship.followsT.getRHSMin("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("4") == "8");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("34") == "45");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMin("345") == "347");
+
+    REQUIRE(pkb->relationship.followsT.getRHSMax("1") == "2");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("4") == "23");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("34") == "84");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("56") == "89");
+    REQUIRE(pkb->relationship.followsT.getRHSMax("345") == "986");
 
 
 }

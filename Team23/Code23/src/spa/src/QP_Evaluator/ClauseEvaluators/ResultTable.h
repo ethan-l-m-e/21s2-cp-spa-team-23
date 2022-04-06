@@ -33,29 +33,30 @@ public:
     string getBooleanResultString();
     vector<string> *getHeader();
     String2DVector *getList();
+    vector<string> *getColumn(string& synonym);
     size_t getTableHeight();
     size_t getTableWidth();
     void setBooleanResult(bool);
-    void appendColumn(string, vector<string>&);
+    void appendColumn(string header, vector<string>& value);
     void mergeResultToTable(Result &result);
     void rearrangeSynonyms(vector<int>&);
-
+    void mergeColumnsToTable(vector<vector<string>> columns, vector<string> headers);
+    vector<int> getProjection();
 private:
     void mergeStringResult(Result &result);
     void mergeTuplesResult(Result &result);
-    void appendHeader(const vector<string>&);
-    void crossJoinStrings(unordered_set<string>&);
-    void crossJoinTuples(unordered_set<pair<string, string>>&);
+    void crossJoin(vector<vector<string>> columns, vector<string> headers);
     void innerJoin(size_t, unordered_set<string>&);
     void innerJoin(pair<size_t, size_t>, unordered_set<pair<string, string>>&);
-    void innerJoin(size_t, unordered_map<string,vector<string>>);
+    void innerJoin(size_t, unordered_map<string,vector<string>>, string);
     static unordered_map<string, vector<string>> convertToMap(unordered_set<pair<string, string>>&, bool);
-    unordered_map<string, vector<string>> createSnapShot();
+    vector<vector<string>> getResultColumns (unordered_set<pair<string, string>>& resultSet);
 
     vector<string> tableHeader;
     String2DVector tableEntries;
     bool isBooleanResult;
     bool booleanResult;
+    vector<int> projection;
 };
 
 #endif //SPA_RESULTTABLE_H

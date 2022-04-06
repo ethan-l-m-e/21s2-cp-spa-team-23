@@ -7,14 +7,17 @@
 
 #include "QP_Evaluator/Query/Query.h"
 #include <unordered_set>
-#include <map>
+#include <unordered_map>
 #include <iostream>
+
+using std::unordered_set;
+using std::unordered_map;
 
 class DisjointSet {
 public:
-    DisjointSet(int size) : root(size) {
+    explicit DisjointSet(int size) {
         for (int i = 0; i < size + 1; i++) {
-            root[i] = i;
+            root.emplace_back(i);
         }
     }
 
@@ -40,18 +43,31 @@ private:
 typedef struct GroupedClause {
     Clause* clause;
     int group;
+    float weight;
     bool operator <(const GroupedClause & other) const
     {
-        return group < other.group; // compare group number
+        return weight < other.weight;
+//        return group < other.group; // compare group number
     }
 } GroupedClause;
 
 class QueryOptimizer {
 private:
+    std::vector<GroupedClause> rearrangedClauses; // the output vector, initially empty
     Query *query;
+    unordered_set<int> groups;
+    unordered_map<string, int> synonymIndices;
+    void setSynonymIndices();
+    void setGroups();
 public:
     QueryOptimizer(Query* query): query{query}{}
-    std::vector<GroupedClause> groupClauses();
+    void groupClauses();
+    vector<GroupedClause> getClauses();
+    unordered_set<int>* getGroups();
+
+    void assignWeights(std::vector<GroupedClause>*);
+    void setWeightByClause(GroupedClause*);
+    std::pair<int, int> getNumSynonymConst(std::vector<Argument>*);
 };
 
 
