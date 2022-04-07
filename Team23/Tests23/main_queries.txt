@@ -1,0 +1,60 @@
+../../../../Tests23/main_source.txt ../../../../Tests23/main_queries.txt ../../../tests/main_out.xml
+assign a;
+Select a such that Affects(11, a)
+22
+5000
+1 - test
+variable v;
+Select v with v.varName = "v1"
+v1
+5000
+2 - test
+while w; variable v;
+Select w pattern w (v,_) with v.varName = "passionfruit"
+38
+5000
+3 - test
+while w; variable v;
+Select w pattern w ("mew",_)
+66
+5000
+4 - test
+while w; variable v;
+Select w pattern w (v,_) with v.varName = "mew"
+66
+5000
+5 - test
+read r;
+Select r with r.varName = "Line50IsHere"
+50
+5000
+6 - test
+assign a;
+Select a such that Uses(a, "thisIsLine73")
+73
+5000
+7 -
+read r;
+Select r with r.varName ="itsChristmasAndLine130"
+130
+5000
+8 - (10 clauses !but many many variables)
+if ifs, ifs1; assign a, a1; stmt s, s1, s2, s3; variable v, v1, v2;
+Select <v, v2> pattern ifs(_,_,_) such that Uses(s, v) and Parent(ifs, s) and Follows(s, s1) and Uses(a, v) and Next(a, a1) and Modifies(a1, v1) and Follows*(a1, s2) and Parent(s2, s3) and Uses(s3, v2)
+Ans Ans,Ans I999I,Ans Sort,Ans VI0IV,Ans VV1VV,Ans a,Ans best,Ans cat,Ans continue,Ans entry,Ans f15H,Ans fr13nd,Ans fresh,Ans i,Ans l,Ans lol,Ans m0m,Ans m10101m,Ans m1010H0101m,Ans m101T101m,Ans mN10100100101Nm,Ans newArrayList,Ans nip,Ans nums,Ans numsLength,Ans omN10100100101Nmo,Ans omN1010T00100T0101Nmo,Ans omN1010T0011100T0101Nmo,Ans omN1010T010T0101Nmo,Ans please,Ans r,Ans sum,Ans true,Ans v51,Ans v52,Ans v53,Ans v61,Ans v62,Ans v63,entry Ans,entry I999I,entry Sort,entry VI0IV,entry VV1VV,entry a,entry best,entry cat,entry continue,entry entry,entry f15H,entry fr13nd,entry fresh,entry i,entry l,entry lol,entry m0m,entry m10101m,entry m1010H0101m,entry m101T101m,entry mN10100100101Nm,entry newArrayList,entry nip,entry nums,entry numsLength,entry omN10100100101Nmo,entry omN1010T00100T0101Nmo,entry omN1010T0011100T0101Nmo,entry omN1010T010T0101Nmo,entry please,entry r,entry sum,entry true,entry v51,entry v52,entry v53,entry v61,entry v62,entry v63,i Ans,i I999I,i Sort,i VI0IV,i VV1VV,i a,i best,i cat,i continue,i entry,i f15H,i fr13nd,i fresh,i i,i l,i lol,i m0m,i m10101m,i m1010H0101m,i m101T101m,i mN10100100101Nm,i newArrayList,i nip,i nums,i numsLength,i omN10100100101Nmo,i omN1010T00100T0101Nmo,i omN1010T0011100T0101Nmo,i omN1010T010T0101Nmo,i please,i r,i sum,i true,i v51,i v52,i v53,i v61,i v62,i v63,l Ans,l I999I,l Sort,l VI0IV,l VV1VV,l a,l best,l cat,l continue,l entry,l f15H,l fr13nd,l fresh,l i,l l,l lol,l m0m,l m10101m,l m1010H0101m,l m101T101m,l mN10100100101Nm,l newArrayList,l nip,l nums,l numsLength,l omN10100100101Nmo,l omN1010T00100T0101Nmo,l omN1010T0011100T0101Nmo,l omN1010T010T0101Nmo,l please,l r,l sum,l true,l v51,l v52,l v53,l v61,l v62,l v63,newArrayList Ans,newArrayList I999I,newArrayList Sort,newArrayList VI0IV,newArrayList VV1VV,newArrayList a,newArrayList best,newArrayList cat,newArrayList continue,newArrayList entry,newArrayList f15H,newArrayList fr13nd,newArrayList fresh,newArrayList i,newArrayList l,newArrayList lol,newArrayList m0m,newArrayList m10101m,newArrayList m1010H0101m,newArrayList m101T101m,newArrayList mN10100100101Nm,newArrayList newArrayList,newArrayList nip,newArrayList nums,newArrayList numsLength,newArrayList omN10100100101Nmo,newArrayList omN1010T00100T0101Nmo,newArrayList omN1010T0011100T0101Nmo,newArrayList omN1010T010T0101Nmo,newArrayList please,newArrayList r,newArrayList sum,newArrayList true,newArrayList v51,newArrayList v52,newArrayList v53,newArrayList v61,newArrayList v62,newArrayList v63,nums Ans,nums I999I,nums Sort,nums VI0IV,nums VV1VV,nums a,nums best,nums cat,nums continue,nums entry,nums f15H,nums fr13nd,nums fresh,nums i,nums l,nums lol,nums m0m,nums m10101m,nums m1010H0101m,nums m101T101m,nums mN10100100101Nm,nums newArrayList,nums nip,nums nums,nums numsLength,nums omN10100100101Nmo,nums omN1010T00100T0101Nmo,nums omN1010T0011100T0101Nmo,nums omN1010T010T0101Nmo,nums please,nums r,nums sum,nums true,nums v51,nums v52,nums v53,nums v61,nums v62,nums v63,r Ans,r I999I,r Sort,r VI0IV,r VV1VV,r a,r best,r cat,r continue,r entry,r f15H,r fr13nd,r fresh,r i,r l,r lol,r m0m,r m10101m,r m1010H0101m,r m101T101m,r mN10100100101Nm,r newArrayList,r nip,r nums,r numsLength,r omN10100100101Nmo,r omN1010T00100T0101Nmo,r omN1010T0011100T0101Nmo,r omN1010T010T0101Nmo,r please,r r,r sum,r true,r v51,r v52,r v53,r v61,r v62,r v63,v51 Ans,v51 I999I,v51 Sort,v51 VI0IV,v51 VV1VV,v51 a,v51 best,v51 cat,v51 continue,v51 entry,v51 f15H,v51 fr13nd,v51 fresh,v51 i,v51 l,v51 lol,v51 m0m,v51 m10101m,v51 m1010H0101m,v51 m101T101m,v51 mN10100100101Nm,v51 newArrayList,v51 nip,v51 nums,v51 numsLength,v51 omN10100100101Nmo,v51 omN1010T00100T0101Nmo,v51 omN1010T0011100T0101Nmo,v51 omN1010T010T0101Nmo,v51 please,v51 r,v51 sum,v51 true,v51 v51,v51 v52,v51 v53,v51 v61,v51 v62,v51 v63,v52 Ans,v52 I999I,v52 Sort,v52 VI0IV,v52 VV1VV,v52 a,v52 best,v52 cat,v52 continue,v52 entry,v52 f15H,v52 fr13nd,v52 fresh,v52 i,v52 l,v52 lol,v52 m0m,v52 m10101m,v52 m1010H0101m,v52 m101T101m,v52 mN10100100101Nm,v52 newArrayList,v52 nip,v52 nums,v52 numsLength,v52 omN10100100101Nmo,v52 omN1010T00100T0101Nmo,v52 omN1010T0011100T0101Nmo,v52 omN1010T010T0101Nmo,v52 please,v52 r,v52 sum,v52 true,v52 v51,v52 v52,v52 v53,v52 v61,v52 v62,v52 v63,v53 Ans,v53 I999I,v53 Sort,v53 VI0IV,v53 VV1VV,v53 a,v53 best,v53 cat,v53 continue,v53 entry,v53 f15H,v53 fr13nd,v53 fresh,v53 i,v53 l,v53 lol,v53 m0m,v53 m10101m,v53 m1010H0101m,v53 m101T101m,v53 mN10100100101Nm,v53 newArrayList,v53 nip,v53 nums,v53 numsLength,v53 omN10100100101Nmo,v53 omN1010T00100T0101Nmo,v53 omN1010T0011100T0101Nmo,v53 omN1010T010T0101Nmo,v53 please,v53 r,v53 sum,v53 true,v53 v51,v53 v52,v53 v53,v53 v61,v53 v62,v53 v63
+5000
+9 - (20 clauses)
+assign a, a1, a2, a3, a4, a5; stmt s, s1; while w; variable v, v1, v2;
+Select <a, a3, v2> such that Follows*(s, a) and Uses(s, "IAmSoSad") pattern a (_, _"v32+v33"_) pattern a (_, _"v34+v35"_) pattern a (_, _"v36+v37"_) pattern a (_, _"v38+v39"_) pattern a (_, _"v40+v41"_) pattern a (_, _"v42+v43"_) pattern a (_, _"v44+v45"_) pattern a (_, _"v46+v47"_) pattern a (_, _"v48+v49"_) pattern a (_, _"(v32+v33) + (v34+v35) + (v36+v37) + (v38+v39) + (v40+v41) + (v42+v43) + (v44+v45) + (v46+v47) + (v48+v49)"_) such that Parent(w, _) pattern w ("boom",_) such that Modifies(w, v) and Modifies(a3, v) and Uses(a4, v) and Follows*(a4, a3) and Uses(a5, v2) pattern a5("v50",_"v57"_)
+100 31 v51, 100 31 v52, 100 31 v53, 100 31 v54, 100 31 v55, 100 31 v56, 100 31 v57, 100 37 v51, 100 37 v52, 100 37 v53, 100 37 v54, 100 37 v55, 100 37 v56, 100 37 v57, 100 43 v51, 100 43 v52, 100 43 v53, 100 43 v54, 100 43 v55, 100 43 v56, 100 43 v57, 100 60 v51, 100 60 v52, 100 60 v53, 100 60 v54, 100 60 v55, 100 60 v56, 100 60 v57, 100 71 v51, 100 71 v52, 100 71 v53, 100 71 v54, 100 71 v55, 100 71 v56, 100 71 v57
+5000
+10 - (15 clauses) select affected, read, modified in if
+variable v20, v13, v12, v11, v1, vR, vIf, vUnselected; assign a, a1, a2, a3, a4, a5; read r; if ifs; stmt s; print pr;
+Select <v20, v13, v12, v11, v1, vR, vIf> such that Affects(11, a) and Modifies(a, v20) and Affects*(a1, 3) and Affects(a1, 2) and Modifies(a1, v1) with v12.varName = "v12" such that Modifies(2, v11) and Modifies(a2, v13) and Uses(a2, "pumpkin") and Modifies(r, vR) and Uses(22, vR) and Follows*(a3,r) pattern a3 (vR, _"5"_) pattern ifs (vIf,_,_) such that Modifies(ifs, "v12")
+v20 v13 v12 v11 v1 v19 v11, v20 v13 v12 v11 v1 v19 v12, v20 v13 v12 v11 v1 v19 v13
+5000
+11 - (20 clauses) (not sure if this one still SIGBUS error) select affected, read, modified in if
+variable v20, v13, v12, v11, v1, vR, vIf, vUnselected; assign a, a1, a2, a3, a4, a5; read r; if ifs; stmt s, s1; print pr;
+Select <v20, v13, v12, v11, v1, vR, vIf> such that Affects(11, a) and Modifies(a, v20) and Affects*(a1, 3) and Affects(a1, 2) and Modifies(a1, v1) with v12.varName = "v12" such that Modifies(2, v11) and Modifies(a2, v13) and Uses(a2, "pumpkin") and Modifies(r, vR) and Uses(22, vR) and Follows*(a3,r) pattern a3 (vR, _"5"_) pattern ifs (vIf,_,_) such that Modifies(ifs, "v12") and Affects*(a4, a5) and Uses(a5, vUnselected) and Uses(pr, vUnselected) and Parent(s, pr) and Next*(s1, pr)
+v20 v13 v12 v11 v1 v19 v11, v20 v13 v12 v11 v1 v19 v12, v20 v13 v12 v11 v1 v19 v13
+5000
