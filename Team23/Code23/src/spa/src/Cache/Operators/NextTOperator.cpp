@@ -124,12 +124,12 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
     }
 
     // performs #1
-//    auto linear = pkb->relationship.followsT.getRHS(to_string(srcVal));
-    int largestValInLinear = stoi(pkb->relationship.followsT.getRHSMax(to_string(srcVal)));
-//    int largestValInLinear = findLargestValue(linear);
-//    if (srcVal < destVal && destVal <= largestValInLinear) {
-//        return true;
-//    }
+    //int largestValInLinear = stoi(pkb->relationship.followsT.getRHSMax(to_string(srcVal)));
+    auto linear = pkb->relationship.followsT.getRHS(to_string(srcVal));
+    int largestValInLinear = findLargestValue(linear);
+    if (srcVal < destVal && destVal <= largestValInLinear) {
+        return true;
+    }
 
 
     if (largestValInLinear == 0) {
