@@ -3,6 +3,7 @@
 //
 #include "iostream"
 #include "SourceProcessor/RelationshipExtractor.h"
+#include "SourceProcessor/EntityExtractor.h"
 #include "TNode/TNode.h"
 #include "catch.hpp"
 #include "PKB/PKB.h"
@@ -584,3 +585,22 @@ TEST_CASE("test calls - multiple calls in one procedure") {
     REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name3","name3")==false);
     REQUIRE(PKB::getInstance()->relationship.callsT.isRelationship("name4","name4")==false);
 }
+
+TEST_CASE("Entity Extractor - assign all stmt nodes to a procedure") {
+
+    PKB::getInstance()->clearPKB();
+
+    ProcedureList procLst;
+    StatementList s1;
+    s1.push_back(&aNode);
+    s1.push_back(&bNode);
+
+    ProcedureNode proc1 = ProcedureNode(&p1, s1);
+    procLst.push_back(&proc1);
+    ProgramNode prog = ProgramNode(procLst);
+    EntityExtractor::assignProcedureToNodes(&prog,nullptr);
+    REQUIRE(dynamic_cast<ProcedureNode*>(aNode.getProc())->getProcName() == "name1");
+    REQUIRE(dynamic_cast<ProcedureNode*>(bNode.getProc())->getProcName() == "name1");
+
+}
+

@@ -1,0 +1,245 @@
+procedure Main {
+    v1 = v2 / v3 * (v4 % ((1/2 + (v5 + v6 + v7)) / v8 * (3/2/v8/v9/v10) * 7));
+    v11 = v1-v2-v3-v4-v5-v6-v7-v8-v9-v10;
+    v12 = v11*(a+b+c+d+e+f+g+h+i+j+k)/9000;
+    if (!(v11 == (v12*v13) / 2 *3/4*5%6)) then {
+        v12 = 3;
+    } else {
+        print somethingAnythingEverythingNothing;
+        print v12;
+    }
+    v13 = v12  + 1;
+    read v12;
+    v13 = v12 + pumpkin + ((((((1))))));
+    v14 = 0;
+    v15 = 1;
+    v16 = 2;
+    v17 = 3;
+    v18 = 4;
+    v19 = 5;
+    read v15;
+    read v16;
+    read v17;
+    read v18;
+    read v19;
+    v20 = v19 / v18 + v17 * v16 - v15 % v14;
+    print abc;
+    call Two;
+}
+procedure Two {
+    if (((12345678 != 123456789) || (a == b)) && (chickenRice == (rice + chilli + cucumber + chicken))) then {
+        while ( ( (1>2 )||( 2<3)) && ((456 / 789) != 456789)) {
+            v22 = v21 + v26;
+            v23 = v22;
+            v24 = v23;
+            v25 = v24;
+            v26 = v25;
+            while (1%2 <= 3*4-5/6+7 + boom) {
+                v22 = v21 + v26;
+                v23 = v22;
+                v24 = v23;
+                v25 = v24;
+                v26 = v25;
+                while ((((apple > banana)||((dragonfruit/(pineapple) < grapes)||(kiwi >= soursop)))
+                && (((guava+rockmelon <= orange* watermelon)&&(pear != tomato))&&((!(cucumber == aLongFruit))
+                &&(grapefruit < passionfruit)))) || ((starfruit > starfish)||((Freddie != Mercury)&&
+                (((lemon +sugar <= lemonade)&&(cherry<cherrytomato))||(mango/strawberry > coconut))))) {
+                    v22 = v21 + v26;
+                    v23 = v22;
+                    v24 = v23;
+                    v25 = v24;
+                    v26 = v25;
+                }
+            }
+        }
+    } else {
+        while ((!(v21 < v26)) || (v22 == v23)) {
+            v22 = v21 + v26;
+            v23 = v22;
+            v24 = v23;
+            v25 = v24;
+            v26 = v25;
+            read Line50IsHere;
+            v27 = v26;
+            v28 = v27;
+            v29 = v28;
+            v30 = v29;
+            while (v24-v25     ==       1234567890%guitar) {
+                v22 = v21 + v26;
+                v23 = v22;
+                v24 = v23;
+                v25 = v24;
+                v26 = v25;
+                while (v30/v29/v28/v27!=0) {
+                    v27 = v26;
+                    v28 = v27;
+                    v29 = v28;
+                    v30 = v29;
+                    while ((((chansey > blissey)||((rotom/(giratina) < arceus)||(psyduck >= venusaur * charlizard + piplup)))
+                            && (((cyndaquill - treeko / groudon <= kyogre* chikorita)&&(mimikyu != pikachu))&&((!(unknown == unknown))
+                            &&(magnetron == magneton * magneton * magneton)))) || ((starmie > staryu)||((skarmory != arron)&&
+                            (((lugia +darkrai <= mew)&&(metagross/geodude/beautifly<=shedninja))||(monferno/slugma != ninetails))))) {
+                        v22 = v21 + v26;
+                        v23 = v22;
+                        v24 = v23;
+                        v25 = v24;
+                        v26 = v25;
+                    }
+                }
+            }
+        }
+    }
+    call Another;
+}
+procedure Isolated {
+    nobodyCallsMe = true
+                    *
+                    thisIsLine73 +IAmSoSad;
+    v31 = v32+v33 + v34+v35 + v36+v37 + v38+v39 + v40+v41 + v42+v43 + v44+v45 + v46+v47 + v48+v49;
+    v31 = v32-v33 + v34-v35 + v36-v37 + v38-v39 + v40-v41 + v42-v43 + v44-v45 + v46-v47 + v48-v49;
+    v31 = v32*v33 + v34*v35 + v36*v37 + v38*v39 + v40*v41 + v42*v43 + v44*v45 + v46*v47 + v48*v49;
+    v31 = v32/v33 + v34/v35 + v36/v37 + v38/v39 + v40/v41 + v42/v43 + v44/v45 + v46/v47 + v48/v49;
+    v31 = v32%v33 + v34%v35 + v36%v37 + v38%v39 + v40%v41 + v42%v43 + v44%v45 + v46%v47 + v48%v49;
+    v31 = v32+v33 - v34+v35 - v36+v37 - v38+v39 - v40+v41 - v42+v43 - v44+v45 - v46+v47 - v48+v49;
+    v31 = v32-v33 - v34-v35 - v36-v37 - v38-v39 - v40-v41 - v42-v43 - v44-v45 - v46-v47 - v48-v49;
+    v31 = v32*v33 - v34*v35 - v36*v37 - v38*v39 - v40*v41 - v42*v43 - v44*v45 - v46*v47 - v48*v49;
+    v31 = v32/v33 - v34/v35 - v36/v37 - v38/v39 - v40/v41 - v42/v43 - v44/v45 - v46/v47 - v48/v49;
+    v31 = v32%v33 - v34%v35 - v36%v37 - v38%v39 - v40%v41 - v42%v43 - v44%v45 - v46%v47 - v48%v49;
+    v31 = v32+v33 * v34+v35 * v36+v37 * v38+v39 * v40+v41 * v42+v43 * v44+v45 * v46+v47 * v48+v49;
+    v31 = v32-v33 * v34-v35 * v36-v37 * v38-v39 * v40-v41 * v42-v43 * v44-v45 * v46-v47 * v48-v49;
+    v31 = v32*v33 * v34*v35 * v36*v37 * v38*v39 * v40*v41 * v42*v43 * v44*v45 * v46*v47 * v48*v49;
+    v31 = v32/v33 * v34/v35 * v36/v37 * v38/v39 * v40/v41 * v42/v43 * v44/v45 * v46/v47 * v48/v49;
+    v31 = v32%v33 * v34%v35 * v36%v37 * v38%v39 * v40%v41 * v42%v43 * v44%v45 * v46%v47 * v48%v49;
+    v31 = v32+v33 / v34+v35 / v36+v37 / v38+v39 / v40+v41 / v42+v43 / v44+v45 / v46+v47 / v48+v49;
+    v31 = v32-v33 / v34-v35 / v36-v37 / v38-v39 / v40-v41 / v42-v43 / v44-v45 / v46-v47 / v48-v49;
+    v31 = v32*v33 / v34*v35 / v36*v37 / v38*v39 / v40*v41 / v42*v43 / v44*v45 / v46*v47 / v48*v49;
+    v31 = v32/v33 / v34/v35 / v36/v37 / v38/v39 / v40/v41 / v42/v43 / v44/v45 / v46/v47 / v48/v49;
+    v31 = v32%v33 / v34%v35 / v36%v37 / v38%v39 / v40%v41 / v42%v43 / v44%v45 / v46%v47 / v48%v49;
+    v31 = v32+v33 % v34+v35 % v36+v37 % v38+v39 % v40+v41 % v42+v43 % v44+v45 % v46+v47 % v48+v49;
+    v31 = v32-v33 % v34-v35 % v36-v37 % v38-v39 % v40-v41 % v42-v43 % v44-v45 % v46-v47 % v48-v49;
+    v31 = v32*v33 % v34*v35 % v36*v37 % v38*v39 % v40*v41 % v42*v43 % v44*v45 % v46*v47 % v48*v49;
+    v31 = v32/v33 % v34/v35 % v36/v37 % v38/v39 % v40/v41 % v42/v43 % v44/v45 % v46/v47 % v48/v49;
+    v31 = v32%v33 % v34%v35 % v36%v37 % v38%v39 % v40%v41 % v42%v43 % v44%v45 % v46%v47 % v48%v49;
+    thisIsLine99 = true1;
+    v32 = (v32+v33) + (v34+v35) + (v36+v37) + (v38+v39) + (v40+v41) + (v42+v43) + (v44+v45) + (v46+v47) + (v48+v49);
+    v32 = (v32-v33) + (v34-v35) + (v36-v37) + (v38-v39) + (v40-v41) + (v42-v43) + (v44-v45) + (v46-v47) + (v48-v49);
+    v32 = (v32*v33) + (v34*v35) + (v36*v37) + (v38*v39) + (v40*v41) + (v42*v43) + (v44*v45) + (v46*v47) + (v48*v49);
+    v32 = (v32/v33) + (v34/v35) + (v36/v37) + (v38/v39) + (v40/v41) + (v42/v43) + (v44/v45) + (v46/v47) + (v48/v49);
+    v32 = (v32%v33) + (v34%v35) + (v36%v37) + (v38%v39) + (v40%v41) + (v42%v43) + (v44%v45) + (v46%v47) + (v48%v49);
+    v32 = (v32+v33) - (v34+v35) - (v36+v37) - (v38+v39) - (v40+v41) - (v42+v43) - (v44+v45) - (v46+v47) - (v48+v49);
+    v32 = (v32-v33) - (v34-v35) - (v36-v37) - (v38-v39) - (v40-v41) - (v42-v43) - (v44-v45) - (v46-v47) - (v48-v49);
+    v32 = (v32*v33) - (v34*v35) - (v36*v37) - (v38*v39) - (v40*v41) - (v42*v43) - (v44*v45) - (v46*v47) - (v48*v49);
+    v32 = (v32/v33) - (v34/v35) - (v36/v37) - (v38/v39) - (v40/v41) - (v42/v43) - (v44/v45) - (v46/v47) - (v48/v49);
+    v32 = (v32%v33) - (v34%v35) - (v36%v37) - (v38%v39) - (v40%v41) - (v42%v43) - (v44%v45) - (v46%v47) - (v48%v49);
+    v32 = (v32+v33) * (v34+v35) * (v36+v37) * (v38+v39) * (v40+v41) * (v42+v43) * (v44+v45) * (v46+v47) * (v48+v49);
+    v32 = (v32-v33) * (v34-v35) * (v36-v37) * (v38-v39) * (v40-v41) * (v42-v43) * (v44-v45) * (v46-v47) * (v48-v49);
+    v32 = (v32*v33) * (v34*v35) * (v36*v37) * (v38*v39) * (v40*v41) * (v42*v43) * (v44*v45) * (v46*v47) * (v48*v49);
+    v32 = (v32/v33) * (v34/v35) * (v36/v37) * (v38/v39) * (v40/v41) * (v42/v43) * (v44/v45) * (v46/v47) * (v48/v49);
+    v32 = (v32%v33) * (v34%v35) * (v36%v37) * (v38%v39) * (v40%v41) * (v42%v43) * (v44%v45) * (v46%v47) * (v48%v49);
+    v32 = (v32+v33) / (v34+v35) / (v36+v37) / (v38+v39) / (v40+v41) / (v42+v43) / (v44+v45) / (v46+v47) / (v48+v49);
+    v32 = (v32-v33) / (v34-v35) / (v36-v37) / (v38-v39) / (v40-v41) / (v42-v43) / (v44-v45) / (v46-v47) / (v48-v49);
+    v32 = (v32*v33) / (v34*v35) / (v36*v37) / (v38*v39) / (v40*v41) / (v42*v43) / (v44*v45) / (v46*v47) / (v48*v49);
+    v32 = (v32/v33) / (v34/v35) / (v36/v37) / (v38/v39) / (v40/v41) / (v42/v43) / (v44/v45) / (v46/v47) / (v48/v49);
+}
+procedure Another {
+    v50 = v51+v52/v53;
+    v50 = (v51+v52)/v53;
+    v50 = v51+(v52/v53);
+    v50 = v51+(v52/v53)%v54*(v55-v56)+v57;
+    v50 = ((((((v51+(v52/v53)%v54*(v55-v56)+v57))))));
+    v50 = 123456789123456789 + 101010101010101;
+    if (v50 < v52+v52 %(((v53-v58))) *v59*v60) then {
+        v50 = (v51) + v52 + v53;
+        v50 = v51 + (v52) + v53;
+        v50 = v51 + v52 + (v53);
+        if ((a) < (1)) then {
+            read itsChristmasAndLine130;
+            v50 =                   (lol);
+            v50 =                   ((0));
+            v50 =                  ((101));
+            v50 =                 (((m0m)));
+            v50 =                (((10001)));
+            v50 =               (((m10101m)));
+            v50 =              ((((1100011))));
+            v50 =             ((((m101T101m))));
+            v50 =            (((((110101011)))));
+            v50 =           (((((m1010H0101m)))));
+            v50 =          (((((1101010101011)))));
+            v50 =         (((((mN10100100101Nm)))));
+            v50 =        ((((((110101101101011))))));
+            v50 =       ((((((omN10100100101Nmo))))));
+            v50 =      (((((((11010110001101011)))))));
+            v50 =     (((((((omN1010T010T0101Nmo)))))));
+            v50 =    ((((((((1101011900091101011))))))));
+            v50 =   ((((((((omN1010T00100T0101Nmo))))))));
+            v50 =  (((((((((110101191000191101011)))))))));
+            v50 = (((((((((omN1010T0011100T0101Nmo)))))))));
+            v50 =                   I999I;
+            v50 =                   VI0IV;
+            v50 =                   VV1VV;
+        } else {
+            ChristmasIsOver = true;
+        }
+    } else {
+        call ThreeSum;
+    }
+}
+procedure ThreeSum {
+    Ans = newArrayList;
+    nums = Sort*(nums);
+    read ForiInLoopThroughNumsAndThisIsLine157;
+        if (nums*i == nums*(i-1)) then {
+            print continue;
+        } else {
+            l = i + 1;
+            r = numsLength - 1;
+            while (l < r) {
+                sum = nums*(i) + nums*(l) + nums*(r);
+                if (sum == 0) then {
+                    entry = newArrayList;
+                    entry = entry + nums*(i);
+                    entry = entry + nums*(l);
+                    entry = entry + nums*(r);
+                    Ans = Ans + entry;
+                    l = l + 1;
+                    while ((l < r) && (nums*(l) == nums*(l-1))) {
+                        l = l + 1;
+                    }
+                } else {
+                    if (sum < 0) then  {
+                        l = l + 1;
+                    } else {
+                        r = r - 1;
+                    }
+                }
+            }
+        }
+    call Ans;
+}
+procedure CallMeBack {
+    thisIsADeadEnd = (1);
+}
+procedure Ans {
+    while (best != fr13nd) {
+        if (f15H != fresh) then {
+            call CallMeBack;
+        } else {
+            call = 1;
+            variable = v61;
+            if (cat == nip) then {
+                v61 = v62;
+            } else {
+                v62 = v63;
+                if (1==2) then {
+                    v62 = v63;
+                } else {
+                    v61 = v62;
+                }
+            }
+        }
+    }
+    call End;
+}
+procedure End {
+    pleaseLetThisEnd = please+1+2+3;
+}

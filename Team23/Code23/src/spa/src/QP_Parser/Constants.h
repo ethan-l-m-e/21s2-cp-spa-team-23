@@ -20,8 +20,8 @@ std::string const ELEM = "(" + ATTR_REF + "|" + SYNONYM + ")";
 std::string const REF = "(\"" + SPACE + IDENT + SPACE + "\"|" + INTEGER + "|" + ATTR_REF + ")";
 
 std::string const REL = "(Follows\\*|Parent\\*|Calls\\*|Next\\*|Affects\\*)";
-std::string const LEXICAL_TOKENS = "^(" + REL + "|\\(|\\)|<|>|,|=|;|\\.|_|(-|\\+|\\/|\\*|%|\"(.)+\")|" + ATTR_NAME + "|"
-        + SYNONYM + "|" + NAME + "|" + INTEGER + ")";
+std::string const LEXICAL_TOKENS = "^(" + REL + "|\\(|\\)|<|>|,|=|;|\\.|_|(-|\\+|\\/|\\*|%)|" + ATTR_NAME + "|"
+                                   + SYNONYM + "|" + NAME + "|" + INTEGER + "|\"" + SYNONYM + "\"" "|(\"))";
 
 // Grammar Rules
 std::string const DESIGN_ENTITY = "(stmt|read|print|call|while|if|assign|variable|constant|procedure)";
@@ -77,7 +77,8 @@ std::string const REL_COND = REL_REF + "(" + SINGLE_SPACE + "and" + SINGLE_SPACE
 std::string const SUCH_THAT_CL = "such" + SINGLE_SPACE + "that" + SINGLE_SPACE + REL_COND;
 
 // pattern regex
-std::string const EXPRESSION_SPEC = "(_|_" + SPACE + "\"(.)+\"" + SPACE + "_|\"(.)+\")";
+std::string const EXPRESSION_SPEC = "(_|_" + SPACE + "\"(\\+|\\/|\\*|%|-|\\(|\\)|" + SYNONYM + "|" + SPACE + "|" + INTEGER
+        + ")+\"" + SPACE + "_|" +  "\"(\\+|\\/|\\*|%|-|\\(|\\)|" + SYNONYM + "|" + SPACE + "|" + INTEGER + ")+\")";
 std::string const ASSIGN = SYNONYM + SPACE + "\\(" + SPACE + ENT_REF + SPACE + "," + SPACE
                            + EXPRESSION_SPEC + SPACE + "\\)";
 std::string const WHILE = SYNONYM + SPACE + "\\(" + SPACE + ENT_REF + SPACE + "," + SPACE + "_"
@@ -108,6 +109,7 @@ std::string const PATTERN_SYNONYMS = "(if|while|assign)";
 std::string const INT_WILDCARD = "(_|" + INTEGER + ")";
 std::string const IDENT_INT_CHECK = "(\"" + IDENT + "\"|" + INTEGER + ")";
 std::string const STMT_DESIGN_ENTITIES = "(read|print|call|while|if|assign|stmt)";
+std::string const EMPTY_PATTERN_ARG = "_\"\"_|\"\"";
 
 // regex strings for tokenizer
 std::string const DECLARATIONS_LINE = "( )*;( )*(Select.*)";

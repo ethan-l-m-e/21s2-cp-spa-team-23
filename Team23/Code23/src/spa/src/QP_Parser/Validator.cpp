@@ -98,7 +98,8 @@ void Validator::validatePatterns(std::map<std::string, std::string>& declaration
             throw QPInvalidSemanticException("Invalid Pattern Synonym");
         }
 
-        if (!regex_match(patternArguments[1], std::regex(EXPRESSION_SPEC))) {
+        if (!regex_match(patternArguments[1], std::regex(EXPRESSION_SPEC))
+        || regex_match(patternArguments[1], std::regex(EMPTY_PATTERN_ARG))) {
             throw QPInvalidSemanticException("Invalid Second argument");
         }
 
