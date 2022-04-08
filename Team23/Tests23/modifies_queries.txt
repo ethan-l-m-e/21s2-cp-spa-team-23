@@ -34,7 +34,7 @@ Select a such that Modifies(1, _)
 1, 4, 6, 7, 9, 10
 5000
 7 - [valid] select assign with assign stmt# and var synonym
-assign a;
+assign a; variable v;
 Select a such that Modifies(1, v)
 1, 4, 6, 7, 9, 10
 5000
