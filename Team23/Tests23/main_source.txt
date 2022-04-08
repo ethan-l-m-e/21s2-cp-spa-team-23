@@ -217,7 +217,7 @@ procedure ThreeSum {
     call Ans;
 }
 procedure CallMeBack {
-    thisIsADeadEnd = (1);
+    thisIsADeadEnd = ( 1     );
 }
 procedure Ans {
     while (best != fr13nd) {
