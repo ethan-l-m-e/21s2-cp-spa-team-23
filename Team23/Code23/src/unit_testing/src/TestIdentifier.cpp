@@ -60,6 +60,8 @@ TEST_CASE("ASSIGN") {
     CHECK(switchCase == ASSIGN);
     switchCase = Identifier::identifyFirstObject("x = (((a)));");
     CHECK(switchCase == ASSIGN);
+    switchCase = Identifier::identifyFirstObject("x = (((  a    )));");
+    CHECK(switchCase == ASSIGN);
     /*
     switchCase = Identifier::identifyFirstObject("x = ;");  // missing RHS expr
     CHECK(switchCase == ERROR);
