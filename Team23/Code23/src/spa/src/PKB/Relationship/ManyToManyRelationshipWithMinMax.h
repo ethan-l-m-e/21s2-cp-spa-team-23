@@ -32,6 +32,8 @@ public:
 
     void setRelationship(unordered_set<string> setLhs, string rhs) override;
 
+    void clear() override;
+
 
     string getRHSMin(string lhs);
 
