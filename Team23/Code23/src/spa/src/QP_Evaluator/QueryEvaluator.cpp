@@ -7,47 +7,54 @@
 #include "QP_Parser/Exception.h"
 #include "QP_Evaluator/ClauseEvaluators/ClauseEvaluatorCollection.h"
 
+/**
+ * Evalute a query object, it evaluate the optimizeQueryClauses for each group and returns the result from evaluation.
+ * @param queryObj the query object with synonym declarations and optimizeQueryClauses
+ * @return a list of string values as the results for the query
+ */
 list<string> QueryEvaluator::evaluate(Query* queryObj) {
 
     query = queryObj;
-    auto* optimizer = new QueryOptimizer(query);
-    optimizer->groupClauses();
 
-    unordered_map<int, ResultTable*> groupedResultTables;
-    for(const auto& group: *optimizer->getGroups()) {
+    // perform optimization on the query
+    auto *optimizer = new QueryOptimizer(query);
+    optimizer->optimizeQueryClauses();
+
+    // generate result tables for each group and store them in a map
+    unordered_map<int, ResultTable *> groupedResultTables;
+    for (const auto &group: *optimizer->getGroups()) {
         groupedResultTables.insert(std::make_pair(group, new ResultTable()));
     }
 
+    // evaluate each clause in a loop
     bool isFalse = false;
 
-    for (GroupedClause gc : *optimizer->getClauses()) {
-        if (dynamic_cast<WithClause*>(gc.clause)) {
-            // Create ClauseEvaluators and evaluate each with clause
-            auto* withClause = dynamic_cast<WithClause*>(gc.clause);
+    for (GroupedClause gc: *optimizer->getClauses()) {
+        if (dynamic_cast<WithClause *>(gc.clause)) {
+            // Create ClauseEvaluators and evaluate each with clause, merge the result to the corresponding result table
+            auto *withClause = dynamic_cast<WithClause *>(gc.clause);
             auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), withClause, pkb);
             bool withResult = withClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete withClauseEvaluator;
-            // if the clause evaluates to false, terminate evaluation and output an empty list.
+            // if the clause evaluates to false, terminate evaluation early.
             if (!withResult) {
                 isFalse = true;
                 break;
             }
-        }
-        else if (dynamic_cast<SuchThatClause*>(gc.clause)){
-            // Create ClauseEvaluators and evaluate each suchThat clause
-            auto* suchThatClause = dynamic_cast<SuchThatClause *>(gc.clause);
+        } else if (dynamic_cast<SuchThatClause *>(gc.clause)) {
+            // Create ClauseEvaluators and evaluate each suchThat clause, merge the result to the corresponding result table
+            auto *suchThatClause = dynamic_cast<SuchThatClause *>(gc.clause);
             auto suchThatClauseEvaluator = generateEvaluator(*suchThatClause, *query->getDeclarations());
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete suchThatClauseEvaluator;
-            // if the clause evaluates to false, terminate evaluation and output an empty list.
-            if (!suchThatResult){
+            // if the clause evaluates to false, terminate evaluation early.
+            if (!suchThatResult) {
                 isFalse = true;
                 break;
             }
-        }
-        else if (dynamic_cast<PatternClause*>(gc.clause)){
-            // Create ClauseEvaluators and evaluate each pattern clause
-            auto* patternClause = dynamic_cast<PatternClause *>(gc.clause);
+        } else if (dynamic_cast<PatternClause *>(gc.clause)) {
+            // Create ClauseEvaluators and evaluate each pattern clause, merge the result to the corresponding result table
+            auto *patternClause = dynamic_cast<PatternClause *>(gc.clause);
             auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), patternClause, pkb);
             bool patternResult = patternClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete patternClauseEvaluator;
@@ -61,20 +68,20 @@ list<string> QueryEvaluator::evaluate(Query* queryObj) {
         }
     }
 
-    auto* finalResultTable = new ResultTable();
+    auto *finalResultTable = new ResultTable();
+
     mergeToFinalResultTable(finalResultTable, groupedResultTables, isFalse);
 
-    // Evaluate result clause and output the result
-    auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
+    // Evaluate result clause
+    auto *resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
     bool result = resultClauseEvaluator->evaluateClause(finalResultTable);
     delete resultClauseEvaluator;
     if (!result) return {};
     list<string> output = generateResultString(finalResultTable);
 
+    //deallocate memory for result tables and clear cache
     delete finalResultTable;
-    for (auto map: groupedResultTables) {
-        delete map.second;
-    }
+    for (auto map: groupedResultTables) delete map.second;
     delete optimizer;
 
     Cache::getInstance()->clearCache();
@@ -118,7 +125,6 @@ ClauseEvaluator* QueryEvaluator::generateEvaluator(SuchThatClause& clause, unord
             return new AffectsClauseEvaluator(&declarations, &clause, pkb);
         case RelRef::AFFECTS_T:
             return new AffectsTClauseEvaluator(&declarations, &clause, pkb);
-
         default:
             throw qp::QPEvaluatorException("No valid clause evaluator is found for relationship type");
     }
@@ -135,7 +141,7 @@ list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
     if (resultTable->isBoolean()) {
         stringSet.insert(resultTable->getBooleanResultString());
     } else if (!resultTable->isEmpty()) {
-        for(int i = 0; i < resultTable->getTableHeight(); i++) {
+        for (int i = 0; i < resultTable->getTableHeight(); i++) {
             string s;
             for (auto col: resultTable->getProjection()) {
                 if (!s.empty()) s += " ";
@@ -144,14 +150,14 @@ list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
             stringSet.insert(s);
         }
     }
-    return list<string> {std::begin(stringSet), std::end(stringSet)};
+    return list<string>{std::begin(stringSet), std::end(stringSet)};
 }
 
-
-void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unordered_map<int, ResultTable*>& groupedResultTables, bool isFalse) {
+unordered_set<string> QueryEvaluator::getSelectedSynonyms() {
 
     unordered_set<string> selectedSynonyms;
 
+    // examine the result clause and retrieve selected synonyms
     for (Argument synonym: query->getResultClause()->argList) {
         if (synonym.argumentType == ArgumentType::ATTR_REF) {
             auto attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
@@ -159,16 +165,43 @@ void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unor
         } else if (synonym.argumentType == ArgumentType::SYNONYM) {
             selectedSynonyms.insert(std::get<string>(synonym.argumentValue));
         } else if (synonym.argumentType == ArgumentType::BOOLEAN) {
-            finalResultTable->enableBooleanResult();
+            break;
         }
     }
 
+    return selectedSynonyms;
+}
+
+/**
+ * Merge result from individual result tables to the final result table.
+ * @param finalResultTable the result table which contains information that will be used in the final output
+ * @param groupedResultTables the mapping of group number to result tables for each group
+ * @param isFalse boolean value that indicate whether the query is false
+ */
+void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unordered_map<int, ResultTable*>& groupedResultTables, bool isFalse) {
+
+    unordered_set<string> selectedSynonyms = getSelectedSynonyms();
+
+    //set boolean result for false result
     if (isFalse) {
         finalResultTable->setBooleanResult(false);
         return;
     }
 
+
+    // otherwise, populate the result table by selecting relevant columns from each group
     if (!selectedSynonyms.empty()) {
+
+        // for queries with only 1 group, set the content of the result table to the final result table
+        if (groupedResultTables.size() == 1) {
+            finalResultTable->setResultTable(
+                    *(groupedResultTables.begin())->second->getHeader(),
+                    *(groupedResultTables.begin())->second->getList()
+            );
+            return;
+        }
+
+        // otherwise, for each result table, extract the relevant columns to the final result table
         for (auto map: groupedResultTables) {
             auto synonymList = map.second->getHeader();
             unordered_set<string> synonyms(synonymList->begin(), synonymList->end());
@@ -181,6 +214,7 @@ void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unor
                     selectedSynonymHeaders.emplace_back(synonym);
                 }
             }
+            // if there are selected columns from the group, merge selected columns to the final result table
             if (!selectedColumns.empty())
                 finalResultTable->mergeColumnsToTable(selectedColumns, selectedSynonymHeaders);
 

@@ -11,14 +11,19 @@
 template<typename T>
 class TableClauseEvaluator : public SuchThatClauseEvaluator {
 public:
-    TableClauseEvaluator (unordered_map<string, DesignEntity>* declarations, Clause* clause, PKB* pkb, T* relationship): SuchThatClauseEvaluator(declarations, clause, pkb), relationship{relationship} {}
-    RelRef getRelRef() override {return dynamic_cast<SuchThatClause*>(clause)->relRef;};
+    TableClauseEvaluator(unordered_map<string, DesignEntity> *declarations, Clause *clause, PKB *pkb, T *relationship)
+            : SuchThatClauseEvaluator(declarations, clause, pkb), relationship{relationship} {}
+
+    RelRef getRelRef() override { return dynamic_cast<SuchThatClause *>(clause)->relRef; };
 protected:
-    T* relationship;
+    T *relationship;
 
     bool isRelation(string left, string right) override;
+
     unordered_set<string> getLeftSynonymValue(string right) override;
+
     unordered_set<string> getRightSynonymValue(string left) override;
+
     pair<DesignEntity, DesignEntity> getWildcardType() override;
 };
 

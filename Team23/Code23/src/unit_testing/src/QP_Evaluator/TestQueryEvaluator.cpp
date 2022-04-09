@@ -8,7 +8,7 @@
 
 using namespace std;
 
-TEST_CASE("Query with no clauses") {
+TEST_CASE("Query with no optimizeQueryClauses") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {{"v", DesignEntity::VARIABLE},
                                                            {"a", DesignEntity::ASSIGN},
@@ -47,7 +47,7 @@ TEST_CASE("Query with no clauses") {
     delete qe;
 }
 
-TEST_CASE("Query with false clauses") {
+TEST_CASE("Query with false optimizeQueryClauses") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {{"a", DesignEntity::ASSIGN}};
     Argument a4 = {ArgumentType::STMT_NO, "4"};
@@ -103,7 +103,7 @@ TEST_CASE("Query with false clauses") {
     
 }
 
-TEST_CASE("Multi clauses") {
+TEST_CASE("Multi optimizeQueryClauses") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"s1", DesignEntity::STMT},
@@ -189,7 +189,7 @@ TEST_CASE("Multi clauses") {
     
 }
 
-TEST_CASE("Multi clauses with tuples") {
+TEST_CASE("Multi optimizeQueryClauses with tuples") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"s1", DesignEntity::STMT},
@@ -254,7 +254,7 @@ TEST_CASE("Multi clauses with tuples") {
     
 }
 
-TEST_CASE("Multi clauses with ref") {
+TEST_CASE("Multi optimizeQueryClauses with ref") {
     PKB *testPKB = generateSamplePKB();
     unordered_map<string, DesignEntity> declarations = {
             {"s1", DesignEntity::STMT},

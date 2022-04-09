@@ -683,7 +683,7 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: MULTIPLE SUCH THAT CLAUSES") {
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // Multiple such that clauses
+    // Multiple such that optimizeQueryClauses
     query = "stmt s; variable v; Select s such that Modifies(v, _) such that Follows(3, 2) and Next*(s, 4) such that Affects(_, _)";
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
@@ -1049,12 +1049,12 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: VALID WITH CLAUSE QUERIES") {
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // Multiple with clauses
+    // Multiple with optimizeQueryClauses
     query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 with p1.procName=\"x\" with p1.value=4";
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // Multiple with clauses with 'and'
+    // Multiple with optimizeQueryClauses with 'and'
     query = "assign a; procedure p1, p2; Select a with p2.stmt#=3 with p1.procName=\"x\" and p1.value=4";
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
@@ -1523,17 +1523,17 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: RANDOM SPACES AND TABS") {
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // tabs and spaces between 'and' in with clauses
+    // tabs and spaces between 'and' in with optimizeQueryClauses
     query = "assign a; procedure p; Select p with p.procName = \"x\" \t \t \t \t and c.value=3";
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // tabs and spaces between 'and' in pattern clauses
+    // tabs and spaces between 'and' in pattern optimizeQueryClauses
     query = "assign a; procedure p; Select p pattern a (_, _)\t \t \t \t  and a2(_, _)";
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
 
-    // tabs and spaces between 'and' in such that clauses
+    // tabs and spaces between 'and' in such that optimizeQueryClauses
     query = "assign a; procedure p; Select p such that Next(3, 2) \t \t \t \t  and Follows(_, _)";
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));
@@ -1583,7 +1583,7 @@ TEST_CASE ("QP SYNTACTIC VALIDATOR: RANDOM SPACES AND TABS") {
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_THROWS(validator.validateQueryStructure(query));
 
-    // missed spacing between 2 such that clauses
+    // missed spacing between 2 such that optimizeQueryClauses
     query = "assign a; procedure p; Select p such that Follows(2, 3)and Next(2, 3)";
     query = Tokenizer::lexicalTokens(query);
     REQUIRE_NOTHROW(validator.validateQueryStructure(query));

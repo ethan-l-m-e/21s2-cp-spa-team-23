@@ -4,10 +4,10 @@
 
 #include "QueryOptimizer.h"
 
-void QueryOptimizer::groupClauses(){
+void QueryOptimizer::optimizeQueryClauses(){
     vector<Clause*> allClauses;
 
-    // add all clauses into a single vector
+    // add all optimizeQueryClauses into a single vector
     for(auto &patternClause : *query->getPatternClauses()) {
         allClauses.emplace_back(&patternClause);
     }
@@ -21,7 +21,7 @@ void QueryOptimizer::groupClauses(){
     if(allClauses.size() > 3) {
         groupClausesWithCommonSynonyms(allClauses);
     } else {
-        groupClausesBasic(allClauses);
+        groupClausesSingle(allClauses);
     }
 
     assignWeights(&rearrangedClauses);
@@ -35,7 +35,7 @@ void QueryOptimizer::groupClausesWithCommonSynonyms(vector<Clause*> allClauses){
     // disjoint set algorithm is used to identify which group a synonym belongs to
     DisjointSet ds(int(query->getDeclarations()->size()));
 
-    std::unordered_map<Clause*, int> groupIdentifier; // stores the mapping from each clause to one of its synonyms (0 for clauses without synonyms)
+    std::unordered_map<Clause*, int> groupIdentifier; // stores the mapping from each clause to one of its synonyms (0 for optimizeQueryClauses without synonyms)
 
     /*
      * for each clause, get all its synonyms. For cases with more than 1 synonym, join them under the same group.
@@ -76,7 +76,7 @@ void QueryOptimizer::groupClausesWithCommonSynonyms(vector<Clause*> allClauses){
     }
 }
 
-void QueryOptimizer::groupClausesBasic(vector<Clause*> allClauses){
+void QueryOptimizer::groupClausesSingle(vector<Clause*> allClauses){
 
     auto numOfClauses = allClauses.size();
 
@@ -87,7 +87,7 @@ void QueryOptimizer::groupClausesBasic(vector<Clause*> allClauses){
         rearrangedClauses.emplace_back(newClause);
     }
 
-    // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
+    // sort the vector such that  1.optimizeQueryClauses with no synonyms at the front  2. clause with common synonyms are next to each other.
     std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
 
     setGroups();
@@ -95,7 +95,7 @@ void QueryOptimizer::groupClausesBasic(vector<Clause*> allClauses){
 
 std::vector<GroupedClause>* QueryOptimizer::getClauses() {
     return &rearrangedClauses;
-};
+}
 
 void QueryOptimizer::assignWeights(std::vector<GroupedClause>* groupedClauses) {
     std::vector<GroupedClause>& clauses = *groupedClauses;
@@ -152,7 +152,7 @@ void QueryOptimizer::setGroups() {
     for (auto groupedClause : rearrangedClauses) {
         groups.insert(groupedClause.group);
     }
-};
+}
 
 unordered_set<int>* QueryOptimizer::getGroups() {
     return &groups;

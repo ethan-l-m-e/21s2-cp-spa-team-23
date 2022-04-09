@@ -785,7 +785,7 @@ TEST_CASE ("QP TOKENIZER: PATTERN WITH 'FOLLOWS' AS SYN-ASSIGN") {
     CHECK(suchThatClauseTokens.size() == 0);
 }
 
-// Check multiple pattern clauses
+// Check multiple pattern optimizeQueryClauses
 TEST_CASE ("QP TOKENIZER: MULTIPLE PATTERN CLAUSES WITH AND") {
     std::string firstQuery = "assign a1, a2, a3; \nSelect a1 pattern a1 (\"x\", _) and a2(_, _) and a3(_, _, _)";
     firstQuery = Tokenizer::lexicalTokens(firstQuery);

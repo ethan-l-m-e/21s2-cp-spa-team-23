@@ -35,7 +35,7 @@ unordered_set<string> CachedNextTRelationship::getRHS(string lhs) {
         results = CachedManyToManyRelationship::getRHS(lhs);
     } else {
         // computing. runtime: O(n*h).
-        // but with caching can shave off a lot of runtime if overloaded with clauses -> O(h*n) -> O(n) -> O(1)
+        // but with caching can shave off a lot of runtime if overloaded with optimizeQueryClauses -> O(h*n) -> O(n) -> O(1)
         printStmt("computing NextT RHS " + lhs + "\n");
         getRhsHistory.addToHistory(lhs);
         unordered_set<string> allStmtNo = getAllStmtInSameProcedureAs(lhs);

@@ -45,14 +45,6 @@ string ResultTable::getBooleanResultString() {
     return booleanResult ? "TRUE" : "FALSE";
 }
 
-vector<string>* ResultTable::getHeader() {
-    return &tableHeader;
-}
-
-String2DVector* ResultTable::getList() {
-    return &tableEntries;
-}
-
 vector<string>* ResultTable::getColumn(string& synonym) {
     auto it = find(tableHeader.begin(), tableHeader.end(), synonym);
     if (it != tableHeader.end())
@@ -61,6 +53,25 @@ vector<string>* ResultTable::getColumn(string& synonym) {
         return &tableEntries[index];
     } else {
         return {};
+    }
+}
+
+vector<string>* ResultTable::getHeader() {
+    return &tableHeader;
+}
+
+String2DVector* ResultTable::getList() {
+    return &tableEntries;
+}
+
+vector<int> ResultTable::getProjection() {
+    if (projection.empty()) {
+        vector<int> defaultProjection;
+        defaultProjection.reserve(tableHeader.size());
+        for( int i = 0; i < tableHeader.size(); i++ ) defaultProjection.emplace_back( i );
+        return defaultProjection;
+    } else {
+        return projection;
     }
 }
 
@@ -78,27 +89,23 @@ void ResultTable::setBooleanResult(bool result) {
     booleanResult = result;
 }
 
+void ResultTable::setProjection(vector<int> proj) {
+    projection = std::move(proj);
+}
+
 void ResultTable::appendColumn(string header, vector<string>& value) {
     tableHeader.emplace_back(header);
     tableEntries.emplace_back(value);
 }
 
-void ResultTable::rearrangeSynonyms(vector<int>& orders) {
-    vector<string> newHeader = {};
-    String2DVector newEntries = {};
-    for(auto order : orders) {
-        if(order < 0 || order >= tableHeader.size()) return;
-        newHeader.emplace_back(tableHeader[order]);
-        newEntries.emplace_back(tableEntries[order]);
-    }
-    tableHeader = newHeader;
-    tableEntries = newEntries;
-}
-
+/**
+ * Merge a list of columns to the table.
+ * @param columns  a vector of new columns to be added to the table
+ * @param headers  the corresponding headers for each columns
+ */
 void ResultTable::mergeColumnsToTable(vector<vector<string>> columns, vector<string> headers) {
     crossJoin(std::move(columns), std::move(headers));
 }
-
 
 /**
  * Merge a result to the table.
@@ -109,9 +116,9 @@ void ResultTable::mergeResultToTable(Result& result) {
     if (result.resultType == ResultType::BOOLEAN) {
         return;
     } else if (result.resultType == ResultType::SINGLE) {
-        mergeStringResult(result);
+        mergeSingleResult(result);
     } else if (result.resultType == ResultType::PAIR) {
-        mergeTuplesResult(result);
+        mergePairResult(result);
     }
 
     // clear the table headers if there is no entry in the table left.
@@ -121,10 +128,10 @@ void ResultTable::mergeResultToTable(Result& result) {
 }
 
 /**
- * Merge a string result to the table.
+ * Merge a single result to the table.
  * @param result  reference to the result object to be merged
  */
-void ResultTable::mergeStringResult(Result& result) {
+void ResultTable::mergeSingleResult(Result& result) {
     auto stringSet = std::get<unordered_set<string>>(result.resultSet);
     auto header = std::get<string>(result.resultHeader);
     auto it = std::find(tableHeader.begin(), tableHeader.end(), header);
@@ -140,10 +147,10 @@ void ResultTable::mergeStringResult(Result& result) {
 }
 
 /**
- * Merge a tuples result to the table.
+ * Merge a pair result to the table.
  * @param result  reference to the result object to be merged
  */
-void ResultTable::mergeTuplesResult(Result& result) {
+void ResultTable::mergePairResult(Result& result) {
     auto tupleSet = std::get<unordered_set<pair<string, string>>>(result.resultSet);
     auto headerTuple = std::get<pair<string, string>>(result.resultHeader);
     auto it1 = std::find(tableHeader.begin(), tableHeader.end(), headerTuple.first);
@@ -165,6 +172,12 @@ void ResultTable::mergeTuplesResult(Result& result) {
     }
 }
 
+/**
+ * Join a list of new columns to the result table. The list of new columns are treated as set tuples, no cross join is
+ * performed between them.
+ * @param columns  a list of new columns, none of the columns should exist in the table before joining
+ * @param headers  the headers for the list of new columns
+ */
 void ResultTable::crossJoin(vector<vector<string>> columns, vector<string> headers) {
 
     if(columns.empty()) return;
@@ -189,17 +202,16 @@ void ResultTable::crossJoin(vector<vector<string>> columns, vector<string> heade
 }
 
 /**
- * Inner join method to join the table with a string result, with a common synonym.
+ * Inner join method to join the table with a single result set, with a common synonym.
  * @param index  the index of the common synonym in the table header
- * @param resultItemList  a list of ResultItem of the type string
+ * @param resultSet  a set of single results
  */
-
-void ResultTable::innerJoin(size_t index, unordered_set<string>& resultItemList) {
+void ResultTable::innerJoin(size_t index, unordered_set<string>& resultSet) {
    size_t height = getTableHeight();
    size_t width = getTableWidth();
    unordered_set<int> deletedRows;
    for (int r = 0; r < height; r++) {
-       if (!resultItemList.count(tableEntries[index][r])) {
+       if (!resultSet.count(tableEntries[index][r])) {
            deletedRows.insert(r);
        }
    }
@@ -214,19 +226,18 @@ void ResultTable::innerJoin(size_t index, unordered_set<string>& resultItemList)
 }
 
 /**
- * Inner join method to join the table with a tuple result, with two common synonyms.
+ * Inner join method to join the table with a pair result set, with two common synonyms.
  * @param indices  pair of indices representing the position of the two synonyms in the table header
- * @param resultItemList  a list of ResultItem of the type tuple
+ * @param resultSet  a set of pair results
  */
-
-void ResultTable::innerJoin(std::pair<size_t, size_t> indices, unordered_set<pair<string, string>>& resultItemList) {
+void ResultTable::innerJoin(std::pair<size_t, size_t> indices, unordered_set<pair<string, string>>& resultSet) {
     size_t height = getTableHeight();
     size_t width = getTableWidth();
     unordered_set<int> deletedRows;
     for (int r = 0; r < height; r++) {
         string left = tableEntries[indices.first][r];
         string right = tableEntries[indices.second][r];
-        if (!resultItemList.count(make_pair(left, right))) {
+        if (!resultSet.count(make_pair(left, right))) {
             deletedRows.insert(r);
         }
     }
@@ -242,11 +253,11 @@ void ResultTable::innerJoin(std::pair<size_t, size_t> indices, unordered_set<pai
 }
 
 /**
- * Inner join method to join the table with a tuple result, with one common synonym.
+ * Inner join method to join the table with a pair result set, with one common synonym.
  * @param index  the index of the common synonym in the table header
  * @param map  an unordered map representation of the tuple result with the values of the common synonym as the key
+ * @param newHeader  the synonym to be appended to the header
  */
-
 void ResultTable::innerJoin(size_t index, unordered_map<string,vector<string>> map, string newHeader){
     size_t height = getTableHeight();
     size_t width = getTableWidth();
@@ -303,17 +314,11 @@ unordered_map<string, vector<string>> ResultTable::convertToMap (unordered_set<p
     return map;
 }
 
-vector<int> ResultTable::getProjection() {
-    if (projection.empty()) {
-        vector<int> defaultProjection;
-        defaultProjection.reserve(tableHeader.size());
-        for( int i = 0; i < tableHeader.size(); i++ ) defaultProjection.emplace_back( i );
-        return defaultProjection;
-    } else {
-        return projection;
-    }
-}
-
+/**
+ * Generate two column vectors from a pair result set
+ * @param resultSet  a pair result set
+ * @return  a vector of 2 vectors representing the first and second item in the result pair
+ */
 vector<vector<string>> ResultTable::getResultColumns (unordered_set<pair<string, string>>& resultSet) {
     vector<string> row1;
     vector<string> row2;
