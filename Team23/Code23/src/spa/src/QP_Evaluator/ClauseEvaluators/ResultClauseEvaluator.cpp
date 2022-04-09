@@ -9,17 +9,19 @@ bool ResultClauseEvaluator::evaluateClause(ResultTable* resultTable) {
     if (clause->argList.empty())
         throw qp::QPEvaluatorException("No argument was selected");
 
-    // handle select boolean
-    if (resultTable->isBoolean()) return true;
+    // handle boolean select
+    if (clause->argList[0].argumentType == ArgumentType::BOOLEAN) {
+        resultTable->enableBooleanResult();
+        return true;
+    }
 
     // handle select synonym / attribute references
     vector<int> projections;
     if (resultTable->getBooleanResult())
         projectSelectedSynonyms(&projections, resultTable);
 
-    resultTable->rearrangeSynonyms(projections);
+    resultTable->setProjection(projections);
     return true;
-
 }
 
 /**
@@ -31,20 +33,20 @@ void ResultClauseEvaluator::projectSelectedSynonyms(vector<int>* projections, Re
     auto header = resultTable->getHeader();
     for (Argument synonym: clause->argList) {
 
-        // get synonym value and attribute reference.
+        // get synonym value and attribute reference
         string synonymValue;
         std::pair<string, AttrName> attrRef;
         unpackSynonym(synonym, &attrRef, &synonymValue);
         
-        // find synonym in result table.
+        // find synonym in result table
         auto it = std::find(header->begin(), header->end(), synonymValue);
         auto index = std::distance(header->begin(), it);
 
-        //merge synonyms to result table if synonym is not in the table.
+        //merge synonyms to result table if synonym is not in the table
         if (it == header->end()) 
             appendNewSynonym(synonymValue, resultTable);
 
-        //handle attribute reference.
+        //handle attribute reference
         if (synonym.argumentType == ArgumentType::ATTR_REF) 
             updateTableForAttrReference(attrRef, &index, resultTable);
 

@@ -39,6 +39,11 @@ unordered_set<string> ClauseEvaluator::getAllType(DesignEntity designEntity) {
     }
 }
 
+/**
+ * Process a result struct and update the result table.
+ * @param resultTable  The result table to be updated
+ * @return  boolean value to indicate whether the clause has a valid result.
+ */
 bool ClauseEvaluator::processResult(ResultTable* resultTable) {
     if(!result.resultBoolean) {
         resultTable->clearTable();
@@ -87,6 +92,7 @@ vector<string> ClauseEvaluator::getMapping(vector<string>& lst, string (ClauseEv
     return mappings;
 }
 
+// Helper functions for generating the mapping of key to value by applying a function
 unordered_map<string, string> ClauseEvaluator::generateMap(unordered_set<string>& set, string (ClauseEvaluator::*func) (string&)) {
     unordered_map<string, string> mappings;
     for (string val: set) {
@@ -96,6 +102,7 @@ unordered_map<string, string> ClauseEvaluator::generateMap(unordered_set<string>
     return mappings;
 }
 
+// Helper functions for generating the mapping of key to value where key = value
 unordered_map<string, string> ClauseEvaluator::generateMap(unordered_set<string>& set) {
     unordered_map<string, string> mappings;
     for (string val: set) {
@@ -104,7 +111,9 @@ unordered_map<string, string> ClauseEvaluator::generateMap(unordered_set<string>
     return mappings;
 }
 
-
+/*
+ * Wrapper functions for PKB calls
+ */
 string ClauseEvaluator::getVarRead(string& stmtNumber) {
     return pkb->statement.readStatements.getVariableName(stmtNumber);
 }
@@ -115,6 +124,9 @@ string ClauseEvaluator::getProcByCall(string& stmtNumber) {
     return pkb->statement.callStatements.getProcedureName(stmtNumber);
 }
 
+/*
+ * Helper functions for making a result
+ */
 Result ClauseEvaluator::makeResult(bool validity) {
     return {
             .resultType = ResultType::BOOLEAN,

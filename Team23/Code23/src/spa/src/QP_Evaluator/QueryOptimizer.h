@@ -13,6 +13,9 @@
 using std::unordered_set;
 using std::unordered_map;
 
+/**
+ * Disjoint set algorithm for finding the grouping of clauses based on common synonyms
+ */
 class DisjointSet {
 public:
     explicit DisjointSet(int size) {
@@ -40,6 +43,9 @@ private:
     vector<int> root;
 };
 
+/**
+ * Grouped clause is a struct used for grouping and sorting of a clause
+ */
 typedef struct GroupedClause {
     Clause* clause;
     int group;
@@ -47,27 +53,40 @@ typedef struct GroupedClause {
     bool operator <(const GroupedClause & other) const
     {
         return weight < other.weight;
-//        return group < other.group; // compare group number
     }
 } GroupedClause;
 
 class QueryOptimizer {
+public:
+    explicit QueryOptimizer(Query *query) : query{query} {}
+
+    void optimizeQueryClauses();
+
+    vector<GroupedClause> *getClauses();
+
+    unordered_set<int> *getGroups();
+
 private:
+
     std::vector<GroupedClause> rearrangedClauses; // the output vector, initially empty
     Query *query;
     unordered_set<int> groups;
     unordered_map<string, int> synonymIndices;
-    void setSynonymIndices();
-    void setGroups();
-public:
-    QueryOptimizer(Query* query): query{query}{}
-    void groupClauses();
-    vector<GroupedClause> getClauses();
-    unordered_set<int>* getGroups();
 
-    void assignWeights(std::vector<GroupedClause>*);
-    void setWeightByClause(GroupedClause*);
-    std::pair<int, int> getNumSynonymConst(std::vector<Argument>*);
+    void assignWeights(std::vector<GroupedClause> *);
+
+    void groupClausesWithCommonSynonyms(vector<Clause *> allClauses);
+
+    void groupClausesSingle(vector<Clause *> allClauses);
+
+    void setSynonymIndices();
+
+    void setGroups();
+
+    void setWeightByClause(GroupedClause *);
+
+    std::pair<int, int> getNumSynonymConst(std::vector<Argument> *);
+
 };
 
 

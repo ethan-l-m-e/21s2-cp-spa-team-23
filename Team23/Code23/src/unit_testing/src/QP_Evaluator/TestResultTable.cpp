@@ -105,6 +105,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
 
     // merge string into rt
     auto* rt = new ResultTable();
+
     rt->setResultTable({"a", "c"},{{"1", "2", "3", "4"},{"w", "w", "w", "r"}});
 
     Result result1 = {
@@ -139,7 +140,7 @@ TEST_CASE("Add result to existing synonym relations, join required") {
     REQUIRE(*(rt->getList()) ==  String2DVector {
             {"1", "1", "1", "1", "1", "1", "2", "2"},
             {"w", "w", "w", "r", "r", "r", "w", "w"},
-            {"x", "y", "z", "x", "y", "z", "x", "y"}
+            {"x", "y", "z", "x", "y", "z", "y", "x"}
         });
 
     // merge tuple into rt, two common s

@@ -49,7 +49,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   } catch (qp::QPTokenizerException e) {
       std::cout << "Invalid Syntax: " << e.what();
   } catch (qp::QPEvaluatorException e) {
-      // TODO Add results
+      std::cout << "Evaluator exception: " << e.what();
   }
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.

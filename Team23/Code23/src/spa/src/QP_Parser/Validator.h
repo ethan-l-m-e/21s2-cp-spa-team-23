@@ -44,7 +44,7 @@ namespace qp {
         void checkArguments(std::vector<std::string>&, std::map<std::string, std::string>&);
         void checkSynonymIsDeclared(std::string&, std::map<std::string, std::string>&);
 
-        // Helper functions to validate different such that clauses
+        // Helper functions to validate different such that optimizeQueryClauses
         void handleSuchThatStatementClause(std::map<std::string, std::string>&, std::vector<std::string>&);
         void handleVariableRelationshipClause(std::map<std::string, std::string>&, SuchThatClauseToken&);
         void handleCallsAffectsClauses(SuchThatClauseToken&, std::map<std::string, std::string>&);
@@ -53,7 +53,7 @@ namespace qp {
         void checkSecondArgForVariableClauses(std::string&, std::map<std::string, std::string>&);
         void checkProcAssignArgument(std::string&, std::string&, std::map<std::string, std::string>&);
 
-        // Helper functions for Validating Pattern clauses
+        // Helper functions for Validating Pattern optimizeQueryClauses
         void validatePatternFirstArgument(std::map<std::string, std::string>&, std::string&);
         void validateAttrRefArgument(std::string&, std::map<std::string, std::string>&);
 

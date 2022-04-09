@@ -83,47 +83,69 @@ PKB* generateSamplePKB() {
     PKB *testPKB = PKB::getInstance();
     testPKB->clearPKB();
     Parser::resetStatementNumber();
+
+
+
     ReadNode* n1 = Parser::parseRead(s1);
+    AssignNode* n2 = Parser::parseAssign(s2);
+    AssignNode* n3 = Parser::parseAssign(s3);
+    PrintNode* n4 = Parser::parsePrint(s4);
+    WhileNode* n5 = Parser::parseWhile(s5);
+    CallNode* n6 = Parser::parseCall(s6);
+    IfNode* n7 = Parser::parseIf(s7);
+    AssignNode* n8 = dynamic_cast<AssignNode*>(((*n7).getThenStmtLst())[0]);
+    AssignNode* n9 = dynamic_cast<AssignNode*>(((*n7).getElseStmtLst())[0]);
+    AssignNode* n10 = Parser::parseAssign(s10);
+    PrintNode* n11 = Parser::parsePrint(s11);
+
+    StatementList statementList;
+    statementList.push_back(n1);
+    statementList.push_back(n2);
+    statementList.push_back(n3);
+    statementList.push_back(n4);
+    statementList.push_back(n5);
+    statementList.push_back(n6);
+    statementList.push_back(n7);
+    statementList.push_back(n8);
+    statementList.push_back(n9);
+    statementList.push_back(n10);
+    statementList.push_back(n11);
+
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+
     testPKB->statement.statements.addStatement(n1);
     testPKB->statement.readStatements.addStatement(n1);
 
-    AssignNode* n2 = Parser::parseAssign(s2);
     testPKB->statement.statements.addStatement(n2);
     testPKB->statement.assignStatements.addStatement(n2);
 
-    AssignNode* n3 = Parser::parseAssign(s3);
     testPKB->statement.statements.addStatement(n3);
     testPKB->statement.assignStatements.addStatement(n3);
 
-    PrintNode* n4 = Parser::parsePrint(s4);
     testPKB->statement.statements.addStatement(n4);
     testPKB->statement.printStatements.addStatement(n4);
 
-    WhileNode* n5 = Parser::parseWhile(s5);
     testPKB->statement.statements.addStatement(n5);
     testPKB->statement.whileStatements.addStatement(n5);
 
-    CallNode* n6 = Parser::parseCall(s6);
     testPKB->statement.statements.addStatement(n6);
     testPKB->statement.callStatements.addStatement(n6);
 
-    IfNode* n7 = Parser::parseIf(s7);
     testPKB->statement.statements.addStatement(n7);
     testPKB->statement.ifStatements.addStatement(n7);
 
-    AssignNode* n8 = dynamic_cast<AssignNode*>(((*n7).getThenStmtLst())[0]);
     testPKB->statement.statements.addStatement(n8);
     testPKB->statement.assignStatements.addStatement(n8);
 
-    AssignNode* n9 = dynamic_cast<AssignNode*>(((*n7).getElseStmtLst())[0]);
     testPKB->statement.statements.addStatement(n9);
     testPKB->statement.assignStatements.addStatement(n9);
 
-    AssignNode* n10 = Parser::parseAssign(s10);
     testPKB->statement.statements.addStatement(n10);
     testPKB->statement.assignStatements.addStatement(n10);
 
-    PrintNode* n11 = Parser::parsePrint(s11);
     testPKB->statement.statements.addStatement(n11);
     testPKB->statement.printStatements.addStatement(n11);
 
@@ -245,31 +267,47 @@ PKB* generateSamplePKBForPatternMatchingAssign() {
     testPKB->entity.variables.add("y");
     testPKB->entity.variables.add("z");
 
+
     AssignNode* n1 = Parser::parseAssign(a1);
+    AssignNode* n2 = Parser::parseAssign(a2);
+    AssignNode* n3 = Parser::parseAssign(a3);
+    AssignNode* n4 = Parser::parseAssign(a4);
+    AssignNode* n5 = Parser::parseAssign(a5);
+    AssignNode* n6 = Parser::parseAssign(a6);
+    AssignNode* n7 = Parser::parseAssign(a7);
+
+    StatementList statementList;
+    statementList.push_back(n1);
+    statementList.push_back(n2);
+    statementList.push_back(n3);
+    statementList.push_back(n4);
+    statementList.push_back(n5);
+    statementList.push_back(n6);
+    statementList.push_back(n7);
+
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
+
     testPKB->statement.statements.addStatement(n1);
     testPKB->statement.assignStatements.addStatement(n1);
 
-    AssignNode* n2 = Parser::parseAssign(a2);
     testPKB->statement.statements.addStatement(n2);
     testPKB->statement.assignStatements.addStatement(n2);
 
-    AssignNode* n3 = Parser::parseAssign(a3);
     testPKB->statement.statements.addStatement(n3);
     testPKB->statement.assignStatements.addStatement(n3);
 
-    AssignNode* n4 = Parser::parseAssign(a4);
     testPKB->statement.statements.addStatement(n4);
     testPKB->statement.assignStatements.addStatement(n4);
 
-    AssignNode* n5 = Parser::parseAssign(a5);
     testPKB->statement.statements.addStatement(n5);
     testPKB->statement.assignStatements.addStatement(n5);
 
-    AssignNode* n6 = Parser::parseAssign(a6);
     testPKB->statement.statements.addStatement(n6);
     testPKB->statement.assignStatements.addStatement(n6);
 
-    AssignNode* n7 = Parser::parseAssign(a7);
     testPKB->statement.statements.addStatement(n7);
     testPKB->statement.assignStatements.addStatement(n7);
 
@@ -310,6 +348,20 @@ PKB* generateSamplePKBForPatternMatchingCondition() {
     WhileNode* n1 = Parser::parseWhile(w1);
     WhileNode* n2 = Parser::parseWhile(w2);
     WhileNode* n3 = Parser::parseWhile(w3);
+    AssignNode* n4 = Parser::parseAssign(a4);
+    IfNode* n5 = Parser::parseIf(i5);
+
+    StatementList statementList;
+    statementList.push_back(n1);
+    statementList.push_back(n2);
+    statementList.push_back(n3);
+    statementList.push_back(n4);
+    statementList.push_back(n5);
+
+
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
 
     testPKB->statement.statements.addStatement(n1);
     testPKB->statement.statements.addStatement(n2);
@@ -319,13 +371,12 @@ PKB* generateSamplePKBForPatternMatchingCondition() {
     testPKB->statement.whileStatements.addStatement(n2);
     testPKB->statement.whileStatements.addStatement(n3);
 
-    AssignNode* n4 = Parser::parseAssign(a4);
     testPKB->statement.statements.addStatement(n4);
     testPKB->statement.assignStatements.addStatement(n4);
 
-    IfNode* n5 = Parser::parseIf(i5);
     testPKB->statement.statements.addStatement(n5);
     testPKB->statement.ifStatements.addStatement(n5);
+
     return testPKB;
 }
 
@@ -345,22 +396,34 @@ PKB* generateAttrRefPKB() {
     Parser::resetStatementNumber();
 
     AssignNode* n1 = Parser::parseAssign(s1);
+    WhileNode* n2 = Parser::parseWhile(s2);
+    PrintNode* n3 = Parser::parsePrint(s3);
+    WhileNode* n4 = Parser::parseWhile(s4);
+    ReadNode* n5 = Parser::parseRead(s5);
+
+    StatementList statementList;
+    statementList.push_back(n1);
+    statementList.push_back(n2);
+    statementList.push_back(n3);
+    statementList.push_back(n4);
+    statementList.push_back(n5);
+
+    ProcNameNode nameNode = ProcNameNode("procedure");
+    ProcedureNode procedureNode = ProcedureNode(&nameNode, statementList);
+    EntityExtractor::assignProcedureToNodes(&procedureNode, &procedureNode);
+
     testPKB->statement.statements.addStatement(n1);
     testPKB->statement.assignStatements.addStatement(n1);
 
-    WhileNode* n2 = Parser::parseWhile(s2);
     testPKB->statement.statements.addStatement(n2);
     testPKB->statement.whileStatements.addStatement(n2);
 
-    PrintNode* n3 = Parser::parsePrint(s3);
     testPKB->statement.statements.addStatement(n3);
     testPKB->statement.printStatements.addStatement(n3);
 
-    WhileNode* n4 = Parser::parseWhile(s4);
     testPKB->statement.statements.addStatement(n4);
     testPKB->statement.whileStatements.addStatement(n4);
 
-    ReadNode* n5 = Parser::parseRead(s5);
     testPKB->statement.statements.addStatement(n5);
     testPKB->statement.readStatements.addStatement(n5);
 

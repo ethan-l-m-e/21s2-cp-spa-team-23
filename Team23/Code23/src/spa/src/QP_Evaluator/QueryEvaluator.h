@@ -16,17 +16,23 @@ using std::string;
 using std::list;
 
 class QueryEvaluator {
-private:
-    PKB* pkb;
 public:
-    explicit QueryEvaluator(PKB* pkb) : pkb(pkb) { }
+    explicit QueryEvaluator(PKB *pkb) : pkb(pkb) {}
 
-    list<string> evaluate(Query*);
+    list<string> evaluate(Query *);
 
-    ClauseEvaluator* generateEvaluator(SuchThatClause& clause, unordered_map<string, DesignEntity>&);
+    static list<string> generateResultString(ResultTable *);
 
-    static list<string> generateResultString(ResultTable*);
+private:
+    PKB *pkb;
+    Query *query;
+
+    ClauseEvaluator *generateEvaluator(SuchThatClause &clause, unordered_map<string, DesignEntity> &);
+
+    unordered_set<string> getSelectedSynonyms();
+
+    void mergeToFinalResultTable(ResultTable *finalResultTable, unordered_map<int, ResultTable *> &groupedResultTables,
+                                 bool isFalse);
 };
-
 
 #endif //SPA_QUERYEVALUATOR_H

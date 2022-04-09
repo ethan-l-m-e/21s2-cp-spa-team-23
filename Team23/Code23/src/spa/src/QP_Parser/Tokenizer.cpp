@@ -161,7 +161,7 @@ void Tokenizer::getWithClauseToken(std::string& pql, QueryToken& queryToken) {
     std::smatch sm;
     std::vector<std::string> withClauseStrings = getSplitStringsWithRegex(pql, WITH_CL, ATTR_COMPARE);
 
-    // Split with clauses into each with clause substring
+    // Split with optimizeQueryClauses into each with clause substring
     std::vector<std::pair<std::string, std::string>>* withClauses = new std::vector<std::pair<std::string, std::string>>();
 
     for (std::string withClause : withClauseStrings) {
@@ -188,7 +188,7 @@ std::vector<std::string> Tokenizer::getSplitStringsWithRegex(std::string pql, st
 
     std::vector<std::string> clauseStrings = std::vector<std::string>();
 
-    // Separate clauses to individual clause
+    // Separate optimizeQueryClauses to individual clause
     for (std::string clause : clauses) {
         while (std::regex_search (clause, sm, std::regex(singleClauseReg))) {
             std::string x = sm[0];

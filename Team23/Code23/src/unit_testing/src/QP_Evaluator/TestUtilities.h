@@ -6,6 +6,7 @@
 #include "QP_Evaluator/QueryEvaluator.h"
 #include "SourceProcessor/Parser.h"
 #include "SourceProcessor/DesignExtractor.h"
+#include "SourceProcessor/EntityExtractor.h"
 
 #pragma once
 
