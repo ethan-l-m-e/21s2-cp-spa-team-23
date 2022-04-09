@@ -62,6 +62,8 @@ private:
 public:
     QueryOptimizer(Query* query): query{query}{}
     void groupClauses();
+    void groupClausesWithCommonSynonyms(vector<Clause*> allClauses);
+    void groupClausesBasic(vector<Clause*> allClauses);
     vector<GroupedClause> getClauses();
     unordered_set<int>* getGroups();
 

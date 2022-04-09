@@ -18,6 +18,19 @@ void QueryOptimizer::groupClauses(){
         allClauses.emplace_back(&withClause);
     }
 
+    if(allClauses.size() > 3) {
+        groupClausesWithCommonSynonyms(allClauses);
+    } else {
+        groupClausesBasic(allClauses);
+    }
+
+    assignWeights(&rearrangedClauses);
+    // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
+    std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
+    setGroups();
+}
+
+void QueryOptimizer::groupClausesWithCommonSynonyms(vector<Clause*> allClauses){
     setSynonymIndices();
 
     // disjoint set algorithm is used to identify which group a synonym belongs to
@@ -62,31 +75,23 @@ void QueryOptimizer::groupClauses(){
         GroupedClause newClause = {clause, group};
         rearrangedClauses.emplace_back(newClause);
     }
+}
 
-    assignWeights(&rearrangedClauses);
+void QueryOptimizer::groupClausesBasic(vector<Clause*> allClauses){
+
+    auto numOfClauses = allClauses.size();
+
+    // GroupedClause stores a pointer to the clause and the group number for the clause, append it to the output vector
+    for(int i = 0; i < numOfClauses; i ++) {
+        Clause* clause = allClauses[i];
+        GroupedClause newClause = {clause, 0};
+        rearrangedClauses.emplace_back(newClause);
+    }
 
     // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
     std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
 
     setGroups();
-
-    // for testing
-    /*
-    for(GroupedClause gc : rearrangedClauses) {
-        if (dynamic_cast<WithClause*>(gc.clause)) {
-            auto *c = dynamic_cast<WithClause*>(gc.clause);
-            std::cout<< c->getName() << " group: " << gc.group << std::endl;
-        }
-        else if (dynamic_cast<SuchThatClause*>(gc.clause)){
-            auto *c = dynamic_cast<SuchThatClause *>(gc.clause);
-            std::cout<< c->getName() << " group: " << gc.group << std::endl;
-        }
-        else if (dynamic_cast<PatternClause*>(gc.clause)){
-            auto *c = dynamic_cast<PatternClause *>(gc.clause);
-            std::cout<< c->getName() << " group: " << gc.group << std::endl;
-        }
-    }
-    */
 }
 
 std::vector<GroupedClause> QueryOptimizer::getClauses() {
