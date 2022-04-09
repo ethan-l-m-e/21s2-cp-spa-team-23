@@ -84,18 +84,19 @@ list<string> QueryEvaluator::evaluate(Query* query) {
             for (auto map: groupedResultTables) {
                 auto synonymList = map.second->getHeader();
                 unordered_set<string> synonyms (synonymList->begin(),synonymList->end());
+                vector<vector<string>> selectedColumns;
+                vector<string> selectedSynonymHeaders;
                 for (auto synonym : selectedSynonyms) {
-                    vector<vector<string>> selectedColumns;
-                    vector<string> selectedSynonymHeaders;
                     if (synonyms.find(synonym) != synonyms.end()) {
                         auto column = map.second->getColumn(synonym);
                         selectedColumns.emplace_back(*column);
                         selectedSynonymHeaders.emplace_back(synonym);
                     }
-
-                    if(!selectedColumns.empty())
-                        finalResultTable->mergeColumnsToTable(selectedColumns, selectedSynonymHeaders);
                 }
+
+                if(!selectedColumns.empty())
+                    finalResultTable->mergeColumnsToTable(selectedColumns, selectedSynonymHeaders);
+
             }
         }
     }
