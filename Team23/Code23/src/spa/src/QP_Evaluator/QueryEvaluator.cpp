@@ -63,43 +63,9 @@ list<string> QueryEvaluator::evaluate(Query* query) {
             throw qp::QPEvaluatorException("Invalid clause type");
         }
     }
+
     auto* finalResultTable = new ResultTable();
-
-    unordered_set<string> selectedSynonyms;
-    for (Argument synonym: query->getResultClause()->argList) {
-        if (synonym.argumentType == ArgumentType::ATTR_REF) {
-            auto attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
-            selectedSynonyms.insert(attrRef.first);
-        } else if (synonym.argumentType == ArgumentType::SYNONYM) {
-            selectedSynonyms.insert(std::get<string>(synonym.argumentValue));
-        } else if (synonym.argumentType == ArgumentType::BOOLEAN) {
-            finalResultTable->enableBooleanResult();
-        }
-    }
-
-    if (isFalse) {
-        finalResultTable->setBooleanResult(false);
-    } else {
-        if (!selectedSynonyms.empty()) {
-            for (auto map: groupedResultTables) {
-                auto synonymList = map.second->getHeader();
-                unordered_set<string> synonyms (synonymList->begin(),synonymList->end());
-                vector<vector<string>> selectedColumns;
-                vector<string> selectedSynonymHeaders;
-                for (auto synonym : selectedSynonyms) {
-                    if (synonyms.find(synonym) != synonyms.end()) {
-                        auto column = map.second->getColumn(synonym);
-                        selectedColumns.emplace_back(*column);
-                        selectedSynonymHeaders.emplace_back(synonym);
-                    }
-                }
-
-                if(!selectedColumns.empty())
-                    finalResultTable->mergeColumnsToTable(selectedColumns, selectedSynonymHeaders);
-
-            }
-        }
-    }
+    mergeToFinalResultTable(finalResultTable, &groupedResultTables, query, isFalse);
 
     // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
@@ -184,3 +150,41 @@ list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
     return list<string> {std::begin(stringSet), std::end(stringSet)};
 }
 
+
+void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unordered_map<int, ResultTable*>* groupedResultTables, Query* query, bool isFalse) {
+
+    unordered_set<string> selectedSynonyms;
+    for (Argument synonym: query->getResultClause()->argList) {
+        if (synonym.argumentType == ArgumentType::ATTR_REF) {
+            auto attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
+            selectedSynonyms.insert(attrRef.first);
+        } else if (synonym.argumentType == ArgumentType::SYNONYM) {
+            selectedSynonyms.insert(std::get<string>(synonym.argumentValue));
+        } else if (synonym.argumentType == ArgumentType::BOOLEAN) {
+            finalResultTable->enableBooleanResult();
+        }
+    }
+
+    if (isFalse) {
+        finalResultTable->setBooleanResult(false);
+        return;
+    }
+    if (!selectedSynonyms.empty()) {
+        for (auto map: *groupedResultTables) {
+            auto synonymList = map.second->getHeader();
+            unordered_set<string> synonyms(synonymList->begin(), synonymList->end());
+            vector<vector<string>> selectedColumns;
+            vector<string> selectedSynonymHeaders;
+            for (auto synonym: selectedSynonyms) {
+                if (synonyms.find(synonym) != synonyms.end()) {
+                    auto column = map.second->getColumn(synonym);
+                    selectedColumns.emplace_back(*column);
+                    selectedSynonymHeaders.emplace_back(synonym);
+                }
+            }
+            if (!selectedColumns.empty())
+                finalResultTable->mergeColumnsToTable(selectedColumns, selectedSynonymHeaders);
+
+        }
+    }
+}
