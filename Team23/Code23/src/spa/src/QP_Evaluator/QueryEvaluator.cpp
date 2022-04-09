@@ -7,11 +7,11 @@
 #include "QP_Parser/Exception.h"
 #include "QP_Evaluator/ClauseEvaluators/ClauseEvaluatorCollection.h"
 
-list<string> QueryEvaluator::evaluate(Query* query) {
+list<string> QueryEvaluator::evaluate(Query* queryObj) {
 
+    query = queryObj;
     auto* optimizer = new QueryOptimizer(query);
     optimizer->groupClauses();
-    std::vector<GroupedClause> groupedClauses = optimizer->getClauses();
 
     unordered_map<int, ResultTable*> groupedResultTables;
     for(const auto& group: *optimizer->getGroups()) {
@@ -20,11 +20,10 @@ list<string> QueryEvaluator::evaluate(Query* query) {
 
     bool isFalse = false;
 
-    for (GroupedClause gc : groupedClauses) {
+    for (GroupedClause gc : *optimizer->getClauses()) {
         if (dynamic_cast<WithClause*>(gc.clause)) {
             // Create ClauseEvaluators and evaluate each with clause
             auto* withClause = dynamic_cast<WithClause*>(gc.clause);
-            //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), withClause, pkb);
             bool withResult = withClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete withClauseEvaluator;
@@ -37,7 +36,6 @@ list<string> QueryEvaluator::evaluate(Query* query) {
         else if (dynamic_cast<SuchThatClause*>(gc.clause)){
             // Create ClauseEvaluators and evaluate each suchThat clause
             auto* suchThatClause = dynamic_cast<SuchThatClause *>(gc.clause);
-            //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto suchThatClauseEvaluator = generateEvaluator(*suchThatClause, *query->getDeclarations());
             bool suchThatResult = suchThatClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete suchThatClauseEvaluator;
@@ -50,7 +48,6 @@ list<string> QueryEvaluator::evaluate(Query* query) {
         else if (dynamic_cast<PatternClause*>(gc.clause)){
             // Create ClauseEvaluators and evaluate each pattern clause
             auto* patternClause = dynamic_cast<PatternClause *>(gc.clause);
-            //std::cout<< clause->getName() << " group: " << gc.group << std::endl;
             auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), patternClause, pkb);
             bool patternResult = patternClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete patternClauseEvaluator;
@@ -65,7 +62,7 @@ list<string> QueryEvaluator::evaluate(Query* query) {
     }
 
     auto* finalResultTable = new ResultTable();
-    mergeToFinalResultTable(finalResultTable, &groupedResultTables, query, isFalse);
+    mergeToFinalResultTable(finalResultTable, groupedResultTables, isFalse);
 
     // Evaluate result clause and output the result
     auto* resultClauseEvaluator = new ResultClauseEvaluator(query->getDeclarations(), query->getResultClause(), pkb);
@@ -151,9 +148,10 @@ list<string> QueryEvaluator::generateResultString(ResultTable* resultTable) {
 }
 
 
-void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unordered_map<int, ResultTable*>* groupedResultTables, Query* query, bool isFalse) {
+void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unordered_map<int, ResultTable*>& groupedResultTables, bool isFalse) {
 
     unordered_set<string> selectedSynonyms;
+
     for (Argument synonym: query->getResultClause()->argList) {
         if (synonym.argumentType == ArgumentType::ATTR_REF) {
             auto attrRef = std::get<std::pair<string, AttrName>>(synonym.argumentValue);
@@ -169,8 +167,9 @@ void QueryEvaluator::mergeToFinalResultTable(ResultTable* finalResultTable, unor
         finalResultTable->setBooleanResult(false);
         return;
     }
+
     if (!selectedSynonyms.empty()) {
-        for (auto map: *groupedResultTables) {
+        for (auto map: groupedResultTables) {
             auto synonymList = map.second->getHeader();
             unordered_set<string> synonyms(synonymList->begin(), synonymList->end());
             vector<vector<string>> selectedColumns;

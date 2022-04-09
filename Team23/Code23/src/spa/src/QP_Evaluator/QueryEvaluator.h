@@ -18,6 +18,7 @@ using std::list;
 class QueryEvaluator {
 private:
     PKB *pkb;
+    Query *query;
 public:
     explicit QueryEvaluator(PKB *pkb) : pkb(pkb) {}
 
@@ -27,8 +28,7 @@ public:
 
     static list<string> generateResultString(ResultTable *);
 
-    void mergeToFinalResultTable(ResultTable *finalResultTable, unordered_map<int, ResultTable *> *groupedResultTables,
-                                 Query *query, bool isFalse);
+    void mergeToFinalResultTable(ResultTable *finalResultTable, unordered_map<int, ResultTable *>& groupedResultTables, bool isFalse);
 };
 
 #endif //SPA_QUERYEVALUATOR_H

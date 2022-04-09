@@ -251,10 +251,11 @@ void ResultTable::innerJoin(size_t index, unordered_map<string,vector<string>> m
     size_t height = getTableHeight();
     size_t width = getTableWidth();
     std::unordered_set<int> deletedRows;
+    vector<string> referenceCol = tableEntries[index];
     vector<string> newCol;
 
     for (int r = 0; r < height; r++) {
-        auto it = map.find(tableEntries[index][r]);
+        auto it = map.find(referenceCol[r]);
         if (it == map.end()) {
             deletedRows.insert(r);
         } else {
@@ -266,7 +267,7 @@ void ResultTable::innerJoin(size_t index, unordered_map<string,vector<string>> m
         std::vector<std::string> newValues;
         for (int r = 0; r < height; r++) {
             if(deletedRows.find(r) != deletedRows.end()) continue;
-            auto it = map.find(tableEntries[index][r]);
+            auto it = map.find(referenceCol[r]);
             newValues.insert(newValues.end(), (it->second).size(), tableEntries[c][r]);
         }
         tableEntries[c] = newValues;

@@ -25,7 +25,6 @@ void QueryOptimizer::groupClauses(){
     }
 
     assignWeights(&rearrangedClauses);
-    // sort the vector such that  1.clauses with no synonyms at the front  2. clause with common synonyms are next to each other.
     std::sort(rearrangedClauses.begin(), rearrangedClauses.end());
     setGroups();
 }
@@ -94,8 +93,8 @@ void QueryOptimizer::groupClausesBasic(vector<Clause*> allClauses){
     setGroups();
 }
 
-std::vector<GroupedClause> QueryOptimizer::getClauses() {
-    return rearrangedClauses;
+std::vector<GroupedClause>* QueryOptimizer::getClauses() {
+    return &rearrangedClauses;
 };
 
 void QueryOptimizer::assignWeights(std::vector<GroupedClause>* groupedClauses) {

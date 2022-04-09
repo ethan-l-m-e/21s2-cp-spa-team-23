@@ -64,7 +64,7 @@ public:
     void groupClauses();
     void groupClausesWithCommonSynonyms(vector<Clause*> allClauses);
     void groupClausesBasic(vector<Clause*> allClauses);
-    vector<GroupedClause> getClauses();
+    vector<GroupedClause>* getClauses();
     unordered_set<int>* getGroups();
 
     void assignWeights(std::vector<GroupedClause>*);
