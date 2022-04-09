@@ -30,7 +30,7 @@ string const IF_IDENTIFIER  = "^( |\n|\t)*(if)( |\n|\t)*(\\()" + COND_EXPR_IDENT
 
 string const PROCEDURE_IDENTIFIER = "^( |\n|\t)*(procedure)( |\n|\t)+(" + PROC_NAME + ")( |\n|\t)*(\\{)(.*)" ;
 string const ASSIGN_IDENTIFIER = "^( |\n|\t)*" + VAR_NAME + "( |\n|\t)*(=)( |\n|\t)*(" + EXPR_TERM_IDENTIFIER + "|"
-        + "[\\(]*(" + BASE_CASE_REGEX + ")[\\)]*"
+        + "[\\(]*( |\n|\t)*(" + BASE_CASE_REGEX + ")( |\n|\t)*[\\)]*"
         + ")( |\n|\t)*(;)(.*)";
 
 string const STMT_IDENTIFIER = "(" + PROCEDURE_IDENTIFIER + "|" + ASSIGN_IDENTIFIER + "|" + READ_REGEX + "|"

@@ -68,6 +68,7 @@ variable v20, v13, v12, v11, v1, vR, vIf, vUnselected; assign a, a1, a2, a3, a4,
 Select <v20, v13, v12, v11, v1, vR, vIf> such that Affects(11, a) and Modifies(a, v20) and Affects*(a1, 3) and Affects(a1, 2) and Modifies(a1, v1) with v12.varName = "v12" such that Modifies(2, v11) and Modifies(a2, v13) and Uses(a2, "pumpkin") and Modifies(r, vR) and Uses(22, vR) and Follows*(a3,r) pattern a3 (vR, _"5"_) pattern ifs (vIf,_,_) such that Modifies(ifs, "v12")
 v20 v13 v12 v11 v1 v19 v11, v20 v13 v12 v11 v1 v19 v12, v20 v13 v12 v11 v1 v19 v13
 5000
+
 14 - (20 clauses) (not sure if this one still SIGBUS error) select affected, read, modified in if
 variable v20, v13, v12, v11, v1, vR, vIf, vUnselected; assign a, a1, a2, a3, a4, a5; read r; if ifs; stmt s, s1; print pr;
 Select <v20, v13, v12, v11, v1, vR, vIf> such that Affects(11, a) and Modifies(a, v20) and Affects*(a1, 3) and Affects(a1, 2) and Modifies(a1, v1) with v12.varName = "v12" such that Modifies(2, v11) and Modifies(a2, v13) and Uses(a2, "pumpkin") and Modifies(r, vR) and Uses(22, vR) and Follows*(a3,r) pattern a3 (vR, _"5"_) pattern ifs (vIf,_,_) such that Modifies(ifs, "v12") and Affects*(a4, a5) and Uses(a5, vUnselected) and Uses(pr, vUnselected) and Parent(s, pr) and Next*(s1, pr)
