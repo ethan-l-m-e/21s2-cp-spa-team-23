@@ -124,6 +124,7 @@ void ResultTable::mergeResultToTable(Result& result) {
     // clear the table headers if there is no entry in the table left.
     if(tableEntries.empty()) {
         tableHeader = {};
+        setBooleanResult(false);
     }
 }
 
