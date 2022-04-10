@@ -7,6 +7,8 @@
 static CachedAffectsRelationship* affects = CachedAffectsRelationship::getInstance();
 
 bool CachedAffectsTRelationship::isRelationship(string lhs, string rhs) {
+    if(lhs == "1" && rhs == "10")
+        cout << "";
     bool boolResults;
     //checks if result (returning true) exist or if query is inside history
     if(pairHistory.isInHistory(lhs, rhs) || CachedManyToManyRelationship::isRelationship(lhs, rhs)) {
@@ -16,10 +18,27 @@ bool CachedAffectsTRelationship::isRelationship(string lhs, string rhs) {
     } else {
         printStmt("computing Affects* isRelationship " + lhs + " " + rhs + "\n");
         pairHistory.addToHistory(lhs, rhs);
-        boolResults = affectsTOp->computeRelation(lhs, rhs);
+        //boolResults = affectsTOp->computeRelation(lhs, rhs);
+        boolResults = computeRelation(lhs, rhs, {});
+
         if (boolResults) CachedManyToManyRelationship::setRelationship(lhs, rhs);
     }
     return boolResults;
+}
+
+bool CachedAffectsTRelationship::computeRelation(string left, string right, unordered_set<string> visitedList) {
+    if(!nextT->isRelationship(left, right)) return false;
+    if(affects->isRelationship(left, right)) return true;
+    else {
+        visitedList.insert(left);
+        unordered_set<string> left_new = affects->getRHS(left);
+        for(string leftAdj: left_new) {
+            if(left != leftAdj &&
+            (visitedList.find(leftAdj) == visitedList.end()) && computeRelation(leftAdj, right, visitedList))
+                return true;
+        }
+        return false;
+    }
 }
 
 
@@ -82,21 +101,6 @@ unordered_set<string> CachedAffectsTRelationship::getLHS(string rhs) {
         }
     }
     return results;
-}
-
-bool CachedAffectsTRelationship::computeRelation(string left, string right) {
-    if(!nextT->isRelationship(left, right)) return false;
-    if(affects->isRelationship(left, right)) {
-        return true;
-    } else {
-        unordered_set<string> left_new = affects->getRHS(left);
-
-        for(string leftAdj: left_new) {
-            if(left != leftAdj && computeRelation(leftAdj, right))
-                return true;
-        }
-        return false;
-    }
 }
 
 unordered_set<string> CachedAffectsTRelationship::computeResultSetHelper(string stmt,

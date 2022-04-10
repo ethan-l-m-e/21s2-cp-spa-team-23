@@ -13,7 +13,6 @@ bool AffectsTOperator::computeRelation(string left, string right) {
         return true;
     } else {
         stmtSetStr left_new = affectsOperator->computeRHS(left);
-
         for(stmtStr leftAdj: left_new) {
             if(left != leftAdj && computeRelation(leftAdj, right))
                     return true;
