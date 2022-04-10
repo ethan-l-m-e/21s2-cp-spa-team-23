@@ -107,20 +107,20 @@ void QueryOptimizer::assignWeights(std::vector<GroupedClause>* groupedClauses) {
 void QueryOptimizer::setWeightByClause(GroupedClause* clause) {
     std::pair<int, int> numSynonymConst = getNumSynonymConst(&clause->clause->argList);
     if (numSynonymConst.second == 2) {
-        clause->weight = 0;
+        clause->weight = CONST_WEIGHT;
     } else if (numSynonymConst.first == 1 && numSynonymConst.second == 1) {
-        clause->weight = 0.1;
+        clause->weight = SINGLE_CONST_WEIGHT;
     } else if (dynamic_cast<WithClause*>(clause->clause)) {
-        clause->weight = 0.8;
+        clause->weight = WITH_CLAUSE_WEIGHT;
     } else if (dynamic_cast<PatternClause*>(clause->clause)) {
-        clause->weight = 0.9;
+        clause->weight = PATTERN_CLAUSE_WEIGHT;
     } else {
         SuchThatClause suchThatClause = *dynamic_cast<SuchThatClause*>(clause->clause);
-        clause->weight = 0.2;
+        clause->weight = SUCH_THAT_CLAUSE_WEIGHT;
         if (suchThatClause.relRef == RelRef::NEXT_T) {
-            clause->weight = 0.6;
+            clause->weight = NEXT_T_CLAUSE_WEIGHT;
         } else if (suchThatClause.relRef == RelRef::AFFECTS || suchThatClause.relRef == RelRef::AFFECTS_T) {
-            clause->weight = 1;
+            clause->weight = AFFECTS_CLAUSE_WEIGHT;
         }
     }
 }
