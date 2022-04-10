@@ -7,7 +7,7 @@ std::string const NZDIGIT = "[1-9]";
 std::string const IDENT = "[A-Za-z][A-Za-z|0-9]*";
 std::string const NAME = "[A-Za-z][A-Za-z|0-9]*";
 std::string const INTEGER = "(0|" + NZDIGIT + DIGIT + "*)";
-std::string const SPACE = "( )*";
+std::string const SPACE = "( )?";
 std::string const SINGLE_SPACE = "( )";
 
 std::string const SYNONYM = IDENT;
@@ -98,7 +98,7 @@ std::string const WITH_CL = SPACE + "with" + SINGLE_SPACE + ATTR_COND;
 
 std::string const SELECT_CL = SPACE + "Select" + SINGLE_SPACE + RESULT_CL + "(" + SINGLE_SPACE + SUCH_THAT_CL
                               + "|" + SINGLE_SPACE + PATTERN_CL + "|" + SINGLE_SPACE + WITH_CL + ")*" + SPACE;
-std::string const DECLARATION_REGEX = "(" + SPACE + DECLARATION + ")+";
+std::string const DECLARATION_REGEX = "(" + DECLARATION + ")+";
 std::string const PQL_FORMAT = DECLARATION_REGEX + SELECT_CL + SPACE;
 
 // regex needed for semantic validation

@@ -13,6 +13,14 @@
 using std::unordered_set;
 using std::unordered_map;
 
+const float CONST_WEIGHT = 0;
+const float SINGLE_CONST_WEIGHT = 0.1;
+const float SUCH_THAT_CLAUSE_WEIGHT = 0.2;
+const float NEXT_T_CLAUSE_WEIGHT = 0.6;
+const float WITH_CLAUSE_WEIGHT = 0.8;
+const float PATTERN_CLAUSE_WEIGHT = 0.9;
+const float AFFECTS_CLAUSE_WEIGHT = 1;
+
 /**
  * Disjoint set algorithm for finding the grouping of clauses based on common synonyms
  */
