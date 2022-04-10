@@ -30,41 +30,35 @@ list<string> QueryEvaluator::evaluate(Query* queryObj) {
     bool isFalse = false;
 
     for (GroupedClause gc: *optimizer->getClauses()) {
+        bool result;
         if (dynamic_cast<WithClause *>(gc.clause)) {
             // Create ClauseEvaluators and evaluate each with clause, merge the result to the corresponding result table
             auto *withClause = dynamic_cast<WithClause *>(gc.clause);
             auto withClauseEvaluator = new WithClauseEvaluator(query->getDeclarations(), withClause, pkb);
-            bool withResult = withClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
+            result = withClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete withClauseEvaluator;
-            // if the clause evaluates to false, terminate evaluation early.
-            if (!withResult) {
-                isFalse = true;
-                break;
-            }
+
         } else if (dynamic_cast<SuchThatClause *>(gc.clause)) {
             // Create ClauseEvaluators and evaluate each suchThat clause, merge the result to the corresponding result table
             auto *suchThatClause = dynamic_cast<SuchThatClause *>(gc.clause);
             auto suchThatClauseEvaluator = generateEvaluator(*suchThatClause, *query->getDeclarations());
-            bool suchThatResult = suchThatClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
+            result = suchThatClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete suchThatClauseEvaluator;
-            // if the clause evaluates to false, terminate evaluation early.
-            if (!suchThatResult) {
-                isFalse = true;
-                break;
-            }
+
         } else if (dynamic_cast<PatternClause *>(gc.clause)) {
             // Create ClauseEvaluators and evaluate each pattern clause, merge the result to the corresponding result table
             auto *patternClause = dynamic_cast<PatternClause *>(gc.clause);
             auto patternClauseEvaluator = new PatternClauseEvaluator(query->getDeclarations(), patternClause, pkb);
-            bool patternResult = patternClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
+            result = patternClauseEvaluator->evaluateClause(groupedResultTables.at(gc.group));
             delete patternClauseEvaluator;
-            // if the clause evaluates to false, terminate evaluation early.
-            if (!patternResult) {
-                isFalse = true;
-                break;
-            }
+
         } else {
             throw qp::QPEvaluatorException("Invalid clause type");
+        }
+        // if the clause evaluates to false, terminate evaluation early.
+        if (!result) {
+            isFalse = true;
+            break;
         }
     }
 

@@ -1,5 +1,5 @@
 function autotest() {
-  ../Code23/cmake-build-debug-/src/autotester/autotester $1 $2 $3
+  ../Code23/cmake-build-debug/src/autotester/autotester $1 $2 $3
 }
 OUT_PATH=../Code23/tests/
 autotest affects_source.txt affects_queries.txt ${OUT_PATH}affects_out.xml
