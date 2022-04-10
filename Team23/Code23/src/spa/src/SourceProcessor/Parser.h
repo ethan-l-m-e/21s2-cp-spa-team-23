@@ -10,6 +10,11 @@
 
 using namespace std;
 
+class InvalidSyntacticException : public std::runtime_error {
+public:
+    InvalidSyntacticException(const std::string& message = "") : std::runtime_error(message) {}
+};
+
 class Parser {
 public:
     static Node* Parse(string);

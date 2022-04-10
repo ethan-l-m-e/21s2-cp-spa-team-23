@@ -34,7 +34,7 @@ VariableNode* Parser::parseVar(string input) {
     if(check == VARIABLE_NAME) {
         return new VariableNode(variable);
     } else {
-        throw "Invalid varname format: '" + variable + "'\n";
+        throw InvalidSyntacticException("Invalid varname format: '" + variable + "'\n");
     }
 }
 
@@ -45,7 +45,7 @@ ConstValueNode *Parser::parseConst(string input) {
     if(check == CONSTANT_VALUE) {
         return new ConstValueNode(constValue);
     } else {
-        throw "Invalid const format: '" + constValue + "'\n";
+        throw InvalidSyntacticException("Invalid const format: '" + constValue + "'\n");
     }
 }
 
@@ -77,7 +77,7 @@ bool isNumber(string s) {
 Expression Parser::parseExpression(string expression) {
     expression = StringFormatter::removeTrailingSpace(StringFormatter::removeMatchingFrontBackBrackets(expression));
     if(!Identifier::checkParenthesesCorrectness(expression, "()"))
-        throw "incorrect brackets in expression: " + expression + "\n";
+        throw InvalidSyntacticException("incorrect brackets in expression: " + expression + "\n");
     if (isLeaf(expression)) {
         if (isNumber(expression)) {
             return Parser::parseConst(expression);
@@ -86,8 +86,8 @@ Expression Parser::parseExpression(string expression) {
     }
     vector<string> tokens;
     SourceTokenizer::extractExpression(expression, tokens);
-    if(tokens[0] == "") throw "left side of binary operator cannot be empty";
-    if(tokens[1] == "") throw "right side of binary operator cannot be empty";
+    if(tokens[0] == "") throw InvalidSyntacticException("left side of binary operator cannot be empty");
+    if(tokens[1] == "") throw InvalidSyntacticException("right side of binary operator cannot be empty");
     Expression left = parseExpression(tokens[0]);
     Expression right = parseExpression(tokens[1]);
     return new BinaryOperatorNode(left, right, tokens[2]);
