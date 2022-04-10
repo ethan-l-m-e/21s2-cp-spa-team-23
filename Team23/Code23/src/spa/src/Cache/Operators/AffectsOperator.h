@@ -10,8 +10,6 @@
 
 class AffectsOperator: protected CacheOperator {
 public:
-    AffectsOperator(PKB *pkb);
-
     bool computeRelation(string left, string right) override;
     stmtSetStr computeLHS(string right) override;
     stmtSetStr computeRHS(string left) override;
@@ -30,31 +28,12 @@ protected:
 
     variableSet getVarModifiedBy(string stmt);
     variableSet getVarUsedBy(string stmt);
-    static stmtSetStr getStmtModifying(string var);
-    static stmtSetStr getStmtUsing(string var);
 
     bool isContainerStatement(string stmtNo);
 
     stmtSetStr removeContainerFromSet(unordered_set<string> &stmtSet);
 
-    stmtSetNum static DFSResultSetRecursion(NodeCFG *currentNode, unordered_map<int, bool> &visited, unordered_set<int> resultSet,
-                          unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *));
-
     static bool IsReachableForward(NodeCFG *srcNode, NodeCFG *destNode, unordered_map<int, bool> &visited, vector<int> &path);
-
-    /*
-    stmtSetNum static searchForAffectsBefore(NodeCFG *rightNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
-
-    stmtSetNum static searchForAffectsAfter(NodeCFG *leftNode, unordered_map<int, bool> &visited, unordered_set<int> nextSet);
-
-
-    stmtSetStr
-    findResultSet(string stmt,
-                  variableSet variables,
-                  pair<stmtSetStr, stmtSetStr >(*blackAndWhiteListFoo)(string),
-                  unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *),
-                  stmtSetNum (*dfsRecursionFoo)(NodeCFG *, unordered_map<int, bool> &, unordered_set<int>));
-    */
 };
 
 

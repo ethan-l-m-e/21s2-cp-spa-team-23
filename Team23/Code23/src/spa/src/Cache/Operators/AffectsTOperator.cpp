@@ -6,7 +6,6 @@
 
 typedef std::unordered_set<string> variableSet, stmtSetStr;
 typedef  std::string stmtStr, variable;
-typedef  int statementNum;
 
 bool AffectsTOperator::computeRelation(string left, string right) {
     if(!nextTOperator->computeRelation(left, right)) return false;
