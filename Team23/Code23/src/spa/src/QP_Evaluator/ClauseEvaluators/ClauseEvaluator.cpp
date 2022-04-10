@@ -51,7 +51,7 @@ bool ClauseEvaluator::processResult(ResultTable* resultTable) {
         return false;
     }
     resultTable->mergeResultToTable(result);
-    return true;
+    return resultTable->getBooleanResult();
 }
 
 /**

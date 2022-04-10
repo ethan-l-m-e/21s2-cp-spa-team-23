@@ -12,6 +12,7 @@
 using namespace std;
 
 bool evaluateFollowsClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<OneToOneRelationship>(declarations, clause, pkb, &pkb->relationship.follows);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -19,6 +20,7 @@ bool evaluateFollowsClause(unordered_map<string, DesignEntity>* declarations, Re
 }
 
 bool evaluateFollowsTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.followsT);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -26,6 +28,7 @@ bool evaluateFollowsTClause(unordered_map<string, DesignEntity>* declarations, R
 }
 
 bool evaluateParentClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<OneToManyRelationship>(declarations, clause, pkb, &pkb->relationship.parent);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -33,6 +36,7 @@ bool evaluateParentClause(unordered_map<string, DesignEntity>* declarations, Res
 }
 
 bool evaluateParentTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.parentT);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -40,6 +44,7 @@ bool evaluateParentTClause(unordered_map<string, DesignEntity>* declarations, Re
 }
 
 bool evaluateModifiesSClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.modifiesS);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -47,6 +52,7 @@ bool evaluateModifiesSClause(unordered_map<string, DesignEntity>* declarations, 
 }
 
 bool evaluateModifiesPClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.modifiesP);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -54,6 +60,7 @@ bool evaluateModifiesPClause(unordered_map<string, DesignEntity>* declarations, 
 }
 
 bool evaluateUsesSClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.usesS);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -61,6 +68,7 @@ bool evaluateUsesSClause(unordered_map<string, DesignEntity>* declarations, Resu
 }
 
 bool evaluateUsesPClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.usesP);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -68,6 +76,7 @@ bool evaluateUsesPClause(unordered_map<string, DesignEntity>* declarations, Resu
 }
 
 bool evaluateCallsClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.calls);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -75,6 +84,7 @@ bool evaluateCallsClause(unordered_map<string, DesignEntity>* declarations, Resu
 }
 
 bool evaluateCallsTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<ManyToManyRelationship>(declarations, clause, pkb, &pkb->relationship.callsT);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -82,6 +92,7 @@ bool evaluateCallsTClause(unordered_map<string, DesignEntity>* declarations, Res
 }
 
 bool evaluateNextClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new TableClauseEvaluator<NextRelationship>(declarations, clause, pkb, &pkb->relationship.next);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
@@ -89,6 +100,7 @@ bool evaluateNextClause(unordered_map<string, DesignEntity>* declarations, Resul
 }
 
 bool evaluateNextTClause(unordered_map<string, DesignEntity>* declarations, ResultTable* resultTable, Clause *clause, PKB *pkb) {
+    resultTable->setBooleanResult(true);
     auto *suchThatClauseEvaluator = new NextTClauseEvaluator(declarations, clause, pkb);
     bool result = suchThatClauseEvaluator->evaluateClause(resultTable);
     delete suchThatClauseEvaluator;
