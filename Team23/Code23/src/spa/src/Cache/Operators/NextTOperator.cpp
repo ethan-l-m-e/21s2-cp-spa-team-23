@@ -134,13 +134,12 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
 
     if (largestValInLinear == 0) {
         //#erforms #2
-        if(pkb->relationship.parentT.isRelationship(to_string(srcVal), to_string(destVal))) {
+        if(pkb->relationship.parentT.isRelationship(to_string(srcVal), to_string(destVal)))
             return true;
-        }
 
-        if (auto loop = dynamic_cast<LoopCFG *>(srcNode)) {
+        if (auto loop = dynamic_cast<LoopCFG *>(srcNode))
             visited[loop->getNodeInLoop()->getStatementNumber()] = true;
-        }
+
         if(auto branch = dynamic_cast<BranchCFG*>(srcNode)) {
             auto lastNodeInLeft = pkb->relationship.next.
                     getCFGNode(to_string(branch->getRightNode()->getStatementNumber()-1));
