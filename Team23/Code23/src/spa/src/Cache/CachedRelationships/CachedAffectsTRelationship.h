@@ -22,7 +22,7 @@ public:
     unordered_set<string> getLHS(string rhs) override;
 
 protected:
-    bool computeRelation(string left, string right);
+    bool computeRelation(string left, string right, unordered_set<string> visitedList);
     unordered_set<string> computeResultSetHelper(string stmt, std::function<unordered_set<string>(string)> computeDirection);
     unordered_set<string> resultSetRecursionHelper(string stmt, std::function<unordered_set<string>(string)> computeDirection);
 

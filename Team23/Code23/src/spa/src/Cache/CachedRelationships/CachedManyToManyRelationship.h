@@ -11,6 +11,8 @@
 #include <vector>
 struct History {
     unordered_set<string> historySingle;
+    // `unordered_set` cannot have a tuple as a key by default, that's why I am using a `set`
+    //set<tuple<string, string>> historyPair;
     set<tuple<string, string>> historyPair;
     bool isInHistory(string key);
     void addToHistory(string key);
@@ -20,26 +22,17 @@ struct History {
 };
 
 class CachedManyToManyRelationship : public ManyToManyRelationship {
-
-    // `unordered_set` cannot have a tuple as a key by default, that's why I am using a `set`
-    //set<tuple<string, string>> historyPair;
-
 protected:
-    //bool isInHistory(string lhs, string rhs);
-    //void addToHistory(string lhs, string rhs);
     History pairHistory;
     History getLhsHistory;
     History getRhsHistory;
 
     void printStmt(string input);
 
-
 public:
     void clear() override;
 
     unordered_set<string> getAllStmtInSameProcedureAs(string stmt);
-
-    void printStmt(string input, bool in);
 };
 
 

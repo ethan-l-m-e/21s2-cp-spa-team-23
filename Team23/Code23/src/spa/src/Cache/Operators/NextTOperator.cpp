@@ -14,7 +14,7 @@ bool NextTOperator::computeRelation(string left, string right) {
         return graphMethods->DFSBoolean(leftNode,
                                         rightNode,
                                         size,
-                                        IsReachableForwardV2);
+                                        IsReachableForward_v2);
     } else {
         return graphMethods->DFSBoolean(leftNode,
                                         rightNode,
@@ -24,17 +24,6 @@ bool NextTOperator::computeRelation(string left, string right) {
 }
 
 unordered_set<string> NextTOperator::computeRHS(string left) {
-    /*
-    NodeCFG* leftNode = retrieveNode(left);
-    int size = getSize();
-    stmtSetNum resultSet;
-    resultSet = graphMethods->DFSResultSet(leftNode,
-                                           size,
-                                           graphMethods->collateAllAdjacentNodes,
-                                           graphMethods->searchNodesAlongPathAfter);
-    return convertIntToString(resultSet);
-    */
-
     if(stmtIsNotInSource(vector<string>{left})) return {};
     stmtSetStr  resultSet;
     stmtSetStr allStmtNo = pkb->statement.statements.getAllStatementNumbers();
@@ -44,10 +33,7 @@ unordered_set<string> NextTOperator::computeRHS(string left) {
         }
     }
     return resultSet;
-
-
 }
-
 
 unordered_set<string> NextTOperator::computeLHS(string right) {
     if(stmtIsNotInSource(vector<string>{right})) return {};
@@ -107,10 +93,10 @@ int NextTOperator::findLargestValue(stmtSetStr stmtSet) {
  * If any while loop is present return true, else false. Can can be expensive (due to sorting) and inconclusive,
  * so it is performed when src > dest (as src > dest is likely false unless a while loop is present)
  */
-bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
-                                       NodeCFG* destNode,
-                                       unordered_map<int, bool> &visited,
-                                       vector<int> &path) {
+bool NextTOperator::IsReachableForward_v2(NodeCFG* srcNode,
+                                          NodeCFG* destNode,
+                                          unordered_map<int, bool> &visited,
+                                          vector<int> &path) {
     int srcVal = srcNode->getStatementNumber();
     int destVal = destNode->getStatementNumber();
     visited[srcVal] = true;
@@ -130,7 +116,6 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
     if (srcVal < destVal && destVal <= largestValInLinear) {
         return true;
     }
-
 
     if (largestValInLinear == 0) {
         //#erforms #2
@@ -152,7 +137,7 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
             unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(lastNodeInLeft);
             for (NodeCFG *adjNode: adjNodes) {
                 int adjStmtNo = adjNode->getStatementNumber();
-                if (!visited[adjStmtNo] && IsReachableForwardV2(adjNode, destNode, visited, path))
+                if (!visited[adjStmtNo] && IsReachableForward_v2(adjNode, destNode, visited, path))
                     return true;
             }
         }
@@ -160,7 +145,7 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
         unordered_set<NodeCFG *> adjNodes = graphMethods->collateAllAdjacentNodes(srcNode);
         for (NodeCFG *adjNode: adjNodes) {
             int adjStmtNo = adjNode->getStatementNumber();
-            if (!visited[adjStmtNo] && IsReachableForwardV2(adjNode, destNode, visited, path))
+            if (!visited[adjStmtNo] && IsReachableForward_v2(adjNode, destNode, visited, path))
                 return true;
         }
     } else {
@@ -170,7 +155,7 @@ bool NextTOperator::IsReachableForwardV2(NodeCFG* srcNode,
 
         for (NodeCFG *adjNode: adjNodes) {
             int adjStmtNo = adjNode->getStatementNumber();
-            if (!visited[adjStmtNo] && IsReachableForwardV2(adjNode, destNode, visited, path))
+            if (!visited[adjStmtNo] && IsReachableForward_v2(adjNode, destNode, visited, path))
                 return true;
         }
     }

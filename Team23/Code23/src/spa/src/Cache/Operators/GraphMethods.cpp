@@ -44,7 +44,6 @@ bool GraphMethods::IsReachableForward(NodeCFG* srcNode,
     return false;
 }
 
-
 bool GraphMethods::DFSBoolean(NodeCFG* left, NodeCFG* right, int CFGSize,
                               bool(*dfsRecursionFoo)(NodeCFG* srcNode, NodeCFG* destNode,
                                                          unordered_map<int, bool> &visited,
@@ -57,55 +56,6 @@ bool GraphMethods::DFSBoolean(NodeCFG* left, NodeCFG* right, int CFGSize,
     }
     return false;
 }
-
-unordered_set<int> GraphMethods::DFSResultSet(NodeCFG* currentNode, int CFGSize,
-                                              unordered_set<NodeCFG*>(*getAdjFoo)(NodeCFG*),
-                                              unordered_set<int>(*dfsRecursionFoo)(NodeCFG*,
-                                                               unordered_map<int, bool>&,
-                                                                       unordered_set<int>)) {
-    unordered_map<int, bool> visited = constructVisitMap(CFGSize);
-    unordered_set<NodeCFG *> adjNode = getAdjFoo(currentNode);
-    unordered_set<int> resultNodes;
-    for (NodeCFG *node: adjNode) {
-        unordered_set<int> newSet = dfsRecursionFoo(node, visited, resultNodes);
-        resultNodes.insert(newSet.begin(), newSet.end());
-    }
-    return resultNodes;
-}
-
-
-unordered_set<int> GraphMethods::DFSResultSetRecursion(NodeCFG* currentNode,
-                                                       unordered_map<int, bool> &visited,
-                                                       unordered_set<int> resultSet,
-                                                       unordered_set<NodeCFG *> (*getAdjFoo)(NodeCFG *)) {
-    int currVal = currentNode->getStatementNumber();
-    visited[currVal] = true;
-    resultSet.insert(currVal);
-    unordered_set<NodeCFG *> adjNodes = getAdjFoo(currentNode);
-
-    unordered_set<NodeCFG *>::iterator adj;
-    for (adj = adjNodes.begin(); adj != adjNodes.end(); ++adj) {
-        NodeCFG* adjacentNode =  *adj;
-        if (!visited[adjacentNode->getStatementNumber()]) {
-            unordered_set<int> resultSetInAdjacentNode = DFSResultSetRecursion(adjacentNode, visited, resultSet, getAdjFoo);
-            resultSet.insert(resultSetInAdjacentNode.begin(), resultSetInAdjacentNode.end());
-        }
-    }
-    return resultSet;
-}
-
-unordered_set<int> GraphMethods::searchNodesAlongPathAfter(NodeCFG* leftNode,
-                                                           unordered_map<int, bool> &visited,
-                                                           unordered_set<int> nextSet) {
-    return DFSResultSetRecursion(leftNode, visited, nextSet, collateAllAdjacentNodes);
-}
-
-unordered_set<int> GraphMethods::searchNodesAlongPathBefore(NodeCFG* rightNode,
-                                                            unordered_map<int, bool> &visited,
-                                                            unordered_set<int> nextSet) {
-    return DFSResultSetRecursion(rightNode, visited, nextSet, collateAllPreviousNodes);
-}
-
 
 unordered_set<NodeCFG*> GraphMethods::collateAllPreviousNodes(NodeCFG* node) {
     unordered_map<int, NodeCFG*> nodeMap = node->getAllPreviousNode();
