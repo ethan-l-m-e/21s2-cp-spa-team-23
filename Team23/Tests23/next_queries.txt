@@ -403,19 +403,19 @@ stmt s;
 Select s such that Next*(3, 3)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 5000
-65 - [valid] select 5 next disconnected =======================================================[multiclause tests start]
+65 - [valid] select 4 next disconnected =======================================================[multiclause tests start]
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
+Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+66 - [valid] select 5 next disconnected
 stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
 Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
-66 - [valid] select 6 next disconnected
+67 - [valid] select 6 next disconnected
 stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
 Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9) and Next(s10, s11)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-5000
-67 - [valid] select 2 next disconnected
-stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19;
-Select s such that Next(s, s1) and Next(s2, s3) and Next(s4, s5) and Next(s6, s7) and Next(s8, s9)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 5000
 68 - [valid] select 3 next* disconnected

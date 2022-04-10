@@ -1,0 +1,24 @@
+procedure PatternIfWhile {
+    if (x == y1) then {
+        while (cat1 < dog1) {
+            read x;
+        }
+    } else {
+        while (a < b) {
+            read x;
+        }
+    }
+    if ((1 != apples) || (1==2)) then {
+        here = there;
+    } else {
+        everywhere = 1;
+    }
+    while ( ! (1 == 1)) {
+        read whileStmtWithNoVar;
+        if (123 != 0) then {
+            print x;
+        } else {
+            ifStmtWithNoVar = true;
+        }
+    }
+}

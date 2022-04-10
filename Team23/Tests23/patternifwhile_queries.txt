@@ -1,0 +1,110 @@
+../../../../Tests23/patternifwhile_source.txt ../../../../Tests23/patternifwhile_queries.txt ../../../tests/patternifwhile_out.xml
+if ifs;
+Select ifs pattern ifs ( _ , _ , _ )
+1, 6, 11
+5000
+1
+while w;
+Select w pattern w ( _ , _ )
+2, 4, 9
+5000
+2 - [valid] if variable synonym ========================================================================[if tests start]
+if ifs; variable v;
+Select ifs pattern ifs (v, _, _)
+1, 6
+5000
+3 - [valid] if variable name
+if ifs;
+Select ifs pattern ifs ("apples", _, _)
+6
+5000
+4 - [valid] if variable name with number
+if ifs;
+Select ifs pattern ifs ("y1", _, _)
+1
+5000
+5 - [valid] if variable name does not exist
+if ifs;
+Select ifs pattern ifs ("pear", _, _)
+none
+5000
+6 - [valid] while variable synonym ==================================================================[while tests start]
+while w; variable v;
+Select w pattern w (v, _)
+2, 4
+5000
+7 - [valid] while variable name
+while w;
+Select w pattern w ("b", _)
+4
+5000
+8 - [valid] while variable name with number
+while w;
+Select w pattern w ("cat1", _)
+2
+5000
+9 - [valid] while variable name does not exist
+while w;
+Select w pattern w ("otter", _)
+none
+5000
+10 - [invalid] non-if pattern (read) ==============================================================[invalid tests start]
+read r;
+Select r pattern r (_, _, _)
+none
+5000
+11 - [invalid] non-if pattern (print)
+print pr;
+Select pr pattern pr (_, _, _)
+none
+5000
+12 - [invalid] non-if pattern (assign)
+assign a;
+Select a pattern a (_, _, _)
+none
+5000
+13 - [invalid] non-if pattern (while)
+while w;
+Select w pattern w (_, _, _)
+none
+5000
+14 - [invalid] non-if pattern (call)
+call cl;
+Select cl pattern cl (_, _, _)
+none
+5000
+15 - [invalid] non-if pattern (procedure)
+procedure p;
+Select p pattern p (_, _, _)
+none
+5000
+16 - [invalid] non-if pattern (constant)
+constant c;
+Select c pattern c (_, _, _)
+none
+5000
+17 - [invalid] non-while pattern (read)
+read r;
+Select r pattern r (_, _)
+none
+5000
+18 - [invalid] non-while pattern (print)
+print pr;
+Select pr pattern pr (_, _)
+none
+5000
+19 - [invalid] non-while pattern (call)
+call cl;
+Select cl pattern cl (_, _)
+none
+5000
+20 - [invalid] non-while pattern (procedure)
+procedure p;
+Select p pattern p (_, _)
+none
+5000
+21 - [invalid] non-while pattern (constant)
+constant c;
+Select c pattern c (_, _)
+none
+5000
