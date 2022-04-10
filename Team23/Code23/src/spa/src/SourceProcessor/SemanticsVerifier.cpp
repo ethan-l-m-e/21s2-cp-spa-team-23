@@ -49,6 +49,21 @@ bool detectCyclicCallsRec(ProcName name,
     stack[name] = false;
     return false;
 }
+
+void SemanticsVerifier::checkIfProcIsDeclared(ProcedureList procList, vector<ProcName> procCall) {
+    for(ProcName call: procCall) {
+        bool existInProcList = false;
+        for(ProcedureNode* procedure: procList) {
+            ProcName procedureName = procedure->getProcName();
+            if(call == procedureName) {
+                existInProcList = true;
+                break;
+            }
+        }
+        if(!existInProcList) throw "\"" + call + "\" procedure is not declared in program";
+    }
+}
+
 void SemanticsVerifier::detectCyclicCalls(Node* node) {
     auto programNode = dynamic_cast<ProgramNode *>(node);
     vector<ProcedureNode *> v = programNode->getProcLst();
@@ -61,6 +76,8 @@ void SemanticsVerifier::detectCyclicCalls(Node* node) {
     for (ProcedureNode *p: v) {
         ProcName name = p->getProcName();
         vector < ProcName > NodesFromP = getAllProcedureCall(p);
+        checkIfProcIsDeclared(v, NodesFromP);
+
         GraphNode *node = new GraphNode(name, NodesFromP);
         graphNodes[name] = node;
         allProcName.push_back(name);
