@@ -30,10 +30,11 @@ vector<ProcName> getAllProcedureCall(Node* node) {
     };
 }
 
-bool detectCyclicCallsRec(ProcName name,
-                          unordered_map<ProcName, GraphNode*> graphNodes,
-                          unordered_map<ProcName, bool> visited,
-                          unordered_map<ProcName, bool> stack) {
+unordered_map<ProcName, GraphNode*> graphNodes;
+unordered_map<ProcName, bool> visited;
+unordered_map<ProcName, bool> stack;
+
+bool detectCyclicCallsRec(ProcName name) {
     if (visited[name] == false) {
         visited[name] = true;
         stack[name] = true;
@@ -42,25 +43,38 @@ bool detectCyclicCallsRec(ProcName name,
         vector<ProcName>::iterator i;
         for (i = nameList.begin(); i != nameList.end(); ++i) {
             if ((!visited[*i] &&
-                detectCyclicCallsRec(*i, graphNodes, stack, visited)) || stack[*i])
+                detectCyclicCallsRec(*i)) || stack[*i])
                 return true;
         }
     }
     stack[name] = false;
     return false;
 }
+
+void SemanticsVerifier::checkIfProcIsDeclared(ProcedureList procList, vector<ProcName> procCall) {
+    for(ProcName call: procCall) {
+        bool existInProcList = false;
+        for(ProcedureNode* procedure: procList) {
+            ProcName procedureName = procedure->getProcName();
+            if(call == procedureName) {
+                existInProcList = true;
+                break;
+            }
+        }
+        if(!existInProcList) throw "\"" + call + "\" procedure is not declared in program";
+    }
+}
+
 void SemanticsVerifier::detectCyclicCalls(Node* node) {
     auto programNode = dynamic_cast<ProgramNode *>(node);
     vector<ProcedureNode *> v = programNode->getProcLst();
-
-    unordered_map<ProcName, GraphNode *> graphNodes;
     vector < ProcName > allProcName;
-    unordered_map<ProcName, bool> visited;
-    unordered_map<ProcName, bool> stack;
 
     for (ProcedureNode *p: v) {
         ProcName name = p->getProcName();
         vector < ProcName > NodesFromP = getAllProcedureCall(p);
+        checkIfProcIsDeclared(v, NodesFromP);
+
         GraphNode *node = new GraphNode(name, NodesFromP);
         graphNodes[name] = node;
         allProcName.push_back(name);
@@ -69,7 +83,7 @@ void SemanticsVerifier::detectCyclicCalls(Node* node) {
     // perform DFS to check for recursions
     for (int i = 0; i < allProcName.size(); i++) {
         ProcName name = allProcName[i];
-        if (!visited[name] && detectCyclicCallsRec(name, graphNodes, visited, stack)) {
+        if (!visited[name] && detectCyclicCallsRec(name)) {
             cout << "cyclic call statements detected\n";
             graphNodes.clear();
             throw "cyclic calls detected\n";

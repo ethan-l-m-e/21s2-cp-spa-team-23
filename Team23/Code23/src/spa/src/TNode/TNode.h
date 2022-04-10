@@ -4,7 +4,7 @@
 
 #ifndef SPA_TNODE_H
 #define SPA_TNODE_H
-
+// This header file is need as it is the conglomeration of all the header files of Nodes
 #include "Node.h"
 #include "AssignNode.h"
 #include "BinaryOperatorNode.h"

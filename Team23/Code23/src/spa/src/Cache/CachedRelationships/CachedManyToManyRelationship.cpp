@@ -5,20 +5,6 @@
 #include "CachedManyToManyRelationship.h"
 #include "PKB/PKB.h"
 
-/*
-bool CachedManyToManyRelationship::isInHistory(string lhs, string rhs) {
-    tuple<string, string> tup = make_tuple(lhs, rhs);
-
-    return historyPair.find(tup) != historyPair.end();
-}
-
-void CachedManyToManyRelationship::addToHistory(string lhs, string rhs) {
-    tuple<string, string> tup = make_tuple(lhs, rhs);
-
-    historyPair.insert(tup);
-}
-*/
-
 unordered_set<string> CachedManyToManyRelationship::getAllStmtInSameProcedureAs(string stmt) {
     return PKB::getInstance()->statement.statements.getAllStatementNumbers();
 }

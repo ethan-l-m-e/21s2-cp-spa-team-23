@@ -20,7 +20,7 @@ bool AffectsOperator::computeRelation(string left, string right) {
     //step 0: check if left are right are both assign statements
     if(!(isAssignStmt(left) && isAssignStmt(right))) return false;
 
-    // step 1: see if same procedure, might need PKB to implement this (technically can use nextOp* but this is for optimisation
+    // step 1: see if same procedure, might need PKB to implement this (technically can use nextOp* but this is for further optimisation
 
     // step 2: check if var mod and uses
     string modifiedVar = *(getVarModifiedBy(left).begin());
