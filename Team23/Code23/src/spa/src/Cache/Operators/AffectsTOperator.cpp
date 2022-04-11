@@ -8,14 +8,19 @@ typedef std::unordered_set<string> variableSet, stmtSetStr;
 typedef  std::string stmtStr, variable;
 
 bool AffectsTOperator::computeRelation(string left, string right) {
+    return computeRelation(left, right, {});
+}
+
+bool AffectsTOperator::computeRelation(string left, string right, unordered_set<string> visited) {
     if(!nextTOperator->computeRelation(left, right)) return false;
-    if(affectsOperator->computeRelation(left, right)) {
-        return true;
-    } else {
+    if(affectsOperator->computeRelation(left, right)) return true;
+    else {
+        visited.insert(left);
         stmtSetStr left_new = affectsOperator->computeRHS(left);
         for(stmtStr leftAdj: left_new) {
-            if(left != leftAdj && computeRelation(leftAdj, right))
-                    return true;
+            if((visited.find(leftAdj) == visited.end()) &&
+            computeRelation(leftAdj, right))
+                return true;
         }
         return false;
     }
