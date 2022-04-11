@@ -16,7 +16,7 @@ void CachedManyToManyRelationship::clear() {
     getRhsHistory.clear();
 }
 
-static bool print = true;
+static bool print = false;
 
 
 void CachedManyToManyRelationship::printStmt(string input) {
