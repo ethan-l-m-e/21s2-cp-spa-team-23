@@ -33,8 +33,8 @@ bool CachedAffectsTRelationship::computeRelation(string left, string right, unor
         visitedList.insert(left);
         unordered_set<string> left_new = affects->getRHS(left);
         for(string leftAdj: left_new) {
-            if(left != leftAdj &&
-            (visitedList.find(leftAdj) == visitedList.end()) && computeRelation(leftAdj, right, visitedList))
+            if((visitedList.find(leftAdj) == visitedList.end()) &&
+                    computeRelation(leftAdj, right, visitedList))
                 return true;
         }
         return false;

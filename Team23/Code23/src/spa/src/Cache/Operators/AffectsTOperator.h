@@ -26,6 +26,8 @@ protected:
 
     stmtSetStr computeResultSetHelper(string stmt, stmtSetStr (*computeDirection)(string));
     stmtSetStr resultSetRecursionHelper(string stmt, stmtSetStr (*computeDirection)(string));
+
+    bool computeRelation(string left, string right, unordered_set<string> visited);
 };
 
 
