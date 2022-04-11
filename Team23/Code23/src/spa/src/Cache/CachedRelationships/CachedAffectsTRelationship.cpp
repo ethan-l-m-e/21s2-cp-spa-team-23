@@ -19,22 +19,32 @@ bool CachedAffectsTRelationship::isRelationship(string lhs, string rhs) {
         printStmt("computing Affects* isRelationship " + lhs + " " + rhs + "\n");
         pairHistory.addToHistory(lhs, rhs);
         //boolResults = affectsTOp->computeRelation(lhs, rhs);
-        boolResults = computeRelation(lhs, rhs, {});
+        boolResults = computeRelation(lhs, rhs);
 
         if (boolResults) CachedManyToManyRelationship::setRelationship(lhs, rhs);
     }
     return boolResults;
 }
 
-bool CachedAffectsTRelationship::computeRelation(string left, string right, unordered_set<string> visitedList) {
+
+bool CachedAffectsTRelationship::computeRelation(string left, string right) {
+    unordered_set<string> left_new = affects->getRHS(left);
+    unordered_set<string> visitedList = {};
+    for(string leftAdj: left_new) {
+        if(computeRelationRec(left, right, visitedList)) return true;
+    }
+    return false;
+}
+
+bool CachedAffectsTRelationship::computeRelationRec(string left, string right, unordered_set<string> visitedList) {
     if(!nextT->isRelationship(left, right)) return false;
     if(affects->isRelationship(left, right)) return true;
     else {
         visitedList.insert(left);
         unordered_set<string> left_new = affects->getRHS(left);
         for(string leftAdj: left_new) {
-            if(left != leftAdj &&
-            (visitedList.find(leftAdj) == visitedList.end()) && computeRelation(leftAdj, right, visitedList))
+            if((visitedList.find(leftAdj) == visitedList.end()) &&
+               computeRelationRec(leftAdj, right, visitedList))
                 return true;
         }
         return false;
