@@ -1,0 +1,5 @@
+1 - Search for modifying statements
+stmt s;
+Select s such that Modifies(s, "i")
+~
+5000

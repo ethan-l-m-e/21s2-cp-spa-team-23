@@ -5,6 +5,7 @@
 #ifndef SPA_CLAUSEEVALUATOR_H
 #define SPA_CLAUSEEVALUATOR_H
 
+#include <cassert>
 #include "QP_Evaluator/Query/Query.h"
 #include "PKB/PKB.h"
 #include "Result.h"
