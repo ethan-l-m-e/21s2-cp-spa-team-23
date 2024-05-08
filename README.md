@@ -27,11 +27,11 @@ No additional instructions required.
 
 # Team Members
 
-Name | Mobile | Email | Development OS/Toolchain
--:|:-:|:-|-|
-Lucas Tai | 92368426 | e0406424@u.nus.edu | Mac
-Lim Ethan | 94319256 | e0406537@u.nus.edu | Mac M1
-Tin Hong Wen | 92307489 | e0325606@u.nus.edu | Mac M1
-Sruthi Saravanan | 87224864 | e0424630@u.nus.edu | Mac M1
-Wang Tianyi | 83538878 | e0322921@u.nus.edu | Mac
-Karan Dev Sapra | 81187421 | e0311234@u.nus.edu | Mac M1
+Name | Email | Development OS/Toolchain
+-:|:-|-|
+Lucas Tai | e0406424@u.nus.edu | Mac
+Lim Ethan | e0406537@u.nus.edu | Mac M1
+Tin Hong Wen | e0325606@u.nus.edu | Mac M1
+Sruthi Saravanan | e0424630@u.nus.edu | Mac M1
+Wang Tianyi | e0322921@u.nus.edu | Mac
+Karan Dev Sapra | e0311234@u.nus.edu | Mac M1

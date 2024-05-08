@@ -1,0 +1,40 @@
+    procedure Example {
+01    x = 2;
+02    z = 3;
+03    i = 5; // Modifies i
+04    while (i!=0) { // Has stmt that modifies i
+05      x = x - 1;
+06      if (x==1) then {
+07        z = x + 1;
+        } else {
+08        y = z + x;
+        }
+09      z = z + x + i;
+10      call q;
+11      i = i - 1; // Modifies i
+      }
+12    call p; // Has stmt that modifies i
+    }
+
+    procedure p {
+13    if (x<0) then { // Has stmt that modifies i
+14      while (i>0) { // Has stmt that modifies i
+15        x = z * 3 + 2 * y;
+16        call q;
+17        i = i - 1; // Modifies i
+        }
+18      x = x + 1;
+19      z = x + z;
+      } else {
+20      z = 1;
+      }
+21    z = z + x + i;
+    }
+
+    procedure q {
+22    if (x==1) then {
+23      z = x + 1;
+      } else {
+24      x = z + x;
+      }
+    }
